@@ -8,7 +8,10 @@ pushd ..\..\..\..\include\ && (
 	)
 	popd
 ) && (
-	pushd ..\..\output && (
-		del/s/q boost_*
+	if exist ..\..\output (
+		pushd ..\..\output && (
+			del/s/q boost_*
+			popd
+		)
 	)
 )

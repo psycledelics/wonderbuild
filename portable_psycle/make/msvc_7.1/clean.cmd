@@ -2,13 +2,20 @@ rem ===========================================
 rem cleans all IDE and compiler generated files
 rem ===========================================
 
-rmdir/s/q output || goto failed
+del/s/q "*.ncb"
+del/s/q/ah "*.suo"
 
-call projects\boost\clean.cmd
-call projects\doxygen\clean.cmd
+rmdir/s/q output
 
-del/s/q "*.ncb" || goto :failed
-del/s/q/ah "*.suo" || goto :failed
+pushd projects\boost && (
+	call clean
+	popd
+)
+
+pushd projects\doxygen &&
+	call clean
+	popd
+)
 
 rem ============================================
 rem safely recursively removes empty directories
