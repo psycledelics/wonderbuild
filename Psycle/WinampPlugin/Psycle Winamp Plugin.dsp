@@ -36,25 +36,25 @@ RSC=rc.exe
 # PROP BASE Output_Dir "Release"
 # PROP BASE Intermediate_Dir "Release"
 # PROP BASE Target_Dir ""
-# PROP Use_MFC 1
+# PROP Use_MFC 2
 # PROP Use_Debug_Libraries 0
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PSYCLEWINAMPPLUGIN_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /G6 /MT /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PSYCLEWINAMPPLUGIN_EXPORTS" /D "_WINAMP_PLUGIN_" /D "_WINDLL" /FR /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PSYCLEWINAMPPLUGIN_EXPORTS" /D "_WINAMP_PLUGIN_" /D "_WINDLL" /D "_AFXDLL" /FR /Yu"stdafx.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x403 /d "NDEBUG"
-# ADD RSC /l 0x417 /d "NDEBUG" /d "_WINAMP_PLUGIN_"
+# ADD RSC /l 0x417 /d "NDEBUG" /d "_WINAMP_PLUGIN_" /d "_AFXDLL"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 /nologo /dll /pdb:none /machine:I386 /out:"Release/in_psycle.dll"
-# SUBTRACT LINK32 /profile /map /nodefaultlib /force
+# ADD LINK32 /nologo /dll /pdb:none /map /debug /machine:I386 /out:"d:/archivos de programa/winamp/plugins/in_psycle.dll"
+# SUBTRACT LINK32 /profile /nodefaultlib /force
 
 !ELSEIF  "$(CFG)" == "Psycle Winamp Plugin - Win32 Debug"
 
@@ -110,6 +110,10 @@ SOURCE=..\Filter.cpp
 # Begin Source File
 
 SOURCE=..\Global.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\Helpers.cpp
 # End Source File
 # Begin Source File
 
