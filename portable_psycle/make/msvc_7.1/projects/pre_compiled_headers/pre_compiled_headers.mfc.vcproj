@@ -95,8 +95,8 @@
 		</Configuration>
 		<Configuration
 			Name="debug|Win32"
-			OutputDirectory="$(IntDir)"
-			IntermediateDirectory="$(SolutionDir)/$(ConfigurationName)/intermediate_output/"
+			OutputDirectory="$(IntDir)/../"
+			IntermediateDirectory="$(SolutionDir)/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="2"
 			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -165,8 +165,8 @@
 		</Configuration>
 		<Configuration
 			Name="release.g7|Win32"
-			OutputDirectory="$(IntDir)/"
-			IntermediateDirectory="$(SolutionDir)/$(ConfigurationName)/intermediate_output/"
+			OutputDirectory="$(IntDir)/../"
+			IntermediateDirectory="$(SolutionDir)/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="2"
 			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"

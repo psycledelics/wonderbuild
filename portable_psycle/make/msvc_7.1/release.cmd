@@ -144,12 +144,13 @@ rem ----------------
 	rem ===========================
 		
 		if "%tag%" == "" (
-			set archive=psycle.mfc.bin.rar
+			set archive=psycle.mfc.bin.7z
 		) else (
-			set archive=psycle.mfc.bin.%tag%.rar
+			set archive=psycle.mfc.bin.%tag%.7z
 		)
 
-		rar a -s -m5 -md4096 -r0 .\%archive% "%distribution%" 1>> .\%archive%.log 2>&1 || goto :failed
+		rem rar a -s -m5 -md4096 -r0 .\%archive% "%distribution%" 1>> .\%archive%.log 2>&1 || goto :failed
+		7za a -ms=on -mx=9 -m0=BCJ2 -m1=LZMA -m2=LZMA -m3=LZMA -mb0:1 -mb0s1:2 -mb0s2:3,.\%archive% "%distribution%" 1>> .\%archive%.log 2>&1 || goto :failed
 	
 	rem =================================================
 	rem uploading the archive and updating the site
