@@ -259,6 +259,15 @@
 		<File
 			RelativePath="pre_compiled_headers.mfc.cpp">
 		</File>
+		<File
+			RelativePath="$(SolutionDir)\..\..\..\src\project.h">
+		</File>
+		<File
+			RelativePath="$(SolutionDir)\..\..\..\src\pre_compiled_headers.h">
+		</File>
+		<File
+			RelativePath="$(SolutionDir)\..\..\..\src\stdafx.h">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

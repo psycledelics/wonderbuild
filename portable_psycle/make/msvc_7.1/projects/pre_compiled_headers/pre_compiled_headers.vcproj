@@ -257,6 +257,12 @@
 		<File
 			RelativePath="pre_compiled_headers.cpp">
 		</File>
+		<File
+			RelativePath="$(SolutionDir)\..\..\..\src\project.h">
+		</File>
+		<File
+			RelativePath="$(SolutionDir)\..\..\..\src\pre_compiled_headers.h">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

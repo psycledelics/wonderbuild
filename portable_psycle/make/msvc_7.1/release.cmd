@@ -187,7 +187,8 @@ rem rebuild (clean and build) sub routine
 rem -------------------------------------
 :rebuild
 	set configuration=%1
-	for %%o in (clean build) do (
+	rem for %%o in (clean build) do (
+	for %%o in (build) do (
 		echo %0: %%oing %configuration% ...
 		DevEnv ..\solution.sln /%%o %configuration% /out %configuration%.%%o.log || ( call :restore_path && goto :failed )
 	)
@@ -206,10 +207,12 @@ rem -------------
 	rem xcopy/i "%source%\*.dll" "%destination%" || goto :failed
 	xcopy/i "%source%\*.exe" "%destination%" || goto :failed
 	xcopy/i "%source%\psycle.plugins\*.dll" "%destination%\plugins\" || goto :failed
-	echo %0: copying microsoft c/c++/mfc runtime libraries ...
+	echo %0: copying microsoft c/c++/gdi+/mfc runtime libraries ...
 	xcopy "%SYSTEMROOT%\system32\msvcr71.dll" "%bin%" || goto :failed
 	xcopy "%SYSTEMROOT%\system32\msvcp71.dll" "%bin%" || goto :failed
 	xcopy "%SYSTEMROOT%\system32\mfc71.dll" "%bin%" || goto :failed
+	rem xcopy "%SYSTEMROOT%\WinSxS\x86_Microsoft.Windows.GdiPlus_6595b64144ccf1df_1.0.10.0_x-ww_712befd8\GdiPlus.dll" "%bin%" || goto :failed
+	xcopy "%SYSTEMROOT%\WinSxS\x86_Microsoft.Windows.GdiPlus_*_1.0.10.0_*\GdiPlus.dll" "%bin%" || goto :failed
 goto :eof
 
 rem ------
