@@ -44,7 +44,7 @@ rename "%distribution%\amd-k7-and-intel-pentium-3\psycle.exe" "psycle.timestamp-
 call :upx "%distribution%\amd-k7-and-intel-pentium-3\psycle.timestamp-%timestamp%.exe"
 
 mkdir "%distribution%\amd-k7-and-intel-pentium-3\plugins\"
-xcopy/f .\release\bin\psycle__plugins\*.dll "%distribution%\amd-k7-and-intel-pentium-3\plugins\" || ( echo copy failed, aborting. & goto :pause )
+xcopy/f .\release\bin\psycle.plugins\*.dll "%distribution%\amd-k7-and-intel-pentium-3\plugins\" || ( echo copy failed, aborting. & goto :pause )
 
 rem ########## intel p4 ##########
 
@@ -54,15 +54,19 @@ rename "%distribution%\intel-pentium-4\psycle.exe" "psycle.timestamp-%timestamp%
 call :upx "%distribution%\intel-pentium-4\psycle.timestamp-%timestamp%-intel-pentium-4.exe"
 
 mkdir "%distribution%\intel-pentium-4\plugins\"
-xcopy/f .\release_intel_pentium_4\bin\psycle__plugins\*.dll "%distribution%\intel-pentium-4\plugins\" || ( echo copy failed, aborting. & goto :pause )
+xcopy/f .\release_intel_pentium_4\bin\psycle.plugins\*.dll "%distribution%\intel-pentium-4\plugins\" || ( echo copy failed, aborting. & goto :pause )
 
 rem ------------------------------------------
 rem copy microsoft c/c++/mfc runtime libraries
 rem ------------------------------------------
 
-xcopy/f "%SYSTEMROOT%\system32\msvcr71.dll" "%distribution%" || ( echo copy failed, aborting. & goto :pause )
-xcopy/f "%SYSTEMROOT%\system32\msvcp71.dll" "%distribution%" || ( echo copy failed, aborting. & goto :pause )
-xcopy/f "%SYSTEMROOT%\system32\mfc71.dll" "%distribution%" || ( echo copy failed, aborting. & goto :pause )
+xcopy/f "%SYSTEMROOT%\system32\msvcr71.dll" "%distribution%\amd-k7-and-intel-pentium-3\" || ( echo copy failed, aborting. & goto :pause )
+xcopy/f "%SYSTEMROOT%\system32\msvcp71.dll" "%distribution%\amd-k7-and-intel-pentium-3\" || ( echo copy failed, aborting. & goto :pause )
+xcopy/f "%SYSTEMROOT%\system32\mfc71.dll" "%distribution%\amd-k7-and-intel-pentium-3\" || ( echo copy failed, aborting. & goto :pause )
+
+xcopy/f "%SYSTEMROOT%\system32\msvcr71.dll" "%distribution%\intel-pentium-4\" || ( echo copy failed, aborting. & goto :pause )
+xcopy/f "%SYSTEMROOT%\system32\msvcp71.dll" "%distribution%\intel-pentium-4\" || ( echo copy failed, aborting. & goto :pause )
+xcopy/f "%SYSTEMROOT%\system32\mfc71.dll" "%distribution%\intel-pentium-4\" || ( echo copy failed, aborting. & goto :pause )
 
 rem ---------------------------
 rem copy end-user documentation
