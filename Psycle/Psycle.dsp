@@ -782,6 +782,10 @@ SOURCE=.\res\vsti.bmp
 # End Group
 # Begin Source File
 
+SOURCE=.\Helpers.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\Docs\todo.txt
 # End Source File
 # Begin Source File
