@@ -127,7 +127,7 @@
 				BrowseInformation="1"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
-				DebugInformationFormat="3"
+				DebugInformationFormat="4"
 				DisableSpecificWarnings="4652"
 				ForcedIncludeFiles=""/>
 			<Tool
@@ -205,7 +205,7 @@
 				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
 				WarningLevel="4"
-				WarnAsError="TRUE"
+				WarnAsError="FALSE"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4652"
@@ -460,16 +460,61 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\FileIO.hpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\FileIT.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\FileIT.hpp">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\FileXM.cpp">
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\FileXM.hpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\it.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\it.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\ITModule2.cpp">
+					<FileConfiguration
+						Name="release.g6|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release.g7|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\ITModule2.h">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Riff.cpp">
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Riff.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\XMFile.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\XMSongLoader.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\XMSongLoader.hpp">
 				</File>
 			</Filter>
 			<Filter
@@ -728,6 +773,34 @@
 							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\VstGui.hpp">
 						</File>
 					</Filter>
+					<Filter
+						Name="XMSampler"
+						Filter="">
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUI.cpp">
+						</File>
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUI.hpp">
+						</File>
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUIGeneral.cpp">
+						</File>
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUIGeneral.hpp">
+						</File>
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUIInst.cpp">
+						</File>
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUIInst.hpp">
+						</File>
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUISample.cpp">
+						</File>
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUISample.hpp">
+						</File>
+					</Filter>
 				</Filter>
 				<Filter
 					Name="pattern"
@@ -875,6 +948,22 @@
 							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Sampler.hpp">
 						</File>
 					</Filter>
+					<Filter
+						Name="XMSampler"
+						Filter="">
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\XMInstrument.cpp">
+						</File>
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\XMInstrument.hpp">
+						</File>
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\XMSampler.cpp">
+						</File>
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\XMSampler.hpp">
+						</File>
+					</Filter>
 				</Filter>
 				<Filter
 					Name="midi"
@@ -892,6 +981,6 @@
 	<Globals>
 		<Global
 			Name="RESOURCE_FILE"
-			Value="\home\bohan\projects\cvs.sourceforge.net\psycle\portable_psycle\src\psycle\host\resources\resources.rc"/>
+			Value="\Documents and Settings\All Users\Documentos\Visual C++\portable_psycle\src\psycle\host\resources\resources.rc"/>
 	</Globals>
 </VisualStudioProject>
