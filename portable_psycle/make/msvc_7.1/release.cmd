@@ -187,7 +187,7 @@ rem ----------------
 		echo %0: updating sourceforge ht pages ...
 		rem ------------------------------------------
 		
-			ssh "%sourceforge_user_account%@shell.sourceforge.net" "%sourceforge_group_account%/htdocs.update.bash %archive%" || goto :failed
+			ssh "%sourceforge_user_account%@shell.sourceforge.net" "%sourceforge_group_account%/htdocs/update-timestamps" || goto :failed
 goto :eof
 
 rem ---------------
