@@ -4,6 +4,7 @@
 	Version="7.10"
 	Name="asio (steinberg&apos;s sdk)"
 	ProjectGUID="{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
+	RootNamespace="asio (steinberg&apos;s sdk)"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>

@@ -60,7 +60,7 @@ rem ----------------
 			call "%VS71ComnTools%\VSVars32" || goto :failed
 		
 		for %%t in (%targets%) do (
-			call :rebuild release.%%t || goto :failed
+			call :rebuild release.%%t || ( call :restore_env & goto :failed)
 		)
 		
 		call :restore_env
@@ -192,7 +192,7 @@ rem -------------------------------------
 	rem for %%o in (clean build) do (
 	for %%o in (build) do (
 		echo %0: %%oing %configuration% ...
-		DevEnv ..\solution.sln /%%o %configuration% /out %configuration%.%%o.log || ( call :restore_path && goto :failed )
+		DevEnv ..\solution.sln /%%o %configuration% /out %configuration%.%%o.log || goto :failed
 	)
 goto :eof
 

@@ -63,6 +63,7 @@
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="$(SolutionDir)/$(ConfigurationName)/lib"
 				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
 				LargeAddressAware="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
@@ -133,6 +134,7 @@
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="$(SolutionDir)/$(ConfigurationName)/lib"
 				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
 				OptimizeForWindows98="1"
 				TurnOffAssemblyGeneration="TRUE"
 				ImportLibrary="$(SolutionDir)/$(ConfigurationName)/lib/$(ProjectName).lib"/>
@@ -211,6 +213,7 @@
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="$(SolutionDir)/$(ConfigurationName)/lib"
 				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
 				LargeAddressAware="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"

@@ -59,11 +59,12 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/$(ProjectName).exe"
+				OutputFile="$(OutDir)/$(InputName).dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="$(SolutionDir)/$(ConfigurationName)/lib"
 				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
 				SubSystem="2"
 				LargeAddressAware="1"
 				TerminalServerAware="1"
@@ -133,11 +134,12 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/$(ProjectName).exe"
+				OutputFile="$(OutDir)/$(InputName).dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="$(SolutionDir)/$(ConfigurationName)/lib"
 				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
 				SubSystem="2"
 				OptimizeForWindows98="1"
 				BaseAddress=""
@@ -215,11 +217,12 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/$(ProjectName).exe"
+				OutputFile="$(OutDir)/$(InputName).dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="$(SolutionDir)/$(ConfigurationName)/lib"
 				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
 				SubSystem="2"
 				LargeAddressAware="1"
 				TerminalServerAware="1"
