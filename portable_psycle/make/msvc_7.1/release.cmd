@@ -151,7 +151,7 @@ rem ----------------
 			scp ./psycle.bin.rar "%sourceforge_user_account%@shell.sourceforge.net:%sourceforge_group_account%/htdocs/" || goto :failed
 		
 		rem ------------------------------------------
-		echo %0: updating the sourceforge ht pages ...
+		echo %0: updating sourceforge ht pages ...
 		rem ------------------------------------------
 		
 			ssh "%sourceforge_user_account%@shell.sourceforge.net" "%sourceforge_group_account%/htdocs.update.bash" || goto :failed
