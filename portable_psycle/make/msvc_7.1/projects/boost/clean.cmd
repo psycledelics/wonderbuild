@@ -7,4 +7,8 @@ pushd ..\..\..\..\include\ && (
 		if exist boost exit 1
 	)
 	popd
+) && (
+	pushd ..\..\output && (
+		del/s/q boost_*
+	)
 )

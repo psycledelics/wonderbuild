@@ -3,4 +3,8 @@ pushd ..\..\..\..\include\ && (
 		boost -y
 	)
 	popd
+) && (
+	pushd ..\..\ && (
+		output.boost.exe -y
+	)
 )
