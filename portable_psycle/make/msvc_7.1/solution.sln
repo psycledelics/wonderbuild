@@ -137,6 +137,22 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.schorus", "p
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.vd.allpass", "projects\psycle\plugins\vdallpass.vcproj", "{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.vd.echo", "projects\psycle\plugins\vdecho.vcproj", "{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.vd.noisegate", "projects\psycle\plugins\vdnoisegate.vcproj", "{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.vd.vsfastverb", "projects\psycle\plugins\vsfastverb.vcproj", "{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		debug = debug
@@ -339,6 +355,38 @@ Global
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g6.Build.0 = release.g6|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g7.ActiveCfg = release.g7|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g7.Build.0 = release.g7|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.debug.ActiveCfg = debug|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.debug.Build.0 = debug|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.documentation.ActiveCfg = debug|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.documentation.Build.0 = debug|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.release.g6.ActiveCfg = release.g6|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.release.g6.Build.0 = release.g6|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.release.g7.ActiveCfg = release.g7|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.release.g7.Build.0 = release.g7|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.debug.ActiveCfg = debug|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.debug.Build.0 = debug|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.documentation.ActiveCfg = debug|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.documentation.Build.0 = debug|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.release.g6.ActiveCfg = release.g6|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.release.g6.Build.0 = release.g6|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.release.g7.ActiveCfg = release.g7|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.release.g7.Build.0 = release.g7|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.debug.ActiveCfg = debug|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.debug.Build.0 = debug|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.documentation.ActiveCfg = debug|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.documentation.Build.0 = debug|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.release.g6.ActiveCfg = release.g6|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.release.g6.Build.0 = release.g6|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.release.g7.ActiveCfg = release.g7|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.release.g7.Build.0 = release.g7|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.debug.ActiveCfg = debug|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.debug.Build.0 = debug|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.documentation.ActiveCfg = debug|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.documentation.Build.0 = debug|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.release.g6.ActiveCfg = release.g6|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.release.g6.Build.0 = release.g6|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.release.g7.ActiveCfg = release.g7|Win32
+		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.release.g7.Build.0 = release.g7|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
