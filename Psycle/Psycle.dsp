@@ -139,6 +139,14 @@ SOURCE=.\DefaultVstGui.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Dsp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Dsp.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Filter.cpp
 # End Source File
 # Begin Source File
@@ -216,6 +224,10 @@ SOURCE=.\Machine.cpp
 # Begin Source File
 
 SOURCE=.\Machine.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MachineInterface.h
 # End Source File
 # Begin Source File
 
@@ -418,6 +430,22 @@ SOURCE=.\Riff.cpp
 SOURCE=.\Riff.h
 # End Source File
 # End Group
+# Begin Group "VST SDK Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\Vst\AEffect.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Vst\AEffectx.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Vst\AEffEditor.h
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\ChildView.cpp
@@ -428,11 +456,7 @@ SOURCE=.\ChildView.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Dsp.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Dsp.h
+SOURCE=.\Constants.h
 # End Source File
 # Begin Source File
 
@@ -465,6 +489,14 @@ SOURCE=.\GreetDialog.cpp
 # Begin Source File
 
 SOURCE=.\GreetDialog.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Helpers.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Helpers.h
 # End Source File
 # Begin Source File
 
@@ -568,6 +600,10 @@ SOURCE=.\Psycle2.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\resource.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Song.cpp
 # End Source File
 # Begin Source File
@@ -590,6 +626,10 @@ SOURCE=.\SongStructs.h
 
 SOURCE=.\StdAfx.cpp
 # ADD CPP /Yc"stdafx.h"
+# End Source File
+# Begin Source File
+
+SOURCE=.\StdAfx.h
 # End Source File
 # Begin Source File
 
@@ -729,10 +769,6 @@ SOURCE=.\res\MasterMachine\masterbk.bmp
 # End Source File
 # Begin Source File
 
-SOURCE=.\MidiMessageDlg.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\res\minus.bmp
 # End Source File
 # Begin Source File
@@ -796,10 +832,6 @@ SOURCE=.\res\vstfx.bmp
 SOURCE=.\res\vsti.bmp
 # End Source File
 # End Group
-# Begin Source File
-
-SOURCE=.\Helpers.cpp
-# End Source File
 # Begin Source File
 
 SOURCE=.\Docs\todo.txt
