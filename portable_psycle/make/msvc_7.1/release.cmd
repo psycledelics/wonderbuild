@@ -114,7 +114,6 @@ rem ----------------
 	echo %0: making the archive ...
 	rem ===========================
 		
-		del/q .\psycle.bin.rar
 		rar a -s -m5 -md4096 -ep1 -r0 .\psycle.bin.rar "%distribution%" 1>> .\psycle.bin.rar.log 2>&1 || goto :failed
 	
 	rem =================================================
@@ -139,7 +138,7 @@ rem ----------------
 			echo %0: sourceforge user account: %sourceforge_user_account%
 		
 		rem ------------------------------
-		echo %0: sourceforge group account
+		rem sourceforge group account
 		rem ------------------------------
 
 			set sourceforge_group_account=/home/groups/p/ps/psycle/
@@ -213,9 +212,8 @@ rem -------------
 	xcopy "%SYSTEMROOT%\system32\msvcr71.dll" "%destination%" || goto :failed
 	xcopy "%SYSTEMROOT%\system32\msvcp71.dll" "%destination%" || goto :failed
 	xcopy "%SYSTEMROOT%\system32\mfc71.dll" "%destination%" || goto :failed
-echo on
-	xcopy "%SYSTEMROOT%\WinSxS\x86_Microsoft.Windows.GdiPlus_6595b64144ccf1df_1.0.10.0_x-ww_712befd8\GDIPlus.dll" "%destination%" || goto :failed
 	rem xcopy/f/i "%SYSTEMROOT%\WinSxS\x86_Microsoft.Windows.GdiPlus_*_1.0.10.0_*\GDIPlus.dll" "%destination%" || goto :failed
+	xcopy "%SYSTEMROOT%\WinSxS\x86_Microsoft.Windows.GdiPlus_6595b64144ccf1df_1.0.10.0_x-ww_712befd8\GDIPlus.dll" "%destination%" || goto :failed
 goto :eof
 
 rem ------
