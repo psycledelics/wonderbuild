@@ -1,3 +1,5 @@
 pushd ..\..\..\..\include\ && (
-	rmdir/s/q boost
+	if exist boost (
+		rmdir/s/q boost
+	)
 )
