@@ -663,6 +663,14 @@ SOURCE=.\InputHandler.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Instrument.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Instrument.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\MainFrm.cpp
 # End Source File
 # Begin Source File
@@ -894,6 +902,10 @@ SOURCE=.\res\vsti.bmp
 # Begin Source File
 
 SOURCE=".\Docs\how to skin psycle.txt"
+# End Source File
+# Begin Source File
+
+SOURCE=".\DevelDocs\new Psycle file description.txt"
 # End Source File
 # Begin Source File
 
