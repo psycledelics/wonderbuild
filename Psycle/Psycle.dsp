@@ -850,6 +850,10 @@ SOURCE=".\Docs\how to skin psycle.txt"
 # End Source File
 # Begin Source File
 
+SOURCE=".\DevelDocs\new sampler spec.txt"
+# End Source File
+# Begin Source File
+
 SOURCE=.\Docs\todo.txt
 # End Source File
 # Begin Source File
