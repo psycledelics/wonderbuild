@@ -29,6 +29,14 @@ xcopy/f .\release.bin.upx.nrv2d\psycle.exe .\psycle\ || ( echo copy failed, abor
 rem mkdir .\psycle\plugins\
 rem xcopy/f .\release.bin\psycle__plugins\*.dll .\psycle\plugins\ || ( echo copy failed, aborting. & goto :pause )
 
+rem ------------------------------------------
+rem copy microsoft c/c++/mfc runtime libraries
+rem ------------------------------------------
+
+xcopy/f "%SYSTEMROOT%\system32\msvcr71.dll" .\psycle\ || ( echo copy failed, aborting. & goto :pause )
+xcopy/f "%SYSTEMROOT%\system32\msvcp71.dll" .\psycle\ || ( echo copy failed, aborting. & goto :pause )
+xcopy/f "%SYSTEMROOT%\system32\mfc71.dll" .\psycle\ || ( echo copy failed, aborting. & goto :pause )
+
 rem ---------------------------
 rem copy end-user documentation
 rem ---------------------------
