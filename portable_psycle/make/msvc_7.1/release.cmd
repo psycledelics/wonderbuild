@@ -102,14 +102,14 @@ set group=/home/groups/p/ps/psycle/
 
 rem maps local user account names to sourceforge user account names
 
-if "%USERPNAME%" == "bohan" (
+if "%USERNAME%" == "bohan" (
 	set user=johan-boule
-) else if "%USERPNAME%" == "x" (
-	rem in the meanwhile alk fixes he's account, he uses bohan's.
+) else if "%USERNAME%" == "x" (
+	rem in the meanwhile alk fixes his account, he uses bohan's.
 	rem set user=alkenstein
 	set user=johan-boule
 ) else (
-	set user="%USERPNAME%"
+	set user="%USERNAME%"
 )
 
 scp ./psycle.bin.rar "%user%@shell.sourceforge.net:%group%/htdocs/" || ( echo scp failed, aborting. && goto :pause )
