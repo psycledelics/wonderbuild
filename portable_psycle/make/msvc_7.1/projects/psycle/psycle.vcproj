@@ -11,7 +11,7 @@
 	</Platforms>
 	<Configurations>
 		<Configuration
-			Name="release.amd-k7-and-intel-pentium-3|Win32"
+			Name="release.g6|Win32"
 			OutputDirectory="$(SolutionDir)/$(ConfigurationName)/bin"
 			IntermediateDirectory="$(SolutionDir)/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="1"
@@ -35,7 +35,7 @@
 				EnableFiberSafeOptimizations="TRUE"
 				OptimizeForProcessor="2"
 				OptimizeForWindowsApplication="TRUE"
-				AdditionalIncludeDirectories="$(SolutionDir)/../../include;$(SolutionDir)/../../include/psycle/host;$(SolutionDir)/../../include/psycle/host/asio;$(SolutionDir)/../../src;$(SolutionDir)/../../src/psycle/host"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../include/psycle/host&quot;;&quot;$(SolutionDir)/../../include/psycle/host/asio&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;"
 				PreprocessorDefinitions="OPERATING_SYSTEM__CROSSPLATFORM"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
@@ -111,8 +111,7 @@
 /WL
 "
 				Optimization="0"
-				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="$(SolutionDir)/../../include;$(SolutionDir)/../../include/psycle/host;$(SolutionDir)/../../include/psycle/host/asio;$(SolutionDir)/../../src;$(SolutionDir)/../../src/psycle/host"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../include/psycle/host&quot;;&quot;$(SolutionDir)/../../include/psycle/host/asio&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;"
 				PreprocessorDefinitions="OPERATING_SYSTEM__CROSSPLATFORM"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="FALSE"
@@ -168,7 +167,7 @@
 				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
-			Name="release.intel-pentium-4|Win32"
+			Name="release.g7|Win32"
 			OutputDirectory="$(SolutionDir)/$(ConfigurationName)/bin"
 			IntermediateDirectory="$(SolutionDir)/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="1"
@@ -192,7 +191,7 @@
 				EnableFiberSafeOptimizations="TRUE"
 				OptimizeForProcessor="3"
 				OptimizeForWindowsApplication="TRUE"
-				AdditionalIncludeDirectories="$(SolutionDir)/../../include;$(SolutionDir)/../../include/psycle/host;$(SolutionDir)/../../include/psycle/host/asio;$(SolutionDir)/../../src;$(SolutionDir)/../../src/psycle/host"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../include/psycle/host&quot;;&quot;$(SolutionDir)/../../include/psycle/host/asio&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;"
 				PreprocessorDefinitions="OPERATING_SYSTEM__CROSSPLATFORM"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
@@ -622,60 +621,6 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="drivers"
-			Filter="">
-			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\AudioDriver.cpp">
-			</File>
-			<File
-				RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\AudioDriver.h">
-			</File>
-			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\DirectSound.cpp">
-			</File>
-			<File
-				RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\DirectSound.h">
-			</File>
-			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\WaveOut.cpp">
-			</File>
-			<File
-				RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\WaveOut.h">
-			</File>
-			<Filter
-				Name="asio"
-				Filter="">
-				<File
-					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\ASIOInterface.cpp">
-				</File>
-				<File
-					RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\ASIOInterface.h">
-				</File>
-				<Filter
-					Name="sdk"
-					Filter="">
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\asio\asio.cpp">
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\asio\asio.h">
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\asio\asiodrivers.cpp">
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\asio\asiodrivers.h">
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\asio\asiolist.cpp">
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\asio\asiolist.h">
-					</File>
-				</Filter>
-			</Filter>
-		</Filter>
-		<Filter
 			Name="configuration"
 			Filter="">
 			<File
@@ -815,6 +760,38 @@
 			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\Toolbar.bmp">
 			</File>
+		</Filter>
+		<Filter
+			Name="devices"
+			Filter="">
+			<Filter
+				Name="output"
+				Filter="">
+				<File
+					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\ASIOInterface.cpp">
+				</File>
+				<File
+					RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\ASIOInterface.h">
+				</File>
+				<File
+					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\AudioDriver.cpp">
+				</File>
+				<File
+					RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\AudioDriver.h">
+				</File>
+				<File
+					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\DirectSound.cpp">
+				</File>
+				<File
+					RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\DirectSound.h">
+				</File>
+				<File
+					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\WaveOut.cpp">
+				</File>
+				<File
+					RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\WaveOut.h">
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Global.cpp">

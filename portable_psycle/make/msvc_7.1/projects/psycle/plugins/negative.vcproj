@@ -11,7 +11,7 @@
 	</Platforms>
 	<Configurations>
 		<Configuration
-			Name="release.amd-k7-and-intel-pentium-3|Win32"
+			Name="release.g6|Win32"
 			OutputDirectory="$(SolutionDir)/$(ConfigurationName)/bin/psycle.plugins"
 			IntermediateDirectory="$(SolutionDir)/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="2"
@@ -34,7 +34,7 @@
 				EnableFiberSafeOptimizations="TRUE"
 				OptimizeForProcessor="2"
 				OptimizeForWindowsApplication="FALSE"
-				AdditionalIncludeDirectories="$(SolutionDir)/../../include;$(SolutionDir)/../../src"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
@@ -63,7 +63,6 @@
 				AdditionalLibraryDirectories="$(SolutionDir)/$(ConfigurationName)/lib"
 				GenerateDebugInformation="TRUE"
 				LargeAddressAware="1"
-				TerminalServerAware="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
@@ -107,8 +106,7 @@
 /WL
 "
 				Optimization="0"
-				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="$(SolutionDir)/../../include;$(SolutionDir)/../../src"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="FALSE"
 				BasicRuntimeChecks="3"
@@ -161,7 +159,7 @@
 				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
-			Name="release.intel-pentium-4|Win32"
+			Name="release.g7|Win32"
 			OutputDirectory="$(SolutionDir)/$(ConfigurationName)/bin/psycle.plugins"
 			IntermediateDirectory="$(SolutionDir)/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="2"
@@ -184,7 +182,7 @@
 				EnableFiberSafeOptimizations="TRUE"
 				OptimizeForProcessor="3"
 				OptimizeForWindowsApplication="FALSE"
-				AdditionalIncludeDirectories="$(SolutionDir)/../../include;$(SolutionDir)/../../src"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
@@ -213,7 +211,6 @@
 				AdditionalLibraryDirectories="$(SolutionDir)/$(ConfigurationName)/lib"
 				GenerateDebugInformation="TRUE"
 				LargeAddressAware="1"
-				TerminalServerAware="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"

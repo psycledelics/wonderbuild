@@ -46,7 +46,7 @@ rem ----------------
 	rem targets
 	rem =======
 	
-		set targets=amd-k7-and-intel-pentium-3 intel-pentium-4
+		set targets=g7 g6
 	
 	rem ===============
 	rem clean and build
@@ -95,6 +95,7 @@ rem ----------------
 		
 			mkdir "%distribution%\doc\"
 			xcopy/s ..\..\..\doc\for-end-users\* "%distribution%\doc\" || goto :failed
+			xcopy "%distribution%\doc\cpu.txt" "%distribution%\readme-cpu.txt" || goto :failed
 		
 		rem ---------------------------------------------
 		echo %0: removing cvs files from distribution ...
