@@ -538,6 +538,14 @@ SOURCE=.\MidiMonitorDlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\NewMachine.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\NewMachine.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\NewVal.cpp
 # End Source File
 # Begin Source File
@@ -668,14 +676,6 @@ SOURCE=.\MidiInput.cpp
 # Begin Source File
 
 SOURCE=.\MidiInput.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\NewMachine.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\NewMachine.h
 # End Source File
 # Begin Source File
 
