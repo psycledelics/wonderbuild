@@ -893,6 +893,14 @@ SOURCE=".\DevelDocs\new sampler spec.txt"
 # End Source File
 # Begin Source File
 
+SOURCE=.\SaveWavDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SaveWavDlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Docs\todo.txt
 # End Source File
 # Begin Source File
