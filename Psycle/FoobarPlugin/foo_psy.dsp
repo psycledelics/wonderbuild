@@ -82,7 +82,7 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib msacm32.lib /nologo /dll /machine:I386
 # SUBTRACT BASE LINK32 /debug
-# ADD LINK32 foobar2000_SDK.lib /nologo /dll /machine:I386 /out:"./Release/foo_psy.dll"
+# ADD LINK32 foobar2000_SDK.lib pfc.lib utf8api.lib foobar2000_component_client.lib /nologo /dll /machine:I386 /out:"./Release/foo_psy.dll" /libpath:"../../foobarSDK/foobar2000/SDK/Release" /libpath:"../../foobarSDK/pfc/Release_unicode" /libpath:"../../foobarSDK/foobar2000/foobar2000_component_client/Release" /libpath:"../../foobarSDK/foobar2000/Release"
 # SUBTRACT LINK32 /debug
 
 !ENDIF 
@@ -259,11 +259,11 @@ SOURCE=..\StdAfx.h
 SOURCE=..\VstHost.h
 # End Source File
 # End Group
-# End Group
 # Begin Source File
 
-SOURCE=..\..\fb2kSDK\foobar2000\component_client\component_client.cpp
+SOURCE=..\convert_internal_machines.h
 # End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\foo_input_psy.rc

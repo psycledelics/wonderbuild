@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "foo_psy"=.\foo_psy.dsp - Package Owner=<4>
+Project: "foo_psy"=".\foo_psy.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -11,6 +11,75 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name pfc
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name foobar2000_SDK
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name utf8api
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name foobar2000_component_client
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "foobar2000_SDK"="..\..\foobarSDK\foobar2000\SDK\foobar2000_SDK.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name pfc
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name utf8api
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "foobar2000_component_client"="..\..\foobarSDK\foobar2000\foobar2000_component_client\foobar2000_component_client.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "pfc"="..\..\foobarSDK\pfc\pfc.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "utf8api"="..\..\foobarSDK\foobar2000\utf8api\utf8api.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name pfc
+    End Project Dependency
 }}}
 
 ###############################################################################

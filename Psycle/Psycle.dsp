@@ -146,22 +146,6 @@ SOURCE=.\Filter.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\FrameMachine.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\FrameMachine.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\GearTracker.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\GearTracker.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\Machine.cpp
 # End Source File
 # Begin Source File
@@ -171,14 +155,6 @@ SOURCE=.\Machine.h
 # Begin Source File
 
 SOURCE=.\MachineInterface.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\MasterDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MasterDlg.h
 # End Source File
 # Begin Source File
 
@@ -442,11 +418,27 @@ SOURCE=.\DefaultVstGui.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\FrameMachine.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\FrameMachine.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\GearRackDlg.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\GearRackDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GearTracker.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GearTracker.h
 # End Source File
 # Begin Source File
 
@@ -471,6 +463,14 @@ SOURCE=.\MacProp.cpp
 # Begin Source File
 
 SOURCE=.\MacProp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MasterDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\MasterDlg.h
 # End Source File
 # Begin Source File
 
