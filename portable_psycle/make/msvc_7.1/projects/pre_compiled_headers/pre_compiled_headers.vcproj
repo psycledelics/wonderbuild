@@ -20,7 +20,7 @@
 			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/EHsc
+				AdditionalOptions="/EHa
 /QIfist
 /Op-
 /WL
@@ -104,7 +104,7 @@
 			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.bat;$(TargetPath)">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/EHac-
+				AdditionalOptions="/EHa
 /QIfist
 /Op-
 /WL
@@ -175,7 +175,7 @@
 			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/EHsc
+				AdditionalOptions="/EHa
 /QIfist
 /Op-
 /WL
