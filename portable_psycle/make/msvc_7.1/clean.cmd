@@ -5,6 +5,7 @@ rem ===================================
 del/s/q "*.pch"
 del/s/q "*.obj"
 del/s/q "*.res"
+del/s/q "*.aps"
 del/s/q "*.idb"
 del/s/q "*.pdb"
 del/s/q "*.ilk"
