@@ -12,7 +12,6 @@ del/s/q "*.pdb"
 del/s/q "*.ilk"
 del/s/q "*.sbr"
 del/s/q "*.bsc"
-del/s/q "*.lib"
 del/s/q "*.exp"
 
 rename .\release.g7\lib\boost_thread.lib boost_thread.lib.preserve
