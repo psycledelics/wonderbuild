@@ -137,8 +137,10 @@ rem ----------------
 		rem unix2dos is distributed with cygwin
 		rem --------------------------------------------------------
 		
-			for /r "%distribution%" %%i in (*.txt *.text) do unix2dos "%%i"
-			echo.
+			for /r "%distribution%" %%i in (*.txt *.text) do (
+				unix2dos "%%i"
+				echo.
+			)
 		
 	rem ===========================
 	echo %~n0: making the archive ...
@@ -248,7 +250,8 @@ rem -------------
 	echo %~n0: copying built libraries and programs ...
 	xcopy/f/i "%source%\*.exe" "%destination%" || goto :failed
 	xcopy/f/i "%source%\*.dll" "%destination%" || goto :failed
-	xcopy/i "%source%\psycle.plugins\*.dll" "%destination%\plugins\" || goto :failed
+	xcopy/f/i "%source%\psycle.plugins\*.dll" "%destination%\plugins\" || goto :failed
+	xcopy/s/i "..\..\..\closed-source" "%destination%\plugins\closed-source (avoid them although they're good plugins)" || goto :failed
 	echo %~n0: copying microsoft c/c++/gdi+/mfc runtime libraries ...
 	xcopy "%SYSTEMROOT%\system32\msvcr71.dll" "%destination%" || goto :failed
 	xcopy "%SYSTEMROOT%\system32\msvcp71.dll" "%destination%" || goto :failed
