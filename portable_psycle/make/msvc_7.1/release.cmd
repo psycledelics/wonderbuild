@@ -181,7 +181,7 @@ rem ----------------
 		echo %~n0: uploading the archive to sourceforge ...
 		rem ---------------------------------------------
 		
-			scp ./%archive% "%sourceforge_user_account%@shell.sourceforge.net:%sourceforge_group_account%/htdocs/" || goto :failed
+			scp ./%archive% "%sourceforge_user_account%@shell.sourceforge.net:%sourceforge_group_account%/htdocs/microsoft/" || goto :failed
 		
 		rem ------------------------------------------
 		echo %~n0: updating sourceforge ht pages ...
