@@ -29,7 +29,7 @@ del/s/q cache.map
 del/s/q pluginlog.txt
 
 rem ===========================================
-rem safely recursively remove empty directories
+rem safely recursively removes empty directories
 rem ===========================================
 
 call :prune .
