@@ -88,7 +88,7 @@ rem ----------------
 	echo %~n0: making the directory to be distributed ...
 	rem ===============================================
 
-		rem microsoft's state of the art script engine has no late evaluation by default...
+		rem microsoft's state of the art script engine has no late evaluation by default ...  would need to use !stamp!
 		set stamp=%date%.%time%
 		set stamp=%stamp: =.%
 		set stamp=%stamp:/=.%
@@ -98,7 +98,7 @@ rem ----------------
 		set stamp=timestamp-%stamp%
 
 		if "%tag%" == "" (
-			rem microsoft's state of the art script engine has no late evalutation...
+			rem microsoft's state of the art script engine has no late evalutation by default ... would need to use !tag!
 		) else (
 			set stamp=%tag%
 		)
