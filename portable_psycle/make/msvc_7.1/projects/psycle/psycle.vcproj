@@ -336,7 +336,7 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MidiInput.cpp">
 				</File>
 				<File
-					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MidiLearn.cpp">
+					RelativePath="..\..\..\..\include\psycle\host\MidiInput.h">
 				</File>
 			</Filter>
 		</Filter>
@@ -613,6 +613,16 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\include\psycle\host\WireDlg.h">
+				</File>
+			</Filter>
+			<Filter
+				Name="midi"
+				Filter="">
+				<File
+					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MidiLearn.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\include\psycle\host\MidiLearn.h">
 				</File>
 			</Filter>
 		</Filter>
