@@ -124,10 +124,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.haas", "proj
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.stk.plucked (stk wrapper by sartorius)", "projects\psycle\plugins\stk Plucked.vcproj", "{652E2772-861D-48C6-A710-FDC1078CBA09}"
 	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.stk.shakers (stk wrapper by sartorius)", "projects\psycle\plugins\stk Shakers.vcproj", "{652E2772-861D-48C6-A710-FDC1078CBA09}"
 	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
 Global
