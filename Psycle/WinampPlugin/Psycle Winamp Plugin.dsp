@@ -43,7 +43,8 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 1
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PSYCLEWINAMPPLUGIN_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PSYCLEWINAMPPLUGIN_EXPORTS" /D "_WINAMP_PLUGIN_" /D "_WINDLL" /D "_AFXDLL" /FR /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PSYCLEWINAMPPLUGIN_EXPORTS" /D "_WINAMP_PLUGIN_" /D "_WINDLL" /D "_AFXDLL" /Yu"stdafx.h" /FD /c
+# SUBTRACT CPP /Fr
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x403 /d "NDEBUG"
@@ -53,8 +54,8 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 /nologo /dll /pdb:none /map /debug /machine:I386 /out:"d:/archivos de programa/winamp/plugins/in_psycle.dll"
-# SUBTRACT LINK32 /profile /nodefaultlib /force
+# ADD LINK32 /nologo /dll /pdb:none /map /machine:I386 /out:"release/in_psycle.dll"
+# SUBTRACT LINK32 /profile /debug /nodefaultlib /force
 
 !ELSEIF  "$(CFG)" == "Psycle Winamp Plugin - Win32 Debug"
 
