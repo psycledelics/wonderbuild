@@ -6,9 +6,10 @@ The current code base of psycle is stored in the portable_psycle dir.
 
 ./psycle2_multisequence
 	Krissce's version of psycle, with a multipattern sequencer.
+	This is a fork from mainline version 1.7.6.
 
 ./Psycle/ (Capital)
-	Old psycle versions until 1.7.5.
+	Old psycle versions until 1.7.5. (or 1.7.6?)
 
 ./psycle/ (lower case)
 	Some mistake, nothing there :/
