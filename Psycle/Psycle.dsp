@@ -562,6 +562,14 @@ SOURCE=.\PresetsDlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\SaveWavDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SaveWavDlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\SongpDlg.cpp
 # End Source File
 # Begin Source File
@@ -890,14 +898,6 @@ SOURCE=".\Docs\how to skin psycle.txt"
 # Begin Source File
 
 SOURCE=".\DevelDocs\new sampler spec.txt"
-# End Source File
-# Begin Source File
-
-SOURCE=.\SaveWavDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\SaveWavDlg.h
 # End Source File
 # Begin Source File
 
