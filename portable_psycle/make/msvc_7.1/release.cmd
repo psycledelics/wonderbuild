@@ -138,6 +138,7 @@ rem ----------------
 		rem --------------------------------------------------------
 		
 			for /r "%distribution%" %%i in (*.txt *.text) do unix2dos "%%i"
+			echo.
 		
 	rem ===========================
 	echo %~n0: making the archive ...
@@ -163,7 +164,7 @@ rem ----------------
 		
 			if "%USERNAME%" == "JosepMa" (
 				set sourceforge_user_account=jaz001
-			) else if "%USERNAME%" == "administrador" (
+			) else if "%USERNAME%" == "Administrador" (
 				set sourceforge_user_account=sampler
 			) else if "%USERNAME%" == "bohan" (
 				set sourceforge_user_account=johan-boule
