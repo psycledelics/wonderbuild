@@ -14,7 +14,13 @@ rem ============
 rem calling main
 rem ============
 
-	call :main && echo %0: all operations completed successfully.
+	if exist ..\..\..\CVS\Tag (
+		for /f %%i in (..\..\..\CVS\Tag) do (
+			call :main %%i && echo %0: all operations completed successfully.
+		)
+	) else (
+		call :main && echo %0: all operations completed successfully.
+	)
 
 rem ====================================================
 echo %0: removing temporary working directory %work% ...
@@ -42,6 +48,19 @@ rem ----------------
 rem main sub routine
 rem ----------------
 :main
+
+	rem ===
+	rem tag
+	rem ===
+
+	set tag=%1
+	if "%tag%" == "" (
+		echo %0: tag: no tag
+	) else (
+		set tag=%tag:~1%
+		echo %0: tag: %tag%
+	)
+
 	rem =======
 	rem targets
 	rem =======
@@ -68,15 +87,23 @@ rem ----------------
 	rem ===============================================
 	echo %0: making the directory to be distributed ...
 	rem ===============================================
-	
-		set timestamp=%date%.%time%
-		set timestamp=%timestamp: =.%
-		set timestamp=%timestamp:/=.%
-		set timestamp=%timestamp:\=.%
-		set timestamp=%timestamp::=.%
-		set timestamp=%timestamp:-=.%
+
+		rem microsoft's state of the art script engine has no late evalutation...
+		set stamp=%date%.%time%
+		set stamp=%stamp: =.%
+		set stamp=%stamp:/=.%
+		set stamp=%stamp:\=.%
+		set stamp=%stamp::=.%
+		set stamp=%stamp:-=.%
+		set stamp=timestamp-%stamp%
+
+		if "%tag%" == "" (
+			rem microsoft's state of the art script engine has no late evalutation...
+		) else (
+			set stamp=%tag%
+		)
 		
-		set distribution=.\psycle.bin.timestamp-%timestamp%\
+		set distribution=.\psycle.bin.%stamp%\
 		
 		mkdir "%distribution%"
 		echo %0: directory %distribution% created
@@ -116,7 +143,13 @@ rem ----------------
 	echo %0: making the archive ...
 	rem ===========================
 		
-		rar a -s -m5 -md4096 -ep1 -r0 .\psycle.bin.rar "%distribution%" 1>> .\psycle.bin.rar.log 2>&1 || goto :failed
+		if "%tag%" == "" (
+			set archive=psycle.bin.rar
+		) else (
+			set archive=psycle.bin.%tag%.rar
+		)
+
+		rar a -s -m5 -md4096 -ep1 -r0 .\%archive% "%distribution%" 1>> .\%archive%.log 2>&1 || goto :failed
 	
 	rem =================================================
 	rem uploading the archive and updating the site
@@ -148,13 +181,13 @@ rem ----------------
 		echo %0: uploading the archive to sourceforge ...
 		rem ---------------------------------------------
 		
-			scp ./psycle.bin.rar "%sourceforge_user_account%@shell.sourceforge.net:%sourceforge_group_account%/htdocs/" || goto :failed
+			scp ./%archive% "%sourceforge_user_account%@shell.sourceforge.net:%sourceforge_group_account%/htdocs/" || goto :failed
 		
 		rem ------------------------------------------
 		echo %0: updating sourceforge ht pages ...
 		rem ------------------------------------------
 		
-			ssh "%sourceforge_user_account%@shell.sourceforge.net" "%sourceforge_group_account%/htdocs.update.bash" || goto :failed
+			ssh "%sourceforge_user_account%@shell.sourceforge.net" "%sourceforge_group_account%/htdocs.update.bash %archive%" || goto :failed
 goto :eof
 
 rem ---------------
