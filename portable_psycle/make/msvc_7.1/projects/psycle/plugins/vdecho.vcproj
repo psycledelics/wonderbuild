@@ -33,7 +33,6 @@
 				OmitFramePointers="TRUE"
 				EnableFiberSafeOptimizations="TRUE"
 				OptimizeForProcessor="2"
-				OptimizeForWindowsApplication="FALSE"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
@@ -182,7 +181,6 @@
 				OmitFramePointers="TRUE"
 				EnableFiberSafeOptimizations="TRUE"
 				OptimizeForProcessor="3"
-				OptimizeForWindowsApplication="FALSE"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
@@ -245,9 +243,9 @@
 	<References>
 	</References>
 	<Files>
-			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugins\vincenzo_demasi\vdEcho\vdEcho.cpp">
-			</File>
+		<File
+			RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugins\vincenzo_demasi\vdEcho\vdEcho.cpp">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
