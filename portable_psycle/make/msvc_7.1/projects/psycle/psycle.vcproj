@@ -830,6 +830,16 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\operating_system\exceptions.code_description.cpp">
 				</File>
 			</Filter>
+			<Filter
+				Name="library"
+				Filter="">
+				<File
+					RelativePath="..\..\..\..\include\operating_system\library\export.h">
+				</File>
+				<File
+					RelativePath="..\..\..\..\include\operating_system\library\import.h">
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Global.cpp">
