@@ -6,15 +6,15 @@ call "%VS71ComnTools%\VSVars32"
 
 rem ######### amd k7 and intel p3 ##########
 
-DevEnv solution.sln /clean release /out clean.log || ( echo clean failed, aborting. & goto :pause )
-del/q clean.log
-DevEnv solution.sln /build release /out release.log || ( echo build failed, aborting. & goto :pause )
+DevEnv solution.sln /clean release /out release.clean.log || ( echo clean failed, aborting. & goto :pause )
+del/q release.clean.log
+DevEnv solution.sln /build release /out release.build.log || ( echo build failed, aborting. & goto :pause )
 
 rem ########## intel p4 ##########
 
-DevEnv solution.sln /clean release_intel_pentium_4 /out clean.log || ( echo clean failed, aborting. & goto :pause )
-del/q clean.log
-DevEnv solution.sln /build release_intel_pentium_4 /out release.log || ( echo build failed, aborting. & goto :pause )
+DevEnv solution.sln /clean release_intel_pentium_4 /out release_intel_pentium_4.clean.log || ( echo clean failed, aborting. & goto :pause )
+del/q release_intel_pentium_4.clean.log
+DevEnv solution.sln /build release_intel_pentium_4 /out release_intel_pentium_4.build.log || ( echo build failed, aborting. & goto :pause )
 
 rem ====================================
 rem make the directory to be distributed
@@ -123,7 +123,7 @@ rem ================================
 pause
 rmdir/s/q "%distribution%"
 del/q .\psycle.bin.rar
-del/q .\release.log
+del/q .\release*.log
 goto :eof
 
 rem ===============
