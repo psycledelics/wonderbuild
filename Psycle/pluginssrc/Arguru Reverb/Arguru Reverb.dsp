@@ -92,11 +92,16 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\AllPass.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\CombFilter.cpp
+
+!IF  "$(CFG)" == "Arguru Reverb - Win32 Release"
+
+# ADD CPP /O2
+
+!ELSEIF  "$(CFG)" == "Arguru Reverb - Win32 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
