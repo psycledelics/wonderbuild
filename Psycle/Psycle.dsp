@@ -230,14 +230,6 @@ SOURCE=.\MachineInterface.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\MacProp.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MacProp.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\MasterDlg.cpp
 # End Source File
 # Begin Source File
@@ -527,6 +519,14 @@ SOURCE=.\InfoDlg.cpp
 # Begin Source File
 
 SOURCE=.\InfoDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MacProp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\MacProp.h
 # End Source File
 # Begin Source File
 
