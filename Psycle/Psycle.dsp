@@ -139,6 +139,14 @@ SOURCE=.\DefaultVstGui.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Filter.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Filter.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\FrameMachine.cpp
 # End Source File
 # Begin Source File
@@ -428,14 +436,6 @@ SOURCE=.\FileXM.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Filter.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Filter.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\Global.cpp
 # End Source File
 # Begin Source File
@@ -709,6 +709,10 @@ SOURCE=.\res\minus.bmp
 # End Source File
 # Begin Source File
 
+SOURCE=.\res\minus1.bmp
+# End Source File
+# Begin Source File
+
 SOURCE=.\res\more.bmp
 # End Source File
 # Begin Source File
@@ -718,6 +722,10 @@ SOURCE=.\res\moremore.bmp
 # Begin Source File
 
 SOURCE=.\res\plus.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\plus1.bmp
 # End Source File
 # Begin Source File
 
