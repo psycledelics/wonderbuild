@@ -211,14 +211,6 @@ SOURCE=.\GearPsychosc.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\GearScope.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\GearScope.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\GearTracker.cpp
 # End Source File
 # Begin Source File
