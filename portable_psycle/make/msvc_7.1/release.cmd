@@ -160,7 +160,11 @@ rem ----------------
 		echo %~n0: mapping local user account name to sourceforge user account name ...
 		rem ------------------------------------------------------------------------
 		
-			if "%USERNAME%" == "bohan" (
+			if "%USERNAME%" == "JosepMa" (
+				set sourceforge_user_account=jaz001
+			) else if "%USERNAME%" == "administrador" (
+				set sourceforge_user_account=sampler
+			) else if "%USERNAME%" == "bohan" (
 				set sourceforge_user_account=johan-boule
 			) else if "%USERNAME%" == "x" (
 				set sourceforge_user_account=alkenstein
