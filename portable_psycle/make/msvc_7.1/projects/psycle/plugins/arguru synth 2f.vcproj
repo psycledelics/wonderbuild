@@ -68,7 +68,7 @@
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
 				TurnOffAssemblyGeneration="TRUE"
-				ImportLibrary="$(SolutionDir)/$(ConfigurationName)/lib/$(ProjectName).lib"/>
+				ImportLibrary="$(SolutionDir)/$(ConfigurationName)/lib/$(InputName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				TypeLibraryName="$(SolutionDir)/$(ConfigurationName)/lib/$(ProjectName).tlb"/>
@@ -136,7 +136,7 @@
 				ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
 				OptimizeForWindows98="1"
 				TurnOffAssemblyGeneration="TRUE"
-				ImportLibrary="$(SolutionDir)/$(ConfigurationName)/lib/$(ProjectName).lib"/>
+				ImportLibrary="$(SolutionDir)/$(ConfigurationName)/lib/$(InputName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				TypeLibraryName="$(SolutionDir)/$(ConfigurationName)/lib/$(ProjectName).tlb"/>
@@ -218,7 +218,7 @@
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
 				TurnOffAssemblyGeneration="TRUE"
-				ImportLibrary="$(SolutionDir)/$(ConfigurationName)/lib/$(ProjectName).lib"/>
+				ImportLibrary="$(SolutionDir)/$(ConfigurationName)/lib/$(InputName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				TypeLibraryName="$(SolutionDir)/$(ConfigurationName)/lib/$(ProjectName).tlb"/>

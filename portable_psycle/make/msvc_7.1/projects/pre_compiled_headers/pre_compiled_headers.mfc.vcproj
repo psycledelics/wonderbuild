@@ -71,7 +71,7 @@
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
 				TurnOffAssemblyGeneration="TRUE"
-				ImportLibrary="$(IntDir)/$(ProjectName).lib"/>
+				ImportLibrary="$(IntDir)/$(InputName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				TypeLibraryName="$(IntDir)/$(ProjectName).tlb"/>
@@ -142,7 +142,7 @@
 				ProgramDatabaseFile="$(IntDir)/$(InputName).pdb"
 				OptimizeForWindows98="1"
 				TurnOffAssemblyGeneration="TRUE"
-				ImportLibrary="$(IntDir)/$(ProjectName).lib"/>
+				ImportLibrary="$(IntDir)/$(InputName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				TypeLibraryName="$(IntDir)/$(ProjectName).tlb"/>
@@ -227,7 +227,7 @@
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
 				TurnOffAssemblyGeneration="TRUE"
-				ImportLibrary="$(IntDir)/$(ProjectName).lib"/>
+				ImportLibrary="$(IntDir)/$(InputName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				TypeLibraryName="$(IntDir)/$(ProjectName).tlb"/>
