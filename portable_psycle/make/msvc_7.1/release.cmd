@@ -94,10 +94,20 @@ rem ============================================================================
 rem upload the archive and update the site (scp and ssh are cygwin commands, use / not \)
 rem =====================================================================================
 
-set user=johan-boule
+group=/home/groups/p/ps/psycle/
 
-scp ./psycle.bin.rar %user%@shell.sourceforge.net:psycle/htdocs/ || ( echo scp failed, aborting. && goto :pause )
-ssh %user%@shell.sourceforge.net psycle/htdocs.update.bash || ( echo ssh failed, aborting. && goto :pause )
+rem maps local user account names to sourceforge user account names
+
+if "%USERPNAME%" == "bohan" (
+	set user=johan-boule
+) else if "%USERPNAME%" == "x" (
+	set user=alkenstein
+) else (
+	set user="%USERPNAME%"
+)
+
+scp ./psycle.bin.rar "%user%@shell.sourceforge.net:%group%/htdocs/" || ( echo scp failed, aborting. && goto :pause )
+ssh "%user%@shell.sourceforge.net" "%group%/htdocs.update.bash" || ( echo ssh failed, aborting. && goto :pause )
 
 rem ================================
 rem pause and remove temporary files
