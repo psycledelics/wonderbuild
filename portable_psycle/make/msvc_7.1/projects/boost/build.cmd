@@ -1,6 +1,6 @@
 pushd ..\..\..\..\include\ && (
 	if not exist boost (
-		boost
+		boost -y
 	)
 	popd
 )
