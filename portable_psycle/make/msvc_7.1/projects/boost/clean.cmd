@@ -11,6 +11,7 @@ pushd ..\..\..\..\include\ && (
 	if exist ..\..\output (
 		pushd ..\..\output && (
 			del/s/q boost_*
+			del/s/q libboost_*
 			popd
 		)
 	)
