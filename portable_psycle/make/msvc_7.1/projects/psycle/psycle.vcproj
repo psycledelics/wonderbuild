@@ -759,6 +759,12 @@
 						Name="XMSampler"
 						Filter="">
 						<File
+							RelativePath="..\..\..\..\src\psycle\host\XMSamplerMixerPage.cpp">
+						</File>
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\XMSamplerMixerPage.hpp">
+						</File>
+						<File
 							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUI.cpp">
 						</File>
 						<File
@@ -854,58 +860,6 @@
 					</File>
 					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MidiLearn.hpp">
-					</File>
-				</Filter>
-				<Filter
-					Name="CTabCtrlSSL"
-					Filter="">
-					<File
-						RelativePath="..\..\..\..\include\CTabCtrlSSL\TabCtrlSSL.cpp">
-						<FileConfiguration
-							Name="release.g6|Win32"
-							ExcludedFromBuild="TRUE">
-							<Tool
-								Name="VCCLCompilerTool"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="debug|Win32"
-							ExcludedFromBuild="TRUE">
-							<Tool
-								Name="VCCLCompilerTool"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="release.g7|Win32"
-							ExcludedFromBuild="TRUE">
-							<Tool
-								Name="VCCLCompilerTool"/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\..\..\..\include\CTabCtrlSSL\TabCtrlSSL.h">
-					</File>
-					<File
-						RelativePath="..\..\..\..\include\CTabCtrlSSL\TabPageSSL.cpp">
-						<FileConfiguration
-							Name="release.g6|Win32"
-							ExcludedFromBuild="TRUE">
-							<Tool
-								Name="VCCLCompilerTool"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="debug|Win32"
-							ExcludedFromBuild="TRUE">
-							<Tool
-								Name="VCCLCompilerTool"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="release.g7|Win32"
-							ExcludedFromBuild="TRUE">
-							<Tool
-								Name="VCCLCompilerTool"/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\..\..\..\include\CTabCtrlSSL\TabPageSSL.h">
 					</File>
 				</Filter>
 			</Filter>
