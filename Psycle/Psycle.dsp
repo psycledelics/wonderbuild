@@ -889,6 +889,14 @@ SOURCE=".\Docs\tweakings and commands.txt"
 # End Source File
 # Begin Source File
 
+SOURCE=.\VolumeDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\VolumeDlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Docs\whatsnew.txt
 # End Source File
 # End Target
