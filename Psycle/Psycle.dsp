@@ -846,7 +846,15 @@ SOURCE=.\res\vsti.bmp
 # End Group
 # Begin Source File
 
+SOURCE=".\Docs\how to skin psycle.txt"
+# End Source File
+# Begin Source File
+
 SOURCE=.\Docs\todo.txt
+# End Source File
+# Begin Source File
+
+SOURCE=".\Docs\tweakings and commands.txt"
 # End Source File
 # Begin Source File
 
