@@ -733,6 +733,10 @@ SOURCE=.\res\littleright.bmp
 # End Source File
 # Begin Source File
 
+SOURCE=.\res\MasterMachine\masterbk.bmp
+# End Source File
+# Begin Source File
+
 SOURCE=.\MidiMessageDlg.h
 # End Source File
 # Begin Source File
@@ -753,6 +757,10 @@ SOURCE=.\res\moremore.bmp
 # End Source File
 # Begin Source File
 
+SOURCE=.\res\MasterMachine\numbers.bmp
+# End Source File
+# Begin Source File
+
 SOURCE=.\res\plus.bmp
 # End Source File
 # Begin Source File
@@ -766,6 +774,10 @@ SOURCE=.\res\Psycle.ico
 # Begin Source File
 
 SOURCE=.\res\Psycle.rc2
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\MasterMachine\slider.bmp
 # End Source File
 # Begin Source File
 
