@@ -378,6 +378,14 @@ SOURCE=.\DSoundConfig.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\KeyConfigDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\KeyConfigDlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\MidiInputDlg.cpp
 # End Source File
 # Begin Source File
@@ -528,14 +536,6 @@ SOURCE=.\InputHandler.cpp
 # Begin Source File
 
 SOURCE=.\InputHandler.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\KeyConfigDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\KeyConfigDlg.h
 # End Source File
 # Begin Source File
 
