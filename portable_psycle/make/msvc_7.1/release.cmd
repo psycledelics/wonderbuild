@@ -55,9 +55,9 @@ rem ================
 del/q .\psycle.bin.rar
 rar a -s -m5 -md4096 -ep1 -r0 .\psycle.bin.rar .\psycle 1>> .\release.log 2>&1 || ( echo rar failed, aborting. & goto :pause )
 
-rem =================================================================================
-rem upload archive and update the site (scp and ssh are cygwin commands, use / not \)
-rem =================================================================================
+rem =====================================================================================
+rem upload the archive and update the site (scp and ssh are cygwin commands, use / not \)
+rem =====================================================================================
 
 set user=johan-boule
 
