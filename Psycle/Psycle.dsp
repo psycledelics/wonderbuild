@@ -865,6 +865,14 @@ SOURCE=.\res\vsti.bmp
 # End Group
 # Begin Source File
 
+SOURCE=.\GearRackDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GearRackDlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=".\Docs\how to skin psycle.txt"
 # End Source File
 # Begin Source File
