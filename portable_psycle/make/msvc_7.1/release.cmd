@@ -8,7 +8,7 @@ rem ====================================
 	if exist %work% rmdir/s/q %work%
 	mkdir %work%
 	pushd %work%
-	echo %0: temporary working directory is %work%
+	echo %~n0: temporary working directory is %work%
 
 rem ============
 rem calling main
@@ -16,21 +16,21 @@ rem ============
 
 	if exist ..\..\..\CVS\Tag (
 		for /f %%i in (..\..\..\CVS\Tag) do (
-			call :main %%i && echo %0: all operations completed successfully.
+			call :main %%i && echo %~n0: all operations completed successfully.
 		)
 	) else (
-		call :main && echo %0: all operations completed successfully.
+		call :main && echo %~n0: all operations completed successfully.
 	)
 
 rem ====================================================
-echo %0: removing temporary working directory %work% ...
+echo %~n0: removing temporary working directory %work% ...
 rem ====================================================
 
 	popd
-	echo %0: press any key to remove temporary working directory %work%, or break to keep it.
+	echo %~n0: press any key to remove temporary working directory %work%, or break to keep it.
 	pause
 	rmdir/s/q %work%
-	echo %0: removed temporary working directory %work%
+	echo %~n0: removed temporary working directory %work%
 
 rem ======================================
 rem end of main flow, exiting or returning
@@ -55,10 +55,10 @@ rem ----------------
 
 	set tag=%1
 	if "%tag%" == "" (
-		echo %0: tag: no tag
+		echo %~n0: tag: no tag
 	) else (
 		set tag=%tag:~1%
-		echo %0: tag: %tag%
+		echo %~n0: tag: %tag%
 	)
 
 	rem =======
@@ -71,7 +71,7 @@ rem ----------------
 	rem clean and build
 	rem ===============
 	
-		echo %0: sourcing mircosoft visual studio 7.1 environement ...
+		echo %~n0: sourcing mircosoft visual studio 7.1 environement ...
 			rem microsoft made a dumb script that keeps appending things to the env vars,
 			rem so, when invoke many times, we ends up with "too long line", sic. they can rot in hell.
 			rem so, we're saving the env to restore it after.
@@ -85,7 +85,7 @@ rem ----------------
 		call :restore_env
 	
 	rem ===============================================
-	echo %0: making the directory to be distributed ...
+	echo %~n0: making the directory to be distributed ...
 	rem ===============================================
 
 		rem microsoft's state of the art script engine has no late evaluation by default...
@@ -106,10 +106,10 @@ rem ----------------
 		set distribution=.\psycle.mfc.bin.%stamp%\
 		
 		mkdir "%distribution%"
-		echo %0: directory %distribution% created
+		echo %~n0: directory %distribution% created
 		
 		rem ---------------------------------------
-		echo %0: copying libraries and programs ...
+		echo %~n0: copying libraries and programs ...
 		rem ---------------------------------------
 		
 			for %%t in (%targets%) do (
@@ -117,7 +117,7 @@ rem ----------------
 			)
 		
 		rem ---------------------------------------
-		echo %0: copying end-user documentation ...
+		echo %~n0: copying end-user documentation ...
 		rem ---------------------------------------
 		
 			mkdir "%distribution%\doc\"
@@ -126,21 +126,21 @@ rem ----------------
 			rename "%distribution%\cpu.txt" "readme-cpu.txt" || goto :failed
 		
 		rem ---------------------------------------------
-		echo %0: removing cvs files from distribution ...
+		echo %~n0: removing cvs files from distribution ...
 		rem ---------------------------------------------
 		
 			for /r "%distribution%" %%i in (CVS) do rmdir/s/q "%%i"
 			for /r "%distribution%" %%i in (.cvsignore) do del/q "%%i"
 		
 		rem --------------------------------------------------------
-		echo %0: converting text files to microsoft end-of-lines ...
+		echo %~n0: converting text files to microsoft end-of-lines ...
 		rem unix2dos is distributed with cygwin
 		rem --------------------------------------------------------
 		
 			for /r "%distribution%" %%i in (*.txt *.text) do unix2dos "%%i"
 		
 	rem ===========================
-	echo %0: making the archive ...
+	echo %~n0: making the archive ...
 	rem ===========================
 		
 		if "%tag%" == "" (
@@ -157,7 +157,7 @@ rem ----------------
 	rem =================================================
 	
 		rem ------------------------------------------------------------------------
-		echo %0: mapping local user account name to sourceforge user account name ...
+		echo %~n0: mapping local user account name to sourceforge user account name ...
 		rem ------------------------------------------------------------------------
 		
 			if "%USERNAME%" == "bohan" (
@@ -168,23 +168,23 @@ rem ----------------
 				set sourceforge_user_account=%USERNAME%
 			)
 			
-			echo %0: sourceforge user account: %sourceforge_user_account%
+			echo %~n0: sourceforge user account: %sourceforge_user_account%
 		
 		rem ------------------------------
 		rem sourceforge group account
 		rem ------------------------------
 
 			set sourceforge_group_account=/home/groups/p/ps/psycle/
-			echo %0: sourceforge group account: %sourceforge_group_account%
+			echo %~n0: sourceforge group account: %sourceforge_group_account%
 		
 		rem ---------------------------------------------
-		echo %0: uploading the archive to sourceforge ...
+		echo %~n0: uploading the archive to sourceforge ...
 		rem ---------------------------------------------
 		
 			scp ./%archive% "%sourceforge_user_account%@shell.sourceforge.net:%sourceforge_group_account%/htdocs/" || goto :failed
 		
 		rem ------------------------------------------
-		echo %0: updating sourceforge ht pages ...
+		echo %~n0: updating sourceforge ht pages ...
 		rem ------------------------------------------
 		
 			ssh "%sourceforge_user_account%@shell.sourceforge.net" "%sourceforge_group_account%/htdocs/update-timestamps" || goto :failed
@@ -222,7 +222,7 @@ rem -------------------------------------
 	set configuration=%1
 	rem for %%o in (clean build) do (
 	for %%o in (build) do (
-		echo %0: %%oing %configuration% ...
+		echo %~n0: %%oing %configuration% ...
 		DevEnv ..\solution.sln /%%o %configuration% /out %configuration%.%%o.log || goto :failed
 	)
 goto :eof
@@ -232,18 +232,18 @@ rem copy binaries
 rem -------------
 :copy_binaries
 	set target=%1
-	echo %0: copying %target% ...
+	echo %~n0: copying %target% ...
 	set source=..\release.%target%\bin\
 	set destination=%distribution%\%target%\
 	rem <bohan> Well i think microsoft's documentation about microsoft's xcopy is wrong.
 	rem <bohan> xcopy/f <-- shows what files are being copied.
 	rem <bohan> It turns out it also does something else, like allowing copy of files whose name ends with ".exe".
 	rem <bohan> Also, sometimes, xcopy crashes with a memory access violation... no comment.
-	echo %0: copying built libraries and programs ...
+	echo %~n0: copying built libraries and programs ...
 	xcopy/f/i "%source%\*.exe" "%destination%" || goto :failed
 	xcopy/f/i "%source%\*.dll" "%destination%" || goto :failed
 	xcopy/i "%source%\psycle.plugins\*.dll" "%destination%\plugins\" || goto :failed
-	echo %0: copying microsoft c/c++/gdi+/mfc runtime libraries ...
+	echo %~n0: copying microsoft c/c++/gdi+/mfc runtime libraries ...
 	xcopy "%SYSTEMROOT%\system32\msvcr71.dll" "%destination%" || goto :failed
 	xcopy "%SYSTEMROOT%\system32\msvcp71.dll" "%destination%" || goto :failed
 	xcopy "%SYSTEMROOT%\system32\mfc71.dll" "%destination%" || goto :failed
@@ -256,7 +256,7 @@ rem failed
 rem ------
 :failed
 	set return_code=%ERRORLEVEL%
-	echo %0: failed with return code: %return_code%
+	echo %~n0: failed with return code: %return_code%
 	set failed=true
 	if "%return_code%" == "0" (
 		exit /b 1
@@ -269,7 +269,7 @@ rem return
 rem ------
 :return
 	if "%failed%" == "true" (
-		echo %0: failed with return code: %return_code%
+		echo %~n0: failed with return code: %return_code%
 		if "%return_code%" == "0" (
 			exit /b 1
 		) else (
