@@ -35,8 +35,6 @@
 				OptimizeForProcessor="2"
 				OptimizeForWindowsApplication="TRUE"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../include/psycle/host&quot;;&quot;$(SolutionDir)/../../include/psycle/host/asio&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;"
-				PreprocessorDefinitions="OPERATING_SYSTEM__CROSSPLATFORM"
-				StringPooling="FALSE"
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
@@ -53,7 +51,7 @@
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4652"
-				ForcedIncludeFiles="stdafx.h;psycle/host/Global.h"/>
+				ForcedIncludeFiles="stdafx.h"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -111,9 +109,6 @@
 /WL"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../include/psycle/host&quot;;&quot;$(SolutionDir)/../../include/psycle/host/asio&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;"
-				PreprocessorDefinitions="OPERATING_SYSTEM__CROSSPLATFORM"
-				StringPooling="FALSE"
-				MinimalRebuild="FALSE"
 				ExceptionHandling="FALSE"
 				BasicRuntimeChecks="3"
 				SmallerTypeCheck="TRUE"
@@ -127,6 +122,7 @@
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
+				BrowseInformation="1"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
@@ -174,7 +170,7 @@
 			OutputDirectory="$(SolutionDir)/$(ConfigurationName)/bin"
 			IntermediateDirectory="$(SolutionDir)/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="1"
-			UseOfMFC="1"
+			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.bat;$(TargetPath)"
 			WholeProgramOptimization="FALSE">
@@ -186,7 +182,7 @@
 /WL"
 				Optimization="4"
 				GlobalOptimizations="TRUE"
-				InlineFunctionExpansion="1"
+				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="TRUE"
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
@@ -194,10 +190,8 @@
 				OptimizeForProcessor="3"
 				OptimizeForWindowsApplication="TRUE"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../include/psycle/host&quot;;&quot;$(SolutionDir)/../../include/psycle/host/asio&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;"
-				PreprocessorDefinitions="OPERATING_SYSTEM__CROSSPLATFORM"
-				StringPooling="FALSE"
 				ExceptionHandling="FALSE"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
@@ -207,13 +201,12 @@
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
-				BrowseInformation="1"
 				WarningLevel="4"
 				WarnAsError="TRUE"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4652"
-				ForcedIncludeFiles="stdafx.h;psycle/host/Global.h"/>
+				ForcedIncludeFiles="stdafx.h"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -836,10 +829,10 @@
 				Name="library"
 				Filter="">
 				<File
-					RelativePath="..\..\..\..\include\operating_system\library\export.h">
+					RelativePath="$(SolutionDir)\..\..\..\include\operating_system\library\export.h">
 				</File>
 				<File
-					RelativePath="..\..\..\..\include\operating_system\library\import.h">
+					RelativePath="$(SolutionDir)\..\..\..\include\operating_system\library\import.h">
 				</File>
 			</Filter>
 		</Filter>
