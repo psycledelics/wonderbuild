@@ -19,7 +19,6 @@ CFG=PortAudioStaticASIO - Win32 Debug
 !MESSAGE 
 !MESSAGE "PortAudioStaticASIO - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE "PortAudioStaticASIO - Win32 Release" (based on "Win32 (x86) Static Library")
-!MESSAGE "PortAudioStaticASIO - Win32 Release Cyrix" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -27,7 +26,6 @@ CFG=PortAudioStaticASIO - Win32 Debug
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
 CPP=cl.exe
-MTL=midl.exe
 RSC=rc.exe
 
 !IF  "$(CFG)" == "PortAudioStaticASIO - Win32 Debug"
@@ -42,18 +40,19 @@ RSC=rc.exe
 # PROP Output_Dir ".\Debug"
 # PROP Intermediate_Dir ".\Debug"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MDd /I "..\..\asiosdk2\host\pc" /I "..\..\asiosdk2\host" /I "..\..\asiosdk2\common" /I "..\..\portaudio_v18\pa_common" /ZI /W3 /Od /Ot /D "WIN32" /D "_DEBUG" /D "_LIB" /D "_MBCS" /YX /GZ /c /GX 
-# ADD CPP /nologo /MDd /I "..\..\asiosdk2\host\pc" /I "..\..\asiosdk2\host" /I "..\..\asiosdk2\common" /I "..\..\portaudio_v18\pa_common" /ZI /W3 /Od /Ot /D "WIN32" /D "_DEBUG" /D "_LIB" /D "_MBCS" /YX /GZ /c /GX 
-# ADD BASE MTL /nologo /win32 
-# ADD MTL /nologo /win32 
-# ADD BASE RSC /l 1033 /d "_DEBUG" 
-# ADD RSC /l 1033 /d "_DEBUG" 
+MTL=midl.exe
+# ADD BASE MTL /nologo /win32
+# ADD MTL /nologo /win32
+# ADD BASE CPP /nologo /MDd /W3 /GX /ZI /Ot /I "..\..\asiosdk2\host\pc" /I "..\..\asiosdk2\host" /I "..\..\asiosdk2\common" /I "..\..\portaudio_v18\pa_common" /D "WIN32" /D "_DEBUG" /D "_LIB" /D "_MBCS" /YX /GZ /c
+# ADD CPP /nologo /MTd /W3 /GX /ZI /Od /I "..\..\asiosdk2\host\pc" /I "..\..\asiosdk2\host" /I "..\..\asiosdk2\common" /I "..\..\portaudio_v18\pa_common" /D "WIN32" /D "_DEBUG" /D "_LIB" /D "_MBCS" /FR /YX /GZ /c
+# ADD BASE RSC /l 0x409 /d "_DEBUG"
+# ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo 
-# ADD BSC32 /nologo 
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:".\Debug\PortAudioStaticASIO.lib" 
-# ADD LIB32 /nologo /out:".\Debug\PortAudioStaticASIO.lib" 
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo
 
 !ELSEIF  "$(CFG)" == "PortAudioStaticASIO - Win32 Release"
 
@@ -67,65 +66,70 @@ LIB32=link.exe -lib
 # PROP Output_Dir ".\Release"
 # PROP Intermediate_Dir ".\Release"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MT /I "..\..\asiosdk2\host\pc" /I "..\..\asiosdk2\host" /I "..\..\asiosdk2\common" /I "..\..\portaudio_v18\pa_common" /W3 /O2 /Ob2 /Ot /G6 /D "WIN32" /D "NDEBUG" /D "_LIB" /D "_MBCS" /GF /Gy /YX /c /GX 
-# ADD CPP /nologo /MT /I "..\..\asiosdk2\host\pc" /I "..\..\asiosdk2\host" /I "..\..\asiosdk2\common" /I "..\..\portaudio_v18\pa_common" /W3 /O2 /Ob2 /Ot /G6 /D "WIN32" /D "NDEBUG" /D "_LIB" /D "_MBCS" /GF /Gy /YX /c /GX 
-# ADD BASE MTL /nologo /win32 
-# ADD MTL /nologo /win32 
-# ADD BASE RSC /l 1033 /d "NDEBUG" 
-# ADD RSC /l 1033 /d "NDEBUG" 
+MTL=midl.exe
+# ADD BASE MTL /nologo /win32
+# ADD MTL /nologo /win32
+# ADD BASE CPP /nologo /G6 /MT /W3 /GX /Ot /Ob2 /Gy /I "..\..\asiosdk2\host\pc" /I "..\..\asiosdk2\host" /I "..\..\asiosdk2\common" /I "..\..\portaudio_v18\pa_common" /D "WIN32" /D "NDEBUG" /D "_LIB" /D "_MBCS" /YX /GF /c
+# ADD CPP /nologo /G6 /MT /W3 /GX /Ot /Ob2 /Gy /I "..\..\asiosdk2\host\pc" /I "..\..\asiosdk2\host" /I "..\..\asiosdk2\common" /I "..\..\portaudio_v18\pa_common" /D "WIN32" /D "NDEBUG" /D "_LIB" /D "_MBCS" /YX /GF /c
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo 
-# ADD BSC32 /nologo 
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:".\Release\PortAudioStaticASIO.lib" 
-# ADD LIB32 /nologo /out:".\Release\PortAudioStaticASIO.lib" 
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo
 
-!ELSEIF  "$(CFG)" == "PortAudioStaticASIO - Win32 Release Cyrix"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir ".\Release Cyrix"
-# PROP BASE Intermediate_Dir ".\Release Cyrix"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir ".\Release Cyrix"
-# PROP Intermediate_Dir ".\Release Cyrix"
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /MT /I "..\..\asiosdk2\host\pc" /I "..\..\asiosdk2\host" /I "..\..\asiosdk2\common" /I "..\..\portaudio_v18\pa_common" /W3 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /D "_CYRIX_PROCESSOR_" /D "_MBCS" /GF /Gy /c /GX 
-# ADD CPP /nologo /MT /I "..\..\asiosdk2\host\pc" /I "..\..\asiosdk2\host" /I "..\..\asiosdk2\common" /I "..\..\portaudio_v18\pa_common" /W3 /Ob2 /D "WIN32" /D "NDEBUG" /D "_LIB" /D "_CYRIX_PROCESSOR_" /D "_MBCS" /GF /Gy /c /GX 
-# ADD BASE MTL /nologo /win32 
-# ADD MTL /nologo /win32 
-# ADD BASE RSC /l 1033 
-# ADD RSC /l 1033 
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo 
-# ADD BSC32 /nologo 
-LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:".\Release Cyrix\PortAudioStaticASIO.lib" 
-# ADD LIB32 /nologo /out:".\Release Cyrix\PortAudioStaticASIO.lib" 
-
-!ENDIF
+!ENDIF 
 
 # Begin Target
 
 # Name "PortAudioStaticASIO - Win32 Debug"
 # Name "PortAudioStaticASIO - Win32 Release"
-# Name "PortAudioStaticASIO - Win32 Release Cyrix"
 # Begin Group "ASIO SDK Files"
 
 # PROP Default_Filter ""
 # Begin Source File
 
 SOURCE=..\..\asiosdk2\common\asio.cpp
+DEP_CPP_ASIO_=\
+	"..\..\asiosdk2\common\asio.h"\
+	"..\..\asiosdk2\common\asiodrvr.h"\
+	"..\..\asiosdk2\common\asiosys.h"\
+	"..\..\asiosdk2\common\combase.h"\
+	"..\..\asiosdk2\common\iasiodrv.h"\
+	"..\..\asiosdk2\host\asiodrivers.h"\
+	"..\..\asiosdk2\host\ginclude.h"\
+	"..\..\asiosdk2\host\pc\asiolist.h"\
+	
+NODEP_CPP_ASIO_=\
+	"..\..\asiosdk2\host\CodeFragments.hpp"\
+	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\asiosdk2\host\asiodrivers.cpp
+DEP_CPP_ASIOD=\
+	"..\..\asiosdk2\common\asio.h"\
+	"..\..\asiosdk2\common\asiosys.h"\
+	"..\..\asiosdk2\common\iasiodrv.h"\
+	"..\..\asiosdk2\host\asiodrivers.h"\
+	"..\..\asiosdk2\host\ginclude.h"\
+	"..\..\asiosdk2\host\pc\asiolist.h"\
+	
+NODEP_CPP_ASIOD=\
+	"..\..\asiosdk2\host\CodeFragments.hpp"\
+	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\asiosdk2\host\pc\asiolist.cpp
+DEP_CPP_ASIOL=\
+	"..\..\asiosdk2\common\asio.h"\
+	"..\..\asiosdk2\common\asiosys.h"\
+	"..\..\asiosdk2\common\iasiodrv.h"\
+	"..\..\asiosdk2\host\pc\asiolist.h"\
+	
 # End Source File
 # End Group
 # Begin Group "PortAudio SDK Files"
@@ -134,6 +138,19 @@ SOURCE=..\..\asiosdk2\host\pc\asiolist.cpp
 # Begin Source File
 
 SOURCE=..\..\portaudio_v18\pa_asio\pa_asio.cpp
+DEP_CPP_PA_AS=\
+	"..\..\asiosdk2\common\asio.h"\
+	"..\..\asiosdk2\common\asiosys.h"\
+	"..\..\asiosdk2\host\asiodrivers.h"\
+	"..\..\asiosdk2\host\ginclude.h"\
+	"..\..\asiosdk2\host\pc\asiolist.h"\
+	"..\..\portaudio_v18\pa_common\pa_host.h"\
+	"..\..\portaudio_v18\pa_common\pa_trace.h"\
+	"..\..\portaudio_v18\pa_common\portaudio.h"\
+	
+NODEP_CPP_PA_AS=\
+	"..\..\asiosdk2\host\CodeFragments.hpp"\
+	
 # End Source File
 # Begin Source File
 
@@ -142,6 +159,11 @@ SOURCE=..\..\portaudio_v18\pa_common\pa_host.h
 # Begin Source File
 
 SOURCE=..\..\portaudio_v18\pa_common\pa_lib.c
+DEP_CPP_PA_LI=\
+	"..\..\portaudio_v18\pa_common\pa_host.h"\
+	"..\..\portaudio_v18\pa_common\pa_trace.h"\
+	"..\..\portaudio_v18\pa_common\portaudio.h"\
+	
 # End Source File
 # Begin Source File
 
@@ -150,4 +172,3 @@ SOURCE=..\..\portaudio_v18\pa_common\portaudio.h
 # End Group
 # End Target
 # End Project
-
