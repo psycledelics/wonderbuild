@@ -1,0 +1,16 @@
+The current code base of psycle is stored in the portable_psycle dir.
+
+./portable_psycle/
+	psycle from version 1.7.6 and above
+
+./Psycle/
+	old psycle until version 1.7.5
+
+./PsyCore/
+	some draft, unfinished psycle core engine
+
+./PsyClean/
+	some draft, unfinished psycle
+
+./test/
+	nothing interesting here
