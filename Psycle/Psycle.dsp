@@ -601,6 +601,14 @@ SOURCE=.\StdAfx.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\SwingFillDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SwingFillDlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\WaveEdAmplifyDialog.cpp
 # End Source File
 # Begin Source File
