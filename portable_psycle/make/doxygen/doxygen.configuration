@@ -450,9 +450,9 @@ RECURSIVE              = YES
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-EXCLUDE                =
-	../../include/boost/
-	../../include/asio/ ../../src/asio/
+EXCLUDE                = \
+	../../include/boost/ \
+	../../include/asio/ ../../src/asio/ \
 	../../include/vst/
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or directories 
