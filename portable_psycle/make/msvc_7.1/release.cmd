@@ -27,7 +27,7 @@ set timestamp=%timestamp:\=.%
 set timestamp=%timestamp::=.%
 set timestamp=%timestamp:-=.%
 
-set distribution=.\psycle-%timestamp%\
+set distribution=.\psycle.bin.timestamp-%timestamp%\
 
 rmdir/s/q "%distribution%"
 mkdir "%distribution%"
