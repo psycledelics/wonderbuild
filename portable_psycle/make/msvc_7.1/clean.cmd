@@ -39,6 +39,12 @@ del/s/q/ah "*.suo" || goto :failed
 del/s/q "*.log" || goto :failed
 del/s/q "BuildLog.htm*" || goto :failed
 
+rem ============
+rem cleans boost
+rem ============
+
+rmdir/s/q ..\..\include\boost
+
 rem =================================
 rem cleans all psycle-generated files
 rem =================================
