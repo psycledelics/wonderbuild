@@ -70,7 +70,7 @@ MTL=midl.exe
 # ADD BASE MTL /nologo /win32
 # ADD MTL /nologo /win32
 # ADD BASE CPP /nologo /G6 /MT /W3 /GX /Ot /Ob2 /Gy /I "..\..\asiosdk2\host\pc" /I "..\..\asiosdk2\host" /I "..\..\asiosdk2\common" /I "..\..\portaudio_v18\pa_common" /D "WIN32" /D "NDEBUG" /D "_LIB" /D "_MBCS" /YX /GF /c
-# ADD CPP /nologo /G6 /MT /W3 /GX /Ot /Ob2 /Gy /I "..\..\asiosdk2\host\pc" /I "..\..\asiosdk2\host" /I "..\..\asiosdk2\common" /I "..\..\portaudio_v18\pa_common" /D "WIN32" /D "NDEBUG" /D "_LIB" /D "_MBCS" /YX /GF /c
+# ADD CPP /nologo /G6 /MT /W3 /GX /O2 /Ob2 /I "..\..\asiosdk2\host\pc" /I "..\..\asiosdk2\host" /I "..\..\asiosdk2\common" /I "..\..\portaudio_v18\pa_common" /D "WIN32" /D "NDEBUG" /D "_LIB" /D "_MBCS" /YX /GF /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
