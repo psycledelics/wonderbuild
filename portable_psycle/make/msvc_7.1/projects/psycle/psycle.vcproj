@@ -829,6 +829,9 @@
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Song.hpp">
 				</File>
+				<File
+					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\SongStructs.hpp">
+				</File>
 				<Filter
 					Name="machine"
 					Filter="">
