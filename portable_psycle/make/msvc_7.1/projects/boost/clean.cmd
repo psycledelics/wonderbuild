@@ -1,25 +1,9 @@
 pushd ..\..\..\..\include\ && (
 	if exist boost (
-		rmdir/s/q boost
 		rem [bohan] i don't know why sometimes it fails
-		if exist boost (
-			rmdir/s/q boost
-			if exist boost (
-				rmdir/s/q boost
-				if exist boost (
-					rmdir/s/q boost
-					if exist boost (
-						rmdir/s/q boost
-						if exist boost (
-							rmdir/s/q boost
-							if exist boost (
-								rmdir/s/q boost
-							)
-						)
-					)
-				)
-			)
-		)
+		rmdir/s/q boost || exit 1
+		rem [bohan] i don't know why sometimes it doesn't report the failure
+		if exist boost exit 1
 	)
 	popd
 )
