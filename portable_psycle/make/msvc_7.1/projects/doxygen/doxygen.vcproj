@@ -12,8 +12,8 @@
 	<Configurations>
 		<Configuration
 			Name="html|Win32"
-			OutputDirectory="$(SolutionDir)\..\..\..\doc\"
-			IntermediateDirectory="intermediate_output"
+			OutputDirectory="$(SolutionDir)\..\..\..\doc"
+			IntermediateDirectory="$(SolutionDir)\output\$(ConfigurationName)\$(ProjectName)\intermediate_output"
 			ConfigurationType="0">
 			<Tool
 				Name="VCNMakeTool"

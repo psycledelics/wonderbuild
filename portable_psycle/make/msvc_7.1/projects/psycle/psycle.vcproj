@@ -13,12 +13,12 @@
 	<Configurations>
 		<Configuration
 			Name="release.g6|Win32"
-			OutputDirectory="$(SolutionDir)/$(ConfigurationName)/bin"
-			IntermediateDirectory="$(SolutionDir)/$(ConfigurationName)/intermediate_output/$(ProjectName)"
+			OutputDirectory="$(SolutionDir)/output/$(ConfigurationName)/bin"
+			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="1"
 			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.bat;$(TargetPath)"
+			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.cmd;$(TargetPath)"
 			WholeProgramOptimization="FALSE">
 			<Tool
 				Name="VCCLCompilerTool"
@@ -49,7 +49,7 @@
 				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
 				WarningLevel="4"
-				WarnAsError="TRUE"
+				WarnAsError="FALSE"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4652"
@@ -61,7 +61,7 @@
 				OutputFile="$(OutDir)/$(InputName).exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="$(SolutionDir)/$(ConfigurationName)/lib"
+				AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
 				SubSystem="2"
@@ -70,10 +70,10 @@
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
-				ImportLibrary="$(SolutionDir)/$(ConfigurationName)/lib/$(InputName).lib"/>
+				ImportLibrary="$(SolutionDir)/output/$(ConfigurationName)/lib/$(InputName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName="$(SolutionDir)/$(ConfigurationName)/lib/$(ProjectName).tlb"/>
+				TypeLibraryName="$(SolutionDir)/output/$(ConfigurationName)/lib/$(ProjectName).tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -97,12 +97,12 @@
 		</Configuration>
 		<Configuration
 			Name="debug|Win32"
-			OutputDirectory="$(SolutionDir)/$(ConfigurationName)/bin"
-			IntermediateDirectory="$(SolutionDir)/$(ConfigurationName)/intermediate_output/$(ProjectName)"
+			OutputDirectory="$(SolutionDir)/output/$(ConfigurationName)/bin"
+			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="1"
 			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.bat;$(TargetPath)">
+			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.cmd;$(TargetPath)">
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/EHa
@@ -137,16 +137,16 @@
 				OutputFile="$(OutDir)/$(InputName).exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="$(SolutionDir)/$(ConfigurationName)/lib"
+				AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
 				SubSystem="2"
 				OptimizeForWindows98="1"
 				BaseAddress=""
-				ImportLibrary="$(SolutionDir)/$(ConfigurationName)/lib/$(InputName).lib"/>
+				ImportLibrary="$(SolutionDir)/output/$(ConfigurationName)/lib/$(InputName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName="$(SolutionDir)/$(ConfigurationName)/lib/$(ProjectName).tlb"/>
+				TypeLibraryName="$(SolutionDir)/output/$(ConfigurationName)/lib/$(ProjectName).tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -169,12 +169,12 @@
 		</Configuration>
 		<Configuration
 			Name="release.g7|Win32"
-			OutputDirectory="$(SolutionDir)/$(ConfigurationName)/bin"
-			IntermediateDirectory="$(SolutionDir)/$(ConfigurationName)/intermediate_output/$(ProjectName)"
+			OutputDirectory="$(SolutionDir)/output/$(ConfigurationName)/bin"
+			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="1"
 			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.bat;$(TargetPath)"
+			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.cmd;$(TargetPath)"
 			WholeProgramOptimization="FALSE">
 			<Tool
 				Name="VCCLCompilerTool"
@@ -217,7 +217,7 @@
 				OutputFile="$(OutDir)/$(InputName).exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="$(SolutionDir)/$(ConfigurationName)/lib"
+				AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
 				SubSystem="2"
@@ -226,10 +226,10 @@
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
-				ImportLibrary="$(SolutionDir)/$(ConfigurationName)/lib/$(InputName).lib"/>
+				ImportLibrary="$(SolutionDir)/output/$(ConfigurationName)/lib/$(InputName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName="$(SolutionDir)/$(ConfigurationName)/lib/$(ProjectName).tlb"/>
+				TypeLibraryName="$(SolutionDir)/output/$(ConfigurationName)/lib/$(ProjectName).tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
