@@ -49,8 +49,8 @@ rem =================================
 rem cleans all psycle-generated files
 rem =================================
 
-del/s/q plugin-scan* || goto :failed
-del/s/q output.log.txt || goto :failed
+del/s/q "*.log.txt" || goto :failed
+del/s/q "*.cache" || goto :failed
 
 rem ============================================
 rem safely recursively removes empty directories
