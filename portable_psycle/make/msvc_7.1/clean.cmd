@@ -15,10 +15,12 @@ del/s/q "*.lib"
 del/s/q "*.exp"
 
 rename .\release\bin\unicows.dll unicows.dll.preserve
+rename .\release_intel_pentium_4\bin\unicows.dll unicows.dll.preserve
 rename .\debug\bin\unicows.dll unicows.dll.preserve
 del/s/q "*.dll"
 del/s/q/ar "*.dll"
 rename .\release\bin\unicows.dll.preserve unicows.dll
+rename .\release_intel_pentium_4\bin\unicows.dll.preserve unicows.dll
 rename .\debug\bin\unicows.dll.preserve unicows.dll
 
 del/s/q "*.exe"
