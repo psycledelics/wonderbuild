@@ -19,7 +19,7 @@ function main
 		tar --extract --bzip2 --file /tmp/$(logname).doxygen.tar.bz2 &&
 		chmod ug=rwsx,o=rx doxygen.microsoft &&
 		find doxygen.microsoft -type d -exec chmod ug=rwsx,o=rx {} \; &&
-		find doxygen.microsoft -type f -exec chmod ug=rw,o=r {} \; &&
+		find doxygen.microsoft -type f -exec chmod ug+rw,o+r-w {} \; &&
 		./update-timestamps
 	eof
 }
