@@ -95,7 +95,8 @@ rem ----------------
 		
 			mkdir "%distribution%\doc\"
 			xcopy/s ..\..\..\doc\for-end-users\* "%distribution%\doc\" || goto :failed
-			xcopy "%distribution%\doc\cpu.txt" "%distribution%\readme-cpu.txt" || goto :failed
+			xcopy "%distribution%\doc\cpu.txt" "%distribution%" || goto :failed
+			rename "%distribution%\cpu.txt" "readme-cpu.txt" || goto :failed
 		
 		rem ---------------------------------------------
 		echo %0: removing cvs files from distribution ...
