@@ -98,6 +98,10 @@ SOURCE=..\Configuration.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\DataCompression.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\Dsp.cpp
 # End Source File
 # Begin Source File
@@ -119,6 +123,10 @@ SOURCE=..\Helpers.cpp
 # Begin Source File
 
 SOURCE=.\in_psycle.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\Instrument.cpp
 # End Source File
 # Begin Source File
 
@@ -185,6 +193,10 @@ SOURCE=..\Constants.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\DataCompression.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\Ddc.h
 # End Source File
 # Begin Source File
@@ -210,6 +222,14 @@ SOURCE=..\Helpers.h
 # Begin Source File
 
 SOURCE=.\IN2.H
+# End Source File
+# Begin Source File
+
+SOURCE=..\InputHandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\Instrument.h
 # End Source File
 # Begin Source File
 
