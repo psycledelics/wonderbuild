@@ -887,5 +887,8 @@
 		</Filter>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="\home\bohan\projects\cvs.sourceforge.net\psycle\portable_psycle\src\psycle\host\resources\resources.rc"/>
 	</Globals>
 </VisualStudioProject>
