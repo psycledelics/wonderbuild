@@ -1,0 +1,4 @@
+pushd ..\..\..\doxygen\ && (
+	clean
+	popd
+)
