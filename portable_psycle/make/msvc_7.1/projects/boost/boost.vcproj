@@ -12,8 +12,8 @@
 	<Configurations>
 		<Configuration
 			Name="unique|Win32"
-			OutputDirectory="Debug"
-			IntermediateDirectory="Debug"
+			OutputDirectory="$(SolutionDir)\..\..\..\include\"
+			IntermediateDirectory="intermediate_output"
 			ConfigurationType="0">
 			<Tool
 				Name="VCNMakeTool"
