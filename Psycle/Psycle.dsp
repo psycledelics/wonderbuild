@@ -130,14 +130,6 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\DefaultVstGui.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\DefaultVstGui.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\Dsp.cpp
 # End Source File
 # Begin Source File
@@ -251,22 +243,6 @@ SOURCE=.\Sampler.cpp
 # Begin Source File
 
 SOURCE=.\Sampler.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\VstEditorDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\VstEditorDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\VstGui.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\VstGui.h
 # End Source File
 # Begin Source File
 
@@ -506,6 +482,14 @@ SOURCE=.\Vst\AEffEditor.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\DefaultVstGui.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\DefaultVstGui.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\GearRackDlg.cpp
 # End Source File
 # Begin Source File
@@ -615,6 +599,22 @@ SOURCE=.\VolumeDlg.cpp
 # Begin Source File
 
 SOURCE=.\VolumeDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\VstEditorDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\VstEditorDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\VstGui.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\VstGui.h
 # End Source File
 # Begin Source File
 
