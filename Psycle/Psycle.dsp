@@ -745,6 +745,10 @@ SOURCE=.\res\icon1.ico
 # End Source File
 # Begin Source File
 
+SOURCE=.\res\idr_main.ico
+# End Source File
+# Begin Source File
+
 SOURCE=.\res\idr_vstf.ico
 # End Source File
 # Begin Source File
