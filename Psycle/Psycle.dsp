@@ -623,6 +623,14 @@ SOURCE=.\Constants.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\DataCompression.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\DataCompression.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\FileIO.cpp
 # End Source File
 # Begin Source File
