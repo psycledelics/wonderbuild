@@ -46,9 +46,9 @@ rem =================================
 del/s/q plugin-scan* || goto :failed
 del/s/q output.log.txt || goto :failed
 
-rem ===========================================
+rem ============================================
 rem safely recursively removes empty directories
-rem ===========================================
+rem ============================================
 
 call :prune .
 goto :eof
