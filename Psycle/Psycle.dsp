@@ -754,11 +754,11 @@ SOURCE=.\res\vsti.bmp
 # End Group
 # Begin Source File
 
-SOURCE=.\todo.txt
+SOURCE=.\Docs\todo.txt
 # End Source File
 # Begin Source File
 
-SOURCE=.\whatsnew.txt
+SOURCE=.\Docs\whatsnew.txt
 # End Source File
 # End Target
 # End Project
