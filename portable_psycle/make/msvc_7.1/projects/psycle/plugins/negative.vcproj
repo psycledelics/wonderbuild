@@ -161,6 +161,88 @@
 			<Tool
 				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
+		<Configuration
+			Name="release_intel_pentium_4|Win32"
+			OutputDirectory="$(SolutionDir)/$(ConfigurationName)/bin/psycle__plugins"
+			IntermediateDirectory="$(SolutionDir)/$(ConfigurationName)/intermediate_output/$(ProjectName)"
+			ConfigurationType="2"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.bat;$(TargetPath)"
+			WholeProgramOptimization="TRUE">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="/EHsc
+/QIfist
+/Op-
+/WL
+"
+				Optimization="4"
+				GlobalOptimizations="TRUE"
+				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="TRUE"
+				FavorSizeOrSpeed="1"
+				OmitFramePointers="TRUE"
+				EnableFiberSafeOptimizations="TRUE"
+				OptimizeForProcessor="3"
+				OptimizeForWindowsApplication="FALSE"
+				AdditionalIncludeDirectories="$(SolutionDir)/../../include;$(SolutionDir)/../../src"
+				StringPooling="TRUE"
+				ExceptionHandling="FALSE"
+				RuntimeLibrary="2"
+				BufferSecurityCheck="FALSE"
+				ForceConformanceInForLoopScope="TRUE"
+				RuntimeTypeInfo="FALSE"
+				UsePrecompiledHeader="3"
+				PrecompiledHeaderThrough="project.h"
+				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.pch"
+				AssemblerListingLocation="$(IntDir)/"
+				ObjectFile="$(IntDir)/"
+				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.pdb"
+				WarningLevel="4"
+				WarnAsError="TRUE"
+				SuppressStartupBanner="TRUE"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4652"
+				ForcedIncludeFiles="project.h"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				OutputFile="$(OutDir)/$(InputName).dll"
+				LinkIncremental="1"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="$(SolutionDir)/$(ConfigurationName)/lib"
+				GenerateDebugInformation="TRUE"
+				LargeAddressAware="1"
+				TerminalServerAware="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				OptimizeForWindows98="1"
+				TurnOffAssemblyGeneration="TRUE"
+				ImportLibrary="$(SolutionDir)/$(ConfigurationName)/lib/$(ProjectName).lib"/>
+			<Tool
+				Name="VCMIDLTool"
+				TypeLibraryName="$(SolutionDir)/$(ConfigurationName)/lib/$(ProjectName).tlb"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				Culture="1047"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>

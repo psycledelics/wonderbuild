@@ -25,6 +25,7 @@ rem copy executables and libraries
 rem ------------------------------
 
 xcopy/f .\release.bin.upx.nrv2d\psycle.exe .\psycle\ || ( echo copy failed, aborting. & goto :pause )
+xcopy/f .\release_intel_pentium_4.bin.upx.nrv2d\psycle.exe .\psycle\psycle-intel-pentium-4.exe || ( echo copy failed, aborting. & goto :pause )
 
 rem mkdir .\psycle\plugins\
 rem xcopy/f .\release.bin\psycle__plugins\*.dll .\psycle\plugins\ || ( echo copy failed, aborting. & goto :pause )

@@ -51,7 +51,7 @@
 				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers__mfc.pdb"
 				WarningLevel="4"
-				WarnAsError="FALSE"
+				WarnAsError="TRUE"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4652"
@@ -143,6 +143,91 @@
 				SubSystem="2"
 				OptimizeForWindows98="1"
 				BaseAddress=""
+				ImportLibrary="$(SolutionDir)/$(ConfigurationName)/lib/$(ProjectName).lib"/>
+			<Tool
+				Name="VCMIDLTool"
+				TypeLibraryName="$(SolutionDir)/$(ConfigurationName)/lib/$(ProjectName).tlb"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				Culture="1047"
+				AdditionalIncludeDirectories="$(SolutionDir)/../../src/psycle/host/resources/"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="release_intel_pentium_4|Win32"
+			OutputDirectory="$(SolutionDir)/$(ConfigurationName)/bin"
+			IntermediateDirectory="$(SolutionDir)/$(ConfigurationName)/intermediate_output/$(ProjectName)"
+			ConfigurationType="1"
+			UseOfMFC="2"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.bat;$(TargetPath)"
+			WholeProgramOptimization="FALSE">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="/EHsc
+/QIfist
+/Op-
+/WL
+"
+				Optimization="4"
+				GlobalOptimizations="TRUE"
+				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="TRUE"
+				FavorSizeOrSpeed="1"
+				OmitFramePointers="TRUE"
+				EnableFiberSafeOptimizations="TRUE"
+				OptimizeForProcessor="3"
+				OptimizeForWindowsApplication="TRUE"
+				AdditionalIncludeDirectories="$(SolutionDir)/../../include;$(SolutionDir)/../../include/psycle/host;$(SolutionDir)/../../include/psycle/host/asio;$(SolutionDir)/../../src;$(SolutionDir)/../../src/psycle/host"
+				PreprocessorDefinitions="OPERATING_SYSTEM__CROSSPLATFORM"
+				StringPooling="TRUE"
+				ExceptionHandling="FALSE"
+				RuntimeLibrary="2"
+				BufferSecurityCheck="FALSE"
+				ForceConformanceInForLoopScope="TRUE"
+				RuntimeTypeInfo="FALSE"
+				UsePrecompiledHeader="3"
+				PrecompiledHeaderThrough="stdafx.h"
+				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers__mfc.pch"
+				AssemblerListingLocation="$(IntDir)/"
+				ObjectFile="$(IntDir)/"
+				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers__mfc.pdb"
+				WarningLevel="4"
+				WarnAsError="TRUE"
+				SuppressStartupBanner="TRUE"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4652"
+				ForcedIncludeFiles="stdafx.h;psycle/host/Global.h"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				OutputFile="$(OutDir)/$(ProjectName).exe"
+				LinkIncremental="1"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="$(SolutionDir)/$(ConfigurationName)/lib"
+				GenerateDebugInformation="TRUE"
+				SubSystem="2"
+				LargeAddressAware="1"
+				TerminalServerAware="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				OptimizeForWindows98="1"
 				ImportLibrary="$(SolutionDir)/$(ConfigurationName)/lib/$(ProjectName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -540,4 +625,6 @@
 			RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\InputHandler.cpp">
 		</File>
 	</Files>
+	<Globals>
+	</Globals>
 </VisualStudioProject>
