@@ -293,6 +293,9 @@
 			Name="psycle"
 			Filter="">
 			<File
+				RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\Constants.h">
+			</File>
+			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Global.cpp">
 			</File>
 			<File
@@ -343,7 +346,7 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\AsioLogo.bmp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\beta.bmp">
+					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\beta.bmp">
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\bmp00002.bmp">
@@ -499,10 +502,10 @@
 					RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\GreetDialog.h">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\keybhandler.h">
+					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\keybhandler.h">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\machineview.h">
+					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\machineview.h">
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MainFrm.cpp">
@@ -759,10 +762,10 @@
 						RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\MidiMonitorDlg.h">
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\Mixer.cpp">
+						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Mixer.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\include\psycle\host\Mixer.h">
+						RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\Mixer.h">
 					</File>
 					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\ProgressDialog.cpp">
