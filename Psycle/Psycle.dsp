@@ -81,8 +81,8 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 winmm.lib dsound.lib PortAudioStaticASIO.lib /nologo /subsystem:windows /map /debug /machine:I386 /libpath:"./PortAudioStaticASIO/Debug"
-# SUBTRACT LINK32 /profile /pdb:none
+# ADD LINK32 winmm.lib dsound.lib /nologo /subsystem:windows /map /debug /machine:I386 /libpath:"./PortAudioStaticASIO/Debug"
+# SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "Psycle - Win32 Release Cyrix"
 
@@ -270,6 +270,14 @@ SOURCE=.\WavFileDlg.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\ASIOInterface.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ASIOInterface.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\AudioDriver.cpp
 # End Source File
 # Begin Source File
@@ -286,14 +294,6 @@ SOURCE=.\DirectSound.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\PortAudioASIO.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\PortAudioASIO.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\WaveOut.cpp
 # End Source File
 # Begin Source File
@@ -304,6 +304,14 @@ SOURCE=.\WaveOut.h
 # Begin Group "Configuration"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\ASIOConfig.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ASIOConfig.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\ConfigDlg.cpp
@@ -367,14 +375,6 @@ SOURCE=.\OutputDlg.cpp
 # Begin Source File
 
 SOURCE=.\OutputDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\PortAudioASIOConfig.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\PortAudioASIOConfig.h
 # End Source File
 # Begin Source File
 
@@ -575,6 +575,22 @@ SOURCE=.\WireDlg.cpp
 # Begin Source File
 
 SOURCE=.\WireDlg.h
+# End Source File
+# End Group
+# Begin Group "ASIO SDK Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\Asio\asio.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Asio\asiodrivers.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Asio\asiolist.cpp
 # End Source File
 # End Group
 # Begin Source File
