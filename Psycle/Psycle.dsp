@@ -290,6 +290,14 @@ SOURCE=.\EnvDialog.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Instrument.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Instrument.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\InstrumentEditor.cpp
 # End Source File
 # Begin Source File
@@ -676,14 +684,6 @@ SOURCE=.\InputHandler.cpp
 # Begin Source File
 
 SOURCE=.\InputHandler.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Instrument.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Instrument.h
 # End Source File
 # Begin Source File
 
