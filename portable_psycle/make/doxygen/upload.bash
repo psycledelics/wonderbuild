@@ -15,8 +15,11 @@ function main
 		set -vx &&
 		cd /home/groups/p/ps/psycle/htdocs &&
 		rm --force doxygen.microsoft --recursive &&
+		umask ug=rwx,o=rx &&
 		tar --extract --bzip2 --file /tmp/$(logname).doxygen.tar.bz2 &&
-		chmod ug+rw,o+r-w doxygen.microsoft --recursive &&
+		chmod ug=rwsx,o=rx doxygen.microsoft &&
+		find doxygen.microsoft -type d -exec chmod ug=rwsx,o=rx {} \; &&
+		find doxygen.microsoft -type f -exec chmod ug=rw,o=r {} \; &&
 		./update-timestamps
 	eof
 }
