@@ -142,7 +142,7 @@ pre
 	font-family: lucida console;
 	font-size: 10px
 }
-pre.fragment
+.fragment
 {
 	width: auto;
 	border-width: 1px;
