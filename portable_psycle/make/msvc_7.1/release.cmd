@@ -102,6 +102,7 @@ rem ================================
 pause
 rmdir/s/q "%distribution%"
 del/q .\psycle.bin.rar
+del/q .\release.log
 goto :eof
 
 rem ===============
