@@ -84,7 +84,7 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1047"
-				AdditionalIncludeDirectories="$(SolutionDir)/../../include/psycle/host;$(SolutionDir)/../../src/psycle/host"/>
+				AdditionalIncludeDirectories="$(SolutionDir)/../../src/psycle/host/resources/"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -156,7 +156,7 @@
 			<Tool
 				Name="VCResourceCompilerTool"
 				Culture="1047"
-				AdditionalIncludeDirectories="$(SolutionDir)/../../include/psycle/host;$(SolutionDir)/../../src/psycle/host"/>
+				AdditionalIncludeDirectories="$(SolutionDir)/../../src/psycle/host/resources/"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -440,94 +440,97 @@
 			Name="resources"
 			Filter="">
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\AsioLogo.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\AsioLogo.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\bmp00002.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\bmp00002.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\bmp00003.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\bmp00003.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\bmp00004.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\bmp00004.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\bmp00005.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\bmp00005.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\bmp00009.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\bmp00009.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\ico00001.ico">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\ico00001.ico">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\icon1.ico">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\icon1.ico">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\idr_vstf.ico">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\idr_vstf.ico">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\less.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\less.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\lessless.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\lessless.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\littleleft.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\littleleft.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\littleright.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\littleright.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\machine_skin.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\machine_skin.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\MasterMachine\masterbk.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\MasterMachine\masterbk.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\minus.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\minus.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\minus1.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\minus1.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\more.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\more.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\moremore.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\moremore.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\MasterMachine\numbers.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\MasterMachine\numbers.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\pattern_header_skin.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\pattern_header_skin.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\plus.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\plus.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\plus1.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\plus1.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\Psycle.ico">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\Psycle.ico">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Psycle.rc">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\psycle.rc">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resource.h">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\psycle.rc2">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\MasterMachine\slider.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\resource.h">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\splash copia.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\MasterMachine\slider.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\TbMainKnob.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\splash copia.bmp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\resources\Toolbar.bmp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\TbMainKnob.bmp">
+			</File>
+			<File
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\Toolbar.bmp">
 			</File>
 		</Filter>
 		<File
@@ -537,9 +540,4 @@
 			RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\InputHandler.cpp">
 		</File>
 	</Files>
-	<Globals>
-		<Global
-			Name="RESOURCE_FILE"
-			Value="\home\bohan\projects\cvs.sourceforge.net\psycle\portable_psycle\src\psycle\host\Psycle.rc"/>
-	</Globals>
 </VisualStudioProject>
