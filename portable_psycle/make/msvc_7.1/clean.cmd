@@ -13,7 +13,14 @@ del/s/q "*.sbr"
 del/s/q "*.bsc"
 del/s/q "*.lib"
 del/s/q "*.exp"
+
+rename .\release\bin\unicows.dll unicows.dll.preserve
+rename .\debug\bin\unicows.dll unicows.dll.preserve
 del/s/q "*.dll"
+del/s/q/ar "*.dll"
+rename .\release\bin\unicows.dll.preserve unicows.dll
+rename .\debug\bin\unicows.dll.preserve unicows.dll
+
 del/s/q "*.exe"
 del/s/q "*.opt"
 del/s/q "*.ncb"
