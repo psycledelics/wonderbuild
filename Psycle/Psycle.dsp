@@ -564,6 +564,10 @@ SOURCE=.\Psycle.rc
 # End Source File
 # Begin Source File
 
+SOURCE=.\Psycle2.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\SaveDlg.cpp
 # End Source File
 # Begin Source File
