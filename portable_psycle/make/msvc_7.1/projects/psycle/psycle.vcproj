@@ -416,32 +416,36 @@
 					RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\SkinDlg.h">
 				</File>
 				<Filter
-					Name="drivers"
+					Name="devices"
 					Filter="">
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\ASIOConfig.cpp">
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\ASIOConfig.h">
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\DSoundConfig.cpp">
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\DSoundConfig.h">
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\OutputDlg.cpp">
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\OutputDlg.h">
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\WaveOutDialog.cpp">
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\WaveOutDialog.h">
-					</File>
+					<Filter
+						Name="output"
+						Filter="">
+						<File
+							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\ASIOConfig.cpp">
+						</File>
+						<File
+							RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\ASIOConfig.h">
+						</File>
+						<File
+							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\DSoundConfig.cpp">
+						</File>
+						<File
+							RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\DSoundConfig.h">
+						</File>
+						<File
+							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\OutputDlg.cpp">
+						</File>
+						<File
+							RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\OutputDlg.h">
+						</File>
+						<File
+							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\WaveOutDialog.cpp">
+						</File>
+						<File
+							RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\WaveOutDialog.h">
+						</File>
+					</Filter>
 				</Filter>
 			</Filter>
 			<Filter
@@ -793,6 +797,32 @@
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\WaveOut.h">
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="operating_system"
+			Filter="">
+			<File
+				RelativePath="$(SolutionDir)\..\..\..\src\operating_system\exception.cpp">
+			</File>
+			<File
+				RelativePath="$(SolutionDir)\..\..\..\include\operating_system\exception.h">
+			</File>
+			<File
+				RelativePath="$(SolutionDir)\..\..\..\src\operating_system\logger.cpp">
+			</File>
+			<File
+				RelativePath="$(SolutionDir)\..\..\..\include\operating_system\logger.h">
+			</File>
+			<Filter
+				Name="exceptions"
+				Filter="">
+				<File
+					RelativePath="$(SolutionDir)\..\..\..\include\operating_system\exceptions\code_description.h">
+				</File>
+				<File
+					RelativePath="$(SolutionDir)\..\..\..\src\operating_system\exceptions.code_description.cpp">
 				</File>
 			</Filter>
 		</Filter>

@@ -62,7 +62,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.arguru.rever
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "asio", "projects\asio\asio.vcproj", "{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "asio (steinberg's sdk)", "projects\asio\asio.vcproj", "{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
 	ProjectSection(ProjectDependencies) = postProject
 		{28C015FB-3BDA-4B32-8D85-C652E9892216} = {28C015FB-3BDA-4B32-8D85-C652E9892216}
 	EndProjectSection
@@ -112,6 +112,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.zephod.super
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.crasher", "projects\psycle\plugins\crasher.vcproj", "{520E5BA9-4E94-45B7-A37F-EEB90EFF86A7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		debug = debug
@@ -120,6 +125,13 @@ Global
 		release.g7 = release.g7
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
+		{C6292BF4-9E87-4176-9101-A3D29D074B35}.debug.ActiveCfg = debug|Win32
+		{C6292BF4-9E87-4176-9101-A3D29D074B35}.debug.Build.0 = debug|Win32
+		{C6292BF4-9E87-4176-9101-A3D29D074B35}.documentation.ActiveCfg = debug|Win32
+		{C6292BF4-9E87-4176-9101-A3D29D074B35}.release.g6.ActiveCfg = release.g6|Win32
+		{C6292BF4-9E87-4176-9101-A3D29D074B35}.release.g6.Build.0 = release.g6|Win32
+		{C6292BF4-9E87-4176-9101-A3D29D074B35}.release.g7.ActiveCfg = release.g7|Win32
+		{C6292BF4-9E87-4176-9101-A3D29D074B35}.release.g7.Build.0 = release.g7|Win32
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}.debug.ActiveCfg = debug|Win32
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}.debug.Build.0 = debug|Win32
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}.documentation.ActiveCfg = debug|Win32
@@ -134,13 +146,6 @@ Global
 		{28C015FB-3BDA-4B32-8D85-C652E9892216}.release.g6.Build.0 = release.g6|Win32
 		{28C015FB-3BDA-4B32-8D85-C652E9892216}.release.g7.ActiveCfg = release.g7|Win32
 		{28C015FB-3BDA-4B32-8D85-C652E9892216}.release.g7.Build.0 = release.g7|Win32
-		{C6292BF4-9E87-4176-9101-A3D29D074B35}.debug.ActiveCfg = debug|Win32
-		{C6292BF4-9E87-4176-9101-A3D29D074B35}.debug.Build.0 = debug|Win32
-		{C6292BF4-9E87-4176-9101-A3D29D074B35}.documentation.ActiveCfg = debug|Win32
-		{C6292BF4-9E87-4176-9101-A3D29D074B35}.release.g6.ActiveCfg = release.g6|Win32
-		{C6292BF4-9E87-4176-9101-A3D29D074B35}.release.g6.Build.0 = release.g6|Win32
-		{C6292BF4-9E87-4176-9101-A3D29D074B35}.release.g7.ActiveCfg = release.g7|Win32
-		{C6292BF4-9E87-4176-9101-A3D29D074B35}.release.g7.Build.0 = release.g7|Win32
 		{5EDF4167-AEA5-49BA-9B25-AFCEEF12F5E9}.debug.ActiveCfg = debug|Win32
 		{5EDF4167-AEA5-49BA-9B25-AFCEEF12F5E9}.debug.Build.0 = debug|Win32
 		{5EDF4167-AEA5-49BA-9B25-AFCEEF12F5E9}.documentation.ActiveCfg = debug|Win32
@@ -289,6 +294,14 @@ Global
 		{652E2772-861D-48C6-A710-FDC1078CBA09}.release.g6.Build.0 = release.g6|Win32
 		{652E2772-861D-48C6-A710-FDC1078CBA09}.release.g7.ActiveCfg = release.g7|Win32
 		{652E2772-861D-48C6-A710-FDC1078CBA09}.release.g7.Build.0 = release.g7|Win32
+		{520E5BA9-4E94-45B7-A37F-EEB90EFF86A7}.debug.ActiveCfg = debug|Win32
+		{520E5BA9-4E94-45B7-A37F-EEB90EFF86A7}.debug.Build.0 = debug|Win32
+		{520E5BA9-4E94-45B7-A37F-EEB90EFF86A7}.documentation.ActiveCfg = debug|Win32
+		{520E5BA9-4E94-45B7-A37F-EEB90EFF86A7}.documentation.Build.0 = debug|Win32
+		{520E5BA9-4E94-45B7-A37F-EEB90EFF86A7}.release.g6.ActiveCfg = release.g6|Win32
+		{520E5BA9-4E94-45B7-A37F-EEB90EFF86A7}.release.g6.Build.0 = release.g6|Win32
+		{520E5BA9-4E94-45B7-A37F-EEB90EFF86A7}.release.g7.ActiveCfg = release.g7|Win32
+		{520E5BA9-4E94-45B7-A37F-EEB90EFF86A7}.release.g7.Build.0 = release.g7|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
