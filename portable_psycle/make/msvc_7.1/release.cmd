@@ -149,7 +149,7 @@ rem ----------------
 			set archive=psycle.mfc.bin.%tag%.rar
 		)
 
-		rar a -s -m5 -md4096 -ep1 -r0 .\%archive% "%distribution%" 1>> .\%archive%.log 2>&1 || goto :failed
+		rar a -s -m5 -md4096 -r0 .\%archive% "%distribution%" 1>> .\%archive%.log 2>&1 || goto :failed
 	
 	rem =================================================
 	rem uploading the archive and updating the site
