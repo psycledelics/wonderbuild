@@ -304,6 +304,38 @@ SOURCE=.\InstrumentEditor.cpp
 
 SOURCE=.\InstrumentEditor.h
 # End Source File
+# Begin Source File
+
+SOURCE=.\WaveEdAmplifyDialog.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\WaveEdAmplifyDialog.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\WaveEdChildView.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\WaveEdChildView.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\WaveEdFrame.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\WaveEdFrame.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\WavFileDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\WavFileDlg.h
+# End Source File
 # End Group
 # Begin Group "Audio_Driver"
 
@@ -469,6 +501,98 @@ SOURCE=.\Vst\AEffectx.h
 SOURCE=.\Vst\AEffEditor.h
 # End Source File
 # End Group
+# Begin Group "Interface Dialogs"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\GearRackDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GearRackDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GreetDialog.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GreetDialog.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\InfoDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\InfoDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MidiMonitorDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\MidiMonitorDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\NewVal.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\NewVal.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\PatDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\PatDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\PresetsDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\PresetsDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SongpDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SongpDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SwingFillDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SwingFillDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\VolumeDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\VolumeDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\WireDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\WireDlg.h
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\ChildView.cpp
@@ -507,27 +631,11 @@ SOURCE=.\Global.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\GreetDialog.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\GreetDialog.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\Helpers.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\Helpers.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\InfoDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\InfoDlg.h
 # End Source File
 # Begin Source File
 
@@ -555,14 +663,6 @@ SOURCE=.\MidiInput.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\MidiMonitorDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MidiMonitorDlg.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\NewMachine.cpp
 # End Source File
 # Begin Source File
@@ -571,35 +671,11 @@ SOURCE=.\NewMachine.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\NewVal.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\NewVal.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\PatDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\PatDlg.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\Player.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\Player.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\PresetsDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\PresetsDlg.h
 # End Source File
 # Begin Source File
 
@@ -627,14 +703,6 @@ SOURCE=.\Song.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\SongpDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\SongpDlg.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\SongStructs.h
 # End Source File
 # Begin Source File
@@ -645,54 +713,6 @@ SOURCE=.\StdAfx.cpp
 # Begin Source File
 
 SOURCE=.\StdAfx.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\SwingFillDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\SwingFillDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\WaveEdAmplifyDialog.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\WaveEdAmplifyDialog.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\WaveEdChildView.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\WaveEdChildView.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\WaveEdFrame.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\WaveEdFrame.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\WavFileDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\WavFileDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\WireDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\WireDlg.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
@@ -865,14 +885,6 @@ SOURCE=.\res\vsti.bmp
 # End Group
 # Begin Source File
 
-SOURCE=.\GearRackDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\GearRackDlg.h
-# End Source File
-# Begin Source File
-
 SOURCE=".\Docs\how to skin psycle.txt"
 # End Source File
 # Begin Source File
@@ -886,14 +898,6 @@ SOURCE=.\Docs\todo.txt
 # Begin Source File
 
 SOURCE=".\Docs\tweakings and commands.txt"
-# End Source File
-# Begin Source File
-
-SOURCE=.\VolumeDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\VolumeDlg.h
 # End Source File
 # Begin Source File
 
