@@ -39,8 +39,6 @@
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
-				EnableFunctionLevelLinking="FALSE"
-				EnableEnhancedInstructionSet="0"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="FALSE"
 				UsePrecompiledHeader="1"
@@ -48,11 +46,11 @@
 				PrecompiledHeaderFile="$(OutDir)/$(ProjectName).pch"
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
+				ProgramDataBaseFileName="$(OutDir)/$(ProjectName).pdb"
 				WarningLevel="4"
 				WarnAsError="TRUE"
 				SuppressStartupBanner="TRUE"
-				CompileAs="0"
+				DebugInformationFormat="3"
 				DisableSpecificWarnings="4652"
 				ForcedIncludeFiles=""
 				ShowIncludes="TRUE"/>
@@ -61,17 +59,18 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
-				ShowProgress="0"
 				OutputFile="$(IntDir)/$(ProjectName).dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="$(SolutionDir)/$(ConfigurationName)/lib"
+				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile="$(IntDir)/$(ProjectName).pdb"
 				LargeAddressAware="1"
-				TerminalServerAware="0"
+				TerminalServerAware="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
-				ResourceOnlyDLL="FALSE"
+				TurnOffAssemblyGeneration="TRUE"
 				ImportLibrary="$(IntDir)/$(ProjectName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -118,7 +117,6 @@
 				ExceptionHandling="FALSE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				EnableEnhancedInstructionSet="0"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="1"
@@ -127,11 +125,9 @@
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(OutDir)/$(ProjectName).pdb"
-				BrowseInformation="0"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
-				CompileAs="0"
 				ForcedIncludeFiles=""
 				ShowIncludes="TRUE"/>
 			<Tool
@@ -139,7 +135,6 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
-				ShowProgress="0"
 				OutputFile="$(IntDir)/$(ProjectName).dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -147,7 +142,6 @@
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(IntDir)/$(ProjectName).pdb"
 				OptimizeForWindows98="1"
-				ResourceOnlyDLL="TRUE"
 				TurnOffAssemblyGeneration="TRUE"
 				ImportLibrary="$(IntDir)/$(ProjectName).lib"/>
 			<Tool

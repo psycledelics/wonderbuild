@@ -40,8 +40,6 @@
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
-				EnableFunctionLevelLinking="FALSE"
-				EnableEnhancedInstructionSet="0"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="FALSE"
 				UsePrecompiledHeader="3"
@@ -54,15 +52,12 @@
 				WarnAsError="FALSE"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
-				CompileAs="0"
 				DisableSpecificWarnings="4652"
-				ForcedIncludeFiles="stdafx.h;psycle/host/Global.h"
-				ShowIncludes="FALSE"/>
+				ForcedIncludeFiles="stdafx.h;psycle/host/Global.h"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				ShowProgress="0"
 				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -74,7 +69,6 @@
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
-				TurnOffAssemblyGeneration="FALSE"
 				ImportLibrary="$(SolutionDir)/$(ConfigurationName)/lib/$(ProjectName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -122,7 +116,6 @@
 				ExceptionHandling="FALSE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				EnableEnhancedInstructionSet="0"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
@@ -131,29 +124,22 @@
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers__mfc.pdb"
-				BrowseInformation="0"
-				BrowseInformationFile="$(IntDir)/"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
-				CompileAs="0"
-				ForcedIncludeFiles=""
-				ShowIncludes="FALSE"/>
+				ForcedIncludeFiles=""/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				ShowProgress="0"
 				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="$(SolutionDir)/$(ConfigurationName)/lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
 				SubSystem="2"
 				OptimizeForWindows98="1"
 				BaseAddress=""
-				TurnOffAssemblyGeneration="FALSE"
 				ImportLibrary="$(SolutionDir)/$(ConfigurationName)/lib/$(ProjectName).lib"/>
 			<Tool
 				Name="VCMIDLTool"

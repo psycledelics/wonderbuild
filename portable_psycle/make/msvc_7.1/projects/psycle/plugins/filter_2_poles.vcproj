@@ -39,8 +39,6 @@
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
-				EnableFunctionLevelLinking="FALSE"
-				EnableEnhancedInstructionSet="0"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="FALSE"
 				UsePrecompiledHeader="3"
@@ -48,11 +46,11 @@
 				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.pch"
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(IntDir)/$(ProjectName).pdb"
+				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.pdb"
 				WarningLevel="4"
 				WarnAsError="TRUE"
 				SuppressStartupBanner="TRUE"
-				CompileAs="0"
+				DebugInformationFormat="3"
 				DisableSpecificWarnings="4652"
 				ForcedIncludeFiles="project.h"/>
 			<Tool
@@ -63,12 +61,13 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="$(SolutionDir)/$(ConfigurationName)/lib"
-				AssemblyDebug="0"
+				GenerateDebugInformation="TRUE"
 				LargeAddressAware="1"
-				TerminalServerAware="0"
+				TerminalServerAware="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
+				TurnOffAssemblyGeneration="TRUE"
 				ImportLibrary="$(SolutionDir)/$(ConfigurationName)/lib/$(ProjectName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -108,14 +107,12 @@
 /WL
 "
 				Optimization="0"
-				GlobalOptimizations="FALSE"
 				OptimizeForProcessor="2"
 				AdditionalIncludeDirectories="$(SolutionDir)/../../include;$(SolutionDir)/../../src"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="FALSE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				EnableEnhancedInstructionSet="0"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
@@ -124,12 +121,9 @@
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.pdb"
-				BrowseInformation="0"
-				BrowseInformationFile="$(IntDir)/"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
-				CompileAs="0"
 				ForcedIncludeFiles=""/>
 			<Tool
 				Name="VCCustomBuildTool"/>
