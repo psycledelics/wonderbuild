@@ -154,54 +154,6 @@ SOURCE=.\FrameMachine.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\GearDelay.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\GearDelay.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\GearDistort.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\GearDistort.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Gearfilter.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\GearFilter.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\GearFlanger.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\GearFlanger.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\GearGainer.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\GearGainer.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\GearPsychOsc.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\GearPsychosc.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\GearTracker.cpp
 # End Source File
 # Begin Source File
