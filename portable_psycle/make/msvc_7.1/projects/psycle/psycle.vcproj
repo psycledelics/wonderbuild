@@ -359,12 +359,6 @@
 				RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\GreetDialog.h">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\LoggingWindow.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\include\psycle\host\LoggingWindow.h">
-			</File>
-			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MainFrm.cpp">
 			</File>
 			<File
@@ -591,6 +585,12 @@
 			<Filter
 				Name="monitors"
 				Filter="">
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\LoggingWindow.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\include\psycle\host\LoggingWindow.h">
+				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MasterDlg.cpp">
 				</File>
