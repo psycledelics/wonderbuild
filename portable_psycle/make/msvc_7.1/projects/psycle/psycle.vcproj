@@ -126,6 +126,7 @@
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
+				DisableSpecificWarnings="4652"
 				ForcedIncludeFiles=""/>
 			<Tool
 				Name="VCCustomBuildTool"/>
