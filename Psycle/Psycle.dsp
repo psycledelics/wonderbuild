@@ -570,6 +570,14 @@ SOURCE=.\PresetsDlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ProgressDialog.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ProgressDialog.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\SaveWavDlg.cpp
 # End Source File
 # Begin Source File
