@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo -en "\e[1m$(basename $0): Calling: $(dirname $0)/autotools-bootstrap\e[0m\n" &&
+$(dirname $0)/autotools-bootstrap &&
+
+echo -en "\e[1m$(basename $0): Calling: $0 $*\e[0m\n" &&
+$0 $*
