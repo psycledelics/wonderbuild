@@ -614,6 +614,12 @@
 					RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\MidiMonitorDlg.h">
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\Mixer.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\include\psycle\host\Mixer.h">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\ProgressDialog.cpp">
 				</File>
 				<File
@@ -852,6 +858,9 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\..\..\src\psycle\host\resources\beta.bmp">
+		</File>
 		<File
 			RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Global.cpp">
 		</File>
