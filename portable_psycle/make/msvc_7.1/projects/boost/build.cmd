@@ -4,7 +4,10 @@ pushd ..\..\..\..\include\ && (
 	)
 	popd
 ) && (
-	pushd ..\..\ && (
-		output.boost.exe -y
+	if not exist ..\..\output\boost_stamp (
+		pushd ..\..\ && (
+			output.boost.exe -y
+			echo boost extracted > output\boost_stamp
+		)
 	)
 )
