@@ -789,6 +789,10 @@ SOURCE=.\res\MasterMachine\numbers.bmp
 # End Source File
 # Begin Source File
 
+SOURCE=.\res\pattern_header_skin.bmp
+# End Source File
+# Begin Source File
+
 SOURCE=.\res\plus.bmp
 # End Source File
 # Begin Source File
