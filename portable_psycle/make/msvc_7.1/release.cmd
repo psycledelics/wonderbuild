@@ -40,8 +40,8 @@ rem ########## amd k7 and intel p3 ##########
 
 mkdir "%distribution%\amd-k7-and-intel-pentium-3\"
 xcopy/f/i ".\release\bin\psycle.exe" "%distribution%\amd-k7-and-intel-pentium-3\" || ( echo copy failed, aborting. & goto :pause )
-rename "%distribution%\amd-k7-and-intel-pentium-3\psycle.exe" "psycle.timestamp-%timestamp%.exe" || ( echo rename failed, aborting. & goto :pause )
-call :upx "%distribution%\amd-k7-and-intel-pentium-3\psycle.timestamp-%timestamp%.exe"
+rename "%distribution%\amd-k7-and-intel-pentium-3\psycle.exe" "psycle.timestamp-%timestamp%.amd-k7-and-intel-pentium-3.exe" || ( echo rename failed, aborting. & goto :pause )
+call :upx "%distribution%\amd-k7-and-intel-pentium-3\psycle.timestamp-%timestamp%.amd-k7-and-intel-pentium-3.exe"
 
 mkdir "%distribution%\amd-k7-and-intel-pentium-3\plugins\"
 xcopy/f .\release\bin\psycle.plugins\*.dll "%distribution%\amd-k7-and-intel-pentium-3\plugins\" || ( echo copy failed, aborting. & goto :pause )
@@ -50,8 +50,8 @@ rem ########## intel p4 ##########
 
 mkdir "%distribution%\intel-pentium-4\"
 xcopy/f/i ".\release_intel_pentium_4\bin\psycle.exe" "%distribution%\intel-pentium-4\" || ( echo copy failed, aborting. & goto :pause )
-rename "%distribution%\intel-pentium-4\psycle.exe" "psycle.timestamp-%timestamp%-intel-pentium-4.exe" || ( echo rename failed, aborting. & goto :pause )
-call :upx "%distribution%\intel-pentium-4\psycle.timestamp-%timestamp%-intel-pentium-4.exe"
+rename "%distribution%\intel-pentium-4\psycle.exe" "psycle.timestamp-%timestamp%.intel-pentium-4.exe" || ( echo rename failed, aborting. & goto :pause )
+call :upx "%distribution%\intel-pentium-4\psycle.timestamp-%timestamp%.intel-pentium-4.exe"
 
 mkdir "%distribution%\intel-pentium-4\plugins\"
 xcopy/f .\release_intel_pentium_4\bin\psycle.plugins\*.dll "%distribution%\intel-pentium-4\plugins\" || ( echo copy failed, aborting. & goto :pause )
@@ -92,7 +92,7 @@ rem make the archive
 rem ================
 
 del/q .\psycle.bin.rar
-rar a -s -m5 -md4096 -ep1 -r0 .\psycle.bin.rar "%distribution%" 1>> .\release.log 2>&1 || ( echo rar failed, aborting. & goto :pause )
+rar a -s -m5 -md4096 -ep1 -r0 .\psycle.bin.rar "%distribution%" 1>> .\psycle.bin.rar.log 2>&1 || ( echo rar failed, aborting. & goto :pause )
 
 rem =====================================================================================
 rem upload the archive and update the site (scp and ssh are cygwin commands, use / not \)
@@ -123,7 +123,7 @@ rem ================================
 pause
 rmdir/s/q "%distribution%"
 del/q .\psycle.bin.rar
-del/q .\release*.log
+del/q .\*.log
 goto :eof
 
 rem ===============
