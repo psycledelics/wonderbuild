@@ -34,6 +34,7 @@
 				OptimizeForProcessor="2"
 				OptimizeForWindowsApplication="FALSE"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
+				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
@@ -41,10 +42,10 @@
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="1"
 				PrecompiledHeaderThrough=""
-				PrecompiledHeaderFile="$(OutDir)/$(InputName).pch"
+				PrecompiledHeaderFile="$(OutDir)/$(ProjectName).pch"
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(OutDir)/$(InputName).pdb"
+				ProgramDataBaseFileName="$(OutDir)/$(ProjectName).pdb"
 				WarningLevel="4"
 				WarnAsError="TRUE"
 				SuppressStartupBanner="TRUE"
@@ -68,7 +69,7 @@
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
 				TurnOffAssemblyGeneration="TRUE"
-				ImportLibrary="$(IntDir)/$(InputName).lib"/>
+				ImportLibrary="$(IntDir)/$(ProjectName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				TypeLibraryName="$(IntDir)/$(ProjectName).tlb"/>
@@ -116,13 +117,14 @@
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="1"
 				PrecompiledHeaderThrough=""
-				PrecompiledHeaderFile="$(OutDir)/$(InputName).pch"
+				PrecompiledHeaderFile="$(OutDir)/$(ProjectName).pch"
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(OutDir)/$(InputName).pdb"
+				ProgramDataBaseFileName="$(OutDir)/$(ProjectName).pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
+				DisableSpecificWarnings="4652"
 				ForcedIncludeFiles=""
 				ShowIncludes="TRUE"/>
 			<Tool
@@ -138,7 +140,7 @@
 				ProgramDatabaseFile="$(IntDir)/$(InputName).pdb"
 				OptimizeForWindows98="1"
 				TurnOffAssemblyGeneration="TRUE"
-				ImportLibrary="$(IntDir)/$(InputName).lib"/>
+				ImportLibrary="$(IntDir)/$(ProjectName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				TypeLibraryName="$(IntDir)/$(ProjectName).tlb"/>
@@ -186,6 +188,7 @@
 				OptimizeForProcessor="3"
 				OptimizeForWindowsApplication="FALSE"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
+				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
@@ -193,10 +196,10 @@
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="1"
 				PrecompiledHeaderThrough=""
-				PrecompiledHeaderFile="$(OutDir)/$(InputName).pch"
+				PrecompiledHeaderFile="$(OutDir)/$(ProjectName).pch"
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(OutDir)/$(InputName).pdb"
+				ProgramDataBaseFileName="$(OutDir)/$(ProjectName).pdb"
 				WarningLevel="4"
 				WarnAsError="TRUE"
 				SuppressStartupBanner="TRUE"
@@ -220,7 +223,7 @@
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
 				TurnOffAssemblyGeneration="TRUE"
-				ImportLibrary="$(IntDir)/$(InputName).lib"/>
+				ImportLibrary="$(IntDir)/$(ProjectName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				TypeLibraryName="$(IntDir)/$(ProjectName).tlb"/>
@@ -252,10 +255,13 @@
 			RelativePath="pre_compiled_headers.cpp">
 		</File>
 		<File
-			RelativePath="$(SolutionDir)\..\..\..\src\pre_compiled_headers.h">
+			RelativePath="$(SolutionDir)\..\..\..\src\pre_compiled_headers.private.hpp">
 		</File>
 		<File
-			RelativePath="$(SolutionDir)\..\..\..\src\project.h">
+			RelativePath="$(SolutionDir)\..\..\..\src\project.hpp">
+		</File>
+		<File
+			RelativePath="$(SolutionDir)\..\..\..\src\project.private.hpp">
 		</File>
 	</Files>
 	<Globals>

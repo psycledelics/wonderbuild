@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="pre_compiled_headers.mfc"
+	RootNamespace="pre_compiled_headers.mfc"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -35,6 +36,7 @@
 				OptimizeForProcessor="2"
 				OptimizeForWindowsApplication="TRUE"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
+				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
@@ -42,10 +44,10 @@
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="1"
 				PrecompiledHeaderThrough=""
-				PrecompiledHeaderFile="$(OutDir)/$(InputName).pch"
+				PrecompiledHeaderFile="$(OutDir)/$(ProjectName).pch"
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(OutDir)/$(InputName).pdb"
+				ProgramDataBaseFileName="$(OutDir)/$(ProjectName).pdb"
 				WarningLevel="4"
 				WarnAsError="TRUE"
 				SuppressStartupBanner="TRUE"
@@ -69,7 +71,7 @@
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
 				TurnOffAssemblyGeneration="TRUE"
-				ImportLibrary="$(IntDir)/$(InputName).lib"/>
+				ImportLibrary="$(IntDir)/$(ProjectName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				TypeLibraryName="$(IntDir)/$(ProjectName).tlb"/>
@@ -117,13 +119,14 @@
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="1"
 				PrecompiledHeaderThrough=""
-				PrecompiledHeaderFile="$(OutDir)/$(InputName).pch"
+				PrecompiledHeaderFile="$(OutDir)/$(ProjectName).pch"
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(OutDir)/$(InputName).pdb"
+				ProgramDataBaseFileName="$(OutDir)/$(ProjectName).pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
+				DisableSpecificWarnings="4652"
 				ForcedIncludeFiles=""
 				ShowIncludes="TRUE"/>
 			<Tool
@@ -136,10 +139,10 @@
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="$(SolutionDir)/$(ConfigurationName)/lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(IntDir)/$(InputName).pdb"
+				ProgramDatabaseFile="$(IntDir)/$(ProjectName).pdb"
 				OptimizeForWindows98="1"
 				TurnOffAssemblyGeneration="TRUE"
-				ImportLibrary="$(IntDir)/$(InputName).lib"/>
+				ImportLibrary="$(IntDir)/$(ProjectName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				TypeLibraryName="$(IntDir)/$(ProjectName).tlb"/>
@@ -188,6 +191,7 @@
 				OptimizeForProcessor="3"
 				OptimizeForWindowsApplication="TRUE"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
+				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
@@ -195,10 +199,10 @@
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="1"
 				PrecompiledHeaderThrough=""
-				PrecompiledHeaderFile="$(OutDir)/$(InputName).pch"
+				PrecompiledHeaderFile="$(OutDir)/$(ProjectName).pch"
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(OutDir)/$(InputName).pdb"
+				ProgramDataBaseFileName="$(OutDir)/$(ProjectName).pdb"
 				WarningLevel="4"
 				WarnAsError="TRUE"
 				SuppressStartupBanner="TRUE"
@@ -222,7 +226,7 @@
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
 				TurnOffAssemblyGeneration="TRUE"
-				ImportLibrary="$(IntDir)/$(InputName).lib"/>
+				ImportLibrary="$(IntDir)/$(ProjectName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				TypeLibraryName="$(IntDir)/$(ProjectName).tlb"/>
@@ -251,16 +255,19 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="$(SolutionDir)\..\..\..\src\pre_compiled_headers.h">
+			RelativePath="pre_compiled_headers.cpp">
 		</File>
 		<File
-			RelativePath="pre_compiled_headers.mfc.cpp">
+			RelativePath="$(SolutionDir)\..\..\..\src\pre_compiled_headers.mfc.private.hpp">
 		</File>
 		<File
-			RelativePath="$(SolutionDir)\..\..\..\src\project.h">
+			RelativePath="$(SolutionDir)\..\..\..\src\pre_compiled_headers.private.hpp">
 		</File>
 		<File
-			RelativePath="$(SolutionDir)\..\..\..\src\stdafx.h">
+			RelativePath="$(SolutionDir)\..\..\..\src\project.hpp">
+		</File>
+		<File
+			RelativePath="$(SolutionDir)\..\..\..\src\project.private.hpp">
 		</File>
 	</Files>
 	<Globals>
