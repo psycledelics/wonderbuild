@@ -765,6 +765,10 @@ SOURCE=.\res\littleright.bmp
 # End Source File
 # Begin Source File
 
+SOURCE=.\res\machine_skin.bmp
+# End Source File
+# Begin Source File
+
 SOURCE=.\res\MasterMachine\masterbk.bmp
 # End Source File
 # Begin Source File
