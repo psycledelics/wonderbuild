@@ -460,24 +460,6 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\FileIO.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\FileIT.cpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\FileIT.hpp">
-				</File>
-				<File
-					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\FileXM.cpp">
-				</File>
-				<File
-					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\FileXM.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\it.cpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\it.hpp">
-				</File>
-				<File
 					RelativePath="..\..\..\..\src\psycle\host\ITModule2.cpp">
 					<FileConfiguration
 						Name="release.g6|Win32">
@@ -872,6 +854,22 @@
 					</File>
 					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MidiLearn.hpp">
+					</File>
+				</Filter>
+				<Filter
+					Name="CTabCtrlSSL"
+					Filter="">
+					<File
+						RelativePath="..\..\..\..\include\CTabCtrlSSL\TabCtrlSSL.cpp">
+					</File>
+					<File
+						RelativePath="..\..\..\..\include\CTabCtrlSSL\TabCtrlSSL.h">
+					</File>
+					<File
+						RelativePath="..\..\..\..\include\CTabCtrlSSL\TabPageSSL.cpp">
+					</File>
+					<File
+						RelativePath="..\..\..\..\include\CTabCtrlSSL\TabPageSSL.h">
 					</File>
 				</Filter>
 			</Filter>
