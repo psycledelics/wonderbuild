@@ -255,7 +255,7 @@ rem ------
 rem failed
 rem ------
 :failed
-	set return_code=%ERRORLEVEL%
+	set return_code=%ErrorLevel%
 	echo %~n0: failed with return code: %return_code%
 	set failed=true
 	if "%return_code%" == "0" (
