@@ -59,7 +59,7 @@ rem ============================================================================
 rem upload archive and update the site (scp and ssh are cygwin commands, use / not \)
 rem =================================================================================
 
-user=johan-boule
+set user=johan-boule
 
 scp ./psycle.bin.rar %user%@shell.sourceforge.net:psycle/htdocs/ || ( echo scp failed, aborting. && goto :pause )
 ssh %user%@shell.sourceforge.net psycle/htdocs.update.bash || ( echo ssh failed, aborting. && goto :pause )
