@@ -209,6 +209,7 @@ rem -------------
 	rem <bohan> it turns out it also does something else, like allowing copy of files whose name ends with ".exe".
 	echo %0: copying built libraries and programs ...
 	xcopy/f/i "%source%\*.exe" "%destination%" || goto :failed
+	xcopy/f/i "%source%\*.dll" "%destination%" || goto :failed
 	xcopy/i "%source%\psycle.plugins\*.dll" "%destination%\plugins\" || goto :failed
 	echo %0: copying microsoft c/c++/gdi+/mfc runtime libraries ...
 	xcopy "%SYSTEMROOT%\system32\msvcr71.dll" "%destination%" || goto :failed
