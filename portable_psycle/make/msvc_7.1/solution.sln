@@ -47,6 +47,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle__plugin__negative", 
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle__plugin__arguru_synth", "projects\psycle\plugins\arguru synth 2f.vcproj", "{4F58513B-F7E3-46CD-8196-9B3E4A07AF20}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		debug = debug
@@ -114,6 +118,12 @@ Global
 		{57779BFB-E246-4305-9431-C0639619C17A}.release.Build.0 = release|Win32
 		{57779BFB-E246-4305-9431-C0639619C17A}.release_intel_pentium_4.ActiveCfg = release_intel_pentium_4|Win32
 		{57779BFB-E246-4305-9431-C0639619C17A}.release_intel_pentium_4.Build.0 = release_intel_pentium_4|Win32
+		{4F58513B-F7E3-46CD-8196-9B3E4A07AF20}.debug.ActiveCfg = debug|Win32
+		{4F58513B-F7E3-46CD-8196-9B3E4A07AF20}.debug.Build.0 = debug|Win32
+		{4F58513B-F7E3-46CD-8196-9B3E4A07AF20}.release.ActiveCfg = release|Win32
+		{4F58513B-F7E3-46CD-8196-9B3E4A07AF20}.release.Build.0 = release|Win32
+		{4F58513B-F7E3-46CD-8196-9B3E4A07AF20}.release_intel_pentium_4.ActiveCfg = release_intel_pentium_4|Win32
+		{4F58513B-F7E3-46CD-8196-9B3E4A07AF20}.release_intel_pentium_4.Build.0 = release_intel_pentium_4|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
