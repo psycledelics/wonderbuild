@@ -204,9 +204,10 @@ rem -------------
 	echo %0: copying %target% ...
 	set source=..\release.%target%\bin\
 	set destination=%distribution%\%target%\
-	rem <bohan> well i think microsoft's documentation about microsoft's xcopy is wrong.
+	rem <bohan> Well i think microsoft's documentation about microsoft's xcopy is wrong.
 	rem <bohan> xcopy/f <-- shows what files are being copied.
-	rem <bohan> it turns out it also does something else, like allowing copy of files whose name ends with ".exe".
+	rem <bohan> It turns out it also does something else, like allowing copy of files whose name ends with ".exe".
+	rem <bohan> Also, sometimes, xcopy crashes with a memory access violation... no comment.
 	echo %0: copying built libraries and programs ...
 	xcopy/f/i "%source%\*.exe" "%destination%" || goto :failed
 	xcopy/f/i "%source%\*.dll" "%destination%" || goto :failed
