@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="psycle__plugin__gainer"
+	Name="psycle.plugins.gainer"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -12,7 +12,7 @@
 	<Configurations>
 		<Configuration
 			Name="release|Win32"
-			OutputDirectory="$(SolutionDir)/$(ConfigurationName)/bin/psycle__plugins"
+			OutputDirectory="$(SolutionDir)/$(ConfigurationName)/bin/psycle.plugins"
 			IntermediateDirectory="$(SolutionDir)/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="2"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -94,7 +94,7 @@
 		</Configuration>
 		<Configuration
 			Name="debug|Win32"
-			OutputDirectory="$(SolutionDir)/$(ConfigurationName)/bin/psycle__plugins"
+			OutputDirectory="$(SolutionDir)/$(ConfigurationName)/bin/psycle.plugins"
 			IntermediateDirectory="$(SolutionDir)/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="2"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
@@ -162,7 +162,7 @@
 		</Configuration>
 		<Configuration
 			Name="release_intel_pentium_4|Win32"
-			OutputDirectory="$(SolutionDir)/$(ConfigurationName)/bin/psycle__plugins"
+			OutputDirectory="$(SolutionDir)/$(ConfigurationName)/bin/psycle.plugins"
 			IntermediateDirectory="$(SolutionDir)/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="2"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"

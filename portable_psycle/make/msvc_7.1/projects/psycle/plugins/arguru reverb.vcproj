@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="psycle.plugins.delay"
+	Name="psycle.plugins.arguru_reverb"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -247,10 +247,19 @@
 	</References>
 	<Files>
 		<Filter
-			Name="delay"
+			Name="arguru reverb"
 			Filter="">
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugin\Delay.cpp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugin\arguru_reverb\reverb.cpp">
+			</File>
+			<File
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugin\arguru_reverb\AllPass.cpp">
+			</File>
+			<File
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugin\arguru_reverb\CombFilter.cpp">
+			</File>
+			<File
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugin\arguru_reverb\LowPass.cpp">
 			</File>
 		</Filter>
 	</Files>
