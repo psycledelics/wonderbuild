@@ -240,9 +240,6 @@
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Psycle.cpp">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Psycle.rc">
-			</File>
-			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\SaveWavDlg.cpp">
 			</File>
 			<File
@@ -437,6 +434,100 @@
 			</File>
 			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Riff.cpp">
+			</File>
+		</Filter>
+		<Filter
+			Name="resources"
+			Filter="">
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\AsioLogo.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\bmp00002.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\bmp00003.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\bmp00004.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\bmp00005.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\bmp00009.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\ico00001.ico">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\icon1.ico">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\idr_vstf.ico">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\less.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\lessless.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\littleleft.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\littleright.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\machine_skin.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\MasterMachine\masterbk.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\minus.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\minus1.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\more.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\moremore.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\MasterMachine\numbers.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\pattern_header_skin.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\plus.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\plus1.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\Psycle.ico">
+			</File>
+			<File
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Psycle.rc">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resource.h">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\MasterMachine\slider.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\splash copia.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\TbMainKnob.bmp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\resources\Toolbar.bmp">
 			</File>
 		</Filter>
 		<File
