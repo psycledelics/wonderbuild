@@ -759,7 +759,7 @@
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\psycle.rc2">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\resource.h">
+				RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\resource.h">
 			</File>
 			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\MasterMachine\slider.bmp">
