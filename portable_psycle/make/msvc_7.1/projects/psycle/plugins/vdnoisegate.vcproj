@@ -246,7 +246,7 @@
 	</References>
 	<Files>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugins\vincenzo_demasi\vdNoiseGate.cpp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugins\vincenzo_demasi\vdNoiseGate\vdNoiseGate.cpp">
 			</File>
 	</Files>
 	<Globals>

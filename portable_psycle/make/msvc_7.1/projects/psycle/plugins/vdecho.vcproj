@@ -246,7 +246,7 @@
 	</References>
 	<Files>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugins\vincenzo_demasi\vdEcho.cpp">
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugins\vincenzo_demasi\vdEcho\vdEcho.cpp">
 			</File>
 	</Files>
 	<Globals>
