@@ -354,10 +354,22 @@
 				RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\GreetDialog.h">
 			</File>
 			<File
+				RelativePath="..\..\..\..\src\psycle\host\keybhandler.h">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\machineview.h">
+			</File>
+			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MainFrm.cpp">
 			</File>
 			<File
 				RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\MainFrm.h">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\mouseHandler.h">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\patviewnew.h">
 			</File>
 			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Psycle.cpp">
@@ -370,6 +382,9 @@
 			</File>
 			<File
 				RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\SaveWavDlg.h">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\seqview.h">
 			</File>
 			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\SongpDlg.cpp">
@@ -471,19 +486,10 @@
 					RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\InfoDlg.h">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\keybhandler.h">
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\machineview.h">
-				</File>
-				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MacProp.cpp">
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\MacProp.h">
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\mouseHandler.h">
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\NewMachine.cpp">
@@ -498,16 +504,10 @@
 					RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\NewVal.h">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\patviewnew.h">
-				</File>
-				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\PresetsDlg.cpp">
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\PresetsDlg.h">
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\seqview.h">
 				</File>
 				<Filter
 					Name="sampler"
