@@ -265,13 +265,25 @@
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Dsp.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\include\psycle\host\Dsp.h">
+			</File>
+			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Helpers.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\include\psycle\host\Helpers.h">
 			</File>
 			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Player.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\include\psycle\host\Player.h">
+			</File>
+			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Song.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\include\psycle\host\Song.h">
 			</File>
 			<Filter
 				Name="machine"
@@ -280,10 +292,19 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Machine.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\include\psycle\host\Machine.h">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Plugin.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\include\psycle\host\Plugin.h">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\VstHost.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\include\psycle\host\VstHost.h">
 				</File>
 				<Filter
 					Name="sampler"
@@ -292,10 +313,19 @@
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Filter.cpp">
 					</File>
 					<File
+						RelativePath="..\..\..\..\include\psycle\host\Filter.h">
+					</File>
+					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Instrument.cpp">
 					</File>
 					<File
+						RelativePath="..\..\..\..\include\psycle\host\Instrument.h">
+					</File>
+					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Sampler.cpp">
+					</File>
+					<File
+						RelativePath="..\..\..\..\include\psycle\host\Sampler.h">
 					</File>
 				</Filter>
 			</Filter>
@@ -314,22 +344,46 @@
 			Name="mfc"
 			Filter="">
 			<File
+				RelativePath="..\..\..\..\include\psycle\host\Bitmap.h">
+			</File>
+			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\ChildView.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\include\psycle\host\ChildView.h">
 			</File>
 			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\GreetDialog.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\include\psycle\host\GreetDialog.h">
+			</File>
+			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MainFrm.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\include\psycle\host\MainFrm.h">
 			</File>
 			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Psycle.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\include\psycle\host\psycle.h">
+			</File>
+			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\SaveWavDlg.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\include\psycle\host\SaveWavDlg.h">
+			</File>
+			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\SongpDlg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\include\psycle\host\SongpDlg.h">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\stdafx.h">
 			</File>
 			<Filter
 				Name="configuration"
@@ -338,16 +392,31 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\ConfigDlg.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\include\psycle\host\ConfigDlg.h">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\DirectoryDlg.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\include\psycle\host\DirectoryDlg.h">
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\KeyConfigDlg.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\include\psycle\host\KeyConfigDlg.h">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MidiInputDlg.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\include\psycle\host\MidiInputDlg.h">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\SkinDlg.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\include\psycle\host\SkinDlg.h">
 				</File>
 				<Filter
 					Name="drivers"
@@ -356,13 +425,25 @@
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\ASIOConfig.cpp">
 					</File>
 					<File
+						RelativePath="..\..\..\..\include\psycle\host\ASIOConfig.h">
+					</File>
+					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\DSoundConfig.cpp">
+					</File>
+					<File
+						RelativePath="..\..\..\..\include\psycle\host\DSoundConfig.h">
 					</File>
 					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\OutputDlg.cpp">
 					</File>
 					<File
+						RelativePath="..\..\..\..\include\psycle\host\OutputDlg.h">
+					</File>
+					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\WaveOutDialog.cpp">
+					</File>
+					<File
+						RelativePath="..\..\..\..\include\psycle\host\WaveOutDialog.h">
 					</File>
 				</Filter>
 			</Filter>
@@ -373,25 +454,49 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\FrameMachine.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\include\psycle\host\FrameMachine.h">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\GearRackDlg.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\include\psycle\host\GearRackDlg.h">
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\GearTracker.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\include\psycle\host\GearTracker.h">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\InfoDlg.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\include\psycle\host\InfoDlg.h">
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MacProp.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\include\psycle\host\MacProp.h">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\NewMachine.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\include\psycle\host\NewMachine.h">
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\NewVal.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\include\psycle\host\NewVal.h">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\PresetsDlg.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\include\psycle\host\PresetsDlg.h">
 				</File>
 				<Filter
 					Name="sampler"
@@ -400,7 +505,13 @@
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\EnvDialog.cpp">
 					</File>
 					<File
+						RelativePath="..\..\..\..\include\psycle\host\EnvDialog.h">
+					</File>
+					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\InstrumentEditor.cpp">
+					</File>
+					<File
+						RelativePath="..\..\..\..\include\psycle\host\InstrumentEditor.h">
 					</File>
 					<Filter
 						Name="waveform"
@@ -409,13 +520,25 @@
 							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\WaveEdAmplifyDialog.cpp">
 						</File>
 						<File
+							RelativePath="..\..\..\..\include\psycle\host\WaveEdAmplifyDialog.h">
+						</File>
+						<File
 							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\WaveEdChildView.cpp">
+						</File>
+						<File
+							RelativePath="..\..\..\..\include\psycle\host\WaveEdChildView.h">
 						</File>
 						<File
 							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\WaveEdFrame.cpp">
 						</File>
 						<File
+							RelativePath="..\..\..\..\include\psycle\host\WaveEdFrame.h">
+						</File>
+						<File
 							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\wavfiledlg.cpp">
+						</File>
+						<File
+							RelativePath="..\..\..\..\include\psycle\host\WavFileDlg.h">
 						</File>
 					</Filter>
 				</Filter>
@@ -426,10 +549,19 @@
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\DefaultVstGui.cpp">
 					</File>
 					<File
+						RelativePath="..\..\..\..\include\psycle\host\DefaultVstGui.h">
+					</File>
+					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\VstEditorDlg.cpp">
 					</File>
 					<File
+						RelativePath="..\..\..\..\include\psycle\host\VstEditorDlg.h">
+					</File>
+					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\VstGui.cpp">
+					</File>
+					<File
+						RelativePath="..\..\..\..\include\psycle\host\VstGui.h">
 					</File>
 				</Filter>
 			</Filter>
@@ -440,7 +572,13 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\PatDlg.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\include\psycle\host\PatDlg.h">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\SwingFillDlg.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\include\psycle\host\SwingFillDlg.h">
 				</File>
 			</Filter>
 			<Filter
@@ -450,16 +588,31 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MasterDlg.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\include\psycle\host\MasterDlg.h">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MidiMonitorDlg.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\include\psycle\host\MidiMonitorDlg.h">
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\ProgressDialog.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\include\psycle\host\ProgressDialog.h">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\VolumeDlg.cpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\include\psycle\host\VolumeDlg.h">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\WireDlg.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\include\psycle\host\WireDlg.h">
 				</File>
 			</Filter>
 		</Filter>
@@ -470,16 +623,28 @@
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\AudioDriver.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\include\psycle\host\AudioDriver.h">
+			</File>
+			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\DirectSound.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\include\psycle\host\DirectSound.h">
+			</File>
+			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\WaveOut.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\include\psycle\host\WaveOut.h">
 			</File>
 			<Filter
 				Name="asio"
 				Filter="">
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\ASIOInterface.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\include\psycle\host\ASIOInterface.h">
 				</File>
 				<Filter
 					Name="sdk"
@@ -488,10 +653,19 @@
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\asio\asio.cpp">
 					</File>
 					<File
+						RelativePath="..\..\..\..\include\psycle\host\asio\asio.h">
+					</File>
+					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\asio\asiodrivers.cpp">
 					</File>
 					<File
+						RelativePath="..\..\..\..\include\psycle\host\asio\asiodrivers.h">
+					</File>
+					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\asio\asiolist.cpp">
+					</File>
+					<File
+						RelativePath="..\..\..\..\include\psycle\host\asio\asiolist.h">
 					</File>
 				</Filter>
 			</Filter>
@@ -503,7 +677,13 @@
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Configuration.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\include\psycle\host\Configuration.h">
+			</File>
+			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Registry.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\include\psycle\host\Registry.h">
 			</File>
 		</Filter>
 		<Filter
@@ -513,13 +693,25 @@
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\DataCompression.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\include\psycle\host\DataCompression.h">
+			</File>
+			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\FileIO.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\include\psycle\host\FileIO.h">
 			</File>
 			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\FileXM.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\include\psycle\host\FileXM.h">
+			</File>
+			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Riff.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\include\psycle\host\Riff.h">
 			</File>
 		</Filter>
 		<Filter
@@ -623,7 +815,13 @@
 			RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Global.cpp">
 		</File>
 		<File
+			RelativePath="..\..\..\..\include\psycle\host\Global.h">
+		</File>
+		<File
 			RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\InputHandler.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\..\include\psycle\host\InputHandler.h">
 		</File>
 	</Files>
 	<Globals>
