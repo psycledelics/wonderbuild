@@ -3,7 +3,19 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "Psycle"=Psycle.dsp - Package Owner=<4>
+Project: "PortAudioStaticASIO"=".\PortAudioStaticASIO\PortAudioStaticASIO.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "Psycle"=".\Psycle.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -18,7 +30,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "Psycle Winamp Plugin"=WinampPlugin\Psycle Winamp Plugin.dsp - Package Owner=<4>
+Project: "Psycle Winamp Plugin"=".\WinampPlugin\Psycle Winamp Plugin.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -30,7 +42,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "PortAudioStaticASIO"=PortAudioStaticASIO\PortAudioStaticASIO.dsp - Package Owner=<4>
+Project: "Winamp3 Plugin"=".\WINAMPPLUGIN\Winamp3 Plugin.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
