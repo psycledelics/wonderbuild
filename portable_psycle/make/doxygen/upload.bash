@@ -3,7 +3,7 @@
 function main
 {
 	cd $(dirname $0)/../../doc/ &&
-	tar --create --bzip2 --file /tmp/$(logname).doxygen.tar.bz2 doxygen.microsoft &&
+	tar --create --bzip2 --file /tmp/$(logname).doxygen.tar.bz2 doxygen.mfc &&
 	# maps local user account names to sourceforge user account names
 	case "$(logname)@$(hostname)" in
 		bohan@*) local user=johan-boule ;;
@@ -14,12 +14,12 @@ function main
 	ssh $user@shell.sourceforge.net <<-eof
 		set -vx &&
 		cd /home/groups/p/ps/psycle/htdocs &&
-		rm --force doxygen.microsoft --recursive &&
+		rm --force doxygen.mfc --recursive &&
 		umask ug=rwx,o=rx &&
 		tar --extract --bzip2 --file /tmp/$(logname).doxygen.tar.bz2 &&
-		chmod ug=rwsx,o=rx doxygen.microsoft &&
-		find doxygen.microsoft -type d -exec chmod ug=rwsx,o=rx {} \; &&
-		find doxygen.microsoft -type f -exec chmod ug+rw,o+r-w {} \; &&
+		chmod ug=rwsx,o=rx doxygen.mfc &&
+		find doxygen.mfc -type d -exec chmod ug=rwsx,o=rx {} \; &&
+		find doxygen.mfc -type f -exec chmod ug+rw,o+r-w {} \; &&
 		./update-timestamps
 	eof
 }

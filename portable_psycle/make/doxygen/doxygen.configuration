@@ -30,7 +30,7 @@ PROJECT_NUMBER         = 1.7.7
 # If a relative path is entered, it will be relative to the location 
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = ../../doc/doxygen.microsoft
+OUTPUT_DIRECTORY       = ../../doc/doxygen.mfc
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create 
 # 2 levels of 10 sub-directories under the output directory of each output 

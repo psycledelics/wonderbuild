@@ -103,7 +103,7 @@ rem ----------------
 			set stamp=%tag%
 		)
 		
-		set distribution=.\psycle.bin.%stamp%\
+		set distribution=.\psycle.mfc.bin.%stamp%\
 		
 		mkdir "%distribution%"
 		echo %0: directory %distribution% created
@@ -144,9 +144,9 @@ rem ----------------
 	rem ===========================
 		
 		if "%tag%" == "" (
-			set archive=psycle.bin.rar
+			set archive=psycle.mfc.bin.rar
 		) else (
-			set archive=psycle.bin.%tag%.rar
+			set archive=psycle.mfc.bin.%tag%.rar
 		)
 
 		rar a -s -m5 -md4096 -ep1 -r0 .\%archive% "%distribution%" 1>> .\%archive%.log 2>&1 || goto :failed
