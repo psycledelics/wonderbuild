@@ -80,8 +80,8 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				Culture="1047"
-				AdditionalIncludeDirectories="$(SolutionDir)/../../src/psycle/host/resources/"/>
+				PreprocessorDefinitions="_AFXDLL;NDEBUG"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../src/psycle/host/resources&quot;"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -153,8 +153,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				Culture="1047"
-				AdditionalIncludeDirectories="$(SolutionDir)/../../src/psycle/host/resources/"/>
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../src/psycle/host/resources&quot;"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -236,8 +235,8 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				Culture="1047"
-				AdditionalIncludeDirectories="$(SolutionDir)/../../src/psycle/host/resources/"/>
+				PreprocessorDefinitions="_AFXDLL;NDEBUG"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../src/psycle/host/resources&quot;"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -306,6 +305,9 @@
 			</File>
 			<File
 				RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\InputHandler.h">
+			</File>
+			<File
+				RelativePath="$(SolutionDir)\..\..\..\include\psycle\host\version.h">
 			</File>
 			<Filter
 				Name="devices"
