@@ -6,7 +6,7 @@ del/s/q "*.pch" || goto :failed
 del/s/q "*.obj" || goto :failed
 del/s/q "*.res" || goto :failed
 del/s/q "*.aps" || goto :failed
-del/s/q "..\..\src\*.aps" || goto :failed
+rem del/s/q "..\..\src\*.aps" || goto :failed
 del/s/q "*.idb" || goto :failed
 del/s/q "*.ilk" || goto :failed
 del/s/q "*.sbr" || goto :failed
