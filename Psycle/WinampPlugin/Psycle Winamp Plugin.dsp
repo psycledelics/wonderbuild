@@ -62,24 +62,24 @@ LINK32=link.exe
 # PROP BASE Output_Dir "Debug"
 # PROP BASE Intermediate_Dir "Debug"
 # PROP BASE Target_Dir ""
-# PROP Use_MFC 2
+# PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PSYCLEWINAMPPLUGIN_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PSYCLEWINAMPPLUGIN_EXPORTS" /D "_WINDLL" /D "_AFXDLL" /D "_WINAMP_PLUGIN_" /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PSYCLEWINAMPPLUGIN_EXPORTS" /D "_WINAMP_PLUGIN_" /YX"stdafx.h" /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x403 /d "_DEBUG"
-# ADD RSC /l 0x403 /d "_DEBUG" /d "_WINAMP_PLUGIN_" /d "_AFXDLL"
+# ADD RSC /l 0x417 /d "_DEBUG" /d "_WINAMP_PLUGIN_"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 /nologo /dll /debug /machine:I386 /out:"Debug/in_psycle_d.dll" /pdbtype:sept
+# ADD LINK32 /nologo /dll /debug /machine:I386 /out:"D:\Archivos de programa\Winamp\Plugins\in_psycle_d.dll" /pdbtype:sept
 
 !ENDIF 
 
@@ -145,6 +145,15 @@ SOURCE=..\Song.cpp
 # Begin Source File
 
 SOURCE=..\VstHost.cpp
+
+!IF  "$(CFG)" == "Psycle Winamp Plugin - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "Psycle Winamp Plugin - Win32 Debug"
+
+# SUBTRACT CPP /YX
+
+!ENDIF 
+
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -157,6 +166,10 @@ SOURCE=.\ConfigDlg.h
 # Begin Source File
 
 SOURCE=..\Configuration.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\Constants.h
 # End Source File
 # Begin Source File
 
@@ -173,6 +186,10 @@ SOURCE=..\Filter.h
 # Begin Source File
 
 SOURCE=..\Global.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\Helpers.h
 # End Source File
 # Begin Source File
 

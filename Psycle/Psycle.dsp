@@ -568,14 +568,6 @@ SOURCE=.\Psycle2.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\SaveDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\SaveDlg.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\Song.cpp
 # End Source File
 # Begin Source File
