@@ -118,6 +118,7 @@
 				BasicRuntimeChecks="3"
 				SmallerTypeCheck="TRUE"
 				RuntimeLibrary="3"
+				EnableFunctionLevelLinking="TRUE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
