@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="psycle"
+	ProjectGUID="{40D583C1-6393-417C-A569-0E5702484F95}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -36,6 +37,7 @@
 				OptimizeForProcessor="2"
 				OptimizeForWindowsApplication="TRUE"
 				AdditionalIncludeDirectories="$(SolutionDir)/../../include;$(SolutionDir)/../../include/psycle/host;$(SolutionDir)/../../include/psycle/host/asio;$(SolutionDir)/../../src;$(SolutionDir)/../../src/psycle/host"
+				PreprocessorDefinitions="OPERATING_SYSTEM__CROSSPLATFORM"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
@@ -112,6 +114,7 @@
 				Optimization="0"
 				OptimizeForProcessor="2"
 				AdditionalIncludeDirectories="$(SolutionDir)/../../include;$(SolutionDir)/../../include/psycle/host;$(SolutionDir)/../../include/psycle/host/asio;$(SolutionDir)/../../src;$(SolutionDir)/../../src/psycle/host"
+				PreprocessorDefinitions="OPERATING_SYSTEM__CROSSPLATFORM"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="FALSE"
 				BasicRuntimeChecks="3"
