@@ -31,8 +31,8 @@ rename .\release.g7\bin\boost_thread.dll.preserve boost_thread.dll || goto :fail
 rename .\release.g6\bin\boost_thread.dll.preserve boost_thread.dll || goto :failed
 rename .\debug\bin\boost_threadd.dll.preserve boost_threadd.dll || goto :failed
 
-del/s/q "*.pdb" || goto :failed
 del/s/q "*.exe" || goto :failed
+del/s/q "*.pdb" || goto :failed
 del/s/q "*.opt" || goto :failed
 del/s/q "*.ncb" || goto :failed
 del/s/q/ah "*.suo" || goto :failed
