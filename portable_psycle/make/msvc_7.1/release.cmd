@@ -5,7 +5,7 @@ rem ===============
 call "%VS71ComnTools%\VSVars32"
 DevEnv solution.sln /clean release /out clean.log || ( echo clean failed, aborting. & goto :pause )
 DevEnv solution.sln /clean release_intel_pentium_4 /out clean.log || ( echo clean failed, aborting. & goto :pause )
-rem del/q clean.log
+del/q clean.log
 DevEnv solution.sln /build release /out release.log || ( echo build failed, aborting. & goto :pause )
 DevEnv solution.sln /build release_intel_pentium_4 /out release.log || ( echo build failed, aborting. & goto :pause )
 
