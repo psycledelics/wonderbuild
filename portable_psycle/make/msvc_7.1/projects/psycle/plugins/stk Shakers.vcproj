@@ -246,13 +246,13 @@
 			Name="stk"
 			Filter="">
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\stk\Instrmnt.cpp">
+				RelativePath="..\..\..\..\..\src\stk\psyInstrmnt.cpp">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\stk\Shakers.cpp">
+				RelativePath="..\..\..\..\..\src\stk\psyShakers.cpp">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\stk\stk.cpp">
+				RelativePath="..\..\..\..\..\src\stk\psystk.cpp">
 			</File>
 		</Filter>
 		<File

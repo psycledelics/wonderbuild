@@ -246,40 +246,40 @@
 			Name="stk"
 			Filter="">
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\stk\BiQuad.cpp">
+				RelativePath="..\..\..\..\..\src\stk\psyBiQuad.cpp">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\stk\Delay.cpp">
+				RelativePath="..\..\..\..\..\src\stk\psyDelay.cpp">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\stk\DelayA.cpp">
+				RelativePath="..\..\..\..\..\src\stk\psyDelayA.cpp">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\stk\DelayL.cpp">
+				RelativePath="..\..\..\..\..\src\stk\psyDelayL.cpp">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\stk\Filter.cpp">
+				RelativePath="..\..\..\..\..\src\stk\psyFilter.cpp">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\stk\Generator.cpp">
+				RelativePath="..\..\..\..\..\src\stk\psyGenerator.cpp">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\stk\Instrmnt.cpp">
+				RelativePath="..\..\..\..\..\src\stk\psyInstrmnt.cpp">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\stk\Noise.cpp">
+				RelativePath="..\..\..\..\..\src\stk\psyNoise.cpp">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\stk\OnePole.cpp">
+				RelativePath="..\..\..\..\..\src\stk\psyOnePole.cpp">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\stk\OneZero.cpp">
+				RelativePath="..\..\..\..\..\src\stk\psyOneZero.cpp">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\stk\Plucked.cpp">
+				RelativePath="..\..\..\..\..\src\stk\psyPlucked.cpp">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\stk\stk.cpp">
+				RelativePath="..\..\..\..\..\src\stk\psystk.cpp">
 			</File>
 		</Filter>
 		<File
