@@ -98,14 +98,16 @@ rem ============================================================================
 rem upload the archive and update the site (scp and ssh are cygwin commands, use / not \)
 rem =====================================================================================
 
-group=/home/groups/p/ps/psycle/
+set group=/home/groups/p/ps/psycle/
 
 rem maps local user account names to sourceforge user account names
 
 if "%USERPNAME%" == "bohan" (
 	set user=johan-boule
 ) else if "%USERPNAME%" == "x" (
-	set user=alkenstein
+	rem in the meanwhile alk fixes he's account, he uses bohan's.
+	rem set user=alkenstein
+	set user=johan-boule
 ) else (
 	set user="%USERPNAME%"
 )
