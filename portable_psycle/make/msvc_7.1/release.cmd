@@ -130,9 +130,7 @@ rem ----------------
 			if "%USERNAME%" == "bohan" (
 				set sourceforge_user_account=johan-boule
 			) else if "%USERNAME%" == "x" (
-				rem in the meanwhile alk fixes his account, he uses bohan's.
-				rem set sourceforge_user_account=alkenstein
-				set sourceforge_user_account=johan-boule
+				set sourceforge_user_account=alkenstein
 			) else (
 				set sourceforge_user_account=%USERNAME%
 			)
