@@ -100,7 +100,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /G6 /MT /W3 /GX /Zi /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /Yu"stdafx.h" /FD /c
 # SUBTRACT BASE CPP /WX /Fr
-# ADD CPP /nologo /MT /W3 /GX /Zi /O2 /Ob2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_CYRIX_PROCESSOR_" /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MT /W3 /GX /Zi /O2 /Ob2 /I "../portaudio_v18/pa_common" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_CYRIX_PROCESSOR_" /Yu"stdafx.h" /FD /c
 # SUBTRACT CPP /WX /Fr
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -112,7 +112,7 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 winmm.lib dsound.lib htmlhelp.lib /nologo /subsystem:windows /debug /machine:I386 /OPT:REF
 # SUBTRACT BASE LINK32 /pdb:none /incremental:yes
-# ADD LINK32 winmm.lib dsound.lib /nologo /subsystem:windows /debug /machine:I386 /libpath:"./PortAudioStaticASIO/Release" /OPT:REF
+# ADD LINK32 winmm.lib dsound.lib PortAudioStaticASIO.lib /nologo /subsystem:windows /debug /machine:I386 /libpath:"./PortAudioStaticASIO/Release" /OPT:REF
 # SUBTRACT LINK32 /pdb:none /incremental:yes
 
 !ENDIF 
