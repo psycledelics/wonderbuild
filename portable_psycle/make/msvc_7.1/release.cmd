@@ -1,135 +1,241 @@
-rem ===============
-rem clean and build
-rem ===============
-
-call "%VS71ComnTools%\VSVars32"
-
-rem ######### amd k7 and intel p3 ##########
-
-DevEnv solution.sln /clean release /out release.clean.log || ( echo clean failed, aborting. & goto :pause )
-del/q release.clean.log
-DevEnv solution.sln /build release /out release.build.log || ( echo build failed, aborting. & goto :pause )
-
-rem ########## intel p4 ##########
-
-DevEnv solution.sln /clean release_intel_pentium_4 /out release_intel_pentium_4.clean.log || ( echo clean failed, aborting. & goto :pause )
-del/q release_intel_pentium_4.clean.log
-DevEnv solution.sln /build release_intel_pentium_4 /out release_intel_pentium_4.build.log || ( echo build failed, aborting. & goto :pause )
+@echo off
 
 rem ====================================
-rem make the directory to be distributed
+rem creating temporary working directory
 rem ====================================
 
-set timestamp=%date%.%time%
-set timestamp=%timestamp: =.%
-set timestamp=%timestamp:/=.%
-set timestamp=%timestamp:\=.%
-set timestamp=%timestamp::=.%
-set timestamp=%timestamp:-=.%
+	set work=%0.work
+	if exist %work% rmdir/s/q %work%
+	mkdir %work%
+	pushd %work%
+	echo %0: temporary working directory is %work%
 
-set distribution=.\psycle.bin.timestamp-%timestamp%\
+rem ============
+rem calling main
+rem ============
 
-rmdir/s/q "%distribution%"
-mkdir "%distribution%"
+	call :main && echo %0: all operations completed successfully.
 
-rem ------------------------------
-rem copy executables and libraries
-rem ------------------------------
+rem ====================================================
+echo %0: removing temporary working directory %work% ...
+rem ====================================================
 
-rem ########## amd k7 and intel p3 ##########
+	popd
+	echo %0: press any key to remove temporary working directory %work%, or break to keep it.
+	pause
+	rmdir/s/q %work%
 
-mkdir "%distribution%\amd-k7-and-intel-pentium-3\"
-xcopy/f/i ".\release\bin\psycle.exe" "%distribution%\amd-k7-and-intel-pentium-3\" || ( echo copy failed, aborting. & goto :pause )
-rename "%distribution%\amd-k7-and-intel-pentium-3\psycle.exe" "psycle.timestamp-%timestamp%.amd-k7-and-intel-pentium-3.exe" || ( echo rename failed, aborting. & goto :pause )
-call :upx "%distribution%\amd-k7-and-intel-pentium-3\psycle.timestamp-%timestamp%.amd-k7-and-intel-pentium-3.exe"
+rem ======================================
+rem end of main flow, exiting or returning
+rem ======================================
+	
+	goto :return
 
-mkdir "%distribution%\amd-k7-and-intel-pentium-3\plugins\"
-xcopy/f .\release\bin\psycle.plugins\*.dll "%distribution%\amd-k7-and-intel-pentium-3\plugins\" || ( echo copy failed, aborting. & goto :pause )
 
-rem ########## intel p4 ##########
 
-mkdir "%distribution%\intel-pentium-4\"
-xcopy/f/i ".\release_intel_pentium_4\bin\psycle.exe" "%distribution%\intel-pentium-4\" || ( echo copy failed, aborting. & goto :pause )
-rename "%distribution%\intel-pentium-4\psycle.exe" "psycle.timestamp-%timestamp%.intel-pentium-4.exe" || ( echo rename failed, aborting. & goto :pause )
-call :upx "%distribution%\intel-pentium-4\psycle.timestamp-%timestamp%.intel-pentium-4.exe"
-
-mkdir "%distribution%\intel-pentium-4\plugins\"
-xcopy/f .\release_intel_pentium_4\bin\psycle.plugins\*.dll "%distribution%\intel-pentium-4\plugins\" || ( echo copy failed, aborting. & goto :pause )
-
-rem ------------------------------------------
-rem copy microsoft c/c++/mfc runtime libraries
-rem ------------------------------------------
-
-xcopy/f "%SYSTEMROOT%\system32\msvcr71.dll" "%distribution%\amd-k7-and-intel-pentium-3\" || ( echo copy failed, aborting. & goto :pause )
-xcopy/f "%SYSTEMROOT%\system32\msvcp71.dll" "%distribution%\amd-k7-and-intel-pentium-3\" || ( echo copy failed, aborting. & goto :pause )
-xcopy/f "%SYSTEMROOT%\system32\mfc71.dll" "%distribution%\amd-k7-and-intel-pentium-3\" || ( echo copy failed, aborting. & goto :pause )
-
-xcopy/f "%SYSTEMROOT%\system32\msvcr71.dll" "%distribution%\intel-pentium-4\" || ( echo copy failed, aborting. & goto :pause )
-xcopy/f "%SYSTEMROOT%\system32\msvcp71.dll" "%distribution%\intel-pentium-4\" || ( echo copy failed, aborting. & goto :pause )
-xcopy/f "%SYSTEMROOT%\system32\mfc71.dll" "%distribution%\intel-pentium-4\" || ( echo copy failed, aborting. & goto :pause )
-
-rem ---------------------------
-rem copy end-user documentation
-rem ---------------------------
-
-mkdir "%distribution%\doc\"
-xcopy/f/s ..\..\doc\for-end-users\* "%distribution%\doc\" || ( echo copy failed, aborting. & goto :pause )
+rem ===================================
+rem sub routines, called via call :name
+rem ===================================
 
 rem ----------------
-rem remove cvs files
+rem main sub routine
 rem ----------------
+:main
+	rem =======
+	rem targets
+	rem =======
+	
+		set targets=amd-k7-and-intel-pentium-3 intel-pentium-4
+	
+	rem ===============
+	rem clean and build
+	rem ===============
+	
+		echo %0: sourcing mircosoft visual studio 7.1 environement ...
+			rem microsoft made a dumb script that keeps appending things to the env vars,
+			rem so, when invoke many times, we ends up with "too long line", sic. they can rot in hell.
+			rem so, we're saving the env to restore it after.
+			call :save_env
+			call "%VS71ComnTools%\VSVars32" || goto :failed
+		
+		for %%t in (%targets%) do (
+			call :rebuild release.%%t
+		)
+		
+		call :restore_env
+	
+	rem ===============================================
+	echo %0: making the directory to be distributed ...
+	rem ===============================================
+	
+		set timestamp=%date%.%time%
+		set timestamp=%timestamp: =.%
+		set timestamp=%timestamp:/=.%
+		set timestamp=%timestamp:\=.%
+		set timestamp=%timestamp::=.%
+		set timestamp=%timestamp:-=.%
+		
+		set distribution=.\psycle.bin.timestamp-%timestamp%\
+		
+		mkdir "%distribution%"
+		echo %0: directory %distribution% created
+		
+		rem ---------------------------------------
+		echo %0: copying libraries and programs ...
+		rem ---------------------------------------
+		
+			for %%t in (%targets%) do (
+				call :copy_binaries %%t
+			)
+		
+		rem ---------------------------------------
+		echo %0: copying end-user documentation ...
+		rem ---------------------------------------
+		
+			mkdir "%distribution%\doc\"
+			xcopy/f/s ..\..\doc\for-end-users\* "%distribution%\doc\" || goto :failed
+		
+		rem ---------------------------------------------
+		echo %0: removing cvs files from distribution ...
+		rem ---------------------------------------------
+		
+			for /r "%distribution%" %%i in (CVS) do rmdir/s/q "%%i"
+			for /r "%distribution%" %%i in (.cvsignore) do del/q "%%i"
+		
+		rem --------------------------------------------------------
+		echo %0: converting text files to microsoft end-of-lines ...
+		rem unix2dos is distributed with cygwin
+		rem --------------------------------------------------------
+		
+			for /r "%distribution%" %%i in (*.txt *.text) do unix2dos "%%i"
+		
+	rem ===========================
+	echo %0: making the archive ...
+	rem ===========================
+		
+		del/q .\psycle.bin.rar
+		rar a -s -m5 -md4096 -ep1 -r0 .\psycle.bin.rar "%distribution%" 1>> .\psycle.bin.rar.log 2>&1 || goto :failed
+	
+	rem =================================================
+	rem uploading the archive and updating the site
+	rem scp and ssh are cygwin/unix commands, use / not \
+	rem =================================================
+	
+		rem ------------------------------------------------------------------------
+		echo %0: maping local user account name to sourceforge user account name ...
+		rem ------------------------------------------------------------------------
+		
+			if "%USERNAME%" == "bohan" (
+				set sourceforge_user_account=johan-boule
+			) else if "%USERNAME%" == "x" (
+				rem in the meanwhile alk fixes his account, he uses bohan's.
+				rem set sourceforge_user_account=alkenstein
+				set sourceforge_user_account=johan-boule
+			) else (
+				set sourceforge_user_account="%USERNAME%"
+			)
+			
+			echo %0: sourceforge user account: %sourceforge_user_account%
+		
+		rem ------------------------------
+		echo %0: sourceforge group account
+		rem ------------------------------
 
-for /r "%distribution%" %%i in (CVS) do rmdir/s/q "%%i"
-for /r "%distribution%" %%i in (.cvsignore) do del/q "%%i"
-
-rem ----------------------------------------------------------------------------------
-rem convert text files to microsoft end-of-lines (unix2dos is distributed with cygwin)
-rem ----------------------------------------------------------------------------------
-for /r "%distribution%" %%i in (*.txt *.text) do unix2dos "%%i"
-
-rem ================
-rem make the archive
-rem ================
-
-del/q .\psycle.bin.rar
-rar a -s -m5 -md4096 -ep1 -r0 .\psycle.bin.rar "%distribution%" 1>> .\psycle.bin.rar.log 2>&1 || ( echo rar failed, aborting. & goto :pause )
-
-rem =====================================================================================
-rem upload the archive and update the site (scp and ssh are cygwin commands, use / not \)
-rem =====================================================================================
-
-set group=/home/groups/p/ps/psycle/
-
-rem maps local user account names to sourceforge user account names
-
-if "%USERNAME%" == "bohan" (
-	set user=johan-boule
-) else if "%USERNAME%" == "x" (
-	rem in the meanwhile alk fixes his account, he uses bohan's.
-	rem set user=alkenstein
-	set user=johan-boule
-) else (
-	set user="%USERNAME%"
-)
-
-scp ./psycle.bin.rar "%user%@shell.sourceforge.net:%group%/htdocs/" || ( echo scp failed, aborting. && goto :pause )
-ssh "%user%@shell.sourceforge.net" "%group%/htdocs.update.bash" || ( echo ssh failed, aborting. && goto :pause )
-
-rem ================================
-rem pause and remove temporary files
-rem ================================
-
-:pause
-pause
-rmdir/s/q "%distribution%"
-del/q .\psycle.bin.rar
-del/q .\*.log
+			set sourceforge_group_account=/home/groups/p/ps/psycle/
+			echo %0: sourceforge group account: %sourceforge_group_account%
+		
+		rem ---------------------------------------------
+		echo %0: uploading the archive to sourceforge ...
+		rem ---------------------------------------------
+		
+			scp ./psycle.bin.rar "%sourceforge_user_account%@shell.sourceforge.net:%sourceforge_group_account%/htdocs/" || goto :failed
+		
+		rem ------------------------------------------
+		echo %0: updating the sourceforge ht pages ...
+		rem ------------------------------------------
+		
+			ssh "%sourceforge_user_account%@shell.sourceforge.net" "%sourceforge_group_account%/htdocs.update.bash" || goto :failed
 goto :eof
 
-rem ===============
+rem ---------------
 rem upx sub routine
-rem ===============
-
+rem ---------------
 :upx
-rem upx.exe --overlay=strip --force --strip-relocs=1 --compress-icons=1 --best --crp-ms=999999 --nrv2d --no-backup -o %~p1%~n1.upx%~x1 %1
+	upx.exe --overlay=strip --force --strip-relocs=1 --compress-icons=1 --best --crp-ms=999999 --nrv2d --no-backup -o %~p1%~n1.upx%~x1 %1
 goto :eof
+
+rem --------------------
+rem save env sub routine
+rem --------------------
+:save_env
+	set old_path=%PATH%
+	set old_include=%INCLUDE%
+	set old_lib=%LIB%
+goto :eof
+
+rem -----------------------
+rem restore env sub routine
+rem -----------------------
+:restore_env
+	set PATH=%old_path%
+	set INCLUDE=%old_include%
+	set LIB=%old_lib%
+goto :eof
+
+rem -------------------------------------
+rem rebuild (clean and build) sub routine
+rem -------------------------------------
+:rebuild
+	set configuration=%1
+	for %%o in (clean build) do (
+		echo %0: %%oing %configuration% ...
+		DevEnv ..\solution.sln /%%o %configuration% /out %configuration%.%%o.log || ( call :restore_path && goto :failed )
+	)
+goto :eof
+
+rem -------------
+rem copy binaries
+rem -------------
+:copy_binaries
+	set target=%1
+	echo %0: copying %target% ...
+	set source="..\release.%target%\bin\"
+	set destination="%distribution%\%target%\"
+	rem xcopy/f <-- shows what files are copied
+	echo %0: copying built libraries and programs ...
+	rem xcopy/i "%source%\*.dll" "%destination%" || goto :failed
+	xcopy/i "%source%\*.exe" "%destination%" || goto :failed
+	xcopy/i "%source%\psycle.plugins\*.dll" "%destination%\plugins\" || goto :failed
+	echo %0: copying microsoft c/c++/mfc runtime libraries ...
+	xcopy "%SYSTEMROOT%\system32\msvcr71.dll" "%bin%" || goto :failed
+	xcopy "%SYSTEMROOT%\system32\msvcp71.dll" "%bin%" || goto :failed
+	xcopy "%SYSTEMROOT%\system32\mfc71.dll" "%bin%" || goto :failed
+goto :eof
+
+rem ------
+rem failed
+rem ------
+:failed
+	set return_code=%ERRORLEVEL%
+	echo %0: failed with return code: %return_code%
+	set failed=true
+	if "%return_code%" == "0" (
+		exit /b 1
+	) else (
+		exit /b %return_code%
+	)
+
+rem ------
+rem return
+rem ------
+:return
+	if "%failed%" == "true" (
+		echo %0: failed with return code: %return_code%
+		if "%return_code%" == "0" (
+			exit /b 1
+		) else (
+			exit /b %return_code%
+		)
+	) else (
+		goto :eof
+	)

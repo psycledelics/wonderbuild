@@ -11,7 +11,7 @@
 	</Platforms>
 	<Configurations>
 		<Configuration
-			Name="release|Win32"
+			Name="release.amd-k7-and-intel-pentium-3|Win32"
 			OutputDirectory="$(IntDir)/../"
 			IntermediateDirectory="$(SolutionDir)/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="2"
@@ -168,7 +168,7 @@
 				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
-			Name="release_intel_pentium_4|Win32"
+			Name="release.intel-pentium-4|Win32"
 			OutputDirectory="$(IntDir)/../"
 			IntermediateDirectory="$(SolutionDir)/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="2"
