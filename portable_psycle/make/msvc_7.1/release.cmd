@@ -24,6 +24,7 @@ rem ====================================================
 	echo %0: press any key to remove temporary working directory %work%, or break to keep it.
 	pause
 	rmdir/s/q %work%
+	echo %0: removed temporary working directory %work%
 
 rem ======================================
 rem end of main flow, exiting or returning
@@ -59,7 +60,7 @@ rem ----------------
 			call "%VS71ComnTools%\VSVars32" || goto :failed
 		
 		for %%t in (%targets%) do (
-			call :rebuild release.%%t
+			call :rebuild release.%%t || goto :failed
 		)
 		
 		call :restore_env
@@ -85,7 +86,7 @@ rem ----------------
 		rem ---------------------------------------
 		
 			for %%t in (%targets%) do (
-				call :copy_binaries %%t
+				call :copy_binaries %%t || goto :failed
 			)
 		
 		rem ---------------------------------------
@@ -93,7 +94,7 @@ rem ----------------
 		rem ---------------------------------------
 		
 			mkdir "%distribution%\doc\"
-			xcopy/f/s ..\..\doc\for-end-users\* "%distribution%\doc\" || goto :failed
+			xcopy/s ..\..\..\doc\for-end-users\* "%distribution%\doc\" || goto :failed
 		
 		rem ---------------------------------------------
 		echo %0: removing cvs files from distribution ...
@@ -132,7 +133,7 @@ rem ----------------
 				rem set sourceforge_user_account=alkenstein
 				set sourceforge_user_account=johan-boule
 			) else (
-				set sourceforge_user_account="%USERNAME%"
+				set sourceforge_user_account=%USERNAME%
 			)
 			
 			echo %0: sourceforge user account: %sourceforge_user_account%
@@ -200,19 +201,21 @@ rem -------------
 :copy_binaries
 	set target=%1
 	echo %0: copying %target% ...
-	set source="..\release.%target%\bin\"
-	set destination="%distribution%\%target%\"
-	rem xcopy/f <-- shows what files are copied
+	set source=..\release.%target%\bin\
+	set destination=%distribution%\%target%\
+	rem <bohan> well i think microsoft's documentation about microsoft's xcopy is wrong.
+	rem <bohan> xcopy/f <-- shows what files are being copied.
+	rem <bohan> it turns out it also does something else, like allowing copy of files whose name ends with ".exe".
 	echo %0: copying built libraries and programs ...
-	rem xcopy/i "%source%\*.dll" "%destination%" || goto :failed
-	xcopy/i "%source%\*.exe" "%destination%" || goto :failed
+	xcopy/f/i "%source%\*.exe" "%destination%" || goto :failed
 	xcopy/i "%source%\psycle.plugins\*.dll" "%destination%\plugins\" || goto :failed
 	echo %0: copying microsoft c/c++/gdi+/mfc runtime libraries ...
-	xcopy "%SYSTEMROOT%\system32\msvcr71.dll" "%bin%" || goto :failed
-	xcopy "%SYSTEMROOT%\system32\msvcp71.dll" "%bin%" || goto :failed
-	xcopy "%SYSTEMROOT%\system32\mfc71.dll" "%bin%" || goto :failed
-	rem xcopy "%SYSTEMROOT%\WinSxS\x86_Microsoft.Windows.GdiPlus_6595b64144ccf1df_1.0.10.0_x-ww_712befd8\GdiPlus.dll" "%bin%" || goto :failed
-	xcopy "%SYSTEMROOT%\WinSxS\x86_Microsoft.Windows.GdiPlus_*_1.0.10.0_*\GdiPlus.dll" "%bin%" || goto :failed
+	xcopy "%SYSTEMROOT%\system32\msvcr71.dll" "%destination%" || goto :failed
+	xcopy "%SYSTEMROOT%\system32\msvcp71.dll" "%destination%" || goto :failed
+	xcopy "%SYSTEMROOT%\system32\mfc71.dll" "%destination%" || goto :failed
+echo on
+	xcopy "%SYSTEMROOT%\WinSxS\x86_Microsoft.Windows.GdiPlus_6595b64144ccf1df_1.0.10.0_x-ww_712befd8\GDIPlus.dll" "%destination%" || goto :failed
+	rem xcopy/f/i "%SYSTEMROOT%\WinSxS\x86_Microsoft.Windows.GdiPlus_*_1.0.10.0_*\GDIPlus.dll" "%destination%" || goto :failed
 goto :eof
 
 rem ------
