@@ -157,7 +157,7 @@ rem ----------------
 	rem =================================================
 	
 		rem ------------------------------------------------------------------------
-		echo %0: maping local user account name to sourceforge user account name ...
+		echo %0: mapping local user account name to sourceforge user account name ...
 		rem ------------------------------------------------------------------------
 		
 			if "%USERNAME%" == "bohan" (
