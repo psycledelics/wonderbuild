@@ -246,7 +246,7 @@
 	</References>
 	<Files>
 			<File
-				RelativePath="..\..\..\..\..\src\psycle\plugins\vincenzo_demasi\vdFastVerb\vdFastVerb.cpp">
+				RelativePath="..\..\..\..\..\src\psycle\plugins\vincenzo_demasi\vsFastVerb\vdFastVerb.cpp">
 			</File>
 	</Files>
 	<Globals>
