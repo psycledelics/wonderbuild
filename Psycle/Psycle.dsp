@@ -367,6 +367,14 @@ SOURCE=.\MidiInputDlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\MidiLearn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\MidiLearn.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\OutputDlg.cpp
 # End Source File
 # Begin Source File
