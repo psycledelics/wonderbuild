@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="psycle.plugins.arguru_reverb"
+	ProjectGUID="{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -250,9 +251,6 @@
 			Name="arguru reverb"
 			Filter="">
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugin\arguru_reverb\reverb.cpp">
-			</File>
-			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugin\arguru_reverb\AllPass.cpp">
 			</File>
 			<File
@@ -260,6 +258,9 @@
 			</File>
 			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugin\arguru_reverb\LowPass.cpp">
+			</File>
+			<File
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugin\arguru_reverb\reverb.cpp">
 			</File>
 		</Filter>
 	</Files>
