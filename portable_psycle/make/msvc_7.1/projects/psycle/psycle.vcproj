@@ -295,6 +295,9 @@
 			Name="psycle"
 			Filter="">
 			<File
+				RelativePath="$(SolutionDir)\..\..\..\src\configuration.hpp">
+			</File>
+			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Constants.hpp">
 			</File>
 			<File
