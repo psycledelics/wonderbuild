@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="psycle"
+	ProjectGUID="{C6292BF4-9E87-4176-9101-A3D29D074B35}"
 	RootNamespace="psycle"
 	SccProjectName=""
 	SccLocalPath="">
