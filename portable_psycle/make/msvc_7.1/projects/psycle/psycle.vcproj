@@ -475,7 +475,7 @@
 						Name="debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+							ObjectFile="$(IntDir)/"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="release.g7|Win32">
@@ -664,16 +664,22 @@
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\GearTracker.hpp">
 					</File>
 					<File
-						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\InfoDlg.cpp">
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\InfoDlg.hpp">
-					</File>
-					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MacProp.cpp">
 					</File>
 					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MacProp.hpp">
+					</File>
+					<File
+						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MasterDlg.cpp">
+					</File>
+					<File
+						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MasterDlg.hpp">
+					</File>
+					<File
+						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Mixer.cpp">
+					</File>
+					<File
+						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Mixer.hpp">
 					</File>
 					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\NewMachine.cpp">
@@ -814,28 +820,22 @@
 					Name="monitors"
 					Filter="">
 					<File
+						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\InfoDlg.cpp">
+					</File>
+					<File
+						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\InfoDlg.hpp">
+					</File>
+					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\LoggingWindow.cpp">
 					</File>
 					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\LoggingWindow.hpp">
 					</File>
 					<File
-						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MasterDlg.cpp">
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MasterDlg.hpp">
-					</File>
-					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MidiMonitorDlg.cpp">
 					</File>
 					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MidiMonitorDlg.hpp">
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Mixer.cpp">
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Mixer.hpp">
 					</File>
 					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\ProgressDialog.cpp">
@@ -969,6 +969,9 @@
 				</Filter>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\..\..\src\psycle\host\resources\sampulse.bmp">
+		</File>
 	</Files>
 	<Globals>
 		<Global
