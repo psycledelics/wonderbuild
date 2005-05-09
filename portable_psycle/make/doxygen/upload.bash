@@ -16,7 +16,7 @@ function main
 		cd /home/groups/p/ps/psycle/htdocs &&
 		rm --force doxygen.mfc --recursive &&
 		umask ug=rwx,o=rx &&
-		tar --extract --bzip2 --file /tmp/$(logname).doxygen.tar.bz2 &&
+		tar --extract --bzip2 --touch --file /tmp/$(logname).doxygen.tar.bz2 &&
 		chmod ug=rwsx,o=rx doxygen.mfc &&
 		find doxygen.mfc -type d -exec chmod ug=rwsx,o=rx {} \; &&
 		find doxygen.mfc -type f -exec chmod ug+rw,o+r-w {} \; &&
