@@ -350,7 +350,7 @@
 			</Filter>
 			<Filter
 				Name="resources"
-				Filter="">
+				Filter="*.bmp">
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\AsioLogo.bmp">
 				</File>
@@ -434,6 +434,9 @@
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\resources.rc2">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\sampulse.bmp">
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\MasterMachine\slider.bmp">
@@ -969,9 +972,6 @@
 				</Filter>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath="..\..\..\..\src\psycle\host\resources\sampulse.bmp">
-		</File>
 	</Files>
 	<Globals>
 		<Global
