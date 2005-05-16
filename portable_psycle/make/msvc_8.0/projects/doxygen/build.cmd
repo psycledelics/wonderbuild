@@ -1,0 +1,4 @@
+pushd ..\..\..\doxygen\ && (
+	build
+	popd
+)
