@@ -6,7 +6,7 @@ pushd ..\..\..\..\include\ && (
 ) && (
 	if not exist ..\..\output\boost_stamp (
 		pushd ..\..\ && (
-			output.boost.exe -y
+			output.boost -y
 			echo boost extracted > output\boost_stamp
 		)
 	)
