@@ -2,6 +2,9 @@ rem ===========================================
 rem cleans all IDE and compiler generated files
 rem ===========================================
 
+%~d0
+cd %~p0
+
 del/s/q "*.ncb"
 del/s/q/ah "*.suo"
 
