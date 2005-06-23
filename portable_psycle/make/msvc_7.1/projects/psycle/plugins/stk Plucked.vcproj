@@ -247,6 +247,9 @@
 			Name="stk"
 			Filter="">
 			<File
+				RelativePath="..\..\..\..\..\src\stk\ADSR.cpp">
+			</File>
+			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\stk\BiQuad.cpp">
 			</File>
 			<File
@@ -257,6 +260,9 @@
 			</File>
 			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\stk\DelayL.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\stk\Envelope.cpp">
 			</File>
 			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\stk\Filter.cpp">
