@@ -958,6 +958,6 @@
 	<Globals>
 		<Global
 			Name="RESOURCE_FILE"
-			Value="\Documents and Settings\All Users\Documentos\Visual C++\portable_psycle\src\psycle\host\resources\resources.rc"/>
+			Value="\psycle\portable_psycle\src\psycle\host\resources\resources.rc"/>
 	</Globals>
 </VisualStudioProject>
