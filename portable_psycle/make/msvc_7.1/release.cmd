@@ -257,7 +257,7 @@ rem -------------
 	xcopy "%SYSTEMROOT%\system32\msvcp71.dll" "%destination%" || goto :failed
 	xcopy "%SYSTEMROOT%\system32\mfc71.dll" "%destination%" || goto :failed
 	rem xcopy/f/i "%SYSTEMROOT%\WinSxS\x86_Microsoft.Windows.GdiPlus_*_1.0.10.0_*\GDIPlus.dll" "%destination%" || goto :failed
-	xcopy "%SYSTEMROOT%\WinSxS\x86_Microsoft.Windows.GdiPlus_6595b64144ccf1df_1.0.10.0_x-ww_712befd8\GDIPlus.dll" "%destination%" || goto :failed
+	rem xcopy "%SYSTEMROOT%\WinSxS\x86_Microsoft.Windows.GdiPlus_6595b64144ccf1df_1.0.10.0_x-ww_712befd8\GDIPlus.dll" "%destination%" || goto :failed
 goto :eof
 
 rem ------
