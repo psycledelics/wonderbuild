@@ -65,7 +65,8 @@ rem ----------------
 	rem targets
 	rem =======
 	
-		set targets=g7 g6
+		rem set targets=g7 g6
+		set targets=g7
 	
 	rem ===============
 	rem clean and build
@@ -250,6 +251,10 @@ rem -------------
 	echo %~n0: copying built libraries and programs ...
 	xcopy/f/i "%source%\*.exe" "%destination%" || goto :failed
 	xcopy/f/i "%source%\*.dll" "%destination%" || goto :failed
+	del/q "%destination%\boost_date_time-*.dll" || goto :failed
+	del/q "%destination%\boost_program_options-*.dll" || goto :failed
+	del/q "%destination%\boost_regex-*.dll" || goto :failed
+	del/q "%destination%\boost_signals-*.dll" || goto :failed
 	xcopy/f/i "%source%\psycle.plugins\*.dll" "%destination%\native-psycle-plugins\" || goto :failed
 	xcopy/s/i "..\..\..\closed-source" "%destination%\native-psycle-plugins\!!!closed-source!!!" || goto :failed
 	echo %~n0: copying microsoft c/c++/gdi+/mfc runtime libraries ...
