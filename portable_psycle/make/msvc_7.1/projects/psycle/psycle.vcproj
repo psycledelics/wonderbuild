@@ -661,12 +661,6 @@
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MasterDlg.hpp">
 					</File>
 					<File
-						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Mixer.cpp">
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Mixer.hpp">
-					</File>
-					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\NewMachine.cpp">
 					</File>
 					<File
