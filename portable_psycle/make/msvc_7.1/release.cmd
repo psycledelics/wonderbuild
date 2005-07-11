@@ -255,8 +255,8 @@ rem -------------
 	del/q "%destination%\boost_program_options-*.dll" || goto :failed
 	del/q "%destination%\boost_regex-*.dll" || goto :failed
 	del/q "%destination%\boost_signals-*.dll" || goto :failed
-	xcopy/f/i "%source%\psycle.plugins\*.dll" "%destination%\native-psycle-plugins\" || goto :failed
-	xcopy/s/i "..\..\..\closed-source" "%destination%\native-psycle-plugins\!!!closed-source!!!" || goto :failed
+	xcopy/f/i "%source%\psycle.plugins\*.dll" "%destination%\PsyclePlugins\" || goto :failed
+	xcopy/s/i "..\..\..\closed-source" "%destination%\PsyclePlugins\!!!closed-source!!!" || goto :failed
 	echo %~n0: copying microsoft c/c++/gdi+/mfc runtime libraries ...
 	xcopy "%SYSTEMROOT%\system32\msvcr71.dll" "%destination%" || goto :failed
 	xcopy "%SYSTEMROOT%\system32\msvcp71.dll" "%destination%" || goto :failed
