@@ -1,5 +1,19 @@
 @echo off
 
+
+
+rem ===================================================================================================
+rem ===================================================================================================
+rem ===================================================================================================
+rem This script requires UNIX programs, such as distributed by cygwin.
+rem It was technically impossible to use only microsoft's (non)standard tools ; they are too limited.
+rem We should even rewrite this script in POSIX shell because cmd.exe's language is absolutely awfull.
+rem ===================================================================================================
+rem ===================================================================================================
+rem ===================================================================================================
+
+
+
 rem ====================================
 rem creating temporary working directory
 rem ====================================
@@ -123,8 +137,8 @@ rem ----------------
 		
 			mkdir "%distribution%\doc\"
 			xcopy/s ..\..\..\doc\for-end-users\* "%distribution%\doc\" || goto :failed
-			rem xcopy "%distribution%\doc\cpu.txt" "%distribution%" || goto :failed
-			rem rename "%distribution%\cpu.txt" "readme-cpu.txt" || goto :failed
+			xcopy "%distribution%\doc\cpu.txt" "%distribution%" || goto :failed
+			rename "%distribution%\cpu.txt" "readme-cpu.txt" || goto :failed
 		
 		rem ---------------------------------------------
 		echo %~n0: removing cvs files from distribution ...
@@ -244,6 +258,7 @@ rem -------------
 	echo %~n0: copying %target% ...
 	set source=..\output\release.%target%\bin\
 	set destination=%distribution%\%target%\
+	set destination_posix=%distribution%/%target%/
 	rem <bohan> Well i think microsoft's documentation about microsoft's xcopy is wrong.
 	rem <bohan> xcopy/f <-- shows what files are being copied.
 	rem <bohan> It turns out it also does something else, like allowing copy of files whose name ends with ".exe".
@@ -256,6 +271,8 @@ rem -------------
 	del/q "%destination%\boost_regex-*.dll" || goto :failed
 	del/q "%destination%\boost_signals-*.dll" || goto :failed
 	xcopy/f/i "%source%\psycle.plugins\*.dll" "%destination%\PsyclePlugins\" || goto :failed
+	sh -c "echo aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" || goto :failed
+	sh -c "for i in i $(find ../../../src/psycle/plugins -name \*.prs -or -name \*.text -or -name \*.txt) ; do echo cp --verbose $i %destination_posix%/PsyclePlugins/ ; done" || goto :failed
 	xcopy/s/i "..\..\..\closed-source" "%destination%\PsyclePlugins\!!!closed-source!!!" || goto :failed
 	echo %~n0: copying microsoft c/c++/gdi+/mfc runtime libraries ...
 	xcopy "%SYSTEMROOT%\system32\msvcr71.dll" "%destination%" || goto :failed
