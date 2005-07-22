@@ -272,7 +272,7 @@ rem -------------
 	del/q "%destination%\boost_signals-*.dll" || goto :failed
 	xcopy/f/i "%source%\psycle.plugins\*.dll" "%destination%\PsyclePlugins\" || goto :failed
 	sh -c "echo aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" || goto :failed
-	sh -c "for i in i $(find ../../../src/psycle/plugins -name \*.prs -or -name \*.text -or -name \*.txt) ; do echo cp --verbose $i %destination_posix%/PsyclePlugins/ ; done" || goto :failed
+	sh -c "for i in i $(find ../../../src/psycle/plugins -name \*.prs -or -name \*.text -or -name \*.txt -or -name \*.html) ; do echo cp --verbose $i %destination_posix%/PsyclePlugins/ ; done" || goto :failed
 	xcopy/s/i "..\..\..\closed-source" "%destination%\PsyclePlugins\!!!closed-source!!!" || goto :failed
 	echo %~n0: copying microsoft c/c++/gdi+/mfc runtime libraries ...
 	xcopy "%SYSTEMROOT%\system32\msvcr71.dll" "%destination%" || goto :failed
