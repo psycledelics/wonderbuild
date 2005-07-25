@@ -215,6 +215,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="htmlhelp.lib"
 				OutputFile="$(OutDir)/$(InputName).exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -952,6 +953,6 @@
 	<Globals>
 		<Global
 			Name="RESOURCE_FILE"
-			Value="\psycle\portable_psycle\src\psycle\host\resources\resources.rc"/>
+			Value="\Documents and Settings\All Users\Documentos\Visual C++\portable_psycle\src\psycle\host\resources\resources.rc"/>
 	</Globals>
 </VisualStudioProject>
