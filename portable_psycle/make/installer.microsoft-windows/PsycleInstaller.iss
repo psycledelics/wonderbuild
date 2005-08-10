@@ -49,6 +49,7 @@ Source: ..\..\doc\for-end-users\*; DestDir: {app}\Docs; Flags: ignoreversion rec
 Source: Psycle.exe.manifest; DestDir: {app}; Components: " Windows_XP_theme_support"
 Source: ..\..\closed-source\*; DestDir: {app}\PsyclePlugins\closed-source; Flags: ignoreversion createallsubdirs recursesubdirs; Components: Closed_Source_Plugins
 Source: ..\msvc_7.1\output\release.g7\bin\Skins\*; DestDir: {app}\Skins; Flags: confirmoverwrite recursesubdirs ignoreversion createallsubdirs; Components: Skins
+Source: ..\..\src\psycle\plugins\*.prs; DestDir: {app}\PsyclePlugins; Flags: recursesubdirs ignoreversion; Components: Open_Source_Plugins
 
 [INI]
 Filename: {app}\psycle.url; Section: InternetShortcut; Key: URL; String: http://psycle.pastnotecut.org; Flags: uninsdeleteentry uninsdeletesectionifempty; Tasks: ; Languages: 
