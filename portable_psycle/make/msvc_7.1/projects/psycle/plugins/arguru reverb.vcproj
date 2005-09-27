@@ -195,7 +195,6 @@
 				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.pdb"
 				WarningLevel="4"
-				WarnAsError="TRUE"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4652"
