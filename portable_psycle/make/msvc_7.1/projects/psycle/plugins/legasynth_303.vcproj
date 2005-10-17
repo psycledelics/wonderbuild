@@ -253,9 +253,6 @@
 				RelativePath="..\..\..\..\..\src\psycle\plugins\legasynth\lib\chorus.h">
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\psycle\plugins\legasynth\lib\denormals.hpp">
-			</File>
-			<File
 				RelativePath="..\..\..\..\..\src\psycle\plugins\legasynth\lib\voice.cpp">
 			</File>
 			<File
