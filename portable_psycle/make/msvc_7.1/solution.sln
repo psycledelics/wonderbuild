@@ -181,6 +181,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.legasynth.30
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.moreamp.maeq", "projects\psycle\plugins\maeq.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05186}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		debug = debug
@@ -447,6 +451,14 @@ Global
 		{F3ABFF20-76B9-4113-805F-2B7EB67CAB0F}.release.g6.Build.0 = release.g6|Win32
 		{F3ABFF20-76B9-4113-805F-2B7EB67CAB0F}.release.g7.ActiveCfg = release.g7|Win32
 		{F3ABFF20-76B9-4113-805F-2B7EB67CAB0F}.release.g7.Build.0 = release.g7|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.debug.ActiveCfg = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.debug.Build.0 = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.documentation.ActiveCfg = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.documentation.Build.0 = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g6.ActiveCfg = release.g6|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g6.Build.0 = release.g6|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g7.ActiveCfg = release.g7|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g7.Build.0 = release.g7|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
