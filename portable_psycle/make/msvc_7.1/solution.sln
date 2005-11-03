@@ -175,60 +175,70 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.voskomo.blit
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.audacity.wahwah (wrapper by sartorius)", "projects\psycle\plugins\wahwah.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05186}"
 	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.legasynth.303", "projects\psycle\plugins\legasynth_303.vcproj", "{F3ABFF20-76B9-4113-805F-2B7EB67CAB0F}"
 	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.moreamp.maeq", "projects\psycle\plugins\maeq.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05186}"
 	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.autopan", "projects\psycle\plugins\pooplog autopan.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05186}"
 	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.delay", "projects\psycle\plugins\pooplog delay.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05186}"
 	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.delay.light", "projects\psycle\plugins\pooplog delay light.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05186}"
 	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.filter", "projects\psycle\plugins\pooplog filter.vcproj", "{A4A90A56-8CE8-480A-97BE-AB9B194436C6}"
 	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.fm.laboratory", "projects\psycle\plugins\pooplog fm laboratory.vcproj", "{FCFE88A2-E6F1-4643-BF64-6EBFDCDF1AB1}"
 	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.fm.light", "projects\psycle\plugins\pooplog fm light.vcproj", "{9ADD208D-3BEA-476F-A0CE-5ED4D10A62E7}"
 	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.lofi", "projects\psycle\plugins\pooplog lofi processor.vcproj", "{E50C03CC-FE5F-4E33-9A7D-196AA6D17E00}"
 	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.scratch", "projects\psycle\plugins\pooplog scratch master.vcproj", "{66B5D7EA-4CF3-4F52-AA46-203E0B173B99}"
 	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.scratch2", "projects\psycle\plugins\pooplog scratch master 2.vcproj", "{169A62CC-C6C2-4FDA-B320-B813D6FB7748}"
 	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.fm.ultralight", "projects\psycle\plugins\pooplog fm ultralight.vcproj", "{D356E06A-1FE4-4F70-9F38-5359ADC68AD8}"
 	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
 Global
-	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
-		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}
-	EndGlobalSection
 	GlobalSection(SolutionConfiguration) = preSolution
 		debug = debug
 		documentation = documentation
@@ -335,6 +345,7 @@ Global
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.debug.ActiveCfg = debug|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.debug.Build.0 = debug|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.documentation.ActiveCfg = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.documentation.Build.0 = debug|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g6.ActiveCfg = release.g6|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g6.Build.0 = release.g6|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g7.ActiveCfg = release.g7|Win32
@@ -426,6 +437,7 @@ Global
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.debug.ActiveCfg = debug|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.debug.Build.0 = debug|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.documentation.ActiveCfg = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.documentation.Build.0 = debug|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g6.ActiveCfg = release.g6|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g6.Build.0 = release.g6|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g7.ActiveCfg = release.g7|Win32
@@ -482,6 +494,7 @@ Global
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.debug.ActiveCfg = debug|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.debug.Build.0 = debug|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.documentation.ActiveCfg = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.documentation.Build.0 = debug|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g6.ActiveCfg = release.g6|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g6.Build.0 = release.g6|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g7.ActiveCfg = release.g7|Win32
@@ -586,5 +599,8 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
+		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}
 	EndGlobalSection
 EndGlobal
