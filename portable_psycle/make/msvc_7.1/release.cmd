@@ -135,8 +135,8 @@ rem ----------------
 		echo %~n0: copying end-user documentation ...
 		rem ---------------------------------------
 		
-			mkdir "%distribution%\doc\"
-			xcopy/s ..\..\..\doc\for-end-users\* "%distribution%\doc\" || goto :failed
+			mkdir "%distribution%\docs\"
+			xcopy/s ..\..\..\doc\for-end-users\* "%distribution%\docs\" || goto :failed
 			xcopy "%distribution%\doc\cpu.txt" "%distribution%" || goto :failed
 			rename "%distribution%\cpu.txt" "readme-cpu.txt" || goto :failed
 		

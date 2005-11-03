@@ -59,6 +59,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="htmlhelp.lib"
 				OutputFile="$(OutDir)/$(InputName).exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -135,6 +136,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="htmlhelp.lib"
 				OutputFile="$(OutDir)/$(InputName).exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -880,6 +882,18 @@
 				<Filter
 					Name="machine"
 					Filter="">
+					<File
+						RelativePath="..\..\..\..\src\Seib-vsthost\CVSTHost.Seib.cpp">
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\Seib-vsthost\CVSTHost.Seib.hpp">
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\ImplVstHost.cpp">
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\ImplVstHost.hpp">
+					</File>
 					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Machine.cpp">
 					</File>
