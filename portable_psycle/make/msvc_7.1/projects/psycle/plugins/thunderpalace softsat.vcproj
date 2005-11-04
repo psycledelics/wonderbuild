@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="psycle.plugins.thunderpalace_softsat"
+	ProjectGUID="{CDD9BC26-289D-4558-A22D-500F0BB76828}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
