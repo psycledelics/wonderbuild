@@ -135,10 +135,8 @@ rem ----------------
 		echo %~n0: copying end-user documentation ...
 		rem ---------------------------------------
 		
-			mkdir "%distribution%\docs\"
-			xcopy/s ..\..\..\doc\for-end-users\* "%distribution%\docs\" || goto :failed
-			xcopy "%distribution%\doc\cpu.txt" "%distribution%" || goto :failed
-			rename "%distribution%\cpu.txt" "readme-cpu.txt" || goto :failed
+			mkdir "%distribution%\doc\"
+			xcopy/s ..\..\..\doc\for-end-users\* "%distribution%\doc\" || goto :failed
 		
 		rem ---------------------------------------------
 		echo %~n0: removing cvs files from distribution ...
@@ -271,8 +269,7 @@ rem -------------
 	del/q "%destination%\boost_regex-*.dll" || goto :failed
 	del/q "%destination%\boost_signals-*.dll" || goto :failed
 	xcopy/f/i "%source%\psycle.plugins\*.dll" "%destination%\PsyclePlugins\" || goto :failed
-	sh -c "echo aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" || goto :failed
-	sh -c "for i in i $(find ../../../src/psycle/plugins -name \*.prs -or -name \*.text -or -name \*.txt -or -name \*.html) ; do echo cp --verbose $i %destination_posix%/PsyclePlugins/ ; done" || goto :failed
+rem	sh -c "for i in i $(find ../../../src/psycle/plugins -name \*.prs -or -name \*.text -or -name \*.txt -or -name \*.html) ; do echo cp --verbose $i %destination_posix%/PsyclePlugins/ ; done" || goto :failed
 	xcopy/s/i "..\..\..\closed-source" "%destination%\PsyclePlugins\!!!closed-source!!!" || goto :failed
 	echo %~n0: copying microsoft c/c++/gdi+/mfc runtime libraries ...
 	xcopy "%SYSTEMROOT%\system32\msvcr71.dll" "%destination%" || goto :failed
