@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="psycle.plugins.audacity.wahwah"
+	Name="psycle.plugins.audacity.compressor"
 	ProjectGUID="{8ADD9C4A-378B-48D8-9853-4EA253F05186}"
 	SccProjectName=""
 	SccLocalPath="">
@@ -244,7 +244,13 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugins\audacity\wahwah.cpp">
+			RelativePath="..\..\..\..\..\src\psycle\plugins\audacity\audacity_compressor.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\..\..\src\psycle\plugins\audacity\Compressor.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\..\..\src\psycle\plugins\audacity\Compressor.h">
 		</File>
 	</Files>
 	<Globals>

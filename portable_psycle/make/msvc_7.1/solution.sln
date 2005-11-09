@@ -173,7 +173,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.voskomo.blit
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.audacity.wahwah (wrapper by sartorius)", "projects\psycle\plugins\wahwah.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05186}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.audacity.wahwah", "projects\psycle\plugins\wahwah.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05186}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
@@ -245,6 +245,14 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.thunderpalace_softsat", "projects\psycle\plugins\thunderpalace softsat.vcproj", "{CDD9BC26-289D-4558-A22D-500F0BB76828}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.audacity.compressor", "projects\psycle\plugins\audacity compressor.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05186}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.audacity.phaser", "projects\psycle\plugins\audacity phaser.vcproj", "{D9481658-10F2-4007-905A-0873271C6045}"
+	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
 Global
@@ -620,6 +628,22 @@ Global
 		{CDD9BC26-289D-4558-A22D-500F0BB76828}.release.g6.Build.0 = release.g6|Win32
 		{CDD9BC26-289D-4558-A22D-500F0BB76828}.release.g7.ActiveCfg = release.g7|Win32
 		{CDD9BC26-289D-4558-A22D-500F0BB76828}.release.g7.Build.0 = release.g7|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.debug.ActiveCfg = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.debug.Build.0 = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.documentation.ActiveCfg = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.documentation.Build.0 = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g6.ActiveCfg = release.g6|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g6.Build.0 = release.g6|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g7.ActiveCfg = release.g7|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g7.Build.0 = release.g7|Win32
+		{D9481658-10F2-4007-905A-0873271C6045}.debug.ActiveCfg = debug|Win32
+		{D9481658-10F2-4007-905A-0873271C6045}.debug.Build.0 = debug|Win32
+		{D9481658-10F2-4007-905A-0873271C6045}.documentation.ActiveCfg = debug|Win32
+		{D9481658-10F2-4007-905A-0873271C6045}.documentation.Build.0 = debug|Win32
+		{D9481658-10F2-4007-905A-0873271C6045}.release.g6.ActiveCfg = release.g6|Win32
+		{D9481658-10F2-4007-905A-0873271C6045}.release.g6.Build.0 = release.g6|Win32
+		{D9481658-10F2-4007-905A-0873271C6045}.release.g7.ActiveCfg = release.g7|Win32
+		{D9481658-10F2-4007-905A-0873271C6045}.release.g7.Build.0 = release.g7|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
