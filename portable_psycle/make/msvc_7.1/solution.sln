@@ -255,6 +255,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.audacity.pha
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.ladspa.gverb", "projects\psycle\plugins\ladspa gverb.vcproj", "{1EDE3137-50AB-4565-AA60-1E8F7C11164F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		debug = debug
@@ -644,6 +648,14 @@ Global
 		{D9481658-10F2-4007-905A-0873271C6045}.release.g6.Build.0 = release.g6|Win32
 		{D9481658-10F2-4007-905A-0873271C6045}.release.g7.ActiveCfg = release.g7|Win32
 		{D9481658-10F2-4007-905A-0873271C6045}.release.g7.Build.0 = release.g7|Win32
+		{1EDE3137-50AB-4565-AA60-1E8F7C11164F}.debug.ActiveCfg = debug|Win32
+		{1EDE3137-50AB-4565-AA60-1E8F7C11164F}.debug.Build.0 = debug|Win32
+		{1EDE3137-50AB-4565-AA60-1E8F7C11164F}.documentation.ActiveCfg = debug|Win32
+		{1EDE3137-50AB-4565-AA60-1E8F7C11164F}.documentation.Build.0 = debug|Win32
+		{1EDE3137-50AB-4565-AA60-1E8F7C11164F}.release.g6.ActiveCfg = release.g6|Win32
+		{1EDE3137-50AB-4565-AA60-1E8F7C11164F}.release.g6.Build.0 = release.g6|Win32
+		{1EDE3137-50AB-4565-AA60-1E8F7C11164F}.release.g7.ActiveCfg = release.g7|Win32
+		{1EDE3137-50AB-4565-AA60-1E8F7C11164F}.release.g7.Build.0 = release.g7|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
