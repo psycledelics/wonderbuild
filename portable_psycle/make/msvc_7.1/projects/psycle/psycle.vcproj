@@ -909,6 +909,12 @@
 								Name="VCCLCompilerTool"/>
 						</FileConfiguration>
 						<FileConfiguration
+							Name="debug|Win32"
+							ExcludedFromBuild="TRUE">
+							<Tool
+								Name="VCCLCompilerTool"/>
+						</FileConfiguration>
+						<FileConfiguration
 							Name="release.g7|Win32"
 							ExcludedFromBuild="TRUE">
 							<Tool
@@ -917,6 +923,12 @@
 					</File>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\ImplVstHost.hpp">
+						<FileConfiguration
+							Name="debug|Win32"
+							ExcludedFromBuild="TRUE">
+							<Tool
+								Name="VCCustomBuildTool"/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Machine.cpp">
@@ -987,6 +999,12 @@
 				</Filter>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\..\..\src\psycle\host\resources\notekey.bmp">
+		</File>
+		<File
+			RelativePath="..\..\..\..\src\psycle\host\resources\sharpkey.bmp">
+		</File>
 	</Files>
 	<Globals>
 		<Global
