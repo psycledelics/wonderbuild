@@ -4,22 +4,16 @@ The current code base of psycle is stored in the portable_psycle dir.
 	Psycle from version 1.7.6 and above.
 	This is probably what you want to look at since this is where the current code base of psycle is stored.
 
-./psycle2_multisequence
+./psycle2_multisequence (removed)
 	Krissce's version of psycle, with a multipattern sequencer.
 	This is a fork from mainline version 1.7.6.
 
-./Psycle/ (Capital)
+./Psycle/ (Capital) (removed)
 	Old psycle versions until 1.7.5. (or 1.7.6?)
 
-./psycle/ (lower case)
+./psycle/ (lower case) (removed)
 	Some mistake, nothing there :/
 	You won't even notice this dir on case-insensitive file systems.
 
-./PsyCore/
-	Some draft, unfinished psycle core engine.
-
-./PsyClean/
-	Some draft, unfinished psycle.
-
-./test/
+./test/ (removed)
 	Nothing interesting here :-)
