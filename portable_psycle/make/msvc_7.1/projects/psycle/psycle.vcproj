@@ -1000,6 +1000,12 @@
 			</Filter>
 		</Filter>
 		<File
+			RelativePath="..\..\..\..\src\psycle\host\resources\keys_bac.bmp">
+		</File>
+		<File
+			RelativePath="..\..\..\..\src\psycle\host\resources\keys_sha.bmp">
+		</File>
+		<File
 			RelativePath="..\..\..\..\src\psycle\host\resources\notekey.bmp">
 		</File>
 		<File
