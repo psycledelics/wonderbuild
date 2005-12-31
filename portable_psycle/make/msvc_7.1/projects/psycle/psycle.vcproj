@@ -943,6 +943,9 @@
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Plugin.hpp">
 					</File>
 					<File
+						RelativePath="..\..\..\..\src\psycle\plugin_interface.hpp">
+					</File>
+					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\VstHost.cpp">
 					</File>
 					<File
