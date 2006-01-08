@@ -1,3 +1,4 @@
+#! /usr/bin/python
 # switches versions of .vcproj and .sln files
 # License: GPL, http://fsf.org/licenses/gpl.html
 # Copyright (C) 2005 Leonard "paniq" Ritter.
@@ -7,8 +8,8 @@ import os
 import os.path
 import re
 
-if not "make\\msvc" in os.getcwd():
-	print "Wrong current directory."
+if not "msvc" in os.getcwd():
+	print "msvc_switch_version.py: wrong current directory: ", os.getcwd()
 	sys.exit()
 	
 c = re.compile("^(\\s*Version\=\\\")([^\\\"]*)(\\\"\\s*)$")
@@ -22,7 +23,7 @@ def switch_version(newVersion):
 			base,ext = os.path.splitext(name)
 			if ext in [".vcproj",".sln"]:
 				fullpath = os.path.join(root,name)
-				print "Changing %s..." % fullpath
+				print "changing %s ..." % fullpath
 				f = open(fullpath,"r")
 				inlines = f.readlines()
 				f.close()
@@ -31,18 +32,18 @@ def switch_version(newVersion):
 					r = c.match(l)					
 					if r:						
 						nl = r.group(1) + newVersion + r.group(3)
-						print "Changing"
+						print "changing"
 						print repr(l)
-						print "To"
+						print "to"
 						print repr(nl)
 						l = nl
 					else:
 						r = csln.match(l)
 						if r:
 							nl = r.group(1) + mapSlnVersion[newVersion] + r.group(3)
-							print "Changing"
+							print "changing"
 							print repr(l)
-							print "To"
+							print "to"
 							print repr(nl)
 							l = nl
 					outlines.append(l)
@@ -54,7 +55,7 @@ if __name__ == "__main__":
 	if len(sys.argv) == 2:
 		switch_version(sys.argv[1])
 	else:
-		print "usage: "
-		print "    switch_version.py 7.10"
+		print "msvc_switch_version.py: usage: "
+		print "    msvc_switch_version.py 7.10"
 		print "or"
-		print "    switch_version.py 8.00"
+		print "    msvc_switch_version.py 8.00"

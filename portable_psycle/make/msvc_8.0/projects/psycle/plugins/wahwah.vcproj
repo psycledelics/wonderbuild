@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.audacity.wahwah (wrapper by sartorius)"
+	Name="psycle.plugins.audacity.wahwah"
 	ProjectGUID="{8ADD9C4A-378B-48D8-9853-4EA253F05186}"
 	SccProjectName=""
 	SccLocalPath="">

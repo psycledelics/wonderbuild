@@ -4,35 +4,22 @@
 	Version="8.00"
 	Name="doxygen"
 	ProjectGUID="{7C2EC99A-E859-4DF0-B21F-40F81E97735C}"
-	Keyword="MakeFileProj"
-	>
+	Keyword="MakeFileProj">
 	<Platforms>
 		<Platform
-			Name="Win32"
-		/>
+			Name="Win32"/>
 	</Platforms>
-	<ToolFiles>
-	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="html|Win32"
 			OutputDirectory="$(SolutionDir)\..\..\..\doc"
 			IntermediateDirectory="$(SolutionDir)\output\$(ConfigurationName)\$(ProjectName)\intermediate_output"
-			ConfigurationType="0"
-			>
+			ConfigurationType="0">
 			<Tool
 				Name="VCNMakeTool"
 				BuildCommandLine="cmd.exe /c build.cmd"
 				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd &amp;&amp; build.cmd&quot;"
-				CleanCommandLine="cmd.exe /c clean.cmd"
-				Output=""
-				PreprocessorDefinitions=""
-				IncludeSearchPath=""
-				ForcedIncludes=""
-				AssemblySearchPath=""
-				ForcedUsingAssemblies=""
-				CompileAsManaged=""
-			/>
+				CleanCommandLine="cmd.exe /c clean.cmd"/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -40,55 +27,46 @@
 	<Files>
 		<Filter
 			Name="style"
-			>
+			Filter="">
 			<File
-				RelativePath="$(SolutionDir)\..\..\doxygen\doxygen.css"
-				>
+				RelativePath="$(SolutionDir)\..\..\doxygen\doxygen.css">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\doxygen\doxygen.footer.html"
-				>
+				RelativePath="$(SolutionDir)\..\..\doxygen\doxygen.footer.html">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\doxygen\doxygen.header.html"
-				>
+				RelativePath="$(SolutionDir)\..\..\doxygen\doxygen.header.html">
 			</File>
 		</Filter>
 		<Filter
 			Name="generated output"
-			>
+			Filter="">
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\doc\doxygen\html\index.html"
-				>
+				RelativePath="$(SolutionDir)\..\..\..\doc\doxygen\html\index.html">
 			</File>
 		</Filter>
 		<Filter
 			Name="commands"
-			>
+			Filter="">
 			<File
-				RelativePath=".\build.cmd"
-				>
+				RelativePath=".\build.cmd">
 			</File>
 			<File
-				RelativePath=".\clean.cmd"
-				>
+				RelativePath=".\clean.cmd">
 			</File>
 		</Filter>
 		<Filter
 			Name="pages"
-			>
+			Filter="">
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\main_page.doxygen"
-				>
+				RelativePath="$(SolutionDir)\..\..\..\src\main_page.doxygen">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\psycle\namespaces.doxygen"
-				>
+				RelativePath="$(SolutionDir)\..\..\..\src\psycle\namespaces.doxygen">
 			</File>
 		</Filter>
 		<File
-			RelativePath="$(SolutionDir)\..\..\doxygen\doxygen.configuration"
-			>
+			RelativePath="$(SolutionDir)\..\..\doxygen\doxygen.configuration">
 		</File>
 	</Files>
 	<Globals>

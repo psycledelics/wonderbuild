@@ -4,35 +4,22 @@
 	Version="8.00"
 	Name="boost"
 	ProjectGUID="{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}"
-	Keyword="MakeFileProj"
-	>
+	Keyword="MakeFileProj">
 	<Platforms>
 		<Platform
-			Name="Win32"
-		/>
+			Name="Win32"/>
 	</Platforms>
-	<ToolFiles>
-	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="unique|Win32"
 			OutputDirectory="$(SolutionDir)\..\..\..\include"
 			IntermediateDirectory="$(SolutionDir)\output\$(ConfigurationName)\$(ProjectName)\intermediate_output"
-			ConfigurationType="0"
-			>
+			ConfigurationType="0">
 			<Tool
 				Name="VCNMakeTool"
 				BuildCommandLine="cmd.exe /c build.cmd"
 				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd &amp;&amp; build.cmd&quot;"
-				CleanCommandLine="cmd.exe /c clean.cmd"
-				Output=""
-				PreprocessorDefinitions=""
-				IncludeSearchPath=""
-				ForcedIncludes=""
-				AssemblySearchPath=""
-				ForcedUsingAssemblies=""
-				CompileAsManaged=""
-			/>
+				CleanCommandLine="cmd.exe /c clean.cmd"/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -40,14 +27,12 @@
 	<Files>
 		<Filter
 			Name="commands"
-			>
+			Filter="">
 			<File
-				RelativePath=".\build.cmd"
-				>
+				RelativePath=".\build.cmd">
 			</File>
 			<File
-				RelativePath=".\clean.cmd"
-				>
+				RelativePath=".\clean.cmd">
 			</File>
 		</Filter>
 	</Files>
