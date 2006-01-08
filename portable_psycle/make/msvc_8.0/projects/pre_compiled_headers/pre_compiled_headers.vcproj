@@ -253,13 +253,13 @@
 			RelativePath="pre_compiled_headers.cpp">
 		</File>
 		<File
-			RelativePath="$(SolutionDir)\..\..\..\src\pre_compiled_headers.private.hpp">
+			RelativePath="..\..\..\..\src\pre_compiled_headers.private.hpp">
 		</File>
 		<File
-			RelativePath="$(SolutionDir)\..\..\..\src\project.hpp">
+			RelativePath="..\..\..\..\src\project.hpp">
 		</File>
 		<File
-			RelativePath="$(SolutionDir)\..\..\..\src\project.private.hpp">
+			RelativePath="..\..\..\..\src\project.private.hpp">
 		</File>
 	</Files>
 	<Globals>

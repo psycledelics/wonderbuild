@@ -249,13 +249,13 @@
 			Name="sdk"
 			Filter="">
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\asio\asio.cpp">
+				RelativePath="..\..\..\..\src\asio\asio.cpp">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\asio\asiodrivers.cpp">
+				RelativePath="..\..\..\..\src\asio\asiodrivers.cpp">
 			</File>
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\asio\asiolist.cpp">
+				RelativePath="..\..\..\..\src\asio\asiolist.cpp">
 			</File>
 		</Filter>
 	</Files>

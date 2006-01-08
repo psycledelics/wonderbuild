@@ -244,7 +244,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugins\audacity\wahwah.cpp">
+			RelativePath="..\..\..\..\src\psycle\plugins\audacity\wahwah.cpp">
 		</File>
 	</Files>
 	<Globals>

@@ -244,7 +244,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugins\crasher.cpp">
+			RelativePath="..\..\..\..\src\psycle\plugins\crasher.cpp">
 		</File>
 	</Files>
 	<Globals>

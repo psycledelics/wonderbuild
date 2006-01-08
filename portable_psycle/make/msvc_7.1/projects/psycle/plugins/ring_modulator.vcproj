@@ -243,7 +243,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugins\ring_modulator.cpp">
+			RelativePath="..\..\..\..\src\psycle\plugins\ring_modulator.cpp">
 		</File>
 	</Files>
 	<Globals>

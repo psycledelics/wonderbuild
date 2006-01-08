@@ -244,7 +244,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugins\arguru_goaslicer\arguru_goaslicer.cpp">
+			RelativePath="..\..\..\..\src\psycle\plugins\arguru_goaslicer\arguru_goaslicer.cpp">
 		</File>
 	</Files>
 	<Globals>
