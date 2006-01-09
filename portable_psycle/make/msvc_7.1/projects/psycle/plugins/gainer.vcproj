@@ -243,7 +243,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\gainer.cpp">
+			RelativePath="..\..\..\..\..\src\psycle\plugins\gainer.cpp">
 		</File>
 	</Files>
 	<Globals>
