@@ -3,13 +3,16 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="pre_compiled_headers.mfc"
+	ProjectGUID="{28C015FB-3BDA-4B32-8D85-C652E9892216}"
 	RootNamespace="pre_compiled_headers.mfc"
-	SccProjectName=""
-	SccLocalPath="">
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="release.g6|Win32"
@@ -17,31 +20,40 @@
 			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="2"
 			UseOfMFC="2"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			ATLMinimizesCRunTimeLibraryUsage="false"
 			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.cmd;$(TargetPath)"
-			WholeProgramOptimization="TRUE">
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TypeLibraryName="$(IntDir)/$(ProjectName).tlb"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/EHa
-/QIfist
-/Op-
-/WL"
+				AdditionalOptions="/EHa /QIfist /Op- /WL"
 				Optimization="4"
-				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="2"
-				EnableIntrinsicFunctions="TRUE"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				OmitFramePointers="TRUE"
-				EnableFiberSafeOptimizations="TRUE"
-				OptimizeForProcessor="2"
-				OptimizeForWindowsApplication="TRUE"
+				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
-				StringPooling="TRUE"
-				ExceptionHandling="FALSE"
+				StringPooling="true"
 				RuntimeLibrary="2"
-				BufferSecurityCheck="FALSE"
-				ForceConformanceInForLoopScope="TRUE"
-				RuntimeTypeInfo="TRUE"
+				BufferSecurityCheck="false"
+				ForceConformanceInForLoopScope="true"
+				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="1"
 				PrecompiledHeaderThrough=""
 				PrecompiledHeaderFile="$(OutDir)/$(ProjectName).pch"
@@ -49,51 +61,63 @@
 				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(OutDir)/$(ProjectName).pdb"
 				WarningLevel="4"
-				WarnAsError="TRUE"
-				SuppressStartupBanner="TRUE"
+				WarnAsError="false"
+				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4652"
 				ForcedIncludeFiles=""
-				ShowIncludes="TRUE"/>
+				ShowIncludes="true"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				Culture="1047"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
-				IgnoreImportLibrary="TRUE"
+				IgnoreImportLibrary="true"
 				OutputFile="$(IntDir)/$(ProjectName).dll"
 				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
+				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
-				GenerateDebugInformation="TRUE"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)/$(InputName).pdb"
 				LargeAddressAware="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
-				TurnOffAssemblyGeneration="TRUE"
-				ImportLibrary="$(IntDir)/$(ProjectName).lib"/>
+				TurnOffAssemblyGeneration="true"
+				ImportLibrary="$(IntDir)/$(ProjectName).lib"
+			/>
 			<Tool
-				Name="VCMIDLTool"
-				TypeLibraryName="$(IntDir)/$(ProjectName).tlb"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"
-				Culture="1047"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCWebDeploymentTool"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="debug|Win32"
@@ -101,22 +125,35 @@
 			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="2"
 			UseOfMFC="2"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.cmd;$(TargetPath)">
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.cmd;$(TargetPath)"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TypeLibraryName="$(IntDir)/$(ProjectName).tlb"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/EHa
-/QIfist
-/Op-
-/WL"
+				AdditionalOptions="/EHa /QIfist /Op- /WL"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
-				ExceptionHandling="FALSE"
 				BasicRuntimeChecks="3"
-				SmallerTypeCheck="TRUE"
+				SmallerTypeCheck="true"
 				RuntimeLibrary="3"
-				ForceConformanceInForLoopScope="TRUE"
-				RuntimeTypeInfo="TRUE"
+				ForceConformanceInForLoopScope="true"
+				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="1"
 				PrecompiledHeaderThrough=""
 				PrecompiledHeaderFile="$(OutDir)/$(ProjectName).pch"
@@ -124,47 +161,59 @@
 				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(OutDir)/$(ProjectName).pdb"
 				WarningLevel="4"
-				SuppressStartupBanner="TRUE"
+				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4652"
 				ForcedIncludeFiles=""
-				ShowIncludes="TRUE"/>
+				ShowIncludes="true"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCLinkerTool"
-				IgnoreImportLibrary="TRUE"
-				OutputFile="$(IntDir)/$(ProjectName).dll"
-				LinkIncremental="2"
-				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
-				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(IntDir)/$(ProjectName).pdb"
-				OptimizeForWindows98="1"
-				TurnOffAssemblyGeneration="TRUE"
-				ImportLibrary="$(IntDir)/$(ProjectName).lib"/>
-			<Tool
-				Name="VCMIDLTool"
-				TypeLibraryName="$(IntDir)/$(ProjectName).tlb"/>
-			<Tool
-				Name="VCPostBuildEventTool"/>
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				Culture="1047"/>
+				Culture="1047"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="true"
+				OutputFile="$(IntDir)/$(ProjectName).dll"
+				LinkIncremental="2"
+				SuppressStartupBanner="true"
+				AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(IntDir)/$(ProjectName).pdb"
+				OptimizeForWindows98="1"
+				TurnOffAssemblyGeneration="true"
+				ImportLibrary="$(IntDir)/$(ProjectName).lib"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="release.g7|Win32"
@@ -172,31 +221,40 @@
 			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="2"
 			UseOfMFC="2"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			ATLMinimizesCRunTimeLibraryUsage="false"
 			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.cmd;$(TargetPath)"
-			WholeProgramOptimization="TRUE">
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TypeLibraryName="$(IntDir)/$(ProjectName).tlb"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/EHa
-/QIfist
-/Op-
-/WL"
+				AdditionalOptions="/EHa /QIfist /Op- /WL"
 				Optimization="4"
-				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="2"
-				EnableIntrinsicFunctions="TRUE"
+				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				OmitFramePointers="TRUE"
-				EnableFiberSafeOptimizations="TRUE"
-				OptimizeForProcessor="3"
-				OptimizeForWindowsApplication="TRUE"
+				OmitFramePointers="true"
+				EnableFiberSafeOptimizations="true"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
-				StringPooling="TRUE"
-				ExceptionHandling="FALSE"
+				StringPooling="true"
 				RuntimeLibrary="2"
-				BufferSecurityCheck="FALSE"
-				ForceConformanceInForLoopScope="TRUE"
-				RuntimeTypeInfo="TRUE"
+				BufferSecurityCheck="false"
+				ForceConformanceInForLoopScope="true"
+				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="1"
 				PrecompiledHeaderThrough=""
 				PrecompiledHeaderFile="$(OutDir)/$(ProjectName).pch"
@@ -204,70 +262,87 @@
 				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(OutDir)/$(ProjectName).pdb"
 				WarningLevel="4"
-				WarnAsError="TRUE"
-				SuppressStartupBanner="TRUE"
+				WarnAsError="false"
+				SuppressStartupBanner="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4652"
 				ForcedIncludeFiles=""
-				ShowIncludes="TRUE"/>
+				ShowIncludes="true"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				Culture="1047"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
-				IgnoreImportLibrary="TRUE"
+				IgnoreImportLibrary="true"
 				OutputFile="$(IntDir)/$(ProjectName).dll"
 				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
+				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
-				GenerateDebugInformation="TRUE"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)/$(InputName).pdb"
 				LargeAddressAware="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
-				TurnOffAssemblyGeneration="TRUE"
-				ImportLibrary="$(IntDir)/$(ProjectName).lib"/>
+				TurnOffAssemblyGeneration="true"
+				ImportLibrary="$(IntDir)/$(ProjectName).lib"
+			/>
 			<Tool
-				Name="VCMIDLTool"
-				TypeLibraryName="$(IntDir)/$(ProjectName).tlb"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"
-				Culture="1047"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCWebDeploymentTool"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
 	</References>
 	<Files>
 		<File
-			RelativePath="pre_compiled_headers.cpp">
+			RelativePath="pre_compiled_headers.cpp"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\pre_compiled_headers.mfc.private.hpp">
+			RelativePath="..\..\..\..\src\pre_compiled_headers.mfc.private.hpp"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\pre_compiled_headers.private.hpp">
+			RelativePath="..\..\..\..\src\pre_compiled_headers.private.hpp"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\project.hpp">
+			RelativePath="..\..\..\..\src\project.hpp"
+			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\project.private.hpp">
+			RelativePath="..\..\..\..\src\project.private.hpp"
+			>
 		</File>
 	</Files>
 	<Globals>

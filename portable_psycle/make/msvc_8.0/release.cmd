@@ -86,7 +86,7 @@ rem ----------------
 	rem clean and build
 	rem ===============
 	
-		echo %~n0: sourcing mircosoft visual studio 7.1 environement ...
+		echo %~n0: sourcing mircosoft visual studio 8.0 environement ...
 			rem microsoft made a dumb script that keeps appending things to the env vars,
 			rem so, when invoke many times, we ends up with "too long line", sic. they can rot in hell.
 			rem so, we're saving the env to restore it after.
@@ -264,19 +264,27 @@ rem -------------
 	echo %~n0: copying built libraries and programs ...
 	xcopy/f/i "%source%\*.exe" "%destination%" || goto :failed
 	xcopy/f/i "%source%\*.dll" "%destination%" || goto :failed
-	del/q "%destination%\boost_date_time-*.dll" || goto :failed
-	del/q "%destination%\boost_program_options-*.dll" || goto :failed
-	del/q "%destination%\boost_regex-*.dll" || goto :failed
-	del/q "%destination%\boost_signals-*.dll" || goto :failed
+rem	del/q "%destination%\boost_date_time-*.dll" || goto :failed
+	del/q "%destination%\boost_filesystem-*.dll" || goto :failed
+rem	del/q "%destination%\boost_iostreams-*.dll" || goto :failed
+rem	del/q "%destination%\boost_program_options-*.dll" || goto :failed
+rem	del/q "%destination%\boost_python-*.dll" || goto :failed
+rem	del/q "%destination%\boost_regex-*.dll" || goto :failed
+rem	del/q "%destination%\boost_serialization-*.dll" || goto :failed
+rem	del/q "%destination%\boost_signals-*.dll" || goto :failed
+	del/q "%destination%\boost_thread-*.dll" || goto :failed
+rem	del/q "%destination%\boost_wserialization-*.dll" || goto :failed
 	xcopy/f/i "%source%\psycle.plugins\*.dll" "%destination%\PsyclePlugins\" || goto :failed
 rem	sh -c "for i in i $(find ../../../src/psycle/plugins -name \*.prs -or -name \*.text -or -name \*.txt -or -name \*.html) ; do echo cp --verbose $i %destination_posix%/PsyclePlugins/ ; done" || goto :failed
 	xcopy/s/i "..\..\..\closed-source" "%destination%\PsyclePlugins\!!!closed-source!!!" || goto :failed
 	echo %~n0: copying microsoft c/c++/gdi+/mfc runtime libraries ...
-	xcopy "%SYSTEMROOT%\system32\msvcr80.dll" "%destination%" || goto :failed
-	xcopy "%SYSTEMROOT%\system32\msvcp80.dll" "%destination%" || goto :failed
-	xcopy "%SYSTEMROOT%\system32\mfc80.dll" "%destination%" || goto :failed
-	rem xcopy/f/i "%SYSTEMROOT%\WinSxS\x86_Microsoft.Windows.GdiPlus_*_1.0.10.0_*\GDIPlus.dll" "%destination%" || goto :failed
-	rem xcopy "%SYSTEMROOT%\WinSxS\x86_Microsoft.Windows.GdiPlus_6595b64144ccf1df_1.0.10.0_x-ww_712befd8\GDIPlus.dll" "%destination%" || goto :failed
+rem	xcopy "%SYSTEMROOT%\WinSxS\x86_Microsoft.VC80.MFC_1fc8b3b9a1e18e3b_8.0.50727.42_x-ww_dec6ddd2\msvcr80.dll" "%destination%" || goto :failed
+	xcopy "%VS80ComnTools%\..\..\VC\redist\x86\Microsoft.VC80.CRT\msvcr80.dll" "%destination%" || goto :failed
+rem	xcopy "%SYSTEMROOT%\WinSxS\x86_Microsoft.VC80.MFC_1fc8b3b9a1e18e3b_8.0.50727.42_x-ww_dec6ddd2\msvcp80.dll" "%destination%" || goto :failed
+	xcopy "%VS80ComnTools%\..\..\VC\redist\x86\Microsoft.VC80.CRT\msvcp80.dll" "%destination%" || goto :failed
+rem	xcopy "%SYSTEMROOT%\WinSxS\x86_Microsoft.VC80.MFC_1fc8b3b9a1e18e3b_8.0.50727.42_x-ww_dec6ddd2\mfc80.dll" "%destination%" || goto :failed
+	xcopy "%VS80ComnTools%\..\..\VC\redist\x86\Microsoft.VC80.MFC\mfc80.dll" "%destination%" || goto :failed
+rem	xcopy "%SYSTEMROOT%\WinSxS\x86_Microsoft.Windows.GdiPlus_6595b64144ccf1df_1.0.10.0_x-ww_712befd8\GDIPlus.dll" "%destination%" || goto :failed
 goto :eof
 
 rem ------
