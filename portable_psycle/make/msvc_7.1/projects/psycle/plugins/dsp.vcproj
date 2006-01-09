@@ -57,7 +57,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/Dsp.lib"/>
+				OutputFile="$(SolutionDir)/output/$(ConfigurationName)/lib/Dsp.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				TypeLibraryName="$(SolutionDir)/output/$(ConfigurationName)/lib/$(ProjectName).tlb"/>
@@ -117,7 +117,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/Dsp.lib"/>
+				OutputFile="$(SolutionDir)/output/$(ConfigurationName)/lib/Dsp.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				TypeLibraryName="$(SolutionDir)/output/$(ConfigurationName)/lib/$(ProjectName).tlb"/>
