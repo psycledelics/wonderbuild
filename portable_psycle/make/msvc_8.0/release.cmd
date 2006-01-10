@@ -264,16 +264,16 @@ rem -------------
 	echo %~n0: copying built libraries and programs ...
 	xcopy/f/i "%source%\*.exe" "%destination%" || goto :failed
 	xcopy/f/i "%source%\*.dll" "%destination%" || goto :failed
-rem	del/q "%destination%\boost_date_time-*.dll" || goto :failed
-	del/q "%destination%\boost_filesystem-*.dll" || goto :failed
-rem	del/q "%destination%\boost_iostreams-*.dll" || goto :failed
-rem	del/q "%destination%\boost_program_options-*.dll" || goto :failed
-rem	del/q "%destination%\boost_python-*.dll" || goto :failed
-rem	del/q "%destination%\boost_regex-*.dll" || goto :failed
-rem	del/q "%destination%\boost_serialization-*.dll" || goto :failed
-rem	del/q "%destination%\boost_signals-*.dll" || goto :failed
-	del/q "%destination%\boost_thread-*.dll" || goto :failed
-rem	del/q "%destination%\boost_wserialization-*.dll" || goto :failed
+	del/q "%destination%\boost_date_time-*.dll" || goto :failed
+rem	del/q "%destination%\boost_filesystem-*.dll" || goto :failed
+	del/q "%destination%\boost_iostreams-*.dll" || goto :failed
+	del/q "%destination%\boost_program_options-*.dll" || goto :failed
+	del/q "%destination%\boost_python-*.dll" || goto :failed
+	del/q "%destination%\boost_regex-*.dll" || goto :failed
+	del/q "%destination%\boost_serialization-*.dll" || goto :failed
+	del/q "%destination%\boost_signals-*.dll" || goto :failed
+rem	del/q "%destination%\boost_thread-*.dll" || goto :failed
+	del/q "%destination%\boost_wserialization-*.dll" || goto :failed
 	xcopy/f/i "%source%\psycle.plugins\*.dll" "%destination%\PsyclePlugins\" || goto :failed
 rem	sh -c "for i in i $(find ../../../src/psycle/plugins -name \*.prs -or -name \*.text -or -name \*.txt -or -name \*.html) ; do echo cp --verbose $i %destination_posix%/PsyclePlugins/ ; done" || goto :failed
 	xcopy/s/i "..\..\..\closed-source" "%destination%\PsyclePlugins\!!!closed-source!!!" || goto :failed
