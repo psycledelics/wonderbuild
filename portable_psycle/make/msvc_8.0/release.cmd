@@ -118,7 +118,7 @@ rem ----------------
 			set stamp=%tag%
 		)
 		
-		set distribution=.\psycle.mfc.bin.%stamp%\
+		set distribution=psycle.mfc.bin.%stamp%
 		
 		mkdir "%distribution%"
 		echo %~n0: directory %distribution% created
@@ -160,13 +160,14 @@ rem ----------------
 	rem ===========================
 		
 		if "%tag%" == "" (
-			set archive=psycle.mfc.bin.7z
+			set archive=psycle.mfc.bin.tgz
 		) else (
-			set archive=psycle.mfc.bin.%tag%.7z
+			set archive=psycle.mfc.bin.%tag%.tgz
 		)
 
-		rem rar a -s -m5 -md4096 -r0 .\%archive% "%distribution%" 1>> .\%archive%.log 2>&1 || goto :failed
-		7za a -ms=on -mx=9 -m0=BCJ2 -m1=LZMA -m2=LZMA -m3=LZMA -mb0:1 -mb0s1:2 -mb0s2:3 .\%archive% "%distribution%" 1>> .\%archive%.log 2>&1 || goto :failed
+		rem rar a -s -m5 -md4096 -r0 .\%archive% "%distribution%" 1>> %archive%.log 2>&1 || goto :failed
+		rem 7za a -ms=on -mx=9 -m0=BCJ2 -m1=LZMA -m2=LZMA -m3=LZMA -mb0:1 -mb0s1:2 -mb0s2:3 %archive% "%distribution%" 1>> %archive%.log 2>&1 || goto :failed
+		tar czf %archive% "%distribution%" || goto :failed
 	
 	rem =================================================
 	rem uploading the archive and updating the site
@@ -202,7 +203,7 @@ rem ----------------
 		echo %~n0: uploading the archive to sourceforge ...
 		rem ---------------------------------------------
 		
-			scp ./%archive% "%sourceforge_user_account%@shell.sourceforge.net:%sourceforge_group_account%/htdocs/packages/microsoft/" || goto :failed
+			scp %archive% "%sourceforge_user_account%@shell.sourceforge.net:%sourceforge_group_account%/htdocs/packages/microsoft/" || goto :failed
 		
 		rem ------------------------------------------
 		echo %~n0: updating sourceforge ht pages ...
