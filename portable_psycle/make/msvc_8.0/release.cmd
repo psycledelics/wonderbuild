@@ -277,14 +277,10 @@ rem	del/q "%destination%\boost_thread-*.dll" || goto :failed
 	xcopy/f/i "%source%\psycle.plugins\*.dll" "%destination%\PsyclePlugins\" || goto :failed
 rem	sh -c "for i in i $(find ../../../src/psycle/plugins -name \*.prs -or -name \*.text -or -name \*.txt -or -name \*.html) ; do echo cp --verbose $i %destination_posix%/PsyclePlugins/ ; done" || goto :failed
 	xcopy/s/i "..\..\..\closed-source" "%destination%\PsyclePlugins\!!!closed-source!!!" || goto :failed
+
 	echo %~n0: copying microsoft c/c++/gdi+/mfc runtime libraries ...
-rem	xcopy "%SYSTEMROOT%\WinSxS\x86_Microsoft.VC80.MFC_1fc8b3b9a1e18e3b_8.0.50727.42_x-ww_dec6ddd2\msvcr80.dll" "%destination%" || goto :failed
-	xcopy "%VS80ComnTools%\..\..\VC\redist\x86\Microsoft.VC80.CRT\msvcr80.dll" "%destination%" || goto :failed
-rem	xcopy "%SYSTEMROOT%\WinSxS\x86_Microsoft.VC80.MFC_1fc8b3b9a1e18e3b_8.0.50727.42_x-ww_dec6ddd2\msvcp80.dll" "%destination%" || goto :failed
-	xcopy "%VS80ComnTools%\..\..\VC\redist\x86\Microsoft.VC80.CRT\msvcp80.dll" "%destination%" || goto :failed
-rem	xcopy "%SYSTEMROOT%\WinSxS\x86_Microsoft.VC80.MFC_1fc8b3b9a1e18e3b_8.0.50727.42_x-ww_dec6ddd2\mfc80.dll" "%destination%" || goto :failed
-	xcopy "%VS80ComnTools%\..\..\VC\redist\x86\Microsoft.VC80.MFC\mfc80.dll" "%destination%" || goto :failed
-rem	xcopy "%SYSTEMROOT%\WinSxS\x86_Microsoft.Windows.GdiPlus_6595b64144ccf1df_1.0.10.0_x-ww_712befd8\GDIPlus.dll" "%destination%" || goto :failed
+	xcopy/s/i "%VS80ComnTools%\..\..\VC\redist\x86\Microsoft.VC80.CRT" "%destination%\Microsoft.VC80.CRT" || goto :failed
+	xcopy/s/i "%VS80ComnTools%\..\..\VC\redist\x86\Microsoft.VC80.MFC" "%destination%\Microsoft.VC80.MFC" || goto :failed
 goto :eof
 
 rem ------
