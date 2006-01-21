@@ -280,8 +280,11 @@ rem	sh -c "for i in i $(find ../../../src/psycle/plugins -name \*.prs -or -name 
 	xcopy/s/i "..\..\..\closed-source" "%destination%\PsyclePlugins\!!!closed-source!!!" || goto :failed
 
 	echo %~n0: copying microsoft c/c++/gdi+/mfc runtime libraries ...
-	xcopy/s/i "%VS80ComnTools%\..\..\VC\redist\x86\Microsoft.VC80.CRT" "%destination%\Microsoft.VC80.CRT" || goto :failed
-	xcopy/s/i "%VS80ComnTools%\..\..\VC\redist\x86\Microsoft.VC80.MFC" "%destination%\Microsoft.VC80.MFC" || goto :failed
+	xcopy/f "%VS80ComnTools%\..\..\VC\redist\x86\Microsoft.VC80.CRT\Microsoft.VC80.CRT.manifest" "%destination%" || goto :failed
+	xcopy/f "%VS80ComnTools%\..\..\VC\redist\x86\Microsoft.VC80.CRT\msvcr80.dll"                 "%destination%" || goto :failed
+	xcopy/f "%VS80ComnTools%\..\..\VC\redist\x86\Microsoft.VC80.CRT\msvcp80.dll"                 "%destination%" || goto :failed
+	xcopy/f "%VS80ComnTools%\..\..\VC\redist\x86\Microsoft.VC80.MFC\Microsoft.VC80.MFC.manifest" "%destination%" || goto :failed
+	xcopy/f "%VS80ComnTools%\..\..\VC\redist\x86\Microsoft.VC80.MFC\mfc80.dll"                   "%destination%" || goto :failed
 goto :eof
 
 rem ------
