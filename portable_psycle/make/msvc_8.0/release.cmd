@@ -160,9 +160,9 @@ rem ----------------
 	rem ===========================
 		
 		if "%tag%" == "" (
-			set archive=psycle.mfc.bin.tgz
+			set archive=psycle.mfc.bin.tar.gz
 		) else (
-			set archive=psycle.mfc.bin.%tag%.tgz
+			set archive=psycle.mfc.bin.%tag%.tar.gz
 		)
 
 		rem rar a -s -m5 -md4096 -r0 .\%archive% "%distribution%" 1>> %archive%.log 2>&1 || goto :failed
