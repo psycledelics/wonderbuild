@@ -1,0 +1,18 @@
+digraph dependencies
+{
+	label = "module dependencies, transitive graph" rankdir = TB labelloc = t fontname = helvetica fontsize = 14 bgcolor = palegoldenrod concentrate = true ratio = auto
+	node [ shape = record style = rounded fillcolor = lemonchiffon1 fontname = helvetica fontsize = 10 ]
+	subgraph cluster__universalis
+	{
+		label = "universalis 0.0.152 - general-purpose cross-platform library" bgcolor = khaki3
+		node [ style = filled ]
+		"universalis" [ label = "{universalis | universalis platform abstraction layer}" ];
+	}
+	"universalis" -> "boost_thread" ;
+	"universalis" -> "boost_filesystem" ;
+	"universalis" -> "boost_signals" ;
+	"universalis" -> "diversalis" ;
+	"universalis" -> "glibmm-2.4" ;
+	"universalis" -> "gthread-2.0" ;
+	"universalis" -> "boost" ;
+}
