@@ -73,7 +73,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.arguru.disto
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.yezar.freeverb (aka arguru freeverb, who made the port to psycle)", "projects\psycle\plugins\arguru freeverb.vcproj", "{2911A2EB-A0F2-4C99-802C-ED694E557DE6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.yezar.freeverb", "projects\psycle\plugins\arguru freeverb.vcproj", "{2911A2EB-A0F2-4C99-802C-ED694E557DE6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
@@ -312,6 +312,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.koru
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycoal", "projects\psycle\psycoal\psycoal.vcproj", "{C8783C54-EE91-4948-9843-647E833BB9EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1080,6 +1082,20 @@ Global
 		{C233B433-2D3A-41BD-ABAB-F92B569E95EA}.Release|Win32.Build.0 = release.g7|Win32
 		{C233B433-2D3A-41BD-ABAB-F92B569E95EA}.unique|Win32.ActiveCfg = release.g7|Win32
 		{C233B433-2D3A-41BD-ABAB-F92B569E95EA}.unique|Win32.Build.0 = release.g7|Win32
+		{C8783C54-EE91-4948-9843-647E833BB9EE}.debug|Win32.ActiveCfg = Debug|Win32
+		{C8783C54-EE91-4948-9843-647E833BB9EE}.debug|Win32.Build.0 = Debug|Win32
+		{C8783C54-EE91-4948-9843-647E833BB9EE}.documentation|Win32.ActiveCfg = Debug|Win32
+		{C8783C54-EE91-4948-9843-647E833BB9EE}.documentation|Win32.Build.0 = Debug|Win32
+		{C8783C54-EE91-4948-9843-647E833BB9EE}.html|Win32.ActiveCfg = Release|Win32
+		{C8783C54-EE91-4948-9843-647E833BB9EE}.html|Win32.Build.0 = Release|Win32
+		{C8783C54-EE91-4948-9843-647E833BB9EE}.release.g6|Win32.ActiveCfg = Release|Win32
+		{C8783C54-EE91-4948-9843-647E833BB9EE}.release.g6|Win32.Build.0 = Release|Win32
+		{C8783C54-EE91-4948-9843-647E833BB9EE}.release.g7|Win32.ActiveCfg = Release|Win32
+		{C8783C54-EE91-4948-9843-647E833BB9EE}.release.g7|Win32.Build.0 = Release|Win32
+		{C8783C54-EE91-4948-9843-647E833BB9EE}.Release|Win32.ActiveCfg = Release|Win32
+		{C8783C54-EE91-4948-9843-647E833BB9EE}.Release|Win32.Build.0 = Release|Win32
+		{C8783C54-EE91-4948-9843-647E833BB9EE}.unique|Win32.ActiveCfg = Release|Win32
+		{C8783C54-EE91-4948-9843-647E833BB9EE}.unique|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
