@@ -15,7 +15,7 @@ pushd projects\boost && (
 	popd
 )
 
-pushd projects\doxygen &&
+pushd projects\doxygen && (
 	call clean
 	popd
 )
