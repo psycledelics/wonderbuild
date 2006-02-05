@@ -15,112 +15,6 @@
 	</ToolFiles>
 	<Configurations>
 		<Configuration
-			Name="release.g6|Win32"
-			OutputDirectory="$(SolutionDir)/output/$(ConfigurationName)/bin"
-			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
-			ConfigurationType="1"
-			UseOfMFC="2"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.cmd;$(TargetPath)"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				TypeLibraryName="$(SolutionDir)/output/$(ConfigurationName)/lib/$(ProjectName).tlb"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				AdditionalOptions="/EHa /QIfist /Op- /WL"
-				Optimization="4"
-				InlineFunctionExpansion="2"
-				EnableIntrinsicFunctions="true"
-				FavorSizeOrSpeed="1"
-				OmitFramePointers="true"
-				EnableFiberSafeOptimizations="true"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../include/psycle/host&quot;;&quot;$(SolutionDir)/../../include/psycle/host/asio&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;"
-				StringPooling="true"
-				RuntimeLibrary="2"
-				BufferSecurityCheck="false"
-				ForceConformanceInForLoopScope="true"
-				RuntimeTypeInfo="true"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough="project.private.hpp"
-				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
-				AssemblerListingLocation="$(IntDir)/"
-				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
-				WarningLevel="4"
-				WarnAsError="false"
-				SuppressStartupBanner="true"
-				DebugInformationFormat="3"
-				DisableSpecificWarnings="4652"
-				ForcedIncludeFiles="project.private.hpp"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_AFXDLL;NDEBUG"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../src/psycle/host/resources&quot;"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="htmlhelp.lib"
-				OutputFile="$(OutDir)/$(InputName).exe"
-				LinkIncremental="1"
-				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
-				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
-				SubSystem="2"
-				LargeAddressAware="1"
-				TerminalServerAware="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				OptimizeForWindows98="1"
-				ImportLibrary="$(SolutionDir)/output/$(ConfigurationName)/lib/$(InputName).lib"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
 			Name="debug|Win32"
 			OutputDirectory="$(SolutionDir)/output/$(ConfigurationName)/bin"
 			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
@@ -219,7 +113,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="release.g7|Win32"
+			Name="release|Win32"
 			OutputDirectory="$(SolutionDir)/output/$(ConfigurationName)/bin"
 			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="1"
@@ -1138,15 +1032,7 @@
 						RelativePath="..\..\..\..\src\Seib-vsthost\CVSTHost.Seib.cpp"
 						>
 						<FileConfiguration
-							Name="release.g6|Win32"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="release.g7|Win32"
+							Name="release|Win32"
 							ExcludedFromBuild="true"
 							>
 							<Tool
@@ -1162,14 +1048,6 @@
 						RelativePath="..\..\..\..\src\psycle\host\ImplVstHost.cpp"
 						>
 						<FileConfiguration
-							Name="release.g6|Win32"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
 							Name="debug|Win32"
 							ExcludedFromBuild="true"
 							>
@@ -1178,7 +1056,7 @@
 							/>
 						</FileConfiguration>
 						<FileConfiguration
-							Name="release.g7|Win32"
+							Name="release|Win32"
 							ExcludedFromBuild="true"
 							>
 							<Tool
