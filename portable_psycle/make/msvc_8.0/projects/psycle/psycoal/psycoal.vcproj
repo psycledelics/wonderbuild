@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="psycoal"
 	ProjectGUID="{C8783C54-EE91-4948-9843-647E833BB9EE}"
+	RootNamespace="psycoal"
 	>
 	<Platforms>
 		<Platform
@@ -51,7 +52,7 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
 				AssemblerListingLocation="$(IntDir)/"
-				ObjectFile="$(IntDir)/"
+				ObjectFile="$(IntDir)/$(ParentName)/"
 				ProgramDataBaseFileName="$(IntDir)/program_database.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
@@ -149,7 +150,7 @@
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
 				AssemblerListingLocation="$(IntDir)/"
-				ObjectFile="$(IntDir)/"
+				ObjectFile="$(IntDir)/$(ParentName)/"
 				ProgramDataBaseFileName="$(IntDir)/program_database.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
@@ -211,14 +212,22 @@
 	<References>
 	</References>
 	<Files>
-		<File
-			RelativePath="..\..\..\..\..\src\psycle\coal\hello.cpp"
+		<Filter
+			Name="psycle/coal"
 			>
-		</File>
-		<File
-			RelativePath="..\..\..\..\..\src\psycle\coal\hello.hpp"
-			>
-		</File>
+			<File
+				RelativePath="..\..\..\..\..\src\psycle\coal\hello.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\psycle\coal\hello.hpp"
+				>
+			</File>
+			<Filter
+				Name="psycle/coal/dsp"
+				>
+			</Filter>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
