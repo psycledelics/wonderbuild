@@ -647,9 +647,7 @@ Global
 		{B78DFE59-051A-43FD-B489-775A4982581C}.debug|Win32.ActiveCfg = debug|Win32
 		{B78DFE59-051A-43FD-B489-775A4982581C}.debug|Win32.Build.0 = debug|Win32
 		{B78DFE59-051A-43FD-B489-775A4982581C}.documentation|Win32.ActiveCfg = debug|Win32
-		{B78DFE59-051A-43FD-B489-775A4982581C}.documentation|Win32.Build.0 = debug|Win32
 		{B78DFE59-051A-43FD-B489-775A4982581C}.release|Win32.ActiveCfg = release|Win32
-		{B78DFE59-051A-43FD-B489-775A4982581C}.release|Win32.Build.0 = release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

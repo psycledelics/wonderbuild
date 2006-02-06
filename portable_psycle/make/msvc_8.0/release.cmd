@@ -79,8 +79,8 @@ rem ----------------
 	rem targets
 	rem =======
 	
-		rem set targets=g7 g6
-		set targets=g7
+		rem set targets=debug release
+		set targets=release
 	
 	rem ===============
 	rem clean and build
@@ -94,7 +94,7 @@ rem ----------------
 			call "%VS80ComnTools%\VSVars32" || goto :failed
 		
 		for %%t in (%targets%) do (
-			call :rebuild release.%%t || ( call :restore_env & goto :failed)
+			call :rebuild %%t || ( call :restore_env & goto :failed)
 		)
 		
 		call :restore_env

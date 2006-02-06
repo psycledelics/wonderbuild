@@ -1,4 +1,6 @@
-#!/bin/bash
+#! /bin/bash
+
+set -u &&
 
 function main
 {
@@ -25,4 +27,4 @@ function main
 }
 
 set -vx &&
-main
+main "$@"

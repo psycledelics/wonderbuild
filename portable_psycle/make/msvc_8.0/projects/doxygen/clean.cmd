@@ -1,4 +1,7 @@
+%~d0
+cd %~p0
+
 pushd ..\..\..\doxygen\ && (
-	clean
+	clean || exit /b 1
 	popd
 )
