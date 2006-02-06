@@ -255,7 +255,7 @@ rem -------------
 :copy_binaries
 	set target=%1
 	echo %~n0: copying %target% ...
-	set source=..\output\release.%target%\bin\
+	set source=..\output\%target%\bin\
 	set destination=%distribution%\%target%\
 	set destination_posix=%distribution%/%target%/
 	rem <bohan> Well i think microsoft's documentation about microsoft's xcopy is wrong.
