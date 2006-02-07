@@ -3,8 +3,6 @@
 #pragma once
 #include <packageneric/configuration.private.hpp>
 
-#define UNIVERSALIS__QUAQUAVERSALIS
-
 #define PACKAGENERIC__MODULE__NAME "universalis"
 #define PACKAGENERIC__MODULE__VERSION "0:0:0"
 #define PACKAGENERIC__MODULE__DESCRIPTION "universalis platform abstraction layer"

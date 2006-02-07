@@ -43,7 +43,7 @@
 				AdditionalOptions="/EHa /QIfist /Op- /WL"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;"
-				PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;null.hpp&gt;;PACKAGENERIC=&lt;packageneric/package/modules/lib.universalis/hardcoded/unknown-microsoft-unknown/includes.private.hpp&gt;;UNIVERSALIS__OPERATING_SYSTEM__LOGGERS__OWNED"
+				PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;;UNIVERSALIS__OPERATING_SYSTEM__LOGGERS__OWNED"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				SmallerTypeCheck="true"
@@ -141,7 +141,7 @@
 				OmitFramePointers="true"
 				EnableFiberSafeOptimizations="true"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;"
-				PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;null.hpp&gt;;PACKAGENERIC=&lt;packageneric/package/modules/lib.universalis/hardcoded/unknown-microsoft-unknown/includes.private.hpp&gt;;UNIVERSALIS__OPERATING_SYSTEM__LOGGERS__OWNED;NDEBUG"
+				PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;;UNIVERSALIS__OPERATING_SYSTEM__LOGGERS__OWNED;NDEBUG"
 				StringPooling="true"
 				MinimalRebuild="true"
 				RuntimeLibrary="2"
@@ -603,6 +603,74 @@
 							BrowseInformationFile="$(IntDir)/src/universalis/standard_library/exceptions/code_description.sbr"
 						/>
 					</FileConfiguration>
+				</File>
+			</Filter>
+			<Filter
+				Name="detail"
+				>
+				<File
+					RelativePath="..\..\src\universalis\detail\configuration.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\src\universalis\detail\configuration.private.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\universalis\detail\project.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\universalis\detail\project.private.hpp"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="packageneric"
+			>
+			<File
+				RelativePath="..\..\src\packageneric\configuration.private.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\packageneric\module.private.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\packageneric\package.private.hpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="diversalis"
+			>
+			<File
+				RelativePath="..\..\..\..\src\diversalis\compiler.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\diversalis\operating_system.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\diversalis\processor.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\diversalis\standard_library.hpp"
+				>
+			</File>
+			<Filter
+				Name="detail"
+				>
+				<File
+					RelativePath="..\..\src\diversalis\detail\configuration.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\diversalis\detail\project.hpp"
+					>
 				</File>
 			</Filter>
 		</Filter>

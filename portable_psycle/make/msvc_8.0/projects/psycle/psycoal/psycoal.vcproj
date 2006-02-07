@@ -43,7 +43,7 @@
 				AdditionalOptions="/EHa /QIfist /Op- /WL"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;"
-				PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;null.hpp&gt;;PACKAGENERIC=&lt;null.hpp&gt;"
+				PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				SmallerTypeCheck="true"
@@ -141,7 +141,7 @@
 				OmitFramePointers="true"
 				EnableFiberSafeOptimizations="true"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;"
-				PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;null.hpp&gt;;PACKAGENERIC=&lt;null.hpp&gt;;NDEBUG"
+				PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;;NDEBUG"
 				StringPooling="true"
 				MinimalRebuild="true"
 				RuntimeLibrary="2"
@@ -227,6 +227,22 @@
 				Name="psycle/coal/dsp"
 				>
 			</Filter>
+		</Filter>
+		<Filter
+			Name="packageneric"
+			>
+			<File
+				RelativePath="..\..\..\src\packageneric\configuration.private.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\packageneric\module.private.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\packageneric\package.private.hpp"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
