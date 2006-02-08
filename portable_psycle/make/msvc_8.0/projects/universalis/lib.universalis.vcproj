@@ -40,14 +40,16 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/EHa /QIfist /Op- /WL"
+				AdditionalOptions="/WL"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;"
 				PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;;UNIVERSALIS__OPERATING_SYSTEM__LOGGERS__OWNED"
 				MinimalRebuild="true"
+				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
 				SmallerTypeCheck="true"
 				RuntimeLibrary="3"
+				EnableFunctionLevelLinking="true"
 				ForceConformanceInForLoopScope="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
@@ -133,7 +135,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/EHa /QIfist /Op- /WL"
+				AdditionalOptions="/QIfist /Op- /WL"
 				Optimization="4"
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
@@ -144,8 +146,10 @@
 				PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;;UNIVERSALIS__OPERATING_SYSTEM__LOGGERS__OWNED;NDEBUG"
 				StringPooling="true"
 				MinimalRebuild="true"
+				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
+				FloatingPointModel="2"
 				ForceConformanceInForLoopScope="true"
 				RuntimeTypeInfo="true"
 				UsePrecompiledHeader="0"
@@ -650,6 +654,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\..\src\diversalis\diversalis.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\src\diversalis\operating_system.hpp"
 				>
 			</File>
@@ -679,6 +687,7 @@
 			>
 			<FileConfiguration
 				Name="debug|Win32"
+				ExcludedFromBuild="true"
 				>
 				<Tool
 					Name="VCResourceCompilerTool"
@@ -687,6 +696,7 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="release|Win32"
+				ExcludedFromBuild="true"
 				>
 				<Tool
 					Name="VCResourceCompilerTool"

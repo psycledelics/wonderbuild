@@ -14,7 +14,7 @@
 	/// description of the source package
 	#define PACKAGENERIC__PACKAGE__DESCRIPTION "modular music studio"
 	/// version of the source package
-	#define PACKAGENERIC__PACKAGE__VERSION PACKAGENERIC__PACKAGE__VERSION__MAJOR "." PACKAGENERIC__PACKAGE__VERSION__MINOR "." PACKAGENERIC__PACKAGE__VERSION__PATCH
+	#define PACKAGENERIC__PACKAGE__VERSION "1.9.4"
 	/// major version number of the source package
 	#define PACKAGENERIC__PACKAGE__VERSION__MAJOR 1
 	/// minor version number of the source package
