@@ -862,6 +862,18 @@
 					RelativePath="..\..\..\..\src\psycle\host\Dsp.hpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\FFT.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\FFT.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\Filter.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\Filter.hpp">
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\Helpers.cpp">
 				</File>
 				<File
@@ -957,12 +969,6 @@
 					<Filter
 						Name="sampler"
 						Filter="">
-						<File
-							RelativePath="..\..\..\..\src\psycle\host\Filter.cpp">
-						</File>
-						<File
-							RelativePath="..\..\..\..\src\psycle\host\Filter.hpp">
-						</File>
 						<File
 							RelativePath="..\..\..\..\src\psycle\host\Instrument.cpp">
 						</File>
