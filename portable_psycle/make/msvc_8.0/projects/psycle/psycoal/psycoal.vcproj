@@ -79,6 +79,7 @@
 				ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
 				SubSystem="2"
 				TurnOffAssemblyGeneration="true"
+				ImportLibrary="$(SolutionDir)/output/$(ConfigurationName)/lib/$(InputName).lib"
 				TargetMachine="1"
 			/>
 			<Tool

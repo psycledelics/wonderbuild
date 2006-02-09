@@ -1,5 +1,5 @@
 ///\file
-///\brief packageneric configuration for module universalis
+///\brief packageneric configuration for module psycoal
 #pragma once
 #include <packageneric/configuration.private.hpp>
 

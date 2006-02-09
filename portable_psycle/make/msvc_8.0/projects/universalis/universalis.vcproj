@@ -56,6 +56,7 @@
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(IntDir)/program_database.pdb"
+				BrowseInformation="1"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
 				Detect64BitPortabilityProblems="true"
@@ -67,6 +68,8 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;;UNIVERSALIS__OPERATING_SYSTEM__LOGGERS__OWNED"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -81,6 +84,7 @@
 				ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
 				SubSystem="2"
 				TurnOffAssemblyGeneration="true"
+				ImportLibrary="$(SolutionDir)/output/$(ConfigurationName)/lib/$(InputName).lib"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -94,6 +98,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
+				OutputFile="$(IntDir)/$(ProjectName).bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -167,6 +172,8 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;;UNIVERSALIS__OPERATING_SYSTEM__LOGGERS__OWNED;NDEBUG"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -198,6 +205,7 @@
 			/>
 			<Tool
 				Name="VCBscMakeTool"
+				OutputFile="$(IntDir)/$(ProjectName).bsc"
 			/>
 			<Tool
 				Name="VCFxCopTool"
@@ -227,8 +235,8 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/src/universalis/exception.obj"
-						BrowseInformationFile="$(IntDir)/src/universalis/exception.sbr"
+						ObjectFile="$(IntDir)/universalis/exception.obj"
+						BrowseInformationFile="$(IntDir)/universalis/exception.sbr"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -236,8 +244,8 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/src/universalis/exception.obj"
-						BrowseInformationFile="$(IntDir)/src/universalis/exception.sbr"
+						ObjectFile="$(IntDir)/universalis/exception.obj"
+						BrowseInformationFile="$(IntDir)/universalis/exception.sbr"
 					/>
 				</FileConfiguration>
 			</File>
@@ -252,8 +260,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/compiler/detail/pragmatic/demangle.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/compiler/detail/pragmatic/demangle.sbr"
+							ObjectFile="$(IntDir)/universalis/compiler/detail/pragmatic/demangle.obj"
+							BrowseInformationFile="$(IntDir)/universalis/compiler/detail/pragmatic/demangle.sbr"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -261,8 +269,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/compiler/detail/pragmatic/demangle.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/compiler/detail/pragmatic/demangle.sbr"
+							ObjectFile="$(IntDir)/universalis/compiler/detail/pragmatic/demangle.obj"
+							BrowseInformationFile="$(IntDir)/universalis/compiler/detail/pragmatic/demangle.sbr"
 						/>
 					</FileConfiguration>
 				</File>
@@ -274,8 +282,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/compiler/exceptions/ellipsis.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/compiler/exceptions/ellipsis.sbr"
+							ObjectFile="$(IntDir)/universalis/compiler/exceptions/ellipsis.obj"
+							BrowseInformationFile="$(IntDir)/universalis/compiler/exceptions/ellipsis.sbr"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -283,8 +291,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/compiler/exceptions/ellipsis.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/compiler/exceptions/ellipsis.sbr"
+							ObjectFile="$(IntDir)/universalis/compiler/exceptions/ellipsis.obj"
+							BrowseInformationFile="$(IntDir)/universalis/compiler/exceptions/ellipsis.sbr"
 						/>
 					</FileConfiguration>
 				</File>
@@ -300,8 +308,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/operating_system/clocks.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/operating_system/clocks.sbr"
+							ObjectFile="$(IntDir)/universalis/operating_system/clocks.obj"
+							BrowseInformationFile="$(IntDir)/universalis/operating_system/clocks.sbr"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -309,8 +317,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/operating_system/clocks.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/operating_system/clocks.sbr"
+							ObjectFile="$(IntDir)/universalis/operating_system/clocks.obj"
+							BrowseInformationFile="$(IntDir)/universalis/operating_system/clocks.sbr"
 						/>
 					</FileConfiguration>
 				</File>
@@ -322,8 +330,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/operating_system/detail/check_version.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/operating_system/detail/check_version.sbr"
+							ObjectFile="$(IntDir)/universalis/operating_system/detail/check_version.obj"
+							BrowseInformationFile="$(IntDir)/universalis/operating_system/detail/check_version.sbr"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -331,8 +339,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/operating_system/detail/check_version.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/operating_system/detail/check_version.sbr"
+							ObjectFile="$(IntDir)/universalis/operating_system/detail/check_version.obj"
+							BrowseInformationFile="$(IntDir)/universalis/operating_system/detail/check_version.sbr"
 						/>
 					</FileConfiguration>
 				</File>
@@ -344,8 +352,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/operating_system/dynamic_link/resolver.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/operating_system/dynamic_link/resolver.sbr"
+							ObjectFile="$(IntDir)/universalis/operating_system/dynamic_link/resolver.obj"
+							BrowseInformationFile="$(IntDir)/universalis/operating_system/dynamic_link/resolver.sbr"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -353,8 +361,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/operating_system/dynamic_link/resolver.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/operating_system/dynamic_link/resolver.sbr"
+							ObjectFile="$(IntDir)/universalis/operating_system/dynamic_link/resolver.obj"
+							BrowseInformationFile="$(IntDir)/universalis/operating_system/dynamic_link/resolver.sbr"
 						/>
 					</FileConfiguration>
 				</File>
@@ -366,8 +374,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/operating_system/exception.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/operating_system/exception.sbr"
+							ObjectFile="$(IntDir)/universalis/operating_system/exception.obj"
+							BrowseInformationFile="$(IntDir)/universalis/operating_system/exception.sbr"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -375,8 +383,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/operating_system/exception.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/operating_system/exception.sbr"
+							ObjectFile="$(IntDir)/universalis/operating_system/exception.obj"
+							BrowseInformationFile="$(IntDir)/universalis/operating_system/exception.sbr"
 						/>
 					</FileConfiguration>
 				</File>
@@ -388,8 +396,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/operating_system/exceptions/code_description.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/operating_system/exceptions/code_description.sbr"
+							ObjectFile="$(IntDir)/universalis/operating_system/exceptions/code_description.obj"
+							BrowseInformationFile="$(IntDir)/universalis/operating_system/exceptions/code_description.sbr"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -397,8 +405,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/operating_system/exceptions/code_description.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/operating_system/exceptions/code_description.sbr"
+							ObjectFile="$(IntDir)/universalis/operating_system/exceptions/code_description.obj"
+							BrowseInformationFile="$(IntDir)/universalis/operating_system/exceptions/code_description.sbr"
 						/>
 					</FileConfiguration>
 				</File>
@@ -410,8 +418,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/operating_system/loggers.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/operating_system/loggers.sbr"
+							ObjectFile="$(IntDir)/universalis/operating_system/loggers.obj"
+							BrowseInformationFile="$(IntDir)/universalis/operating_system/loggers.sbr"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -419,8 +427,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/operating_system/loggers.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/operating_system/loggers.sbr"
+							ObjectFile="$(IntDir)/universalis/operating_system/loggers.obj"
+							BrowseInformationFile="$(IntDir)/universalis/operating_system/loggers.sbr"
 						/>
 					</FileConfiguration>
 				</File>
@@ -432,8 +440,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/operating_system/paths.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/operating_system/paths.sbr"
+							ObjectFile="$(IntDir)/universalis/operating_system/paths.obj"
+							BrowseInformationFile="$(IntDir)/universalis/operating_system/paths.sbr"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -441,8 +449,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/operating_system/paths.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/operating_system/paths.sbr"
+							ObjectFile="$(IntDir)/universalis/operating_system/paths.obj"
+							BrowseInformationFile="$(IntDir)/universalis/operating_system/paths.sbr"
 						/>
 					</FileConfiguration>
 				</File>
@@ -454,8 +462,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/operating_system/terminal.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/operating_system/terminal.sbr"
+							ObjectFile="$(IntDir)/universalis/operating_system/terminal.obj"
+							BrowseInformationFile="$(IntDir)/universalis/operating_system/terminal.sbr"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -463,8 +471,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/operating_system/terminal.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/operating_system/terminal.sbr"
+							ObjectFile="$(IntDir)/universalis/operating_system/terminal.obj"
+							BrowseInformationFile="$(IntDir)/universalis/operating_system/terminal.sbr"
 						/>
 					</FileConfiguration>
 				</File>
@@ -476,8 +484,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/operating_system/threads/id.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/operating_system/threads/id.sbr"
+							ObjectFile="$(IntDir)/universalis/operating_system/threads/id.obj"
+							BrowseInformationFile="$(IntDir)/universalis/operating_system/threads/id.sbr"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -485,8 +493,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/operating_system/threads/id.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/operating_system/threads/id.sbr"
+							ObjectFile="$(IntDir)/universalis/operating_system/threads/id.obj"
+							BrowseInformationFile="$(IntDir)/universalis/operating_system/threads/id.sbr"
 						/>
 					</FileConfiguration>
 				</File>
@@ -498,8 +506,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/operating_system/threads/sleep.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/operating_system/threads/sleep.sbr"
+							ObjectFile="$(IntDir)/universalis/operating_system/threads/sleep.obj"
+							BrowseInformationFile="$(IntDir)/universalis/operating_system/threads/sleep.sbr"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -507,8 +515,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/operating_system/threads/sleep.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/operating_system/threads/sleep.sbr"
+							ObjectFile="$(IntDir)/universalis/operating_system/threads/sleep.obj"
+							BrowseInformationFile="$(IntDir)/universalis/operating_system/threads/sleep.sbr"
 						/>
 					</FileConfiguration>
 				</File>
@@ -524,8 +532,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/processor/exception.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/processor/exception.sbr"
+							ObjectFile="$(IntDir)/universalis/processor/exception.obj"
+							BrowseInformationFile="$(IntDir)/universalis/processor/exception.sbr"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -533,8 +541,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/processor/exception.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/processor/exception.sbr"
+							ObjectFile="$(IntDir)/universalis/processor/exception.obj"
+							BrowseInformationFile="$(IntDir)/universalis/processor/exception.sbr"
 						/>
 					</FileConfiguration>
 				</File>
@@ -546,8 +554,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/processor/exceptions/code_description.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/processor/exceptions/code_description.sbr"
+							ObjectFile="$(IntDir)/universalis/processor/exceptions/code_description.obj"
+							BrowseInformationFile="$(IntDir)/universalis/processor/exceptions/code_description.sbr"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -555,8 +563,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/processor/exceptions/code_description.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/processor/exceptions/code_description.sbr"
+							ObjectFile="$(IntDir)/universalis/processor/exceptions/code_description.obj"
+							BrowseInformationFile="$(IntDir)/universalis/processor/exceptions/code_description.sbr"
 						/>
 					</FileConfiguration>
 				</File>
@@ -572,8 +580,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/standard_library/detail/allocators.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/standard_library/detail/allocators.sbr"
+							ObjectFile="$(IntDir)/universalis/standard_library/detail/allocators.obj"
+							BrowseInformationFile="$(IntDir)/universalis/standard_library/detail/allocators.sbr"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -581,8 +589,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/standard_library/detail/allocators.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/standard_library/detail/allocators.sbr"
+							ObjectFile="$(IntDir)/universalis/standard_library/detail/allocators.obj"
+							BrowseInformationFile="$(IntDir)/universalis/standard_library/detail/allocators.sbr"
 						/>
 					</FileConfiguration>
 				</File>
@@ -594,8 +602,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/standard_library/exceptions/code_description.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/standard_library/exceptions/code_description.sbr"
+							ObjectFile="$(IntDir)/universalis/standard_library/exceptions/code_description.obj"
+							BrowseInformationFile="$(IntDir)/universalis/standard_library/exceptions/code_description.sbr"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -603,8 +611,8 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/src/universalis/standard_library/exceptions/code_description.obj"
-							BrowseInformationFile="$(IntDir)/src/universalis/standard_library/exceptions/code_description.sbr"
+							ObjectFile="$(IntDir)/universalis/standard_library/exceptions/code_description.obj"
+							BrowseInformationFile="$(IntDir)/universalis/standard_library/exceptions/code_description.sbr"
 						/>
 					</FileConfiguration>
 				</File>
@@ -645,6 +653,27 @@
 				RelativePath="..\..\..\..\src\packageneric\package.private.hpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\..\..\src\packageneric\resources.rc"
+				>
+				<FileConfiguration
+					Name="debug|Win32"
+					>
+					<Tool
+						Name="VCResourceCompilerTool"
+						ResourceOutputFileName="$(IntDir)/packageneric/resources.res"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCResourceCompilerTool"
+						ResourceOutputFileName="$(IntDir)/packageneric/resources.res"
+					/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 		<Filter
 			Name="diversalis"
@@ -682,28 +711,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath="..\..\..\..\src\resources.rc"
-			>
-			<FileConfiguration
-				Name="debug|Win32"
-				ExcludedFromBuild="true"
-				>
-				<Tool
-					Name="VCResourceCompilerTool"
-					ResourceOutputFileName="$(IntDir)/./resources.res"
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="release|Win32"
-				ExcludedFromBuild="true"
-				>
-				<Tool
-					Name="VCResourceCompilerTool"
-					ResourceOutputFileName="$(IntDir)/./resources.res"
-				/>
-			</FileConfiguration>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

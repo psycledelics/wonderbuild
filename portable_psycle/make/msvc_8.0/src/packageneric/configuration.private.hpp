@@ -31,7 +31,7 @@
 ///\name installation paths
 ///\{
 	/// relative path from the bin dir to the lib dir
-	#define PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_LIB     "../lib"
+	#define PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_LIB     "."
 	/// relative path from the bin dir to the libexec dir
  	#define PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_LIBEXEC "../libexec"
 	/// relative path from the bin dir to the share dir
