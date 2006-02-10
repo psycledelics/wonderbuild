@@ -58,7 +58,7 @@ The sources shouldn't assume anything about what is included via this #include P
 it could be /dev/null (or an equivalent empty file on windows).
 
 Then each .cpp file does #include PACKAGENERIC.
-This let us include a per-module (per-project), or even per-source configuration headers.
+This let us include a per-module (per-project), or even per-source configuration header.
 This include should indirectly include other config headers ; for example, the include chain might look like:
 	- per-module config and meta-information: $(ProjectDir)/src/packageneric/module.private.hpp
 	- per-compiler config and meta-information: $(SolutionDir)/src/packageneric/configuration.private.hpp
@@ -69,7 +69,7 @@ these inclusions also declare some build settings,
 and particularly, settings that let us determing what functions and objects should be either imported or exported
 when compiling a microsoft dll.
 
-This handling of import or export attributes is done in the .hpp could be done like this:
+This handling of import or export attributes goes in the .hpp files and could be done like this:
 
 file psycle/coal/foo_bar.hpp:
 	// all other #includes comes before
