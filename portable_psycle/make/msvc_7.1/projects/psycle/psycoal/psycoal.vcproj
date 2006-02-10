@@ -166,12 +166,6 @@
 				RelativePath="..\..\..\..\..\src\psycle\coal\gear.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\psycle\coal\hello.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\src\psycle\coal\hello.hpp">
-			</File>
-			<File
 				RelativePath="..\..\..\..\..\src\psycle\coal\host.cpp">
 				<FileConfiguration
 					Name="debug|Win32">

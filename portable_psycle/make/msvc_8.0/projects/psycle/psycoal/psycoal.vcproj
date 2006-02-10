@@ -217,16 +217,44 @@
 			Name="psycle/coal"
 			>
 			<File
-				RelativePath="..\..\..\..\..\src\psycle\coal\hello.cpp"
+				RelativePath="..\..\..\..\..\src\psycle\coal\arranger.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\psycle\coal\hello.hpp"
+				RelativePath="..\..\..\..\..\src\psycle\coal\arranger.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\psycle\coal\gear.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\psycle\coal\gear.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\psycle\coal\host.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\psycle\coal\host.hpp"
 				>
 			</File>
 			<Filter
 				Name="psycle/coal/dsp"
 				>
+			</Filter>
+			<Filter
+				Name="detail"
+				>
+				<File
+					RelativePath="..\..\..\..\..\src\psycle\coal\detail\project.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\src\psycle\coal\detail\project.private.hpp"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
