@@ -5,18 +5,17 @@
 ///\file
 ///\meta generic
 #include <diversalis/compiler.hpp>
-#if !defined DIVERSALIS__COMPILER__RESOURCE // limited to DIVERSALIS__COMPILER__RESOURCE_
+#if !defined DIVERSALIS__COMPILER__RESOURCE
 	#error "This file is for resource compilers (only relevant on microsoft's operating system)."
 #endif
 #include <winver.h>
-#include <universalis/compiler/stringized.hpp>
 #include PACKAGENERIC
 #if defined PACKAGENERIC__MODULE__LOGO
 	1 ICON DISCARDABLE "../" PACKAGENERIC__CONFIGURATION__STAGE_PATH__BUILD_TO_SOURCE "/pixmaps/" PACKAGENERIC__MODULE__LOGO ".ico"
 #endif
 // http://msdn.microsoft.com/library/default.asp?url=/library/en-us/tools/tools/versioninfo_resource.asp
 VS_VERSION_INFO VERSIONINFO
-	#define PACKAGENERIC__COMPILER__RESOURCE__VERSION_INFO  PACKAGENERIC__PACKAGE__VERSION__MAJOR,PACKAGENERIC__PACKAGE__VERSION__MINOR,PACKAGENERIC__PACKAGE__VERSION__PATCH,0
+	#define PACKAGENERIC__COMPILER__RESOURCE__VERSION_INFO  PACKAGENERIC__MODULE__VERSION__MAJOR,PACKAGENERIC__MODULE__VERSION__MINOR,PACKAGENERIC__MODULE__VERSION__PATCH,0
 	PRODUCTVERSION PACKAGENERIC__COMPILER__RESOURCE__VERSION_INFO
 	FILEVERSION    PACKAGENERIC__COMPILER__RESOURCE__VERSION_INFO
 	FILEFLAGSMASK VS_FF_DEBUG
@@ -40,9 +39,9 @@ VS_VERSION_INFO VERSIONINFO
 				VALUE "InternalName"      , PACKAGENERIC__PACKAGE__NAME
 				VALUE "ProductVersion"    , PACKAGENERIC__PACKAGE__VERSION " " PACKAGENERIC__PACKAGE__ARCHIVE
 
-				VALUE "FileDescription"   , PACKAGENERIC__PACKAGE__NAME ", " PACKAGENERIC__MODULE__DESCRIPTION
-				VALUE "OriginalFilename"  , PACKAGENERIC__PACKAGE__NAME "/"  PACKAGENERIC__MODULE__NAME
-				VALUE "FileVersion"       , PACKAGENERIC__PACKAGE__VERSION " " PACKAGENERIC__PACKAGE__ARCHIVE ", " PACKAGENERIC__MODULE__VERSION ", " PACKAGENERIC__COMPILER__RESOURCE__DEBUG
+				VALUE "FileDescription"   , PACKAGENERIC__MODULE__DESCRIPTION
+				VALUE "OriginalFilename"  , PACKAGENERIC__MODULE__NAME
+				VALUE "FileVersion"       , DIVERSALIS__COMPILER__STRINGIZED(PACKAGENERIC__MODULE__VERSION__MAJOR) "." DIVERSALIS__COMPILER__STRINGIZED(PACKAGENERIC__MODULE__VERSION__MINOR) "." DIVERSALIS__COMPILER__STRINGIZED(PACKAGENERIC__MODULE__VERSION__PATCH) ", " PACKAGENERIC__COMPILER__RESOURCE__DEBUG
 				VALUE "LibToolFileVersion", PACKAGENERIC__MODULE__VERSION
 
 				VALUE "SpecialBuild",
@@ -51,13 +50,13 @@ VS_VERSION_INFO VERSIONINFO
 					"compiler build tool chain:\r\n" PACKAGENERIC__CONFIGURATION__COMPILER__BUILD
 					"\r\n\r\n"
 					"compiler host tool chain:\r\n"  PACKAGENERIC__CONFIGURATION__COMPILER__HOST
-					#if defined DIVERSALIS__COMPILER__VERSION__MAJOR
+					#ifdef DIVERSALIS__COMPILER__VERSION__MAJOR // [bohan] #ifdef and not #if defined ; see bug http://lab.msdn.microsoft.com/ProductFeedback/viewFeedback.aspx?FeedbackID=FDBK45638
 						"\r\n\r\n"
-						"compiler version:\r\n" UNIVERSALIS__COMPILER__STRINGIZED(DIVERSALIS__COMPILER__VERSION__MAJOR)
+						"compiler version:\r\n" DIVERSALIS__COMPILER__STRINGIZED(DIVERSALIS__COMPILER__VERSION__MAJOR)
 						#if defined DIVERSALIS__COMPILER__VERSION__MINOR
-						    "."                 UNIVERSALIS__COMPILER__STRINGIZED(DIVERSALIS__COMPILER__VERSION__MINOR)
+						    "."                 DIVERSALIS__COMPILER__STRINGIZED(DIVERSALIS__COMPILER__VERSION__MINOR)
 						    #if defined DIVERSALIS__COMPILER__VERSION__PATCH
-						        "."             UNIVERSALIS__COMPILER__STRINGIZED(DIVERSALIS__COMPILER__VERSION__PATCH)
+						        "."             DIVERSALIS__COMPILER__STRINGIZED(DIVERSALIS__COMPILER__VERSION__PATCH)
 						    #endif
 						#endif
 					#endif
@@ -65,14 +64,28 @@ VS_VERSION_INFO VERSIONINFO
 					#if defined DIVERSALIS__COMPILER__GNU
 						#if defined DIVERSALIS__COMPILER__GNU__ABI__VERSION
 							"\r\n\r\n"
-							"compiler abi version:\r\n" UNIVERSALIS__COMPILER__STRINGIZED(DIVERSALIS__COMPILER__GNU__ABI__VERSION)
+							"compiler abi version:\r\n" DIVERSALIS__COMPILER__STRINGIZED(DIVERSALIS__COMPILER__GNU__ABI__VERSION)
 						#endif
 					#endif
 					"\r\n\r\n"
 					"compiler options:\r\n" PACKAGENERIC__CONFIGURATION__COMPILER__CXXFLAGS
 					"\r\n\r\n"
 					"linker options:\r\n"   PACKAGENERIC__CONFIGURATION__COMPILER__LDFLAGS
-				VALUE "PrivateBuild", "built on " __DATE__ " " __TIME__ " by " PACKAGENERIC__OPERATING_SYSTEM__ID
+
+				VALUE "PrivateBuild",
+					"built on "
+					#if !defined __DATE__
+						"a sunny day"
+					#else
+						__DATE__
+					#endif
+					" "
+					#if !defined __TIME__
+						"after hours"
+					#else
+						__TIME__
+					#endif
+					" by " PACKAGENERIC__OPERATING_SYSTEM__ID
 
 				VALUE "CompanyName"   , PACKAGENERIC__PACKAGE__ORIGIN
 				VALUE "LegalCopyright", PACKAGENERIC__PACKAGE__COPYRIGHT
