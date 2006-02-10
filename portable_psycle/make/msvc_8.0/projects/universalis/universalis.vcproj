@@ -666,7 +666,6 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="release|Win32"
-					ExcludedFromBuild="true"
 					>
 					<Tool
 						Name="VCResourceCompilerTool"

@@ -65,6 +65,8 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;;UNIVERSALIS__OPERATING_SYSTEM__LOGGERS__OWNED"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -164,6 +166,8 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;;UNIVERSALIS__OPERATING_SYSTEM__LOGGERS__OWNED;NDEBUG"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
@@ -270,6 +274,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\src\packageneric\package.private.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\packageneric\resources.rc"
 				>
 			</File>
 		</Filter>
