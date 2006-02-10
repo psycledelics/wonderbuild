@@ -19,10 +19,10 @@ for example:
 I wanted to setup a .vcproj so that it outputs each .obj file in a directory corresponding to its "full source path"
 rather than putting all .obj file directly at the root of the $(IntDir).
 
-In this case, this mean:
+In this case, this means:
 	src/universalis/exception.cpp                  -> $(IntDir)/universalis/exception.obj
 	src/universalis/operating_system/exception.cpp -> $(IntDir)/universalis/operating_system/exception.obj
-rather than
+rather than:
 	src/universalis/exception.cpp                  -> $(IntDir)/exception.obj
 	src/universalis/operating_system/exception.cpp -> $(IntDir)/exception.obj
 the latter clashing.
