@@ -5,7 +5,7 @@
 ///\file
 ///\meta generic
 #include <diversalis/compiler.hpp>
-#if !defined DIVERSALIS__COMPILER__RESOURCE
+#if !defined DIVERSALIS__COMPILER__RESOURCE // limited to DIVERSALIS__COMPILER__RESOURCE_
 	#error "This file is for resource compilers (only relevant on microsoft's operating system)."
 #endif
 #include <winver.h>
