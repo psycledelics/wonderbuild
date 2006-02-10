@@ -82,7 +82,7 @@ file psycle/coal/foo_bar.hpp:
 			{
 				class UNIVERSALIS__COMPILER__DYNAMIC_LINK foo_bar
 				{
-					// ... every member function is implicitely declated with dynamic linkage here.
+					// ... every member function is implicitely declared with dynamic linkage here.
 				}
 			}
 		}
@@ -97,7 +97,7 @@ the attribute telling the compiler/linker to import the definition of the symbol
 or it may expands to nothing if it's compiled as a static lib or if it's a unix/elf system, or if it's mingw.
 The purpose of the notation is that the sources know nothing about the way they are compiled.
 This let us freely build the source files into whatever modules: we can split a module, regroup several modules into one,
-building as dynamic or as a static lib, etc.. without editing the sources themselves.
+build as a dynamic or as a static lib, etc.. without editing the sources themselves.
 
 .................. <to be continued> 
 some more explanations are (not well) written there: http://retropaganda.info/cgi-bin/archzoom.cgi/psycle@sourceforge.net/packageneric--mainline--LATEST--LATEST/doc/coding-standard?download
