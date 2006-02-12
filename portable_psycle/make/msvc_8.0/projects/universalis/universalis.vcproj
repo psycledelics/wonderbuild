@@ -140,7 +140,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/QIfist /Op- /WL"
+				AdditionalOptions="/WL"
 				Optimization="4"
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
@@ -181,7 +181,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)/$(InputName).dll"
-				LinkIncremental="2"
+				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
 				GenerateDebugInformation="true"

@@ -2,8 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.druttis.dsp(lib)"
+	Name="psycle.plugins.druttis.dsp (static build)"
 	ProjectGUID="{F46EC0F9-8440-418D-91E7-41176165E294}"
+	RootNamespace="psycle.plugins.druttis.dsp (static build)"
 	>
 	<Platforms>
 		<Platform
@@ -39,10 +40,11 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/EHa /QIfist /Op- /WL"
+				AdditionalOptions="/WL"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
 				PreprocessorDefinitions="_LIB"
+				ExceptionHandling="2"
 				BasicRuntimeChecks="3"
 				SmallerTypeCheck="true"
 				RuntimeLibrary="3"
@@ -96,6 +98,7 @@
 			ConfigurationType="4"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.cmd;$(TargetPath)"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -115,7 +118,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/EHa /QIfist /Op- /WL"
+				AdditionalOptions="/WL"
 				Optimization="4"
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
@@ -125,6 +128,7 @@
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
 				PreprocessorDefinitions="_LIB"
 				StringPooling="true"
+				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
 				ForceConformanceInForLoopScope="true"
