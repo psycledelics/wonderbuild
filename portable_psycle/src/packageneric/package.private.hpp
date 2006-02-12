@@ -1,6 +1,7 @@
 ///\file
 ///\brief description of a fake source package (there's no notion of source package in psycle's cvs).
 #pragma once
+#include <packageneric/project.private.hpp>
 
 
 
@@ -12,9 +13,7 @@
 	/// name of the source package
 	#define PACKAGENERIC__PACKAGE__NAME "psycle-cvs"
 	/// description of the source package
-	#define PACKAGENERIC__PACKAGE__DESCRIPTION "modular music studio"
-	/// version of the source package
-	#define PACKAGENERIC__PACKAGE__VERSION "1.9.4"
+	#define PACKAGENERIC__PACKAGE__DESCRIPTION "psycle modular music creation studio"
 	/// major version number of the source package
 	#define PACKAGENERIC__PACKAGE__VERSION__MAJOR 1
 	/// minor version number of the source package
