@@ -7,6 +7,8 @@ some weird things that were in the msvc8.0 project ; i'll try to explain what th
 ========================
 About the .vcproj itself
 
+ERRATA! The trick described below doesn't work because the IDE tries to compile all .cpp files to .obj in one cl.exe command line, passing just one common directory for as the .obj path (/Fo <dir>).
+
 You may have noticed there's a filter (ms's jargon for virtual folder)
 named "psycle/coal", rather than a folder "psycle" with a sub folder "coal" inside it.
 This is a trick i found working in msvc 8.0 but i don't know if it works the same in msvc 7.1.
