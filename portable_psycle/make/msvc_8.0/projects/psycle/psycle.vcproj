@@ -57,11 +57,12 @@
 				PrecompiledHeaderThrough="project.private.hpp"
 				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
 				AssemblerListingLocation="$(IntDir)/"
-				ObjectFile="$(IntDir)/"
+				ObjectFile="$(IntDir)/$(ParentName)/"
 				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
 				BrowseInformation="1"
 				WarningLevel="4"
 				SuppressStartupBanner="true"
+				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
 				DisableSpecificWarnings="4652"
 				ForcedIncludeFiles=""
@@ -164,11 +165,12 @@
 				PrecompiledHeaderThrough="project.private.hpp"
 				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
 				AssemblerListingLocation="$(IntDir)/"
-				ObjectFile="$(IntDir)/"
+				ObjectFile="$(IntDir)/$(ParentName)/"
 				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
 				WarningLevel="4"
 				WarnAsError="false"
 				SuppressStartupBanner="true"
+				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4652"
 				ForcedIncludeFiles="project.private.hpp"
@@ -231,45 +233,53 @@
 	</References>
 	<Files>
 		<Filter
-			Name="operating_system"
+			Name="legacy/operating_system"
 			>
 			<File
-				RelativePath="..\..\..\..\src\operating_system\exception.cpp"
+				RelativePath="..\..\..\..\src\legacy\operating_system\exception.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\operating_system\exception.hpp"
+				RelativePath="..\..\..\..\src\legacy\operating_system\exception.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\operating_system\logger.cpp"
+				RelativePath="..\..\..\..\src\legacy\operating_system\logger.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\operating_system\logger.hpp"
+				RelativePath="..\..\..\..\src\legacy\operating_system\logger.hpp"
 				>
 			</File>
 			<Filter
-				Name="exceptions"
+				Name="legacy/operating_system/exceptions"
 				>
 				<File
-					RelativePath="..\..\..\..\src\operating_system\exceptions\code_description.hpp"
+					RelativePath="..\..\..\..\src\legacy\operating_system\exceptions\code_description.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\operating_system\exceptions.code_description.cpp"
+					RelativePath="..\..\..\..\src\legacy\operating_system\exceptions\code_description.hpp"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="library"
+				Name="legacy/operating_system/exceptions/library"
 				>
 				<File
-					RelativePath="..\..\..\..\src\operating_system\library\export.hpp"
+					RelativePath="..\..\..\..\src\legacy\operating_system\library\begin.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\operating_system\library\import.hpp"
+					RelativePath="..\..\..\..\src\legacy\operating_system\library\end.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\legacy\operating_system\library\export.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\legacy\operating_system\library\import.hpp"
 					>
 				</File>
 			</Filter>
@@ -306,10 +316,10 @@
 				>
 			</File>
 			<Filter
-				Name="devices"
+				Name="psycle/devices"
 				>
 				<Filter
-					Name="output"
+					Name="psycle/devices/output"
 					>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\ASIOInterface.cpp"
@@ -346,7 +356,7 @@
 				</Filter>
 			</Filter>
 			<Filter
-				Name="resources"
+				Name="psycle/resources"
 				Filter="*.bmp"
 				>
 				<File
@@ -495,7 +505,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="file"
+				Name="psycle/file"
 				>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\DataCompression.cpp"
@@ -543,7 +553,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="configuration"
+				Name="psycle/configuration"
 				>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\Configuration.cpp"
@@ -563,7 +573,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="mfc"
+				Name="psycle/mfc"
 				>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\Bitmap.hpp"
@@ -638,7 +648,7 @@
 					>
 				</File>
 				<Filter
-					Name="configuration"
+					Name="psycle/mfc/configuration"
 					>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\ConfigDlg.cpp"
@@ -722,7 +732,7 @@
 					</Filter>
 				</Filter>
 				<Filter
-					Name="machine"
+					Name="psycle/mfc/machine"
 					>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\FrameMachine.cpp"
@@ -789,7 +799,7 @@
 						>
 					</File>
 					<Filter
-						Name="sampler"
+						Name="psycle/mfc/machine/sampler"
 						>
 						<File
 							RelativePath="..\..\..\..\src\psycle\host\EnvDialog.cpp"
@@ -808,7 +818,7 @@
 							>
 						</File>
 						<Filter
-							Name="waveform"
+							Name="psycle/mfc/machine/sampler/waveform"
 							>
 							<File
 								RelativePath="..\..\..\..\src\psycle\host\WaveEdAmplifyDialog.cpp"
@@ -845,7 +855,7 @@
 						</Filter>
 					</Filter>
 					<Filter
-						Name="vst"
+						Name="psycle/mfc/machine/vst"
 						>
 						<File
 							RelativePath="..\..\..\..\src\psycle\host\DefaultVstGui.cpp"
@@ -873,7 +883,7 @@
 						</File>
 					</Filter>
 					<Filter
-						Name="XMSampler"
+						Name="psycle/mfc/machine/XMSampler"
 						>
 						<File
 							RelativePath="..\..\..\..\src\psycle\host\XMSamplerMixerPage.cpp"
@@ -918,7 +928,7 @@
 					</Filter>
 				</Filter>
 				<Filter
-					Name="pattern"
+					Name="psycle/mfc/pattern"
 					>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\PatDlg.cpp"
@@ -938,7 +948,7 @@
 					</File>
 				</Filter>
 				<Filter
-					Name="monitors"
+					Name="psycle/mfc/monitors"
 					>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\InfoDlg.cpp"
@@ -982,7 +992,7 @@
 					</File>
 				</Filter>
 				<Filter
-					Name="midi"
+					Name="psycle/mfc/midi"
 					>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\MidiLearn.cpp"
@@ -995,7 +1005,7 @@
 				</Filter>
 			</Filter>
 			<Filter
-				Name="host"
+				Name="psycle/host"
 				>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\Dsp.cpp"
@@ -1034,56 +1044,8 @@
 					>
 				</File>
 				<Filter
-					Name="machine"
+					Name="psycle/host/machine"
 					>
-					<File
-						RelativePath="..\..\..\..\src\Seib-vsthost\CVSTHost.Seib.cpp"
-						>
-						<FileConfiguration
-							Name="release|Win32"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-							/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\..\..\..\src\Seib-vsthost\CVSTHost.Seib.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\..\src\psycle\host\ImplVstHost.cpp"
-						>
-						<FileConfiguration
-							Name="debug|Win32"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="release|Win32"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-							/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\..\..\..\src\psycle\host\ImplVstHost.hpp"
-						>
-						<FileConfiguration
-							Name="debug|Win32"
-							ExcludedFromBuild="true"
-							>
-							<Tool
-								Name="VCCustomBuildTool"
-							/>
-						</FileConfiguration>
-					</File>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\Machine.cpp"
 						>
@@ -1113,7 +1075,7 @@
 						>
 					</File>
 					<Filter
-						Name="sampler"
+						Name="psycle/host/machine/sampler"
 						>
 						<File
 							RelativePath="..\..\..\..\src\psycle\host\Filter.cpp"
@@ -1141,7 +1103,7 @@
 						</File>
 					</Filter>
 					<Filter
-						Name="XMSampler"
+						Name="psycle/host/machine/XMSampler"
 						>
 						<File
 							RelativePath="..\..\..\..\src\psycle\host\XMInstrument.cpp"
@@ -1162,7 +1124,7 @@
 					</Filter>
 				</Filter>
 				<Filter
-					Name="midi"
+					Name="psycle/host/midi"
 					>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\MidiInput.cpp"
@@ -1175,11 +1137,59 @@
 				</Filter>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="seib/vsthost"
+			>
+			<File
+				RelativePath="..\..\..\..\src\Seib-vsthost\CVSTHost.Seib.cpp"
+				>
+				<FileConfiguration
+					Name="release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\Seib-vsthost\CVSTHost.Seib.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\ImplVstHost.cpp"
+				>
+				<FileConfiguration
+					Name="debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\ImplVstHost.hpp"
+				>
+				<FileConfiguration
+					Name="debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
-		<Global
-			Name="RESOURCE_FILE"
-			Value="\Documents and Settings\All Users\Documentos\Visual C++\portable_psycle\src\psycle\host\resources\resources.rc"
-		/>
 	</Globals>
 </VisualStudioProject>

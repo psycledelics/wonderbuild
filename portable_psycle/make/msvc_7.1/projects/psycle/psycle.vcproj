@@ -260,38 +260,38 @@
 	</References>
 	<Files>
 		<Filter
-			Name="operating_system"
+			Name="legacy/operating_system"
 			Filter="">
 			<File
-				RelativePath="..\..\..\..\src\operating_system\exception.cpp">
+				RelativePath="..\..\..\..\src\legacy\operating_system\exception.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\operating_system\exception.hpp">
+				RelativePath="..\..\..\..\src\legacy\operating_system\exception.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\operating_system\logger.cpp">
+				RelativePath="..\..\..\..\src\legacy\operating_system\logger.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\operating_system\logger.hpp">
+				RelativePath="..\..\..\..\src\legacy\operating_system\logger.hpp">
 			</File>
 			<Filter
-				Name="exceptions"
+				Name="legacy/operating_system/exceptions"
 				Filter="">
 				<File
-					RelativePath="..\..\..\..\src\operating_system\exceptions\code_description.hpp">
+					RelativePath="..\..\..\..\src\legacy\operating_system\exceptions/code_description.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\operating_system\exceptions.code_description.cpp">
+					RelativePath="..\..\..\..\src\legacy\operating_system\exceptions.code_description.cpp">
 				</File>
 			</Filter>
 			<Filter
-				Name="library"
+				Name="legacy/operating_system/library"
 				Filter="">
 				<File
-					RelativePath="..\..\..\..\src\operating_system\library\export.hpp">
+					RelativePath="..\..\..\..\src\legacy\operating_system\library\export.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\operating_system\library\import.hpp">
+					RelativePath="..\..\..\..\src\legacy\operating_system\library\import.hpp">
 				</File>
 			</Filter>
 		</Filter>
