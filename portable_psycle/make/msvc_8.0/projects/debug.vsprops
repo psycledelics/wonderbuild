@@ -5,4 +5,25 @@
 	Name="debug"
 	InheritedPropertySheets=".\common.vsprops"
 	>
+	<Tool
+		Name="VCCLCompilerTool"
+		Optimization="0"
+		EnableIntrinsicFunctions="false"
+		FavorSizeOrSpeed="0"
+		OmitFramePointers="false"
+		EnableFiberSafeOptimizations="false"
+		WholeProgramOptimization="false"
+		BasicRuntimeChecks="3"
+		SmallerTypeCheck="true"
+		RuntimeLibrary="3"
+		BufferSecurityCheck="true"
+		EnableFunctionLevelLinking="true"
+		FloatingPointExceptions="true"
+		BrowseInformation="1"
+		DebugInformationFormat="4"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		LinkIncremental="2"
+	/>
 </VisualStudioPropertySheet>
