@@ -30,7 +30,6 @@
 		AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
 		GenerateDebugInformation="true"
 		ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
-		SubSystem="8"
 		TurnOffAssemblyGeneration="true"
 		ImportLibrary="$(SolutionDir)/output/$(ConfigurationName)/lib/$(InputName).lib"
 	/>
