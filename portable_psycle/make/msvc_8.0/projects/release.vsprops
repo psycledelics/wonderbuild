@@ -19,7 +19,7 @@
 		SmallerTypeCheck="false"
 		RuntimeLibrary="2"
 		BufferSecurityCheck="false"
-		EnableEnhancedInstructionSet="2"
+		EnableEnhancedInstructionSet="1"
 		FloatingPointModel="2"
 		FloatingPointExceptions="false"
 		DebugInformationFormat="3"

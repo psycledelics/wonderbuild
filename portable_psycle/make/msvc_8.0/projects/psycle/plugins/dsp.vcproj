@@ -134,7 +134,7 @@
 				ExceptionHandling="2"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
-				EnableEnhancedInstructionSet="2"
+				EnableEnhancedInstructionSet="1"
 				FloatingPointModel="2"
 				ForceConformanceInForLoopScope="true"
 				RuntimeTypeInfo="true"
