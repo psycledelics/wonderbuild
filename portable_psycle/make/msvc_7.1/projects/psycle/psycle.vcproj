@@ -279,7 +279,7 @@
 					RelativePath="..\..\..\..\src\legacy\operating_system\exceptions/code_description.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\legacy\operating_system\exceptions.code_description.cpp">
+					RelativePath="..\..\..\..\src\legacy\operating_system\exceptions/code_description.cpp">
 				</File>
 			</Filter>
 			<Filter
@@ -858,12 +858,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\Dsp.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\FFT.cpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\FFT.hpp">
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\Filter.cpp">
