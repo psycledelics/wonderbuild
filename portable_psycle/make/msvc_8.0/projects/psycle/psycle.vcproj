@@ -50,6 +50,8 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="htmlhelp.lib"
 				OutputFile="$(OutDir)/$(InputName).exe"
+				SubSystem="2"
+				TurnOffAssemblyGeneration="false"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -114,6 +116,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="htmlhelp.lib"
 				OutputFile="$(OutDir)/$(InputName).exe"
+				TurnOffAssemblyGeneration="false"
 			/>
 			<Tool
 				Name="VCALinkTool"

@@ -74,31 +74,7 @@ rem ----------------
 			set tag=%tag:~1%
 			echo %~n0: tag: %tag%
 		)
-
-	rem =======
-	rem targets
-	rem =======
-	
-		rem set targets=debug release
-		set targets=release
-	
-	rem ===============
-	rem clean and build
-	rem ===============
-	
-		echo %~n0: sourcing mircosoft visual studio 8.0 environement ...
-			rem microsoft made a dumb script that keeps appending things to the env vars,
-			rem so, when invoke many times, we ends up with "too long line", sic. they can rot in hell.
-			rem so, we're saving the env to restore it after.
-			call :save_env
-			call "%VS80ComnTools%\VSVars32" || goto :failed
 		
-		for %%t in (%targets%) do (
-			call :rebuild %%t || ( call :restore_env & goto :failed)
-		)
-		
-		call :restore_env
-	
 	rem =================================================
 	echo %~n0: making the directory to be distributed ...
 	rem =================================================
@@ -119,48 +95,24 @@ rem ----------------
 		)
 		
 		set distribution=psycle.mfc.bin.%stamp%
-		
+
 		mkdir "%distribution%"
 		echo %~n0: directory %distribution% created
+	
+		rem --------------------------------
+		echo %~n0: writing sorry message ...
+		rem --------------------------------
 		
-		rem -----------------------------------------
-		echo %~n0: copying libraries and programs ...
-		rem -----------------------------------------
-		
-			for %%t in (%targets%) do (
-				call :copy_binaries %%t || goto :failed
-			)
-		
-		rem -----------------------------------------
-		echo %~n0: copying end-user documentation ...
-		rem -----------------------------------------
-		
-			mkdir "%distribution%\doc\"
-			xcopy/s ..\..\..\doc\for-end-users\* "%distribution%\doc\" || goto :failed
-		
-		rem -----------------------------------------------
-		echo %~n0: removing cvs files from distribution ...
-		rem -----------------------------------------------
-		
-			for /r "%distribution%" %%i in (CVS) do rmdir/s/q "%%i"
-			for /r "%distribution%" %%i in (.cvsignore) do del/q "%%i"
-		
-		rem ----------------------------------------------------------
-		echo %~n0: converting text files to microsoft end-of-lines ...
-		rem unix2dos is distributed with cygwin
-		rem ----------------------------------------------------------
-		
-			for /r "%distribution%" %%i in (*.txt *.text) do (
-				unix2dos "%%i"
-				echo.
-			)
+			echo %stamp% > %distribution%\README.txt || goto :failed
+			echo. >> %distribution%\README.txt || goto :failed
+			echo Sorry, alpha builds are currently too broken for distribution. >> %distribution%\README.txt || goto :failed
+			echo You can use a stable build instead. >> %distribution%\README.txt || goto :failed
 		
 	rem =============================
 	echo %~n0: making the archive ...
 	rem =============================
 		
-		if "%tag%" == "" (
-			set archive=psycle.mfc.bin.zip
+		set archive=psycle.mfc.bin.zip
 		) else (
 			set archive=psycle.mfc.bin.%tag%.zip
 		)
@@ -211,81 +163,6 @@ rem ----------------
 		rem ----------------------------------------
 		
 			ssh "%sourceforge_user_account%@shell.sourceforge.net" "%sourceforge_group_account%/htdocs/update-timestamps" || goto :failed
-goto :eof
-
-rem ---------------
-rem upx sub routine
-rem ---------------
-:upx
-	upx.exe --overlay=strip --force --strip-relocs=1 --compress-icons=1 --best --crp-ms=999999 --nrv2d --no-backup -o %~p1%~n1.upx%~x1 %1
-goto :eof
-
-rem --------------------
-rem save env sub routine
-rem --------------------
-:save_env
-	set old_path=%PATH%
-	set old_include=%INCLUDE%
-	set old_lib=%LIB%
-goto :eof
-
-rem -----------------------
-rem restore env sub routine
-rem -----------------------
-:restore_env
-	set PATH=%old_path%
-	set INCLUDE=%old_include%
-	set LIB=%old_lib%
-goto :eof
-
-rem -------------------------------------
-rem rebuild (clean and build) sub routine
-rem -------------------------------------
-:rebuild
-	set configuration=%1
-	rem for %%o in (clean build) do (
-	for %%o in (build) do (
-		echo %~n0: %%oing %configuration% ...
-		DevEnv ..\solution.sln /%%o %configuration% /out %configuration%.%%o.log || goto :failed
-	)
-goto :eof
-
-rem -------------
-rem copy binaries
-rem -------------
-:copy_binaries
-	set target=%1
-	echo %~n0: copying %target% ...
-	set source=..\output\%target%\bin\
-	set destination=%distribution%\%target%\
-	set destination_posix=%distribution%/%target%/
-	rem <bohan> Well i think microsoft's documentation about microsoft's xcopy is wrong.
-	rem <bohan> xcopy/f <-- shows what files are being copied.
-	rem <bohan> It turns out it also does something else, like allowing copy of files whose name ends with ".exe".
-	rem <bohan> Also, sometimes, xcopy crashes with a memory access violation... no comment.
-	echo %~n0: copying built libraries and programs ...
-	xcopy/f/i "%source%\*.exe" "%destination%" || goto :failed
-	xcopy/f/i "%source%\*.dll" "%destination%" || goto :failed
-	del/q "%destination%\boost_date_time-*.dll" || goto :failed
-rem	del/q "%destination%\boost_filesystem-*.dll" || goto :failed
-	del/q "%destination%\boost_iostreams-*.dll" || goto :failed
-	del/q "%destination%\boost_program_options-*.dll" || goto :failed
-	del/q "%destination%\boost_python-*.dll" || goto :failed
-	del/q "%destination%\boost_regex-*.dll" || goto :failed
-	del/q "%destination%\boost_serialization-*.dll" || goto :failed
-	del/q "%destination%\boost_signals-*.dll" || goto :failed
-rem	del/q "%destination%\boost_thread-*.dll" || goto :failed
-	del/q "%destination%\boost_wserialization-*.dll" || goto :failed
-	xcopy/f/i "%source%\psycle.plugins\*.dll" "%destination%\PsyclePlugins\" || goto :failed
-rem	sh -c "for i in i $(find ../../../src/psycle/plugins -name \*.prs -or -name \*.text -or -name \*.txt -or -name \*.html) ; do echo cp --verbose $i %destination_posix%/PsyclePlugins/ ; done" || goto :failed
-	xcopy/s/i "..\..\..\closed-source" "%destination%\PsyclePlugins\!!!closed-source!!!" || goto :failed
-
-	echo %~n0: copying microsoft c/c++/gdi+/mfc runtime libraries ...
-	xcopy/f "%VS80ComnTools%\..\..\VC\redist\x86\Microsoft.VC80.CRT\Microsoft.VC80.CRT.manifest" "%destination%" || goto :failed
-	xcopy/f "%VS80ComnTools%\..\..\VC\redist\x86\Microsoft.VC80.CRT\msvcr80.dll"                 "%destination%" || goto :failed
-	xcopy/f "%VS80ComnTools%\..\..\VC\redist\x86\Microsoft.VC80.CRT\msvcp80.dll"                 "%destination%" || goto :failed
-	xcopy/f "%VS80ComnTools%\..\..\VC\redist\x86\Microsoft.VC80.MFC\Microsoft.VC80.MFC.manifest" "%destination%" || goto :failed
-	xcopy/f "%VS80ComnTools%\..\..\VC\redist\x86\Microsoft.VC80.MFC\mfc80.dll"                   "%destination%" || goto :failed
 goto :eof
 
 rem ------
