@@ -112,7 +112,8 @@ rem ----------------
 	echo %~n0: making the archive ...
 	rem =============================
 		
-		set archive=psycle.mfc.bin.zip
+		if "%tag%" == "" (
+			set archive=psycle.mfc.bin.zip
 		) else (
 			set archive=psycle.mfc.bin.%tag%.zip
 		)
