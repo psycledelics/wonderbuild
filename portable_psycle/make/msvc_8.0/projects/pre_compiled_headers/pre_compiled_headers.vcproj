@@ -15,12 +15,9 @@
 	<Configurations>
 		<Configuration
 			Name="debug|Win32"
-			OutputDirectory="$(IntDir)/../"
-			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="2"
+			InheritedPropertySheets="..\debug.vsprops;.\create.vsprops"
 			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.cmd;$(TargetPath)"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -36,56 +33,21 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName="$(IntDir)/$(ProjectName).tlb"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/WL"
-				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
-				MinimalRebuild="true"
-				ExceptionHandling="2"
-				BasicRuntimeChecks="3"
-				SmallerTypeCheck="true"
-				RuntimeLibrary="3"
-				EnableFunctionLevelLinking="true"
-				FloatingPointExceptions="true"
-				ForceConformanceInForLoopScope="true"
-				RuntimeTypeInfo="true"
-				UsePrecompiledHeader="1"
-				PrecompiledHeaderThrough=""
-				PrecompiledHeaderFile="$(OutDir)/$(ProjectName).pch"
-				ProgramDataBaseFileName="$(OutDir)/$(ProjectName).pdb"
-				WarningLevel="4"
-				SuppressStartupBanner="true"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="4"
-				DisableSpecificWarnings="4652"
-				ForcedIncludeFiles=""
-				ShowIncludes="true"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				Culture="1047"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				IgnoreImportLibrary="true"
-				OutputFile="$(IntDir)/$(ProjectName).dll"
-				LinkIncremental="2"
-				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
-				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(IntDir)/$(InputName).pdb"
-				OptimizeForWindows98="1"
-				TurnOffAssemblyGeneration="true"
-				ImportLibrary="$(IntDir)/$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -114,11 +76,8 @@
 		</Configuration>
 		<Configuration
 			Name="release|Win32"
-			OutputDirectory="$(IntDir)/../"
-			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="2"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.cmd;$(TargetPath)"
+			InheritedPropertySheets="..\release.vsprops;.\create.vsprops"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -135,65 +94,21 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TypeLibraryName="$(IntDir)/$(ProjectName).tlb"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/WL"
-				Optimization="4"
-				InlineFunctionExpansion="2"
-				EnableIntrinsicFunctions="true"
-				FavorSizeOrSpeed="1"
-				OmitFramePointers="true"
-				EnableFiberSafeOptimizations="true"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
-				StringPooling="true"
-				MinimalRebuild="true"
-				ExceptionHandling="2"
-				RuntimeLibrary="2"
-				BufferSecurityCheck="false"
-				EnableEnhancedInstructionSet="1"
-				FloatingPointModel="2"
-				ForceConformanceInForLoopScope="true"
-				RuntimeTypeInfo="true"
-				UsePrecompiledHeader="1"
-				PrecompiledHeaderThrough=""
-				PrecompiledHeaderFile="$(OutDir)/$(ProjectName).pch"
-				ProgramDataBaseFileName="$(OutDir)/$(ProjectName).pdb"
-				WarningLevel="4"
-				WarnAsError="false"
-				SuppressStartupBanner="true"
-				Detect64BitPortabilityProblems="true"
-				DebugInformationFormat="3"
-				DisableSpecificWarnings="4652"
-				ForcedIncludeFiles=""
-				ShowIncludes="true"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				Culture="1047"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				IgnoreImportLibrary="true"
-				OutputFile="$(IntDir)/$(ProjectName).dll"
-				LinkIncremental="1"
-				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
-				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(IntDir)/$(InputName).pdb"
-				LargeAddressAware="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				OptimizeForWindows98="1"
-				TurnOffAssemblyGeneration="true"
-				ImportLibrary="$(IntDir)/$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -229,15 +144,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\pre_compiled_headers.private.hpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\..\src\project.hpp"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\..\src\project.private.hpp"
+			RelativePath="..\..\..\..\src\packageneric\pre_compiled_headers.private.hpp"
 			>
 		</File>
 	</Files>

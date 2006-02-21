@@ -3,8 +3,9 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="common"
-	OutputDirectory="$(SolutionDir)/output/$(ConfigurationName)/bin/"
-	IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate/$(ProjectName)/"
+	OutputDirectory="$(TopOutputDir)/bin"
+	IntermediateDirectory="$(TopOutputDir)/intermediate/$(ProjectName)"
+	InheritedPropertySheets=".\top_output_dir.vsprops;.\lib_path.vsprops;.\include_path.vsprops;.\pre_compiled_headers\use.vsprops;.\defines.vsprops"
 	>
 	<Tool
 		Name="VCBscMakeTool"
@@ -13,30 +14,27 @@
 	<Tool
 		Name="VCCLCompilerTool"
 		AdditionalOptions="/WL"
-		AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;"
-		PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;"
 		MinimalRebuild="true"
 		ExceptionHandling="2"
 		ForceConformanceInForLoopScope="true"
 		RuntimeTypeInfo="true"
-		UsePrecompiledHeader="0"
-		ProgramDataBaseFileName="$(IntDir)/program_database.pdb"
 		WarningLevel="4"
 		Detect64BitPortabilityProblems="true"
 	/>
 	<Tool
+		Name="VCLibrarianTool"
+		OutputFile="$(TopOutputDir)/lib/$(InputName).lib"
+	/>
+	<Tool
 		Name="VCLinkerTool"
 		OutputFile="$(OutDir)/$(InputName).dll"
-		AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
 		GenerateDebugInformation="true"
 		ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
 		TurnOffAssemblyGeneration="true"
-		ImportLibrary="$(SolutionDir)/output/$(ConfigurationName)/lib/$(InputName).lib"
+		ImportLibrary="$(TopOutputDir)/lib/$(InputName).lib"
 	/>
 	<Tool
 		Name="VCResourceCompilerTool"
-		PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;"
-		AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;"
 		ResourceOutputFileName="$(IntDir)/$(ParentName)/$(InputName).res"
 	/>
 </VisualStudioPropertySheet>

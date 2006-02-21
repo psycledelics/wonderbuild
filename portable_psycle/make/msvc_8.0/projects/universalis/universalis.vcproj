@@ -4,7 +4,6 @@
 	Version="8.00"
 	Name="universalis"
 	ProjectGUID="{B78DFE59-051A-43FD-B489-775A4982581C}"
-	RootNamespace="universalis"
 	>
 	<Platforms>
 		<Platform
@@ -18,8 +17,6 @@
 			Name="debug|Win32"
 			ConfigurationType="2"
 			InheritedPropertySheets="..\debug.vsprops"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -38,23 +35,19 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="UNIVERSALIS__OPERATING_SYSTEM__LOGGERS__OWNED"
-				ForcedIncludeFiles=""
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories=""
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalLibraryDirectories=""
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -85,8 +78,6 @@
 			Name="release|Win32"
 			ConfigurationType="2"
 			InheritedPropertySheets="..\release.vsprops"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="0"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -106,23 +97,19 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="UNIVERSALIS__OPERATING_SYSTEM__LOGGERS__OWNED"
-				ForcedIncludeFiles=""
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories=""
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalLibraryDirectories=""
 			/>
 			<Tool
 				Name="VCALinkTool"

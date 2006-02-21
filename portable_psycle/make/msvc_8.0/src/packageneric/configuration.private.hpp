@@ -70,4 +70,5 @@
 
 
 
+#define _CRT_SECURE_NO_DEPRECATE
 #define BOOST_THREAD_USE_DLL

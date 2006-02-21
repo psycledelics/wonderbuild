@@ -17,7 +17,7 @@
 		<Configuration
 			Name="unpack|Win32"
 			OutputDirectory="$(SolutionDir)\..\..\..\include"
-			IntermediateDirectory="$(SolutionDir)\output\$(ConfigurationName)\$(ProjectName)\intermediate_output"
+			IntermediateDirectory="$(SolutionDir)\output\$(ConfigurationName)\$(ProjectName)\intermediate"
 			ConfigurationType="0"
 			>
 			<Tool
@@ -25,13 +25,6 @@
 				BuildCommandLine="cmd.exe /c build.cmd"
 				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd &amp;&amp; build.cmd&quot;"
 				CleanCommandLine="cmd.exe /c clean.cmd"
-				Output=""
-				PreprocessorDefinitions=""
-				IncludeSearchPath=""
-				ForcedIncludes=""
-				AssemblySearchPath=""
-				ForcedUsingAssemblies=""
-				CompileAsManaged=""
 			/>
 		</Configuration>
 	</Configurations>
