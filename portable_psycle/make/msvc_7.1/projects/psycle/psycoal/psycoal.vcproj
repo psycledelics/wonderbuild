@@ -235,6 +235,12 @@
 				RelativePath="..\..\..\..\..\src\psycle\coal\arranger.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\..\src\psycle\coal\event.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\psycle\coal\event.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\src\psycle\coal\gear.cpp">
 			</File>
 			<File
