@@ -117,6 +117,8 @@ begin
 	  begin
 		if RegKeyExists(HKEY_CURRENT_USER, 'Software\psycle') then
 			RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER, 'Software\psycle')
+		if RegKeyExists(HKEY_CURRENT_USER, 'Software\AAS\Psycle') then
+			RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER, 'Software\AAS\Psycle')
 	  end;
       if Pos('Clear_Plugin_Cache', Tasks)>0 then
       begin
@@ -130,5 +132,6 @@ begin
   end;
   Result := True;
 end;
+
 
 
