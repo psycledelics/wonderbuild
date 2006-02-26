@@ -808,12 +808,6 @@
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\InfoDlg.hpp">
 					</File>
 					<File
-						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\LoggingWindow.cpp">
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\LoggingWindow.hpp">
-					</File>
-					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MidiMonitorDlg.cpp">
 					</File>
 					<File
