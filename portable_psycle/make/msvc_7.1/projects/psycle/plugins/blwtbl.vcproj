@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="psycle.plugins.druttis.blwtbl(lib)"
+	Name="psycle.plugins.druttis.blwtbl (wavetable)"
 	ProjectGUID="{984A85EE-BA08-473F-9ADB-1C1692DFD77F}"
 	SccProjectName=""
 	SccLocalPath="">
@@ -34,7 +34,6 @@
 				EnableFiberSafeOptimizations="TRUE"
 				OptimizeForProcessor="2"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
-				PreprocessorDefinitions="_USRDLL;BLWTBL_EXPORT"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
@@ -107,7 +106,6 @@
 /WL"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
-				PreprocessorDefinitions="_USRDLL;BLWTBL_EXPORT"
 				ExceptionHandling="FALSE"
 				BasicRuntimeChecks="3"
 				SmallerTypeCheck="TRUE"
@@ -185,7 +183,6 @@
 				EnableFiberSafeOptimizations="TRUE"
 				OptimizeForProcessor="3"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
-				PreprocessorDefinitions="_USRDLL;BLWTBL_EXPORT"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"

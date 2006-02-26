@@ -56,7 +56,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(SolutionDir)/output/$(ConfigurationName)/lib/Dsp.lib blwtbl.lib"
+				AdditionalDependencies="dsp.lib blwtbl.lib"
 				OutputFile="$(OutDir)/$(InputName).dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -128,7 +128,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(SolutionDir)/output/$(ConfigurationName)/lib/Dsp.lib blwtbl.lib"
+				AdditionalDependencies="dsp.lib blwtbl.lib"
 				OutputFile="$(OutDir)/$(InputName).dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -206,7 +206,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(SolutionDir)/output/$(ConfigurationName)/lib/Dsp.lib blwtbl.lib"
+				AdditionalDependencies="dsp.lib blwtbl.lib"
 				OutputFile="$(OutDir)/$(InputName).dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
