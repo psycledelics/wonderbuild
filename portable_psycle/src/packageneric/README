@@ -7,7 +7,7 @@ some weird things that were in the msvc8.0 project ; i'll try to explain what th
 ========================
 About the .vcproj itself
 
-ERRATA! The trick described below doesn't work because the IDE tries to compile all .cpp files to .obj in one cl.exe command line, passing just one common directory for as the .obj path (/Fo <dir>).
+( ERRATUM! The trick described below doesn't work because the IDE tries to compile all .cpp files to .obj in one cl.exe command line, passing just one common directory for as the .obj path (/Fo <dir>). )
 
 You may have noticed there's a filter (ms's jargon for virtual folder)
 named "psycle/coal", rather than a folder "psycle" with a sub folder "coal" inside it.
@@ -49,6 +49,8 @@ for the msvc 8.0 compiler.
 
 ==========================================================================
 About "packageneric" stuff and the boilerplate code in every .cpp and .hpp
+
+( ERRATUM! #include PACKAGENERIC__PRE_COMPILED works fine in gcc and msvc 8 but not in msvc 7.1 )
 
 Each .cpp file first does #include PACKAGENERIC__PRE_COMPILED.
 msvc (and some other compilers) requires that the pre-compiled headers are included first, with one #include statement.
@@ -101,5 +103,4 @@ The purpose of the notation is that the sources know nothing about the way they 
 This let us freely build the source files into whatever modules: we can split a module, regroup several modules into one,
 build as a dynamic or as a static lib, etc.. without editing the sources themselves.
 
-.................. <to be continued> 
 some more explanations are (not well) written there: http://retropaganda.info/cgi-bin/archzoom.cgi/psycle@sourceforge.net/packageneric--mainline--LATEST--LATEST/doc/coding-standard?download
