@@ -10,7 +10,7 @@
 	/// The indirection in the call to # lets the macro expansion on the argument be done first.
 	#define PACKAGENERIC__STRINGIZED(tokens) PACKAGENERIC__STRINGIZED__DETAIL__NO_EXPANSION(tokens)
 
-	//#region DETAIL		
+	//#region DETAIL
 		///\internal
 		/// Don't call this macro directly ; call PACKAGENERIC__STRINGIZED, which calls this macro after macro expansion is done on the argument.
 		///\relates PACKAGENERIC__STRINGIZED
