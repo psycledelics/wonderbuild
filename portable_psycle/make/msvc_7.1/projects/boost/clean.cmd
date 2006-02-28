@@ -1,5 +1,13 @@
 @echo off
 
+
+rem ================================================================================================
+rem disabled because there's no way to make it work on windows.. file and or dirs seems to be locked
+goto :eof
+rem ================================================================================================
+
+
+
 %~d0
 cd %~p0
 
