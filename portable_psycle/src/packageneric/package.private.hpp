@@ -25,5 +25,5 @@
 	/// origin
 	#define PACKAGENERIC__PACKAGE__ORIGIN "the psycle project http://psycle.sourceforge.net"
 	/// copyright
-	#define PACKAGENERIC__PACKAGE__COPYRIGHT "Copyright (C) 1999-2006 the psycledelics community http://psycle.pastnotecut.org"
+	#define PACKAGENERIC__PACKAGE__COPYRIGHT "Copyright (C) 2000-2006 psycle development team http://psycle.pastnotecut.org ; see the AUTHORS file"
 ///\}
