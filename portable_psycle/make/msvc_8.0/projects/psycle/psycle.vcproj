@@ -116,6 +116,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="htmlhelp.lib"
 				OutputFile="$(OutDir)/$(InputName).exe"
+				SubSystem="2"
 				TurnOffAssemblyGeneration="false"
 			/>
 			<Tool
