@@ -98,11 +98,11 @@
 		#if !defined min || !defined max // gdi+ needs min and max in the root namespace :-(
 			#if !defined min
 				/// replacement for mswindows' min macro, but using a template in the root namespace instead of the ubiquitous macro, so we prevent clashes.
-				template<typename T1, T2> bool inline min(T1 const & t1, T2 const & t2) { return t1 < t2 ? t1 : t2; }
+				template<typename T1, typename T2> bool inline min(T1 const & t1, T2 const & t2) { return t1 < t2 ? t1 : t2; }
 			#endif
 			#if !defined max
 				/// replacement for mswindows' max macro, but using a template in the root namespace instead of the ubiquitous macro, so we prevent clashes.
-				template<typename T1, T2> bool inline max(T1 const & t1, T2 const & t2) { return t1 > t2 ? t1 : t2; }
+				template<typename T1, typename T2> bool inline max(T1 const & t1, T2 const & t2) { return t1 > t2 ? t1 : t2; }
 			#endif
 		#endif
 		#include <gdiplus.h>

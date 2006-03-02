@@ -451,6 +451,12 @@
 					RelativePath="..\..\..\..\src\psycle\host\resources\MasterMachine\slider.bmp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\Slider\sliderB.bmp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\Slider\sliderP.bmp">
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\resources\splash copia.bmp">
 				</File>
 				<File
@@ -1026,12 +1032,6 @@
 				</Filter>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath="..\..\..\..\src\psycle\host\resources\Slider\sliderB.bmp">
-		</File>
-		<File
-			RelativePath="..\..\..\..\src\psycle\host\resources\Slider\sliderP.bmp">
-		</File>
 	</Files>
 	<Globals>
 		<Global
