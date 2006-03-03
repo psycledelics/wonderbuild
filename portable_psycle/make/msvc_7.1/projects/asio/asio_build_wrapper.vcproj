@@ -252,26 +252,26 @@
 			Name="asio"
 			Filter="">
 			<File
-				RelativePath="..\..\..\..\src\asio\build_wrapper\asio.hpp">
+				RelativePath="..\..\..\..\src\asio_build_wrapper\asio.hpp">
 			</File>
 			<Filter
 				Name="host"
 				Filter="">
 				<File
-					RelativePath="..\..\..\..\src\asio\build_wrapper\host\ASIOConvertSamples.cpp">
+					RelativePath="..\..\..\..\src\asio_build_wrapper\host\ASIOConvertSamples.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\asio\build_wrapper\host\asiodrivers.cpp">
+					RelativePath="..\..\..\..\src\asio_build_wrapper\host\asiodrivers.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\asio\build_wrapper\host\pc-or-mac.cpp">
+					RelativePath="..\..\..\..\src\asio_build_wrapper\host\pc-or-mac.cpp">
 				</File>
 			</Filter>
 			<Filter
 				Name="common"
 				Filter="">
 				<File
-					RelativePath="..\..\..\..\src\asio\build_wrapper\common\asio.cpp">
+					RelativePath="..\..\..\..\src\asio_build_wrapper\common\asio.cpp">
 				</File>
 			</Filter>
 		</Filter>
