@@ -2,9 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="asio (steinberg&apos;s sdk)"
-	ProjectGUID="{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
-	RootNamespace="asio (steinberg&apos;s sdk)"
+	Name="asio (steinberg&apos;s sdk) (build wrapper)"
+	ProjectGUID="{31F6FB1D-B7DB-4EDB-A2B1-DA1B2F04AF01}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -116,7 +115,7 @@
 				RuntimeLibrary="3"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="3"
+				UsePrecompiledHeader="0"
 				PrecompiledHeaderThrough="packageneric/pre_compiled_headers.private.hpp"
 				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.pch"
 				AssemblerListingLocation="$(IntDir)/"
@@ -146,7 +145,8 @@
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCPreBuildEventTool"
+				CommandLine="cmd.exe /c build.cmd"/>
 			<Tool
 				Name="VCPreLinkEventTool"/>
 			<Tool
@@ -283,6 +283,16 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\packageneric\resources.rc">
+			</File>
+		</Filter>
+		<Filter
+			Name="commands"
+			Filter="">
+			<File
+				RelativePath=".\build.cmd">
+			</File>
+			<File
+				RelativePath=".\clean.cmd">
 			</File>
 		</Filter>
 	</Files>

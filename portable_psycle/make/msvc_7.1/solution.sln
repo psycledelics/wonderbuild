@@ -324,6 +324,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycoal", "projects\psycle\
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "asio (steinberg's sdk) (build wrapper)", "projects\asio\asio_build_wrapper.vcproj", "{31F6FB1D-B7DB-4EDB-A2B1-DA1B2F04AF01}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		debug = debug
@@ -778,6 +783,10 @@ Global
 		{E6148530-C7D4-4E3B-A1D4-5659B096692F}.release.g6.Build.0 = release.g6|Win32
 		{E6148530-C7D4-4E3B-A1D4-5659B096692F}.release.g7.ActiveCfg = release.g7|Win32
 		{E6148530-C7D4-4E3B-A1D4-5659B096692F}.release.g7.Build.0 = release.g7|Win32
+		{31F6FB1D-B7DB-4EDB-A2B1-DA1B2F04AF01}.debug.ActiveCfg = debug|Win32
+		{31F6FB1D-B7DB-4EDB-A2B1-DA1B2F04AF01}.documentation.ActiveCfg = debug|Win32
+		{31F6FB1D-B7DB-4EDB-A2B1-DA1B2F04AF01}.release.g6.ActiveCfg = release.g6|Win32
+		{31F6FB1D-B7DB-4EDB-A2B1-DA1B2F04AF01}.release.g7.ActiveCfg = release.g7|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
