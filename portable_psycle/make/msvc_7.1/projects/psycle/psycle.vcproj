@@ -653,16 +653,6 @@
 					</File>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\FrameMixerMachine.cpp">
-						<FileConfiguration
-							Name="debug|Win32">
-							<Tool
-								Name="VCCLCompilerTool"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="release.g7|Win32">
-							<Tool
-								Name="VCCLCompilerTool"/>
-						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\FrameMixerMachine.hpp">
@@ -1030,6 +1020,12 @@
 				</Filter>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\..\..\src\psycle\host\resources\Slider\VuOff.bmp">
+		</File>
+		<File
+			RelativePath="..\..\..\..\src\psycle\host\resources\Slider\VuOn.bmp">
+		</File>
 	</Files>
 	<Globals>
 		<Global
