@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="psycle"
 	ProjectGUID="{C6292BF4-9E87-4176-9101-A3D29D074B35}"
+	RootNamespace="psycle"
 	>
 	<Platforms>
 		<Platform
@@ -656,6 +657,14 @@
 					</File>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\FrameMachine.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\FrameMixerMachine.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\FrameMixerMachine.hpp"
 						>
 					</File>
 					<File

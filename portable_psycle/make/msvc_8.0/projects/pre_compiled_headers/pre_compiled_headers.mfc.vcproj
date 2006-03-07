@@ -141,11 +141,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="pre_compiled_headers.cpp"
+			RelativePath="..\..\..\..\src\packageneric\pre-compiled.private.hpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\packageneric\pre_compiled_headers.private.hpp"
+			RelativePath="pre_compiled_headers.cpp"
 			>
 		</File>
 	</Files>

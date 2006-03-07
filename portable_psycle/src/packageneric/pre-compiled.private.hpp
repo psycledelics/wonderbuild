@@ -208,6 +208,7 @@
 
 #include <boost/static_assert.hpp>
 #include <boost/filesystem/path.hpp>
+#define BOOST_THREAD_USE_DLL
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/recursive_mutex.hpp>

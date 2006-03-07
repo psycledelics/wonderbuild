@@ -14,7 +14,7 @@
 	/>
 	<UserMacro
 		Name="PreCompiledHeader"
-		Value="packageneric/pre_compiled_headers.private.hpp"
+		Value="packageneric/pre-compiled.private.hpp"
 	/>
 	<UserMacro
 		Name="Defines"
