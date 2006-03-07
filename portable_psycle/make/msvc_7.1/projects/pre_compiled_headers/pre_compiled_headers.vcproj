@@ -245,16 +245,10 @@
 	</References>
 	<Files>
 		<File
+			RelativePath="..\..\..\..\src\packageneric\pre-compiled.private.hpp">
+		</File>
+		<File
 			RelativePath="pre_compiled_headers.cpp">
-		</File>
-		<File
-			RelativePath="..\..\..\..\src\pre_compiled_headers.private.hpp">
-		</File>
-		<File
-			RelativePath="..\..\..\..\src\project.hpp">
-		</File>
-		<File
-			RelativePath="..\..\..\..\src\project.private.hpp">
 		</File>
 	</Files>
 	<Globals>

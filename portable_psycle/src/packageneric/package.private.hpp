@@ -23,7 +23,7 @@
 	/// distribution archive (e.g., unstable, testing, stable)
 	#define PACKAGENERIC__PACKAGE__ARCHIVE "unstable"
 	/// origin
-	#define PACKAGENERIC__PACKAGE__ORIGIN "the psycle project http://psycle.sourceforge.net"
+	#define PACKAGENERIC__PACKAGE__ORIGIN "psycle project http://psycle.sourceforge.net"
 	/// copyright
-	#define PACKAGENERIC__PACKAGE__COPYRIGHT "Copyright (C) 2000-2006 psycle development team http://psycle.pastnotecut.org ; see the AUTHORS file"
+	#define PACKAGENERIC__PACKAGE__COPYRIGHT "copyright 2000-2006 psycle development team http://psycle.pastnotecut.org ; see the AUTHORS file"
 ///\}

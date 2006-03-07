@@ -50,7 +50,7 @@ for the msvc 8.0 compiler.
 ==========================================================================
 About "packageneric" stuff and the boilerplate code in every .cpp and .hpp
 
-( ERRATUM! #include PACKAGENERIC__PRE_COMPILED works fine in gcc and msvc 8 but not in msvc 7.1 )
+( ERRATUM! #include PACKAGENERIC__PRE_COMPILED works fine in gcc and msvc 8 but not in msvc 7.1 ; we have to write #include <packageneric/pre-compiled.private.hpp> )
 
 Each .cpp file first does #include PACKAGENERIC__PRE_COMPILED.
 msvc (and some other compilers) requires that the pre-compiled headers are included first, with one #include statement.
@@ -58,7 +58,7 @@ There's a "Force Include" option for .vcproj files that could be used instead, b
 in the debug build of psycle on msvc7.1, and it's possible some other compiler has no alternative.
 I find that using a macro rather than a hardcoded file path gives us maximum flexibility.
 Since it's the first line of code in the source file, it of course has to be defined on the command line that invokes the compiler.
-The sources shouldn't assume anything about what is included via this #include PACKAGENERIC__PRE_COMPILED ;
+The sources shouldn't assume anything about what is included via this #include <packageneric/pre-compiled.private.hpp> ;
 it could be /dev/null (or an equivalent empty file on windows).
 
 Then each .cpp file does #include PACKAGENERIC.

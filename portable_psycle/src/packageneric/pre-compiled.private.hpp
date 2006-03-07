@@ -1,13 +1,15 @@
 // This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-// Copyright (C) 1999-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
+// Copyright (C) 1999-2006 Johan Boule <bohan@jabber.org>
+// Copyright (C) 2004-2006 Psycledelics http://psycle.pastnotecut.org
+
 ///\file
 ///\brief inclusions of headers which must be pre-compiled.
 ///\meta generic
 ///\meta depends-on-set-of-libraries
-#if defined PACKAGENERIC__PRE_COMPILED_HEADERS
+#if defined PACKAGENERIC__PRE_COMPILED__INCLUDED
 	#error pre-compiled headers already included
 #else
-	#define PACKAGENERIC__PRE_COMPILED_HEADERS
+	#define PACKAGENERIC__PRE_COMPILED__INCLUDED
 #endif
 
 
@@ -18,6 +20,7 @@
 
 
 #include <diversalis/diversalis.hpp>
+#include <universalis/compiler.hpp> // includes universalis' warning settings
 
 
 
@@ -59,8 +62,8 @@
 	#if !defined WIN32_LEAN_AND_MEAN
 		/// excludes rarely used stuff from windows headers.
 		/// beware,
-		/// when including <gdiplus.h>, MIDL_INTERFACE is not declared,
-		/// when including <mmsystem.h>, WAVEFORMATEX is not declared,
+		/// when including <gdiplus.h>, MIDL_INTERFACE is not declared, needs <atlbase.h>.
+		/// when including <mmsystem.h>, WAVEFORMATEX is not declared
 		#define WIN32_LEAN_AND_MEAN
 	#endif
 	#if !defined VC_EXTRA_LEAN
@@ -77,11 +80,11 @@
 		#include <afxwin.h> // mfc core and standard components
 		#include <afxext.h> // mfc extensions
 		//#include <afxdisp.h> // mfc Automation classes
-		#include <afxdtctl.h> // mfc support for Internet Explorer 4 Common Controls
+		#include <afxdtctl.h> // mfc support for Internet Explorer Common Controls
 		#if !defined _AFX_NO_AFXCMN_SUPPORT
 			#include <afxcmn.h> // mfc support for Windows Common Controls
 		#endif
-		#include <afxmt.h> // ???
+		#include <afxmt.h> // multithreading?
 	#else
 		#if !defined WIN32_EXTRA_LEAN
 			#define WIN32_EXTRA_LEAN // for mfc apps, we would get unresolved symbols
@@ -96,18 +99,22 @@
 	// gdi+, must be included after <windows.h> or <afxwin.h>
 	#if defined DIVERSALIS__COMPILER__MICROSOFT ///\todo is gdi+ available with other compilers than microsoft's? by default, it's safer to assume it's not, as usual.
 		#if !defined min || !defined max // gdi+ needs min and max in the root namespace :-(
+			// the standard c++ header <algorithm> defines std::min and std::max, but microsoft named them __cpp_min and __cpp_max, prefering their own macro stuff rather than the standard
 			#if !defined min
 				/// replacement for mswindows' min macro, but using a template in the root namespace instead of the ubiquitous macro, so we prevent clashes.
-				template<typename T1, typename T2> bool inline min(T1 const & t1, T2 const & t2) { return t1 < t2 ? t1 : t2; }
+				template<typename X> X const inline & min(X const & x1, X const & x2) { return x1 < x2 ? x1 : x2; }
 			#endif
 			#if !defined max
 				/// replacement for mswindows' max macro, but using a template in the root namespace instead of the ubiquitous macro, so we prevent clashes.
-				template<typename T1, typename T2> bool inline max(T1 const & t1, T2 const & t2) { return t1 > t2 ? t1 : t2; }
+				template<typename X> X const inline & max(X const & x1, X const & x2) { return x1 > x2 ? x1 : x2; }
 			#endif
 		#endif
-		#include <gdiplus.h>
-		#if defined DIVERSALIS__COMPILER__FEATURE__AUTO_LINK
-			#pragma comment(lib, "gdiplus")
+		#if defined _AFXDLL // when mfc is used, also include <gdiplus.h>
+			//#include <atlbase.h> // for MIDL_INTERFACE used by <gdiplus.h>
+			#include <gdiplus.h>
+			#if defined DIVERSALIS__COMPILER__FEATURE__AUTO_LINK
+				#pragma comment(lib, "gdiplus")
+			#endif
 		#endif
 	#endif
 	#if defined DIVERSALIS__COMPILER__MICROSOFT
@@ -175,6 +182,7 @@
 //#include <csignal>
 //#include <cstdarg>
 #include <cstddef>
+#include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -199,7 +207,6 @@
 //////////////////////////
 
 #include <boost/static_assert.hpp>
-#include <boost/cstdint.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>

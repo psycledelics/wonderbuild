@@ -36,6 +36,7 @@
 				OptimizeForProcessor="2"
 				OptimizeForWindowsApplication="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;"
+				PreprocessorDefinitions="PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
@@ -43,7 +44,7 @@
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
-				PrecompiledHeaderThrough="project.private.hpp"
+				PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
 				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
@@ -83,7 +84,6 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_AFXDLL;NDEBUG"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;;&quot;$(SolutionDir)/../../src/psycle/host/resources&quot;"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
@@ -111,6 +111,7 @@
 /WL"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;"
+				PreprocessorDefinitions="PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;"
 				ExceptionHandling="FALSE"
 				BasicRuntimeChecks="3"
 				SmallerTypeCheck="TRUE"
@@ -119,7 +120,7 @@
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
-				PrecompiledHeaderThrough="project.private.hpp"
+				PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
 				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
@@ -192,6 +193,7 @@
 				OptimizeForProcessor="3"
 				OptimizeForWindowsApplication="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;"
+				PreprocessorDefinitions="PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
@@ -199,7 +201,7 @@
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
-				PrecompiledHeaderThrough="project.private.hpp"
+				PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
 				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
@@ -239,7 +241,6 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_AFXDLL;NDEBUG"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;;&quot;$(SolutionDir)/../../src/psycle/host/resources&quot;"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
@@ -296,9 +297,6 @@
 			Name="psycle"
 			Filter="">
 			<File
-				RelativePath="..\..\..\..\src\configuration.hpp">
-			</File>
-			<File
 				RelativePath="..\..\..\..\src\psycle\host\Constants.hpp">
 			</File>
 			<File
@@ -350,7 +348,7 @@
 			</Filter>
 			<Filter
 				Name="resources"
-				Filter="*.bmp">
+				Filter="">
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\resources\AsioLogo.bmp">
 				</File>
@@ -440,6 +438,11 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\resources\resources.rc2">
+					<FileConfiguration
+						Name="release.g7|Win32">
+						<Tool
+							Name="VCCustomBuildTool"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\resources\sampulse.bmp">
@@ -1019,13 +1022,260 @@
 					</File>
 				</Filter>
 			</Filter>
+			<Filter
+				Name="detail"
+				Filter="">
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\detail\configuration.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\detail\project.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\detail\project.private.hpp">
+				</File>
+			</Filter>
 		</Filter>
-		<File
-			RelativePath="..\..\..\..\src\psycle\host\resources\Slider\VuOff.bmp">
-		</File>
-		<File
-			RelativePath="..\..\..\..\src\psycle\host\resources\Slider\VuOn.bmp">
-		</File>
+		<Filter
+			Name="universalis"
+			Filter="">
+			<File
+				RelativePath="..\..\..\..\src\universalis\exception.cpp">
+				<FileConfiguration
+					Name="debug|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
+						UsePrecompiledHeader="0"
+						ObjectFile="$(IntDir)/$(ParentName)/"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\universalis\universalis.hpp">
+			</File>
+			<Filter
+				Name="universalis/standard_library"
+				Filter="">
+				<File
+					RelativePath="..\..\..\..\src\universalis\standard_library\standard_library.hpp">
+				</File>
+				<Filter
+					Name="universalis/standard_library/exceptions"
+					Filter="">
+					<File
+						RelativePath="..\..\..\..\src\universalis\standard_library\exceptions\code_description.cpp">
+						<FileConfiguration
+							Name="debug|Win32"
+							ExcludedFromBuild="TRUE">
+							<Tool
+								Name="VCCLCompilerTool"
+								PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
+								UsePrecompiledHeader="0"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+				<Filter
+					Name="universalis/standard_library/detail"
+					Filter="">
+					<File
+						RelativePath="..\..\..\..\src\universalis\standard_library\detail\allocators.cpp">
+						<FileConfiguration
+							Name="debug|Win32"
+							ExcludedFromBuild="TRUE">
+							<Tool
+								Name="VCCLCompilerTool"
+								PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
+								UsePrecompiledHeader="0"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="universalis/processor"
+				Filter="">
+				<File
+					RelativePath="..\..\..\..\src\universalis\processor\exception.cpp">
+					<FileConfiguration
+						Name="debug|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
+							UsePrecompiledHeader="0"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\universalis\processor\processor.hpp">
+				</File>
+				<Filter
+					Name="universalis/processor/exceptions"
+					Filter="">
+					<File
+						RelativePath="..\..\..\..\src\universalis\processor\exceptions\code_description.cpp">
+						<FileConfiguration
+							Name="debug|Win32"
+							ExcludedFromBuild="TRUE">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="universalis/operating_system"
+				Filter="">
+				<File
+					RelativePath="..\..\..\..\src\universalis\operating_system\exception.cpp">
+					<FileConfiguration
+						Name="debug|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
+							UsePrecompiledHeader="0"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\universalis\operating_system\loggers.cpp">
+					<FileConfiguration
+						Name="debug|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
+							UsePrecompiledHeader="0"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\universalis\operating_system\operating_system.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\universalis\operating_system\terminal.cpp">
+					<FileConfiguration
+						Name="debug|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
+							UsePrecompiledHeader="0"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+				</File>
+				<Filter
+					Name="universalis/operating_system/threads"
+					Filter="">
+					<File
+						RelativePath="..\..\..\..\src\universalis\operating_system\threads\id.cpp">
+						<FileConfiguration
+							Name="debug|Win32"
+							ExcludedFromBuild="TRUE">
+							<Tool
+								Name="VCCLCompilerTool"
+								PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
+								UsePrecompiledHeader="0"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\universalis\operating_system\threads\sleep.cpp">
+						<FileConfiguration
+							Name="debug|Win32"
+							ExcludedFromBuild="TRUE">
+							<Tool
+								Name="VCCLCompilerTool"
+								PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
+								UsePrecompiledHeader="0"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+				<Filter
+					Name="universalis/operating_system/exceptions"
+					Filter="">
+					<File
+						RelativePath="..\..\..\..\src\universalis\operating_system\exceptions\code_description.cpp">
+						<FileConfiguration
+							Name="debug|Win32"
+							ExcludedFromBuild="TRUE">
+							<Tool
+								Name="VCCLCompilerTool"
+								PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
+								UsePrecompiledHeader="0"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+				<Filter
+					Name="universalis/operating_system/dynamic_link"
+					Filter="">
+					<File
+						RelativePath="..\..\..\..\src\universalis\operating_system\dynamic_link\resolver.cpp">
+						<FileConfiguration
+							Name="debug|Win32"
+							ExcludedFromBuild="TRUE">
+							<Tool
+								Name="VCCLCompilerTool"
+								PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
+								UsePrecompiledHeader="0"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+				<Filter
+					Name="universalis/operating_system/detail"
+					Filter="">
+					<File
+						RelativePath="..\..\..\..\src\universalis\operating_system\detail\check_version.cpp">
+						<FileConfiguration
+							Name="debug|Win32"
+							ExcludedFromBuild="TRUE">
+							<Tool
+								Name="VCCLCompilerTool"
+								PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
+								UsePrecompiledHeader="0"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="universalis/compiler"
+				Filter="">
+				<File
+					RelativePath="..\..\..\..\src\universalis\compiler\compiler.hpp">
+				</File>
+				<Filter
+					Name="universalis/compiler/exceptions"
+					Filter="">
+					<File
+						RelativePath="..\..\..\..\src\universalis\compiler\exceptions\ellipsis.cpp">
+						<FileConfiguration
+							Name="debug|Win32"
+							ExcludedFromBuild="TRUE">
+							<Tool
+								Name="VCCLCompilerTool"
+								PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
+								UsePrecompiledHeader="0"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="packagneric"
+			Filter="">
+			<File
+				RelativePath=".\src\packageneric\module.private.hpp">
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 		<Global
