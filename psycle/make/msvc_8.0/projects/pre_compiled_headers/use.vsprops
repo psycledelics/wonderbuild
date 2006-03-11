@@ -7,10 +7,14 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		UsePrecompiledHeader="0"
+		UsePrecompiledHeader="2"
 		PrecompiledHeaderThrough="$(PreCompiledHeader)"
 		PrecompiledHeaderFile="$(TopOutputDir)/intermediate/pre_compiled_headers.pch"
 		ProgramDataBaseFileName="$(TopOutputDir)/intermediate/pre_compiled_headers.pdb"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="$(PreCompiledObject)"
 	/>
 	<UserMacro
 		Name="PreCompiledHeader"
@@ -21,5 +25,9 @@
 		Value="PACKAGENERIC__PRE_COMPILED=&lt;$(PreCompiledHeader)&gt;"
 		InheritsFromParent="true"
 		Delimiter=";"
+	/>
+	<UserMacro
+		Name="PreCompiledObject"
+		Value="$(TopOutputDir)/intermediate/pre_compiled_headers/pre_compiled_headers.obj"
 	/>
 </VisualStudioPropertySheet>

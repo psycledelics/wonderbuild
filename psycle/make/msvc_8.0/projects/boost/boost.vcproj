@@ -16,15 +16,23 @@
 	<Configurations>
 		<Configuration
 			Name="unpack|Win32"
-			OutputDirectory="$(SolutionDir)\..\..\..\include"
-			IntermediateDirectory="$(SolutionDir)\output\$(ConfigurationName)\$(ProjectName)\intermediate"
+			OutputDirectory="$(TopSrcDir)/include"
+			IntermediateDirectory="$(TopOutputDir)/intermediate/intermediate"
 			ConfigurationType="0"
+			InheritedPropertySheets="..\top_output_dir.vsprops;..\top_src_dir.vsprops"
 			>
 			<Tool
 				Name="VCNMakeTool"
 				BuildCommandLine="cmd.exe /c build.cmd"
 				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd &amp;&amp; build.cmd&quot;"
 				CleanCommandLine="cmd.exe /c clean.cmd"
+				Output=""
+				PreprocessorDefinitions=""
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
 			/>
 		</Configuration>
 	</Configurations>

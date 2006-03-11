@@ -46,12 +46,10 @@
 				UsePrecompiledHeader="3"
 				PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
 				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
-				AssemblerListingLocation="$(IntDir)/"
-				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
 				WarningLevel="4"
-				WarnAsError="FALSE"
 				SuppressStartupBanner="TRUE"
+				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4652"
 				ForcedIncludeFiles=""/>
@@ -112,6 +110,7 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;"
 				PreprocessorDefinitions="PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;"
+				MinimalRebuild="TRUE"
 				ExceptionHandling="FALSE"
 				BasicRuntimeChecks="3"
 				SmallerTypeCheck="TRUE"
@@ -122,12 +121,11 @@
 				UsePrecompiledHeader="3"
 				PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
 				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
-				AssemblerListingLocation="$(IntDir)/"
-				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
 				BrowseInformation="1"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
+				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="4"
 				DisableSpecificWarnings="4652"
 				ForcedIncludeFiles=""/>
@@ -203,12 +201,10 @@
 				UsePrecompiledHeader="3"
 				PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
 				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
-				AssemblerListingLocation="$(IntDir)/"
-				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
 				WarningLevel="4"
-				WarnAsError="FALSE"
 				SuppressStartupBanner="TRUE"
+				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4652"
 				ForcedIncludeFiles=""/>
@@ -467,6 +463,12 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\resources\Toolbar.bmp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\Slider\VuOff.bmp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\Slider\VuOn.bmp">
 				</File>
 			</Filter>
 			<Filter
@@ -1042,12 +1044,21 @@
 			<File
 				RelativePath="..\..\..\..\src\universalis\exception.cpp">
 				<FileConfiguration
-					Name="debug|Win32"
-					ExcludedFromBuild="TRUE">
+					Name="release.g6|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
-						UsePrecompiledHeader="0"
+						ObjectFile="$(IntDir)/$(ParentName)/"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(ParentName)/"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="release.g7|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
 						ObjectFile="$(IntDir)/$(ParentName)/"/>
 				</FileConfiguration>
 			</File>
@@ -1066,12 +1077,21 @@
 					<File
 						RelativePath="..\..\..\..\src\universalis\standard_library\exceptions\code_description.cpp">
 						<FileConfiguration
-							Name="debug|Win32"
-							ExcludedFromBuild="TRUE">
+							Name="release.g6|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
-								PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
-								UsePrecompiledHeader="0"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"/>
 						</FileConfiguration>
 					</File>
@@ -1082,12 +1102,21 @@
 					<File
 						RelativePath="..\..\..\..\src\universalis\standard_library\detail\allocators.cpp">
 						<FileConfiguration
-							Name="debug|Win32"
-							ExcludedFromBuild="TRUE">
+							Name="release.g6|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
-								PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
-								UsePrecompiledHeader="0"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"/>
 						</FileConfiguration>
 					</File>
@@ -1099,12 +1128,21 @@
 				<File
 					RelativePath="..\..\..\..\src\universalis\processor\exception.cpp">
 					<FileConfiguration
-						Name="debug|Win32"
-						ExcludedFromBuild="TRUE">
+						Name="release.g6|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
-							UsePrecompiledHeader="0"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release.g7|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)/$(ParentName)/"/>
 					</FileConfiguration>
 				</File>
@@ -1117,8 +1155,19 @@
 					<File
 						RelativePath="..\..\..\..\src\universalis\processor\exceptions\code_description.cpp">
 						<FileConfiguration
-							Name="debug|Win32"
-							ExcludedFromBuild="TRUE">
+							Name="release.g6|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g7|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"/>
@@ -1132,24 +1181,42 @@
 				<File
 					RelativePath="..\..\..\..\src\universalis\operating_system\exception.cpp">
 					<FileConfiguration
-						Name="debug|Win32"
-						ExcludedFromBuild="TRUE">
+						Name="release.g6|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
-							UsePrecompiledHeader="0"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release.g7|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)/$(ParentName)/"/>
 					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\universalis\operating_system\loggers.cpp">
 					<FileConfiguration
-						Name="debug|Win32"
-						ExcludedFromBuild="TRUE">
+						Name="release.g6|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
-							UsePrecompiledHeader="0"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release.g7|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)/$(ParentName)/"/>
 					</FileConfiguration>
 				</File>
@@ -1157,14 +1224,44 @@
 					RelativePath="..\..\..\..\src\universalis\operating_system\operating_system.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\operating_system\terminal.cpp">
+					RelativePath="..\..\..\..\src\universalis\operating_system\paths.cpp">
 					<FileConfiguration
-						Name="debug|Win32"
-						ExcludedFromBuild="TRUE">
+						Name="release.g6|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
-							UsePrecompiledHeader="0"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release.g7|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\universalis\operating_system\terminal.cpp">
+					<FileConfiguration
+						Name="release.g6|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release.g7|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)/$(ParentName)/"/>
 					</FileConfiguration>
 				</File>
@@ -1174,24 +1271,42 @@
 					<File
 						RelativePath="..\..\..\..\src\universalis\operating_system\threads\id.cpp">
 						<FileConfiguration
-							Name="debug|Win32"
-							ExcludedFromBuild="TRUE">
+							Name="release.g6|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
-								PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
-								UsePrecompiledHeader="0"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"/>
 						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="..\..\..\..\src\universalis\operating_system\threads\sleep.cpp">
 						<FileConfiguration
-							Name="debug|Win32"
-							ExcludedFromBuild="TRUE">
+							Name="release.g6|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
-								PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
-								UsePrecompiledHeader="0"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"/>
 						</FileConfiguration>
 					</File>
@@ -1202,12 +1317,21 @@
 					<File
 						RelativePath="..\..\..\..\src\universalis\operating_system\exceptions\code_description.cpp">
 						<FileConfiguration
-							Name="debug|Win32"
-							ExcludedFromBuild="TRUE">
+							Name="release.g6|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
-								PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
-								UsePrecompiledHeader="0"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"/>
 						</FileConfiguration>
 					</File>
@@ -1218,12 +1342,21 @@
 					<File
 						RelativePath="..\..\..\..\src\universalis\operating_system\dynamic_link\resolver.cpp">
 						<FileConfiguration
-							Name="debug|Win32"
-							ExcludedFromBuild="TRUE">
+							Name="release.g6|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
-								PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
-								UsePrecompiledHeader="0"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"/>
 						</FileConfiguration>
 					</File>
@@ -1234,12 +1367,21 @@
 					<File
 						RelativePath="..\..\..\..\src\universalis\operating_system\detail\check_version.cpp">
 						<FileConfiguration
-							Name="debug|Win32"
-							ExcludedFromBuild="TRUE">
+							Name="release.g6|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
-								PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
-								UsePrecompiledHeader="0"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"/>
 						</FileConfiguration>
 					</File>
@@ -1257,15 +1399,53 @@
 					<File
 						RelativePath="..\..\..\..\src\universalis\compiler\exceptions\ellipsis.cpp">
 						<FileConfiguration
-							Name="debug|Win32"
-							ExcludedFromBuild="TRUE">
+							Name="release.g6|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
-								PreprocessorDefinitions="PACKAGENERIC__PRE_COMPILED=&lt;packageneric/null.private.hpp&gt;;PACKAGENERIC=&lt;packageneric/null.private.hpp&gt;"
-								UsePrecompiledHeader="0"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"/>
 						</FileConfiguration>
 					</File>
+				</Filter>
+				<Filter
+					Name="universalis/compiler/detail"
+					Filter="">
+					<Filter
+						Name="universalis/compiler/detail/pragmatic"
+						Filter="">
+						<File
+							RelativePath="..\..\..\..\src\universalis\compiler\detail\pragmatic\demangle.cpp">
+							<FileConfiguration
+								Name="release.g6|Win32">
+								<Tool
+									Name="VCCLCompilerTool"
+									ObjectFile="$(IntDir)/$(ParentName)/"/>
+							</FileConfiguration>
+							<FileConfiguration
+								Name="debug|Win32">
+								<Tool
+									Name="VCCLCompilerTool"
+									ObjectFile="$(IntDir)/$(ParentName)/"/>
+							</FileConfiguration>
+							<FileConfiguration
+								Name="release.g7|Win32">
+								<Tool
+									Name="VCCLCompilerTool"
+									ObjectFile="$(IntDir)/$(ParentName)/"/>
+							</FileConfiguration>
+						</File>
+					</Filter>
 				</Filter>
 			</Filter>
 		</Filter>

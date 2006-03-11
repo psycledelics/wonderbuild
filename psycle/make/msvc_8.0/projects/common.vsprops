@@ -16,8 +16,6 @@
 		AdditionalOptions="/WL"
 		MinimalRebuild="true"
 		ExceptionHandling="2"
-		ForceConformanceInForLoopScope="true"
-		RuntimeTypeInfo="true"
 		WarningLevel="4"
 		Detect64BitPortabilityProblems="true"
 	/>

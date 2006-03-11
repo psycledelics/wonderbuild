@@ -36,6 +36,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="LIGHT"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -97,6 +98,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="LIGHT"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"

@@ -35,7 +35,7 @@
 				PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
 				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.pch"
 				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.pdb"
-				WarningLevel="3"
+				WarningLevel="4"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="4"
 				ForcedIncludeFiles=""/>

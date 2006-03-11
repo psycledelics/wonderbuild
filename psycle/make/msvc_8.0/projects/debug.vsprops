@@ -19,7 +19,6 @@
 		BufferSecurityCheck="true"
 		EnableFunctionLevelLinking="true"
 		FloatingPointExceptions="true"
-		BrowseInformation="1"
 		DebugInformationFormat="4"
 	/>
 	<Tool

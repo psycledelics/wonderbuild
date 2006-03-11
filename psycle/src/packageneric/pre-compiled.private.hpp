@@ -19,8 +19,7 @@
 
 
 
-#include <diversalis/diversalis.hpp>
-#include <universalis/compiler.hpp> // includes universalis' warning settings
+#include <diversalis/compiler.hpp>
 
 
 
@@ -30,8 +29,18 @@
 
 
 #if defined DIVERSALIS__COMPILER__MICROSOFT
-	#pragma message("parsing " __FILE__)
+	#pragma message("packageneric::pre_compiled:: parsing " __FILE__)
 #endif
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+#include <diversalis/diversalis.hpp>
+#include <universalis/compiler.hpp> // includes universalis' warning settings
 
 
 
@@ -55,6 +64,9 @@
 // os-specific
 ///////////////
 
+#if defined DIVERSALIS__COMPILER__MICROSOFT
+	#pragma message("packageneric::pre_compiled:: parsing operating-system specific headers")
+#endif
 #if defined DIVERSALIS__OPERATING_SYSTEM__MICROSOFT
 	#if defined DIVERSALIS__COMPILER__MICROSOFT
 		#pragma warning(push) // don't let microsoft mess around with our warning settings
@@ -75,6 +87,9 @@
 		#define NOMINMAX
 	#endif
 	#if defined _AFXDLL // when mfc is used
+		#if defined DIVERSALIS__COMPILER__MICROSOFT
+			#pragma message("packageneric::pre_compiled:: parsing mfc headers")
+		#endif
 		#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS // some CString constructors will be explicit
 		#define _AFX_ALL_WARNINGS // turns off mfc's hiding of some common and often safely ignored warning messages
 		#include <afxwin.h> // mfc core and standard components
@@ -85,6 +100,9 @@
 			#include <afxcmn.h> // mfc support for Windows Common Controls
 		#endif
 		#include <afxmt.h> // multithreading?
+		#if defined DIVERSALIS__COMPILER__MICROSOFT
+			#pragma message("packageneric::pre_compiled:: done parsing mfc headers")
+		#endif
 	#else
 		#if !defined WIN32_EXTRA_LEAN
 			#define WIN32_EXTRA_LEAN // for mfc apps, we would get unresolved symbols
@@ -121,12 +139,23 @@
 		#pragma warning(pop) // don't let microsoft mess around with our warning settings
 	#endif
 #endif
+#if defined DIVERSALIS__COMPILER__MICROSOFT
+	#pragma message("packageneric::pre_compiled:: done parsing operating-system specific headers")
+#endif
 
 
 
 ////////////////
 // c++ standard
 ////////////////
+
+#if defined DIVERSALIS__COMPILER__MICROSOFT
+	#pragma message("packageneric::pre_compiled:: parsing standard c++ headers")
+#endif
+
+#if defined DIVERSALIS__COMPILER__MICROSOFT
+	#define _CRT_SECURE_NO_DEPRECATE
+#endif
 
 #if defined DIVERSALIS__COMPILER__MICROSOFT
 	#pragma warning(push)
@@ -190,6 +219,10 @@
 //#include <cwchar>
 //#include <cwctype>
 
+#if defined DIVERSALIS__COMPILER__MICROSOFT
+	#pragma message("packageneric::pre_compiled:: done parsing standard c++ headers")
+#endif
+
 
 
 /////////
@@ -197,7 +230,13 @@
 /////////
 
 #if defined DIVERSALIS__OPERATING_SYSTEM__POSIX
+	#if defined DIVERSALIS__COMPILER__MICROSOFT
+		#pragma message("packageneric::pre_compiled:: parsing standard posix headers")
+	#endif
 	#include <sys/unistd.h>
+	#if defined DIVERSALIS__COMPILER__MICROSOFT
+		#pragma message("packageneric::pre_compiled:: done parsing standard posix headers")
+	#endif
 #endif
 
 
@@ -206,6 +245,9 @@
 // boost http://boost.org
 //////////////////////////
 
+#if defined DIVERSALIS__COMPILER__MICROSOFT
+	#pragma message("packageneric::pre_compiled:: parsing boost headers")
+#endif
 #include <boost/static_assert.hpp>
 #include <boost/filesystem/path.hpp>
 #define BOOST_THREAD_USE_DLL
@@ -215,6 +257,9 @@
 //#include <boost/thread/read_write_mutex.hpp>
 #include <boost/thread/condition.hpp>
 // huge include! #include <boost/spirit.hpp>
+#if defined DIVERSALIS__COMPILER__MICROSOFT
+	#pragma message("packageneric::pre_compiled:: done parsing boost headers")
+#endif
 
 
 
@@ -235,7 +280,7 @@
 
 
 #if defined DIVERSALIS__COMPILER__MICROSOFT
-	#pragma message("done parsing " __FILE__)
+	#pragma message("packageneric::pre_compiled:: done parsing " __FILE__)
 #endif
 
 

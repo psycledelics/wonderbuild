@@ -16,8 +16,9 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\debug.vsprops;.\create.vsprops"
+			InheritedPropertySheets="..\debug.vsprops;.\use.mfc.vsprops;.\create.vsprops"
 			UseOfMFC="2"
+			ManagedExtensions="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -36,6 +37,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -48,6 +50,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AssemblyDebug="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -77,8 +80,9 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\release.vsprops;.\create.vsprops"
+			InheritedPropertySheets="..\release.vsprops;.\use.mfc.vsprops;.\create.vsprops"
 			UseOfMFC="2"
+			ManagedExtensions="0"
 			WholeProgramOptimization="1"
 			>
 			<Tool

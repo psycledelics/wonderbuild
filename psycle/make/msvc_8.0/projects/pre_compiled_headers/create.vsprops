@@ -20,4 +20,8 @@
 		ProgramDatabaseFile="$(IntDir)/$(InputName).pdb"
 		ImportLibrary="$(IntDir)/$(InputName).lib"
 	/>
+	<UserMacro
+		Name="PreCompiledObject"
+		Value=""
+	/>
 </VisualStudioPropertySheet>
