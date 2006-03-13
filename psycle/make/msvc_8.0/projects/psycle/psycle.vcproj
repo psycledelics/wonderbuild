@@ -208,10 +208,6 @@
 			Name="psycle"
 			>
 			<File
-				RelativePath="..\..\..\..\src\configuration.hpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\..\src\psycle\host\Constants.hpp"
 				>
 			</File>
