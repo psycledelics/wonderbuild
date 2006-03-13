@@ -912,6 +912,9 @@
 					Name="machine"
 					Filter="">
 					<File
+						RelativePath="..\..\..\..\src\psycle\host\convert_internal_machines.hpp">
+					</File>
+					<File
 						RelativePath="..\..\..\..\src\Seib-vsthost\CVSTHost.Seib.cpp">
 						<FileConfiguration
 							Name="release.g6|Win32"
