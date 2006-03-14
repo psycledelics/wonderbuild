@@ -452,7 +452,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\ITModule2.h"
+					RelativePath="..\..\..\..\src\psycle\host\ITModule2.hpp"
 					>
 				</File>
 				<File
