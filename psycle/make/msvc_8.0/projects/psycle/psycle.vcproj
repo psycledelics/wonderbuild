@@ -1068,6 +1068,14 @@
 					</File>
 				</Filter>
 			</Filter>
+			<Filter
+				Name="legacy"
+				>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\legacy\old_file_format.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="seib/vsthost"
@@ -1121,6 +1129,10 @@
 				</FileConfiguration>
 			</File>
 		</Filter>
+		<File
+			RelativePath="..\..\..\..\Changelog"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
