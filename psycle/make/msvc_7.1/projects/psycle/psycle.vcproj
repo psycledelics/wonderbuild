@@ -1437,37 +1437,11 @@
 			Name="legacy/operating_system"
 			Filter="">
 			<File
-				RelativePath="..\..\..\..\src\legacy\operating_system\exception.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\legacy\operating_system\exception.hpp">
-			</File>
-			<File
 				RelativePath="..\..\..\..\src\legacy\operating_system\logger.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\legacy\operating_system\logger.hpp">
 			</File>
-			<Filter
-				Name="legacy/operating_system/exceptions"
-				Filter="">
-				<File
-					RelativePath="..\..\..\..\src\legacy\operating_system\exceptions\code_description.cpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\legacy\operating_system\exceptions\code_description.hpp">
-				</File>
-			</Filter>
-			<Filter
-				Name="legacy/operating_system/library"
-				Filter="">
-				<File
-					RelativePath="..\..\..\..\src\legacy\operating_system\library\export.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\legacy\operating_system\library\import.hpp">
-				</File>
-			</Filter>
 		</Filter>
 	</Files>
 	<Globals>
