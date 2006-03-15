@@ -276,7 +276,8 @@ rem	del/q "%destination%\boost_filesystem-*.dll" || goto :failed
 	del/q "%destination%\boost_signals-*.dll" || goto :failed
 rem	del/q "%destination%\boost_thread-*.dll" || goto :failed
 	del/q "%destination%\boost_wserialization-*.dll" || goto :failed
-	xcopy/f/i "%source%\psycle.plugins\*.dll" "%destination%\PsyclePlugins\" || goto :failed
+rem	xcopy/f/i "%source%\psycle.plugins\*.dll" "%destination%\PsyclePlugins\" || goto :failed
+	xcopy/f/i "%source%\psycle.plugins\*.dll" "%destination%\" || goto :failed
 rem	sh -c "for i in i $(find ../../../src/psycle/plugins -name \*.prs -or -name \*.text -or -name \*.txt -or -name \*.html) ; do echo cp --verbose $i %destination_posix%/PsyclePlugins/ ; done" || goto :failed
 	xcopy/s/i "..\..\..\closed-source" "%destination%\PsyclePlugins\!!!closed-source!!!" || goto :failed
 
