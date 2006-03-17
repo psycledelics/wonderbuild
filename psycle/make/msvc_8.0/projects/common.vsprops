@@ -13,7 +13,6 @@
 	/>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalOptions="/WL"
 		MinimalRebuild="true"
 		ExceptionHandling="2"
 		WarningLevel="4"

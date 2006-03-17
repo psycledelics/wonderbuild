@@ -7,6 +7,7 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
+		AdditionalOptions="/WL"
 		Optimization="4"
 		InlineFunctionExpansion="2"
 		EnableIntrinsicFunctions="true"
