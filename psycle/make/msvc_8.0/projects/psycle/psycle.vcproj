@@ -387,6 +387,14 @@
 					RelativePath="..\..\..\..\src\psycle\host\resources\Toolbar.bmp"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\Slider\VuOff.bmp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\Slider\VuOn.bmp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="psycle/file"
