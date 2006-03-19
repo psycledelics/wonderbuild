@@ -250,6 +250,7 @@
 #endif
 #include <boost/version.hpp>
 #include <boost/static_assert.hpp>
+#include "boost/multi_array.hpp"
 #include <boost/filesystem/path.hpp>
 #define BOOST_THREAD_USE_DLL
 #include <boost/thread/thread.hpp>
