@@ -5,22 +5,6 @@
 	Name="program"
 	>
 	<Tool
-		Name="VCCLCompilerTool"
-		Optimization="0"
-		EnableIntrinsicFunctions="false"
-		FavorSizeOrSpeed="0"
-		OmitFramePointers="false"
-		EnableFiberSafeOptimizations="false"
-		WholeProgramOptimization="false"
-		BasicRuntimeChecks="3"
-		SmallerTypeCheck="true"
-		RuntimeLibrary="3"
-		BufferSecurityCheck="true"
-		EnableFunctionLevelLinking="true"
-		FloatingPointExceptions="true"
-		DebugInformationFormat="4"
-	/>
-	<Tool
 		Name="VCLinkerTool"
 		OutputFile="$(OutDir)/$(InputName).exe"
 		TurnOffAssemblyGeneration="false"

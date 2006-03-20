@@ -10,7 +10,7 @@
 #endif
 #include <winver.h>
 #include PACKAGENERIC
-#if defined PACKAGENERIC__MODULE__LOGO
+#if defined PACKAGENERIC__MODULE__LOGO && defined DIVERSALIS__COMPILER__GNU // only enabled with mingw because microsoft's rc.exe's preprocessor doesn't expand the what we put after 1 ICON DISCARDABLE
 	1 ICON DISCARDABLE "../" PACKAGENERIC__CONFIGURATION__STAGE_PATH__BUILD_TO_SOURCE "/pixmaps/" PACKAGENERIC__MODULE__LOGO ".ico"
 #endif
 // http://msdn.microsoft.com/library/default.asp?url=/library/en-us/tools/tools/versioninfo_resource.asp
