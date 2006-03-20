@@ -1,23 +1,4 @@
 # !/usr/bin/automake
 
-include $(top_srcdir)/packageneric/package/modules/lib.psycle.engine.am
-include $(top_srcdir)/packageneric/package/modules/lib.psycle.host.am
-
 include $(top_srcdir)/packageneric/package/modules/lib.psycle.text.am
 include $(top_srcdir)/packageneric/package/modules/bin.psycle.text.am
-
-include $(top_srcdir)/packageneric/package/modules/lib.psycle.gui.am
-include $(top_srcdir)/packageneric/package/modules/bin.psycle.gui.am
-include $(top_srcdir)/packageneric/package/modules/bin.psycle.gui.x-window.am
-
-include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.sine.am
-include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.bipolar-filter.am
-include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.additioner.am
-include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.multiplier.am
-
-include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.output.gstreamer.am
-#include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.output.jack.am
-include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.output.alsa.am
-#include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.output.asio.am
-include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.output.direct-sound.am
-include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.output.default.am
