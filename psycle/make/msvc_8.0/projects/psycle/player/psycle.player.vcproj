@@ -16,7 +16,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\debug.vsprops;..\pre_compiled_headers\use.vsprops"
+			InheritedPropertySheets="..\..\debug.vsprops;..\..\program.vsprops"
 			UseOfMFC="2"
 			ManagedExtensions="0"
 			ExcludeBuckets="5;6;8;15;16;18;20"
@@ -50,8 +50,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/$(InputName).exe"
-				TurnOffAssemblyGeneration="false"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -81,7 +79,7 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\release.vsprops;..\pre_compiled_headers\use.vsprops"
+			InheritedPropertySheets="..\..\release.vsprops;..\..\program.vsprops"
 			WholeProgramOptimization="1"
 			ExcludeBuckets="5;6;8;15;16;18;20"
 			>
@@ -114,8 +112,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/$(InputName).exe"
-				TurnOffAssemblyGeneration="false"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -147,8 +143,32 @@
 	</References>
 	<Files>
 		<Filter
-			Name="psycle"
+			Name="psycle/player"
 			>
+			<File
+				RelativePath="..\..\..\..\..\src\psycle\player\main.cpp"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="packageneric"
+			>
+			<File
+				RelativePath="..\..\..\src\packageneric\configuration.private.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\packageneric\module.private.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\packageneric\package.private.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\src\packageneric\resources.rc"
+				>
+			</File>
 		</Filter>
 		<File
 			RelativePath="..\..\..\..\..\Changelog"

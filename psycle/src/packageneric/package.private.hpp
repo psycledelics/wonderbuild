@@ -11,7 +11,7 @@
 ///\name source package meta information
 ///\{
 	/// name of the source package
-	#define PACKAGENERIC__PACKAGE__NAME "psycle-cvs"
+	#define PACKAGENERIC__PACKAGE__NAME "psycle-svn"
 	/// description of the source package
 	#define PACKAGENERIC__PACKAGE__DESCRIPTION "psycle modular music creation studio"
 	/// major version number of the source package
