@@ -28,7 +28,7 @@ include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.filter_2_po
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.fluidsynth.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.fs_sf2_player.am
 include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.gainer.am
-#include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.gamefx.am
+include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.gamefx.am
 include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.haas.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.karlkox_surround.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.ladspa_gverb.am
