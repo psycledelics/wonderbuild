@@ -257,7 +257,7 @@
 			Name="psycle"
 			Filter="">
 			<File
-				RelativePath="..\..\..\..\Changelog">
+				RelativePath="..\..\..\..\ChangeLog">
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\psycle\host\Constants.hpp">

@@ -1120,7 +1120,7 @@
 			</File>
 		</Filter>
 		<File
-			RelativePath="..\..\..\..\Changelog"
+			RelativePath="..\..\..\..\ChangeLog"
 			>
 		</File>
 	</Files>
