@@ -17,7 +17,7 @@ include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.alk_muter.a
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.arguru_xfilter.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.audacity_compressor.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.audacity_phaser.am
-#include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.blitz.am
+include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.blitz.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.blwtbl.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.crasher.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.delay.am
