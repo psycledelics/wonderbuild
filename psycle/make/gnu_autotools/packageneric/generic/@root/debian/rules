@@ -1,0 +1,2 @@
+#! /usr/bin/make -f
+include packageneric/generic/debian/rules
