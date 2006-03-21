@@ -1,0 +1,37 @@
+#!/usr/bin/autoconf
+
+####################################################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# Copyright (C) 1999-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
+#
+# This file is meant to be included by /=module.external.ac
+# \meta generic
+# \meta standard posix
+#
+####################################################################################################
+
+
+
+########################################################################################################################################################################
+########################################################################################################################################################################
+########################################################################################################################################################################
+########################################################################################################################################################################
+# dynamic link loader
+
+
+
+case $host in
+	*-*-linux*)
+		PACKAGENERIC__MODULE__EXTERNAL__DEFINE(PACKAGENERIC__DYNAMIC_LINK_LOADER, -ldl, [], >= 2)
+	;;
+	*-*-cygwin* | *-*-mingw* | *-*-windows*)
+		# it's not possible to choose what loader to use on these operating systems.
+		PACKAGENERIC__MODULE__EXTERNAL__DEFINE(PACKAGENERIC__DYNAMIC_LINK_LOADER, [], [], microsoft-proprietary-dynamic-link-loader)
+	;;
+	*-*-darwin* | *-*-solaris* | *)
+		PACKAGENERIC__MODULE__EXTERNAL__DEFINE(PACKAGENERIC__DYNAMIC_LINK_LOADER, [], [], dynamic-link-loader)
+		echo_custom "$(basename $0): Please add support (if needed, i don't know!) for dynamic link loader for your operating system ($host) in file modules.external.base.ac, or edit it to try compiling/linking without choosing a specific dynamic link loader."
+		exit 1
+	;;
+esac

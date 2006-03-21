@@ -1,0 +1,63 @@
+#! /bin/sh
+
+##############################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# Copyright (C) 1999-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
+#
+# \meta generic
+# \meta standard posix
+#
+##############################################################################
+
+set -u &&
+
+main()
+{
+	local source output build build_to_source install &&
+	source=$($(dirname $0)/../../root) &&
+	echoing "source  directory: $source" &&
+	output=$(cd $source && pwd)/++packageneric &&
+	build=$output/build &&
+	echoing "build   directory: $build" &&
+	install=$output/install &&
+	echoing "install directory: $install" &&
+	if test ! -d $output/build
+	then
+		mkdir --verbose $output/build --parents
+	fi &&
+	echoing "entering build directory" cd $output/build &&
+	if test ! -f ../../configure
+	then
+		echoing "autotools bootstrap" $source/packageneric/bin/autotools.bootstrap
+	fi &&
+	echoing "autotools configure" $source/configure --config-cache --prefix=$install "$@"
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+echo_custom()
+{
+	echo '\033[1;32m'"$@"'\033[0m'
+} &&
+
+echoing()
+{
+	local script_path comment &&
+	script_path=packageneric.autotools.autoconf.$(basename $0) &&
+	comment=$1 && shift &&
+	echo_custom "$script_path: $comment" &&
+	if test $# != 0
+	then
+		echo_custom "$script_path: -> calling: $@" &&
+		"$@"
+	fi
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+main "$@"

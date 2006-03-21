@@ -1,0 +1,46 @@
+#!/usr/bin/autoconf
+
+####################################################################################################
+#
+# This program is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2 of the License, or (at your option) any later version.
+# Copyright (C) 2004-2005 Johan Boule <bohan.dyndns.org>
+#
+# \meta generic
+# \meta standard posix
+#
+####################################################################################################
+
+
+
+########################################################################################################################################################################
+########################################################################################################################################################################
+########################################################################################################################################################################
+########################################################################################################################################################################
+# microsoft's only stuff
+
+
+
+#AC_CANONICAL_HOST # what operating system we are building for
+case $host in
+	*-*-cygwin* | *-*-mingw* | *-*-windows*)
+		AM_CONDITIONAL(PACKAGENERIC__OPERATING_SYSTEM__MICROSOFT, true)
+		AC_DEFINE_UNQUOTED(PACKAGENERIC__OPERATING_SYSTEM__MICROSOFT, [], [operating system is microsoft's])
+	;;
+	*)
+		AM_CONDITIONAL(PACKAGENERIC__OPERATING_SYSTEM__MICROSOFT, false)
+	;;
+esac
+
+
+
+###############################################################
+# microsoft's operating system version compatibility selection
+###############################################################
+
+#case $host in
+#	*-*-cygwin* | *-*-mingw* | *-*-windows*)
+		AC_DEFINE_UNQUOTED(PACKAGENERIC__CONFIGURATION__OPERATING_SYSTEM__MICROSOFT__VERSION__MAJOR, 5, [microsoft's operating system version compatibility selection, major version number])
+		AC_DEFINE_UNQUOTED(PACKAGENERIC__CONFIGURATION__OPERATING_SYSTEM__MICROSOFT__VERSION__MINOR, 1, [microsoft's operating system version compatibility selection, minor version number])
+		AC_DEFINE_UNQUOTED(PACKAGENERIC__CONFIGURATION__OPERATING_SYSTEM__MICROSOFT__VERSION__EXTRA_LAYER__INTERNET_EXPLORER__MAJOR, 6, [microsoft's operating system version compatibility selection, internet explorer extra layer, major version number])
+#	;;
+#esac

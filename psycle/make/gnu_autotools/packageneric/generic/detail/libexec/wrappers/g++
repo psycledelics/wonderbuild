@@ -1,0 +1,15 @@
+#! /bin/sh
+
+##############################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2 of the License, or (at your option) any later version.
+# Copyright (C) 2004-2005 Johan Boule <bohan.dyndns.org>
+#
+##############################################################################
+
+export LC_ALL=C &&
+
+#exec -a $(basename $0) $(dirname $0)/../colorizers/gcc "$@" 2>&1
+
+#time
+PACKAGENERIC__GCC=${CXX:-g++$PACKAGENERIC__GCC__VERSION} $(dirname $0)/../colorizers/gcc "$@" 2>&1

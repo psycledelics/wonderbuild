@@ -1,0 +1,185 @@
+#!/bin/bash
+
+##############################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2 of the License, or (at your option) any later version.
+# Copyright (C) 2004-2005 Johan Boule <bohan.dyndns.org>
+#
+# General-purpose: yes
+#
+##############################################################################
+
+function x
+{
+	echo -en "\e[$1m$2"
+}
+
+function reset
+{
+	x 0
+}
+
+colors="0 1 2 3 4 5 6 7 8 9"
+
+function power
+{
+	local base=$1
+	local exponent=$2
+	local result=$base
+	while test ! $exponent = 1
+	do
+		result=$(expr $result \* $base)
+		exponent=$(expr $exponent - 1)
+	done
+	echo -ne $result
+}
+
+function digit
+{
+	local base=$1
+	local string=$2
+	local offset=$3
+	local power=$(power $base $(expr $offset + 1))
+	expr $string % $power \* $base / $power
+}
+
+function bit
+{
+	digit 2 $1 $2
+}
+
+# extracts channels of the 3-bit color: 1-bit bgr channels
+function color-channels
+{
+	local b=$(bit $1 2)
+	local g=$(bit $1 1)
+	local r=$(bit $1 0)
+	echo -en "$b$g$r"
+}
+
+function grounds
+{
+	for i in $colors
+	do
+		x "4$i;39" "$i="
+		x "49;3$i" "$(color-channels $i)"
+		echo -en " "
+	done
+}
+
+function mix
+{
+	#if test "$1" = "$2"
+	#then
+	#	echo -en "$(color-channels $1)=$(color-channels $2)" #"($1 = $2)"
+	#else
+		x "$3;4$1;3$2" "$(color-channels $2)/$(color-channels $1)" #"b:$1,f:$2"
+	#fi
+}
+
+function mixgrounds
+{
+	for x in $colors
+	do
+		description $x
+		reset
+		echo -en "\n"
+		for f in $colors
+		do
+			for b in $colors
+			do
+				mix $b $f $x
+				reset
+				echo -en " "
+			done
+			echo
+		done
+	done
+}
+
+function combine
+{
+	for x in $colors
+	do
+		for y in $colors
+		do
+			if test "$x$y" = 12 # wrecks font
+			then
+				echo "12!"
+				continue
+			fi
+			echo -en "$x$y: $(x $x$y)abcdefghijh"
+			grounds 3
+			reset
+			echo
+		done
+	done
+}
+
+function description
+{
+	echo -en "$1: "
+	x $1
+	case $1 in
+		0) echo -en "normal         ";;
+		1) echo -en "highlighted    ";;
+		2) echo -en "lowlighted     ";;
+		3) echo -en "(fg)           ";;
+		4) echo -en "underlined (bg)";;
+		5) echo -en "bold           ";;
+		6) echo -en "no effect?     ";;
+		7) echo -en "inversed video ";;
+		8) echo -en "out of range?  ";;
+		9) echo -en "out of range?  ";;
+		*) echo -en "unknown        ";;
+	esac
+}
+
+function all
+{
+	reset
+	echo -en "\e[1mterminal font change escape sequences"
+	reset
+	#echo
+	#combine
+	echo
+	echo -e "$(description 0) $(grounds)$(reset)"
+	echo -e "$(description 1) $(grounds)$(reset)"
+	echo -e "$(description 2) $(grounds)$(reset)"
+	echo -e "$(description 3) $(grounds)$(reset)"
+	echo -e "$(description 4) $(grounds)$(reset)"
+	echo -e "$(description 5) $(grounds)$(reset)"
+	echo -e "$(description 6) $(grounds)$(reset)"
+	echo -e "$(description 7) $(grounds)$(reset)"
+	echo -e "$(description 8) $(grounds)$(reset)"
+	echo -e "$(description 9) $(grounds)$(reset)"
+	mixgrounds
+	reset
+}
+
+function output
+{
+	if test -f "$0.output"
+	then
+		cat "$0.output"
+	else
+		all
+	fi
+}
+
+case "$TERM" in
+xterm*)
+	if test ! "$1"
+	then
+		echo "terminal is xterm" &&
+		echo "cd /etc/X11/app-defaults && xrdb -merge XTerm-color &&"
+		cd /etc/X11/app-defaults && xrdb -merge XTerm-color &&
+		echo "starting new xterm with updated resources" &&
+		xterm -hold -title "$(basename $0) (xterm)" -geometry 80x60 -sb -sl 1000 -si -e $0 xterm
+	else
+		output
+	fi;;
+*)
+	output;;
+esac
+

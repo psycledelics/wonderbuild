@@ -1,0 +1,7 @@
+#! /bin/sh
+if test ! -e $($(dirname $0)/../root)/\{arch\}
+then
+	return
+else
+	tla logs "$@"
+fi

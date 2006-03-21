@@ -1,0 +1,28 @@
+#!/bin/bash
+
+##############################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2 of the License, or (at your option) any later version.
+# Copyright (C) 2004-2005 Johan Boule <bohan.dyndns.org>
+#
+# \meta generic
+# \meta standard gnu
+#
+##############################################################################
+
+set -o nounset &&
+
+function main
+{
+	local expression="$@" &&
+	local files=$($(dirname $0)/$(basename $0 .grep)) &&
+	cd $($(dirname $0)/root) &&
+	for file in $files
+	do
+		test -s $file || continue &&
+		grep ${expression:-.\*} --color=auto --with-filename --line-number $file || continue ||
+		return
+	done
+} &&
+
+main "$@"
