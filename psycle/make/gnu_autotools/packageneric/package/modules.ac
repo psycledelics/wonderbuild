@@ -1,6 +1,7 @@
 #! /usr/bin/autoconf
 
-PACKAGENERIC__MODULE__EXTERNAL(UNIVERSALIS, universalis >= 0.0.0)
+#dnl# PACKAGENERIC__MODULE__EXTERNAL(UNIVERSALIS, universalis >= 0.0.0)
 
-PACKAGENERIC__MODULE__INTERNAL(lib, psycle.text, 0:0:0, UNIVERSALIS , no description yet - library)
+#dnl# PACKAGENERIC__MODULE__INTERNAL(lib, psycle.text, 0:0:0, UNIVERSALIS , no description yet - library)
+PACKAGENERIC__MODULE__INTERNAL(lib, psycle.text, 0:0:0,             , no description yet - library)
 PACKAGENERIC__MODULE__INTERNAL(bin, psycle.text, 0:0:0, PSYCLE__TEXT, no description yet - program)
