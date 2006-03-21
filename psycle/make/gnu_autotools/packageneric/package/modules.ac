@@ -1,4 +1,6 @@
 #! /usr/bin/autoconf
 
+PACKAGENERIC__INCLUDE(packageneric/generic/autotools/autoconf/pool/specificities/dynamic-link-loader.ac)
+PACKAGENERIC__INCLUDE(packageneric/generic/autotools/autoconf/pool/specificities/multithreading.ac)
 PACKAGENERIC__INCLUDE(packageneric/generic/autotools/autoconf/pool/specificities/sizeof.ac)
 PACKAGENERIC__MODULE__INTERNAL(lib, alk_muter, 0:0:0, , alk muter - psycle plugin)
