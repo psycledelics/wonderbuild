@@ -1,3 +1,4 @@
 #! /usr/bin/autoconf
 
+PACKAGENERIC__INCLUDE(packageneric/generic/autotools/autoconf/pool/specificities/sizeof.ac)
 PACKAGENERIC__MODULE__INTERNAL(lib, alk_muter, 0:0:0, , alk muter - psycle plugin)
