@@ -1,4 +1,3 @@
 # !/usr/bin/automake
 
-include $(top_srcdir)/packageneric/package/modules/lib.psycle.text.am
-include $(top_srcdir)/packageneric/package/modules/bin.psycle.text.am
+include $(top_srcdir)/packageneric/package/modules/lib.alk_muter.am

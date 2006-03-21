@@ -1,2 +1,0 @@
-#! /bin/sh
-#find psycle/front_ends/text \( -type d -name todo -prune \) -or \( -name \*.cpp -print \)
