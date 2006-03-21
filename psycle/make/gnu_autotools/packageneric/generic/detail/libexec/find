@@ -12,20 +12,20 @@
 
 packageneric__find__dir__no_arch()
 {
-	echo "-mindepth 1 -follow    -type d \( \( \( -name {arch} -or -name .arch-ids -or -name ++\*               \) -prune \) -or \(                                 $@ -print \) \)"
+	echo "-mindepth 1 -follow    -type d \( \( \( -name {arch} -or -name .arch-ids -or -name .svn -or -name ++\*               \) -prune \) -or \(                                 $@ -print \) \)"
 } &&
 
 packageneric__find__dir()
 {
-	echo "-mindepth 1 -follow    -type d \( \( \( -name {arch} -or -name .arch-ids -or -name ++\* -or -name @\* \) -prune \) -or \(                                 $@ -print \) \)"
+	echo "-mindepth 1 -follow    -type d \( \( \( -name {arch} -or -name .arch-ids -or -name .svn -or -name ++\* -or -name @\* \) -prune \) -or \(                                 $@ -print \) \)"
 } &&
 
 packageneric__find__file__no_arch()
 {
-	echo "            -follow \( -type d       \( -name {arch} -or -name .arch-ids -or -name ++\*               \) -prune \) -or \( -type f ! -name .arch-inventory $@ -print \)   "
+	echo "            -follow \( -type d       \( -name {arch} -or -name .arch-ids -or -name .svn -or -name ++\*               \) -prune \) -or \( -type f ! -name .arch-inventory $@ -print \)   "
 } &&
 
 packageneric__find__file()
 {
-	echo "            -follow \( -type d       \( -name {arch} -or -name .arch-ids -or -name ++\* -or -name @\* \) -prune \) -or \( -type f ! -name .arch-inventory $@ -print \)   "
+	echo "            -follow \( -type d       \( -name {arch} -or -name .arch-ids -or -name .svn -or -name ++\* -or -name @\* \) -prune \) -or \( -type f ! -name .arch-inventory $@ -print \)   "
 }
