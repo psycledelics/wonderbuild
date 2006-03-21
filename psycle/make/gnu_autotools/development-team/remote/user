@@ -1,0 +1,64 @@
+#! /bin/bash
+
+##############################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# Copyright (C) 1999-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
+#
+# maps local user@host account names to remote user account names.
+# note: this file is to be sourced.
+#
+# \meta package-specific
+# \meta user-specific
+# \meta standard gnu
+#
+##############################################################################
+
+
+
+###########################################################################################################
+# maps local user@host account names to remote user account names.
+# note: please configure your local host with a real public (internet) name to prevent clashes.
+# note: [bohan] if someone knows how the heck we set the internet name on microsoft boxes, let me know :-)
+# note: [bohan] i tried to create a $SYSTEMROOT/system32/drivers/etc/hostname, but it didn't work :/
+###########################################################################################################
+function packageneric--remote--user
+{
+	# remote host name is available if needed.
+	local remote__host=$1 && shift &&
+
+	# package name is available if needed.
+	local package__name=$1 && shift &&
+
+	local local__host=$1 && shift &&
+	local local__user=$1 && shift &&
+
+	##################################################
+	##################################################
+	##################################################
+	###############                    ###############
+	###############   EDIT BELOW !!!   ###############
+	###############                    ###############
+
+	case $remote__host in
+		( *.sourceforge.net | *.sf.net )
+			case $local__user@$local__host in
+				( alk*@* ) echo alkenstein ;;
+				( *dazzled@* | dazld@* | bdzld@* ) echo bdzld ;;
+				( bohan@* ) echo johan-boule ;;
+				( lobywang@* | botfucker@* ) echo lobywang ;;
+				( erodix@* | jpero@linde.tky.hut.fi ) echo erodix ;;
+				( jaz@* | josepma@* ) echo jaz001 ;;
+				( magnus*@* | zealmange@* ) echo zealmange ;;
+				( sampler@* | Administrador@PC ) echo sampler ;;
+			esac
+		;;
+	esac
+
+	###############                    ###############
+	###############   EDIT ABOVE !!!   ###############
+	###############                    ###############
+	##################################################
+	##################################################
+	##################################################
+}

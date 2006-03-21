@@ -1,0 +1,90 @@
+# !/bin/bash
+
+##############################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# Copyright (C) 1999-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
+#
+# sets the remote host name.
+# sets the remote path.
+# note: this file is to be sourced.
+#
+# \meta package-specific
+# \meta user-specific
+# \meta standard gnu
+#
+##############################################################################
+
+
+
+################################
+# returns the remote host name.
+################################
+function packageneric--remote--host
+{
+	# package name is available if needed.
+	local package__name=$1 && shift &&
+
+	# local user@host is available if needed.
+	local local__host=$1 && shift &&
+	local local__user=$1 && shift &&
+
+	echo ${PACKAGENERIC__REMOTE__HOST:-shell.sourceforge.net}	
+} &&
+
+
+
+##########################
+# returns the remote url.
+##########################
+function packageneric--remote--url
+{
+	# remote user@host is available if needed.
+	local remote__host=$1 && shift &&
+	local remote__user=$1 && shift &&
+        
+	# package name is available if needed.
+	local package__name=$1 && shift &&
+
+	# local user@host is available if needed.
+	local local__host=$1 && shift &&
+	local local__user=$1 && shift &&
+
+	echo psycle.sourceforge.net
+} &&
+
+
+
+###########################
+# returns the remote path.
+###########################
+function packageneric--remote--path
+{
+	# remote user@host is available if needed.
+	local remote__host=$1 && shift &&
+	local remote__user=$1 && shift &&
+
+	# package name is available if needed.
+	local package__name=$1 && shift &&
+
+	# local user@host is available if needed.
+	local local__host=$1 && shift &&
+	local local__user=$1 && shift &&
+
+	case $remote__host in
+		( shell.sourceforge.net | shell.sf.net )
+			case $package__name in
+				( *versalis | mnu | mjoo )
+					local group=psycle
+				;;
+				( * )
+					# Computes the remote group account name from the package tar-name, removing everything after the first dot.
+					# Using the dot and suffix convention allows to have several packages on the same group, without modifying this file
+					# (sourceforge doesn't accept dots in group names anyway).
+					local group=$(echo $package__name | sed 's/\..*//')
+				;;
+			esac &&
+			echo /home/groups/$(echo $group | cut --characters 1)/$(echo $group | cut --characters 1-2)/$group/htdocs/${subdirectory:-}
+		;;
+	esac
+}
