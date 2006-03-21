@@ -10,5 +10,5 @@
 #include <psycle/player/main.hpp>
 extern "C" int main(int /*const*/ argument_count, char /*const*/ * /*const*/ arguments[]) throw()
 {
-	return psycle::player::main(argument_count, arguments);
+	//return psycle::player::main(argument_count, arguments);
 }
