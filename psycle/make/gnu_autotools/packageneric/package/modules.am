@@ -23,7 +23,7 @@ include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.alk_muter.a
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.delay.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.distortion.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.dsp--not-a-plugin.am
-#include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.filter_2_poles.am
+include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.filter_2_poles.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.flanger.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.fluidsynth.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.fs_sf2_player.am
