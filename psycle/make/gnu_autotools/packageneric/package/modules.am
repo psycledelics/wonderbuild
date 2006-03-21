@@ -2,7 +2,7 @@
 
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.eq3.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.feedme.am
-#include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.jmdrum.am
+include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.jmdrum.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.koruz.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.phantom.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.pluckedstring.am
