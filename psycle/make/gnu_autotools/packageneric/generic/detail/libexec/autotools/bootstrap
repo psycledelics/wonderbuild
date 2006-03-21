@@ -167,13 +167,13 @@ function require_softwares
 	{
 		#echoing "Your PATH env var is: $PATH" &&
 		echoing "checking for required tools: missing packages or commands not in path or not compatible or too old (see message above). bailing out." &&
-		if test "$PACKAGENERIC__DEV_PACK__MICROSOFT__VERSION"
+		if test "${PACKAGENERIC__DEV_PACK__MICROSOFT__VERSION:-}"
 		then
 			echoing "note: Environment variable PSYCLE__DEV_PACK__MICROSOFT__VERSION is set." &&
 			echoing "note: If the build fails, this might be because this dev-pack is too old; you can download the latest version from:" &&
 			echoing "note: http://psycle.sourceforge.net/dev-pack-for-psycle-on-mswindows/release-notes" &&
 			echoing "note: (compare the version with yours which is $PSYCLE__DEV_PACK__MICROSOFT__VERSION)."
-		elif test "$OSTYPE" = msys
+		elif test "${OSTYPE:-}" = msys
 		then
 			echoing "note: Operating system is $OSTYPE." &&
 			echoing "note: For this operating system, you can download a complete dev-pack from:" &&
@@ -415,8 +415,8 @@ then
 		echoing "status of rpm package: $name: $status." &&
 		if test "$status" != installed
 		then
-			echoing "note: You do not have package $name installed, you might want to apt-get install $name (apt-get or yum)." &&
-			false
+			echoing "note: You do not have package $name installed, you might want to apt-get install $name (apt-get or yum or yast)." &&
+			: #false
 			#return
 		fi &&
 		local commands="$@" && commands="${commands:-$name}" &&
