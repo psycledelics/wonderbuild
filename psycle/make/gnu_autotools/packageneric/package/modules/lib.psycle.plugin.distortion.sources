@@ -1,2 +1,2 @@
 #! /bin/sh
-echo psycle/plugins/distorsion.cpp
+echo psycle/plugins/distortion.cpp
