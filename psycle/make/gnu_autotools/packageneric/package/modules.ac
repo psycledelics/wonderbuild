@@ -7,7 +7,7 @@ PACKAGENERIC__MODULE__INTERNAL(lib, psycle.plugin.alk_muter     , 0:0:0, , psycl
 PACKAGENERIC__MODULE__INTERNAL(lib, psycle.plugin.blitz         , 0:0:0, , psycle plugin - voskomo blitz          )
 PACKAGENERIC__MODULE__INTERNAL(lib, psycle.plugin.crasher       , 0:0:0, , psycle plugin - crash on purpose       )
 PACKAGENERIC__MODULE__INTERNAL(lib, psycle.plugin.delay         , 0:0:0, , psycle plugin - ayeternal delay        )
-PACKAGENERIC__MODULE__INTERNAL(lib, psycle.plugin.distorsion    , 0:0:0, , psycle plugin - ayeternal distorsion   )
+PACKAGENERIC__MODULE__INTERNAL(lib, psycle.plugin.distortion    , 0:0:0, , psycle plugin - ayeternal distortion   )
 PACKAGENERIC__MODULE__INTERNAL(lib, psycle.plugin.filter_2_poles, 0:0:0, , psycle plugin - ayeternal 2-pole filter)
 PACKAGENERIC__MODULE__INTERNAL(lib, psycle.plugin.flanger       , 0:0:0, , psycle plugin - ayeternal flanger      )
 PACKAGENERIC__MODULE__INTERNAL(lib, psycle.plugin.gainer        , 0:0:0, , psycle plugin - ayeternal gainer       )
