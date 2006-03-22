@@ -19,12 +19,12 @@ include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.alk_muter.a
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.audacity_phaser.am
 include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.blitz.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.blwtbl.am
-#include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.crasher.am
-#include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.delay.am
-#include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.distortion.am
+include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.crasher.am
+include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.delay.am
+include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.distortion.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.dsp--not-a-plugin.am
 include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.filter_2_poles.am
-#include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.flanger.am
+include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.flanger.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.fluidsynth.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.fs_sf2_player.am
 include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.gainer.am
@@ -46,7 +46,7 @@ include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.negative.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.pooplog_lofi_processor.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.pooplog_scratch_master_2.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.pooplog_scratch_master.am
-#include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.ring_modulator.am
+include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.ring_modulator.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.schorus.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.stk_plucked.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.stk_rev.am
