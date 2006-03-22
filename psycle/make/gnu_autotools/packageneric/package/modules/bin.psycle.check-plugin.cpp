@@ -7,6 +7,7 @@
 #include <sstream>
 #include <iostream>
 #include <stdexcept>
+#include <diversalis/compiler.hpp>
 
 namespace psycle
 {
@@ -65,7 +66,17 @@ namespace psycle
 			{
 				out << "loaded fine." << std::endl;
 				out << "resolving symbol " << interface::info::symbol << " ..." << std::endl;
-				interface::info::function function(*reinterpret_cast<interface::info::function*>(::dlsym(lib, interface::info::symbol)));
+				#if \
+					defined DIVERSALIS__COMPILER__GNU && \
+					( \
+						DIVERSALIS__COMPILER__VERSION__MAJOR > 3 || \
+						DIVERSALIS__COMPILER__VERSION__MAJOR == 3 && \
+						DIVERSALIS__COMPILER__VERSION__MINOR >= 4 \
+					)
+					interface::info::function function(reinterpret_cast<interface::info::function>(::dlsym(lib, interface::info::symbol)));
+				#else
+					interface::info::function function((interface::info::function)(::dlsym(lib, interface::info::symbol)));
+				#endif
 				if(!function)
 				{
 					std::ostringstream s;
