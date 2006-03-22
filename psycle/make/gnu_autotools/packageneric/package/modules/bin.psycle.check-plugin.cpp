@@ -1,6 +1,6 @@
 #include <diversalis/operating_system.hpp>
 #if !defined DIVERSALIS__OPERATING_SYSTEM__POSIX
-	#error sorry, but your operating system ain't standard
+	#error "sorry, but your operating system ain't standard"
 #endif
 #include <dlfcn.h>
 #include <string>
