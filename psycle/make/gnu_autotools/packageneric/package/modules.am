@@ -1,5 +1,6 @@
 # !/usr/bin/automake
 
+include $(top_srcdir)/packageneric/package/modules/bin.psycle.check-plugin.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.eq3.am
 #include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.feedme.am
 include $(top_srcdir)/packageneric/package/modules/lib.psycle.plugin.jmdrum.am

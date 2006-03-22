@@ -3,6 +3,9 @@
 PACKAGENERIC__INCLUDE(packageneric/generic/autotools/autoconf/pool/specificities/dynamic-link-loader.ac)
 PACKAGENERIC__INCLUDE(packageneric/generic/autotools/autoconf/pool/specificities/multithreading.ac)
 PACKAGENERIC__INCLUDE(packageneric/generic/autotools/autoconf/pool/specificities/sizeof.ac)
+
+PACKAGENERIC__MODULE__INTERNAL(bin, psycle.check-plugin, 0:0:0, PACKAGENERIC__DYNAMIC_LINK_LOADER, psycle check plugin program)
+
 PACKAGENERIC__MODULE__INTERNAL(lib, psycle.plugin.arguru_distortion, 0:0:0, , psycle plugin - arguru distortion      )
 PACKAGENERIC__MODULE__INTERNAL(lib, psycle.plugin.arguru_freeverb  , 0:0:0, , psycle plugin - yezar/arguru freeverb  )
 PACKAGENERIC__MODULE__INTERNAL(lib, psycle.plugin.arguru_goaslicer , 0:0:0, , psycle plugin - arguru goaslicer       )
