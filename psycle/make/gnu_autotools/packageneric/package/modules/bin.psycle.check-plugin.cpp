@@ -65,7 +65,7 @@ namespace psycle
 			{
 				out << "loaded fine." << std::endl;
 				out << "resolving symbol " << interface::info::symbol << " ..." << std::endl;
-				interface::info::function function(reinterpret_cast<interface::info::function>(::dlsym(lib, interface::info::symbol)));
+				interface::info::function function(*reinterpret_cast<interface::info::function*>(::dlsym(lib, interface::info::symbol)));
 				if(!function)
 				{
 					std::ostringstream s;
