@@ -23,7 +23,7 @@
 	/>
 	<UserMacro
 		Name="PreCompiledObject"
-		Value="$(TopOutputDir)/intermediate/pre_compiled_headers.mfc/pre_compiled_headers.obj"
+		Value="&quot;$(TopOutputDir)&quot;/intermediate/pre_compiled_headers.mfc/pre_compiled_headers.obj"
 		InheritsFromParent="true"
 		Delimiter=" "
 	/>

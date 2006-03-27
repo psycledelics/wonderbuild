@@ -15,7 +15,7 @@
 	/>
 	<UserMacro
 		Name="IncludePath"
-		Value="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(TopSrcDir)/src&quot;;&quot;$(TopSrcDir)/src/legacy&quot;;&quot;$(TopSrcDir)/include&quot;"
+		Value="&quot;$(ProjectDir)&quot;/src;&quot;$(SolutionDir)&quot;/src;&quot;$(TopSrcDir)&quot;/src;&quot;$(TopSrcDir)&quot;/src/legacy;&quot;$(TopSrcDir)&quot;/include"
 		InheritsFromParent="true"
 		Delimiter=";"
 	/>

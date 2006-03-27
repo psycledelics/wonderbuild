@@ -15,7 +15,7 @@
 	/>
 	<UserMacro
 		Name="LibPath"
-		Value="$(TopOutputDir)/lib"
+		Value="&quot;$(TopOutputDir)&quot;/lib"
 		InheritsFromParent="true"
 		Delimiter=";"
 	/>
