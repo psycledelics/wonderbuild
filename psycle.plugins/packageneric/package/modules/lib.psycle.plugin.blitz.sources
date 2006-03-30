@@ -1,0 +1,2 @@
+#! /bin/sh
+find psycle/plugins/voskomo/blitz/ \( -type d -name todo -prune \) -or \( -name \*.cpp -print \)

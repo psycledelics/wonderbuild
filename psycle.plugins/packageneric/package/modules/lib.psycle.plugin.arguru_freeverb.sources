@@ -1,0 +1,2 @@
+#! /bin/sh
+find psycle/plugins/yezar_freeverb/ \( -type d -name todo -prune \) -or \( -name \*.cpp -print \)
