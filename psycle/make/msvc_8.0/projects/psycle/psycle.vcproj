@@ -162,59 +162,59 @@
 			Name="psycle/host"
 			>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Constants.hpp"
+				RelativePath="..\..\..\..\src\psycle\host\engine\constants.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Dsp.cpp"
+				RelativePath="..\..\..\..\src\psycle\host\engine\dsp.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Dsp.hpp"
+				RelativePath="..\..\..\..\src\psycle\host\engine\dsp.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Global.cpp"
+				RelativePath="..\..\..\..\src\psycle\host\global.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Global.hpp"
+				RelativePath="..\..\..\..\src\psycle\host\global.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Helpers.cpp"
+				RelativePath="..\..\..\..\src\psycle\host\engine\helpers.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Helpers.hpp"
+				RelativePath="..\..\..\..\src\psycle\host\engine\helpers.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\InputHandler.cpp"
+				RelativePath="..\..\..\..\src\psycle\host\gui\InputHandler.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\InputHandler.hpp"
+				RelativePath="..\..\..\..\src\psycle\host\gui\InputHandler.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Player.cpp"
+				RelativePath="..\..\..\..\src\psycle\host\engine\player.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Player.hpp"
+				RelativePath="..\..\..\..\src\psycle\host\engine\player.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Song.cpp"
+				RelativePath="..\..\..\..\src\psycle\host\engine\song.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Song.hpp"
+				RelativePath="..\..\..\..\src\psycle\host\engine\song.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\SongStructs.hpp"
+				RelativePath="..\..\..\..\src\psycle\host\engine\SongStructs.hpp"
 				>
 			</File>
 			<File
@@ -228,201 +228,200 @@
 					Name="(output)"
 					>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\ASIOInterface.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\audiodrivers\ASIOInterface.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\ASIOInterface.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\audiodrivers\ASIOInterface.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\AudioDriver.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\audiodrivers\AudioDriver.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\AudioDriver.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\audiodrivers\AudioDriver.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\DirectSound.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\audiodrivers\DirectSound.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\DirectSound.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\audiodrivers\DirectSound.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\WaveOut.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\audiodrivers\WaveOut.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\WaveOut.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\audiodrivers\WaveOut.hpp"
 						>
 					</File>
 				</Filter>
 			</Filter>
 			<Filter
 				Name="resources"
-				Filter="*.bmp"
 				>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\AsioLogo.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\AsioLogo.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\beta.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\beta.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\bmp00002.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\bmp00002.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\bmp00003.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\bmp00003.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\bmp00004.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\bmp00004.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\bmp00005.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\bmp00005.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\bmp00009.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\bmp00009.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\ico00001.ico"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\ico00001.ico"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\icon1.ico"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\icon1.ico"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\idr_vstf.ico"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\idr_vstf.ico"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\keys_bac.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\keys_bac.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\less.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\less.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\lessless.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\lessless.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\littleleft.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\littleleft.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\littleright.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\littleright.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\machine_skin.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\machine_skin.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\MasterMachine\masterbk.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\MasterMachine\masterbk.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\minus.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\minus.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\minus1.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\minus1.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\more.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\more.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\moremore.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\moremore.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\notekey.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\notekey.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\MasterMachine\numbers.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\MasterMachine\numbers.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\pattern_header_skin.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\pattern_header_skin.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\plus.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\plus.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\plus1.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\plus1.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\Psycle.ico"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\Psycle.ico"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\resources.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\resources.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\resources.rc"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\resources.rc"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\resources.rc2"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\resources.rc2"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\sampulse.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\sampulse.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\sharpkey.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\sharpkey.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\MasterMachine\slider.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\MasterMachine\slider.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\Slider\sliderB.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\Slider\sliderB.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\Slider\sliderP.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\Slider\sliderP.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\splash copia.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\splash copia.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\TbMainKnob.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\TbMainKnob.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\Toolbar.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\Toolbar.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\Slider\VuOff.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\Slider\VuOff.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\Slider\VuOn.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\Slider\VuOn.bmp"
 					>
 				</File>
 			</Filter>
@@ -430,47 +429,47 @@
 				Name="(file)"
 				>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\DataCompression.cpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\DataCompression.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\DataCompression.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\DataCompression.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\FileIO.cpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\FileIO.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\FileIO.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\FileIO.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\ITModule2.cpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\ITModule2.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\ITModule2.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\ITModule2.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\Riff.cpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\riff.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\Riff.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\riff.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\XMFile.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\XMFile.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\XMSongLoader.cpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\XMSongLoader.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\XMSongLoader.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\XMSongLoader.hpp"
 					>
 				</File>
 			</Filter>
@@ -478,19 +477,19 @@
 				Name="(configuration)"
 				>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\Configuration.cpp"
+					RelativePath="..\..\..\..\src\psycle\host\configuration.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\Configuration.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\configuration.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\Registry.cpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\registry.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\Registry.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\registry.hpp"
 					>
 				</File>
 			</Filter>
@@ -498,118 +497,118 @@
 				Name="(mfc-gui)"
 				>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\Bitmap.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\bitmap.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\ChildView.cpp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\ChildView.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\ChildView.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\ChildView.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\GreetDialog.cpp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\GreetDialog.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\GreetDialog.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\GreetDialog.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\keybhandler.private.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\KeybHandler.private.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\machineview.private.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\MachineView.private.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\MainFrm.cpp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\MainFrm.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\MainFrm.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\MainFrm.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\mouseHandler.private.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\MouseHandler.private.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\patviewnew.private.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\PatViewNew.private.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\Psycle.cpp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\psycle.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\psycle.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\psycle.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\SaveWavDlg.cpp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\SaveWavDlg.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\SaveWavDlg.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\SaveWavDlg.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\seqview.private.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\SeqView.private.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\SongpDlg.cpp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\SongpDlg.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\SongpDlg.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\SongpDlg.hpp"
 					>
 				</File>
 				<Filter
 					Name="(configuration)"
 					>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\ConfigDlg.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\ConfigDlg.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\ConfigDlg.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\ConfigDlg.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\DirectoryDlg.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\DirectoryDlg.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\DirectoryDlg.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\DirectoryDlg.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\KeyConfigDlg.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\KeyConfigDlg.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\KeyConfigDlg.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\KeyConfigDlg.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\MidiInputDlg.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\MidiInputDlg.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\MidiInputDlg.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\MidiInputDlg.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\SkinDlg.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\SkinDlg.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\SkinDlg.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\SkinDlg.hpp"
 						>
 					</File>
 					<Filter
@@ -619,35 +618,35 @@
 							Name="output"
 							>
 							<File
-								RelativePath="..\..\..\..\src\psycle\host\ASIOConfig.cpp"
+								RelativePath="..\..\..\..\src\psycle\host\audiodrivers\ASIOConfig.cpp"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\..\src\psycle\host\ASIOConfig.hpp"
+								RelativePath="..\..\..\..\src\psycle\host\audiodrivers\ASIOConfig.hpp"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\..\src\psycle\host\DSoundConfig.cpp"
+								RelativePath="..\..\..\..\src\psycle\host\audiodrivers\DSoundConfig.cpp"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\..\src\psycle\host\DSoundConfig.hpp"
+								RelativePath="..\..\..\..\src\psycle\host\audiodrivers\DSoundConfig.hpp"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\..\src\psycle\host\OutputDlg.cpp"
+								RelativePath="..\..\..\..\src\psycle\host\audiodrivers\OutputDlg.cpp"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\..\src\psycle\host\OutputDlg.hpp"
+								RelativePath="..\..\..\..\src\psycle\host\audiodrivers\OutputDlg.hpp"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\..\src\psycle\host\WaveOutDialog.cpp"
+								RelativePath="..\..\..\..\src\psycle\host\audiodrivers\WaveOutDialog.cpp"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\..\src\psycle\host\WaveOutDialog.hpp"
+								RelativePath="..\..\..\..\src\psycle\host\audiodrivers\WaveOutDialog.hpp"
 								>
 							</File>
 						</Filter>
@@ -657,129 +656,129 @@
 					Name="(machine)"
 					>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\FrameMachine.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\FrameMachine.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\FrameMachine.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\FrameMachine.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\FrameMixerMachine.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\FrameMixerMachine.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\FrameMixerMachine.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\FrameMixerMachine.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\GearRackDlg.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\GearRackDlg.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\GearRackDlg.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\GearRackDlg.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\GearTracker.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\GearTracker.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\GearTracker.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\GearTracker.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\MacProp.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\MacProp.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\MacProp.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\MacProp.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\MasterDlg.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\MasterDlg.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\MasterDlg.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\MasterDlg.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\NewMachine.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\NewMachine.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\NewMachine.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\NewMachine.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\NewVal.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\NewVal.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\NewVal.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\NewVal.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\PresetsDlg.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\PresetsDlg.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\PresetsDlg.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\PresetsDlg.hpp"
 						>
 					</File>
 					<Filter
 						Name="(sampler)"
 						>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\EnvDialog.cpp"
+							RelativePath="..\..\..\..\src\psycle\host\gui\EnvDialog.cpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\EnvDialog.hpp"
+							RelativePath="..\..\..\..\src\psycle\host\gui\EnvDialog.hpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\InstrumentEditor.cpp"
+							RelativePath="..\..\..\..\src\psycle\host\gui\InstrumentEditor.cpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\InstrumentEditor.hpp"
+							RelativePath="..\..\..\..\src\psycle\host\gui\InstrumentEditor.hpp"
 							>
 						</File>
 						<Filter
 							Name="(waveform)"
 							>
 							<File
-								RelativePath="..\..\..\..\src\psycle\host\WaveEdAmplifyDialog.cpp"
+								RelativePath="..\..\..\..\src\psycle\host\gui\WaveEdAmplifyDialog.cpp"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\..\src\psycle\host\WaveEdAmplifyDialog.hpp"
+								RelativePath="..\..\..\..\src\psycle\host\gui\WaveEdAmplifyDialog.hpp"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\..\src\psycle\host\WaveEdChildView.cpp"
+								RelativePath="..\..\..\..\src\psycle\host\gui\WaveEdChildView.cpp"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\..\src\psycle\host\WaveEdChildView.hpp"
+								RelativePath="..\..\..\..\src\psycle\host\gui\WaveEdChildView.hpp"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\..\src\psycle\host\WaveEdFrame.cpp"
+								RelativePath="..\..\..\..\src\psycle\host\gui\WaveEdFrame.cpp"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\..\src\psycle\host\WaveEdFrame.hpp"
+								RelativePath="..\..\..\..\src\psycle\host\gui\WaveEdFrame.hpp"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\..\src\psycle\host\wavfiledlg.cpp"
+								RelativePath="..\..\..\..\src\psycle\host\gui\WavFileDlg.cpp"
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\..\src\psycle\host\WavFileDlg.hpp"
+								RelativePath="..\..\..\..\src\psycle\host\gui\WavFileDlg.hpp"
 								>
 							</File>
 						</Filter>
@@ -788,27 +787,27 @@
 						Name="(vst)"
 						>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\DefaultVstGui.cpp"
+							RelativePath="..\..\..\..\src\psycle\host\gui\DefaultVstGui.cpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\DefaultVstGui.hpp"
+							RelativePath="..\..\..\..\src\psycle\host\gui\DefaultVstGui.hpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\VstEditorDlg.cpp"
+							RelativePath="..\..\..\..\src\psycle\host\gui\VSTEditorDlg.cpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\VstEditorDlg.hpp"
+							RelativePath="..\..\..\..\src\psycle\host\gui\VSTEditorDlg.hpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\VstGui.cpp"
+							RelativePath="..\..\..\..\src\psycle\host\gui\VSTGUI.cpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\VstGui.hpp"
+							RelativePath="..\..\..\..\src\psycle\host\gui\VSTGUI.hpp"
 							>
 						</File>
 					</Filter>
@@ -816,43 +815,43 @@
 						Name="(XMSampler)"
 						>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSamplerMixerPage.cpp"
+							RelativePath="..\..\..\..\src\psycle\host\gui\XMSamplerMixerPage.cpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSamplerMixerPage.hpp"
+							RelativePath="..\..\..\..\src\psycle\host\gui\XMSamplerMixerPage.hpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUI.cpp"
+							RelativePath="..\..\..\..\src\psycle\host\gui\XMSamplerUI.cpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUI.hpp"
+							RelativePath="..\..\..\..\src\psycle\host\gui\XMSamplerUI.hpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUIGeneral.cpp"
+							RelativePath="..\..\..\..\src\psycle\host\gui\XMSamplerUIGeneral.cpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUIGeneral.hpp"
+							RelativePath="..\..\..\..\src\psycle\host\gui\XMSamplerUIGeneral.hpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUIInst.cpp"
+							RelativePath="..\..\..\..\src\psycle\host\gui\XMSamplerUIInst.cpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUIInst.hpp"
+							RelativePath="..\..\..\..\src\psycle\host\gui\XMSamplerUIInst.hpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUISample.cpp"
+							RelativePath="..\..\..\..\src\psycle\host\gui\XMSamplerUISample.cpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUISample.hpp"
+							RelativePath="..\..\..\..\src\psycle\host\gui\XMSamplerUISample.hpp"
 							>
 						</File>
 					</Filter>
@@ -861,19 +860,19 @@
 					Name="(pattern)"
 					>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\PatDlg.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\PatDlg.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\PatDlg.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\PatDlg.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\SwingFillDlg.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\SwingFillDlg.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\SwingFillDlg.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\SwingFillDlg.hpp"
 						>
 					</File>
 				</Filter>
@@ -881,43 +880,43 @@
 					Name="(monitors)"
 					>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\InfoDlg.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\InfoDlg.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\InfoDlg.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\InfoDlg.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\MidiMonitorDlg.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\MidiMonitorDlg.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\MidiMonitorDlg.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\MidiMonitorDlg.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\ProgressDialog.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\ProgressDialog.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\ProgressDialog.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\ProgressDialog.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\VolumeDlg.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\VolumeDlg.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\VolumeDlg.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\VolumeDlg.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\WireDlg.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\WireDlg.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\WireDlg.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\WireDlg.hpp"
 						>
 					</File>
 				</Filter>
@@ -925,11 +924,11 @@
 					Name="(midi)"
 					>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\MidiLearn.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\MidiLearn.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\MidiLearn.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\gui\MidiLearn.hpp"
 						>
 					</File>
 				</Filter>
@@ -938,7 +937,7 @@
 				Name="legacy"
 				>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\legacy\old_file_format.cpp"
+					RelativePath="..\..\..\..\src\psycle\host\legacy\engine\old_file_format.cpp"
 					>
 				</File>
 			</Filter>
@@ -962,19 +961,19 @@
 				Name="(machine)"
 				>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\Machine.cpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\machine.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\Machine.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\machine.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\Plugin.cpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\plugin.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\Plugin.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\plugin.hpp"
 					>
 				</File>
 				<File
@@ -982,38 +981,38 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\VstHost.cpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\VSTHost.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\VstHost.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\VSTHost.hpp"
 					>
 				</File>
 				<Filter
 					Name="(sampler)"
 					>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\Filter.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\engine\filter.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\Filter.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\engine\filter.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\Instrument.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\engine\instrument.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\Instrument.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\engine\instrument.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\Sampler.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\engine\sampler.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\Sampler.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\engine\sampler.hpp"
 						>
 					</File>
 				</Filter>
@@ -1021,19 +1020,19 @@
 					Name="(XMSampler)"
 					>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\XMInstrument.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\engine\XMInstrument.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\XMInstrument.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\engine\XMInstrument.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\XMSampler.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\engine\XMSampler.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\XMSampler.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\engine\XMSampler.hpp"
 						>
 					</File>
 				</Filter>
@@ -1042,11 +1041,11 @@
 				Name="(midi)"
 				>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\MidiInput.cpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\MidiInput.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\MidiInput.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\MidiInput.hpp"
 					>
 				</File>
 			</Filter>
