@@ -1,0 +1,740 @@
+psycle (0.0.484) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Tue,  3 Jan 2006 15:02:44 +0000
+
+psycle (0.0.478) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Thu, 15 Dec 2005 02:01:53 +0000
+
+psycle (0.0.477) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Sun, 11 Dec 2005 16:43:12 +0000
+
+psycle (0.0.476) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Mon,  5 Dec 2005 09:12:01 +0000
+
+psycle (0.0.475) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Sun,  4 Dec 2005 22:16:53 +0000
+
+psycle (0.0.471) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Sun,  4 Dec 2005 17:29:01 +0000
+
+psycle (0.0.469) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Sun,  4 Dec 2005 16:48:32 +0000
+
+psycle (0.0.467) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Sun,  4 Dec 2005 07:05:33 +0000
+
+psycle (0.0.462) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Fri,  2 Dec 2005 02:33:54 +0000
+
+psycle (0.0.442) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Fri, 22 Jul 2005 02:29:41 +0000
+
+psycle (0.0.440) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Tue, 19 Jul 2005 01:58:02 +0000
+
+psycle (0.0.437) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Fri, 15 Jul 2005 06:34:13 +0000
+
+psycle (0.0.436) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Thu, 14 Jul 2005 19:31:01 +0000
+
+psycle (0.0.435) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Wed, 13 Jul 2005 04:44:52 +0000
+
+psycle (0.0.432) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Thu,  7 Jul 2005 19:16:13 +0000
+
+psycle (0.0.430) unstable; urgency=low
+
+  * workaround for automake which lacks handling of build order dependencies for built libs and programs
+
+ -- Johan Boule <bohan@retropaganda.info>  Thu,  7 Jul 2005 19:03:08 +0000
+
+psycle (0.0.429) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Wed,  6 Jul 2005 19:38:56 +0000
+
+psycle (0.0.428) unstable; urgency=low
+
+  * added internal build dependency rules
+
+ -- Johan Boule <bohan@retropaganda.info>  Mon,  4 Jul 2005 10:46:51 +0000
+
+psycle (0.0.420) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Mon, 20 Jun 2005 05:22:38 +0000
+
+psycle (0.0.419) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Mon, 20 Jun 2005 04:19:34 +0000
+
+psycle (0.0.418) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Mon, 20 Jun 2005 03:37:02 +0000
+
+psycle (0.0.417) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Fri, 17 Jun 2005 03:52:15 +0000
+
+psycle (0.0.415) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Sat, 11 Jun 2005 19:34:39 +0000
+
+psycle (0.0.414) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Tue,  7 Jun 2005 08:16:35 +0000
+
+psycle (0.0.413) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Sun,  5 Jun 2005 09:54:30 +0000
+
+psycle (0.0.412) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Sun,  5 Jun 2005 07:35:33 +0000
+
+psycle (0.0.411) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Fri,  3 Jun 2005 05:27:31 +0000
+
+psycle (0.0.410) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Fri,  3 Jun 2005 04:58:48 +0000
+
+psycle (0.0.408) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Sat, 28 May 2005 04:50:39 +0000
+
+psycle (0.0.401) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Wed, 18 May 2005 09:15:26 +0000
+
+psycle (0.0.395) unstable; urgency=low
+
+  * fixed include header problems
+
+ -- Johan Boule <bohan@retropaganda.info>  Sat, 30 Apr 2005 17:50:43 +0000
+
+psycle (0.0.394) unstable; urgency=low
+
+  * the psycle source package now depends on the external/nested source package universalis (and universalis depends on diversalis).
+
+ -- Johan Boule <bohan@retropaganda.info>  Mon, 25 Apr 2005 19:47:03 +0000
+
+psycle (0.0.364) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Sun, 10 Apr 2005 00:37:49 +0000
+
+psycle (0.0.361) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Wed,  6 Apr 2005 07:29:13 +0000
+
+psycle (0.0.355) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Tue,  5 Apr 2005 03:14:59 +0000
+
+psycle (0.0.344) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Sun, 13 Feb 2005 19:33:47 +0000
+
+psycle (0.0.339) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Wed,  9 Feb 2005 18:40:49 +0000
+
+psycle (0.0.327) unstable; urgency=low
+
+  * gstreamer output plugin
+  * dev-pack-for-psycle-on-mswindows released, version 20
+
+ -- Johan Boule <bohan@retropaganda.info>  Fri,  4 Feb 2005 18:39:49 +0000
+
+psycle (0.0.326) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Wed,  2 Feb 2005 19:37:45 +0000
+
+psycle (0.0.324) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Tue,  1 Feb 2005 03:33:50 +0000
+
+psycle (0.0.310) unstable; urgency=low
+
+  * unfinished gstreamer and alsa output plugins
+  * bsd stuff
+
+ -- Johan Boule <bohan@retropaganda.info>  Mon, 31 Jan 2005 16:11:55 +0000
+
+psycle (0.0.309) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Fri, 28 Jan 2005 17:41:12 +0000
+
+psycle (0.0.308) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Fri, 28 Jan 2005 08:20:02 +0000
+
+psycle (0.0.307) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Fri, 28 Jan 2005 08:00:26 +0000
+
+psycle (0.0.302) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Thu, 27 Jan 2005 13:09:56 +0000
+
+psycle (0.0.301) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Thu, 27 Jan 2005 12:02:39 +0000
+
+psycle (0.0.296) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Wed, 26 Jan 2005 07:48:00 +0000
+
+psycle (0.0.286) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Mon, 24 Jan 2005 20:52:03 +0000
+
+psycle (0.0.280) unstable; urgency=low
+
+  * some more tests and a few thing changes for compatibility with microsoft and fink
+
+ -- Johan Boule <bohan@retropaganda.info>  Mon, 24 Jan 2005 20:50:04 +0000
+
+psycle (0.0.279) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+  * darwin is making me sick.
+
+ -- Johan Boule <bohan@retropaganda.info>  Sat, 22 Jan 2005 14:01:17 +0000
+
+psycle (0.0.277) unstable; urgency=low
+
+  * there are many changes, so it's hard to describe.
+
+ -- Johan Boule <bohan@retropaganda.info>  Fri, 21 Jan 2005 08:27:34 +0000
+
+psycle (0.0.272) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Thu, 13 Jan 2005 17:31:52 +0000
+
+psycle (0.0.254) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Wed, 12 Jan 2005 08:29:14 +0000
+
+psycle (0.0.253) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Wed, 12 Jan 2005 08:08:08 +0000
+
+psycle (0.0.252) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Wed, 12 Jan 2005 07:47:04 +0000
+
+psycle (0.0.249) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Tue, 11 Jan 2005 23:02:33 +0000
+
+psycle (0.0.246) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Tue, 11 Jan 2005 22:33:33 +0000
+
+psycle (0.0.236) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Mon, 10 Jan 2005 13:51:58 +0000
+
+psycle (0.0.233) unstable; urgency=low
+
+  * built with gcc 3.3 ... it segfaults with 3.4
+    because boost is not compiled against the latest libstdc++.
+    other temporary solution might be to select the libstdc++ that boost uses.
+  * fixed dependencies for the leafs:
+    now using $(foo_CFLAGS) and $(foo__LIBS) instead of just -l-foo ...
+    which selected psycle libs already installed system-wide in /usr/lib/psycle!!!
+
+ -- Johan Boule <bohan@retropaganda.info>  Mon, 10 Jan 2005 13:50:56 +0000
+
+psycle (0.0.231) unstable; urgency=low
+
+  * changes in the build system
+  * graph view using signals from the back-end
+
+ -- Johan Boule <bohan@retropaganda.info>  Mon, 10 Jan 2005 07:50:24 +0000
+
+psycle (0.0.230) unstable; urgency=low
+
+  * back-end now emits signals to the front-ends
+  * graph view using signals from the back-end
+
+ -- Johan Boule <bohan@retropaganda.info>  Fri,  7 Jan 2004 09:45:25 +0000
+
+psycle (0.0.229) unstable; urgency=low
+
+  * a microsoft-only release
+  * source files contain 50786 words in 14789 lines
+
+ -- Johan Boule <bohan@retropaganda.info>  Thu,  2 Dec 2004 19:13:10 +0000
+
+psycle (0.0.213) unstable; urgency=low
+
+  * created new packages
+  * source files contain 31543 words in 9021 lines
+
+ -- Johan Boule <bohan@retropaganda.info>  Wed, 20 Oct 2004 19:38:18 +0000
+
+psycle (0.0.212) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+  * operating_system revised for boost::filesystem
+
+ -- Johan Boule <bohan@retropaganda.info>  Fri, 15 Oct 2004 00:27:34 +0000
+
+psycle (0.0.204) unstable; urgency=low
+
+  * new package lib-psycle.configuration-dev for shared configuration.hpp and project.hpp headers 
+
+ -- Johan Boule <bohan@retropaganda.info>  Fri,  1 Oct 2004 00:14:39 +0000
+
+psycle (0.0.201) unstable; urgency=low
+
+  * improvements in the build system
+
+ -- Johan Boule <bohan@retropaganda.info>  Thu, 30 Sep 2004 14:13:23 +0000
+
+psycle (0.0.195) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Mon, 27 Sep 2004 09:32:34 +0000
+
+psycle (0.0.194) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Mon, 27 Sep 2004 08:38:53 +0000
+
+psycle (0.0.193) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Mon, 27 Sep 2004 05:55:49 +0000
+
+psycle (0.0.192) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Mon, 27 Sep 2004 05:52:13 +0000
+
+psycle (0.0.190) unstable; urgency=low
+
+  * syncing debian package version patch number with that of gnu-arch
+
+ -- Johan Boule <bohan@retropaganda.info>  Fri, 24 Sep 2004 22:04:44 +0000
+
+psycle (0.0.184) unstable; urgency=low
+
+  * renamed psycle.gtkmm to psycle.gui (now complete)
+
+ -- Johan Boule <bohan@retropaganda.info>  Sat, 24 Jul 2004 21:11:50 +0000
+
+psycle (0.0.183) unstable; urgency=low
+
+  * renamed psycle.gtkmm to psycle.gui
+
+ -- Johan Boule <bohan@retropaganda.info>  Thu, 23 Sep 2004 15:24:03 +0000
+
+psycle (0.0.182) unstable; urgency=low
+
+  * added gnome canvas to mswindows post-install script
+
+ -- Johan Boule <bohan@retropaganda.info>  Thu, 23 Sep 2004 15:18:27 +0000
+
+psycle (0.0.181) unstable; urgency=low
+
+  * added libgnomecanvas in dev-pack
+  * added dependency on libgnomecanvasmm
+  * renamed psycle.gtkmm to psycle.gui
+  * added pkg-config files for boost libs in dev-pack
+
+ -- Johan Boule <bohan@retropaganda.info>  Wed, 22 Sep 2004 12:10:38 +0000
+
+psycle (0.0.180) unstable; urgency=low
+
+  * added support for pre-compiled headers in the build system for gcc
+
+ -- Johan Boule <bohan@retropaganda.info>  Sun, 19 Sep 2004 06:39:31 +0000
+
+psycle (0.0.151) unstable; urgency=low
+
+  * eclipse project now works
+
+ -- Johan Boule <bohan@retropaganda.info>  Sat, 18 Sep 2004 14:46:18 +0000
+
+psycle (0.0.150) unstable; urgency=low
+
+  * minor build system patches
+
+ -- Johan Boule <bohan@retropaganda.info>  Thu, 16 Sep 2004 14:09:30 +0000
+
+psycle (0.0.149) unstable; urgency=low
+
+  * c++BuilderX project file now in stable version.
+
+ -- Johan Boule <bohan@retropaganda.info>  Wed, 15 Sep 2004 20:01:02 +0000
+
+psycle (0.0.145) unstable; urgency=low
+
+  * syncing debian version number with tla revision number
+
+ -- Johan Boule <bohan@retropaganda.info>  Wed, 15 Sep 2004 16:03:19 +0000
+
+psycle (0.0.138) unstable; urgency=low
+
+  * build system greatly simplified thanks to automake's subdir-objects option
+
+ -- Johan Boule <bohan@retropaganda.info>  Wed, 15 Sep 2004 14:16:57 +0000
+
+psycle (0.0.129) unstable; urgency=low
+
+  * build system redone
+
+ -- Johan Boule <bohan@retropaganda.info>  Tue, 14 Sep 2004 01:34:20 +0000
+
+psycle (0.0.126) unstable; urgency=low
+
+  * lots of patches
+
+ -- Johan Boule <bohan@retropaganda.info>  Sun, 12 Sep 2004 13:04:32 +0000
+
+psycle (0.0.108) unstable; urgency=low
+
+  * added c++builderX project files
+
+ -- Johan Boule <bohan@retropaganda.info>  Fri, 10 Sep 2004 14:34:06 +0000
+
+psycle (0.0.107) unstable; urgency=low
+
+  * added eclipse project files to gnu-arch archive
+  * added eclipse project files to automake distribution
+
+ -- Johan Boule <bohan@retropaganda.info>  Tue,  7 Sep 2004 06:12:36 +0000
+
+psycle (0.0.104) unstable; urgency=low
+
+  * modified debian/control
+  * modified required versions of dependency packages
+
+ -- Johan Boule <bohan@retropaganda.info>  Tue,  7 Sep 2004 04:27:47 +0000
+
+psycle (0.0.97) unstable; urgency=low
+
+  * binary distribution for mswindows
+
+ -- Johan Boule <bohan@retropaganda.info>  Mon,  6 Sep 2004 02:13:07 +0000
+
+psycle (0.0.92) unstable; urgency=low
+
+  * changed back 'sh' to 'bash' for autogenerate because, on debian, 'sh' can be 'dash',
+  	which is POSIX, and POSIX only, lacking some usefull builtin commands and syntaxes.
+
+ -- Johan Boule <bohan@retropaganda.info>  Sun,  5 Sep 2004 21:47:49 +0000
+
+psycle (0.0.88) unstable; urgency=low
+
+  * automatic symlink to latest source package.
+
+ -- Johan Boule <bohan@retropaganda.info>  Thu,  5 Sep 2004 13:18:41 +0000
+
+psycle (0.0.81) unstable; urgency=low
+
+  * added autoconf test and automake condition in the build system
+    for the x-window front-end because it relies on Xlib,
+    which doesn't exist on MSWindows, unless Cygwin is installed.
+
+ -- Johan Boule <bohan@retropaganda.info>  Thu,  2 Sep 2004 11:10:49 +0000
+
+psycle (0.0.80) unstable; urgency=low
+
+  * syncing debian version number with tla revision number
+
+ -- Johan Boule <bohan@retropaganda.info>  Tue, 31 Aug 2004 01:51:18 +0000
+
+psycle (0.0.67) unstable; urgency=low
+
+  * changed script interpreter for autogenerate from bash to sh,
+  	because msys, even if it has bash, doesn't have named the executable
+  	"bash" but just "sh". Anyway, sh is more portable than bash.
+  * integrated satoshi's blog in www pages.
+  * added short help as to how to download the source code using cvs.
+
+ -- Johan Boule <bohan@retropaganda.info>  Mon, 30 Aug 2004 12:57:16 +0000
+
+psycle (0.0.56) unstable; urgency=low
+
+  * syncing debian version number with tla revision number
+
+ -- Johan Boule <bohan@retropaganda.info>  Mon, 23 Aug 2004 02:14:48 +0000
+
+psycle (0.0.23) unstable; urgency=low
+
+  * automatic build+rsync of the debian archive
+
+ -- Johan Boule <bohan@retropaganda.info>  Sun, 22 Aug 2004 17:45:30 +0000
+
+psycle (0.0.22) unstable; urgency=low
+
+  * changes in package-meta-info
+  * added www dir
+  * rsync script for www dir, with call to update-timestamps on the remote host
+  * added tests for the host and build operating system in configure.ac: *-*-mingw*, *-*-cygwin*,
+  	to transmit some needed compiler and linker options not handled automatically by libtool.
+  * added debian/archive
+
+ -- Johan Boule <bohan@retropaganda.info>  Sat, 21 Aug 2004 22:12:51 +0000
+
+psycle (0.0.21) unstable; urgency=low
+
+  * fixed autogenerate.d for pixmaps: dist_DATA -> nodist_DATA and EXTRA_DIST
+
+ -- Johan Boule <bohan@retropaganda.info>  Tue, 17 Aug 2004 17:56:25 +0000
+
+psycle (0.0.20) unstable; urgency=low
+
+  * autogenerated list of pixmaps
+  * modified the description of the package
+
+ -- Johan Boule <bohan@retropaganda.info>  Tue, 17 Aug 2004 02:39:58 +0000
+
+psycle (0.0.19) unstable; urgency=low
+
+  * added pixmap for debian menu entries
+
+ -- Johan Boule <debian@retropaganda.info>  Sun, 16 Aug 2004 12:17:46 +0000
+
+psycle (0.0.18) unstable; urgency=low
+
+  * added debian menu entries in Apps/Sound for psycle.text, psycle.x-window, psycle.gtkmm
+
+ -- Johan Boule <debian@retropaganda.info>  Sun, 16 Aug 2004 00:26:52 +0000
+
+psycle (0.0.17) unstable; urgency=low
+
+  * patches
+
+ -- Johan Boule <debian@retropaganda.info>  Sun, 15 Aug 2004 22:23:44 +0000
+
+psycle (0.0.16) unstable; urgency=low
+
+  * patches
+
+ -- Johan Boule <debian@retropaganda.info>  Sun, 15 Aug 2004 20:31:10 +0000
+
+psycle (0.0.15) unstable; urgency=low
+
+  * patches
+
+ -- Johan Boule <debian@retropaganda.info>  Sun, 15 Aug 2004 17:25:35 +0000
+
+psycle (0) unstable; urgency=low
+
+  * Initial Release.
+  * 2004-08:
+  	* debian package and online apt source archive.
+  	* autotools build system works on cygwin.
+  	* autogenerated makefile.am for all *.cpp, *.private.hpp (EXTRA_DIST), and public *.hpp (include_HEADERS).
+  	* uniquifier of *.cpp, replacing '/' with '.', to allow several *.o from the same */(*).cpp file name.
+  	* haas plugin.
+  * 2004-07:
+  	* autotools build system works on debian sarge.
+  	* autotools build system works on debian woody.
+  * 2004-04:
+    * repaired the softsynth projects
+    * refactored them to follow the standard c++ naming convention (all lower case)
+  * 2004-03
+    * played with gtkmm gui lib
+  * 2004-02:
+  	* GNU-Arch archive setup.
+  * 2004-01 to 2004-03
+    * created my own x-window/ms-windows gui lib
+  * 2003-12-13
+    * psycle msvc 7.1 project stable
+  * 2003-12-11
+    * fixed class sine_sequence ... was missing clipped(-1, sin, +1)
+  * 2003-12-07
+    * added psycle msvc 7.1 project
+  * 2003-11-02
+    * added a snap dial to the delay plugin
+  * 2003-10-10
+    * upgraded msvc from 7.0 to 7.1 ... and, of course, the solution does not compile anymore
+  * 2003-06-29
+    * created the gui library, based on fltk-2, to allow overlapping non-rectangular widgets
+  * 2003-06-01
+    * added phase commands
+    * added events samples_per_second_changed and sequencer_ticks_per_second_changed
+      these events are not triggered by the host but by the psycle::plugin::Plugin class,
+      but the plugins see them just like any other events :-)
+  * 2003-05-31
+    * added all cvs plugins to this project structure
+  * 2003-05-25
+    * added ring_modulator
+  * 2003-05-24
+    * added flanger
+  * 2003-05-21
+    * added delay
+    * added distortion
+  * 2003-05-16
+    * conversion internal->native done, added calls to converter in song.cpp
+    * scale facilities now in scale.h and shared between plugins and converter
+  * 2003-05-08
+    * plugin.h now stable and pretty
+    * added gainer
+    * added filter_2_poles
+  * 2003-05-01
+    * project restart and merging with psycle
+  * 2003-04 to 2003-06
+    * played with fltk-2-alpha gui lib
+  * 2003-03-23
+    * fixed virtual polymorphic call in base class destructor of input ports
+  * 2003-03-22
+    * events_per_second propagation
+  * 2003-03-21
+    * device interface in nodes
+    * input ports now have a vector of connected output ports
+    * output stream width alignment and console width setting
+  * 2003-03-17
+    * direct sound output plugin
+  * 2003-03-16
+    * channel count propagation
+    * sine oscillator plugin
+    * direct sound output strangely silent
+  * 2003-03-13
+    * boost thread
+    * single threaded scheduler
+  * 2003-03-12
+    * project restart
+  * 2002
+    * project restart
+  * 2001
+    * project restart
+  * 2000
+    * project restart
+  * 1999
+    * project start
+
+ -- Johan Boule <debian@retropaganda.info>  Wed,  4 Aug 2004 00:29:15 +0000
+
+psycle (-1) unstable; urgency=low
+
+  * nothing
+
+ -- noone <noone@nowhere.org>  Mon,  1 Jan 2000 00:00:00 +0000
+
+Local variables:
+mode: debian-changelog
+End:

@@ -1,0 +1,4 @@
+usr/lib/pkgconfig/psycle.text.pc
+usr/lib/lib-psycle.text.so
+usr/lib/lib-psycle.text.la
+usr/include/psycle-*/psycle/front_ends/text/

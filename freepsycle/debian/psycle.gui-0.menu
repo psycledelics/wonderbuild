@@ -1,0 +1,8 @@
+?package(psycle.gui): \
+	section="Apps/Sound" \
+	hints="Editors/Psycle" \
+	title="Psycle GUI front-end" \
+	longtitle="Psycle Modular Music Creation Studio, GTKMM/GNOMEMM GUI front-end" \
+	command="/usr/bin/psycle.gui-0" \
+	needs="X11" \
+	icon="/usr/share/pixmaps/psycle/logo.xpm"

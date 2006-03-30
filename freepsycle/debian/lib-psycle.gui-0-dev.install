@@ -1,0 +1,4 @@
+usr/lib/pkgconfig/psycle.gui.pc
+usr/lib/lib-psycle.gui.so
+usr/lib/lib-psycle.gui.la
+usr/include/psycle-*/psycle/front_ends/gui/

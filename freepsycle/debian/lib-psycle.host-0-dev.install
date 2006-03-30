@@ -1,0 +1,4 @@
+usr/lib/pkgconfig/psycle.host.pc
+usr/lib/lib-psycle.host.so
+usr/lib/lib-psycle.host.la
+usr/include-*/psycle/psycle/host/
