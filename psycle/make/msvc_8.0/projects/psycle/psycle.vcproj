@@ -634,7 +634,7 @@
 								>
 							</File>
 							<File
-								RelativePath="..\..\..\..\src\psycle\host\audiodrivers\OutputDlg.cpp"
+								RelativePath="..\..\..\..\src\psycle\host\gui\OutputDlg.cpp"
 								>
 							</File>
 							<File
