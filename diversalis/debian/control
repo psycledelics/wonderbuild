@@ -1,0 +1,21 @@
+Source: diversalis
+Section: libs
+Priority: optional
+Build-Depends: cdbs (>= 0.4.26), debhelper (>= 4.2.30), autotools-dev, pkg-config (>= 0.15), make (>= 3.80), doxygen (>= 1.4.1), graphviz (>= 2.2), g++ (>= 3.3.5), libboost-dev (>= 1.31)
+Maintainer: Johan Boule <bohan@retropaganda.info>
+Standards-Version: 3.6.1
+
+Package:    lib-diversalis-0-dev
+Provides:   lib-diversalis-dev
+Recommends: lib-diversalis-0-doc (= ${Source-Version})
+Depends: ${misc:Depends}, pkg-config (>= 0.15)
+Architecture: any
+Description: diversalis development package
+ preprocessor definitions for use in preprocessor conditions in order to write platform-specific code
+
+Package:  lib-diversalis-0-doc
+Suggests: lib-diversalis-0-dev (= ${Source-Version})
+Architecture: all
+Description: documentation for diversalis
+ -
+

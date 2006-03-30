@@ -1,0 +1,4 @@
+usr/lib/pkgconfig/universalis.pc
+usr/lib/lib-universalis.la
+usr/lib/lib-universalis.so
+usr/include/universalis-*/

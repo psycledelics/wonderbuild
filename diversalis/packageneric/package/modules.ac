@@ -1,0 +1,17 @@
+#! /usr/bin/autoconf
+
+PACKAGENERIC__INCLUDE(packageneric/generic/autotools/autoconf/pool/specificities/dynamic-link-loader.ac)
+PACKAGENERIC__INCLUDE(packageneric/generic/autotools/autoconf/pool/specificities/multithreading.ac)
+PACKAGENERIC__INCLUDE(packageneric/generic/autotools/autoconf/pool/modules/boost.base.ac)
+
+PACKAGENERIC__MODULE__INTERNAL(
+	hpp,
+	diversalis,
+	0:0:0,
+	PACKAGENERIC__DYNAMIC_LINK_LOADER
+	PACKAGENERIC__MULTITHREADING
+	BOOST__BASE,
+	preprocessor definitions for use in preprocessor conditions in order to write platform-specific code
+)
+
+PACKAGENERIC__INCLUDE(packageneric/generic/autotools/autoconf/pool/specificities/sizeof.ac)

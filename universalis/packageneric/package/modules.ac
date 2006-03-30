@@ -1,0 +1,14 @@
+#! /usr/bin/autoconf
+
+PACKAGENERIC__INCLUDE(packageneric/generic/autotools/autoconf/pool/modules/boost.ac)
+PACKAGENERIC__INCLUDE(packageneric/generic/autotools/autoconf/pool/modules/glibmm.ac)
+
+PACKAGENERIC__MODULE__EXTERNAL(DIVERSALIS, diversalis >= 0.0.0)
+
+PACKAGENERIC__MODULE__INTERNAL(
+	lib,
+	universalis,
+	0:0:0,
+	DIVERSALIS  BOOST  GLIBMM,
+	universalis platform abstraction layer
+)

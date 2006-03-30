@@ -1,0 +1,2 @@
+#! /usr/bin/automake
+include $(top_srcdir)/packageneric/package/modules/hpp.diversalis.am

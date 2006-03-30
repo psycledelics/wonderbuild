@@ -1,0 +1,10 @@
+Document: universalis-reference
+Title: reference of the universalis library
+Author: Johan Boule <bohan@jabber.org> and others
+Abstract: universalis platform abstraction layer.
+ This document describes the C++ API.
+Section: Apps/Sound
+
+Format: HTML
+Index: /usr/share/doc/lib-universalis-0-doc/doxygen/html/index.html
+Files: /usr/share/doc/lib-universalis-0-doc/doxygen/html/*.html
