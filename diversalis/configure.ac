@@ -1,0 +1,1 @@
+packageneric/generic/@root/configure.ac
