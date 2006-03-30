@@ -1,0 +1,27 @@
+#!/bin/bash
+
+##############################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2 of the License, or (at your option) any later version.
+# Copyright (C) 2004-2005 Johan Boule <bohan.dyndns.org>
+#
+# \meta generic
+# \meta standard gnu
+#
+##############################################################################
+
+set -eu &&
+
+function main
+{
+	cd $(dirname $0)/.. &&
+	cd $(tla tree-root) &&
+	local root=$(pwd) &&
+	cd .. &&
+	tla inventory --source --both $(basename $root) |
+	tar --create --no-recursion --files-from - |
+	bzip2 --compress > $(basename $root).tar.bz2 &&
+	echo "$(basename $0): created $(du --human-readable $root.tar.bz2)"
+} &&
+
+main "$@"

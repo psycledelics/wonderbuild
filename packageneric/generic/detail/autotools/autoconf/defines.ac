@@ -1,0 +1,66 @@
+#! /usr/bin/autoconf
+
+####################################################################################################
+#
+# This program is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2 of the License, or (at your option) any later version.
+# Copyright (C) 2004-2005 Johan Boule <bohan.dyndns.org>
+#
+# \meta generic
+# \meta standard posix
+#
+####################################################################################################
+
+
+
+########################################################################################################################################################################
+########################################################################################################################################################################
+########################################################################################################################################################################
+########################################################################################################################################################################
+# defines
+
+
+
+##########################################
+packageneric__echoing 'build information'
+##########################################
+
+
+
+PACKAGENERIC__DEFINE_UNQUOTED(PACKAGENERIC__OPERATING_SYSTEM__UNAME, ["$(uname --all || uname -a)"], [operating system uname --all])
+PACKAGENERIC__DEFINE_UNQUOTED(PACKAGENERIC__OPERATING_SYSTEM__ID,    ["$(id --user --name || echo ${USER:-$LOGNAME})@$(hostname --long || uname --nodename || echo $HOSTNAME)"], [operating system user@host])
+
+PACKAGENERIC__DEFINE_UNQUOTED(PACKAGENERIC__CONFIGURATION__COMPILER__BUILD,    ["$build"],    [compiler build tool chain used for compilation] (the operating system which the binaries were compiled from))
+PACKAGENERIC__DEFINE_UNQUOTED(PACKAGENERIC__CONFIGURATION__COMPILER__HOST,     ["$host"],     [compiler host tool chain used during compilation (the operating system on which the resulting binaries should be run)])
+PACKAGENERIC__DEFINE_UNQUOTED(PACKAGENERIC__CONFIGURATION__COMPILER__CXXFLAGS, ["$CXXFLAGS"], [compiler options used to compile your translation units (source files) to object files])
+PACKAGENERIC__DEFINE_UNQUOTED(PACKAGENERIC__CONFIGURATION__COMPILER__LDFLAGS,  ["$LDFLAGS"] , [linker options used for the link phase of the compilation of your binaries])
+
+
+
+######################################
+packageneric__echoing 'install paths'
+######################################
+
+
+
+# see configure --help for more info, and http://www.gnu.org/prep/standards/standards.html#Directory-Variables
+
+PACKAGENERIC__COMPUTE_RELATIVE_PATHS([bindir:libdir:bindir_to_libdir bindir:datadir:bindir_to_datadir bindir:localstatedir:bindir_to_localstatedir bindir:sysconfdir:bindir_to_sysconfdir])
+PACKAGENERIC__DEFINE_UNQUOTED(PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_LIB,   ["$bindir_to_libdir"]       , [installed relative path from bin dir to lib dir])
+PACKAGENERIC__DEFINE_UNQUOTED(PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_SHARE, ["$bindir_to_datadir"]      , [installed relative path from bin dir to architecture-independent data (usually "share") dir])
+PACKAGENERIC__DEFINE_UNQUOTED(PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_VAR,   ["$bindir_to_localstatedir"], [installed relative path from bin dir to local state (usually "var") dir])
+PACKAGENERIC__DEFINE_UNQUOTED(PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_ETC,   ["$bindir_to_sysconfdir"]   , [installed relative path from bin dir to system config (usually "etc") dir])
+
+
+
+###################################
+packageneric__echoing 'stage path'
+###################################
+
+
+
+# Checks that the src dir specified to configure (configure --src-dir=xxx) actually contains the sources.
+AC_CONFIG_SRCDIR(configure.ac) # The file configure.ac should be present at the top of the source tree.
+
+top_srcdir=$(cd $srcdir && pwd) # see also $abs_top_srcdir. $top_srcdir is the top src dir relative to the top build dir ($top_builddir). pwd is the top build dir.
+PACKAGENERIC__COMPUTE_RELATIVE_PATHS([PWD:top_srcdir:top_builddir_to_top_srcdir])
+PACKAGENERIC__DEFINE_UNQUOTED(PACKAGENERIC__CONFIGURATION__STAGE_PATH__BUILD_TO_SOURCE, ["$top_builddir_to_top_srcdir"], [relative path from build dir to source dir])

@@ -1,0 +1,43 @@
+#!/usr/bin/autoconf
+
+####################################################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# Copyright (C) 1999-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
+#
+# This file is meant to be included by /=modules.external.ac
+# \meta package-specific
+# \meta standard posix
+#
+####################################################################################################
+
+
+
+########################################################################################################################################################################
+########################################################################################################################################################################
+########################################################################################################################################################################
+########################################################################################################################################################################
+# optional gui support
+
+
+PACKAGENERIC__CONFIGURATION__OPTION__WITH__DEFINE(gui, builds the graphical user interface front-ends, gui, GUI, no)
+if PACKAGENERIC__CONFIGURATION__OPTION__WITH(gui)
+then
+	###########
+	# x window
+	###########
+
+	case $host in
+		*-*-mingw* | *-*-windows*)
+			: # no support for the x window protocol :-(
+		;;
+		*)
+			# Try to locate the X Window System include files and libraries as well as extra libraries.
+			# This defines the shell variables $(X_CFLAGS), $(X_PRE_LIBS), $(X_LIBS), $(X_EXTRA_LIBS).
+			# This will add a package option to the configure script (configure --with-x=yes|no).
+			AC_PATH_X
+			AC_PATH_XTRA
+			PACKAGENERIC__MODULE__EXTERNAL__DEFINE(X_WINDOW, $X_PRE_LIBS $X_LIBS -lX11 $X_EXTRA_LIBS, $X_CFLAGS, >= 11.6)
+	  	;;
+	esac
+fi

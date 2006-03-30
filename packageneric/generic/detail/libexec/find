@@ -1,0 +1,31 @@
+#! /bin/sh
+
+##############################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# Copyright (C) 1999-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
+#
+# \meta generic
+# \meta standard posix
+#
+##############################################################################
+
+packageneric__find__dir__no_arch()
+{
+	echo "-mindepth 1 -follow    -type d \( \( \( -name {arch} -or -name .arch-ids -or -name .svn -or -name ++\*               \) -prune \) -or \(                                 $@ -print \) \)"
+} &&
+
+packageneric__find__dir()
+{
+	echo "-mindepth 1 -follow    -type d \( \( \( -name {arch} -or -name .arch-ids -or -name .svn -or -name ++\* -or -name @\* \) -prune \) -or \(                                 $@ -print \) \)"
+} &&
+
+packageneric__find__file__no_arch()
+{
+	echo "            -follow \( -type d       \( -name {arch} -or -name .arch-ids -or -name .svn -or -name ++\*               \) -prune \) -or \( -type f ! -name .arch-inventory $@ -print \)   "
+} &&
+
+packageneric__find__file()
+{
+	echo "            -follow \( -type d       \( -name {arch} -or -name .arch-ids -or -name .svn -or -name ++\* -or -name @\* \) -prune \) -or \( -type f ! -name .arch-inventory $@ -print \)   "
+}

@@ -1,0 +1,111 @@
+#! /usr/bin/autoconf
+
+####################################################################################################
+#
+# This program is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2 of the License, or (at your option) any later version.
+# Copyright (C) 2004-2005 Johan Boule <bohan.dyndns.org>
+#
+# \meta generic
+# \meta standard posix
+#
+####################################################################################################
+
+
+
+########################################################################################################################################################################
+########################################################################################################################################################################
+########################################################################################################################################################################
+########################################################################################################################################################################
+# gnu compiler and linker flags
+
+
+
+if test "$GXX" = yes # we have the gnu compiler
+then
+	packageneric__echo we have the gnu compiler
+	#if test "$CXXFLAGS" = "-g -O2" # the default
+	if test "$CXXFLAGS" = "" # the default with packageneric
+	then # debugging build by default
+		CFLAGS=
+		CXXFLAGS=
+		
+		# Include debugging portions of the source code:
+		CPPFLAGS="-UNDEBUG $CPPFLAGS" &&
+		
+		# Debugging information level:
+		debugging_information_level=-g &&
+		
+		# Warning level:
+		warning_level=-Wall &&
+		
+		# Optimizations: (If the vars already contain a -O option it will be used instead as the last is the one that is effective.)
+		optimization_level=-O0 &&
+		
+		compiler_flags="-pipe $warning_level $optimization_level $debugging_information_level" &&
+		CFLAGS="$compiler_flags $CFLAGS" &&
+		CXXFLAGS="$compiler_flags $CXXFLAGS" &&
+		LDFLAGS="-Wl,$optimization_level $LDFLAGS" &&
+		
+		# Generation of profiling code:
+		#CXXFLAGS="-pg $CXXFLAGS" &&
+		
+		# mudflap
+		#CXXFLAGS="-mudflapth $CXXFLAGS"
+		#LDFLAGS="-lmudflap $LDFLAGS"
+		
+        export CPPFLAGS CFLAGS CXXFLAGS LDFLAGS
+	fi &&
+	
+	# Trace inclusions:
+	#CPPFLAGS="-H $CPPFLAGS" &&
+	
+	# for g++ 3.3 (not needed for the C front-end, and not needed anymore with g++ 3.4)
+	CXXFLAGS="$CXXFLAGS -fmessage-length=0" &&
+	
+	if $(echo "$CPPFLAGS" | egrep --silent --invert-match -- '(-DNDEBUG|-UNDEBUG)')
+	then # make it explicit wether NDEBUG is defined or not
+		# Include debugging portions of the source code
+		CPPFLAGS="-UNDEBUG $CPPFLAGS"
+	fi
+fi
+
+#AC_CANONICAL_HOST # what operating system we are building for
+case $host in
+	*-*-cygwin* | *-*-mingw* | *-*-windows*)
+		if test "$GXX" = yes # we have the gnu compiler
+		then
+			packageneric__echo special hackflags for horrible host: $host
+			CXXFLAGS="$CXXFLAGS -mms-bitfields"
+			LDFLAGS="$LDFLAGS -no-undefined"
+			LDFLAGS="$LDFLAGS -Xlinker --enable-auto-image-base"
+			LDFLAGS="$LDFLAGS -Xlinker --enable-runtime-pseudo-reloc"
+		fi
+		case $host in
+			# To make it easier for the users,
+			# when the build operating system is cygwin,
+			# we can automatically build for the mingw host operating system,
+			# so that they won't have to call configure with --host=mingw32.
+			# If you want to enable this, that is, never building for the cygwin host operating system,
+			# uncomment the *) case, and comment out the *-*-mingw* | *-*-windows*) case.
+			#*)
+			#;;
+			*-*-mingw* | *-*-windows*)
+				#AC_CANONICAL_BUILD # what operating system we are building from
+				case $build in
+					*-*-cygwin*)
+						CXXFLAGS="$CXXFLAGS -mno-cygwin"
+						LDFLAGS="$LDFLAGS -mno-cygwin"
+					;;
+				esac
+			;;
+		esac
+	;;
+esac
+
+{
+	packageneric__echo "environment: CXX=$XX" &&
+	packageneric__echo "environment: CCACHE_DIR=$CCACHE_DIR" &&
+	packageneric__echo "environment: CPPFLAGS=$CPPFLAGS" &&
+	packageneric__echo "environment: CXXFLAGS=$CXXFLAGS" &&
+	packageneric__echo "environment: LDFLAGS=$LDFLAGS"
+}

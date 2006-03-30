@@ -1,0 +1,2 @@
+#! /bin/sh
+exec $(dirname $0)/../detail/libexec/autotools/autoconf/$(basename $0) "$@"

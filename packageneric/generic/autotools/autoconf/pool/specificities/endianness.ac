@@ -1,0 +1,33 @@
+#!/usr/bin/autoconf
+
+####################################################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later ver$
+# Copyright (C) 1999-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
+#
+# \meta generic
+# \meta standard posix
+#
+####################################################################################################
+
+
+
+####################################################################################################
+####################################################################################################
+####################################################################################################
+# type information
+
+
+
+# Checks for compiler and target cpu characteristics.
+AC_C_BIGENDIAN # Determines the byte sex of the target cpu by defining WORDS_BIGENDIAN for big endian cpus.
+
+
+
+###################
+# cache checkpoint
+###################
+
+
+
+AC_CACHE_SAVE

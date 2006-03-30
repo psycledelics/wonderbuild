@@ -1,0 +1,25 @@
+#!/bin/bash
+
+##############################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# Copyright (C) 1999-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
+#
+# \meta generic
+# \meta standard gnu
+#
+##############################################################################
+
+function main
+{
+	cd $(dirname $0) &&
+	source bin/map-local-user-account-name-to-remote-user-account-name . &&
+	set -x &&
+	rsync \
+		"$@" --verbose --progress --exclude '.arch-ids' --compress --recursive --links --checksum \
+		www/ \
+		$remote__user@$remote__host:$remote__path
+	ssh $remote__user@$remote__host $remote__path/update-timestamps
+}
+
+main "$@"

@@ -1,0 +1,508 @@
+#! /bin/bash
+
+####################################################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# Copyright (C) 1999-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
+#
+# \meta generic
+# \meta standard gnu
+#
+####################################################################################################
+
+set -o nounset &&
+
+export LC_ALL=C &&
+
+function description
+{
+cat<<eof
+
+Does a full rebuild of the source package,
+and optionally updates remote servers.
+
+This script accepts the following options:
+
+	$(echo-custom --output \<output\>)\
+	
+		Path to temporary output.
+		Defaults to the environment variable PACKAGENERIC__OUTPUT,
+		or $output__relative if it is not set.
+	
+	$(echo-custom --packages [packages])\
+	
+		Path to the local cache of the remote archive repository of packages.
+		If [packages] is not given, it defaults to the environment variable
+		PACKAGENERIC__PACKAGES, or <output>/packages if is it not set.
+		Note that <output>/packages is deleted each new run, being under the <output> directory.
+		If you want to cache the remote archive repository locally between several runs,
+		give a [packages] location which is outside of the <output> directory.
+		
+	$(echo-custom --binary-distribution \<distributions ...\>)\
+	
+		Implies --source-distribution
+		
+		Builds binary packages for each distribution in a corresponding temporary chroot,
+		and output them under the <packages> directory.
+		
+	$(echo-custom --source-distribution [distributions ...])\
+	
+		Implies --distdir
+		
+		Builds source packages for each distribution
+		and output them under the <packages> directory.
+		If no [distribution] is given, the archive field in debian/changelog is used.
+		
+	$(echo-custom --distribution-section-component \<section-component\>)\
+	
+		Defaults to main.
+		
+	$(echo-custom --sync)\
+		
+		To be used in conjunction with --binary-distribution.
+		Synchronizes the package version patch number with that of gnu-arch.
+
+	$(echo-custom --upload)\
+		
+		Sends the packages located under <packages>/<remote-host>
+		to the <remote-host> defined in packageneric/package/remote.
+		
+		For this to work, you need to have a ssh key to connect to the <remote-host>,
+		and if your local user name differs from the remote user name,
+		you also need to have your local user name mapped the remote user name
+		in packageneric/package/remote/user.
+		
+		Also, upon a successful build, a commit to the gnu-arch archive
+		will be done with a summary message including
+		the version of the source package, as set in debian/changelog.
+		This is let us identify and retrieve the source of any release.
+		Two things worth to note about commits to the gnu-arch archive:
+			1)
+				The archive is a pgp-signed archive,
+				so, you need a pgp key to commit to the archive.
+				Read http://wiki.gnuarch.org/moin.cgi/Signing_20Archives
+			2)
+				Please use a sftp server wrapper on the remote server
+				that sets umask to allow group-writable permissions, or you will
+				prevent other devers from committing further to the archive.
+				Read http://wiki.gnuarch.org/moin.cgi/Centralized_20Development
+
+	$(echo-custom --distdir)\
+		
+		With this option,
+			a make distdir is done first, under <output>/build,
+			resulting in a <output>/build/$package__name-$package__version distdir.
+			Then, the build is done with the distdir as source package.
+			You will hence see two configurations done, this is normal.
+		
+		Without this option,
+			just build directly from <output>/build.
+	
+	$(echo-custom -n --no-nested-source-packages)   The opposite of --nested-source-packages.
+	   $(echo-custom --nested-source-packages)\
+		
+		This option is on by default.
+		Recursively builds the nested source packages.
+
+	$(echo-custom --no-bootstrap)\
+		
+		Do not Call packageneric/generic/bin/autotools.bootstrap, i.e. simply configures and makes.
+	
+	$(echo-custom --configure \<options\>)\
+	
+		Calls to the configure script, if any, will be passed <options>.
+		(this can, e.g., override the default --prefix=<output>/install)
+	
+	$(echo-custom --debug)\
+			
+		Shortcut for --configure options.
+		Compiles, links, and installs with debugging portions of the code and debugging information enabled.
+		
+	$(echo-custom --make \<options\>)\
+	
+		Calls to make, if any, will be passed <options>.
+		(this can, e.g., set a DESTDIR variable for stage install.)
+		
+	$(echo-custom --continue)\
+		
+		Implies --no-bootstrap.
+		Continues the build at the point it was left at.
+		If a makefile already exists,
+			simply invokes make to continue ; i.e. no bootstrap or reconfiguration is done.
+		Else, If the configure script already exists,
+			simply configures and makes (same thing as --no-bootstrap).
+		Else, bootstraps, configures, and makes.
+	
+	$(echo-custom --clean)\
+		
+		Removes the <output> directory,
+		and, if --no-bootstrap is not also given, also calls
+		packageneric/generic/bin/autotools.bootstrap --clean.
+		Nothing else is done, even if other options are given.
+		
+	$(echo-custom -n --help)   Shows this help.
+	
+	$(echo-custom -n --version)   $($libexec/version)
+	
+eof
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+function main
+{
+ 	local libexec=$(cd $(dirname $0) && pwd) &&
+ 	local output__relative=++packageneric &&
+	$libexec/package/meta-information --ensure &&
+	local package__name=$($libexec/package/meta-information name) &&
+	local package__version=$($libexec/package/meta-information version) &&
+
+	echoing '===========================================================' &&
+	echoing "packageneric $($libexec/version) $(basename $0) script" &&
+	echoing "source package: $package__name $package__version $($libexec/package/meta-information archive)" &&
+	echoing '===========================================================' &&
+	
+	# options
+		# default
+			local output=${PACKAGENERIC__OUTPUT:-$(pwd)/$output__relative} &&
+			local packages= &&
+			local binary__distribution= &&
+			local source__distribution= &&
+			local distribution__section_component= &&
+			local option__distribute=false &&
+			local option__sync=false &&
+			local option__upload=false &&
+			local option__distdir=false &&
+			local option__nested_source_packages=true &&
+			local option__nested_source_packages__embeed=true &&
+			local option__bootstrap=true &&
+			local configure__options="--config-cache --with-gui" &&
+			local option__debug=false &&
+			local make__options="--silent" &&
+			#local make__options= &&
+			local option__continue=false &&
+			local option__clean=false &&
+			local option__configure__cached=false &&
+			local option__no_chroot=false &&
+			local option__cross_packaging=false &&
+			local options= &&
+		# command line
+			while test $# != 0
+			do
+				options="$options $1" &&
+				case $1 in
+					--output) shift && output=$1 ;;
+					--packages) case $2 in --*) : ;; *) shift && packages=$1 ;; esac ;;
+					--binary-distribution) option__distribute=true && shift && binary__distribution=$1 ;;
+					--source-distribution) option__distribute=true && case $2 in --*) : ;; *) shift && source__distribution=$1 ;; esac ;;
+					--distribution-section-component) shift && distribution__section_component=$1 ;;
+					--sync) option__sync=true ;;
+					--upload) option__upload=true ;;
+					--distdir) option__distdir=true ;;
+					--nested-source-packages) option__nested_source_packages=true ;;
+					--no-nested-source-packages) option__nested_source_packages=false ;;
+					--no-bootstrap) option__bootstrap=false ;;
+					--configure) shift && configure__options=$configure__options\ $1 ;;
+					--debug) option__debug=true ;;
+					--make) shift && make__options=$make__options\ $1 ;;
+					--continue) option__continue=true ;;
+					--clean) option__clean=true ;;
+					--configuration-cached) option__configure__cached=true ;;
+					--no-chroot) option__no_chroot=true ;;
+					--cross-packaging) option__cross_packaging=true ;;
+					--version) return ;;
+					--help) description && return ;;
+					*) echoing "unexpected option: $1." && description && false ; return ;;
+				esac ||
+				return
+				shift
+			done &&
+		# implies
+			if test -z "$packages"
+			then
+				packages=${PACKAGENERIC__PACKAGES:-$output/packages}
+			fi &&
+			if $option__configure__cached
+			then
+				option__bootstrap=false
+			else
+				if $option__continue
+				then
+					option__bootstrap=false
+				fi &&
+				if $option__distribute
+				then
+					option__distdir=true
+				fi &&
+				if $option__nested_source_packages
+				then
+					configure__options="--with-nested-source-packages $configure__options"
+				fi
+			fi &&
+
+	echoing '' &&
+	echoing "build start date: $(date)" &&
+	
+ 	local source=$($libexec/root) &&
+ 	cd $source &&
+ 	
+	echoing '' &&
+	echoing "source: $source" &&
+	echoing "output: $output" &&
+	echoing "packages: $packages" &&
+	echoing "binary distribution: $binary__distribution" &&
+	echoing "source distribution: $source__distribution" &&
+	echoing '' &&
+	
+	if ! $option__configure__cached && test $(dirname $(which make)) != $libexec/wrappers
+	then
+		: #PATH=$libexec/wrappers:$PATH
+	fi &&
+	if ! $option__configure__cached && ! $option__continue
+	then
+		echoing "removing output directory" rm --force --recursive $output 2>/dev/null ||
+		{
+			echoing "error: could not remove output directory $output" &&
+			{
+				rm --version 1>/dev/null 2>&1 ||
+				echoing "error: this $(basename $0) script only works on GNU systems."
+			} &&
+			false
+		}
+	fi &&
+	if $option__clean
+	then
+		if $option__bootstrap && ! $option__continue
+		then
+			echoing "autotools bootstrap" $libexec/autotools/bootstrap --clean || no-bootstrap-advice
+		fi
+	else
+		if $option__distribute && $option__sync
+		then
+			. $libexec/debian/sync-with-gnu-arch &&
+			sync
+		fi &&
+		export CCACHE_DIR=$(echo ${CCACHE_DIR:-$output/ccache}) &&
+		if $option__configure__cached
+		then
+			local configure__options="--cache-file ../../../../config.cache $configure__options"
+		else
+			if $option__bootstrap && ! $option__continue
+			then
+				echoing "autotools bootsrap" $libexec/autotools/bootstrap || no-bootstrap-advice &&
+				package__name=$($libexec/package/meta-information name) &&
+				package__version=$($libexec/package/meta-information version) &&
+				echoing "refreshed meta-information: source package: $package__name $package__version $($libexec/package/meta-information archive)"
+			fi &&
+			compilation_flags
+		fi &&
+		if ! $option__configure__cached && ! $option__continue || test ! -e $output/build/Makefile
+		then
+			echoing "making build directory" mkdir --verbose $output/build --parents &&
+			(
+				echoing "entering build directory" cd $output/build &&
+				echoing "autotools autoconf configure" $source/configure $configure__options &&
+				echoing "leaving build directory"
+			)
+		fi &&
+		(
+			echoing "entrering build directory" cd $output/build &&
+			if $option__distdir
+			then
+				local distdir=$package__name-$package__version &&
+				if ! $option__continue || test ! -d $distdir/$output__relative/build
+				then
+					echoing "making distdir" make $make__options distdir &&
+					echoing "Successfully built distribution directory: $(pwd)/$distdir"
+				fi
+			else
+				echoing "making all" make $make__options all &&
+				echoing "successfully built files in directory: $output/build" &&
+				echoing "making install-strip" make $make__options install-strip &&
+				echoing "successfully installed files in directory: $output/build/++packageneric/install" # todo: this is AC_DEFAULT_PREFIX, or --configure --prefix=
+			fi &&
+			if $option__distribute
+			then
+				if test -e /etc/debian_version
+				then
+					echoing "debian" \
+						./$distdir/packageneric/generic/detail/libexec/debian/build \
+							--source-root $source \
+							--build-root $(pwd) \
+							--packages $packages \
+							$(if $option__upload ; then echo --upload ; fi) \
+							--source-distribution "$source__distribution" \
+							--binary-distribution "$binary__distribution" \
+							$(if test -n "$distribution__section_component" ; then echo --distribution-section-component $distribution__section_component ; fi) \
+					 		$(if $option__nested_source_packages ; then echo --nested-source-packages ; fi) \
+					 		$(if $option__no_chroot ; then echo --no-chroot ; fi) \
+					 		$(if $option__cross_packaging ; then echo --cross-packaging ; fi) \
+					&&
+					if which tree 1>/dev/null
+					then
+						tree -alF $packages
+					fi
+				elif test "$OSTYPE" = msys
+				then
+						local src=${package__tar_name}_$package__version.tar.gz &&
+						if ! test -e $src
+						then
+							echoing "tarball" tar --create $distdir | gzip --best > $src
+						fi &&
+						echoing "building in distdir" ./$distdir/packageneric/generic/bin/build --configuration-cached &&
+						echoing "microsoft distribute" ./$distdir/packageneric/generic/detail/libexec/microsoft/distribute $(pwd)/$distdir/$output__relative/install
+				else
+					echoing "error: distribution is not implemented for your system." &&
+					false
+				fi &&
+				{
+					echoing "removing build directory" rm --force --recursive $output/build 2>/dev/null ||
+					{
+						echoing "warning: could not remove build directory $output/build" &&
+						false
+					}
+				}
+			elif $option__distdir
+			then
+				echoing "building in distdir" ./$distdir/packageneric/generic/bin/build --configuration-cached
+			fi &&
+			echoing "build end date: $(date)"
+		)
+	fi &&
+	echoing "completed successfully for $(pwd) ${options:-} $*" ||
+	{
+		echoing "failed for $(pwd) ${options:-} $*" &&
+		false
+	}
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+function sync
+{
+	echoing 'debian changelog sync to gnu-arch: querying gnu-arch ... logs ...' &&
+	local gnu_arch__version__patch=$($libexec/gnu-arch/logs --reverse | head --lines 1 | sed 's/patch-//') &&
+	echoing "debian changelog sync to gnu-arch: gnu-arch patch level: $gnu_arch__version__patch" &&
+	if test -z "gnu_arch__version__patch"
+	then
+		echoing "debian changelog sync to gnu-arch: not in a gnu-arch project tree" &&
+		return
+	fi &&
+	if ! echoing "debian changelog sync to gnu-arch: querying gnu-arch ... changes ..." $libexec/gnu-arch/changes
+	then
+		gnu_arch__version__patch__compare=$(expr $gnu_arch__version__patch + 1) &&
+		echoing "debian changelog sync to gnu-arch: gnu-arch patch level after commit: $gnu_arch__version__patch__compare"
+	else
+		gnu_arch__version__patch__compare=$gnu_arch__version__patch &&
+		echoing "debian changelog sync to gnu-arch: gnu-arch patch level before commit: $gnu_arch__version__patch__compare"
+	fi &&
+	echoing "debian changelog sync to gnu-arch: refreshing meta-information ..." $libexec/package/meta-information --refresh &&
+	package__name=$($libexec/package/meta-information name) &&
+	package__version=$($libexec/package/meta-information version) &&
+	echoing "debian changelog sync to gnu-arch: refreshed debian version: $package__version" &&
+	local debian__version__major=$($libexec/package/meta-information version--major) &&
+	local debian__version__minor=$($libexec/package/meta-information version--minor) &&
+	local debian__version__patch=$($libexec/package/meta-information version--patch) &&
+	if test $debian__version__patch -lt $gnu_arch__version__patch__compare
+	then
+		echoing 'debian changelog sync to gnu-arch' debchange --newversion $debian__version__major.$debian__version__minor.$(expr $gnu_arch__version__patch + 1) syncing debian package version patch number with that of gnu-arch &&
+		echoing "debian changelog sync to gnu-arch: refreshing meta-information ..." $libexec/package/meta-information --refresh &&
+		package__name=$($libexec/package/meta-information name) &&
+		package__version=$($libexec/package/meta-information version) &&
+		echoing "debian changelog sync to gnu-arch: refreshed debian version: $package__version"
+	else
+		echoing "debian changelog sync to gnu-arch: debian and gnu-arch are equals"
+	fi
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+function compilation_flags
+{
+	if $option__debug
+	then
+		# Include debugging portions of the source code:
+		CPPFLAGS="-UNDEBUG ${CPPFLAGS:-}" &&
+		
+		# Debugging information level:
+		local debugging_information_level=-g &&
+		
+		# Warning level:
+		local warning_level=-Wall &&
+		
+		# Optimizations: (If the vars already contain a -O option it will be used instead as the last is the one that is effective.)
+		local optimization_level=-O0 &&
+		
+		# Generation of profiling code:
+		#CXXFLAGS="-pg $CXXFLAGS" &&
+		
+		# mudflap
+		#CXXFLAGS="-mudflapth ${CPPFLAGS:-}"
+		#LDFLAGS="-lmudflap ${CPPFLAGS:-}"
+		:
+	else
+		# Exclude debugging portions from the source code:
+		CPPFLAGS="-DNDEBUG ${CPPFLAGS:-}" &&
+		
+		# Debugging information level:
+		local debugging_information_level= && # -g
+		
+		# Warning level:
+		local warning_level=-Wall &&
+		
+		# Optimizations: (If the vars already constain a -O option it will be used instead as the last is the one that is effective.)
+		local optimization_level=-O3
+	fi &&
+	local compiler_flags="-pipe $warning_level $optimization_level $debugging_information_level" &&
+	CFLAGS="$compiler_flags ${CFLAGS:-}" &&
+	CXXFLAGS="$compiler_flags ${CXXFLAGS:-}" &&
+	LDFLAGS="-Wl,$optimization_level ${LDFLAGS:-}" &&
+	export CXX=$(echo ${CXX:-}) CPPFLAGS=$(echo $CPPFLAGS) CFLAGS=$(echo $CFLAGS) CXXFLAGS=$(echo $CXXFLAGS) LDFLAGS=$(echo $LDFLAGS)
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+function no-bootstrap-advice
+{
+	echoing "note: If you don't have all the autotools development tools (autoconf, automake, libtool) ; with an unmodified tree, try $0 --no-bootstrap instead." &&
+	false
+} &&
+
+function date
+{
+	local date__format= &&
+	echo UTC $(command date --universal '+%Y-%m-%d %H:%M:%S')
+} &&
+
+function echo-custom
+{
+	echo -en '\033[5;36m' &&
+	echo -e "$@" &&
+	echo -en '\033[0m'
+} &&
+
+function echoing
+{
+	local script_path=packageneric.$(basename $0) &&
+	local comment=$1 && shift &&
+	echo-custom "$script_path: $comment" &&
+	if test $# != 0
+	then
+		echo-custom "$script_path: -> calling: $@" &&
+		"$@"
+	fi
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+main "$@"

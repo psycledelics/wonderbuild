@@ -1,0 +1,43 @@
+#!/usr/bin/autoconf
+
+####################################################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later ver$
+# Copyright (C) 1999-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
+#
+# \meta generic
+# \meta standard posix
+#
+####################################################################################################
+
+
+
+####################################################################################################
+####################################################################################################
+####################################################################################################
+# type information
+
+
+
+# Checks for compiler and target cpu characteristics.
+AC_C_CHAR_UNSIGNED # If the type char is unsigned, defines __CHAR_UNSIGNED__, unless the compiler predefines it.
+AC_CHECK_SIZEOF(char) # Defines SIZEOF_CHAR to `sizeof(char)'.
+AC_CHECK_SIZEOF(short int) # Defines SIZEOF_SHORT_INT to `sizeof(short int)'.
+AC_CHECK_SIZEOF(int) # Defines SIZEOF_INT to `sizeof(int)'.
+AC_CHECK_SIZEOF(long int) # Defines SIZEOF_LONG_INT to `sizeof(long int)'.
+AC_CHECK_SIZEOF(long long int) # Defines SIZEOF_LONG_LONG_INT to `sizeof(long long int)'.
+AC_CHECK_SIZEOF(void *) # Defines SIZEOF_VOIDP to `sizeof(void *)'.
+AC_CHECK_SIZEOF(float) # Defines SIZEOF_FLOAT to `sizeof(float)'.
+AC_CHECK_SIZEOF(double) # Defines SIZEOF_DOUBLE to `sizeof(double)'.
+AC_CHECK_SIZEOF(long double) # Defines SIZEOF_LONG_DOUBLE to `sizeof(long double)'.
+AC_C_LONG_DOUBLE # If the compiler supports a working long double type with more range or precision than the double type, defines HAVE_LONG_DOUBLE.
+
+
+
+###################
+# cache checkpoint
+###################
+
+
+
+AC_CACHE_SAVE

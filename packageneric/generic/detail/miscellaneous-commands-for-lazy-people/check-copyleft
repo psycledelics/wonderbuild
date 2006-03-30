@@ -1,0 +1,60 @@
+#!/bin/bash
+
+##############################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2 of the License, or (at your option) any later version.
+# Copyright (C) 2004-2005 Johan Boule <bohan.dyndns.org>
+#
+# General-purpose: yes
+#
+# Lists c++ files which lack a copyleft header.
+#
+##############################################################################
+
+function main
+{
+	local file=$1
+
+	if test "$file"
+	then
+		check-copyleft $file
+	else
+		local self_dir=$(cd $(dirname $0) && pwd) &&
+		local self=$self_dir/$(basename $0) &&
+		cd $self_dir/.. &&
+		find src \( -name '*.cpp' -or -name '*.hpp' -or -name '*.hpp.in' \) -and ! -name '+*' \
+		-exec $self {} \;
+	fi
+}
+
+function check-copyleft
+{
+	local file=$1 && shift &&
+
+	local license_version=2 &&
+
+	local license_line="// This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version $license_version, or (at your option) any later version." &&
+
+	local year_from=1999 &&
+	local year_to=$(date --universal +%Y) &&
+
+	local copyright_line=$(echo // $(cat +package-meta-info/copyright | sed 's/"//g')) &&
+
+	local file_line_1=$(head --lines 1 $file) &&
+
+	if test "$file_line_1" != "$license_line"
+	then
+		local failed=true
+	fi
+
+	local file_line_2=$(head --lines 2 $file | tail --lines 1) &&
+
+	if test "$file_line_2" != "$copyright_line"
+	then
+		local failed=true
+	fi
+
+	test "$failed" != true || echo "$(basename $0): missing or wrong copyleft header in file: $file"
+}
+
+main "$@"
