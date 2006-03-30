@@ -1,0 +1,103 @@
+#!/usr/bin/gawk --file
+
+###########################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# Copyright (C) 2004-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
+#
+# Verifies the signature of a clear-signed message, and, if and only it is valid, then outputs the body of the message
+#
+###########################################################################
+
+
+
+/-----BEGIN PGP SIGNED MESSAGE-----/ {
+  if (first_line_seen) 
+    {
+      bogosity = 1;
+      exit;
+    }
+  else
+    {
+      print $0 | gpg;
+      first_line_seen = 1;
+    }
+  next;
+}
+
+/^$/ {
+  if (!first_line_seen)
+    {
+      bogosity = 1;
+      exit;
+    }
+  else
+    {
+      print $0 | gpg;
+      if(second_line_seen && !third_line_seen)
+        {
+          output = output $0 "\n";
+        }
+      second_line_seen = 1;
+    }
+  next;
+}
+
+/-----BEGIN PGP SIGNATURE-----/ {
+  if (!second_line_seen || third_line_seen)
+    {
+      bogosity = 1;
+      exit;
+    }
+  else
+    {
+      print $0 | gpg;
+      third_line_seen = 1;
+    }
+  next;
+}
+
+
+/-----END PGP SIGNATURE-----/ {
+  if (!third_line_seen || last_line_seen)
+    {
+      bogosity = 1;
+      exit;
+    }
+  else
+    {
+      print $0 | gpg;
+      last_line_seen = 1;
+    }
+  next;
+}
+
+
+{
+  if (!first_line_seen || last_line_seen)
+    {
+      bogosity = 1;
+      exit;
+    }
+  else
+    {
+      print $0 | gpg;
+      if (second_line_seen && !third_line_seen)
+        {
+          output = output $0 "\n";
+        }
+    }
+  next;
+}
+
+END {
+ if (bogosity || close(gpg))
+   {
+     exit 1;
+   }
+ else
+   {
+     print output;
+     exit 0;
+   }
+}

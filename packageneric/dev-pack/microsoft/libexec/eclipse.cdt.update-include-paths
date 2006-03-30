@@ -1,0 +1,66 @@
+#!/bin/bash
+
+###########################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# Copyright (C) 2004-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
+#
+# Updates include paths in eclipse IDE's CDT's .cdtproject files
+#
+###########################################################################
+
+function main
+{
+	echo "$(basename $0): Updating include paths in $(pwd)/.cdtproject ..." &&
+	test -f .cdtproject ||
+	{
+		echo "$(basename $0): No .cdtproject in $(pwd)" &&
+		false
+		return
+	} &&
+	local gtk=$(pkg-config --list-all | grep ^gtk | sed 's/  *.*//') &&
+	local gnome=$(pkg-config --list-all | grep gnome | sed 's/  *.*//') &&
+	local includes=$(pkg-config-unoption boost $gtk $gnome) &&
+	for i in $includes
+	do
+		echo "$(basename $0): include path $i" &&
+		local xml="$xml$(add $i)" || return
+	done &&
+	cat < .cdtproject |
+	remove |
+	insert-after '<item id="org.eclipse.cdt.core.pathentry">' "$xml" \
+	> .cdtproject.fix &&
+	mv --force .cdtproject.fix .cdtproject &&
+	echo "$(basename $0): Completed successfully." ||
+	echo "$(basename $0): Failed."
+}
+
+function pkg-config-unoption
+{
+	pkg-config --cflags-only-I $* |
+	sed 's|-I\([^ ]*\)|\1|g'
+}
+
+function add
+{
+	echo '<pathentry include="'$1'" kind="inc" path=""/>'
+}
+
+function remove
+{
+	sed 's|<pathentry include="[^"]*" kind="inc" path=""/>||g'
+}
+
+function escape-sed
+{
+	sed 's|\.|\\.|g'
+}
+
+function insert-after
+{
+	local insert_after=$(echo "$1" | escape-sed) &&
+	local insert=$(echo "$2" | escape-sed) &&
+	sed "s|\($insert_after\)|\1$insert|"
+}
+
+main "$@"

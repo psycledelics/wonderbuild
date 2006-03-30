@@ -1,0 +1,11 @@
+prefix=/target
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: boost.program_options
+Description: c++ boost::program_options library
+Version: 1.32.0
+Cflags:
+Libs: -Wl,${libdir}/libboost_program_options-mgw-mt-1_32.lib
+Requires: boost

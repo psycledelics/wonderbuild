@@ -1,0 +1,49 @@
+*	for vcproj, use InheritedPropertySheets
+	-- bohan
+	
+*	microsoft needs to #include <packageneric/package/meta-information.private.hpp> which is not distributed.
+	( packageneric/generic/detail/src/packageneric/package/meta-information.private.hpp.in )
+	-- bohan
+	
+*	to allow static libraries to be built,
+	split packageneric/package/modules/*/defines.private.hpp
+	into two separate files: meta-informations.private.hpp and sources.private.hpp
+	-- bohan
+
+*	split packageneric/generic/detail/src/packageneric/packages/configurations/**/configuration.private.hpp(.in)
+	into two separate files: host.private.hpp(.in) and install.private.hpp(.in)
+	-- bohan
+	
+*	for the find command, use -path instead of -wholename ; it's the same but more portable.
+	(used for nested source packages)
+	-- bohan
+
+*	configure should set PACKAGENERIC__COMPILER__*flags instead of *FLAGS directly.
+	addition is already done in packageneric/generic/detail/libexec/autogenerate/@0/package/modules.
+	need to edit packageneric/generic/detail/autotools/autoconf/gnu-compiler-and-linker-flags.ac
+	-- bohan
+	
+*	change bin/colorgcc to reflect gcc 4.0 that has changed the `x' notation to 'x'.
+	-- bohan
+
+*	readd the packageneric/generic/detail/libexec/colorizers to the PATH env var.
+	-- bohan
+	
+*	PACKAGENERIC__MODULE__EXTERNAL should allow to just test wether the package is available or not.
+	-- bohan
+
+*	PACKAGENERIC__MODULE__GROUP to allow grouping of several modules.
+	-- bohan
+
+*	have some time to explore libtool's funny --mode=execute gdb bin.wrapper.
+
+*	change naming convention for links from @* to @@* ; @* stays a cut rule.
+	-- bohan
+
+*	remove cairo archive from pbuilder, and maybe an option to add more sources via the command line.
+	-- bohan
+
+*	collect all the dependencies graphviz digraph dot files of nested source packages into the parent one.
+
+*	remember to update the TODO file.
+	-- bohan

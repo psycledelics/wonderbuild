@@ -1,0 +1,25 @@
+===================
+Version information
+===================
+
+	gtk+ dev env 2.4-rc15 (from http://sourceforge.net/projects/gladewin32)
+	gtkmm-devel 2.4.5-2 (from Cedric Gustin http://www.pcpm.ucl.ac.be/~gustin)
+	gtk2-prefs 0.3.1 (from Alex Shaduri http://members.lycos.co.uk/alexv6)
+		bin/
+			gtk2_prefs.exe
+		share/
+			doc/
+				gtk2-prefs
+	gtk2-themes 2005-04-26 (from Alex Shaduri http://members.lycos.co.uk/alexv6)
+		(this requires a new version of gtk, so, this is not yet included)
+		share/
+			themes/
+		lib/
+			gtk-2.0/
+				2.4.0/
+					engines/
+	gtk themes from debian (the ones which don't require a theme engine module)
+		share/
+			themes/
+				Grand-Canyon
+				Smokey-Blue

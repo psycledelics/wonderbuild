@@ -1,0 +1,36 @@
+#!/bin/bash
+
+###########################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# Copyright (C) 2004-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
+#
+# Verifies the signature of downloaded files
+#
+###########################################################################
+
+function main
+{
+	# unsecure (disabled)
+	
+	#sh -c "$(wget --non-verbose --output-document - http://psycle.sourceforge.net/automate/automate)" &&
+	
+	# secure
+	
+	local download=/tmp/download.$$ &&
+	rm --force --recursive $download &&
+	mkdir $download &&
+
+	$(dirname $0)/download http://psycle.sourceforge.net/automate/automate.asc > $download/body &&
+	chmod +x $download/body &&
+	$download/body "$@" &&
+	
+	: ||
+	{	
+		rm --force --recursive $download 2>/dev/null
+		false
+		return
+	}
+} &&
+
+main "$@"

@@ -1,0 +1,199 @@
+===========================================================
+How to get libstdc++ in a shared library, aka libstdc++.dll
+===================== Johan Boule - November 2003 =========
+
+This applies to mingw and cygwin's gcc.
+
+Remember that under cygwin, you can add the -mno-cygwin option to all gcc commands
+if you want your executable not to depend on cygwin1.dll,
+in this case, when this document speaks about /lib/libstdc++.a, use /lib/mingw/libstdc++.a instead.
+
+Further reading:
+	- http://cvs.sourceforge.net/viewcvs.py/*checkout*/octave/octave-forge/admin/Windows/mkdll.sh?content-type=text%2Fplain&rev=HEAD
+	- http://cvs.sourceforge.net/viewcvs.py/*checkout*/octave/octave-forge/admin/Windows/mkstdc++dll.sh?content-type=text%2Fplain&rev=HEAD
+	- mingw-utils's a2dll
+	- exult
+
+=========
+Forewords
+=========
+
+On windows, gcc comes with /lib/libstdc++.a which is a *static archive* library
+containing the standard c++ library.
+
+A simple program like this:
+
+	hello_world/hello_world.hpp:
+	
+		#include <string>
+		namespace hello_world
+		{
+			class hello_world
+			{
+			public:
+				const std::string say_hello() const throw();
+			};
+		}
+		
+	hello_world/hello_world.cpp:
+
+		#include <hello_world/hello_world.hpp>
+		namespace hello_world
+		{
+			const std::string hello_world::hello_world() const throw()
+			{
+				static const std::string s("Hello, World!");
+				return s;
+			}
+		}
+		
+	./main.cpp:
+
+		#include <hello_world/hello_world.hpp>
+		#include <iostream>
+
+		int main(const int, const char[])
+		{
+			hello_world::hello_world hello_world;
+			std::cout << hello_world.say_hello() << std::endl;
+			return 0;
+		}
+
+when passed to gcc for compilation:
+
+	# g++ -O3 -Wl,--output=hello-world.exe hello_world/hello.cpp main.cpp
+
+will link your program with the static /lib/libstdc++.a
+and produce a bloated executable whose size is 390kB!
+
+	# du --human-readable hello-world
+	390k    hello-world
+
+stripping is of no rescue:
+
+	# strip --strip-all hello-world.exe
+	# du --human-readable hello-world.exe
+	198k    hello-world
+
+... still 198kB :-(
+
+Now imagine, you want to compile 30 plugins, each in its own 200kB dll,
+... hmm, no we need to find a solution.
+
+==============================================
+Relinking libstdc++.a into a new libstdc++.dll
+==============================================
+
+First, we need to explode the /lib/libstdc++.a archive into .o files.
+
+	Quoting Danny Smith
+	(
+		If using g++ --shared to build libstdc++.dll,
+		you need to explode the static archive into component modules
+		and build the dll from them.
+		The reason: libstdc++.a is a system lib that is ignored when using
+		(implicitly or explicitly) --export-all(-symbols)
+
+		If you want to use an import library rather than direct linking against dll,
+		you will have to tell the linker that you want an import library,
+		with --out-implib=libstdc++.dll.a.
+		The import library produced by dlltool does not have auto-import symbols.
+		The import library produced by g++ --shared does.
+		The "implied" import library generated on-the-fly when linking directly against the dll
+		is like the one produced by g++ --shared.
+	)
+
+So, here we go:
+
+	# mkdir libstdc++ && (cd libstdc++ && ar x /lib/libstdc++.a)
+
+Now, that we have the standard c++ library's object files in the libstdc++ directory,
+we can build the shared library from them:
+
+	# g++ -Wl,--output=libstdc++.dll libstdc++/*.o --shared
+
+	Note: Don't strip libstdc++.dll unless you have made a libstdc++.dll.a import library
+
+or if you also want an import library:
+
+	# g++ -Wl,--output=libstdc++.dll,--out-implib=libstdc++.dll.a libstdc++/*.o --shared
+	Creating library file: libstdc++.dll.a
+
+	# du --human-readable libstdc++.dll
+	647k    libstdc++.dll
+	# strip --strip-all libstdc++.dll
+	# du --human-readable libstdc++.dll
+	387k    libstdc++.dll
+
+	Note: Don't strip libstdc++.dll.a
+
+We end up with libstdc++.dll, a shared library containing the standard c++ library.
+You can now delete the libstdc++ directory containing the .o files.
+
+===============================
+Linking our hello-world program
+===============================
+
+Now, let's link our hello program against our shared library:
+
+	Note: When compiled with mingw or cygwin with -mno-cygwin, you must type 'gcc' and not 'g++'.
+
+	# g++ -O3 -Wl,--enable-runtime-pseudo-reloc,--output=hello-world.exe hello_world/hello_world.cpp main.cpp libstdc++.dll
+	Info: resolving std::cout  by linking to __imp___ZSt4cout (auto-import)
+
+or if you want to use the import library instead:
+
+	# g++ -O3 -Wl,--enable-runtime-pseudo-reloc,--output=hello-world.exe hello_world/hello_world.cpp main.cpp libstdc++.dll.a
+	Info: resolving std::cout  by linking to __imp___ZSt4cout (auto-import)
+
+	Note: you can add the option -Wl,--enable-auto-import to suppress the info messages
+
+Wnat's the size?
+
+	# du --human-readable hello-world.exe
+	17k     hello-world.exe
+
+	# strip --strip-all hello-world.exe
+	# du --human-readable hello-world.exe
+	6.0k    hello-world.exe
+
+Phew.. ok. 6kB.
+
+	# ./hello-world
+	Hello, World!
+
+It works.
+
+Program dependencies:
+
+	# objdump -x hello-world.exe | grep 'DLL Name: '
+        DLL Name: cygwin1.dll
+        DLL Name: kernel32.dll
+        DLL Name: libstdc++.dll
+
+	# cygcheck --verbose hello-world
+	Found: .\hello-world.exe
+	hello-world.exe
+	  x:\cygwin\bin\cygwin1.dll
+	    x:\windows\system32\kernel32.dll
+	      x:\windows\system32\ntdll.dll
+	  .\libstdc++.dll
+
+This mean our program depends (directly) on cygwin1.dll and libstdc++.dll
+
+Or when compiled with mingw, or cygwin with -mno-cygwin:
+
+	# objdump -x hello-world.exe | grep 'DLL Name: '
+        DLL Name: msvcrt.dll
+        DLL Name: kernel32.dll
+        DLL Name: libstdc++.dll
+
+	# cygcheck --verbose hello-world
+	Found: .\hello-world.exe
+	hello-world.exe
+	  x:\windows\system32\msvcrt.dll
+	    x:\windows\system32\kernel32.dll
+	      x:\windows\system32\ntdll.dll
+	  .\libstdc++.dll
+
+This mean our program depends (directly) on msvcrt.dll and libstdc++.dll

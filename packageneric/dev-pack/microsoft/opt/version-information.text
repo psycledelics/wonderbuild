@@ -1,0 +1,37 @@
+===================
+Version information
+===================
+
+	msys/
+		version-information.text
+	mingw/
+		version-information.text
+	gtk/
+		version-information.text
+	gnomecanvas/
+		version-information.text
+	boost/
+		boost libs 1.32.0
+	doxygen/
+		doxygen 1.4.1
+	graphviz/
+		graphviz 1.14
+	pkg-config/
+		pkg-config 0.15.0
+	cygcheck/
+		cygwin's cygcheck 1.43 (comes with cygwin but doesn't depend on cygwin1.dll)
+	listdlls/
+		sysinternals' listdlls 2.23
+	junction/
+		sysinternals' junction 1.03
+	7-zip/
+		7-zip 4.14
+	wget/
+		wget 1.9.1
+	gnupg/
+		gnupg 1.4.0
+	eclipse/
+		platform 3.0.1
+		cdt 2.1.0
+	jre/
+		sun's java runtime env 1.5.0 (used by eclipse)

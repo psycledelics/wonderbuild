@@ -1,0 +1,14 @@
+===================
+Version information
+===================
+
+	msys 1.0.10 with rxvt from msys 1.0.11-2004.04.30-1
+	msys dev tool kit 1.0.1
+	autoconf 2.59
+	automake 1.8.2
+	libtool 1.5
+	share/
+		aclocal/
+			pkg.m4 pkg-config m4 macros for autoconf
+	local/
+		version-information.text

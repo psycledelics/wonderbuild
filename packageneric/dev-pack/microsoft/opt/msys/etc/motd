@@ -1,0 +1,55 @@
+	                      [0;47;5m(¯`'·.¸(¯`'·.¸¸.·'`¯)¸.·'`¯)[0m
+	                      [0;47;5m ¯`'·.¸              ¸.·'`¯ [0m
+	                      [0;47;5m       )[34mPSYCLEDELICS[0;47;5m(       [0m
+	                      [0;47;5m ¸.·'`¯              ¯`'·.¸ [0m
+	                      [0;47;5m(¸.·'`¯(¸.·'`¯¯`'·.¸)¯`'·.¸)[0m
+
+	                                [37;5mpresents[0m
+[47;5;33;1m
+	                                                                            
+	 twk 02 45 00CC C-4 00 00 0000 --- 00 00 0000 G#6 05 07 0000 --- 00 00 0000 
+	 twk 03 45 00DD C-5 00 00 0000 C-4 00    0000 --- 00 00 0000 C-4 00 04 0000 
+	 twk                 0 00 0000 D   _.o8  0000 G-6 06 07 0000 --- 00 00 0000 
+	 tw   "8888888oooo.    00 0000   o8"' 8  000         00 0000 D#4 00 04 0000 
+	 twk    Y8888888888bo     0000   8    8  00F   8888   7 0000 twk 03 42 008F 
+	 twk 0  '888b     Y888b   0000   8  d88  008   888:   0 0000 --- 00 00 0000 
+	 twk 02  8888      8888   000  d88  Y8P  000   888'  07 0000 C-4 00 04 0000 
+	 twk 03  '888     d8888   000  Y8P     4 000   888   00 0000 C-3 00 06 0000 
+	 twk 02   888b   d8888P    000     00 04 000   888            -- 00 00 0000 
+	 twk 03   888888888888888o.                    88:   .o888oo.  - 00 00 0000 
+	 twk 02   888"""""'d8"' '"*Yb     .o8bo888oo.  88' .8P"'  '"Y.   00 00 0000 
+	 twk 03   888      Y8o.     Yb   d8P8P"'  '"*. 88  d8    _.oP  k 03 42 0023 
+	 twk 0   .888   C   "88888b  Yb.d8Pd8          88  88 **"''    4 00 04 0000 
+	 twk    .d888   C#      'Y88  Y88P 88    [0;47;5;33mLF[47;5;33;1m    88  88          - 00 00 0000 
+	 tw    o8888'         _.o88P   8P- 88          Y8   Yb._   .oP   00 00 0000 
+	 t  .o8888P'     "*888888P"   dP-- 0Yb._   .oP 'Yo*  "Y88888"    00 04 0000 
+	     "888P d888888ooooooooP .dP d88b "Y88888" d8oo8888ooooooo88888oooo....  
+	       YP                .o88P                                              
+	       '             .o88888P       [0;47;5;34mMODULAR MUSIC CREATION STUDIO[47;5;33;1m           
+	                                                                            
+[0m
+	[0;47;5m================================================================================[0m
+	[1;47;5mWelcome to psycledelics packageneric dev-pack, the generic dev-pack - 2005-09-30[0m
+	[0;47;5m================================================================================[0m
+[0m
+	To download and build the latest psycle version:
+	[1;30m
+		cd /tmp/ [0;37m&&[0;1;30m mkdir psycle [0;37m||[0;1;30m rm --force --recursive psycle/* [0;37m&&[0;1;30m cd psycle [0;37m&&[0;1;30m
+		wget http://psycle.sourceforge.net/packages/standard-source-tarball/psycle.tar.gz{,.sig} [0;37m&&[0;1;30m
+		gpgv psycle.tar.gz.sig [0;37m&&[0;1;30m (gzip --decompress | tar --extract --touch) < psycle.tar.gz [0;37m&&[0;1;30m
+		psycle-*.*.*/build
+	[0m
+	To download and build the latest mnu version:
+	[1;30m
+		cd /tmp/ [0;37m&&[0;1;30m mkdir mnu [0;37m||[0;1;30m rm --force --recursive mnu/* [0;37m&&[0;1;30m cd mnu [0;37m&&[0;1;30m
+		wget http://psycle.sourceforge.net/packages/standard-source-tarball/mnu.tar.gz{,.sig} [0;37m&&[0;1;30m
+		gpgv mnu.tar.gz.sig [0;37m&&[0;1;30m (gzip --decompress | tar --extract --touch) < mnu.tar.gz [0;37m&&[0;1;30m
+		mnu-*.*.*/build
+	[0m
+	You can copy the lines above simply by selecting them with the mouse,
+	and paste them by clicking your mouse's middle button (or left+right if you don't have one).
+	You will end up with a directory, respectively,
+	[1;30m/tmp/psycle/psycle-*.*.*/++install/psycle-*.*.*[0m or [1;30m/tmp/mnu/mnu-*.*.*/++install/mnu-*.*.*[0m
+	These directories are standalone/self-contained binary distribution packages that you can move and run anywhere you want.
+	The executables binaries are under the [1;30mbin[0m subdirectory of each package.
+
