@@ -288,7 +288,7 @@ function generate
 			do
 				if test ! -L $file -a -e /usr/share/autoconf-archive/$file
 				then
-					ln --symbolic --verbose --force /usr/share/autoconf-archive/$file .
+					: #ln --symbolic --verbose --force /usr/share/autoconf-archive/$file .
 				fi
 			done
 		)
