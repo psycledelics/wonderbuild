@@ -1,2 +1,2 @@
 #! /bin/sh
-./packageneric/generic/bin/autotools.bootstrap
+$(dirname $0)/packageneric/generic/bin/autotools.bootstrap
