@@ -1,2 +1,2 @@
 #! /bin/sh
-find universalis -name \*.cpp
+find universalis/ -name \*.cpp

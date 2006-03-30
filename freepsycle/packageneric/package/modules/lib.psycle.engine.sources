@@ -1,4 +1,4 @@
 #! /bin/sh
-find psycle/engine \( -type d -name todo -prune \) -or \( -name \*.cpp -print \)
+find psycle/engine/ \( -type d -name todo -prune \) -or \( -name \*.cpp -print \)
 echo psycle/paths.cpp
 echo psycle/generic/test/test.cpp
