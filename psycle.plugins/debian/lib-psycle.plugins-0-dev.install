@@ -1,0 +1,4 @@
+usr/lib/pkgconfig/psycle.plugin.*.pc
+usr/lib/lib-psycle.plugin.*.la
+usr/lib/lib-psycle.plugin.*.so
+usr/include/psycle.plugin-*/
