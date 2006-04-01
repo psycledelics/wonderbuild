@@ -24,7 +24,7 @@ main()
 		if $option__refresh || test ! -e $dir
 		then
 			. ./find &&
-		 	local file=$(cd autogenerate && eval find . $(packageneric__find__file__no_arch -wholename \\\*/package/meta-information)) &&
+		 	local file=$(cd autogenerate && eval find . $(packageneric__find__file__no_arch -path \\\*/package/meta-information)) &&
 			./autogenerate/autogenerate $(dirname $file) $(basename $file)
 		fi
 	else

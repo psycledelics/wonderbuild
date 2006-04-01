@@ -14,10 +14,6 @@
 	into two separate files: host.private.hpp(.in) and install.private.hpp(.in)
 	-- bohan
 	
-*	for the find command, use -path instead of -wholename ; it's the same but more portable.
-	(used for nested source packages)
-	-- bohan
-
 *	configure should set PACKAGENERIC__COMPILER__*flags instead of *FLAGS directly.
 	addition is already done in packageneric/generic/detail/libexec/autogenerate/@0/package/modules.
 	need to edit packageneric/generic/detail/autotools/autoconf/gnu-compiler-and-linker-flags.ac

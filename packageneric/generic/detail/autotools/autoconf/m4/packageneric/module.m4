@@ -116,7 +116,7 @@ AC_DEFUN([PACKAGENERIC__MODULE__EXTERNAL],
 			do
 				if $(echo $dependency | cut --characters 1 | grep --silent $(echo -e "\133")a-zA-Z$(echo -e "\135"))
 				then
-					packageneric__module__external=$(cd $srcdir/$packageneric__module__external__dir && eval find . $(packageneric__find__file__no_arch \\\( -wholename \\\*/packageneric/package/modules/lib.$dependency.am -or -wholename \\\*/packageneric/package/modules/hpp.$dependency.am \\\)) | sort)
+					packageneric__module__external=$(cd $srcdir/$packageneric__module__external__dir && eval find . $(packageneric__find__file__no_arch \\\( -path \\\*/packageneric/package/modules/lib.$dependency.am -or -path \\\*/packageneric/package/modules/hpp.$dependency.am \\\)) | sort)
 					if test -n "$packageneric__module__external"
 					then
 						dirname $packageneric__module__external 1>/dev/null 2>&1 ||

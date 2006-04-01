@@ -24,7 +24,7 @@ function main
 		eof
 	} &&
 	(
-		for file in $(eval find . \\\( -type d -wholename ./autom4te.cache -prune \\\) -or $(packageneric__find__file))
+		for file in $(eval find . \\\( -type d -path ./autom4te.cache -prune \\\) -or $(packageneric__find__file))
 		do
 			echo EXTRA_DIST += $file
 		done &&
