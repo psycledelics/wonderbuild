@@ -38,6 +38,9 @@ then
 
 if which ash 1>/dev/null 2>&1
 then
-	echo "$(basename $0): sorry, only found ash (almquit shell), which is a clone of the non-posix at&t bsh (bourne shell)."
+	echo "$(basename $0): sorry, only found ash (almquist shell), which is a clone of the non-posix at&t bsh (bourne shell)."
 	exit 1
 fi
+
+echo "$(basename $0): sorry, no posix shell found"
+exit 1
