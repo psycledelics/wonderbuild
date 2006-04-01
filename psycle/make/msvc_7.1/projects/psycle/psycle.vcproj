@@ -13,168 +13,6 @@
 	</Platforms>
 	<Configurations>
 		<Configuration
-			Name="debug|Win32"
-			ConfigurationType="1"
-			OutputDirectory="$(SolutionDir)/output/$(ConfigurationName)/bin"
-			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
-
-			UseOfMFC="2"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE">
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCMIDLTool"
-				TypeLibraryName="$(SolutionDir)/output/$(ConfigurationName)/lib/$(ProjectName).tlb"/>
-			<Tool
-				Name="VCCLCompilerTool"
-				AdditionalOptions="/EHa
-/QIfist
-/Op-
-/WL"
-				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;"
-				PreprocessorDefinitions="PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;"
-				MinimalRebuild="TRUE"
-				ExceptionHandling="FALSE"
-				BasicRuntimeChecks="3"
-				SmallerTypeCheck="TRUE"
-				RuntimeLibrary="3"
-				EnableFunctionLevelLinking="TRUE"
-				ForceConformanceInForLoopScope="TRUE"
-				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="3"
-				PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
-				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
-				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
-				BrowseInformation="1"
-				WarningLevel="4"
-				SuppressStartupBanner="TRUE"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="4"
-				DisableSpecificWarnings="4652"
-				ForcedIncludeFiles=""/>
-
-			<Tool
-				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;;&quot;$(SolutionDir)/../../src/psycle/host/resources&quot;"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="htmlhelp.lib"
-				OutputFile="$(OutDir)/$(InputName).exe"
-				LinkIncremental="2"
-				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
-				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
-				SubSystem="2"
-				OptimizeForWindows98="1"
-				BaseAddress=""
-				ImportLibrary="$(SolutionDir)/output/$(ConfigurationName)/lib/$(InputName).lib"/>
-
-
-
-
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCPostBuildEventTool"/>
-
-		</Configuration>
-		<Configuration
-			Name="release.g7|Win32"
-			OutputDirectory="$(SolutionDir)/output/$(ConfigurationName)/bin"
-			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
-			ConfigurationType="1"
-			UseOfMFC="2"
-			ATLMinimizesCRunTimeLibraryUsage="FALSE"
-			WholeProgramOptimization="FALSE">
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCMIDLTool"
-				TypeLibraryName="$(SolutionDir)/output/$(ConfigurationName)/lib/$(ProjectName).tlb"/>
-			<Tool
-				Name="VCCLCompilerTool"
-				AdditionalOptions="/EHa
-/QIfist
-/Op-
-/WL"
-				Optimization="4"
-				GlobalOptimizations="TRUE"
-				InlineFunctionExpansion="2"
-				EnableIntrinsicFunctions="TRUE"
-				FavorSizeOrSpeed="1"
-				OmitFramePointers="TRUE"
-				EnableFiberSafeOptimizations="TRUE"
-				OptimizeForProcessor="3"
-				OptimizeForWindowsApplication="TRUE"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;"
-				PreprocessorDefinitions="PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;"
-				StringPooling="TRUE"
-				ExceptionHandling="FALSE"
-				RuntimeLibrary="2"
-				BufferSecurityCheck="FALSE"
-				ForceConformanceInForLoopScope="TRUE"
-				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="3"
-				PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
-				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
-				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
-				WarningLevel="4"
-				SuppressStartupBanner="TRUE"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="3"
-				DisableSpecificWarnings="4652"
-				ForcedIncludeFiles=""/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;;&quot;$(SolutionDir)/../../src/psycle/host/resources&quot;"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="htmlhelp.lib"
-				OutputFile="$(OutDir)/$(InputName).exe"
-				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
-				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
-				SubSystem="2"
-				LargeAddressAware="1"
-				TerminalServerAware="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				OptimizeForWindows98="1"
-				ImportLibrary="$(SolutionDir)/output/$(ConfigurationName)/lib/$(InputName).lib"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCPostBuildEventTool"/>
-		</Configuration>
-		<Configuration
 			Name="release.g6|Win32"
 			OutputDirectory="$(SolutionDir)/output/$(ConfigurationName)/bin"
 			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
@@ -182,17 +20,6 @@
 			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			WholeProgramOptimization="FALSE">
-			<Tool
-				Name="VCPreBuildEventTool"/>
-			<Tool
-				Name="VCCustomBuildTool"/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCMIDLTool"
-				TypeLibraryName="$(SolutionDir)/output/$(ConfigurationName)/lib/$(ProjectName).tlb"/>
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/EHa
@@ -227,10 +54,7 @@
 				DisableSpecificWarnings="4652"
 				ForcedIncludeFiles=""/>
 			<Tool
-				Name="VCResourceCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;;&quot;$(SolutionDir)/../../src/psycle/host/resources&quot;"/>
-			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="htmlhelp.lib"
@@ -248,78 +72,256 @@
 				OptimizeForWindows98="1"
 				ImportLibrary="$(SolutionDir)/output/$(ConfigurationName)/lib/$(InputName).lib"/>
 			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
+				Name="VCMIDLTool"
+				TypeLibraryName="$(SolutionDir)/output/$(ConfigurationName)/lib/$(ProjectName).tlb"/>
 			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;;&quot;$(SolutionDir)/../../src/psycle/host/resources&quot;"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
 			<Tool
 				Name="VCWebDeploymentTool"/>
 			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="debug|Win32"
+			OutputDirectory="$(SolutionDir)/output/$(ConfigurationName)/bin"
+			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
+			ConfigurationType="1"
+			UseOfMFC="2"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="/EHa
+/QIfist
+/Op-
+/WL"
+				Optimization="0"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;"
+				PreprocessorDefinitions="PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;"
+				MinimalRebuild="TRUE"
+				ExceptionHandling="FALSE"
+				BasicRuntimeChecks="3"
+				SmallerTypeCheck="TRUE"
+				RuntimeLibrary="3"
+				EnableFunctionLevelLinking="TRUE"
+				ForceConformanceInForLoopScope="TRUE"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="3"
+				PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
+				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
+				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
+				BrowseInformation="1"
+				WarningLevel="4"
+				SuppressStartupBanner="TRUE"
+				Detect64BitPortabilityProblems="TRUE"
+				DebugInformationFormat="4"
+				DisableSpecificWarnings="4652"
+				ForcedIncludeFiles=""/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="htmlhelp.lib"
+				OutputFile="$(OutDir)/$(InputName).exe"
+				LinkIncremental="2"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
+				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
+				SubSystem="2"
+				OptimizeForWindows98="1"
+				BaseAddress=""
+				ImportLibrary="$(SolutionDir)/output/$(ConfigurationName)/lib/$(InputName).lib"/>
+			<Tool
+				Name="VCMIDLTool"
+				TypeLibraryName="$(SolutionDir)/output/$(ConfigurationName)/lib/$(ProjectName).tlb"/>
+			<Tool
 				Name="VCPostBuildEventTool"/>
-		</Configuration>		
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;;&quot;$(SolutionDir)/../../src/psycle/host/resources&quot;"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="release.g7|Win32"
+			OutputDirectory="$(SolutionDir)/output/$(ConfigurationName)/bin"
+			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
+			ConfigurationType="1"
+			UseOfMFC="2"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			WholeProgramOptimization="FALSE">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="/EHa
+/QIfist
+/Op-
+/WL"
+				Optimization="4"
+				GlobalOptimizations="TRUE"
+				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="TRUE"
+				FavorSizeOrSpeed="1"
+				OmitFramePointers="TRUE"
+				EnableFiberSafeOptimizations="TRUE"
+				OptimizeForProcessor="3"
+				OptimizeForWindowsApplication="TRUE"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;"
+				PreprocessorDefinitions="PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;"
+				StringPooling="TRUE"
+				ExceptionHandling="FALSE"
+				RuntimeLibrary="2"
+				BufferSecurityCheck="FALSE"
+				ForceConformanceInForLoopScope="TRUE"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="3"
+				PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
+				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
+				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
+				WarningLevel="4"
+				SuppressStartupBanner="TRUE"
+				Detect64BitPortabilityProblems="TRUE"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4652"
+				ForcedIncludeFiles=""/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="htmlhelp.lib"
+				OutputFile="$(OutDir)/$(InputName).exe"
+				LinkIncremental="1"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
+				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
+				SubSystem="2"
+				LargeAddressAware="1"
+				TerminalServerAware="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				OptimizeForWindows98="1"
+				ImportLibrary="$(SolutionDir)/output/$(ConfigurationName)/lib/$(InputName).lib"/>
+			<Tool
+				Name="VCMIDLTool"
+				TypeLibraryName="$(SolutionDir)/output/$(ConfigurationName)/lib/$(ProjectName).tlb"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;;&quot;$(SolutionDir)/../../src/psycle/host/resources&quot;"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>
 	<Files>
 		<Filter
 			Name="psycle/host"
-			Filter="">
+			>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\engine\constants.hpp">
-			</File>
-				<File
-				RelativePath="..\..\..\..\src\psycle\host\engine\dsp.cpp">
-				</File>
-				<File
-				RelativePath="..\..\..\..\src\psycle\host\engine\dsp.hpp">
-				</File>
-			<File
-				RelativePath="..\..\..\..\src\psycle\host\global.cpp">
+				RelativePath="..\..\..\..\src\psycle\host\engine\constants.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\global.hpp">
-			</File>
-				<File
-				RelativePath="..\..\..\..\src\psycle\host\engine\FFT.cpp">
-				</File>
-				<File
-				RelativePath="..\..\..\..\src\psycle\host\engine\FFT.hpp">
-				</File>
-				<File
-				RelativePath="..\..\..\..\src\psycle\host\engine\helpers.cpp">
-				</File>
-				<File
-				RelativePath="..\..\..\..\src\psycle\host\engine\helpers.hpp">
-				</File>
-			<File
-				RelativePath="..\..\..\..\src\psycle\host\gui\InputHandler.cpp">
+				RelativePath="..\..\..\..\src\psycle\host\engine\dsp.cpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\gui\InputHandler.hpp">
+				RelativePath="..\..\..\..\src\psycle\host\engine\dsp.hpp"
+				>
 			</File>
-				<File
-				RelativePath="..\..\..\..\src\psycle\host\engine\player.cpp">
-				</File>
-				<File
-				RelativePath="..\..\..\..\src\psycle\host\engine\player.hpp">
-				</File>
-				<File
-				RelativePath="..\..\..\..\src\psycle\host\engine\song.cpp">
-				</File>
-				<File
-				RelativePath="..\..\..\..\src\psycle\host\engine\song.hpp">
-				</File>
-				<File
-				RelativePath="..\..\..\..\src\psycle\host\engine\SongStructs.hpp">
-				</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\version.hpp">
+				RelativePath="..\..\..\..\src\psycle\host\global.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\global.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\helpers.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\helpers.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\gui\InputHandler.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\gui\InputHandler.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\player.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\player.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\song.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\song.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\SongStructs.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\version.hpp"
+				>
 			</File>
 			<Filter
-				Name="devices"
-				Filter="">
+				Name="(devices)"
+				>
 				<Filter
-					Name="output"
-					Filter="">
+					Name="(output)"
+					>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\audiodrivers\ASIOInterface.cpp"
 						>
@@ -356,7 +358,7 @@
 			</Filter>
 			<Filter
 				Name="resources"
-				Filter="">
+				>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\gui\resources\AsioLogo.bmp"
 					>
@@ -519,8 +521,8 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="file"
-				Filter="">
+				Name="(file)"
+				>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\engine\DataCompression.cpp"
 					>
@@ -567,8 +569,8 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="configuration"
-				Filter="">
+				Name="(configuration)"
+				>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\configuration.cpp"
 					>
@@ -587,8 +589,8 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="mfc-gui"
-				Filter="">
+				Name="(mfc-gui)"
+				>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\gui\bitmap.hpp"
 					>
@@ -607,14 +609,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\gui\GreetDialog.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\gui\InterpolateCurveDlg.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\gui\InterpolateCurveDlg.hpp"
 					>
 				</File>
 				<File
@@ -670,8 +664,8 @@
 					>
 				</File>
 				<Filter
-					Name="configuration"
-					Filter="">
+					Name="(configuration)"
+					>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\gui\ConfigDlg.cpp"
 						>
@@ -714,10 +708,10 @@
 					</File>
 					<Filter
 						Name="devices"
-						Filter="">
+						>
 						<Filter
 							Name="output"
-							Filter="">
+							>
 							<File
 								RelativePath="..\..\..\..\src\psycle\host\audiodrivers\ASIOConfig.cpp"
 								>
@@ -754,8 +748,8 @@
 					</Filter>
 				</Filter>
 				<Filter
-					Name="machine"
-					Filter="">
+					Name="(machine)"
+					>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\gui\FrameMachine.cpp"
 						>
@@ -829,8 +823,8 @@
 						>
 					</File>
 					<Filter
-						Name="sampler"
-						Filter="">
+						Name="(sampler)"
+						>
 						<File
 							RelativePath="..\..\..\..\src\psycle\host\gui\EnvDialog.cpp"
 							>
@@ -848,8 +842,8 @@
 							>
 						</File>
 						<Filter
-							Name="waveform"
-							Filter="">
+							Name="(waveform)"
+							>
 							<File
 								RelativePath="..\..\..\..\src\psycle\host\gui\WaveEdAmplifyDialog.cpp"
 								>
@@ -885,8 +879,8 @@
 						</Filter>
 					</Filter>
 					<Filter
-						Name="vst"
-						Filter="">
+						Name="(vst)"
+						>
 						<File
 							RelativePath="..\..\..\..\src\psycle\host\gui\DefaultVstGui.cpp"
 							>
@@ -913,8 +907,8 @@
 						</File>
 					</Filter>
 					<Filter
-						Name="XMSampler"
-						Filter="">
+						Name="(XMSampler)"
+						>
 						<File
 							RelativePath="..\..\..\..\src\psycle\host\gui\XMSamplerMixerPage.cpp"
 							>
@@ -956,10 +950,10 @@
 							>
 						</File>
 					</Filter>
-        </Filter>
+				</Filter>
 				<Filter
-					Name="pattern"
-					Filter="">
+					Name="(pattern)"
+					>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\gui\PatDlg.cpp"
 						>
@@ -978,8 +972,8 @@
 					</File>
 				</Filter>
 				<Filter
-					Name="monitors"
-					Filter="">
+					Name="(monitors)"
+					>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\gui\InfoDlg.cpp"
 						>
@@ -1022,8 +1016,8 @@
 					</File>
 				</Filter>
 				<Filter
-					Name="midi"
-					Filter="">
+					Name="(midi)"
+					>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\gui\MidiLearn.cpp"
 						>
@@ -1038,13 +1032,13 @@
 				Name="legacy"
 				>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\legacy\engine\old_file_format.cpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\legacy\old_file_format.cpp"
 					>
 				</File>
 			</Filter>
 			<Filter
 				Name="detail"
-				Filter="">
+				>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\detail\configuration.hpp"
 					>
@@ -1059,97 +1053,582 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="machine"
-				Filter="">
-					<File
+				Name="(machine)"
+				>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\engine\machine.cpp"
 					>
-					</File>
-					<File
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\engine\machine.hpp"
 					>
-					</File>
-					<File
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\engine\plugin.cpp"
 					>
-					</File>
-					<File
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\engine\plugin.hpp"
 					>
-					</File>
-					<File
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\plugin_interface.hpp"
 					>
-					</File>
-					<File
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\engine\VSTHost.cpp"
 					>
-					</File>
-					<File
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\engine\VSTHost.hpp"
 					>
-					</File>
-					<Filter
-						Name="sampler"
-						Filter="">
-				<File
+				</File>
+				<Filter
+					Name="(sampler)"
+					>
+					<File
 						RelativePath="..\..\..\..\src\psycle\host\engine\filter.cpp"
 						>
-				</File>
-				<File
+					</File>
+					<File
 						RelativePath="..\..\..\..\src\psycle\host\engine\filter.hpp"
 						>
-				</File>
-						<File
+					</File>
+					<File
 						RelativePath="..\..\..\..\src\psycle\host\engine\instrument.cpp"
 						>
-						</File>
-						<File
+					</File>
+					<File
 						RelativePath="..\..\..\..\src\psycle\host\engine\instrument.hpp"
 						>
-						</File>
-						<File
+					</File>
+					<File
 						RelativePath="..\..\..\..\src\psycle\host\engine\sampler.cpp"
 						>
-						</File>
-						<File
+					</File>
+					<File
 						RelativePath="..\..\..\..\src\psycle\host\engine\sampler.hpp"
 						>
-						</File>
-					</Filter>
-					<Filter
-						Name="XMSampler"
-						Filter="">
-						<File
-						RelativePath="..\..\..\..\src\psycle\host\engine\XMInstrument.cpp"
-						>
-						</File>
-						<File
-						RelativePath="..\..\..\..\src\psycle\host\engine\XMInstrument.hpp"
-						>
-						</File>
-						<File
-						RelativePath="..\..\..\..\src\psycle\host\engine\XMSampler.cpp"
-						>
-						</File>
-						<File
-						RelativePath="..\..\..\..\src\psycle\host\engine\XMSampler.hpp"
-						>
-						</File>
-					</Filter>
+					</File>
 				</Filter>
 				<Filter
-					Name="midi"
-					Filter="">
-					<File
-					RelativePath="..\..\..\..\src\psycle\host\engine\MidiInput.cpp"
+					Name="(XMSampler)"
 					>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\engine\XMInstrument.cpp"
+						>
 					</File>
 					<File
-					RelativePath="..\..\..\..\src\psycle\host\engine\MidiInput.hpp"
-					>
+						RelativePath="..\..\..\..\src\psycle\host\engine\XMInstrument.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\engine\XMSampler.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\engine\XMSampler.hpp"
+						>
 					</File>
 				</Filter>
+			</Filter>
+			<Filter
+				Name="(midi)"
+				>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\engine\MidiInput.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\engine\MidiInput.hpp"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="seib/vsthost"
+			>
+			<File
+				RelativePath="..\..\..\..\src\Seib-vsthost\CVSTHost.Seib.cpp"
+				>
+				<FileConfiguration
+					Name="release.g6|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="release.g7|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\Seib-vsthost\CVSTHost.Seib.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\ImplVstHost.cpp"
+				>
+				<FileConfiguration
+					Name="debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="release.g6|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="release.g7|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\ImplVstHost.hpp"
+				>
+				<FileConfiguration
+					Name="debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+		</Filter>		<Filter
+			Name="universalis"
+			Filter="">
+			<File
+				RelativePath="..\..\..\..\src\universalis\exception.cpp">
+				<FileConfiguration
+					Name="release.g6|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(ParentName)/"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(ParentName)/"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="release.g7|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(ParentName)/"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\universalis\universalis.hpp">
+			</File>
+			<Filter
+				Name="universalis/standard_library"
+				Filter="">
+				<File
+					RelativePath="..\..\..\..\src\universalis\standard_library\standard_library.hpp">
+				</File>
+				<Filter
+					Name="universalis/standard_library/exceptions"
+					Filter="">
+					<File
+						RelativePath="..\..\..\..\src\universalis\standard_library\exceptions\code_description.cpp">
+						<FileConfiguration
+							Name="release.g6|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+				<Filter
+					Name="universalis/standard_library/detail"
+					Filter="">
+					<File
+						RelativePath="..\..\..\..\src\universalis\standard_library\detail\allocators.cpp">
+						<FileConfiguration
+							Name="release.g6|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="universalis/processor"
+				Filter="">
+				<File
+					RelativePath="..\..\..\..\src\universalis\processor\exception.cpp">
+					<FileConfiguration
+						Name="release.g6|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release.g7|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\universalis\processor\processor.hpp">
+				</File>
+				<Filter
+					Name="universalis/processor/exceptions"
+					Filter="">
+					<File
+						RelativePath="..\..\..\..\src\universalis\processor\exceptions\code_description.cpp">
+						<FileConfiguration
+							Name="release.g6|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="universalis/operating_system"
+				Filter="">
+				<File
+					RelativePath="..\..\..\..\src\universalis\operating_system\exception.cpp">
+					<FileConfiguration
+						Name="release.g6|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release.g7|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\universalis\operating_system\loggers.cpp">
+					<FileConfiguration
+						Name="release.g6|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release.g7|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\universalis\operating_system\operating_system.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\universalis\operating_system\paths.cpp">
+					<FileConfiguration
+						Name="release.g6|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release.g7|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\universalis\operating_system\terminal.cpp">
+					<FileConfiguration
+						Name="release.g6|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release.g7|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+				</File>
+				<Filter
+					Name="universalis/operating_system/threads"
+					Filter="">
+					<File
+						RelativePath="..\..\..\..\src\universalis\operating_system\threads\id.cpp">
+						<FileConfiguration
+							Name="release.g6|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\universalis\operating_system\threads\sleep.cpp">
+						<FileConfiguration
+							Name="release.g6|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+				<Filter
+					Name="universalis/operating_system/exceptions"
+					Filter="">
+					<File
+						RelativePath="..\..\..\..\src\universalis\operating_system\exceptions\code_description.cpp">
+						<FileConfiguration
+							Name="release.g6|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+				<Filter
+					Name="universalis/operating_system/dynamic_link"
+					Filter="">
+					<File
+						RelativePath="..\..\..\..\src\universalis\operating_system\dynamic_link\resolver.cpp">
+						<FileConfiguration
+							Name="release.g6|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+				<Filter
+					Name="universalis/operating_system/detail"
+					Filter="">
+					<File
+						RelativePath="..\..\..\..\src\universalis\operating_system\detail\check_version.cpp">
+						<FileConfiguration
+							Name="release.g6|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+			</Filter>
+			<Filter
+				Name="universalis/compiler"
+				Filter="">
+				<File
+					RelativePath="..\..\..\..\src\universalis\compiler\compiler.hpp">
+				</File>
+				<Filter
+					Name="universalis/compiler/exceptions"
+					Filter="">
+					<File
+						RelativePath="..\..\..\..\src\universalis\compiler\exceptions\ellipsis.cpp">
+						<FileConfiguration
+							Name="release.g6|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+					</File>
+				</Filter>
+				<Filter
+					Name="universalis/compiler/detail"
+					Filter="">
+					<Filter
+						Name="universalis/compiler/detail/pragmatic"
+						Filter="">
+						<File
+							RelativePath="..\..\..\..\src\universalis\compiler\detail\pragmatic\demangle.cpp">
+							<FileConfiguration
+								Name="release.g6|Win32">
+								<Tool
+									Name="VCCLCompilerTool"
+									ObjectFile="$(IntDir)/$(ParentName)/"/>
+							</FileConfiguration>
+							<FileConfiguration
+								Name="debug|Win32">
+								<Tool
+									Name="VCCLCompilerTool"
+									ObjectFile="$(IntDir)/$(ParentName)/"/>
+							</FileConfiguration>
+							<FileConfiguration
+								Name="release.g7|Win32">
+								<Tool
+									Name="VCCLCompilerTool"
+									ObjectFile="$(IntDir)/$(ParentName)/"/>
+							</FileConfiguration>
+						</File>
+					</Filter>
+				</Filter>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="packagneric"
+			Filter="">
+			<File
+				RelativePath=".\src\packageneric\module.private.hpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="legacy/operating_system"
@@ -1161,28 +1640,10 @@
 				RelativePath="..\..\..\..\src\legacy\operating_system\logger.hpp">
 			</File>
 		</Filter>
-		<Filter
-			Name="packageneric"
-			>
-			<File
-				RelativePath="..\..\src\packageneric\configuration.private.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\packageneric\module.private.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\packageneric\package.private.hpp"
-				>
-			</File>
-		</Filter>
-		<File
-			RelativePath="..\..\..\..\ChangeLog"
-			>
-		</File>
 	</Files>
-
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="\Documents and Settings\All Users\Documentos\Visual C++\portable_psycle\src\psycle\host\resources\resources.rc"/>
 	</Globals>
 </VisualStudioProject>

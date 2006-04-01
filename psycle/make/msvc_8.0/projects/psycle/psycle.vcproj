@@ -937,7 +937,7 @@
 				Name="legacy"
 				>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\legacy\engine\old_file_format.cpp"
+					RelativePath="..\..\..\..\src\psycle\host\engine\legacy\old_file_format.cpp"
 					>
 				</File>
 			</Filter>
