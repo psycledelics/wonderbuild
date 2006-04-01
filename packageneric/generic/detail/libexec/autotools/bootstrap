@@ -126,18 +126,15 @@ function require_softwares
 {
 	echoing "checking for required tools ..." &&
 	{
-		echoing "checking for command: sh ..." which sh ||
+		echoing "checking for posix-compliant shell ..." $root/packagneric/generic/bin/posix.shell -c : &&
 		{
-			echoing "checking for command: sh: not found" &&
-			false
+			echoing "checking for command: sh ..." which sh ||
+			{
+				echoing "checking for command: sh: not found" &&
+				false
+			}
 		} &&
-		echoing "checking for command: sh ..." eval 'ls --format=long --color=auto --classify $(which {{d,b}a,}sh)' &&
-		#require_software bash fsf-gnu-3.00 bash ||
-		require_software bash fsf-gnu-2.04 bash &&
-		{
-			require_software dash 0 dash ||
-			echoing "checking for command: sh: bash installed, dash not installed. nevermind, bash is a superset of dash."
-		}
+		require_software bash fsf-gnu-2.04 bash # will remove this requirement in the long term (replacing with posix.shell)
 	} &&
 	# note about coreutils and fileutils:
 	# on msys: uname id are in sh-utils (2.0), and the rest is in fileutils.
@@ -365,7 +362,7 @@ function echoing
 # functions to check that we have the required tools
 #####################################################
 
-if test $(which dpkg)
+if which dpkg 1>/dev/null 2>&1
 then
 	echoing "packaging system: dpkg" &&
 	function require_software
@@ -402,7 +399,7 @@ then
 			fi
 		}
 	}
-elif test $(which rpm)
+elif which rpm 1>/dev/null 2>&1
 then
 	echoing "packaging system: rpm" &&
 	function require_software
@@ -426,7 +423,7 @@ then
 			return
 		done
 	}
-elif test $(which cygcheck)
+elif which cygcheck 1>/dev/null 2>&1
 then
 	echoing "packaging system: cygcheck" &&
 	function require_software
