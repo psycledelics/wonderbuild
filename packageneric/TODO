@@ -1,3 +1,6 @@
+*	macosx's /usr/bin/which command is silly. use builtin 'type' instead.
+	-- bohan
+	
 *	for vcproj, use InheritedPropertySheets
 	-- bohan
 	
