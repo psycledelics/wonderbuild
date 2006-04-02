@@ -1,20 +1,23 @@
-#! /bin/bash
+#! /bin/sh
+. $PACKAGENERIC__ROOT/packageneric/generic/bin/posix.shell &&
 
 ##############################################################################
 #
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# Copyright (C) 1999-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
+# copyright 1999-2006 johan boule <bohan@jabber.org>
+# copyright 2004-2006 psycledelics http://psycle.pastnotecut.org
 #
 # autotools autogenerator plugin
+#
 # \meta generic
-# \meta standard gnu
+# \meta standard posix
 #
 ##############################################################################
 
-function main
+main()
 {
 	local output=$PACKAGENERIC__OUTPUT/$PACKAGENERIC__SUBPATH &&
-	mkdir --parents $output
+	mkdir -p $output
 } &&
 
 main "$@"

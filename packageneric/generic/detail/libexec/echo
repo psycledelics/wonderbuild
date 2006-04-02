@@ -1,0 +1,30 @@
+#! /usr/bin/env cat
+
+##############################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any lat$
+# copyright 1999-2006 Johan Boule <bohan@jabber.org>
+# copyright 2004-2006 psycledelics http://psycle.pastnotecut.org
+#
+# Finds a echo command that supports escaping for octal numeric codes (-e option).
+# Note: This file is to be sourced.
+#
+# \meta generic
+# \meta standard posix
+#
+##############################################################################
+
+if test x"${BASH:-}" != x
+then
+	echo='builtin echo'
+elif type echo 1>/dev/null 2>&1
+then
+	echo=$(which echo)
+else
+	echo='command echo'
+fi &&
+
+echo()
+{
+	$echo "$@"
+}

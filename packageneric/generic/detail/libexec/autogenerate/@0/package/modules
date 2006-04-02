@@ -1,4 +1,5 @@
-#! /bin/bash
+#! /usr/bin/env bash
+. $PACKAGENERIC__ROOT/packageneric/generic/bin/posix.shell &&
 
 ##############################################################################
 #
@@ -6,14 +7,15 @@
 # Copyright (C) 1999-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
 #
 # autotools autogenerator plugin
+#
 # \meta generic
-# \meta standard gnu
+# \meta standard posix
 #
 ##############################################################################
 
 set -o nounset &&
 
-function main
+main()
 {
 	local modules__ac__subpath=autotools/autoconf/$PACKAGENERIC__SUBPATH &&
 	local modules__am__subpath=autotools/automake/$PACKAGENERIC__SUBPATH &&
@@ -21,7 +23,7 @@ function main
 	local modules__am=$PACKAGENERIC__OUTPUT/$modules__am__subpath &&
 	local modules__ac__subpath=$PACKAGENERIC__OUTPUT__SUBPATH/$modules__ac__subpath &&
 	local modules__am__subpath=$PACKAGENERIC__OUTPUT__SUBPATH/$modules__am__subpath &&
-	mkdir --parents $(dirname $modules__ac) $(dirname $modules__am) &&
+	mkdir -p $(dirname $modules__ac) $(dirname $modules__am) &&
 	{
 		cat <<-eof > $modules__ac.ac
 			#! /usr/bin/autoconf
@@ -39,7 +41,7 @@ function main
 	local modules__path=packageneric/$PACKAGENERIC__SUBPATH &&
 	if test -d $modules__path
 	then
-		mkdir --parents $modules__ac $modules__am &&
+		mkdir -p $modules__ac $modules__am &&
 		cd $modules__path &&
 		local modules=$(eval find . -maxdepth 1 $(packageneric__find__file \\\( -name hpp.\\\*.am -or -name lib.\\\*.am -or -name bin.\\\*.am \\\))) &&
 		for module in $modules
@@ -55,13 +57,13 @@ function main
 	fi
 } &&
 
-function module
+module()
 {
 	local module=$1 && shift &&
 	local module__ac=$modules__ac/$module.ac &&
 	local module__am__unconditional=$modules__am/$module/unconditional.am &&
 	local module__am__conditional=$modules__am/$module/conditional.am &&
-	mkdir --parents $modules__am/$module &&
+	mkdir -p $modules__am/$module &&
 	local module__type=$(echo $module | sed 's:\..*::') &&
 	local module__name=$(echo $module | sed 's:^[^.]*\.::') &&
 	local module__name__underscores=$(echo $module__name | tr '.-' '__') &&
@@ -588,21 +590,21 @@ resources
 	}
 } &&
 
-function echo-custom
+echo_custom()
 {
 	echo -en '\033[1;34m' &&
 	echo "$@" &&
 	echo -en '\033[0m'
 } &&
 
-function echoing
+echoing()
 {
 	local script_path=packageneric.autogenerate.package.module
 	local comment=$1 && shift &&
-	echo-custom "$script_path: $comment" &&
+	echo_custom "$script_path: $comment" &&
 	if test $# != 0
 	then
-		echo-custom "$script_path: -> calling: $@" &&
+		echo_custom "$script_path: -> calling: $@" &&
 		"$@"
 	fi
 } &&

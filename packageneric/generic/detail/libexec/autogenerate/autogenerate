@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /usr/bin/env bash
 
 ##############################################################################
 #
@@ -6,7 +6,7 @@
 # Copyright (C) 1999-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
 #
 # \meta generic
-# \meta standard gnu
+# \meta standard posix
 #
 ##############################################################################
 
@@ -14,7 +14,7 @@ set -eu &&
 
 . $(dirname $0)/../find &&
 
-function main
+main()
 {
 	local selfdir=$(cd $(dirname $0) && pwd) &&
 	cd   $selfdir &&
@@ -84,21 +84,23 @@ function main
 #####################################################################################################
 #####################################################################################################
 
-function echo-custom
+. $(dirname $0)/../echo &&
+
+echo_custom()
 {
 	echo -en '\033[2;34m' &&
 	echo "$@" &&
 	echo -en '\033[0m'
 } &&
 
-function echoing
+echoing()
 {
 	local script_path=packageneric.$(basename $0)
 	local comment=$1 && shift &&
-	echo-custom "$script_path: $comment" &&
+	echo_custom "$script_path: $comment" &&
 	if test $# != 0
 	then
-		echo-custom "$script_path: -> calling: $@" &&
+		echo_custom "$script_path: -> calling: $@" &&
 		"$@"
 	fi
 } &&

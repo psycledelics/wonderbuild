@@ -1,4 +1,5 @@
-#! /bin/bash
+#! /usr/bin/env bash
+. $PACKAGENERIC__ROOT/packageneric/generic/bin/posix.shell &&
 
 ##############################################################################
 #
@@ -6,18 +7,19 @@
 # Copyright (C) 1999-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
 #
 # autotools autogenerator plugin
+#
 # \meta generic
-# \meta standard gnu
+# \meta standard posix
 #
 ##############################################################################
 
 set -eu &&
 
-function main
+main()
 {
 	local output__ac=$PACKAGENERIC__OUTPUT/autotools/autoconf/$PACKAGENERIC__SUBPATH &&
 	local output__am=$PACKAGENERIC__OUTPUT/autotools/automake/$PACKAGENERIC__SUBPATH &&
-	mkdir --parents $output__ac $output__am &&
+	mkdir -p $output__ac $output__am &&
 	{
 		cat > $output__ac/PACKAGENERIC__CONFIGURATION__HEADER_WITH_NAMESPACE.ac <<-eof
 			#! /usr/bin/autoconf

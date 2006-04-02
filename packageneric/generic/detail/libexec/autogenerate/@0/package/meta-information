@@ -1,4 +1,5 @@
-#! /bin/bash
+#! /bin/sh
+. $PACKAGENERIC__ROOT/packageneric/generic/bin/posix.shell &&
 
 ##############################################################################
 #
@@ -6,17 +7,18 @@
 # Copyright (C) 1999-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
 #
 # autogenerator plugin
+#
 # \meta generic
-# \meta standard gnu
+# \meta standard posix
 #
 ##############################################################################
 
 set -eu &&
 
-function main
+main()
 {
-	mkdir --parents $PACKAGENERIC__OUTPUT/$PACKAGENERIC__SUBPATH &&
-	cd              $PACKAGENERIC__OUTPUT/$PACKAGENERIC__SUBPATH &&
+	mkdir -p $PACKAGENERIC__OUTPUT/$PACKAGENERIC__SUBPATH &&
+	cd       $PACKAGENERIC__OUTPUT/$PACKAGENERIC__SUBPATH &&
 	local meta=../../../$PACKAGENERIC__SUBPATH &&
 	if test ! -e $meta
 	then
@@ -24,7 +26,7 @@ function main
 		false
 		return
 	fi &&
-	ln --symbolic --force $meta/* . &&
+	ln -s -f $meta/* . &&
 	if test ! -e $PACKAGENERIC__ROOT/debian/changelog
 	then
 		for name in name version archive
@@ -38,15 +40,15 @@ function main
 		done &&
 		local version=$(< version)
 	else
-		local head=$(head --lines 1 $PACKAGENERIC__ROOT/debian/changelog) &&
+		local head=$(head -n 1 $PACKAGENERIC__ROOT/debian/changelog) &&
 		
-		local    name=$(echo $head | cut --delimiter ' ' --fields 1) &&
+		local    name=$(echo $head | cut -d ' ' -f 1) &&
 		echo '"'$name'"' > name &&
 		
-		local version=$(echo $head | cut --delimiter ' ' --fields 2 | sed 's/[^0-9\.]//g') &&
+		local version=$(echo $head | cut -d ' ' -f 2 | sed 's/[^0-9\.]//g') &&
 		echo '"'$version'"' > version &&
 		
-		local archive=$(echo $head | cut --delimiter ' ' --fields 3 | sed 's/\;$//') &&
+		local archive=$(echo $head | cut -d ' ' -f 3 | sed 's/\;$//') &&
 		echo '"'$archive'"' > archive
 	fi &&
 
@@ -62,7 +64,7 @@ function main
 	echo $version | sed 's/.*\.\([0-9]*\)$/\1/'         > version--patch &&
 
 	local output=$PACKAGENERIC__OUTPUT/autotools/autoconf/$PACKAGENERIC__SUBPATH &&
-	mkdir --parents $output &&
+	mkdir -p $output &&
 	local output__m4=$output/m4_define.ac &&
 	local output__ac=$output/PACKAGENERIC__DEFINE_AND_SUBST.ac &&
 	{
