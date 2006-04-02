@@ -182,6 +182,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\FFT.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\FFT.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\helpers.cpp"
 				>
 			</File>
@@ -516,6 +524,13 @@
 					RelativePath="..\..\..\..\src\psycle\host\gui\GreetDialog.hpp"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\gui\InterpolateCurveDlg.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\gui\InterpolateCurveDlg.hpp"
+					>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\gui\KeybHandler.private.hpp"
 					>
@@ -1070,7 +1085,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\ImplVstHost.cpp"
+				RelativePath="..\..\..\..\src\psycle\host\engine\ImplVstHost.cpp"
 				>
 				<FileConfiguration
 					Name="debug|Win32"
@@ -1090,7 +1105,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\ImplVstHost.hpp"
+				RelativePath="..\..\..\..\src\psycle\host\engine\ImplVstHost.hpp"
 				>
 				<FileConfiguration
 					Name="debug|Win32"

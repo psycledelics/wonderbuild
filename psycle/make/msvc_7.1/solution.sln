@@ -338,19 +338,19 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_eq", "pro
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_granulizer", "projects\psycle\plugins\dw_granulizer.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05186}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_granulizer", "projects\psycle\plugins\dw_granulizer.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05187}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_guitremolo", "projects\psycle\plugins\dw_guitremolo.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05186}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_guitremolo", "projects\psycle\plugins\dw_guitremolo.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05188}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_iopan", "projects\psycle\plugins\dw_iopan.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05186}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_iopan", "projects\psycle\plugins\dw_iopan.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05189}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_tremolo", "projects\psycle\plugins\dw_tremolo.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05186}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_tremolo", "projects\psycle\plugins\dw_tremolo.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05190}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -962,46 +962,46 @@ Global
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g7.Build.0 = release.g7|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.unpack.ActiveCfg = release.g7|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.unpack.Build.0 = release.g7|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.debug.ActiveCfg = debug|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.debug.Build.0 = debug|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.documentation.ActiveCfg = debug|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.documentation.Build.0 = debug|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g6.ActiveCfg = release.g6|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g6.Build.0 = release.g6|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g7.ActiveCfg = release.g7|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g7.Build.0 = release.g7|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.unpack.ActiveCfg = release.g7|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.unpack.Build.0 = release.g7|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.debug.ActiveCfg = debug|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.debug.Build.0 = debug|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.documentation.ActiveCfg = debug|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.documentation.Build.0 = debug|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g6.ActiveCfg = release.g6|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g6.Build.0 = release.g6|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g7.ActiveCfg = release.g7|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g7.Build.0 = release.g7|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.unpack.ActiveCfg = release.g7|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.unpack.Build.0 = release.g7|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.debug.ActiveCfg = debug|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.debug.Build.0 = debug|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.documentation.ActiveCfg = debug|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.documentation.Build.0 = debug|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g6.ActiveCfg = release.g6|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g6.Build.0 = release.g6|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g7.ActiveCfg = release.g7|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g7.Build.0 = release.g7|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.unpack.ActiveCfg = release.g7|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.unpack.Build.0 = release.g7|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.debug.ActiveCfg = debug|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.debug.Build.0 = debug|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.documentation.ActiveCfg = debug|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.documentation.Build.0 = debug|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g6.ActiveCfg = release.g6|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g6.Build.0 = release.g6|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g7.ActiveCfg = release.g7|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g7.Build.0 = release.g7|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.unpack.ActiveCfg = release.g7|Win32
-		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.unpack.Build.0 = release.g7|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05187}.debug.ActiveCfg = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05187}.debug.Build.0 = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05187}.documentation.ActiveCfg = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05187}.documentation.Build.0 = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05187}.release.g6.ActiveCfg = release.g6|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05187}.release.g6.Build.0 = release.g6|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05187}.release.g7.ActiveCfg = release.g7|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05187}.release.g7.Build.0 = release.g7|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05187}.unpack.ActiveCfg = release.g7|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05187}.unpack.Build.0 = release.g7|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05188}.debug.ActiveCfg = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05188}.debug.Build.0 = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05188}.documentation.ActiveCfg = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05188}.documentation.Build.0 = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05188}.release.g6.ActiveCfg = release.g6|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05188}.release.g6.Build.0 = release.g6|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05188}.release.g7.ActiveCfg = release.g7|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05188}.release.g7.Build.0 = release.g7|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05188}.unpack.ActiveCfg = release.g7|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05188}.unpack.Build.0 = release.g7|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05189}.debug.ActiveCfg = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05189}.debug.Build.0 = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05189}.documentation.ActiveCfg = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05189}.documentation.Build.0 = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05189}.release.g6.ActiveCfg = release.g6|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05189}.release.g6.Build.0 = release.g6|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05189}.release.g7.ActiveCfg = release.g7|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05189}.release.g7.Build.0 = release.g7|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05189}.unpack.ActiveCfg = release.g7|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05189}.unpack.Build.0 = release.g7|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05190}.debug.ActiveCfg = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05190}.debug.Build.0 = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05190}.documentation.ActiveCfg = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05190}.documentation.Build.0 = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05190}.release.g6.ActiveCfg = release.g6|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05190}.release.g6.Build.0 = release.g6|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05190}.release.g7.ActiveCfg = release.g7|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05190}.release.g7.Build.0 = release.g7|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05190}.unpack.ActiveCfg = release.g7|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05190}.unpack.Build.0 = release.g7|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
