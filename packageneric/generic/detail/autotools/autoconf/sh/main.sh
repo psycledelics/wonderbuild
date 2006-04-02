@@ -1,5 +1,5 @@
-#! /bin/sh
-. $(dirname $0)/../../../libexec/posix.shell
+#! /usr/bin/env cat
+. $(dirname $0)/packageneric/generic/bin/posix.shell
 
 ##############################################################################
 #
