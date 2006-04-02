@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /usr/bin/env cat
 
 ##############################################################################
 #
@@ -7,6 +7,7 @@
 # copyright 2004-2006 psycledelics http://psycle.pastnotecut.org
 #
 # Finds a posix shell on any unix system.
+# Note: This file is to be sourced.
 #
 # \meta generic
 # \meta standard posix minor shell gotchaquirks (i.e. should work with at&t bourne shells like bsh and ash)
