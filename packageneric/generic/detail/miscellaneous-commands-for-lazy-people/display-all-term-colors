@@ -1,14 +1,5 @@
 #!/bin/bash
 
-##############################################################################
-#
-# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2 of the License, or (at your option) any later version.
-# Copyright (C) 2004-2005 Johan Boule <bohan.dyndns.org>
-#
-# General-purpose: yes
-#
-##############################################################################
-
 function x
 {
 	echo -en "\e[$1m$2"
@@ -108,7 +99,7 @@ function combine
 				echo "12!"
 				continue
 			fi
-			echo -en "$x$y: $(x $x$y)abcdefghijh"
+			echo -en "$x$y: $(x $x$y)abcdefghijklmnopqrstuvwxyz"
 			grounds 3
 			reset
 			echo
@@ -126,7 +117,7 @@ function description
 		2) echo -en "lowlighted     ";;
 		3) echo -en "(fg)           ";;
 		4) echo -en "underlined (bg)";;
-		5) echo -en "bold           ";;
+		5) echo -en "blinking       ";;
 		6) echo -en "no effect?     ";;
 		7) echo -en "inversed video ";;
 		8) echo -en "out of range?  ";;
@@ -138,6 +129,7 @@ function description
 function all
 {
 	reset
+	echo
 	echo -en "\e[1mterminal font change escape sequences"
 	reset
 	#echo

@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#! /usr/bin/env sh
 
 ########################################################################################################################################
 #
@@ -46,7 +46,7 @@ set -o nounset &&
 #####################################################################################################
 #####################################################################################################
 
-function main
+main()
 {
 	local root=$($(dirname $0)/../root) &&
 
@@ -103,7 +103,7 @@ function main
 	# remove, then generate
 	{
 		(
-			remove $root
+			remove
 		) &&
 		if $(echo "$@" | grep --silent --extended-regexp -- '(--clean|clean)')
 		then
@@ -111,7 +111,7 @@ function main
 			echoing "note: You can call $0 to generate the build system files."
 		else
 			(
-				generate $root
+				generate
 			)
 		fi
 	}
@@ -124,20 +124,11 @@ function main
 ############################
 # checks for required tools
 ############################
-function require_softwares
+require_softwares()
 {
 	echoing "checking for required tools ..." &&
-	{
-		echoing "checking for posix-compliant shell ..." $root/packageneric/generic/bin/posix.shell -c echo '$SHELL' &&
-		{
-			echoing "checking for command: sh ..." type sh ||
-			{
-				echoing "checking for command: sh: not found" &&
-				false
-			}
-		} &&
-		require_software bash fsf-gnu-2.04 bash # will remove this requirement in the long term (replacing with posix.shell)
-	} &&
+	
+	echoing "checking for posix-compliant shell ..." sh $root/packageneric/generic/bin/posix.shell &&
 	
 	# note about coreutils and fileutils:
 	# on msys: uname id are in sh-utils (2.0), and the rest is in fileutils.
@@ -194,13 +185,10 @@ function require_softwares
 #############################
 # removes build system files
 #############################
-function remove
+remove()
 {
 	# or make distmaint-clean
 
-	local root &&
-	root="$1" && shift &&
-	
 	echoing "entering source package directory" cd "$root" &&
 
 	if test ! -f configure.ac
@@ -271,11 +259,12 @@ function remove
 #######################################
 # bootstraps autoconf/automake/libtool
 #######################################
-function generate
+generate()
 {
-	local root verbose &&
-	root=$1 && shift &&
-	#verbose='--verbose' &&
+	local verbose &&
+
+	verbose= &&
+	#verbose=--verbose &&
 	
 	echoing "entering source package directory" cd $root &&    
 	echoing "generating new build system from configure.ac and makefile.am files ..." &&
@@ -341,17 +330,33 @@ function generate
 #####################################################################################################
 #####################################################################################################
 
-function echo_custom
+if test x"${BASH:-}" != x
+then
+	echo='builtin echo'
+elif type echo 1>/dev/null 2>&1
+then
+	echo=$(which echo)
+else
+	echo='command echo'
+fi &&
+
+echo()
 {
-	echo -en '\033[5;35m' &&
+	$echo "$@"
+}
+	
+echo_custom()
+{
+	echo -en '\033[1;35m' &&
 	echo -e "$@" &&
 	echo -en '\033[0m'
 } &&
 
-function echoing
+echoing()
 {
-	local script_path=packageneric.autotools.$(basename $0) &&
-	local comment=$1 && shift &&
+	local script comment &&
+	script_path=packageneric.autotools.$(basename $0) &&
+	comment=$1 && shift &&
 	echo_custom "$script_path: $comment" &&
 	if test $# != 0
 	then
@@ -371,7 +376,7 @@ function echoing
 if type dpkg 1>/dev/null 2>&1
 then
 	echoing "packaging system: dpkg" &&
-	function require_software
+	require_software()
 	{
 		local name version status failed &&
 		name=$1 && shift &&
@@ -408,7 +413,7 @@ then
 elif type rpm 1>/dev/null 2>&1
 then
 	echoing "packaging system: rpm" &&
-	function require_software
+	require_software()
 	{
 		local name version status &&
 		name=$1 && shift &&
@@ -432,7 +437,7 @@ then
 elif type cygcheck 1>/dev/null 2>&1
 then
 	echoing "packaging system: cygcheck" &&
-	function require_software
+	require_software()
 	{
 		local name version status &&
 		name=$1 && shift &&
@@ -444,7 +449,7 @@ then
 	}
 else
 	echoing "packaging system: none known" &&
-	function require_software
+	require_software()
 	{
 		local name version commands &&
 		name=$1 && shift &&
@@ -458,7 +463,7 @@ else
 	}
 fi &&
 
-function require_command_in_path
+require_command_in_path()
 {
 	local name version version__string version__number &&
 	name=$1 && shift &&

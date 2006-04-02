@@ -86,7 +86,7 @@ function main
 
 function echo-custom
 {
-	echo -en '\033[5;34m' &&
+	echo -en '\033[2;34m' &&
 	echo "$@" &&
 	echo -en '\033[0m'
 } &&
