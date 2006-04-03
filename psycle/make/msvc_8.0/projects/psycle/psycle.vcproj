@@ -531,6 +531,7 @@
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\gui\InterpolateCurveDlg.hpp"
 					>
+				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\gui\KeybHandler.private.hpp"
 					>
