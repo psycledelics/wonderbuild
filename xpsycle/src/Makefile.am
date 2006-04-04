@@ -5,7 +5,7 @@ xpsycle_SOURCES = xpsycle.cpp alsaout.cpp analyzer.cpp audiodriver.cpp \
 			machine.cpp machinegui.cpp machineview.cpp macprop.cpp mainwindow.cpp masterdlg.cpp \
 			newmachine.cpp patdlg.cpp patternview.cpp player.cpp plugin.cpp sequencerbar.cpp \
 			serializer.cpp song.cpp songpdlg.cpp wiredlg.cpp wiregui.cpp xmsampler.cpp \
-		defaultbitmaps.cpp greetdlg.cpp aboutdlg.cpp sampler.cpp
+		defaultbitmaps.cpp greetdlg.cpp aboutdlg.cpp sampler.cpp vumeter.cpp
 
 # set the include path found by configure
 INCLUDES = -I /usr/include/freetype2 -I /home/natti/ngrs3/src $(all_includes)
@@ -18,7 +18,7 @@ noinst_HEADERS = alsaout.h analyzer.h audiodriver.h childview.h configuration.h 
 			macprop.h mainwindow.h masterdlg.h newmachine.h patdlg.h patternview.h player.h \
 			plugin.h plugin_interface.h sequencerbar.h serializer.h song.h songpdlg.h \
 			songstructs.h wiredlg.h wiregui.h xmsampler.h defaultbitmaps.h greetdlg.h aboutdlg.h \
-	sampler.h
+	sampler.h vumeter.h
 xpsycle_LDADD = -L/usr/X11R6/lib -lXrandr -lXcursor -lXft -lXrender -lX11 -lm\
 	-ldl -lpthread -lfreetype -lxerces-c -lXpm -lasound\
 	-L/home/natti/ngrs3/optimized/src/ -lngrs
