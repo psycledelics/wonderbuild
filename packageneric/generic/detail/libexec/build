@@ -249,8 +249,8 @@ function main
  	cd $source &&
  	
 	echoing '' &&
-	echoing "source: $source" &&
-	echoing "output: $output" &&
+	echoing "source:   $source" &&
+	echoing "output:   $output" &&
 	echoing "packages: $packages" &&
 	echoing "binary distribution: $binary__distribution" &&
 	echoing "source distribution: $source__distribution" &&
