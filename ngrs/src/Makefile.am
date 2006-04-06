@@ -10,23 +10,23 @@ lib_LTLIBRARIES = libngrs.la
 libngrs_la_LDFLAGS = -all-static
 
 
-libngrs_la_SOURCES = nalignlayout.cpp napp.cpp \
-			nautoscrolllayout.cpp	nbevelborder.cpp nbitmap.cpp nborder.cpp nborderlayout.cpp nbutton.cpp	nbuttonevent.cpp \
-			ncheckbox.cpp ncheckmenuitem.cpp ncolor.cpp	ncombobox.cpp nconfig.cpp \
-			ncustombutton.cpp ncustomitem.cpp	ncustommenuitem.cpp ndialog.cpp nedit.cpp nevent.cpp \
-			nfile.cpp	nfiledialog.cpp nfilelistbox.cpp nflowlayout.cpp nfont.cpp	nfontmetrics.cpp \
-			nfontstructure.cpp nframeborder.cpp ngradient.cpp	ngraphics.cpp ngridlayout.cpp \
-			ngroupbox.cpp nimage.cpp nimgfilter.cpp	nisvisualcomponent.cpp niswindow.cpp \
-			nitem.cpp nitemevent.cpp	nkeyaccelerator.cpp nkeyevent.cpp nlabel.cpp nlayout.cpp \
-			nline.cpp	nlineshape.cpp nlistbox.cpp nlistlayout.cpp nmenubar.cpp nmenu.cpp	nmenuitem.cpp \
-			nmenuseperator.cpp nmoveable.cpp nmoveevent.cpp nnfa.cpp	nnotebook.cpp nobject.cpp \
-			npage.cpp npanel.cpp npngfilter.cpp	npoint3d.cpp npoint.cpp npopupmenu.cpp \
-			nprogressbar.cpp nrect.cpp	nrectshape.cpp nruntime.cpp nscrollbar.cpp \
-			nscrollbox.cpp	nscrollevent.cpp nscrollslider.cpp nshape.cpp nsize.cpp nskin.cpp	nslider.cpp \
-			nsplashscreen.cpp nstate.cpp nsystem.cpp ntabbar.cpp	ntabbook.cpp ntab.cpp \
-			ntestwindow.cpp ntimer.cpp ntogglepanel.cpp	ntoolbar.cpp ntoolbarseparator.cpp \
-			nvisitor.cpp nvisualcomponent.cpp	nvisual.cpp nwindow.cpp nxpmfilter.cpp \
-			nspinbutton.cpp nspinedit.cpp nxmlparser.cpp nregexp.cpp color_converter.cpp
+libngrs_la_SOURCES = nalignlayout.cpp napp.cpp nautoscrolllayout.cpp \
+	nbevelborder.cpp nbitmap.cpp nborder.cpp nborderlayout.cpp nbutton.cpp nbuttonevent.cpp \
+	ncheckbox.cpp ncheckmenuitem.cpp ncolor.cpp ncombobox.cpp nconfig.cpp \
+	ncustombutton.cpp ncustomitem.cpp ncustommenuitem.cpp ndialog.cpp nedit.cpp nevent.cpp \
+	nfile.cpp nfiledialog.cpp nfilelistbox.cpp nflowlayout.cpp nfont.cpp \
+	nfontmetrics.cpp nfontstructure.cpp nframeborder.cpp ngradient.cpp ngraphics.cpp \
+	ngridlayout.cpp ngroupbox.cpp nimage.cpp nimgfilter.cpp nisvisualcomponent.cpp \
+	niswindow.cpp nitem.cpp nitemevent.cpp nkeyaccelerator.cpp nkeyevent.cpp nlabel.cpp \
+	nlayout.cpp nline.cpp nlineshape.cpp nlistbox.cpp nlistlayout.cpp nmenubar.cpp \
+	nmenu.cpp nmenuitem.cpp nmenuseperator.cpp nmoveable.cpp nmoveevent.cpp nnfa.cpp \
+	nnotebook.cpp nobject.cpp npage.cpp npanel.cpp npngfilter.cpp npoint3d.cpp npoint.cpp \
+	npopupmenu.cpp nprogressbar.cpp nrect.cpp nrectshape.cpp nruntime.cpp nscrollbar.cpp \
+	nscrollbox.cpp nscrollevent.cpp nscrollslider.cpp nshape.cpp nsize.cpp nskin.cpp \
+	nslider.cpp nsplashscreen.cpp nstate.cpp nsystem.cpp ntabbar.cpp ntabbook.cpp \
+	ntab.cpp ntestwindow.cpp ntimer.cpp ntogglepanel.cpp ntoolbar.cpp \
+	ntoolbarseparator.cpp nvisitor.cpp nvisualcomponent.cpp nvisual.cpp nwindow.cpp \
+	nxpmfilter.cpp nspinbutton.cpp nspinedit.cpp nxmlparser.cpp nregexp.cpp
 noinst_HEADERS = nalignlayout.h napp.h nautoscrolllayout.h nbevelborder.h \
 	nbitmap.h nborder.h nborderlayout.h nbuttonevent.h nbutton.h ncheckbox.h \
 	ncheckmenuitem.h ncolor.h ncombobox.h nconfig.h ncustombutton.h ncustomitem.h \
@@ -41,6 +41,6 @@ noinst_HEADERS = nalignlayout.h napp.h nautoscrolllayout.h nbevelborder.h \
 	nsize.h nskin.h nslider.h nsplashscreen.h nstate.h nsystem.h ntabbar.h \
 	ntabbook.h ntab.h ntestwindow.h ntimer.h ntogglepanel.h ntoolbar.h \
 	ntoolbarseparator.h nvisitor.h nvisualcomponent.h nvisual.h nwindow.h nxpmfilter.h \
-	sigslot.h nspinbutton.h nspinedit.h nxmlparser.h nregexp.h color_converter.hpp
+	sigslot.h nspinbutton.h nspinedit.h nxmlparser.h nregexp.h
 ngrs3_LDADD = $(top_builddir)/src/libngrs.la -lXpm -lxerces-c -L/usr/X11R6/lib \
 	-lXrandr -lXcursor -lXft -lXrender -lX11 -lm -ldl -lpthread -lfreetype
