@@ -26,7 +26,8 @@ libngrs_la_SOURCES = nalignlayout.cpp napp.cpp nautoscrolllayout.cpp \
 	nslider.cpp nsplashscreen.cpp nstate.cpp nsystem.cpp ntabbar.cpp ntabbook.cpp \
 	ntab.cpp ntestwindow.cpp ntimer.cpp ntogglepanel.cpp ntoolbar.cpp \
 	ntoolbarseparator.cpp nvisitor.cpp nvisualcomponent.cpp nvisual.cpp nwindow.cpp \
-	nxpmfilter.cpp nspinbutton.cpp nspinedit.cpp nxmlparser.cpp nregexp.cpp
+	nxpmfilter.cpp nspinbutton.cpp nspinedit.cpp nxmlparser.cpp nregexp.cpp \
+	color_converter.cpp
 noinst_HEADERS = nalignlayout.h napp.h nautoscrolllayout.h nbevelborder.h \
 	nbitmap.h nborder.h nborderlayout.h nbuttonevent.h nbutton.h ncheckbox.h \
 	ncheckmenuitem.h ncolor.h ncombobox.h nconfig.h ncustombutton.h ncustomitem.h \
@@ -41,6 +42,6 @@ noinst_HEADERS = nalignlayout.h napp.h nautoscrolllayout.h nbevelborder.h \
 	nsize.h nskin.h nslider.h nsplashscreen.h nstate.h nsystem.h ntabbar.h \
 	ntabbook.h ntab.h ntestwindow.h ntimer.h ntogglepanel.h ntoolbar.h \
 	ntoolbarseparator.h nvisitor.h nvisualcomponent.h nvisual.h nwindow.h nxpmfilter.h \
-	sigslot.h nspinbutton.h nspinedit.h nxmlparser.h nregexp.h
+	sigslot.h nspinbutton.h nspinedit.h nxmlparser.h nregexp.h color_converter.hpp
 ngrs3_LDADD = $(top_builddir)/src/libngrs.la -lXpm -lxerces-c -L/usr/X11R6/lib \
 	-lXrandr -lXcursor -lXft -lXrender -lX11 -lm -ldl -lpthread -lfreetype
