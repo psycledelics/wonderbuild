@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /usr/bin/env bash
 
 ####################################################################################################
 #
@@ -90,13 +90,13 @@ This script accepts the following options:
 	$(echo-custom --distdir)\
 		
 		With this option,
-			a make distdir is done first, under <output>/build,
-			resulting in a <output>/build/$package__name-$package__version distdir.
+			a make distdir is done first, under <output>/build/$package__name,
+			resulting in a <output>/build/$package__name/$package__name-$package__version distdir.
 			Then, the build is done with the distdir as source package.
 			You will hence see two configurations done, this is normal.
 		
 		Without this option,
-			just build directly from <output>/build.
+			just build directly from <output>/build/$package__name.
 	
 	$(echo-custom -n --no-nested-source-packages)   The opposite of --nested-source-packages.
 	   $(echo-custom --nested-source-packages)\
@@ -154,10 +154,10 @@ eof
 function main
 {
  	local libexec=$(cd $(dirname $0) && pwd) &&
- 	local output__relative=++packageneric &&
 	$libexec/package/meta-information --ensure &&
 	local package__name=$($libexec/package/meta-information name) &&
 	local package__version=$($libexec/package/meta-information version) &&
+ 	local output__relative=++packageneric &&
 
 	echoing '===========================================================' &&
 	echoing "packageneric $($libexec/version) $(basename $0) script" &&
@@ -298,30 +298,30 @@ function main
 			fi &&
 			compilation_flags
 		fi &&
-		if ! $option__configure__cached && ! $option__continue || test ! -e $output/build/Makefile
+		if ! $option__configure__cached && ! $option__continue || test ! -e $output/build/$package__name/Makefile
 		then
-			echoing "making build directory" mkdir --verbose $output/build --parents &&
+			echoing "making build directory" mkdir -p $output/build/$package__name &&
 			(
-				echoing "entering build directory" cd $output/build &&
+				echoing "entering build directory" cd $output/build/$package__name &&
 				echoing "autotools autoconf configure" $source/configure $configure__options &&
 				echoing "leaving build directory"
 			)
 		fi &&
 		(
-			echoing "entrering build directory" cd $output/build &&
+			echoing "entrering build directory" cd $output/build/$package__name &&
 			if $option__distdir
 			then
 				local distdir=$package__name-$package__version &&
-				if ! $option__continue || test ! -d $distdir/$output__relative/build
+				if ! $option__continue || test ! -d $distdir/$output__relative/build/$package__name
 				then
 					echoing "making distdir" make $make__options distdir &&
 					echoing "Successfully built distribution directory: $(pwd)/$distdir"
 				fi
 			else
 				echoing "making all" make $make__options all &&
-				echoing "successfully built files in directory: $output/build" &&
+				echoing "successfully built files in directory: $output/build/$package__name" &&
 				echoing "making install-strip" make $make__options install-strip &&
-				echoing "successfully installed files in directory: $output/build/++packageneric/install" # todo: this is AC_DEFAULT_PREFIX, or --configure --prefix=
+				echoing "successfully installed files in directory: $output/build/$package__name/++packageneric/install" # todo: this is AC_DEFAULT_PREFIX, or --configure --prefix=
 			fi &&
 			if $option__distribute
 			then
@@ -358,9 +358,9 @@ function main
 					false
 				fi &&
 				{
-					echoing "removing build directory" rm --force --recursive $output/build 2>/dev/null ||
+					echoing "removing build directory" rm -Rf $output/build/$package__name 2>/dev/null ||
 					{
-						echoing "warning: could not remove build directory $output/build" &&
+						echoing "warning: could not remove build directory $output/build/$pakage__name" &&
 						false
 					}
 				}
@@ -484,7 +484,7 @@ function date
 
 function echo-custom
 {
-	echo -en '\033[5;36m' &&
+	echo -en '\033[2;36m' &&
 	echo -e "$@" &&
 	echo -en '\033[0m'
 } &&
