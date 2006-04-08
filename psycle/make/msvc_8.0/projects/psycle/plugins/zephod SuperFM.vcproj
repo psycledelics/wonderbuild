@@ -143,7 +143,7 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\zephod_super_fm\zephod_super_fm.cpp"
+			RelativePath="..\..\..\..\..\src\psycle\plugins\zephod_super_fm\zephod_superfm.cpp"
 			>
 		</File>
 	</Files>
