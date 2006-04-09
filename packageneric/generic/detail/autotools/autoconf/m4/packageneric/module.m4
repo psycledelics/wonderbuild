@@ -1,12 +1,13 @@
-# !/usr/bin/m4
+#! /usr/bin/env m4
 
 ##############################################################################
 #
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# Copyright (C) 1999-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
-# Some macro are Copyright (C) Alexandre Duret-Lutz <duret_g@epita.fr> and Guiodo Draheim <guidod@gmx.de>
+# copyright 1999-2006 johan boule <bohan@jabber.org>
+# copyright 2004-2006 psycledelics http://psycle.pastnotecut.org
 #
-# m4 macros for autoconf included by ./configure.ac
+# m4 macros for autoconf included indirectly by configure.ac
+#
 # \meta hook ./configure.ac
 # \meta generic
 # \meta standard posix
@@ -276,8 +277,8 @@ AC_DEFUN([PACKAGENERIC__MODULE__INTERNAL],
 					Name: $packageneric__module $packageneric__module__libtool__version_info $host
 					Description: $packageneric__module__description
 					Version: \${pkgversion}
-					Cflags: -I\${pkgversionincludedir} $packageneric__module__dependencies__cflags__missing_pkg_config $packageneric__module__cflags
-					Libs: $(if test $packageneric__module__type = lib ; then echo "-L\${pkgversionlibdir} -l-$packageneric__module" ; fi) $packageneric__module__dependencies__libs__missing_pkg_config $packageneric__module__libs
+					Cflags: -I$includedir -I\${pkgversionincludedir} $packageneric__module__dependencies__cflags__missing_pkg_config $packageneric__module__cflags
+					Libs: $(if test $packageneric__module__type = lib ; then echo "-L$libdir -L\${pkgversionlibdir} -l-$packageneric__module" ; fi) $packageneric__module__dependencies__libs__missing_pkg_config $packageneric__module__libs
 					Requires: $packageneric__module__required
 				eof
 			}

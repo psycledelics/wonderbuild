@@ -113,9 +113,21 @@ This script accepts the following options:
 		Calls to the configure script, if any, will be passed <options>.
 		(this can, e.g., override the default --prefix=<output>/install)
 	
+	$(echo-custom --prefix \<prefix\>)\
+	
+		Shortcut for --configure --prefix.
+		Defaults to the environment variable PACKAGENERIC__INSTALL,
+		or <output>/install if is it not set.
+		Note that <output>/install is deleted each new run, being under the <output> directory.
+		If you want to keep the installation between several runs,
+		give a <prefix> location which is outside of the <output> directory.
+		Since PKG_CONFIG_PATH automatically contains the configured <libdir>/pkgconfig path.
+		this will let you build packages separatly with the --no-nested-source-packages option,
+		without having to combine it with the --continue option.
+		
 	$(echo-custom --debug)\
 			
-		Shortcut for --configure options.
+		Shortcut for --configure CPPFLAGS CXXFLAGS LDFLAGS.
 		Compiles, links, and installs with debugging portions of the code and debugging information enabled.
 		
 	$(echo-custom --make \<options\>)\
@@ -178,7 +190,8 @@ function main
 			local option__nested_source_packages=true &&
 			local option__nested_source_packages__embeed=true &&
 			local option__bootstrap=true &&
-			local configure__options="--config-cache --with-gui" &&
+			local configure__options="--config-cache --with-gui --prefix=${PACKAGENERIC__INSTALL:-$output/install}" &&
+			local configure__options__prefix=--prefix=${PACKAGENERIC__INSTALL:-$output/install} &&
 			local option__debug=false &&
 			local make__options="--silent" &&
 			#local make__options= &&
@@ -205,6 +218,7 @@ function main
 					--no-nested-source-packages) option__nested_source_packages=false ;;
 					--no-bootstrap) option__bootstrap=false ;;
 					--configure) shift && configure__options=$configure__options\ $1 ;;
+					--prefix) shift && configure__options__prefix=$1 ;;
 					--debug) option__debug=true ;;
 					--make) shift && make__options=$make__options\ $1 ;;
 					--continue) option__continue=true ;;
@@ -236,10 +250,13 @@ function main
 				then
 					option__distdir=true
 				fi &&
+				configure__options=$configure__options\ $configure__options__prefix &&
 				if $option__nested_source_packages
 				then
 					configure__options="--with-nested-source-packages $configure__options"
-				fi
+				else
+					configure__options="--without-nested-source-packages $configure__options"
+				fi &&
 			fi &&
 
 	echoing '' &&

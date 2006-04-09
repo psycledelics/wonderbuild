@@ -1,7 +1,13 @@
+*	packageneric/generic/detail/libexec/build documents
+	that PKG_CONFIG_PATH will contain the configure --libdir,
+	but this is not the case.
+	-- bohan
+
 *	macosx's /usr/bin/which command is silly. use builtin 'type' instead.
+	this is already changed in most, if not all places.
 	-- bohan
 	
-*	for vcproj, use InheritedPropertySheets
+*	for vcproj, use InheritedPropertySheets pointing to vcprops files.
 	-- bohan
 	
 *	microsoft needs to #include <packageneric/package/meta-information.private.hpp> which is not distributed.
