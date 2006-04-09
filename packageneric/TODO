@@ -1,6 +1,6 @@
-*	packageneric/generic/detail/libexec/build documents
-	that PKG_CONFIG_PATH will contain the configure --libdir,
-	but this is not the case.
+*	packageneric/generic/detail/libexec/build
+	PKG_CONFIG_PATH contains the configure --prefix=xxx/lib always as a unix path.
+	moreover configure can be passed a --libdir different than --prefix=xxx/lib.
 	-- bohan
 
 *	macosx's /usr/bin/which command is silly. use builtin 'type' instead.

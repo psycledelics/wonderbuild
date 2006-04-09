@@ -250,6 +250,7 @@ function main
 				then
 					option__distdir=true
 				fi &&
+				export PKG_CONFIG_PATH=$PKG_CONFIG_PATH\ $configure__options__prefix/lib &&
 				configure__options=$configure__options\ $configure__options__prefix &&
 				if $option__nested_source_packages
 				then
