@@ -1,6 +1,8 @@
 *	packageneric/generic/detail/libexec/build
 	PKG_CONFIG_PATH contains the configure --prefix=xxx/lib always as a unix path.
 	moreover configure can be passed a --libdir different than --prefix=xxx/lib.
+	Also, it has to be defined in the configure script,
+	because invoking the make command directly may retrigger the configure script.
 	-- bohan
 
 *	macosx's /usr/bin/which command is silly. use builtin 'type' instead.
@@ -16,7 +18,9 @@
 	
 *	to allow static libraries to be built,
 	split packageneric/package/modules/*/defines.private.hpp
-	into two separate files: meta-informations.private.hpp and sources.private.hpp
+	into two separate files: meta-informations.private.hpp and sources.private.hpp.
+	then source.private.hpp can be included by client sources,
+	while still having their own meta-informations.private.hpp.
 	-- bohan
 
 *	split packageneric/generic/detail/src/packageneric/packages/configurations/**/configuration.private.hpp(.in)
