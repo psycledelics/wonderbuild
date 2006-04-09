@@ -256,7 +256,7 @@ function main
 					configure__options="--with-nested-source-packages $configure__options"
 				else
 					configure__options="--without-nested-source-packages $configure__options"
-				fi &&
+				fi
 			fi &&
 
 	echoing '' &&
