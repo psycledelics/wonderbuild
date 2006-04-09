@@ -190,7 +190,7 @@ function main
 			local option__nested_source_packages=true &&
 			local option__nested_source_packages__embeed=true &&
 			local option__bootstrap=true &&
-			local configure__options="--config-cache --with-gui --prefix=${PACKAGENERIC__INSTALL:-$output/install}" &&
+			local configure__options="--config-cache --with-gui" &&
 			local configure__options__prefix=--prefix=${PACKAGENERIC__INSTALL:-$output/install} &&
 			local option__debug=false &&
 			local make__options="--silent" &&
