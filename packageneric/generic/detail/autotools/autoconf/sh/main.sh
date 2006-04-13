@@ -59,7 +59,7 @@ packageneric__main()
 			absolute_name=$(cd $(dirname $0) && pwd)/$(basename $0) &&
 			packageneric__echo &&
 			packageneric__echo "note: Canceling because you called $(basename $0) from its own directory ($0)." &&
-			rm --verbose --force config{.{log,cache},ure.lineno} &&
+			rm -Rf config{.{log,cache},ure.lineno} &&
 			packageneric__echo &&
 			packageneric__tip &&
 			packageneric__echo &&
@@ -121,8 +121,6 @@ packageneric__tip()
 		packageneric__echo "note: tip: \t mkdir /tmp/build/ && cd /tmp/build/ && $(dirname $absolute_name)/configure --prefix=/tmp/install && make install" &&
 		packageneric__echo "note: tip: The above commands will keep your $(dirname $absolute_name)/ source package directory clean," &&
 		packageneric__echo "note: tip: and will install any executable in /tmp/install/bin/ and any shared library in /tmp/install/lib/" &&
-		#packageneric__echo "note: tip: To run the executables, in your environement, define the variable export LD_LIBRARY_PATH=/tmp/install/lib/" &&
-		#packageneric__echo "note: tip: To let the library loader know where to find these shared libraries." &&
 		:
 } &&
 
