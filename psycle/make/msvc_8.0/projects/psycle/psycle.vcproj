@@ -174,19 +174,19 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\global.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\psycle\host\global.hpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\FFT.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\FFT.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\global.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\global.hpp"
 				>
 			</File>
 			<File
@@ -1134,10 +1134,6 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath="..\..\..\..\ChangeLog"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

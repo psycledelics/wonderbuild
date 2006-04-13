@@ -367,6 +367,43 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "generators", "generators", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "effects", "effects", "{A328F49A-8455-4A71-A1BD-A2456EC3A6E5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "helper libraries", "helper libraries", "{1E56DD4E-1AB4-4C55-A587-8AEC0D063E2A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "external libraries", "external libraries", "{3C34845E-EDD8-4EAD-8E02-1657883EB758}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pre-compilation", "pre-compilation", "{A6D8B91D-6D6F-47E5-B773-5A865DB07145}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "package standard files", "package standard files", "{E2D82352-7C93-4D6B-B7F4-92CE95B034AC}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\AUTHORS = ..\..\AUTHORS
+		..\..\ChangeLog = ..\..\ChangeLog
+		..\..\NEWS = ..\..\NEWS
+		..\..\README = ..\..\README
+		..\..\TODO = ..\..\TODO
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{7367C3D3-56DD-47E9-8AD2-E47DE338347A}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\doc\for-end-users\faq.txt = ..\..\doc\for-end-users\faq.txt
+		..\..\doc\for-end-users\how-to-skin-psycle.txt = ..\..\doc\for-end-users\how-to-skin-psycle.txt
+		..\..\doc\for-end-users\keys.txt = ..\..\doc\for-end-users\keys.txt
+		..\..\doc\for-end-users\Psycle.chm = ..\..\doc\for-end-users\Psycle.chm
+		..\..\doc\for-end-users\readme.txt = ..\..\doc\for-end-users\readme.txt
+		..\..\doc\for-end-users\todo.txt = ..\..\doc\for-end-users\todo.txt
+		..\..\doc\for-end-users\tweaking.japanese.pdf = ..\..\doc\for-end-users\tweaking.japanese.pdf
+		..\..\doc\for-end-users\tweaking.txt = ..\..\doc\for-end-users\tweaking.txt
+		..\..\doc\for-end-users\whatsnew.txt = ..\..\doc\for-end-users\whatsnew.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "midi", "midi", "{0134E93B-162A-4D3F-855F-3396F7C6830F}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\doc\for-end-users\psycle-midi-2.2b\midiconfiguration.jpg = ..\..\doc\for-end-users\psycle-midi-2.2b\midiconfiguration.jpg
+		..\..\doc\for-end-users\psycle-midi-2.2b\midimonitor.jpg = ..\..\doc\for-end-users\psycle-midi-2.2b\midimonitor.jpg
+		..\..\doc\for-end-users\psycle-midi-2.2b\midiout.jpg = ..\..\doc\for-end-users\psycle-midi-2.2b\midiout.jpg
+		..\..\doc\for-end-users\psycle-midi-2.2b\psyclemidi.html = ..\..\doc\for-end-users\psycle-midi-2.2b\psyclemidi.html
+		..\..\doc\for-end-users\psycle-midi-2.2b\PsycleMIDIChart.txt = ..\..\doc\for-end-users\psycle-midi-2.2b\PsycleMIDIChart.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		debug|win32 = debug|win32
@@ -847,10 +884,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{F46EC0F9-8440-418D-91E7-41176165E294} = {51505DD3-DD2B-40E4-AA3A-7BE6B650A240}
-		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {51505DD3-DD2B-40E4-AA3A-7BE6B650A240}
 		{63702975-A2DD-4193-9C1D-7FF2AEC8F671} = {51505DD3-DD2B-40E4-AA3A-7BE6B650A240}
 		{A328F49A-8455-4A71-A1BD-A2456EC3A6E5} = {51505DD3-DD2B-40E4-AA3A-7BE6B650A240}
+		{1E56DD4E-1AB4-4C55-A587-8AEC0D063E2A} = {51505DD3-DD2B-40E4-AA3A-7BE6B650A240}
 		{C0AA2193-5F21-4DEA-A747-BE9BDCB8469B} = {776C8571-9FCC-4B32-82DF-7D634E51B05A}
 		{5ACF0567-C4BB-41C2-B2F3-D8E89825CFBD} = {C0AA2193-5F21-4DEA-A747-BE9BDCB8469B}
 		{4F58513B-F7E3-46CD-8196-9B3E4A07AF20} = {63702975-A2DD-4193-9C1D-7FF2AEC8F671}
@@ -908,6 +944,14 @@ Global
 		{29688DF6-F5D9-4BE8-9014-81436D967603} = {A328F49A-8455-4A71-A1BD-A2456EC3A6E5}
 		{75C36F66-DB9A-4586-BDC8-7F3AEFA76E34} = {A328F49A-8455-4A71-A1BD-A2456EC3A6E5}
 		{B252B9E6-DBEA-4701-9F7B-9F4294B571D0} = {A328F49A-8455-4A71-A1BD-A2456EC3A6E5}
+		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {1E56DD4E-1AB4-4C55-A587-8AEC0D063E2A}
+		{F46EC0F9-8440-418D-91E7-41176165E294} = {1E56DD4E-1AB4-4C55-A587-8AEC0D063E2A}
+		{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01} = {3C34845E-EDD8-4EAD-8E02-1657883EB758}
+		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1} = {3C34845E-EDD8-4EAD-8E02-1657883EB758}
+		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1} = {3C34845E-EDD8-4EAD-8E02-1657883EB758}
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {A6D8B91D-6D6F-47E5-B773-5A865DB07145}
+		{28C015FB-3BDA-4B32-8D85-C652E9892216} = {A6D8B91D-6D6F-47E5-B773-5A865DB07145}
+		{0134E93B-162A-4D3F-855F-3396F7C6830F} = {7367C3D3-56DD-47E9-8AD2-E47DE338347A}
 	EndGlobalSection
 	GlobalSection(DPCodeReviewSolutionGUID) = preSolution
 		DPCodeReviewSolutionGUID = {00000000-0000-0000-0000-000000000000}
