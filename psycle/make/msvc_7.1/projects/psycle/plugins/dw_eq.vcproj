@@ -106,6 +106,7 @@
 /WL"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
+				MinimalRebuild="TRUE"
 				ExceptionHandling="FALSE"
 				BasicRuntimeChecks="3"
 				SmallerTypeCheck="TRUE"
@@ -113,11 +114,11 @@
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
-				PrecompiledHeaderThrough="packagegeneric/pre-compiled.private.hpp"
-				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
+				PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
+				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.pch"
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
+				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
@@ -249,9 +250,10 @@
 				Name="debug|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
-					MinimalRebuild="TRUE"
 					PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
+					PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.pch"
 					AssemblerListingLocation=""
+					ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.pdb"
 					Detect64BitPortabilityProblems="TRUE"/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -262,6 +264,17 @@
 					AssemblerListingLocation=""
 					WarnAsError="FALSE"
 					Detect64BitPortabilityProblems="TRUE"/>
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\..\..\src\psycle\plugins\dw\dw_filter.cpp">
+			<FileConfiguration
+				Name="debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
+					PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.pch"
+					ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.pdb"/>
 			</FileConfiguration>
 		</File>
 	</Files>
