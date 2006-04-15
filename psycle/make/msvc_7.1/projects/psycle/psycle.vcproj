@@ -661,6 +661,12 @@
 					Name="machine"
 					Filter="">
 					<File
+						RelativePath="..\..\..\..\src\psycle\host\gui\FrameLFOMachine.cpp">
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\gui\FrameLFOMachine.hpp">
+					</File>
+					<File
 						RelativePath="..\..\..\..\src\psycle\host\gui\FrameMachine.cpp">
 					</File>
 					<File
@@ -986,13 +992,13 @@
 			<File
 				RelativePath="..\..\..\..\src\Seib-vsthost\CVSTHost.Seib.cpp">
 				<FileConfiguration
-					Name="release.g6|Win32"
+					Name="release.g7|Win32"
 					ExcludedFromBuild="TRUE">
 					<Tool
 						Name="VCCLCompilerTool"/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="release.g7|Win32"
+					Name="release.g6|Win32"
 					ExcludedFromBuild="TRUE">
 					<Tool
 						Name="VCCLCompilerTool"/>
@@ -1004,12 +1010,6 @@
 			<File
 				RelativePath="..\..\..\..\src\psycle\host\ImplVstHost.cpp">
 				<FileConfiguration
-					Name="release.g6|Win32"
-					ExcludedFromBuild="TRUE">
-					<Tool
-						Name="VCCLCompilerTool"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="debug|Win32"
 					ExcludedFromBuild="TRUE">
 					<Tool
@@ -1017,6 +1017,12 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="release.g7|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="release.g6|Win32"
 					ExcludedFromBuild="TRUE">
 					<Tool
 						Name="VCCLCompilerTool"/>
@@ -1038,12 +1044,6 @@
 			<File
 				RelativePath="..\..\..\..\src\universalis\exception.cpp">
 				<FileConfiguration
-					Name="release.g6|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(ParentName)/"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="debug|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
@@ -1051,6 +1051,12 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="release.g7|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(ParentName)/"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="release.g6|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						ObjectFile="$(IntDir)/$(ParentName)/"/>
@@ -1071,12 +1077,6 @@
 					<File
 						RelativePath="..\..\..\..\src\universalis\standard_library\exceptions\code_description.cpp">
 						<FileConfiguration
-							Name="release.g6|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(ParentName)/"/>
-						</FileConfiguration>
-						<FileConfiguration
 							Name="debug|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
@@ -1084,6 +1084,12 @@
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g6|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"/>
@@ -1096,12 +1102,6 @@
 					<File
 						RelativePath="..\..\..\..\src\universalis\standard_library\detail\allocators.cpp">
 						<FileConfiguration
-							Name="release.g6|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(ParentName)/"/>
-						</FileConfiguration>
-						<FileConfiguration
 							Name="debug|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
@@ -1109,6 +1109,12 @@
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g6|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"/>
@@ -1122,12 +1128,6 @@
 				<File
 					RelativePath="..\..\..\..\src\universalis\processor\exception.cpp">
 					<FileConfiguration
-						Name="release.g6|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(ParentName)/"/>
-					</FileConfiguration>
-					<FileConfiguration
 						Name="debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
@@ -1135,6 +1135,12 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="release.g7|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release.g6|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)/$(ParentName)/"/>
@@ -1149,12 +1155,6 @@
 					<File
 						RelativePath="..\..\..\..\src\universalis\processor\exceptions\code_description.cpp">
 						<FileConfiguration
-							Name="release.g6|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(ParentName)/"/>
-						</FileConfiguration>
-						<FileConfiguration
 							Name="debug|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
@@ -1162,6 +1162,12 @@
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g6|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"/>
@@ -1175,12 +1181,6 @@
 				<File
 					RelativePath="..\..\..\..\src\universalis\operating_system\exception.cpp">
 					<FileConfiguration
-						Name="release.g6|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(ParentName)/"/>
-					</FileConfiguration>
-					<FileConfiguration
 						Name="debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
@@ -1188,6 +1188,12 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="release.g7|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release.g6|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)/$(ParentName)/"/>
@@ -1196,12 +1202,6 @@
 				<File
 					RelativePath="..\..\..\..\src\universalis\operating_system\loggers.cpp">
 					<FileConfiguration
-						Name="release.g6|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(ParentName)/"/>
-					</FileConfiguration>
-					<FileConfiguration
 						Name="debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
@@ -1209,6 +1209,12 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="release.g7|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release.g6|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)/$(ParentName)/"/>
@@ -1220,12 +1226,6 @@
 				<File
 					RelativePath="..\..\..\..\src\universalis\operating_system\paths.cpp">
 					<FileConfiguration
-						Name="release.g6|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(ParentName)/"/>
-					</FileConfiguration>
-					<FileConfiguration
 						Name="debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
@@ -1233,6 +1233,12 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="release.g7|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release.g6|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)/$(ParentName)/"/>
@@ -1241,12 +1247,6 @@
 				<File
 					RelativePath="..\..\..\..\src\universalis\operating_system\terminal.cpp">
 					<FileConfiguration
-						Name="release.g6|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(ParentName)/"/>
-					</FileConfiguration>
-					<FileConfiguration
 						Name="debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
@@ -1254,6 +1254,12 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="release.g7|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release.g6|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)/$(ParentName)/"/>
@@ -1265,12 +1271,6 @@
 					<File
 						RelativePath="..\..\..\..\src\universalis\operating_system\threads\id.cpp">
 						<FileConfiguration
-							Name="release.g6|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(ParentName)/"/>
-						</FileConfiguration>
-						<FileConfiguration
 							Name="debug|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
@@ -1278,6 +1278,12 @@
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g6|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"/>
@@ -1286,12 +1292,6 @@
 					<File
 						RelativePath="..\..\..\..\src\universalis\operating_system\threads\sleep.cpp">
 						<FileConfiguration
-							Name="release.g6|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(ParentName)/"/>
-						</FileConfiguration>
-						<FileConfiguration
 							Name="debug|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
@@ -1299,6 +1299,12 @@
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g6|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"/>
@@ -1311,12 +1317,6 @@
 					<File
 						RelativePath="..\..\..\..\src\universalis\operating_system\exceptions\code_description.cpp">
 						<FileConfiguration
-							Name="release.g6|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(ParentName)/"/>
-						</FileConfiguration>
-						<FileConfiguration
 							Name="debug|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
@@ -1324,6 +1324,12 @@
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g6|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"/>
@@ -1336,12 +1342,6 @@
 					<File
 						RelativePath="..\..\..\..\src\universalis\operating_system\dynamic_link\resolver.cpp">
 						<FileConfiguration
-							Name="release.g6|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(ParentName)/"/>
-						</FileConfiguration>
-						<FileConfiguration
 							Name="debug|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
@@ -1349,6 +1349,12 @@
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g6|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"/>
@@ -1361,12 +1367,6 @@
 					<File
 						RelativePath="..\..\..\..\src\universalis\operating_system\detail\check_version.cpp">
 						<FileConfiguration
-							Name="release.g6|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(ParentName)/"/>
-						</FileConfiguration>
-						<FileConfiguration
 							Name="debug|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
@@ -1374,6 +1374,12 @@
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g6|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"/>
@@ -1393,12 +1399,6 @@
 					<File
 						RelativePath="..\..\..\..\src\universalis\compiler\exceptions\ellipsis.cpp">
 						<FileConfiguration
-							Name="release.g6|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(ParentName)/"/>
-						</FileConfiguration>
-						<FileConfiguration
 							Name="debug|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
@@ -1406,6 +1406,12 @@
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release.g7|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release.g6|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"/>
@@ -1421,12 +1427,6 @@
 						<File
 							RelativePath="..\..\..\..\src\universalis\compiler\detail\pragmatic\demangle.cpp">
 							<FileConfiguration
-								Name="release.g6|Win32">
-								<Tool
-									Name="VCCLCompilerTool"
-									ObjectFile="$(IntDir)/$(ParentName)/"/>
-							</FileConfiguration>
-							<FileConfiguration
 								Name="debug|Win32">
 								<Tool
 									Name="VCCLCompilerTool"
@@ -1434,6 +1434,12 @@
 							</FileConfiguration>
 							<FileConfiguration
 								Name="release.g7|Win32">
+								<Tool
+									Name="VCCLCompilerTool"
+									ObjectFile="$(IntDir)/$(ParentName)/"/>
+							</FileConfiguration>
+							<FileConfiguration
+								Name="release.g6|Win32">
 								<Tool
 									Name="VCCLCompilerTool"
 									ObjectFile="$(IntDir)/$(ParentName)/"/>

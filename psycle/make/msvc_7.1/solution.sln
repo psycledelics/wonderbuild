@@ -962,6 +962,7 @@ Global
 		{69C0ACBE-EA30-4F1E-9B41-B2DD71C39DF1}.unpack.ActiveCfg = unpack|Win32
 		{69C0ACBE-EA30-4F1E-9B41-B2DD71C39DF1}.unpack.Build.0 = unpack|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.debug.ActiveCfg = debug|Win32
+		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.debug.Build.0 = debug|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.documentation.ActiveCfg = debug|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.documentation.Build.0 = debug|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05186}.release.g6.ActiveCfg = release.g6|Win32
