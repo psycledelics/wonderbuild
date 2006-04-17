@@ -41,8 +41,8 @@
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
-				PrecompiledHeaderThrough="project.private.hpp"
-				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.pch"
+				PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
+				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.pdb"
@@ -105,6 +105,8 @@
 /WL"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;"
+				PreprocessorDefinitions="PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;"
+				MinimalRebuild="TRUE"
 				ExceptionHandling="FALSE"
 				BasicRuntimeChecks="3"
 				SmallerTypeCheck="TRUE"
@@ -112,11 +114,11 @@
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
-				PrecompiledHeaderThrough="project.private.hpp"
-				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.pch"
-				AssemblerListingLocation="$(IntDir)/"
+				PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
+				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
+				AssemblerListingLocation=""
 				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.pdb"
+				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
@@ -126,6 +128,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="fluidsynth.lib"
 				OutputFile="$(OutDir)/$(InputName).dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -182,7 +185,7 @@
 				EnableFiberSafeOptimizations="TRUE"
 				OptimizeForProcessor="3"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;"
-				PreprocessorDefinitions="_USRDLL"
+				PreprocessorDefinitions="PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;;_USRDLL"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="0"
@@ -190,7 +193,7 @@
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
-				PrecompiledHeaderThrough="project.private.hpp"
+				PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
 				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
@@ -204,6 +207,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="fluidsynth.lib"
 				OutputFile="$(OutDir)/$(InputName).dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -228,7 +232,8 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				Culture="0"/>
+				Culture="0"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;;&quot;$(SolutionDir)/../../src/psycle/host/resources&quot;"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -245,27 +250,12 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\fluid_synth_sf2_player\fs_logo.bmp">
-		</File>
-		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\fluid_synth_sf2_player\FS_SF2.def">
-		</File>
-		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\fluid_synth_sf2_player\fs_sf2.rc">
-		</File>
-		<File
 			RelativePath="..\..\..\..\..\src\psycle\plugins\fluid_synth_sf2_player\FS_sf2_player.cpp">
-		</File>
-		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\fluid_synth_sf2_player\FS_SF2_UI.cpp">
-		</File>
-		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\fluid_synth_sf2_player\FS_SF2_UI.hpp">
-		</File>
-		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\fluid_synth_sf2_player\resource.h">
 		</File>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="\distr\Multimedia\Trackers\Psycle\Sources\psycle\src\psycle\plugins\fluid_synth_sf2_player\fs_sf2.rc"/>
 	</Globals>
 </VisualStudioProject>
