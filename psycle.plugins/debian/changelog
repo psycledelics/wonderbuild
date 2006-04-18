@@ -1,16 +1,16 @@
-psycle.plugins (1.9.7) unstable; urgency=low
+xpsycle.plugins (1.9.7) unstable; urgency=low
 
   * packageneric module definition for some of the plugins
 
  -- Johan Boule <bohan@retropaganda.info>  Tue, 21 Mar 2006 02:37:55 +0000
 
-psycle.plugins (0) unstable; urgency=low
+xpsycle.plugins (0) unstable; urgency=low
 
   * added packageneric autotools stuff from gnu-arch to svn
 
  -- Johan Boule <bohan@retropaganda.info>  Tue, 21 Mar 2006 02:36:18 +0000
 
-psycle.plugins (-1) unstable; urgency=low
+xpsycle.plugins (-1) unstable; urgency=low
 
   * nothing
 

@@ -1,28 +1,28 @@
-Source: psycle.plugins
+Source: xpsycle.plugins
 Section: libs
 Priority: optional
 Build-Depends: cdbs (>= 0.4.26), debhelper (>= 4.2.30), autotools-dev, pkg-config (>= 0.15), make (>= 3.80), doxygen (>= 1.4.1), graphviz (>= 2.2), g++ (>= 3.3.5), lib-universalis-0-dev (>= 0)
 Maintainer: Johan Boule <bohan@retropaganda.info>
 Standards-Version: 3.6.1
 
-Package:  lib-psycle.plugins-0
-Provides: lib-psycle.plugins
+Package:  lib-xpsycle.plugins-0
+Provides: lib-xpsycle.plugins
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Architecture: any
-Description: psycle plugins
+Description: xpsycle plugins
  _
 
-Package:    lib-psycle.plugins-0-dev
-Provides:   lib-psycle.plugins-dev
-Recommends: lib-psycle.plugins-0-doc
-Depends:    lib-psycle.plugins-0 (= ${Source-Version}), lib-universalis-0-dev (>= 0), ${misc:Depends}, pkg-config (>= 0.15)
+Package:    lib-xpsycle.plugins-0-dev
+Provides:   lib-xpsycle.plugins-dev
+Recommends: lib-xpsycle.plugins-0-doc
+Depends:    lib-xpsycle.plugins-0 (= ${Source-Version}), lib-universalis-0-dev (>= 0), ${misc:Depends}, pkg-config (>= 0.15)
 Architecture: any
-Description: development files for the psycle plugins
+Description: development files for the xpsycle plugins
  _
 
-Package:  lib-psycle.plugins-0-doc
-Suggests: lib-psycle.plugins-0 (= ${Source-Version}), lib-psycle.plugins-0-dev (= ${Source-Version})
+Package:  lib-xpsycle.plugins-0-doc
+Suggests: lib-xpsycle.plugins-0 (= ${Source-Version}), lib-xpsycle.plugins-0-dev (= ${Source-Version})
 Architecture: all
-Description: documentation for the psycle plugins
+Description: documentation for the xpsycle plugins
  -
 
