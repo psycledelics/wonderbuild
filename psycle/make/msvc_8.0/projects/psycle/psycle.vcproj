@@ -413,7 +413,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\gui\resources\splash copia.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\splash_copia.bmp"
 					>
 				</File>
 				<File
@@ -671,6 +671,14 @@
 				<Filter
 					Name="(machine)"
 					>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\gui\FrameLFOMachine.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\gui\FrameLFOMachine.hpp"
+						>
+					</File>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\gui\FrameMachine.cpp"
 						>
