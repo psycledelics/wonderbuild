@@ -23,3 +23,8 @@ packageneric__pre_processor_flags := -DNDEBUG
 # debhelper
 
 DEB_DH_STRIP_ARGS =
+
+###############
+# packageneric
+
+include packageneric/generic/detail/debian/rules.common
