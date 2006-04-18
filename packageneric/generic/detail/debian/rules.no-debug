@@ -1,0 +1,25 @@
+#! /usr/bin/make -f
+
+##############################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# Copyright (C) 2004-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
+#
+# \meta generic
+#
+# makefile for debian packages
+#
+##############################################################################
+
+############
+# autotools
+
+packageneric__debugging_information_level := -g0
+packageneric__warning_level := -Wall
+packageneric__optimization_level := -O3
+packageneric__pre_processor_flags := -DNDEBUG
+
+############
+# debhelper
+
+DEB_DH_STRIP_ARGS =

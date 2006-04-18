@@ -34,6 +34,8 @@ LDFLAGS = -Wl,$(packageneric__optimization_level)
 
 DEB_CONFIGURE_EXTRA_FLAGS += --config-cache --without-nested-source-packages --with-gui
 
+DEB_MAKE_ENVVARS := LC_ALL=C
+
 ############
 # debhelper
 
@@ -50,7 +52,7 @@ DEB_DH_MAKESHLIBS_ARGS_ALL := --version-info
 #DEB_SHLIBDEPS_INCLUDE = $(DEB_DH_INSTALL_SOURCE_DIR)/usr/lib/$(DEB_SOURCE_PACKAGE)-*
 #DEB_SHLIBDEPS_INCLUDE = $(DEB_ARCH_PACKAGES)/usr/lib/$(DEB_SOURCE_PACKAGE)-*
 
-DEB_DH_STRIP_ARGS = --dbg-package=$(DEB_SOURCE_PACKAGE)-dbg
+DEB_DH_STRIP_ARGS = --keep-debug
 
 DEB_DH_ALWAYS_EXCLUDE := {arch}:.arch-ids:.arch-inventory:.svn
 
