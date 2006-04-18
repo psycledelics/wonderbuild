@@ -1,0 +1,4 @@
+usr/lib/pkgconfig/xpsycle.plugin.*.pc
+usr/lib/lib-xpsycle.plugin.*.la
+usr/lib/lib-xpsycle.plugin.*.so
+usr/include/xpsycle.plugin-*/
