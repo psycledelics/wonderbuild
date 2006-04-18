@@ -33,7 +33,7 @@ then
 		CPPFLAGS="-UNDEBUG $CPPFLAGS" &&
 		
 		# Debugging information level:
-		debugging_information_level=-g &&
+		debugging_information_level=-g3 &&
 		
 		# Warning level:
 		warning_level=-Wall &&

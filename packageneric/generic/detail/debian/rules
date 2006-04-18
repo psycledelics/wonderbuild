@@ -22,13 +22,15 @@ DEB_CONFIGURE_SCRIPT_ENV += LDFLAGS="$(LDFLAGS)"
 # Compiler and linker flags (passed as env vars to the configure script):
 # (If the vars already contain a -O option, and we += them, this former switch won't be used as the last is the one that is effective.)
 
-packageneric__debugging_information_level := -g
+packageneric__debugging_information_level := -g3
 packageneric__warning_level := -Wall
 packageneric__optimization_level := -O0
+packageneric__pre_processor_flags := -UNDEBUG
 packageneric__compiler_flags := -pipe $(packageneric__warning_level) $(packageneric__optimization_level) $(packageneric__debugging_information_level)
+CPPFLAGS = $(packageneric__pre_processor_flags)
 CFLAGS = $(packageneric__compiler_flags)
 CXXFLAGS = $(packageneric__compiler_flags)
-LDFLAGS = -Wl,$(packageneric__optimization_level),$(packageneric__debugging_information_level)
+LDFLAGS = -Wl,$(packageneric__optimization_level)
 
 DEB_CONFIGURE_EXTRA_FLAGS += --config-cache --without-nested-source-packages --with-gui
 
@@ -43,14 +45,16 @@ DEB_BUILDDIR := ./++packageneric/build
 #DEB_DH_INSTALL_SOURCEDIR := ./++packageneric/install
 DEB_DH_INSTALL_SOURCEDIR := debian/tmp
 
-DEB_DH_ALWAYS_EXCLUDE := {arch}:.arch-ids:.arch-inventory
-
-DEB_COMPRESS_EXCLUDE := .bz2
-
 DEB_DH_MAKESHLIBS_ARGS_ALL := --version-info
 
 #DEB_SHLIBDEPS_INCLUDE = $(DEB_DH_INSTALL_SOURCE_DIR)/usr/lib/$(DEB_SOURCE_PACKAGE)-*
 #DEB_SHLIBDEPS_INCLUDE = $(DEB_ARCH_PACKAGES)/usr/lib/$(DEB_SOURCE_PACKAGE)-*
+
+DEB_DH_STRIP_ARGS = --dbg-package=$(DEB_SOURCE_PACKAGE)-dbg
+
+DEB_DH_ALWAYS_EXCLUDE := {arch}:.arch-ids:.arch-inventory:.svn
+
+DEB_COMPRESS_EXCLUDE := .bz2
 
 #DEB_AUTO_UPDATE_AUTOCONF := 2.59
 #DEB_AUTO_UPDATE_AUTOMAKE := 1.9

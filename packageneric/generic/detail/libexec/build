@@ -449,7 +449,7 @@ function compilation_flags
 		CPPFLAGS="-UNDEBUG ${CPPFLAGS:-}" &&
 		
 		# Debugging information level:
-		local debugging_information_level=-g &&
+		local debugging_information_level=-g3 &&
 		
 		# Warning level:
 		local warning_level=-Wall &&
