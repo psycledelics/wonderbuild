@@ -24,11 +24,11 @@ DEB_CONFIGURE_SCRIPT_ENV += LDFLAGS="$(LDFLAGS)"
 
 packageneric__debugging_information_level := -g
 packageneric__warning_level := -Wall
-packageneric__optimization_level := -O3
+packageneric__optimization_level := -O0
 packageneric__compiler_flags := -pipe $(packageneric__warning_level) $(packageneric__optimization_level) $(packageneric__debugging_information_level)
 CFLAGS = $(packageneric__compiler_flags)
 CXXFLAGS = $(packageneric__compiler_flags)
-LDFLAGS = -Wl,$(packageneric__optimization_level)
+LDFLAGS = -Wl,$(packageneric__optimization_level),$(packageneric__debugging_information_level)
 
 DEB_CONFIGURE_EXTRA_FLAGS += --config-cache --without-nested-source-packages --with-gui
 

@@ -1,3 +1,9 @@
+xpsycle.plugins (1.9.8) unstable; urgency=low
+
+  * bumping version
+
+ -- Johan Boule <bohan@retropaganda.info>  Tue, 18 Apr 2006 18:37:54 +0000
+
 xpsycle.plugins (1.9.7) unstable; urgency=low
 
   * packageneric module definition for some of the plugins
