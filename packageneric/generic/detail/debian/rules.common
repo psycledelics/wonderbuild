@@ -37,11 +37,13 @@ DEB_MAKE_ENVVARS := LC_ALL=C
 
 #DEB_AUTO_UPDATE_DEBIAN_CONTROL := true
 
-#DEB_SRCDIR := .
-DEB_BUILDDIR := ./++packageneric/build
+DEB_SRCDIR := .
 
-#DEB_DH_INSTALL_SOURCEDIR := ./++packageneric/install
-DEB_DH_INSTALL_SOURCEDIR := debian/tmp
+packageneric__output := $(CURDIR)/debian/++packageneric
+DEB_BUILDDIR := $(packageneric__output)/build
+DEB_DESTDIR := $(packageneric__output)/install
+
+DEB_DH_INSTALL_SOURCEDIR := $(DEB_DESTDIR)
 
 DEB_DH_MAKESHLIBS_ARGS_ALL := --version-info
 

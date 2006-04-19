@@ -33,7 +33,7 @@ then
 		CPPFLAGS="-UNDEBUG $CPPFLAGS" &&
 		
 		# Debugging information level:
-		debugging_information_level=-g3 &&
+		debugging_information_level=-ggdb3 &&
 		
 		# Warning level:
 		warning_level=-Wall &&
@@ -59,7 +59,7 @@ then
 	# Trace inclusions:
 	#CPPFLAGS="-H $CPPFLAGS" &&
 	
-	# for g++ 3.3 (not needed for the C front-end, and not needed anymore with g++ 3.4)
+	# for g++ 3.3 (not needed for the C front-end, and not needed anymore with g++ >= 3.4)
 	CXXFLAGS="$CXXFLAGS -fmessage-length=0" &&
 	
 	if $(echo "$CPPFLAGS" | egrep --silent --invert-match -- '(-DNDEBUG|-UNDEBUG)')

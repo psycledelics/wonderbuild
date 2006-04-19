@@ -14,7 +14,7 @@
 ############
 # autotools
 
-packageneric__debugging_information_level := -g0
+packageneric__debugging_information_level :=
 packageneric__warning_level := -Wall
 packageneric__optimization_level := -O3
 packageneric__pre_processor_flags := -DNDEBUG
