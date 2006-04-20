@@ -2,7 +2,7 @@ Source: universalis
 Section: libs
 Priority: optional
 Build-Depends: cdbs (>= 0.4.26), debhelper (>= 4.2.30), autotools-dev, pkg-config (>= 0.15), make (>= 3.80), doxygen (>= 1.4.1), graphviz (>= 2.2), g++ (>= 3.3.5), libboost-dev (>= 1.31), libboost-thread-dev (>= 1.31), libboost-filesystem-dev (>= 1.31), libboost-signals-dev (>= 1.31), libglibmm-2.4-dev (>= 2.4.0), lib-diversalis-0-dev (>= 0.0.0)
-Maintainer: Johan Boule <bohan@retropaganda.info>
+Maintainer: Johan Boule <bohan.debian.universalis@retropaganda.info>
 Standards-Version: 3.6.1
 
 Package:  lib-universalis-0
