@@ -149,6 +149,8 @@ misc:
 	It should disable escapes by default when outputting to a file unless told to use escape explicitly.
 	Also, some terminals have annoying blinking instead of bold.
 
+*	installwatch
+
 *	remember to update the TODO file.
 	-- bohan
 
