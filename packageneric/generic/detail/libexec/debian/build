@@ -191,7 +191,12 @@ function main
 					$packages__stage/{${package__name}_$package__version.dsc,} &&
 			unset packages__extra &&
 			unset packages__extra__mount &&
-			echoing "linting packages $source" lintian --display-info $packages__stage/*.changes
+			{
+				# todo we don't need to lintian all packages again, just the ones of this source package
+				echoing "linting packages $source" lintian --display-info $packages__stage/*.changes ||
+				# todo removes this once problem is resolved in stable distros too
+				echo-custom "lintian failed, but we don't stop because this might be an internal error due to objdump on /usr/lib/debug"
+			}
 		else
 			(
 				echoing "cd distdir $source" cd $source &&
@@ -246,7 +251,7 @@ function main
 			cd $source_root &&
 			archive__name &&
 			echoing "commiting" \
-				$libexec/gnu-arch/commit \
+				$libexec/version-control-systems/commit \
 					"package $package__name version $package__version released to $packageneric__remote__host:$packageneric__remote__path in archive $binary__distribution/$source__distribution" ||
 			echoing "not commited."
 		)

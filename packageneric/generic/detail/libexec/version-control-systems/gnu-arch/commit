@@ -1,0 +1,13 @@
+#! /bin/sh
+
+main()
+{
+	if test ! -e $($(dirname $0)/../../root)/\{arch\}
+	then
+		return
+	else
+		tla commit --summary "$@"
+	fi
+} &&
+
+main "$@"

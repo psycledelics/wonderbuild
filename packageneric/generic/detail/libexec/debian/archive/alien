@@ -11,7 +11,7 @@
 #
 ##############################################################################
 
-function main
+main()
 {
 	local packages=$1 &&
 	local debian=$2
@@ -34,6 +34,6 @@ function main
 	
 	mkdir --verbose rpm &&
 	mv --verbose *.rpm rpm/
-}
+} &&
 
 main "$@"

@@ -80,7 +80,6 @@ function main
 		cat > $hook <<-eof
 			#! /bin/sh
 			echo deb file://$archive_dir / >> /etc/apt/sources.list &&
-			echo deb http://cairographics.org/packages/debian unstable/ >> /etc/apt/sources.list &&
 			cat /etc/apt/sources.list &&
 			if test -e /etc/apt/apt.conf
 			then

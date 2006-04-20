@@ -11,11 +11,11 @@
 #
 ##############################################################################
 
-function main
+main()
 {
-	cd $($(dirname $0)/../root) &&
+	cd $($(dirname $0)/../root)/debian &&
 	local verbose=--verbose &&
-	rm $verbose --force --recursive compat build tmp files stamp-* &&
+	rm $verbose --force --recursive compat files stamp-* ./+* &&
 	for i in $(find . -name \*.install) # $(sed --silent 's/^Package: //p' < debian/control)
 	do
 		local package=$(basename $i .install) &&

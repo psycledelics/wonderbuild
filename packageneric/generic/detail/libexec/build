@@ -57,11 +57,6 @@ This script accepts the following options:
 	
 		Defaults to main.
 		
-	$(echo-custom --sync)\
-		
-		To be used in conjunction with --binary-distribution.
-		Synchronizes the package version patch number with that of gnu-arch.
-
 	$(echo-custom --upload)\
 		
 		Sends the packages located under <packages>/<remote-host>
@@ -72,11 +67,11 @@ This script accepts the following options:
 		you also need to have your local user name mapped the remote user name
 		in packageneric/package/remote/user.
 		
-		Also, upon a successful build, a commit to the gnu-arch archive
+		Also, upon a successful build, a commit to the version-control-system (being it gnu-arch or subversion)
 		will be done with a summary message including
 		the version of the source package, as set in debian/changelog.
 		This is let us identify and retrieve the source of any release.
-		Two things worth to note about commits to the gnu-arch archive:
+		Two things worth to note about commits to a gnu-arch archive:
 			1)
 				The archive is a pgp-signed archive,
 				so, you need a pgp key to commit to the archive.
@@ -184,7 +179,6 @@ function main
 			local source__distribution= &&
 			local distribution__section_component= &&
 			local option__distribute=false &&
-			local option__sync=false &&
 			local option__upload=false &&
 			local option__distdir=false &&
 			local option__nested_source_packages=true &&
@@ -211,7 +205,6 @@ function main
 					--binary-distribution) option__distribute=true && shift && binary__distribution=$1 ;;
 					--source-distribution) option__distribute=true && case $2 in --*) : ;; *) shift && source__distribution=$1 ;; esac ;;
 					--distribution-section-component) shift && distribution__section_component=$1 ;;
-					--sync) option__sync=true ;;
 					--upload) option__upload=true ;;
 					--distdir) option__distdir=true ;;
 					--nested-source-packages) option__nested_source_packages=true ;;
@@ -297,11 +290,6 @@ function main
 			echoing "autotools bootstrap" $libexec/autotools/bootstrap --clean || no-bootstrap-advice
 		fi
 	else
-		if $option__distribute && $option__sync
-		then
-			. $libexec/debian/sync-with-gnu-arch &&
-			sync
-		fi &&
 		export CCACHE_DIR=$(echo ${CCACHE_DIR:-$output/ccache}) &&
 		if $option__configure__cached
 		then
@@ -394,47 +382,6 @@ function main
 		echoing "failed for $(pwd) ${options:-} $*" &&
 		false
 	}
-} &&
-
-#####################################################################################################
-#####################################################################################################
-#####################################################################################################
-
-function sync
-{
-	echoing 'debian changelog sync to gnu-arch: querying gnu-arch ... logs ...' &&
-	local gnu_arch__version__patch=$($libexec/gnu-arch/logs --reverse | head --lines 1 | sed 's/patch-//') &&
-	echoing "debian changelog sync to gnu-arch: gnu-arch patch level: $gnu_arch__version__patch" &&
-	if test -z "gnu_arch__version__patch"
-	then
-		echoing "debian changelog sync to gnu-arch: not in a gnu-arch project tree" &&
-		return
-	fi &&
-	if ! echoing "debian changelog sync to gnu-arch: querying gnu-arch ... changes ..." $libexec/gnu-arch/changes
-	then
-		gnu_arch__version__patch__compare=$(expr $gnu_arch__version__patch + 1) &&
-		echoing "debian changelog sync to gnu-arch: gnu-arch patch level after commit: $gnu_arch__version__patch__compare"
-	else
-		gnu_arch__version__patch__compare=$gnu_arch__version__patch &&
-		echoing "debian changelog sync to gnu-arch: gnu-arch patch level before commit: $gnu_arch__version__patch__compare"
-	fi &&
-	echoing "debian changelog sync to gnu-arch: refreshing meta-information ..." $libexec/package/meta-information --refresh &&
-	package__name=$($libexec/package/meta-information name) &&
-	package__version=$($libexec/package/meta-information version) &&
-	echoing "debian changelog sync to gnu-arch: refreshed debian version: $package__version" &&
-	local debian__version__major=$($libexec/package/meta-information version--major) &&
-	local debian__version__minor=$($libexec/package/meta-information version--minor) &&
-	local debian__version__patch=$($libexec/package/meta-information version--patch) &&
-	if test $debian__version__patch -lt $gnu_arch__version__patch__compare
-	then
-		echoing 'debian changelog sync to gnu-arch' debchange --newversion $debian__version__major.$debian__version__minor.$(expr $gnu_arch__version__patch + 1) syncing debian package version patch number with that of gnu-arch &&
-		echoing "debian changelog sync to gnu-arch: refreshing meta-information ..." $libexec/package/meta-information --refresh &&
-		package__name=$($libexec/package/meta-information name) &&
-		package__version=$($libexec/package/meta-information version) &&
-		echoing "debian changelog sync to gnu-arch: refreshed debian version: $package__version"
-	else
-		echoing "debian changelog sync to gnu-arch: debian and gnu-arch are equals"
-	fi
 } &&
 
 #####################################################################################################
