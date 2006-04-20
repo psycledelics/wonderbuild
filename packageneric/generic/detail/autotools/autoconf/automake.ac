@@ -29,3 +29,4 @@ dnl # AM_INIT_AUTOMAKE(1.7.9 nostdinc no-define subdir-objects readme-alpha dist
 	# automake version 1.4-p4 on debian 3.0 (stable woody)
 
 dnl # AM_MAINTAINER_MODE
+dnl # AM_PATH_PYTHON(, , :)

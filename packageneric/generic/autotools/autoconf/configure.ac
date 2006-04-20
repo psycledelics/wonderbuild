@@ -58,7 +58,8 @@ AM_INIT_AUTOMAKE(1.7.9 nostdinc no-define subdir-objects readme-alpha dist-bzip2
 	# automake version 1.7.9  on cygwin
 	# automake version 1.4-p4 on debian 3.0 (stable woody)
 
-#AM_MAINTAINER_MODE
+dnl # AM_MAINTAINER_MODE
+AM_PATH_PYTHON(, , :)
 
 
 
@@ -88,7 +89,7 @@ then
 AC_DISABLE_STATIC     # libtool option: tells not to build static libraries
 AC_LIBTOOL_DLOPEN     # libtool option: checks for dlopen/dlpreopen support
 AC_LIBTOOL_RC         # libtool option: checks for resource compiler (only relevant on microsoft's operating system)
-#AC_LIBTOOL_WIN32_DLL # libtool option: ... (only relevant on microsoft's operating system)
+dnl # AC_LIBTOOL_WIN32_DLL # libtool option: ... (only relevant on microsoft's operating system)
 AC_PROG_LIBTOOL
 	# libtool version 1.5.6  on debian 3.1 (stable sarge)
 	# libtool version 1.5    on cygwin
