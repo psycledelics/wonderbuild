@@ -120,6 +120,23 @@ pkg-config:
 
 misc:
 
+*	debian/rules:
+		ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
+			packageneric__debugging_information_level = -ggdb3
+			packageneric__preprocessor_flags = -UNDEBUG
+			packageneric__optimization_level = -O0
+		else
+			packageneric__debugging_information_level =
+			packageneric__preprocessor_flags = -DNDEBUG
+			packageneric__optimization_level = -O3
+		endif
+		ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
+			INSTALL_PROGRAM += -s
+		else
+			DEB_DH_STRIP_ARGS = --keep-debug
+		endif
+	-- bohan
+	
 *	change naming convention for links from @* to @@* ; @* stays a cut rule.
 	-- bohan
 
