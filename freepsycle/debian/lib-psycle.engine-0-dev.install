@@ -1,7 +1,3 @@
 usr/lib/pkgconfig/psycle.engine.pc
-usr/lib/lib-psycle.engine.so
-usr/lib/lib-psycle.engine.la
-usr/include/psycle-*/psycle/generic/
-usr/include/psycle-*/psycle/engine/
-usr/include/psycle-*/psycle/engine.hpp
-usr/include/psycle-*/psycle/stream/
+usr/lib/lib-psycle.engine.{la,so}
+usr/include/psycle-*/psycle/{generic,engine{,.hpp},stream}
