@@ -1,20 +1,22 @@
 Source: diversalis
-Section: libs
+Section: libdevel
 Priority: optional
-Build-Depends: cdbs (>= 0.4.26), debhelper (>= 4.2.30), autotools-dev, pkg-config (>= 0.15), make (>= 3.80), doxygen (>= 1.4.1), graphviz (>= 2.2), g++ (>= 3.3.5), libboost-dev (>= 1.31)
+Build-Depends: cdbs (>= 0.4.26), debhelper (>= 4.2.30), autotools-dev, pkg-config (>= 0.18), make (>= 3.80), doxygen (>= 1.4.1), graphviz (>= 2.2), g++ (>= 3.3.5), libboost-dev (>= 1.31)
 Maintainer: Johan Boule <bohan.debian.diversalis@retropaganda.info>
-Standards-Version: 3.6.1
+Standards-Version: 3.6.2
 
 Package:    lib-diversalis-0-dev
 Provides:   lib-diversalis-dev
 Recommends: lib-diversalis-0-doc (= ${Source-Version})
-Depends: ${misc:Depends}, pkg-config (>= 0.15)
+Depends: ${misc:Depends}, pkg-config (>= 0.18)
+Section: libdevel
 Architecture: any
 Description: diversalis development package
  preprocessor definitions for use in preprocessor conditions in order to write platform-specific code
 
 Package:  lib-diversalis-0-doc
 Suggests: lib-diversalis-0-dev (= ${Source-Version})
+Section: doc
 Architecture: all
 Description: documentation for diversalis
  -

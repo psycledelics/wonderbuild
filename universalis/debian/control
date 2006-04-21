@@ -1,13 +1,14 @@
 Source: universalis
 Section: libs
 Priority: optional
-Build-Depends: cdbs (>= 0.4.26), debhelper (>= 4.2.30), autotools-dev, pkg-config (>= 0.15), make (>= 3.80), doxygen (>= 1.4.1), graphviz (>= 2.2), g++ (>= 3.3.5), libboost-dev (>= 1.31), libboost-thread-dev (>= 1.31), libboost-filesystem-dev (>= 1.31), libboost-signals-dev (>= 1.31), libglibmm-2.4-dev (>= 2.4.0), lib-diversalis-0-dev (>= 0.0.0)
+Build-Depends: cdbs (>= 0.4.26), debhelper (>= 4.2.30), autotools-dev, pkg-config (>= 0.18), make (>= 3.80), doxygen (>= 1.4.1), graphviz (>= 2.2), g++ (>= 3.3.5), libboost-dev (>= 1.31), libboost-thread-dev (>= 1.31), libboost-filesystem-dev (>= 1.31), libboost-signals-dev (>= 1.31), libglibmm-2.4-dev (>= 2.4.0), lib-diversalis-0-dev (>= 0.0.0)
 Maintainer: Johan Boule <bohan.debian.universalis@retropaganda.info>
-Standards-Version: 3.6.1
+Standards-Version: 3.6.2
 
 Package:  lib-universalis-0
 Provides: lib-universalis
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Section: libs
 Architecture: any
 Description: universalis library
  _
@@ -15,13 +16,15 @@ Description: universalis library
 Package:    lib-universalis-0-dev
 Provides:   lib-universalis-dev
 Recommends: lib-universalis-0-doc
-Depends:    lib-universalis-0 (= ${Source-Version}), libboost-thread-dev (>= 1.31), libboost-filesystem-dev (>= 1.31), libboost-signals-dev (>= 1.31), libglibmm-2.4-dev (>= 2.4.0), lib-diversalis-0-dev (>= 0.0.0), ${misc:Depends}, pkg-config (>= 0.15)
+Depends:    lib-universalis-0 (= ${Source-Version}), libboost-thread-dev (>= 1.31), libboost-filesystem-dev (>= 1.31), libboost-signals-dev (>= 1.31), libglibmm-2.4-dev (>= 2.4.0), lib-diversalis-0-dev (>= 0.0.0), ${misc:Depends}, pkg-config (>= 0.18)
+Section: libdevel
 Architecture: any
 Description: development files for the universalis library
  _
 
 Package:  lib-universalis-0-doc
 Suggests: lib-universalis-0-dev (= ${Source-Version})
+Section: doc
 Architecture: all
 Description: documentation for the universalis library
  -

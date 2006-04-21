@@ -51,65 +51,12 @@ pkg-config:
 	-- bohan
 
 *	Honor pkg-config 0.18 Requires.private
-	m4 macro PACKAGENERIC__MODULE__INTERNAL should have
-	parameters:
-		$1: type of module: either hpp, lib, or bin.
-		$2: name of the module being declared
-		$4: interface version minimum supported
-		$3: interface version maximum supported
-		$5: implementation version
-		$9: private compiler flags
-		$8: public compiler flags
-		$11: private linker flags
-		$10: public linker flags
-		$13: list of required private module names, i.e. indirect dependency
-		$12: list of required public module names, i.e. direct dependency
-		$14: description
-	Defines:
-		found
-		how internal
-		type
-		interface__min
-		interface__max
-		implementation
-		cflags__private__no_self
-		cflags__private cflags__private__no_self
-		cflags__public__no_self
-		cflags__public cflags__public__no_self
-		ldflags__private__no_self
-		ldflags__private ldflags__private__no_self
-		lfflags__public__no_self
-		ldflags__public ldflags__no_self
-		requires__public
-		requires__private
-		graph__dependencies ldflags__no_self's -l requires__public
-		for every how=external,when=lazy, emit a lazy pkg-config call to the -uninstalled.pc file
 	-- bohan
 	
 *	m4 macro PACKAGENERIC__MODULE__EXTERNAL should allow to just test wether the package is available or not.
-	instead of adding a parameter action-if-not-found,
-	make two different macros, one ...__REQUIRED and one ...__OPTIONAL.
-	The ...__REQUIRED one will stop the configure script with an error.
-	The ...__OPTIONAL one will set a var that can be tested with: "if packageneric__module__found name"
-	Define:
-		found
-		how external
-		when lazy (for modules in nested packages) or done (for installed)
 	-- bohan
 	
 *	m4 macro PACKAGENERIC__MODULE__GROUP to allow grouping several modules into a "package".
-	parameters:
-		$1: name of the "package" module being declared
-		$2: list of private module names already declared
-		$2: list of public module names already declared
-	The macro should check that each module is found via: "if packageneric__module__found name".
-	Defines:
-		found
-		how group
-		private__lazy
-		private__expanded expand/recurse and eliminate duplicates
-		public__lazy
-		public__expanded expand/recurse and eliminate duplicates
 	-- bohan
 	
 *	Collect all the dependencies graphviz digraph dot files of nested source packages into the parent one.
@@ -120,7 +67,7 @@ pkg-config:
 
 misc:
 
-*	debian/rules:
+*	debian/rules: DEB_BUILD_OPTIONS debug noopt nostrip
 		ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
 			packageneric__debugging_information_level = -ggdb3
 			packageneric__preprocessor_flags = -UNDEBUG
@@ -140,30 +87,24 @@ misc:
 *	change naming convention for links from @* to @@* ; @* stays a cut rule.
 	-- bohan
 
-*	remove cairo archive from pbuilder, and maybe an option to add more sources via the command line.
-	Cairo made into debian testing since gtk-2.8. So this is only for stable sarge now.
-	-- bohan
-
 *	determine type of terminal to make the echo function output
 	font-change escape sequences correctly in all cases.
 	It should disable escapes by default when outputting to a file unless told to use escape explicitly.
 	Also, some terminals have annoying blinking instead of bold.
+	-- bohan
 
-*	installwatch
+*	installwatch, checkinstall
+	-- bohan
 
 *	remember to update the TODO file.
 	-- bohan
 
 
 
-======== done ========
+======== done but needs more testing ========
 
 
 
 *	macosx's /usr/bin/which command is silly. use builtin 'type' instead.
 	this is already changed in most, if not all places.
 	-- bohan
-	
-*	have some time to explore libtool's funny --mode=execute gdb bin.wrapper.
-	Wasn't actually so fun.
-	--bohan

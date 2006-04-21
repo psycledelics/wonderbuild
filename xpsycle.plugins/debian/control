@@ -3,11 +3,12 @@ Section: libs
 Priority: optional
 Build-Depends: cdbs (>= 0.4.26), debhelper (>= 4.2.30), autotools-dev, pkg-config (>= 0.18), make (>= 3.80), doxygen (>= 1.4.1), graphviz (>= 2.2), g++ (>= 3.3.5), lib-universalis-0-dev (>= 0)
 Maintainer: Johan Boule <johan-boule@users.sourceforge.net>
-Standards-Version: 3.6.1
+Standards-Version: 3.6.2
 
 Package:  lib-xpsycle.plugins-0
 Provides: lib-xpsycle.plugins
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Section: libs
 Architecture: any
 Description: xpsycle plugins
  _
@@ -16,12 +17,14 @@ Package:    lib-xpsycle.plugins-0-dev
 Provides:   lib-xpsycle.plugins-dev
 Recommends: lib-xpsycle.plugins-0-doc
 Depends:    lib-xpsycle.plugins-0 (= ${Source-Version}), lib-universalis-0-dev (>= 0), ${misc:Depends}, pkg-config (>= 0.18)
+Section: libdevel
 Architecture: any
 Description: development files for the xpsycle plugins
  _
 
 Package:  lib-xpsycle.plugins-0-doc
 Suggests: lib-xpsycle.plugins-0 (= ${Source-Version}), lib-xpsycle.plugins-0-dev (= ${Source-Version})
+Section: doc
 Architecture: all
 Description: documentation for the xpsycle plugins
  -

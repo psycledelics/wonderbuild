@@ -27,6 +27,13 @@ nodist_pkgdata_DATA =
 nobase_dist_pkgdata_DATA =
 nobase_nodist_pkgdata_DATA =
 
+pkgversionpythondir = $(pythondir)/$(PACKAGENERIC__PACKAGE__NAME)-$(PACKAGENERIC__PACKAGE__VERSION)
+pkgversionpython_PYTHON =
+dist_pkgversionpython_PYTHON =
+nodist_pkgversionpython_PYTHON =
+nobase_dist_pkgversionpython_PYTHON =
+nobase_nodist_pkgversionpython_PYTHON =
+
 pkgversionincludedir = $(includedir)/$(PACKAGENERIC__PACKAGE__NAME)-$(PACKAGENERIC__PACKAGE__VERSION)
 pkgversioninclude_HEADERS =
 dist_pkgversioninclude_HEADERS =
