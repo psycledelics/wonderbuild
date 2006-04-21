@@ -43,7 +43,7 @@ main()
 	then
 		mkdir -p $modules__ac $modules__am &&
 		cd $modules__path &&
-		local modules=$(eval find . -maxdepth 1 $(packageneric__find__file \\\( -name hpp.\\\*.am -or -name lib.\\\*.am -or -name bin.\\\*.am -or -name python.\\\*.am \\\))) &&
+		local modules=$(eval find . -maxdepth 1 $(packageneric__find__file \\\( -name hpp.\\\*.am -or -name lib.\\\*.am -or -name bin.\\\*.am \\\))) &&
 		for module in $modules
 		do
 			module=$(basename $module .am) &&

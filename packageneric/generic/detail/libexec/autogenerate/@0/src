@@ -73,11 +73,19 @@ main()
 			echo nobase_dist_pkgversioninclude_HEADERS += $file >> $output__am/nobase_dist_include_HEADERS.am ||
 			return
 		done
-		for file in $(eval find . $(packageneric__find__file -name \\\*.py))
-		do
-			echo nobase_dist_pkgversionpython_PYTHON += $file >> $output__am/nobase_dist_python_PYTHON.am ||
-			return
-		done
+		echo if PACKAGENERIC__CONFIGURATION__OPTION__ENABLE__PYTHON_COMPILATION >> $output__am/nobase_dist_python_PYTHON.am &&
+			for file in $(eval find . $(packageneric__find__file -name \\\*.py))
+			do
+				echo nobase_dist_python_PYTHON += $file >> $output__am/nobase_dist_python_PYTHON.am ||
+				return
+			done
+		echo else >> $output__am/nobase_dist_python_PYTHON.am
+			for file in $(eval find . $(packageneric__find__file -name \\\*.py))
+			do
+				echo nobase_dist_python_DATA += $file >> $output__am/nobase_dist_python_PYTHON.am ||
+				return
+			done
+		echo endif >> $output__am/nobase_dist_python_PYTHON.am
 	fi
 } &&
 

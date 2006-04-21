@@ -25,6 +25,7 @@ packageneric__echo option: feature options ...
 PACKAGENERIC__CONFIGURATION__OPTION__ENABLE__DEFINE(compilation, [configures to compile the sources and not just for distdir], compilation, COMPILATION, yes, $(AS_DIRNAME([$0]))/src)
 PACKAGENERIC__CONFIGURATION__OPTION__ENABLE__DEFINE(pre-compilation, [first pre-compile some headers and build using them], pre_compilation, PRE_COMPILATION, no, $(AS_DIRNAME([$0]))/src)
 PACKAGENERIC__CONFIGURATION__OPTION__ENABLE__DEFINE(monolithic-compilation, [compile everything as a monolith], monolithic_compilation, MONOLITHIC_COMPILATION, no, $(AS_DIRNAME([$0]))/packageneric/package/monolith.am)
+PACKAGENERIC__CONFIGURATION__OPTION__ENABLE__DEFINE(python-compilation, [configures to compile the python scripts (during installation)], python_compilation, PYTHON_COMPILATION, yes, $(AS_DIRNAME([$0]))/src)
 
 packageneric__echo option: package options ...
 

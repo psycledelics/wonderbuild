@@ -1,4 +1,4 @@
-#!/usr/bin/automake
+#! /usr/bin/env automake
 
 ####################################################################################################
 #
@@ -27,13 +27,6 @@ nodist_pkgdata_DATA =
 nobase_dist_pkgdata_DATA =
 nobase_nodist_pkgdata_DATA =
 
-pkgversionpythondir = $(pythondir)/$(PACKAGENERIC__PACKAGE__NAME)-$(PACKAGENERIC__PACKAGE__VERSION)
-pkgversionpython_PYTHON =
-dist_pkgversionpython_PYTHON =
-nodist_pkgversionpython_PYTHON =
-nobase_dist_pkgversionpython_PYTHON =
-nobase_nodist_pkgversionpython_PYTHON =
-
 pkgversionincludedir = $(includedir)/$(PACKAGENERIC__PACKAGE__NAME)-$(PACKAGENERIC__PACKAGE__VERSION)
 pkgversioninclude_HEADERS =
 dist_pkgversioninclude_HEADERS =
@@ -42,6 +35,21 @@ nobase_dist_pkgversioninclude_HEADERS =
 nobase_nodist_pkgversioninclude_HEADERS =
 
 #if PACKAGENERIC__CONFIGURATION__OPTION__ENABLE__COMPILATION
+
+if PACKAGENERIC__CONFIGURATION__OPTION__ENABLE__PYTHON_COMPILATION
+  python_PYTHON =
+  dist_python_PYTHON =
+  nodist_python_PYTHON =
+  nobase_dist_python_PYTHON =
+  nobase_nodist_python_PYTHON =
+endif
+
+ python_DATA =
+ dist_python_DATA =
+ nodist_python_DATA =
+ nobase_dist_python_DATA =
+ nobase_nodist_python_DATA =
+
  noinst_LTLIBRARIES =
  lib_LTLIBRARIES =
  pkgversionlibdir = $(libdir)/$(PACKAGENERIC__PACKAGE__NAME)-$(PACKAGENERIC__PACKAGE__VERSION)
@@ -59,6 +67,7 @@ nobase_nodist_pkgversioninclude_HEADERS =
  AM_CPPFLAGS =
  AM_CXXFLAGS =
  AM_LDFLAGS =
+
 #endif
 
 EXTRA_SCRIPTS =

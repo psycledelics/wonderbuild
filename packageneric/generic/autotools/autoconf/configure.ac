@@ -59,7 +59,17 @@ AM_INIT_AUTOMAKE(1.7.9 nostdinc no-define subdir-objects readme-alpha dist-bzip2
 	# automake version 1.4-p4 on debian 3.0 (stable woody)
 
 dnl # AM_MAINTAINER_MODE
-AM_PATH_PYTHON(, , :)
+
+
+
+#########
+# python         (it seems it can't be m4_included)
+#########
+
+
+
+PACKAGENERIC__INCLUDE(packageneric/generic/detail/autotools/autoconf/python.ac)
+AM_PATH_PYTHON(2.3, , :)
 
 
 
