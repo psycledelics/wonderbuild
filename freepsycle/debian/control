@@ -1,7 +1,7 @@
 Source: psycle
 Section: sound
 Priority: optional
-Build-Depends: cdbs (>= 0.4.26), debhelper (>= 4.2.30), autotools-dev, autoconf-archive, pkg-config (>= 0.18), make (>= 3.80), doxygen (>= 1.4.1), graphviz (>= 2.2), g++ (>= 3.3.5), lib-universalis-0-dev (>= 0.0.0), libgtkmm-2.4-dev (>= 2.4), libgnomecanvasmm-2.6-dev (>= 2.6), libgstreamer0.8-dev (>= 0.8.8), libgstreamer-gconf0.8-dev (>= 0.8.6), libgconf2-dev (>= 2), libjack-dev (>= 0.80.0) | libjack0.80.0-dev (>= 0.80.0) | libjack0.100.0-dev (>= 0.80.0), libasound2-dev (>= 1.0.8)
+Build-Depends: cdbs (>= 0.4.26), debhelper (>= 4.2.30), autotools-dev, autoconf-archive, pkg-config (>= 0.18), make (>= 3.80), doxygen (>= 1.4.1), graphviz (>= 2.2), g++ (>= 3.3.5), lib-universalis-0-dev (>= 0.0.0), libgtkmm-2.4-dev (>= 2.4), libgnomecanvasmm-2.6-dev (>= 2.6), libgstreamer0.10-dev (>= 0.10), libgconf2-dev (>= 2), libjack-dev (>= 0.80.0) | libjack0.80.0-dev (>= 0.80.0) | libjack0.100.0-dev (>= 0.80.0), libasound2-dev (>= 1.0.8)
 Maintainer: Johan Boule <bohan.debian.psycle@retropaganda.info>
 Standards-Version: 3.6.2
 
@@ -68,7 +68,7 @@ Description: plugins for psycle
 
 Package:  lib-psycle.plugins-0-dev
 Provides: lib-psycle.plugins-dev
-Depends:  lib-psycle.plugins-0 (= ${Source-Version}), lib-psycle.engine-0-dev (= ${Source-Version}), libgstreamer0.8-dev (>= 0.8.8), libgstreamer-gconf0.8-dev (>= 0.8.6), libgconf2-dev (>= 2), libjack-dev (>= 0.80.0) | libjack0.80.0-dev (>= 0.80.0) | libjack0.100.0-dev (>= 0.80.0), libasound2-dev (>= 1.0.8), ${misc:Depends}
+Depends:  lib-psycle.plugins-0 (= ${Source-Version}), lib-psycle.engine-0-dev (= ${Source-Version}), libgstreamer0.10-dev (>= 0.10), libgconf2-dev (>= 2), libjack-dev (>= 0.80.0) | libjack0.80.0-dev (>= 0.80.0) | libjack0.100.0-dev (>= 0.80.0), libasound2-dev (>= 1.0.8), ${misc:Depends}
 Section: libdevel
 Architecture: any
 Description: development files for the plugins for psycle
