@@ -6,4 +6,5 @@ endif
 
 psycle__plugin__output__gstreamer__sources += \
 	src/psycle/plugins/resource.cpp \
-	src/psycle/plugins/outputs/gstreamer.cpp
+	src/psycle/plugins/outputs/gstreamer.cpp \
+	src/psycle/stream/formats/riff_wave/format.cpp
