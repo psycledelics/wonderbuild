@@ -106,7 +106,7 @@
 /WL"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;FLUIDSYNTH_DLL_EXPORTS;FLUIDSYNTH_SEQ_DLL_EXPORTS"
+				PreprocessorDefinitions="DEBUG;WIN32;_WINDOWS;_USRDLL;FLUIDSYNTH_DLL_EXPORTS;FLUIDSYNTH_SEQ_DLL_EXPORTS"
 				ExceptionHandling="FALSE"
 				BasicRuntimeChecks="0"
 				SmallerTypeCheck="FALSE"
@@ -357,12 +357,6 @@
 		</File>
 		<File
 			RelativePath="..\..\..\..\..\src\fluidsynth\fluid_rev.h">
-		</File>
-		<File
-			RelativePath="..\..\..\..\..\src\fluidsynth\fluid_seq.c">
-		</File>
-		<File
-			RelativePath="..\..\..\..\..\src\fluidsynth\fluid_seqbind.c">
 		</File>
 		<File
 			RelativePath="..\..\..\..\..\src\fluidsynth\fluid_settings.c">
