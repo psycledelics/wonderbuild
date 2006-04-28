@@ -1,3 +1,11 @@
+psycle (0.1.0) unstable; urgency=low
+
+  * The generic multiple layering design is working up to the gui.
+    I consider this experimental variante to be stable enough now to
+    replace definitly the old implementation; so i removed the old code.
+
+ -- Johan Boule <bohan@retropaganda.info>  Fri, 28 Apr 2006 00:27:57 +0000
+
 psycle (0.0.484) unstable; urgency=low
 
   * syncing debian package version patch number with that of gnu-arch
