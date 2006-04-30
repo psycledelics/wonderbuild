@@ -1,3 +1,9 @@
+diversalis (0.0.20060430) unstable; urgency=low
+
+  * bumping version
+
+ -- Johan Boule <bohan@retropaganda.info>  Sun, 30 Apr 2005 02:01:28 +0000
+
 diversalis (0.0.118) unstable; urgency=low
 
   * syncing debian package version patch number with that of gnu-arch
