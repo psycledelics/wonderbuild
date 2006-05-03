@@ -398,9 +398,6 @@
 			RelativePath="..\..\..\..\..\src\fluidsynth\fluid_voice.h">
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\fluidsynth\fluid_winmidi.c">
-		</File>
-		<File
 			RelativePath="..\..\..\..\..\src\fluidsynth\fluidsynth.h">
 		</File>
 		<File
