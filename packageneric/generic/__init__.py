@@ -119,11 +119,11 @@ class File:
 		
 class Header(File):
 	def __init__(self):
-		self = File()
+		File.__init__(self)
 		
 class Source(Header):
 	def __init__(self):
-		self = Header()
+		Header.__init__(self)
 		self.defines = []
 	
 class Object:
@@ -165,8 +165,8 @@ class Module(ModulePackage):
 		bin = 'bin'
 		python = 'python'
 	
-	def __init__(self, name, type, version = []):
-		self = ModulePackage(name, type, version)
+	def __init__(self, name = None, type = None, version = []):
+		ModulePackage.__init__(self)
 		self.headers = []
 		self.sources = []
 		self.resources = []
