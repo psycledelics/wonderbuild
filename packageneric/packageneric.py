@@ -6,24 +6,25 @@
 
 sp = SourcePackage(
 	name = 'psycle',
-	version = [0, 0, 0]
+	version = [0, 0, 0],
+	bug_report = 'bohan.psycle@retropaganda.info'
+	origin = 'http://psycle.sourceforge.net'
 )
 
-m = Module(
-	name = 'lib-psycle.engine',
+engine = Module(
+	name = 'lib-psycle.engine-0',
 	type = Module.types.lib,
 	version = [0, 0, 0]
 )
-
-m.requires.add(
+engine.public_requires.add(
 	debian = ['lib-universalis-dev >= 0'],
 	pkgconfig = ['universalis >= 0']
 )
-
-m.sources.add(find('src', 'psycle/engine', '*.cpp'))
-m.headers.add(find('src', 'psycle/engine', '*.hpp'))
-
-m.pkgconfig(
+engine.sources.add(find('src', 'psycle/engine', '*.cpp'))
+engine.private_headers.add(find('src', 'psycle/engine', '*.private.hpp.in'))
+engine.config_headers.add(find('src', 'psycle/engine', '*.hpp.in'))
+engine.public_headers.add(find('src', 'psycle/engine', '*.hpp'))
+engine.pkgconfig(
 	name = 'psycle.engine',
 	description = 'psycle engine library'
 )
@@ -33,26 +34,32 @@ mp = ModulePackage(
 	version = [0, 0, 0],
 	description = 'psycle plugins'
 )
-
 mp.add([psycle.plugin.sine, psycle.plugin.output.default])
 
-bp = binary_package(
-	name = 'lib-hello',
-	version = [0, 0, 0]
-	description = 'hi!'
+bp = BinaryPackage(
+	name = 'lib-psycle.plugins',
+	description = mp.description,
 	long_description =
+		sp.long_description +
 		"""
-			hello, world!
+			this package contains plugins runtime libraries
 		"""
 )
-
 bp.add(mp.modules)
-bp.files.add(destination = os.path.join(bp.share, 'pixmaps', sp.name), find('pixmaps', '*.xpm'))
+bp.files.add(destination = os.path.join(bp.share, 'pixmaps', sp.name), find('pixmaps', '*.xpm', '*.png'))
 
-bp_dev = binary_package('lib-hello-dev', [mp], version = [0, 0, 0])
+bp_dev = BinaryPackage(
+	name = 'lib-psycle.plugins-dev',
+	description = mp.description
+	long_description =
+		sp.long_description +
+		"""
+			this package contains development files for the plugins
+		"""
+)
 bp_dev.add([mp.headers, mp.pkgconfigs])
 
-da = distribution_archive('shell.sourceforge.net:/home/groups/p/ps/psycle/htdocs/packages/debian')
+da = DistributionArchive('shell.sourceforge.net:/home/groups/p/ps/psycle/htdocs/packages/debian')
 da.add('sid', 'unstable', [sp, bp, bp_dev])
 
 ###################################################################
@@ -97,91 +104,86 @@ class Find:
 				if fnmatch.fnmatch(file, self.pattern):
 					return fullname
 
+class CompilerFlags:
+	__init__(self):
+		self.defines = []
+		self.optimizations = []
+		self.debugging_info = []
+
+class LinkerFlags:
+	__init_(self):
+		self.optimizations = []
+
 class CPPDefine:
 	def __init(name, value = ''):
 		seff.name = name
 		self.value = value
 
-class Source:
+class File:
 	def __init__(self, filename):
 		self.filename = filename
-		self.cppflags = ''
-
-class Header:
+		
+class Header(File):
 	def __init__(self, filename):
-		self.filename = filename
+		self = File(filename)
+		
+class Source(Header):
+	def __init__(self, filename):
+		self = Header(filename)
+		self.defines = []
 	
 class Object:
 	def __init__(self, source):
 		self.source = source
 	
-	def scons(self):
-		scons.Object(source)
-	
-class Module:
-	def __init__(self, name, type):
+class ModulePackage:
+	def __init__(self, name, version = []):
 		self.name = name
-		self.type = type
-		self.cppflags = []
-		self.sources = []
-		self.objects = []
+		self.version = version
+		self.compiler_flags = []
+		self.linker_flags = []
+		self.public_requires = []
+		self.private_requires = []
+	
+	def merged_compiler_flags(self):
+		result = self.compiler_flags
+		for x in self.public_requires:
+			result.append(x.merged_compiler_flags())
+		return result
+	
+	def merged_public_linker_flags(self):
+		result = self.linker_flags
+		for x in self.public_requires:
+			result.append(x.public_merged_linker_flags())
+		return result
+	
+	def merged_private_linker_flags(self):
+		result = self.linker_flags
+		for x in self.public_requires:
+			result.append(x.private_merged_linker_flags())
+		return result
+	
+class Module(ModulePackage):
+	class Types:
+		hpp = 'hpp'
+		shared_lib = 'shared_lib'
+		static_lib = 'static_lib'
+		bin = 'bin'
+		python = 'python'
+	
+	def __init__(self, name, type, version = []):
+		self = ModulePackage(name, type, version)
 		self.headers = []
-		self.public_requires = []
-		self.private_requires = []
+		self.sources = []
+		self.resources = []
+		self.objects = []
 	
-	delf cppflags(self):
-		return self.cppflags
-	
-	def sources(self):
-		return self.sources
-		
-	def headers(self):
-		return self.headers
-
-	def public_requires(self, module):
-		return self.public_requires
-
-	def private_requires(self, module):
-		return self.private_requires
-	
-	del merged_cppflags(self):
-		result = self.cppflags
-		for x in self.requires:
-			result.append(x.merged_cppflags)
-		return result
-
-class ModulePackage
-	def __init__(self, name):
-		self.name = name
-		self.cflags = []
-		self.libs = []
-		self.public_requires = []
-		self.private_requires = []
-	
-	def cflags(self):
-		return self.cflags
-		
-	def libs(self):
-		return self.libs
-	
-	def public_requires(self):
-		return self.public_requires
-		
-	def private_requires(self):
-		return self.private_requires
-
-	def merged_cppflags(self):
-		result = self.cppflags
-		for x in self.requires:
-			result.append(x.merged_cppflags)
-		return result
-
-class BinaryPackage
+class BinaryPackage:
 	def __init__(self, name):
 		self.name = name
 		self.binary_version = 0
 		self.package_version = 0
 
-class DistributionArchive
+class DistributionArchive:
 	def __init__(self. remote_path):
 		self.remote_path = remote_path
