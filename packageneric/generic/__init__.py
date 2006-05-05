@@ -4,63 +4,49 @@
 ###################################################################
 ###################################################################
 
-sp = SourcePackage(
-	name = 'psycle',
-	version = [0, 0, 0],
-	bug_report = 'bohan.psycle@retropaganda.info'
-	origin = 'http://psycle.sourceforge.net'
-)
+sp = SourcePackage()
+sp.name = 'psycle'
+sp.version = [0, 0, 0]
+sp.bug_report = 'bohan.psycle@retropaganda.info'
+sp.origin = 'http://psycle.sourceforge.net'
 
-engine = Module(
-	name = 'lib-psycle.engine-0',
-	type = Module.types.lib,
-	version = [0, 0, 0]
-)
-engine.public_requires.add(
-	debian = ['lib-universalis-dev >= 0'],
-	pkgconfig = ['universalis >= 0']
-)
+engine = Module()
+engine.name = 'lib-psycle.engine-0'
+engine.type = Module.types.lib
+engine.version = [0, 0, 0]
+engine.public_requires.debian.append('lib-universalis-dev >= 0')
+engine.public_requires.pkgconfig.append('universalis >= 0')
 engine.sources.add(find('src', 'psycle/engine', '*.cpp'))
 engine.private_headers.add(find('src', 'psycle/engine', '*.private.hpp.in'))
 engine.config_headers.add(find('src', 'psycle/engine', '*.hpp.in'))
 engine.public_headers.add(find('src', 'psycle/engine', '*.hpp'))
-engine.pkgconfig(
-	name = 'psycle.engine',
-	description = 'psycle engine library'
-)
+engine.pkgconfig.name = 'psycle.engine'
+engine.pkgconfig.description = 'psycle engine library'
 
-mp = ModulePackage(
-	name = 'psycle.plugins',
-	version = [0, 0, 0],
-	description = 'psycle plugins'
-)
-mp.add([psycle.plugin.sine, psycle.plugin.output.default])
+mp = ModulePackage()
+mp.name = 'psycle.plugins'
+mp.version = [0, 0, 0]
+mp.description = 'psycle plugins'
+mp.modules.append(psycle.plugin.sine)
+mp.modules.append(psycle.plugin.output.default)
 
-bp = BinaryPackage(
-	name = 'lib-psycle.plugins',
-	description = mp.description,
-	long_description =
-		sp.long_description +
-		"""
-			this package contains plugins runtime libraries
-		"""
-)
-bp.add(mp.modules)
-bp.files.add(destination = os.path.join(bp.share, 'pixmaps', sp.name), find('pixmaps', '*.xpm', '*.png'))
+bp = BinaryPackage()
+bp.name = 'lib-psycle.plugins',
+bp.description = mp.description,
+bp.long_description = sp.long_description + "this package contains plugins runtime libraries"
+bp.files.append(mp.modules.files())
+bp.files.append(find('pixmaps', '*.xpm', '*.png'))
 
-bp_dev = BinaryPackage(
-	name = 'lib-psycle.plugins-dev',
-	description = mp.description
-	long_description =
-		sp.long_description +
-		"""
-			this package contains development files for the plugins
-		"""
-)
-bp_dev.add([mp.headers, mp.pkgconfigs])
+bp_dev = BinaryPackage()
+bp_dev.name = 'lib-psycle.plugins-dev',
+bp_dev.description = mp.description
+bp_dev.long_description = sp.long_description + "			this package contains development files for the plugins"
+bp_dev.files.append(mp.headers)
+bp_dev.files.append(mp.pkgconfigs)
 
-da = DistributionArchive('shell.sourceforge.net:/home/groups/p/ps/psycle/htdocs/packages/debian')
-da.add('sid', 'unstable', [sp, bp, bp_dev])
+da = DistributionArchive()
+da.remote_path = 'shell.sourceforge.net:/home/groups/p/ps/psycle/htdocs/packages/debian'
+da.binary_packages('sid', 'unstable').append([sp, bp, bp_dev])
 
 ###################################################################
 ###################################################################
@@ -80,8 +66,9 @@ class EnvList:
 class Find:
 	# a forward iterator that traverses a directory tree
 	
-	def __init__(self, directory, pattern="*"):
-		self.stack = [directory]
+	def __init__(self, strip_path, path, pattern="*"):
+		self.strip_path = strip_path
+		self.stack = [path]
 		self.pattern = pattern
 		self.files = []
 		self.index = 0
@@ -94,30 +81,37 @@ class Find:
 			except IndexError:
 				# pop next directory from stack
 				self.directory = self.stack.pop()
-				self.files = os.listdir(self.directory)
+				self.files = os.listdir(os.path.join(self.strip_path, self.directory))
 				self.index = 0
 			else:
 				# got a filename
-				fullname = os.path.join(self.directory, file)
-				if os.path.isdir(fullname): # and not os.path.islink(fullname):
-					self.stack.append(fullname)
+				path = os.path.join(self.directory, file)
+				if os.path.isdir(os.path.join(self.strip_path, path)):
+					self.stack.append(path)
 				if fnmatch.fnmatch(file, self.pattern):
-					return fullname
+					return path
 
+class SourcePackage:
+	def __init__(self)
+		self.name = None
+		self.version = []
+		self.path = None
+		
 class CompilerFlags:
-	__init__(self):
+	class Define:
+		def __init(name, value = ''):
+			self.name = name
+			self.value = value
+	def __init__(self):
 		self.defines = []
+		self.include_path = []
 		self.optimizations = []
 		self.debugging_info = []
 
 class LinkerFlags:
-	__init_(self):
+	def __init_(self):
+		self.library_path [}
 		self.optimizations = []
-
-class CPPDefine:
-	def __init(name, value = ''):
-		seff.name = name
-		self.value = value
 
 class File:
 	def __init__(self, filename):
@@ -154,13 +148,13 @@ class ModulePackage:
 	def merged_public_linker_flags(self):
 		result = self.linker_flags
 		for x in self.public_requires:
-			result.append(x.public_merged_linker_flags())
+			result.append(x.merged_public_linker_flags())
 		return result
 	
 	def merged_private_linker_flags(self):
-		result = self.linker_flags
+		result = self.merged_public_linker_flags()
 		for x in self.public_requires:
-			result.append(x.private_merged_linker_flags())
+			result.append(x.merged_private_linker_flags())
 		return result
 	
 class Module(ModulePackage):
@@ -179,11 +173,13 @@ class Module(ModulePackage):
 		self.objects = []
 	
 class BinaryPackage:
-	def __init__(self, name):
-		self.name = name
-		self.binary_version = 0
-		self.package_version = 0
+	def __init__(self):
+		self.source_package = None
+		self.name = None
+		self.files = []
 
 class DistributionArchive:
-	def __init__(self. remote_path):
-		self.remote_path = remote_path
+	def __init__(self):
+		self.remote_path = None
+		self.source_packages = [}
+		self.binary_packages = []
