@@ -114,26 +114,26 @@ class LinkerFlags:
 		self.optimizations = []
 
 class File:
-	def __init__(self, filename):
-		self.filename = filename
+	def __init__(self):
+		self.filename = None
 		
 class Header(File):
-	def __init__(self, filename):
-		self = File(filename)
+	def __init__(self):
+		self = File()
 		
 class Source(Header):
-	def __init__(self, filename):
-		self = Header(filename)
+	def __init__(self):
+		self = Header()
 		self.defines = []
 	
 class Object:
-	def __init__(self, source):
-		self.source = source
+	def __init__(self):
+		self.source = None
 	
 class ModulePackage:
-	def __init__(self, name, version = []):
-		self.name = name
-		self.version = version
+	def __init__(self):
+		self.name = None
+		self.version = []
 		self.compiler_flags = []
 		self.linker_flags = []
 		self.public_requires = []
