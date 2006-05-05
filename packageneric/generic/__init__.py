@@ -92,7 +92,7 @@ class Find:
 					return path
 
 class SourcePackage:
-	def __init__(self)
+	def __init__(self):
 		self.name = None
 		self.version = []
 		self.path = None
@@ -110,7 +110,7 @@ class CompilerFlags:
 
 class LinkerFlags:
 	def __init_(self):
-		self.library_path [}
+		self.library_path = []
 		self.optimizations = []
 
 class File:
@@ -181,5 +181,5 @@ class BinaryPackage:
 class DistributionArchive:
 	def __init__(self):
 		self.remote_path = None
-		self.source_packages = [}
+		self.source_packages = []
 		self.binary_packages = []
