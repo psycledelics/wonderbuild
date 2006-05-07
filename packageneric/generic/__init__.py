@@ -1,68 +1,11 @@
 #! /usr/bin/env python
 
-###################################################################
-###################################################################
-###################################################################
-
-if False:
-	sp = SourcePackage()
-	sp.name = 'psycle'
-	sp.version = [0, 0, 0]
-	sp.bug_report = 'bohan.psycle@retropaganda.info'
-	sp.origin = 'http://psycle.sourceforge.net'
-
-	engine = Module()
-	engine.name = 'lib-psycle.engine-0'
-	engine.type = Module.types.lib
-	engine.version = [0, 0, 0]
-	engine.public_requires.debian.append('lib-universalis-dev >= 0')
-	engine.public_requires.pkgconfig.append('universalis >= 0')
-	engine.sources.add(find('src', 'psycle/engine', '*.cpp'))
-	engine.private_headers.add(find('src', 'psycle/engine', '*.private.hpp.in'))
-	engine.config_headers.add(find('src', 'psycle/engine', '*.hpp.in'))
-	engine.public_headers.add(find('src', 'psycle/engine', '*.hpp'))
-	engine.pkgconfig.name = 'psycle.engine'
-	engine.pkgconfig.description = 'psycle engine library'
-
-	mp = ModulePackage()
-	mp.name = 'psycle.plugins'
-	mp.version = [0, 0, 0]
-	mp.description = 'psycle plugins'
-	mp.modules.append(psycle.plugin.sine)
-	mp.modules.append(psycle.plugin.output.default)
-
-	bp = BinaryPackage()
-	bp.name = 'lib-psycle.plugins',
-	bp.description = mp.description,
-	bp.long_description = sp.long_description + "this package contains plugins runtime libraries"
-	bp.files.append(mp.modules.files())
-	bp.files.append(find('pixmaps', '*.xpm', '*.png'))
-
-	bp_dev = BinaryPackage()
-	bp_dev.name = 'lib-psycle.plugins-dev',
-	bp_dev.description = mp.description
-	bp_dev.long_description = sp.long_description + "			this package contains development files for the plugins"
-	bp_dev.files.append(mp.headers)
-	bp_dev.files.append(mp.pkgconfigs)
-
-	da = DistributionArchive()
-	da.remote_path = 'shell.sourceforge.net:/home/groups/p/ps/psycle/htdocs/packages/debian'
-	da.binary_packages('sid', 'unstable').append([sp, bp, bp_dev])
-
-###################################################################
-###################################################################
-###################################################################
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# copyright 2006 johan boule <bohan@jabber.org>
+# copyright 2006 psycledelics http://psycle.pastnotecut.org
 
 import os, fnmatch
 
-class EnvList:
-	def __init__(self):
-		env = Environment()
-		dictionary = env.Dictionary()
-		keys = dictionary.keys()
-		keys.sort()
-		for key in keys:
-			print '%s = %s' % (key, dictionary[key])
 class Find:
 	# a forward iterator that traverses a directory tree
 	def __init__(self, strip_path, path, pattern="*"):
@@ -88,6 +31,101 @@ class Find:
 					self.stack.append(path)
 				if fnmatch.fnmatch(file, self.pattern):
 					return path
+class EnvList:
+	def __init__(self, env, all = False):
+		if all:
+			dictionary = env.Dictionary()
+			keys = dictionary.keys()
+			keys.sort()
+			for key in keys:
+				print '%s = %s' % (key, dictionary[key])
+		else:
+			def show(key):
+				if len(env[key]):
+					print key, '->', env[key], '->', env.subst('$' + key)
+				else:
+					print key, '<- empty'
+			show('CPPPATH')
+			show('CXXFLAGS')
+			show('LIBPATH')
+			show('LIBS')
+			show('LINKFLAGS')
+class ExternalModulePackage:
+	def __init__(self, env, requires):
+		self.env = env.Copy()
+		self.requires = requires
+		self.parsed = False
+	def get_env(self):
+		if not self.parsed:
+			self.parsed = True
+			print 'checking for module package external:', self.requires, '...'
+			self.static_libs = self.env.ParseConfig('pkg-config --cflags --libs ' + self.requires)
+		return self.env
+	def show(self):
+		print '======== module package external:', self.requires, '========'
+		EnvList(self.get_env())
+class InternalModule:
+	def __init__(self, env, name = None):
+		self.env = env.Copy()
+		self.name = name
+		self.version = []
+		self.public_requires = []
+		self.parsed = False
+		self.sources = []
+		self.headers = []
+	def get_name(self):
+		return self.name
+	def get_version(self):
+		return self.version
+	def get_sources(self):
+		return self.sources
+	def add_source(self, source):
+		self.sources.append(source)
+	def add_sources(self, sources):
+		for x in sources: self.add_source(x)
+	def get_headers(self):
+		return self.headers
+	def add_header(self, header):
+		self.headers.append(header)
+	def add_headers(self, headers):
+		for x in headers: self.add_header(x)
+	def get_public_requires(self):
+		return self.public_requires
+	def add_public_requires(self, requires):
+		self.public_requires.append(requires)
+	def get_env(self):
+		if not self.parsed:
+			self.parsed = True
+			public_requires = ''
+			for x in self.public_requires:
+				public_requires += ' ' + x.requires
+			self.env = ExternalModulePackage(self.env, public_requires).get_env()
+		return self.env
+	def show(self):
+		print '======== module internal:', self.name, self.version, '========'
+		public_requires = []
+		for x in self.public_requires:
+			public_requires.append(x.requires)
+		print 'requires', public_requires
+		EnvList(self.get_env())
+	def scons(self):
+		return self.get_env().SharedLibrary(self.name, self.sources)
+class InstallPrefix:
+	def __init__(self, scons):
+		# Get our configuration options:
+		opts = scons.Options('packageneric.configuration')
+		opts.Add(PathOption('PREFIX', 'Directory to install under', '/usr/local'))
+		opts.Update(env)
+		# Save, so user doesn't have to specify PREFIX every time
+		opts.Save('packageneric.configuration', env)
+		scons.Help(opts.GenerateHelpText(env))
+		# Here are our installation paths:
+		self.prefix  = '$PREFIX'
+		self.lib     = '$PREFIX/lib'
+		self.bin     = '$PREFIX/bin'
+		self.include = '$PREFIX/include'
+		self.data    = '$PREFIX/share'
+		scons.Export('env self.prefix self.lib self.bin self.include self.data')
 class SourcePackage:
 	def __init__(self):
 		self.name = None
