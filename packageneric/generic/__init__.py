@@ -5,6 +5,7 @@
 # copyright 2006 psycledelics http://psycle.pastnotecut.org
 
 import os, fnmatch
+from SCons.Script.SConscript import SConsEnvironment
 
 class Find:
 	# a forward iterator that traverses a directory tree
