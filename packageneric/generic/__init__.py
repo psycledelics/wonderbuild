@@ -8,12 +8,12 @@ import os, fnmatch
 #from SCons.Script.SConscript import SConsEnvironment
 #from SCons.Script import *
 
-def pkg_config_check(context, name):
-	 context.Message('checking for %s ... ' % name)
-	 result = context.TryAction('pkg-config --exists \'%s\'' % name)[0]
-	 context.Result(result)
-	 return result
-
+def pkg_config(context, name, what):
+	context.Message('checking for pkg-config --%s %s ... ' % what, name)
+	result = context.TryAction('pkg-config --%s \'%s\'' % what, name)[0]
+	context.Result(result)
+	return result
+	
 def print_all_nodes(dirnode, level=0):
 	"""Print all the scons nodes that are children of this node, recursively."""
 	if type(dirnode)==type(''):
@@ -67,7 +67,7 @@ def Glob(includes = ['*'], excludes = None, dir = '.'):
 			return Dir(n)
 		else:
 			return File(n)
-		
+	
 	here = Dir(dir)
 	nodes = filter_nodes(here)
 	node_srcs = [n.srcnode() for n in nodes]
@@ -106,7 +106,7 @@ class Find:
 					self.stack.append(path)
 				if fnmatch.fnmatchcase(file, self.pattern):
 					return path
-				
+	
 class EnvList:
 	def __init__(self, env, all = False):
 		if all:
@@ -126,27 +126,94 @@ class EnvList:
 			show('LIBPATH')
 			show('LIBS')
 			show('LINKFLAGS')
-			
-class ExternalModulePackage:
-	def __init__(self, env, requires):
+	
+class InstallPrefix:
+	def __init__(self, env):
+		# Get our configuration options:
+		opts = env.Options('packageneric.configuration')
+		opts.Add(env.PathOption('PREFIX', 'Directory to install under', '/usr/local'))
+		opts.Update(env)
+		# Save, so user doesn't have to specify PREFIX every time
+		opts.Save('packageneric.configuration', env)
+		env.Help(opts.GenerateHelpText(env))
+		# Here are our installation paths:
+		self.prefix  = '$PREFIX'
+		self.lib     = '$PREFIX/lib'
+		self.bin     = '$PREFIX/bin'
+		self.include = '$PREFIX/include'
+		self.data    = '$PREFIX/share'
+		env.Export('env self.prefix self.lib self.bin self.include self.data')
+		
+class Person:
+	def __init__(self, name, email = None):
+		self.name = name
+		self.email = email
+		
+class SourcePackage:
+	def __init__(self, name = None, version = [], path = '.'):
+		self.name = name
+		self.version = version
+		self.path = path
+	
+class File:
+	def __init__(self):
+		self.strip_path = None
+		self.path = None
+		self.install_path = None
+	
+class SourceFile:
+	def __init__(self, path):
+		self.path = path
+		self.defines = []
+		self.include_path = []
+	
+class ObjectFile:
+	def __init__(self, source):
+		self.source = source
+		self.defines = source.defines
+		self.include_path = source.include_path
+		self.compiler_flags = None
+	
+class CompilerFlags:
+	class Define:
+		def __init(name, value = ''):
+			self.name = name
+			self.value = value
+	def __init__(self):
+		self.defines = []
+		self.include_path = []
+		self.optimizations = []
+		self.debugging_info = []
+	
+class LinkerFlags:
+	def __init_(self):
+		self.library_path = []
+		self.libraries = []
+		self.optimizations = []
+	
+class ExternalPackage:
+	def __init__(self, env, debian, debian_version_compare, pkg_config, pkg_config_version_compare = debian_version_compare):
 		self.env = env.Copy()
-		self.requires = requires
+		self.debian = debian
+		self.debian_version_compare = debian_version_compare
+		self.pkg_config = pkg_config
+		self.pkg_config_version_compare = pkg_config_version_compare
 		self.parsed = False
 		
 	def get_env(self):
 		if not self.parsed:
 			self.parsed = True
-			print 'reading config of external package:', self.requires, '...'
-			self.static_libs = self.env.ParseConfig('pkg-config --cflags --libs ' + self.requires)
+			print 'reading config of external package:', self.pkg_config, self.pkg_config_version_compare, '...'
+			self.static_libs = self.env.ParseConfig('pkg-config --cflags --libs ' + self.pkg_config) # problem: '>' is interpreted by the shell
 		return self.env
 	
 	def show(self):
 		print '======== module package external:', self.requires, '========'
 		EnvList(self.get_env())
-		
-class InternalModule:
+	
+class Module:
 	class Types:
-		hpp = 'hpp'
+		files = 'files'
 		shared_lib = 'shared_lib'
 		static_lib = 'static_lib'
 		bin = 'bin'
@@ -205,68 +272,99 @@ class InternalModule:
 		
 	def scons(self):
 		return self.get_env().SharedLibrary(self.name, self.sources)
-	
-class InstallPrefix:
-	def __init__(self, env):
-		# Get our configuration options:
-		opts = env.Options('packageneric.configuration')
-		opts.Add(env.PathOption('PREFIX', 'Directory to install under', '/usr/local'))
-		opts.Update(env)
-		# Save, so user doesn't have to specify PREFIX every time
-		opts.Save('packageneric.configuration', env)
-		env.Help(opts.GenerateHelpText(env))
-		# Here are our installation paths:
-		self.prefix  = '$PREFIX'
-		self.lib     = '$PREFIX/lib'
-		self.bin     = '$PREFIX/bin'
-		self.include = '$PREFIX/include'
-		self.data    = '$PREFIX/share'
-		env.Export('env self.prefix self.lib self.bin self.include self.data')
-		
-class SourcePackage:
-	def __init__(self):
-		self.name = None
-		self.version = []
-		self.path = None
-		
-class CompilerFlags:
-	class Define:
-		def __init(name, value = ''):
-			self.name = name
-			self.value = value
-	def __init__(self):
-		self.defines = []
-		self.include_path = []
-		self.optimizations = []
-		self.debugging_info = []
-		
-class LinkerFlags:
-	def __init_(self):
-		self.library_path = []
-		self.optimizations = []
-		
-class File:
-	def __init__(self):
-		self.filename = None
-		
-class Header(File):
-	def __init__(self):
-		File.__init__(self)
-		
-class Source(Header):
-	def __init__(self):
-		Header.__init__(self)
-		self.defines = []
-		
-class Object:
-	def __init__(self):
-		self.source = None
-		
-class BinaryPackage:
+
+class Package:
+	pass
+
+class DebianPackage:
 	def __init__(self):
 		self.source_package = None
 		self.name = None
+		self.section = self.source_package.section
+		self.architecture = 'any'
+		self.provides = []
+		self.depends = []
+		self.recommends = []
+		self.suggests = []
+		self.description = None
+		self.long_description = None
 		self.files = []
+
+class Debian:
+	def __init_(self):
+		self.source_package = None
+		self.section = 'libs'
+		self.priority = 'optional'
+		self.maintainer = None
+		self.uploaders = []
+		self.build_depends = []
+		self.binary_packages = []
+		self.description = None
+
+	def	get_build_depends(self):
+		result = self.build_depends
+		for x in self.binary_packages:
+			for xx in x.build_depends:
+				if not xx in self.build_depends:
+					result.append(xx)
+					
+	def control(self, where):
+		def out(strings):
+			print **strings
+		out('Source: ', self.source_package.name, '\n')
+		out('Section: ', self.section, '\n')
+		out('Priority: ', self.priority, '\n')
+		out('Build-Depends: ')
+		for x in self.get_build_depends():
+			 out(x.name, ' (', x.version_compare, '), ')
+		out('\n'
+		out('Maintainer', self.maintainer)
+		out('Uploaders: ')
+		for x in self.uploaders
+			out(x.name, ' <', x.email, '>, ')
+		out('\n')
+		out('Standards-Version: 3.6.2\n')
+		for x in self.binary_packages:
+			out('Package: ', x.name, '\n')
+			out('Provides: ')
+			for xx in x.provides:
+				out(xx, ', ')
+			out('\n')
+			out('Suggests: ')
+			for xx in x.suggests:
+				out(xx.name, ' (', xx.version_compare, '), ')
+			out('\n')
+			out('Recommends: ')
+			for xx in x.recommends:
+				out(xx.name, ' (', xx.version_compare, '), ')
+			out('\n')
+			out('Depends: ')
+			for xx in x.depends:
+				out(xx.name, ' (', xx.version_compare, '), ')
+			out('\n')
+			out('Section: ')
+			if x.section is None:
+				out(self.section)
+			else:
+				out(x.section)
+			out('\n')
+			out('Architecture: ', x.architecture, '\n')
+			out('Description', x.description, '\n')
+			for xx in self.description:
+				if xx == '':
+					out('.')
+				else:
+					out(' ')
+				out(xx, '\n')
+			out('.\n')
+			for xx in x.long_description:
+				if xx == '':
+					out('.')
+				else:
+					out(' ')
+				out(xx, '\n')
+			out('\n')
+		
 class DistributionArchive:
 	def __init__(self):
 		self.remote_path = None
