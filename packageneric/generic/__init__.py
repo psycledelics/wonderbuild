@@ -9,12 +9,12 @@ import os, fnmatch
 #from SCons.Script import *
 
 def pkg_config(context, name, what):
-	context.Message('checking for pkg-config --%s %s ... ' % what, name)
-	result = context.TryAction('pkg-config --%s \'%s\'' % what, name)[0]
+	context.Message('checking for pkg-config --%s %s ... ' % (what, name))
+	result = context.TryAction('pkg-config --%s \'%s\'' % (what, name))[0]
 	context.Result(result)
 	return result
 	
-def print_all_nodes(dirnode, level=0):
+def print_all_nodes(dirnode, level = 0):
 	"""Print all the scons nodes that are children of this node, recursively."""
 	if type(dirnode)==type(''):
 		dirnode=Dir(dirnode)
@@ -82,7 +82,7 @@ def Glob(includes = ['*'], excludes = None, dir = '.'):
 class Find:
 	"""a forward iterator that traverses a directory tree"""
 	
-	def __init__(self, strip_path, path, pattern="*"):
+	def __init__(self, strip_path, path, pattern = '*'):
 		self.strip_path = strip_path
 		self.stack = [path]
 		self.pattern = pattern
@@ -117,10 +117,14 @@ class EnvList:
 				print '%s = %s' % (key, dictionary[key])
 		else:
 			def show(key):
-				if len(env[key]):
-					print key, '->', env[key], '->', env.subst('$' + key)
-				else:
-					print key, '<- empty'
+				try:
+					env[key]
+					if len(env[key]):
+						print key, '->', env[key], '->', env.subst('$' + key)
+					else:
+						print key, '<- empty'
+				except:
+					pass
 			show('CPPPATH')
 			show('CXXFLAGS')
 			show('LIBPATH')
@@ -150,9 +154,12 @@ class Person:
 		self.email = email
 		
 class SourcePackage:
-	def __init__(self, name = None, version = [], path = '.'):
+	def __init__(self, name = None, version = None, path = '.'):
 		self.name = name
-		self.version = version
+		if version is None:
+			self.version = []
+		else:
+			self.version = version
 		self.path = path
 	
 class File:
@@ -192,7 +199,7 @@ class LinkerFlags:
 		self.optimizations = []
 	
 class ExternalPackage:
-	def __init__(self, env, debian, debian_version_compare, pkg_config, pkg_config_version_compare = debian_version_compare):
+	def __init__(self, env, debian, debian_version_compare, pkg_config = None, pkg_config_version_compare = None):
 		self.env = env.Copy()
 		self.debian = debian
 		self.debian_version_compare = debian_version_compare
@@ -203,12 +210,36 @@ class ExternalPackage:
 	def get_env(self):
 		if not self.parsed:
 			self.parsed = True
-			print 'reading config of external package:', self.pkg_config, self.pkg_config_version_compare, '...'
-			self.static_libs = self.env.ParseConfig('pkg-config --cflags --libs ' + self.pkg_config) # problem: '>' is interpreted by the shell
+			if not self.pkg_config is None:
+				print 'reading config of external package:', self.pkg_config, self.pkg_config_version_compare, '...'
+				self.static_libs = self.env.ParseConfig('pkg-config --cflags --libs ' + self.pkg_config) # problem: '>' is interpreted by the shell
 		return self.env
+
+	def __str__(self):
+		strings = []
+		if not self.pkg_config is None:
+			strings.append(self.pkg_config)
+			if not self.pkg_config_version_compare is None:
+				strings.append(' ')
+				strings.append(self.pkg_config_version_compare)
+		else:
+			strings.append(self.debian)
+			if not self.debian_version_compare is None:
+				strings.append(' ')
+				strings.append(self.debian_version_compare)
+		string = ''
+		for x in strings:
+			string += x
+		return string
 	
 	def show(self):
-		print '======== module package external:', self.requires, '========'
+		strings = ['======== module package external: ']
+		strings.append(str(self))
+		strings.append(' ========')
+		string = ''
+		for x in strings:
+			string += x
+		print string
 		EnvList(self.get_env())
 	
 class Module:
@@ -258,15 +289,17 @@ class Module:
 			self.parsed = True
 			public_requires = ''
 			for x in self.public_requires:
-				public_requires += ' ' + x.requires
-			self.env = ExternalModulePackage(self.env, public_requires).get_env()
+				public_requires += ' ' + str(x)
+			debian = ''
+			debian_version_compare = ''
+			self.env = ExternalPackage(self.env, debian, debian_version_compare, public_requires).get_env()
 		return self.env
 	
 	def show(self):
 		print '======== module internal:', self.name, self.version, '========'
 		public_requires = []
 		for x in self.public_requires:
-			public_requires.append(x.requires)
+			public_requires.append(str(x))
 		print 'requires', public_requires
 		EnvList(self.get_env())
 		
@@ -309,18 +342,18 @@ class Debian:
 					result.append(xx)
 					
 	def control(self, where):
-		def out(strings):
-			print **strings
+		def out(*strings):
+			print strings
 		out('Source: ', self.source_package.name, '\n')
 		out('Section: ', self.section, '\n')
 		out('Priority: ', self.priority, '\n')
 		out('Build-Depends: ')
 		for x in self.get_build_depends():
 			 out(x.name, ' (', x.version_compare, '), ')
-		out('\n'
+		out('\n')
 		out('Maintainer', self.maintainer)
 		out('Uploaders: ')
-		for x in self.uploaders
+		for x in self.uploaders:
 			out(x.name, ' <', x.email, '>, ')
 		out('\n')
 		out('Standards-Version: 3.6.2\n')

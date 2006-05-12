@@ -85,8 +85,14 @@ function main
 			then
 				cat /etc/apt/apt.conf
 			fi &&
-			apt-get update       --option acquire::retries=3 &&
-			apt-get dist-upgrade --option acquire::retries=3 --assume-yes --force-yes
+			{
+				apt-get update       --option acquire::retries=3 ||
+				apt-get update       --option acquire::retries=3
+			} &&
+			{
+				apt-get dist-upgrade --option acquire::retries=3 --assume-yes --force-yes ||
+				apt-get dist-upgrade --option acquire::retries=3 --assume-yes --force-yes
+			}
 		eof
 	} &&
 	chmod +x $hook &&
