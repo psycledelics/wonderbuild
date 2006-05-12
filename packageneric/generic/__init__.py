@@ -8,9 +8,10 @@ import os, fnmatch
 #from SCons.Script.SConscript import SConsEnvironment
 #from SCons.Script import *
 
-def PkgConfig(context, packageneric, name, what):
-	context.Message('checking for pkg-config --%s %s ... ' % (what, name))
-	result = context.TryAction('pkg-config --%s \'%s\'' % (what, name))
+def _PkgConfig(context, packageneric, name, what):
+	command = 'pkg-config --%s \'%s\'' % (what, name)
+	context.Message('checking for ' + command + ' ... ')
+	result = context.TryAction(command)
 	#print result
 	result = result[0]
 	context.Result(result)
@@ -37,7 +38,7 @@ class Packageneric:
 		self._configure = self._configure_ctor(
 			self.environment(),
 			{
-				'PkgConfig' : lambda context, packageneric, name, what: PkgConfig(context, packageneric, name, what)
+				'PkgConfig' : lambda context, packageneric, name, what: _PkgConfig(context, packageneric, name, what)
 			}
 		)
 	
@@ -388,7 +389,6 @@ class Packageneric:
 				if not x.debian_version_compare is None:
 					depend.version_compare = x.debian_version_compare
 				result.append(depend)
-			print result
 			return result
 		
 	class Debian:
@@ -397,7 +397,7 @@ class Packageneric:
 			source_package = None,
 			section = 'libs',
 			priority = 'optional',
-			maintainer = None,
+			maintainer = '',
 			uploaders = None,
 			description = '',
 			binary_packages = None,
@@ -420,8 +420,6 @@ class Packageneric:
 				self.build_depends = []
 			else:
 				self.build_depends = build_depends
-			if not 'scons' in self.build_depends:
-				self.build_depends.append('scons')
 
 		def	get_build_depends(self):
 			result = self.build_depends
@@ -432,61 +430,58 @@ class Packageneric:
 			return result
 		
 		def control(self, where):
-			def out(*strings):
-				print strings
-			out('Source: ', self.source_package.name, '\n')
-			out('Section: ', self.section, '\n')
-			out('Priority: ', self.priority, '\n')
-			out('Build-Depends: ')
+			string = ''
+			string += 'Source: ' + self.source_package.name + '\n'
+			string += 'Section: ' + self.section + '\n'
+			string += 'Priority: ' + self.priority + '\n'
+			string += 'Build-Depends: scons'
 			for x in self.get_build_depends():
-				 out(x.name, ' (', x.version_compare, '), ')
-			out('\n')
-			out('Maintainer', self.maintainer)
-			out('Uploaders: ')
+				string += x.name + ' (' + x.version_compare + '), '
+			string += '\n'
+			string += 'Maintainer: ' + self.maintainer + '\n'
+			string += 'Uploaders: '
 			for x in self.uploaders:
-				out(x.name, ' <', x.email, '>, ')
-			out('\n')
-			out('Standards-Version: 3.6.2\n')
+				string += x.name + ' <' + x.email + '>, '
+			string += '\n'
+			string += 'Standards-Version: 3.6.2\n'
 			for x in self.binary_packages:
-				out('Package: ', x.name, '\n')
-				out('Provides: ')
+				string += '\n'
+				string += 'Package: ' + x.name + '\n'
+				string += 'Provides: '
 				for xx in x.provides:
-					out(xx, ', ')
-				out('\n')
-				out('Suggests: ')
+					string += xx + ', '
+				string += '\n'
+				string += 'Suggests: '
 				for xx in x.suggests:
-					out(xx.name, ' (', xx.version_compare, '), ')
-				out('\n')
-				out('Recommends: ')
+					string += xx.name + ' (' + xx.version_compare + '), '
+				string += '\n'
+				string += 'Recommends: '
 				for xx in x.recommends:
-					out(xx.name, ' (', xx.version_compare, '), ')
-				out('\n')
-				out('Depends: ')
+					string += xx.name + ' (' + xx.version_compare, '), '
+				string += '\n'
+				string += 'Depends: ${shlibs:Depends}, ${misc:Depends}'
 				for xx in x.depends:
-					out(xx.name, ' (', xx.version_compare, '), ')
-				out('\n')
-				out('Section: ')
+					if isinstance(x, Packageneric.ExternalPackage):
+						string += xx.name + ' (' + xx.version_compare + '), '
+				string += '\n'
+				string += 'Section: '
 				if x.section is None:
-					out(self.section)
+					string += self.section
 				else:
-					out(x.section)
-				out('\n')
-				out('Architecture: ', x.architecture, '\n')
-				out('Description', x.description, '\n')
-				for xx in self.description:
-					if xx == '':
-						out('.')
+					string += x.section
+				string += '\n'
+				string += 'Architecture: ' + x.architecture + '\n'
+				string += 'Description: ' + x.description + '\n '
+				description = self.description + '\n\n' + x.long_description
+				for xx in description:
+					if xx == '\n':
+						string += '\n '
 					else:
-						out(' ')
-					out(xx, '\n')
-				out('.\n')
-				for xx in x.long_description:
-					if xx == '':
-						out('.')
-					else:
-						out(' ')
-					out(xx, '\n')
-				out('\n')
+						string += xx
+				string += '\n'
+			print '==== debian/control ===='
+			print string
+			return string
 			
 	class DistributionArchive:
 		def __init__(self):
