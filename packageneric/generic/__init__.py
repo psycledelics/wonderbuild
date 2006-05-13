@@ -233,6 +233,25 @@ class Packageneric:
 		
 	def pkg_config(self, name, what):
 		return self.configure().PkgConfig(self, name, what)
+
+	def check_header(self, external_package, header):
+		external_package.failed |= not self.configure().CheckHeader(header)
+		return not external_package.failed
+	
+	def check_library(self, external_package, library):
+		external_package.failed |= not self.configure().CheckLib(library) # adds to env LIBS automatically
+		return not external_package.failed
+
+	def check_header_and_library(self, external_package, header, library):
+		return \
+			   self.check_header(external_package, header) & \
+			   self.check_library(external_package, library)
+	
+	def error(self, message):
+		print '********', message
+
+	def abort(self):
+		Exit(1)
 	
 	class ExternalPackage:
 		def __init__(
@@ -248,8 +267,9 @@ class Packageneric:
 			self.pkg_config_version_compare = pkg_config_version_compare
 			self.debian = debian
 			self.debian_version_compare = debian_version_compare
+			self.failed = False
 			self.parsed = False
-			
+		
 		def get_env(self):
 			if not self.parsed:
 				self.parsed = True
