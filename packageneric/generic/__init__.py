@@ -255,16 +255,16 @@ class Packageneric:
 				self.parsed = True
 				env = self.packageneric.environment().Copy()
 				if not self.pkg_config is None:
-					self.packageneric.pkg_config(self.pkg_config, 'exists')
-					string = self.pkg_config
-					if not self.pkg_config_version_compare is None:
-						string += ' ' + self.pkg_config_version_compare
-					self.packageneric.pkg_config(string, 'exists')
-					self.packageneric.pkg_config(string, 'modversion')
-					includes = self.packageneric.pkg_config(string, 'cflags-only-I')
-					cflags = self.packageneric.pkg_config(string, 'cflags-only-other')
-					libpath = self.packageneric.pkg_config(string, 'libs-only-L')
-					libs = self.packageneric.pkg_config(string, 'libs-only-other')
+					if self.packageneric.pkg_config(self.pkg_config, 'exists'):
+						self.packageneric.pkg_config(self.pkg_config, 'modversion')
+						string = self.pkg_config
+						if not self.pkg_config_version_compare is None:
+							string += ' ' + self.pkg_config_version_compare
+						if self.packageneric.pkg_config(string, 'exists'):
+							includes = self.packageneric.pkg_config(string, 'cflags-only-I')
+							cflags = self.packageneric.pkg_config(string, 'cflags-only-other')
+							libpath = self.packageneric.pkg_config(string, 'libs-only-L')
+							libs = self.packageneric.pkg_config(string, 'libs-only-other')
 			return env
 
 		def __str__(self):
@@ -282,13 +282,7 @@ class Packageneric:
 			return string
 		
 		def show(self):
-			strings = ['======== module package external: ']
-			strings.append(str(self))
-			strings.append(' ========')
-			string = ''
-			for x in strings:
-				string += x
-			print string
+			print '======== external package:', self
 			Packageneric.EnvList(self.get_env())
 		
 	class Module:
@@ -352,7 +346,7 @@ class Packageneric:
 			return env
 		
 		def show(self):
-			print '======== module internal:', self.name, self.version, '========'
+			print '======== module:', self.name, self.version
 			public_requires = []
 			for x in self.public_requires:
 				public_requires.append(str(x))
