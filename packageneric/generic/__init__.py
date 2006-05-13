@@ -24,14 +24,17 @@ class Packageneric:
 	
 	def configure(self):
 		return self._configure
-
-	def pkg_config(self, name, what):
-		return self.configure().PkgConfig(self, name, what)
-								   
 	
-	def __init__(self, environment_ctor, configure_ctor):
+	def finish_configure(self):
+		self._environment = self.configure().Finish()
+
+	def options(self):
+		return self._options
+	
+	def __init__(self, environment_ctor, configure_ctor, options_ctor, *etc):
 		self._environment_ctor = environment_ctor
 		self._configure_ctor = configure_ctor
+		self._options_ctor = options_ctor
 		
 		self._environment = self._environment_ctor()
 		self._environment.BuildDir(os.path.join('++packageneric', 'build', 'scons'), 'src', duplicate=0)
@@ -41,6 +44,80 @@ class Packageneric:
 				'PkgConfig' : lambda context, packageneric, name, what: _PkgConfig(context, packageneric, name, what)
 			}
 		)
+		self._options = self._options_ctor('packageneric.configuration')
+	
+	class Person:
+		def __init__(self, name, email = None):
+			self.name = name
+			self.email = email
+
+	class InstallPrefix:
+		def __init__(self, packageneric):
+			# Get our configuration options:
+			packageneric.options().Add(PathOption('PREFIX', 'Directory to install under', '/usr/local'))
+			packageneric.options().Update(packageneric.environment())
+			# Save, so user doesn't have to specify PREFIX every time
+			packageneric.options().Save('packageneric.configuration', packageneric.environment())
+			Help(packageneric.options().GenerateHelpText(packageneric.environment()))
+			# Here are our installation paths:
+			self.prefix  = '$PREFIX'
+			self.lib     = '$PREFIX/lib'
+			self.bin     = '$PREFIX/bin'
+			self.include = '$PREFIX/include'
+			self.data    = '$PREFIX/share'
+			packageneric.environment().Export('env self.prefix self.lib self.bin self.include self.data')
+	
+	class EnvList:
+		def __init__(self, env, all = False):
+			if all:
+				dictionary = env.Dictionary()
+				keys = dictionary.keys()
+				keys.sort()
+				for key in keys:
+					print '%s = %s' % (key, dictionary[key])
+			else:
+				def show(key):
+					try:
+						env[key]
+						if len(env[key]):
+							print key, '->', env[key], '->', env.subst('$' + key)
+						else:
+							print key, '<- empty'
+					except:
+						pass
+				show('CPPPATH')
+				show('CXXFLAGS')
+				show('LIBPATH')
+				show('LIBS')
+				show('LINKFLAGS')
+		
+	class Find:
+		'''a forward iterator that traverses a directory tree'''
+		
+		def __init__(self, strip_path, path, pattern = '*'):
+			self.strip_path = strip_path
+			self.stack = [path]
+			self.pattern = pattern
+			self.files = []
+			self.index = 0
+			
+		def __getitem__(self, index):
+			while 1:
+				try:
+					file = self.files[self.index]
+					self.index = self.index + 1
+				except IndexError:
+					# pop next directory from stack
+					self.directory = self.stack.pop()
+					self.files = os.listdir(os.path.join(self.strip_path, self.directory))
+					self.index = 0
+				else:
+					# got a filename
+					path = os.path.join(self.directory, file)
+					if os.path.isdir(os.path.join(self.strip_path, path)):
+						self.stack.append(path)
+					if fnmatch.fnmatchcase(file, self.pattern):
+						return path
 	
 	def print_all_nodes(dirnode, level = 0):
 		'''Print all the scons nodes that are children of this node, recursively.'''
@@ -107,88 +184,15 @@ class Packageneric:
 					nodes.append(gen_node(os.path.join(dir, os.path.basename(str(s)))))
 		return nodes
 
-	class Find:
-		'''a forward iterator that traverses a directory tree'''
-		
-		def __init__(self, strip_path, path, pattern = '*'):
-			self.strip_path = strip_path
-			self.stack = [path]
-			self.pattern = pattern
-			self.files = []
-			self.index = 0
-			
-		def __getitem__(self, index):
-			while 1:
-				try:
-					file = self.files[self.index]
-					self.index = self.index + 1
-				except IndexError:
-					# pop next directory from stack
-					self.directory = self.stack.pop()
-					self.files = os.listdir(os.path.join(self.strip_path, self.directory))
-					self.index = 0
-				else:
-					# got a filename
-					path = os.path.join(self.directory, file)
-					if os.path.isdir(os.path.join(self.strip_path, path)):
-						self.stack.append(path)
-					if fnmatch.fnmatchcase(file, self.pattern):
-						return path
-		
-	class EnvList:
-		def __init__(self, env, all = False):
-			if all:
-				dictionary = env.Dictionary()
-				keys = dictionary.keys()
-				keys.sort()
-				for key in keys:
-					print '%s = %s' % (key, dictionary[key])
-			else:
-				def show(key):
-					try:
-						env[key]
-						if len(env[key]):
-							print key, '->', env[key], '->', env.subst('$' + key)
-						else:
-							print key, '<- empty'
-					except:
-						pass
-				show('CPPPATH')
-				show('CXXFLAGS')
-				show('LIBPATH')
-				show('LIBS')
-				show('LINKFLAGS')
-		
-	class InstallPrefix:
-		def __init__(self, env):
-			# Get our configuration options:
-			opts = env.Options('packageneric.configuration')
-			opts.Add(env.PathOption('PREFIX', 'Directory to install under', '/usr/local'))
-			opts.Update(env)
-			# Save, so user doesn't have to specify PREFIX every time
-			opts.Save('packageneric.configuration', env)
-			env.Help(opts.GenerateHelpText(env))
-			# Here are our installation paths:
-			self.prefix  = '$PREFIX'
-			self.lib     = '$PREFIX/lib'
-			self.bin     = '$PREFIX/bin'
-			self.include = '$PREFIX/include'
-			self.data    = '$PREFIX/share'
-			env.Export('env self.prefix self.lib self.bin self.include self.data')
-			
-	class Person:
-		def __init__(self, name, email = None):
-			self.name = name
-			self.email = email
-
 	class SourcePackage:
-		def __init__(self, name = None, version = None, description = '', path = '.'):
+		def __init__(self, name = None, version = None, description = '', long_description = '', path = '.'):
 			self.name = name
 			if version is None:
 				self.version = []
 			else:
 				self.version = version
 			self.description= description
+			self.long_description = long_description
 			self.path = path
 		
 	class File:
@@ -227,13 +231,23 @@ class Packageneric:
 			self.libraries = []
 			self.optimizations = []
 		
+	def pkg_config(self, name, what):
+		return self.configure().PkgConfig(self, name, what)
+	
 	class ExternalPackage:
-		def __init__(self, packageneric, debian, debian_version_compare, pkg_config = None, pkg_config_version_compare = None):
+		def __init__(
+			self,
+			packageneric,
+			debian,
+			debian_version_compare,
+			pkg_config = None,
+			pkg_config_version_compare = None
+		):
 			self.packageneric = packageneric
-			self.debian = debian
-			self.debian_version_compare = debian_version_compare
 			self.pkg_config = pkg_config
 			self.pkg_config_version_compare = pkg_config_version_compare
+			self.debian = debian
+			self.debian_version_compare = debian_version_compare
 			self.parsed = False
 			
 		def get_env(self):
@@ -241,10 +255,15 @@ class Packageneric:
 				self.parsed = True
 				env = self.packageneric.environment().Copy()
 				if not self.pkg_config is None:
-					includes = self.packageneric.pkg_config(str(self.pkg_config), 'cflags-only-I')
-					cflags = self.packageneric.pkg_config(str(self.pkg_config), 'cflags-only-other')
-					libpath = self.packageneric.pkg_config(str(self.pkg_config), 'libs-only-L')
-					libs = self.packageneric.pkg_config(str(self.pkg_config), 'libs-only-other')
+					self.packageneric.pkg_config(self.pkg_config, 'exists')
+					string = self.pkg_config
+					if not self.pkg_config_version_compare is None:
+						string += ' ' + self.pkg_config_version_compare
+					self.packageneric.pkg_config(string, 'exists')
+					includes = self.packageneric.pkg_config(string, 'cflags-only-I')
+					cflags = self.packageneric.pkg_config(string, 'cflags-only-other')
+					libpath = self.packageneric.pkg_config(string, 'libs-only-L')
+					libs = self.packageneric.pkg_config(string, 'libs-only-other')
 			return env
 
 		def __str__(self):
@@ -342,7 +361,7 @@ class Packageneric:
 		def scons(self):
 			return self.get_env().SharedLibrary(self.name, self.sources)
 
-	class Package:
+	class PkgConfigPackage:
 		def __init__(self, name = None, version = None, description = '', modules = None):
 			self.name = name
 			if version is None:
@@ -399,7 +418,8 @@ class Packageneric:
 			priority = 'optional',
 			maintainer = '',
 			uploaders = None,
-			description = '',
+			description = None,
+			long_description = None,
 			binary_packages = None,
 			build_depends = None
 		):
@@ -411,7 +431,14 @@ class Packageneric:
 				self.uploaders = []
 			else:
 				self.uploaders = uploaders
-			self.description = description
+			if description is None and not source_package is None:
+				self.description = source_package.description
+			else:
+				self.description = description
+			if long_description is None and not source_package is None:
+				self.long_description = source_package.long_description
+			else:
+				self.description = description
 			if binary_packages is None:
 				self.binary_packages = []
 			else:
@@ -429,7 +456,7 @@ class Packageneric:
 						result.append(xx)
 			return result
 		
-		def control(self, where):
+		def control(self):
 			string = ''
 			string += 'Source: ' + self.source_package.name + '\n'
 			string += 'Section: ' + self.section + '\n'
@@ -438,27 +465,32 @@ class Packageneric:
 			for x in self.get_build_depends():
 				string += x.name + ' (' + x.version_compare + '), '
 			string += '\n'
-			string += 'Maintainer: ' + self.maintainer + '\n'
-			string += 'Uploaders: '
-			for x in self.uploaders:
-				string += x.name + ' <' + x.email + '>, '
-			string += '\n'
+			if not self.maintainer is None:
+				string += 'Maintainer: ' + self.maintainer.name + ' <' + self.maintainer.email + '>\n'
+			if len(self.uploaders):
+				string += 'Uploaders: '
+				for x in self.uploaders:
+					string += x.name + ' <' + x.email + '>, '
+				string += '\n'
 			string += 'Standards-Version: 3.6.2\n'
 			for x in self.binary_packages:
 				string += '\n'
 				string += 'Package: ' + x.name + '\n'
-				string += 'Provides: '
-				for xx in x.provides:
-					string += xx + ', '
-				string += '\n'
-				string += 'Suggests: '
-				for xx in x.suggests:
-					string += xx.name + ' (' + xx.version_compare + '), '
-				string += '\n'
-				string += 'Recommends: '
-				for xx in x.recommends:
-					string += xx.name + ' (' + xx.version_compare, '), '
-				string += '\n'
+				if len(x.provides):
+					string += 'Provides: '
+					for xx in x.provides:
+						string += xx + ', '
+					string += '\n'
+				if len(x.recommends):
+					string += 'Recommends: '
+					for xx in x.recommends:
+						string += xx.name + ' (' + xx.version_compare, '), '
+					string += '\n'
+				if len(x.suggests):
+					string += 'Suggests: '
+					for xx in x.suggests:
+						string += xx.name + ' (' + xx.version_compare + '), '
+					string += '\n'
 				string += 'Depends: ${shlibs:Depends}, ${misc:Depends}'
 				for xx in x.depends:
 					if isinstance(x, Packageneric.ExternalPackage):
@@ -472,15 +504,18 @@ class Packageneric:
 				string += '\n'
 				string += 'Architecture: ' + x.architecture + '\n'
 				string += 'Description: ' + x.description + '\n '
-				description = self.description + '\n\n' + x.long_description
+				description = self.long_description + '\n\n' + x.long_description
+				was_new_line = False
 				for xx in description:
 					if xx == '\n':
+						if was_new_line:
+							string += '.'
+						was_new_line = True
 						string += '\n '
 					else:
+						was_new_line = False
 						string += xx
 				string += '\n'
-			print '==== debian/control ===='
-			print string
 			return string
 			
 	class DistributionArchive:
