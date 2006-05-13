@@ -260,6 +260,7 @@ class Packageneric:
 					if not self.pkg_config_version_compare is None:
 						string += ' ' + self.pkg_config_version_compare
 					self.packageneric.pkg_config(string, 'exists')
+					self.packageneric.pkg_config(string, 'modversion')
 					includes = self.packageneric.pkg_config(string, 'cflags-only-I')
 					cflags = self.packageneric.pkg_config(string, 'cflags-only-other')
 					libpath = self.packageneric.pkg_config(string, 'libs-only-L')
