@@ -43,7 +43,7 @@ libngrs_la_SOURCES = nalignlayout.cpp napp.cpp nautoscrolllayout.cpp \
 	color_converter.cpp nfntstring.cpp nregion.cpp n7segment.cpp n7segdisplay.cpp \
 	ndockpanel.cpp nsplitbar.cpp ntreeview.cpp nflipbar.cpp nflipbox.cpp ntreenode.cpp \
 	ncustomtreeview.cpp nmessagebox.cpp npixmap.cpp nproperty.cpp npopupwindow.cpp \
-	npackageinfo.cpp nalignconstraint.cpp
+	npackageinfo.cpp nalignconstraint.cpp ntablelayout.cpp
 
 bin_PROGRAMS = ngrs3
 ngrs3_SOURCES = ngrs-tests/ngrs3.cpp
