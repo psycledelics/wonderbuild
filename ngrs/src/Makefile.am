@@ -2,7 +2,7 @@
 # set the include path found by configure
 INCLUDES = -I /usr/include/freetype2 $(all_includes)
 
-nobase_inst_pkginclude_HEADERS = nalignlayout.h napp.h nautoscrolllayout.h nbevelborder.h \
+nobase_pkginclude_HEADERS = nalignlayout.h napp.h nautoscrolllayout.h nbevelborder.h \
 	nbitmap.h nborder.h nborderlayout.h nbuttonevent.h nbutton.h ncheckbox.h \
 	ncheckmenuitem.h ncolor.h ncombobox.h nconfig.h ncustombutton.h ncustomitem.h \
 	ncustommenuitem.h ndialog.h nedit.h nevent.h nfiledialog.h nfile.h nfilelistbox.h \
