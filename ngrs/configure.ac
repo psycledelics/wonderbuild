@@ -12,7 +12,7 @@ AC_PROG_CXX
 
 AC_PATH_X
 AC_PATH_XTRA
-X_LIBS="$X_PRE_LIBS $X_LIBS -lX11 $X_EXTRA_LIBS -lXrandr -lXcursor -lXft -lXpm"
+X_LIBS="$X_PRE_LIBS $X_LIBS -lX11 $X_EXTRA_LIBS -lXpm"
 
 AC_LANG_PUSH(C++)
 AC_CHECK_LIB(m, main, M_LIBS=-lm)
@@ -21,7 +21,7 @@ AC_CHECK_LIB(pthread, main, PTHREAD_CFLAGS=-D_REENTRANT && PTHREAD_LIBS=-lpthrea
 AC_CHECK_LIB(xerces-c, main, XERCES_LIBS=-lxerces-c, AC_MSG_ERROR(xerces-c lib required))
 AC_LANG_POP(C++)
 
-NGRS_REQUIRES='freetype2 >= 0'
+NGRS_REQUIRES='freetype2 >= 0 xft >= 0 xcursor >= 0'
 PKG_CHECK_MODULES(NGRS_PKGCONFIG, $NGRS_REQUIRES)
 
 AC_SUBST(NGRS_REQUIRES)
