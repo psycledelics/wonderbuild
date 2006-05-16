@@ -272,7 +272,7 @@ AC_DEFUN([PACKAGENERIC__MODULE__INTERNAL],
 					pkgnameversion=$PACKAGENERIC__PACKAGE__NAME-\${pkgversion}
 					pkgversionlibdir=$libdir/\${pkgnameversion}
 					pkgversionincludedir=$includedir/\${pkgnameversion}
-					pkgversionsharedincludedir=$datadir/$(basename $includedir)\${pkgnameversion}
+					pkgversionsharedincludedir=$datadir/$(basename $includedir)/\${pkgnameversion}
 					
 					Name: $packageneric__module $packageneric__module__libtool__version_info $host
 					Description: $packageneric__module__description
