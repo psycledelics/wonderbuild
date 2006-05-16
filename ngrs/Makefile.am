@@ -52,3 +52,4 @@ ngrs3_LDADD = $(NGRS_LIBS) libngrs.la
 ngrs3_SOURCES =
 ngrs3_SOURCES += src/ngrs-tests/ngrs3.cpp
 ngrs3_SOURCES += src/ngrs-tests/ntestwindow.cpp
+EXTRA_DIST += src/ngrs-tests/ntestwindow.h
