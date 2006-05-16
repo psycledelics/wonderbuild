@@ -4,9 +4,30 @@
 # copyright 2006 johan boule <bohan@jabber.org>
 # copyright 2006 psycledelics http://psycle.pastnotecut.org
 
-import os, fnmatch
-#from SCons.Script.SConscript import SConsEnvironment
-#from SCons.Script import *
+import sys, os, fnmatch
+
+if False:
+	Environment
+	Configure
+	Options
+	PathOption
+	SetOption('implicit_cache', True)
+	Node
+	Entry
+	Dir
+	File
+	Depends
+	Ignore
+	SourceSignatures('MD5') ('timestamp')
+	TargetSignatures('build') ('content')
+	Object
+	Program
+	Java
+
+if False:
+	from SCons.Script.SConscript import SConsEnvironment
+	from SCons.Environment import Environment
+	environment = SCons.Environment.Environment()
 
 def _PkgConfig(context, packageneric, name, what):
 	command = 'pkg-config --%s \'%s\'' % (what, name)
@@ -31,20 +52,22 @@ class Packageneric:
 	def options(self):
 		return self._options
 	
-	def __init__(self, environment_ctor, configure_ctor, options_ctor, *etc):
-		self._environment_ctor = environment_ctor
-		self._configure_ctor = configure_ctor
-		self._options_ctor = options_ctor
+	def __init__(self, EnvironmentClass, ConfigureClass, OptionsClass):
+		self._EnvironmentClass = EnvironmentClass
+		self._environment = self._EnvironmentClass()
+		self.environment().EnsurePythonVersion(2, 3)
+		self.environment().EnsureSConsVersion(0, 96)
+		self.environment().BuildDir(os.path.join('++packageneric', 'build', 'scons'), 'src', duplicate=0)
 		
-		self._environment = self._environment_ctor()
-		self._environment.BuildDir(os.path.join('++packageneric', 'build', 'scons'), 'src', duplicate=0)
-		self._configure = self._configure_ctor(
+		self._ConfigureClass = ConfigureClass
+		self._configure = self._ConfigureClass(
 			self.environment(),
 			{
 				'PkgConfig' : lambda context, packageneric, name, what: _PkgConfig(context, packageneric, name, what)
 			}
 		)
-		self._options = self._options_ctor('packageneric.configuration')
+		self._OptionsClass = OptionsClass
+		self._options = self._OptionsClass('packageneric.configuration')
 	
 	class Person:
 		def __init__(self, name, email = None):
@@ -234,12 +257,12 @@ class Packageneric:
 	def pkg_config(self, name, what):
 		return self.configure().PkgConfig(self, name, what)
 
-	def check_header(self, external_package, header):
-		external_package.failed |= not self.configure().CheckHeader(header)
+	def check_header(self, external_package, header, language = 'C++'):
+		external_package.failed |= not self.configure().CheckHeader(header, language = language)
 		return not external_package.failed
 	
-	def check_library(self, external_package, library):
-		external_package.failed |= not self.configure().CheckLib(library) # adds to env LIBS automatically
+	def check_library(self, external_package, library, language = 'C++'):
+		external_package.failed |= not self.configure().CheckLib(library, language = language, autoadd = True)
 		return not external_package.failed
 
 	def check_header_and_library(self, external_package, header, library):
@@ -251,7 +274,8 @@ class Packageneric:
 		print '********', message
 
 	def abort(self):
-		Exit(1)
+		self.error('failed')
+		sys.exit(1)
 	
 	class ExternalPackage:
 		def __init__(

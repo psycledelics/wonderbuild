@@ -11,7 +11,7 @@
 #
 ####################################################################################################
 
-AUTOMAKE_OPTIONS = 1.7.9 nostdinc no-define subdir-objects readme-alpha
+AUTOMAKE_OPTIONS = 1.9.6 nostdinc no-define subdir-objects readme-alpha
 #AUTOMAKE_OPTIONS += dist-bzip2 no-dist-gzip tar-pax <-- must be in autoconf's AM_INIT_AUTOMAKE because it's a global option (for the wole make dist target), not a per Makefile one
 
 EXTRA_DIST =

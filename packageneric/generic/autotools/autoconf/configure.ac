@@ -51,7 +51,7 @@ PACKAGENERIC__INCLUDE(packageneric/generic/detail/autotools/autoconf/automake.ac
 
 
 # Initializes automake and checks that its version is at least the one given as argument.
-AM_INIT_AUTOMAKE(1.7.9 nostdinc no-define subdir-objects readme-alpha dist-bzip2 no-dist-gzip tar-pax)
+AM_INIT_AUTOMAKE(1.9.6 nostdinc no-define subdir-objects readme-alpha dist-bzip2 no-dist-gzip tar-pax)
 	# automake version 1.9.3  on debian 3.1 (stable sarge)
 	# automake version 1.8.2  on msys
 	# automake version 1.8    on fink
