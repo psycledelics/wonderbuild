@@ -7,11 +7,16 @@
 import sys, os, fnmatch
 
 if False:
+	Help
+	Options
+	BoolOption
+	EnumOption
+	ListOption
+	PathOption
+	PackageOption
+	SetOption('implicit_cache', True)
 	Environment
 	Configure
-	Options
-	PathOption
-	SetOption('implicit_cache', True)
 	Node
 	Entry
 	Dir
@@ -25,9 +30,16 @@ if False:
 	Java
 
 if False:
-	from SCons.Script.SConscript import SConsEnvironment
-	from SCons.Environment import Environment
-	environment = SCons.Environment.Environment()
+	opts = Options()
+	opts.AddOptions(
+		('RELEASE', 'Set to 1 to build for release', 0),
+		('CONFIG', 'Configuration file', '/etc/my_config'),
+		BoolOption('warnings', 'compilation with -Wall and similiar', 1),
+		EnumOption('debug', 'debug output and symbols', 'no', allowed_values=('yes', 'no', 'full'), map={}, ignorecase=0),  # case sensitive
+		ListOption('shared', 'libraries to build as shared libraries', 'all', names = list_of_libs),
+		PackageOption('x11', 'use X11 installed here (yes = search some places)', 'yes'),
+		PathOption('qtdir', 'where the root of Qt is installed', qtdir),
+	)
 
 def _PkgConfig(context, packageneric, name, what):
 	command = 'pkg-config --%s \'%s\'' % (what, name)
@@ -52,22 +64,32 @@ class Packageneric:
 	def options(self):
 		return self._options
 	
-	def __init__(self, EnvironmentClass, ConfigureClass, OptionsClass):
-		self._EnvironmentClass = EnvironmentClass
-		self._environment = self._EnvironmentClass()
+	def __init__(self, Help, ConfigureClass):
+		import SCons.Options
+		self._options = SCons.Options.Options('packageneric.configuration')
+		self.options().Add('packageneric__release', 'set to 1 to build for release', 0)
+		
+		import SCons.Environment
+		self._environment = SCons.Environment.Environment(options = self.options(), CPPDEFINES={'PACKAGENERIC__RELEASE' : '$packageneric__release'})
+		self.environment().Help(self.options().GenerateHelpText(self.environment()))
 		self.environment().EnsurePythonVersion(2, 3)
 		self.environment().EnsureSConsVersion(0, 96)
 		self.environment().BuildDir(os.path.join('++packageneric', 'build', 'scons'), 'src', duplicate=0)
-		
-		self._ConfigureClass = ConfigureClass
-		self._configure = self._ConfigureClass(
-			self.environment(),
-			{
-				'PkgConfig' : lambda context, packageneric, name, what: _PkgConfig(context, packageneric, name, what)
-			}
-		)
-		self._OptionsClass = OptionsClass
-		self._options = self._OptionsClass('packageneric.configuration')
+
+		if False:
+			self._configure = self.environment().Configure(
+				{
+					'PkgConfig' : lambda context, packageneric, name, what: _PkgConfig(context, packageneric, name, what)
+				}
+			)
+		else:
+			self._ConfigureClass = ConfigureClass
+			self._configure = self._ConfigureClass(
+				self.environment(),
+				{
+					'PkgConfig' : lambda context, packageneric, name, what: _PkgConfig(context, packageneric, name, what)
+				}
+			)
 	
 	class Person:
 		def __init__(self, name, email = None):
@@ -75,20 +97,20 @@ class Packageneric:
 			self.email = email
 
 	class InstallPrefix:
-		def __init__(self, packageneric):
+		def __init__(self):
 			# Get our configuration options:
-			packageneric.options().Add(PathOption('PREFIX', 'Directory to install under', '/usr/local'))
-			packageneric.options().Update(packageneric.environment())
-			# Save, so user doesn't have to specify PREFIX every time
-			packageneric.options().Save('packageneric.configuration', packageneric.environment())
+			self.options().Add(PathOption('prefix', 'directory to install under', '/usr/local'))
+			self.options().Update(packageneric.environment())
+			# Save, so user doesn't have to specify prefix every time
+			self.options().Save('packageneric.configuration', packageneric.environment())
 			Help(packageneric.options().GenerateHelpText(packageneric.environment()))
 			# Here are our installation paths:
-			self.prefix  = '$PREFIX'
-			self.lib     = '$PREFIX/lib'
-			self.bin     = '$PREFIX/bin'
-			self.include = '$PREFIX/include'
-			self.data    = '$PREFIX/share'
-			packageneric.environment().Export('env self.prefix self.lib self.bin self.include self.data')
+			self.prefix  = '$prefix'
+			self.lib     = '$prefix/lib'
+			self.bin     = '$prefix/bin'
+			self.include = '$prefix/include'
+			self.data    = '$prefix/share'
+			self.environment().Export('env self.prefix self.lib self.bin self.include self.data')
 	
 	class EnvList:
 		def __init__(self, env, all = False):
@@ -108,6 +130,7 @@ class Packageneric:
 							print key, '<- empty'
 					except:
 						pass
+				show('CPPDEFINES')
 				show('CPPPATH')
 				show('CXXFLAGS')
 				show('LIBPATH')
