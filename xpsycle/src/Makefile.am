@@ -20,6 +20,6 @@ noinst_HEADERS = alsaout.h analyzer.h audiodriver.h childview.h configuration.h 
 				plugin_interface.h sequencerbar.h serializer.h song.h songpdlg.h songstructs.h wiredlg.h \
 				wiregui.h xmsampler.h defaultbitmaps.h greetdlg.h aboutdlg.h sampler.h vumeter.h \
 				presetsdlg.h instrumenteditor.h xminstrument.h envdialog.h
-xpsycle_LDADD = -L/usr/X11R6/lib -lXrandr -lXcursor -lXft -lXrender -lX11 -lm\
-	-ldl -lpthread -lfreetype -lxerces-c -lXpm -lasound\
-	-L/home/natti/ngrs3/optimized/src/ -lngrs
+xpsycle_LDADD = -L/usr/X11R6/lib -lXrandr -lXcursor -lXft -lXrender -lX11 -lm \
+	-ldl -lpthread -lfreetype -lxerces-c -lXpm -lasound \
+	-L/home/natti/ngrs6/debug/src/ -lngrs
