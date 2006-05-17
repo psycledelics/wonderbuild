@@ -29,7 +29,8 @@ AC_CONFIG_HEADERS(autotools.autoheader.private.hpp)
 AC_CONFIG_FILES(
 	Makefile
 	src/Makefile
-	icons/Makefile
+	doc/Makefile
+	pixmaps/Makefile
 )
 
 AC_OUTPUT

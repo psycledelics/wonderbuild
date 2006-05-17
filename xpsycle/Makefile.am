@@ -1,12 +1,16 @@
-SUBDIRS = nested-source-packages/ngrs . src
+SUBDIRS = nested-source-packages/ngrs . src doc pixmaps
 
 include $(top_srcdir)/init.am
 
 
 
-EXTRA_DIST += .xpsycle.xml .ngrs.xml
 EXTRA_DIST += xpsycle_SOURCES.sh
 EXTRA_DIST += src/nobase_pkgversioninclude_HEADERS.sh
+
+
+
+nobase_pkgversionexampledir = $(datadir)/doc/$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)/examples
+nobase_pkgversionexampledir = .xpsycle.xml .ngrs.xml
 
 
 
