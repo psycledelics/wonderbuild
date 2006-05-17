@@ -29,6 +29,7 @@ AC_CONFIG_HEADERS(autotools.autoheader.private.hpp)
 AC_CONFIG_FILES(
 	Makefile
 	src/Makefile
+	icons/Makefile
 )
 
 AC_OUTPUT
