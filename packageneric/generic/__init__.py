@@ -280,15 +280,19 @@ class Packageneric:
 	def pkg_config(self, name, what):
 		return self.configure().PkgConfig(self, name, what)
 
-	def check_header(self, external_package, header, language = 'C++'):
+	def check_header(self, external_package, header, language = 'C++', optional = False):
 		external_package.failed |= not self.configure().CheckHeader(header, language = language)
+		if not optional:
+			self.abort()
 		return not external_package.failed
 	
-	def check_library(self, external_package, library, language = 'C++'):
+	def check_library(self, external_package, library, language = 'C++', optional = False):
 		external_package.failed |= not self.configure().CheckLib(library, language = language, autoadd = True)
+		if not optional:
+			self.abort()
 		return not external_package.failed
 
-	def check_header_and_library(self, external_package, header, library):
+	def check_header_and_library(self, external_package, header, library, optional = False):
 		return \
 			   self.check_header(external_package, header) & \
 			   self.check_library(external_package, library)
