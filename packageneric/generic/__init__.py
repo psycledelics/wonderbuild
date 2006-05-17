@@ -43,6 +43,7 @@ if False:
 
 def _PkgConfig(context, packageneric, name, what):
 	command = 'pkg-config --%s \'%s\'' % (what, name)
+	#packageneric.trace('checking for ' + command + ' ... ')
 	context.Message('checking for ' + command + ' ... ')
 	result = context.TryAction(command)
 	#print result
@@ -50,6 +51,18 @@ def _PkgConfig(context, packageneric, name, what):
 	context.Result(result)
 	return result
 
+class Version:
+	def __init__(self, major = 0, minor = 0, patch = 0):
+		self._major = major
+		self._minor = minor
+		self._patch = patch
+		
+	def __str__(self):
+		return str(self._major) + '.' + str(self._minor) + '.' + str(self._patch)
+	
+	def __cmp__(self, other):
+		raise NotImplemented
+	
 class Packageneric:
 	
 	def	 environment(self):
@@ -63,8 +76,14 @@ class Packageneric:
 
 	def options(self):
 		return self._options
+
+	def	version(self):
+		return self._version
 	
 	def __init__(self, Help, ConfigureClass):
+		self._version = Version(0, 0)
+		self.information('version ' + str(self.version()))
+		
 		import SCons.Options
 		self._options = SCons.Options.Options('packageneric.configuration')
 		self.options().Add('packageneric__release', 'set to 1 to build for release', 0)
@@ -166,7 +185,7 @@ class Packageneric:
 						return path
 	
 	def print_all_nodes(dirnode, level = 0):
-		'''Print all the scons nodes that are children of this node, recursively.'''
+		'''prints all the scons nodes that are children of this node, recursively.'''
 		if type(dirnode)==type(''):
 			dirnode=Dir(dirnode)
 		dt = type(Dir('.'))
@@ -177,7 +196,7 @@ class Packageneric:
 			print "%s%s" % (level * ' ', str(f))
 
 	def Glob(includes = ['*'], excludes = None, dir = '.'):
-		'''Similar to glob.glob, except globs SCons nodes, and thus sees generated files and files from build directories.
+		'''similar to glob.glob, except globs SCons nodes, and thus sees generated files and files from build directories.
 		Basically, it sees anything SCons knows about.
 		A key subtlety is that since this function operates on generated nodes as well as source nodes on the filesystem,
 		it needs to be called after builders that generate files you want to include.
@@ -282,26 +301,60 @@ class Packageneric:
 
 	def check_header(self, external_package, header, language = 'C++', optional = False):
 		external_package.failed |= not self.configure().CheckHeader(header, language = language)
-		if not optional:
-			self.abort()
+		if external_package.failed:
+			if not optional:
+				self.abort('could not find required header: ' + header)
+			else:
+				self.warning('could not find optional header: ' + header)
 		return not external_package.failed
 	
 	def check_library(self, external_package, library, language = 'C++', optional = False):
 		external_package.failed |= not self.configure().CheckLib(library, language = language, autoadd = True)
-		if not optional:
-			self.abort()
+		if external_package.failed:
+			if not optional:
+				self.abort('could not find required library: ' + library)
+			else:
+				self.warning('could not find optional library: ' + library)
 		return not external_package.failed
 
-	def check_header_and_library(self, external_package, header, library, optional = False):
+	def check_header_and_library(self, external_package, header, library, language = 'C++', optional = False):
 		return \
-			   self.check_header(external_package, header) & \
-			   self.check_library(external_package, library)
+			   self.check_header(external_package, header, language, optional) and \
+			   self.check_library(external_package, library, language, optional)
+
+	def tty_font(self, font = '0', text = None):
+		result = '\033[' + font + 'm'
+		if text:
+				result += text + self.tty_font()
+		return result
+	
+	def message(self, message, font = None):
+		string = __name__ + ': '
+		for x in message:
+			string += x
+			if x == '\n':
+					string += __name__ + ': '
+		if font:
+			string = self.tty_font(font, string)
+		print string
+
+	def trace(self, message):
+		self.message('trace: ' + message, '2;34')
+		
+	def information(self, message):
+		self.message('information: ' + message, '34')
+	
+	def success(self, message):
+		self.message('information: ' + message, '32')
+		
+	def warning(self, message):
+		self.message('warning: ' + message, '35')
 	
 	def error(self, message):
-		print '********', message
+		self.message('error: ' + message, '1;31')
 
-	def abort(self):
-		self.error('failed')
+	def abort(self, message):
+		self.error(message + '\nbailing out.')
 		sys.exit(1)
 	
 	class ExternalPackage:
@@ -353,7 +406,7 @@ class Packageneric:
 			return string
 		
 		def show(self):
-			print '======== external package:', self
+			self.packageneric.information('external package: ' + str(self))
 			Packageneric.EnvList(self.get_env())
 		
 	class Module:
@@ -417,11 +470,11 @@ class Packageneric:
 			return env
 		
 		def show(self):
-			print '======== module:', self.name, self.version
+			self.packageneric.information('module: ' + self.name + ' ' + str(self.version))
 			public_requires = []
 			for x in self.public_requires:
 				public_requires.append(str(x))
-			print 'requires', public_requires
+			self.packageneric.information('module: requires: ' + str(public_requires))
 			Packageneric.EnvList(self.get_env())
 			
 		def scons(self):
