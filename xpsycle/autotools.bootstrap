@@ -12,7 +12,11 @@ main()
 	call libtoolize --force &&
 	call autoheader &&
 	call autoconf &&
-	call automake --add-missing
+	call automake --add-missing &&
+	if test -x nested-source-packages/ngrs/autotools.bootstrap
+	then
+		call ./nested-source-packages/ngrs/autotools.bootstrap
+	fi
 } &&
 
 call()

@@ -26,6 +26,11 @@ AC_SUBST(abs_top_srcdir)
 AC_SUBST(abs_top_builddir)
 
 AC_CONFIG_HEADERS(autotools.autoheader.private.hpp)
+AC_CONFIG_HEADERS(src/xpsycle/install_paths.defines.hpp)
+AC_DEFINE_UNQUOTED(XPSYCLE__INSTALL_PATHS__DOC, "$(eval echo $datadir)/doc/$PACKAGE_TARNAME-$PACKAGE_VERSION", doc dir)
+AC_DEFINE_UNQUOTED(XPSYCLE__INSTALL_PATHS__PIXMAPS, "$(eval echo $datadir)/pixmaps/$PACKAGE_TARNAME-$PACKAGE_VERSION", pixmap dir)
+AC_DEFINE_UNQUOTED(XPSYCLE__INSTALL_PATHS__PRESETS, "$(eval echo $datadir)/$PACKAGE_TARNAME.plugins-$PACKAGE_VERSION/presets", preset dir)
+
 AC_CONFIG_FILES(
 	Makefile
 	src/Makefile
