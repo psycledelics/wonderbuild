@@ -2,7 +2,7 @@ include $(top_srcdir)/init.am
 
 SUBDIRS += nested-source-packages/ngrs . src doc pixmaps
 
-nobase_pkgversiondoc_DATA += README README-alpha NEWS TODO ChangeLog AUTHORS COPYING
+nobase_pkgversiondoc_DATA += README README-alpha NEWS ChangeLog TODO AUTHORS COPYING
 
 pkgversionexampledir = $(pkgversiondocdir)/examples
 nobase_pkgversionexample_DATA = .xpsycle.xml .ngrs.xml
