@@ -3,6 +3,8 @@
 main()
 {
 	cd $(dirname $0) &&
+	call ./AC_CONFIG_FILES.sh &&
+	call ./AC_CONFIG_HEADERS.sh &&
 	call ./xpsycle_SOURCES.sh &&
 	call ./src/nobase_pkgversioninclude_HEADERS.sh &&
 	call ./doc/nobase_pkgversiondoc_DATA.sh &&
