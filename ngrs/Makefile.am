@@ -1,14 +1,8 @@
-SUBDIRS = . src
-
 include $(top_srcdir)/init.am
 
-
+SUBDIRS += . src
 
 EXTRA_DIST += introduction.html
-EXTRA_DIST += libngrs_la_SOURCES.sh
-EXTRA_DIST += src/nobase_pkgversioninclude_HEADERS.sh
-
-
 
 lib_LTLIBRARIES += libngrs.la
 #libngrs_la_CPPFLAGS = $(AM_CPPFLAGS) ...
@@ -17,8 +11,7 @@ libngrs_la_LDFLAGS = $(AM_LDFLAGS) -version-info 0:0:0
 libngrs_la_LIBADD = $(NGRS_LIBS) $(NGRS_LIBS_PRIVATE)
 libngrs_la_SOURCES =
 include $(srcdir)/libngrs_la_SOURCES.am
-
-
+EXTRA_DIST += libngrs_la_SOURCES.sh
 
 pkgconfig_DATA += ngrs.pc
 ngrs.pc: Makefile
@@ -42,14 +35,12 @@ ngrs-uninstalled.pc: Makefile
 	$(ECHO) Requires: '$(NGRS_REQUIRES)' >> $@
 CLEANFILES += ngrs-uninstalled.pc
 
-
-
-bin_PROGRAMS += ngrs3
-#ngrs3_CPPFLAGS = $(AM_CPPFLAGS) ...
-ngrs3_CXXFLAGS = $(AM_CXXFLAGS) $(NGRS_CFLAGS)
-#ngrs3_LDFLAGS = $(AM_LDFLAGS) ...
-ngrs3_LDADD = $(NGRS_LIBS) libngrs.la
-ngrs3_SOURCES =
-ngrs3_SOURCES += src/ngrs-tests/ngrs3.cpp
-ngrs3_SOURCES += src/ngrs-tests/ntestwindow.cpp
+bin_PROGRAMS += ngrs
+#ngrs_CPPFLAGS = $(AM_CPPFLAGS) ...
+ngrs_CXXFLAGS = $(AM_CXXFLAGS) $(NGRS_CFLAGS)
+#ngrs_LDFLAGS = $(AM_LDFLAGS) ...
+ngrs_LDADD = $(NGRS_LIBS) libngrs.la
+ngrs_SOURCES =
+ngrs_SOURCES += src/ngrs-tests/ngrs3.cpp
+ngrs_SOURCES += src/ngrs-tests/ntestwindow.cpp
 EXTRA_DIST += src/ngrs-tests/ntestwindow.h
