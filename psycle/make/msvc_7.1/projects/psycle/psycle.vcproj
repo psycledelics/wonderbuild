@@ -290,6 +290,12 @@
 				RelativePath="..\..\..\..\src\psycle\host\gui\InputHandler.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\InstPreview.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\InstPreview.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\player.cpp">
 			</File>
 			<File
@@ -475,6 +481,9 @@
 					RelativePath="..\..\..\..\src\psycle\host\gui\resources\Toolbar.bmp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\toolbar1.bmp">
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\gui\resources\Slider\VuOff.bmp">
 				</File>
 				<File
@@ -581,6 +590,12 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\gui\SaveWavDlg.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\gui\ScrollableDlgBar.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\gui\ScrollableDlgBar.hpp">
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\gui\SeqView.private.hpp">
@@ -751,10 +766,28 @@
 								RelativePath="..\..\..\..\src\psycle\host\gui\WaveEdChildView.hpp">
 							</File>
 							<File
+								RelativePath="..\..\..\..\src\psycle\host\gui\WaveEdCrossfadeDialog.cpp">
+							</File>
+							<File
+								RelativePath="..\..\..\..\src\psycle\host\gui\WaveEdCrossfadeDialog.hpp">
+							</File>
+							<File
 								RelativePath="..\..\..\..\src\psycle\host\gui\WaveEdFrame.cpp">
 							</File>
 							<File
 								RelativePath="..\..\..\..\src\psycle\host\gui\WaveEdFrame.hpp">
+							</File>
+							<File
+								RelativePath="..\..\..\..\src\psycle\host\gui\WaveEdInsertSilenceDialog.cpp">
+							</File>
+							<File
+								RelativePath="..\..\..\..\src\psycle\host\gui\WaveEdInsertSilenceDialog.hpp">
+							</File>
+							<File
+								RelativePath="..\..\..\..\src\psycle\host\gui\WaveEdMixDialog.cpp">
+							</File>
+							<File
+								RelativePath="..\..\..\..\src\psycle\host\gui\WaveEdMixDialog.hpp">
 							</File>
 							<File
 								RelativePath="..\..\..\..\src\psycle\host\gui\WavFileDlg.cpp">
