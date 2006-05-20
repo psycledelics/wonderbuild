@@ -41,6 +41,7 @@ if False:
 		PathOption('qtdir', 'where the root of Qt is installed', qtdir),
 	)
 
+#@staticmethod
 def _PkgConfig(context, packageneric, name, what):
 	command = 'pkg-config --%s \'%s\'' % (what, name)
 	#packageneric.trace('checking for ' + command + ' ... ')
@@ -329,17 +330,18 @@ class Packageneric:
 		return result
 	
 	def message(self, message, font = None):
-		string = __name__ + ': '
+		prefix = __name__ + '(' + self.__class__.__name__ + '): '
+		string = prefix
 		for x in message:
 			string += x
 			if x == '\n':
-					string += __name__ + ': '
+					string += prefix
 		if font:
 			string = self.tty_font(font, string)
 		print string
 
 	def trace(self, message):
-		self.message('trace: ' + message, '2;34')
+		self.message('trace: ' + message, '2;33')
 		
 	def information(self, message):
 		self.message('information: ' + message, '34')
