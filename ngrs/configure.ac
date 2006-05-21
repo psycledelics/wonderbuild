@@ -5,6 +5,7 @@ AC_INIT(ngrs gui toolkit, 0.0.3, natti__@users.sourceforge.net, ngrs)
 AC_CONFIG_AUX_DIR(autotools.auxiliary-programs)
 
 AM_INIT_AUTOMAKE(1.9 readme-alpha subdir-objects no-define nostdinc)
+AC_DISABLE_STATIC
 AC_PROG_LIBTOOL
 AC_PROG_CXXCPP
 AC_PROG_CXX
