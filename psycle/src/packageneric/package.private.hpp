@@ -19,7 +19,7 @@
 	/// minor version number of the source package
 	#define PACKAGENERIC__PACKAGE__VERSION__MINOR 9
 	/// patch version number of the source package
-	#define PACKAGENERIC__PACKAGE__VERSION__PATCH 8
+	#define PACKAGENERIC__PACKAGE__VERSION__PATCH 9
 	/// distribution archive (e.g., unstable, testing, stable)
 	#define PACKAGENERIC__PACKAGE__ARCHIVE "unstable"
 	/// origin
