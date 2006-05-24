@@ -42,15 +42,49 @@ if False:
 	)
 
 #@staticmethod
-def _PkgConfig(context, packageneric, name, what):
+def _pkg_config(context, packageneric, name, what):
 	command = 'pkg-config --%s \'%s\'' % (what, name)
 	#packageneric.trace('checking for ' + command + ' ... ')
 	context.Message('checking for ' + command + ' ... ')
-	result = context.TryAction(command)
-	#print result
-	result = result[0]
+	result, output = context.TryAction(command)
 	context.Result(result)
-	return result
+	return result, output
+
+#@staticmethod
+def _try_run(context, packageneric, description, text, language):
+	#packageneric.trace('checking for ' + description + ' ... ')
+	context.Message('checking for ' + description + ' ... ')
+	result, output = context.TryRun(text, language)
+	context.Result(result)
+	return result, output
+	
+#@staticmethod
+def _dump_environment(environment, all = False):
+	if all:
+		if False:
+			print environment.Dump()
+		else:
+			dictionary = environment.Dictionary()
+			keys = dictionary.keys()
+			keys.sort()
+			for key in keys:
+				print '%s = %s' % (key, dictionary[key])
+	else:
+		def show(key):
+			try:
+				environment[key]
+				if len(env[key]):
+					print key, '->', environment[key], '->', environment.subst('$' + key)
+				else:
+					print key, '<- empty'
+			except:
+				pass
+		show('CPPDEFINES')
+		show('CPPPATH')
+		show('CXXFLAGS')
+		show('LIBPATH')
+		show('LIBS')
+		show('LINKFLAGS')
 
 class Version:
 	def __init__(self, major = 0, minor = 0, patch = 0):
@@ -95,11 +129,15 @@ class Packageneric:
 		self.environment().EnsurePythonVersion(2, 3)
 		self.environment().EnsureSConsVersion(0, 96)
 		self.environment().BuildDir(os.path.join('++packageneric', 'build', 'scons'), 'src', duplicate=0)
+		self.environment().CacheDir(os.path.join('++packageneric', 'build', 'scons', 'cache'))
 
 		if False:
+			#from SCons import SConf.SCons
+			#import SCons.Conftest
 			self._configure = self.environment().Configure(
 				{
-					'PkgConfig' : lambda context, packageneric, name, what: _PkgConfig(context, packageneric, name, what)
+					'packageneric__pkg_config' : lambda context, packageneric, name, what: _pkg_config(context, packageneric, name, what),
+					'packageneric__try_run' : lambda context, packageneric, description, text, language: _try_run(context, packageneric, description, text, language)
 				}
 			)
 		else:
@@ -107,7 +145,8 @@ class Packageneric:
 			self._configure = self._ConfigureClass(
 				self.environment(),
 				{
-					'PkgConfig' : lambda context, packageneric, name, what: _PkgConfig(context, packageneric, name, what)
+					'packageneric__pkg_config' : lambda context, packageneric, name, what: _pkg_config(context, packageneric, name, what),
+					'packageneric__try_run' : lambda context, packageneric, description, text, language: _try_run(context, packageneric, description, text, language)
 				}
 			)
 	
@@ -130,33 +169,8 @@ class Packageneric:
 			self.bin     = '$prefix/bin'
 			self.include = '$prefix/include'
 			self.data    = '$prefix/share'
-			self.environment().Export('env self.prefix self.lib self.bin self.include self.data')
+			self.environment().Export('env prefix lib bin include data')
 	
-	class EnvList:
-		def __init__(self, env, all = False):
-			if all:
-				dictionary = env.Dictionary()
-				keys = dictionary.keys()
-				keys.sort()
-				for key in keys:
-					print '%s = %s' % (key, dictionary[key])
-			else:
-				def show(key):
-					try:
-						env[key]
-						if len(env[key]):
-							print key, '->', env[key], '->', env.subst('$' + key)
-						else:
-							print key, '<- empty'
-					except:
-						pass
-				show('CPPDEFINES')
-				show('CPPPATH')
-				show('CXXFLAGS')
-				show('LIBPATH')
-				show('LIBS')
-				show('LINKFLAGS')
-		
 	class Find:
 		'''a forward iterator that traverses a directory tree'''
 		
@@ -298,10 +312,10 @@ class Packageneric:
 			self.optimizations = []
 		
 	def pkg_config(self, name, what):
-		return self.configure().PkgConfig(self, name, what)
+		return self.configure().packageneric__pkg_config(self, name, what)
 
 	def check_header(self, external_package, header, language = 'C++', optional = False):
-		external_package.failed |= not self.configure().CheckHeader(header, language = language)
+		external_package.failed |= not self.configure().CheckHeader(header = header, language = language)
 		if external_package.failed:
 			if not optional:
 				self.abort('could not find required header: ' + header)
@@ -310,7 +324,7 @@ class Packageneric:
 		return not external_package.failed
 	
 	def check_library(self, external_package, library, language = 'C++', optional = False):
-		external_package.failed |= not self.configure().CheckLib(library, language = language, autoadd = True)
+		external_package.failed |= not self.configure().CheckLib(library = library, language = language, autoadd = True)
 		if external_package.failed:
 			if not optional:
 				self.abort('could not find required library: ' + library)
@@ -319,10 +333,22 @@ class Packageneric:
 		return not external_package.failed
 
 	def check_header_and_library(self, external_package, header, library, language = 'C++', optional = False):
-		return \
-			   self.check_header(external_package, header, language, optional) and \
-			   self.check_library(external_package, library, language, optional)
+		if False:
+			external_package.failed |= not self.configure().CheckLibWithHeader(libs = library, header = header, language = language)
+			if external_package.failed:
+				if not optional:
+					self.abort('could not find required header: ' + header)
+				else:
+					self.warning('could not find optional header: ' + header)
+			return not external_package.failed
+		else:
+			return \
+				   self.check_header(external_package, header, language, optional) and \
+				   self.check_library(external_package, library, language, optional)
 
+	def try_run(self, description, text, language = '.cpp'):
+		return self.configure().packageneric__try_run(self, description, text, language)
+		
 	def tty_font(self, font = '0', text = None):
 		result = '\033[' + font + 'm'
 		if text:
@@ -409,7 +435,7 @@ class Packageneric:
 		
 		def show(self):
 			self.packageneric.information('external package: ' + str(self))
-			Packageneric.EnvList(self.get_env())
+			_dump_environment(self.get_env())
 		
 	class Module:
 		class Types:
@@ -477,7 +503,7 @@ class Packageneric:
 			for x in self.public_requires:
 				public_requires.append(str(x))
 			self.packageneric.information('module: requires: ' + str(public_requires))
-			Packageneric.EnvList(self.get_env())
+			_dump_environment(self.get_env())
 			
 		def scons(self):
 			return self.get_env().SharedLibrary(self.name, self.sources)
