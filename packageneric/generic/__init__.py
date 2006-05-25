@@ -115,7 +115,8 @@ class Packageneric:
 		import SCons.Options
 		self._options = SCons.Options.Options('packageneric.options', self.command_line_arguments())
 		self.options().Add(SCons.Options.PathOption('packageneric__build_directory', 'directory where to build into', os.path.join('++packageneric', 'build', 'scons'), SCons.Options.PathOption.PathIsDirCreate))
-		self.options().Add(SCons.Options.PathOption('packageneric__install_prefix', 'directory to install under', os.path.join('usr', 'local'), SCons.Options.PathOption.PathIsDirCreate))
+		self.options().Add(SCons.Options.PathOption('packageneric__install_stage_destination', 'directory to install under (stage installation)', '.', SCons.Options.PathOption.PathIsDirCreate))
+		self.options().Add(SCons.Options.PathOption('packageneric__install_prefix', 'directory to install under (final installation)', os.path.join('usr', 'local'), SCons.Options.PathOption.PathIsDirCreate))
 		self.options().Add('packageneric__release', 'set to 1 to build for release', 0)
 		
 		import SCons.Environment
@@ -457,7 +458,7 @@ class Packageneric:
 			else:
 				string += self.debian()
 				if not self.debian_version_compare() is None:
-					string += ' ' + str(self.debian_version_compare())
+					string += ' ' + self.debian_version_compare()
 			return string
 		
 		def show(self):
