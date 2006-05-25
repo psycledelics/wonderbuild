@@ -430,11 +430,7 @@ class Packageneric:
 						string = self.pkg_config
 						if not self.pkg_config_version_compare is None:
 							string += ' ' + self.pkg_config_version_compare
-						if self.packageneric.pkg_config(string, 'exists'):
-							includes = self.packageneric.pkg_config(string, 'cflags-only-I')
-							cflags = self.packageneric.pkg_config(string, 'cflags-only-other')
-							libpath = self.packageneric.pkg_config(string, 'libs-only-L')
-							libs = self.packageneric.pkg_config(string, 'libs-only-other')
+						result = self.packageneric.pkg_config(string, 'exists')
 			return env
 
 		def __str__(self):
