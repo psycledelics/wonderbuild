@@ -4,7 +4,7 @@
 # copyright 2006 johan boule <bohan@jabber.org>
 # copyright 2006 psycledelics http://psycle.pastnotecut.org
 
-import sys, os, fnmatch
+import sys, os.path, fnmatch
 
 if False:
 	Help
@@ -114,22 +114,35 @@ class Packageneric:
 
 	def	version(self):
 		return self._version
+		
+	def command_line_arguments(self):
+		return self._command_line_arguments
+		
+	def build_directory(self):
+		return self._build_directory
 	
-	def __init__(self, Help, ConfigureClass):
+	def __init__(self, command_line_arguments, Help, ConfigureClass):
 		self._version = Version(0, 0)
 		self.information('version ' + str(self.version()))
 		
+		self._command_line_arguments = command_line_arguments
+		
 		import SCons.Options
-		self._options = SCons.Options.Options('packageneric.configuration')
+		self._options = SCons.Options.Options('packageneric.options', self.command_line_arguments())
+		self.options().Add(SCons.Options.PathOption('packageneric__build_directory', 'directory where to build into', os.path.join('++packageneric', 'build', 'scons'), SCons.Options.PathOption.PathIsDirCreate))
 		self.options().Add('packageneric__release', 'set to 1 to build for release', 0)
 		
 		import SCons.Environment
-		self._environment = SCons.Environment.Environment(options = self.options(), CPPDEFINES={'PACKAGENERIC__RELEASE' : '$packageneric__release'})
-		self.environment().Help(self.options().GenerateHelpText(self.environment()))
+		self._environment = SCons.Environment.Environment(
+			options = self.options(),
+			CPPDEFINES = {'PACKAGENERIC__RELEASE' : '$packageneric__release'}
+		)
 		self.environment().EnsurePythonVersion(2, 3)
 		self.environment().EnsureSConsVersion(0, 96)
-		self.environment().BuildDir(os.path.join('++packageneric', 'build', 'scons'), 'src', duplicate=0)
-		self.environment().CacheDir(os.path.join('++packageneric', 'build', 'scons', 'cache'))
+		self.environment().Help(self.options().GenerateHelpText(self.environment()))
+		self._build_directory = os.path.join(self.environment()['packageneric__build_directory'], 'targets')
+		self.environment().BuildDir(self.build_directory(), '.', duplicate = False)
+		self.environment().CacheDir(os.path.join(self.environment()['packageneric__build_directory'], 'cache'))
 
 		if False:
 			#from SCons import SConf.SCons
@@ -150,27 +163,32 @@ class Packageneric:
 				}
 			)
 	
+	def installation_prefix(self):
+		# Get our configuration options:
+		self.options().Add(PathOption('prefix', 'directory to install under', '/usr/local'))
+		self.options().Update(self.environment())
+		# Save, so user doesn't have to specify prefix every time
+		self.options().Save('packageneric.options', self.environment())
+		self.environment().Help(self.options().GenerateHelpText(self.environment()))
+		# Here are our installation paths:
+		self._installation_prefix  = '$prefix'
+		self._installation_lib     = '$prefix/lib'
+		self._installation_bin     = '$prefix/bin'
+		self._installation_include = '$prefix/include'
+		self._installation_data    = '$prefix/share'
+		self.environment().Export('env prefix')
+
 	class Person:
 		def __init__(self, name, email = None):
-			self.name = name
-			self.email = email
+			self._name = name
+			self._email = email
+			
+		def name(self):
+			return self._name
+		
+		def email(self):
+			return self._email
 
-	class InstallPrefix:
-		def __init__(self):
-			# Get our configuration options:
-			self.options().Add(PathOption('prefix', 'directory to install under', '/usr/local'))
-			self.options().Update(packageneric.environment())
-			# Save, so user doesn't have to specify prefix every time
-			self.options().Save('packageneric.configuration', packageneric.environment())
-			Help(packageneric.options().GenerateHelpText(packageneric.environment()))
-			# Here are our installation paths:
-			self.prefix  = '$prefix'
-			self.lib     = '$prefix/lib'
-			self.bin     = '$prefix/bin'
-			self.include = '$prefix/include'
-			self.data    = '$prefix/share'
-			self.environment().Export('env prefix lib bin include data')
-	
 	class Find:
 		'''a forward iterator that traverses a directory tree'''
 		
@@ -182,7 +200,7 @@ class Packageneric:
 			self.index = 0
 			
 		def __getitem__(self, index):
-			while 1:
+			while True:
 				try:
 					file = self.files[self.index]
 					self.index = self.index + 1
@@ -436,7 +454,7 @@ class Packageneric:
 		def show(self):
 			self.packageneric.information('external package: ' + str(self))
 			_dump_environment(self.get_env())
-		
+	
 	class Module:
 		class Types:
 			files = 'files'
@@ -460,6 +478,7 @@ class Packageneric:
 			self.parsed = False
 			self.sources = []
 			self.headers = []
+			self.include_path = []
 			
 		def get_name(self):
 			return self.name
@@ -470,7 +489,7 @@ class Packageneric:
 		def get_sources(self):
 			return self.sources
 		def add_source(self, source):
-			self.sources.append(source)
+			self.sources.append(os.path.join(self.packageneric.build_directory(), source))
 		def add_sources(self, sources):
 			for x in sources: self.add_source(x)
 			
@@ -480,6 +499,9 @@ class Packageneric:
 			self.headers.append(header)
 		def add_headers(self, headers):
 			for x in headers: self.add_header(x)
+			
+		def add_include_path(self, path):
+			self.include_path.append(path)
 			
 		def get_public_requires(self):
 			return self.public_requires
@@ -494,8 +516,8 @@ class Packageneric:
 					public_requires += ' ' + str(x)
 				debian = ''
 				debian_version_compare = ''
-				env = self.packageneric.environment().Copy()
-			return env
+				self._environment = self.packageneric.environment().Copy()
+			return self._environment
 		
 		def show(self):
 			self.packageneric.information('module: ' + self.name + ' ' + str(self.version))
@@ -506,8 +528,39 @@ class Packageneric:
 			_dump_environment(self.get_env())
 			
 		def scons(self):
-			return self.get_env().SharedLibrary(self.name, self.sources)
+			env = self.packageneric.environment().Copy()
+			env.Append(
+				CPPPATH = self.include_path,
+				CPPDEFINES = {
+					'PACKAGENERIC': '\\"/dev/null\\"',
+					'PACKAGENERIC__PACKAGE__NAME': '\\"test\\"',
+					'PACKAGENERIC__PACKAGE__VERSION': '\\"0\\"',
+					'PACKAGENERIC__PACKAGE__VERSION__MAJOR': '0',
+					'PACKAGENERIC__PACKAGE__VERSION__MINOR': '0',
+					'PACKAGENERIC__PACKAGE__VERSION__PATCH': '0',
+					'PACKAGENERIC__MODULE__NAME': '\\"test\\"',
+					'PACKAGENERIC__MODULE__VERSION': '\\"0\\"',
+					'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_LIB': '\\"../lib\\"',
+					'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_SHARE': '\\"../share\\"',
+					'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_VAR': '\\"../var\\"',
+					'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_ETC': '\\"../../etc\\"',
+					'PACKAGENERIC__CONFIGURATION__COMPILER__HOST': '\\"test\\"'
+				}
+			)
+			pkg_config = ''
+			for x in self.public_requires:
+				if not x.pkg_config is None:
+					pkg_config += ' ' + x.pkg_config
+					if not x.pkg_config_version_compare is None:
+						pkg_config += ' ' + x.pkg_config_version_compare
+			if not pkg_config == '':
+				env.ParseConfig('pkg-config --cflags --libs \'' + pkg_config + '\'')
+			_dump_environment(env)
+			return env.SharedLibrary(os.path.join(self.packageneric.build_directory(), self.get_name()), self.get_sources())
 
+	def module(self, name = None, version = None, description = '', public_requires = None):
+		return Packageneric.Module(self, name, version, description, public_requires)
+		
 	class PkgConfigPackage:
 		def __init__(self, name = None, version = None, description = '', modules = None):
 			self.name = name
@@ -613,11 +666,11 @@ class Packageneric:
 				string += x.name + ' (' + x.version_compare + '), '
 			string += '\n'
 			if not self.maintainer is None:
-				string += 'Maintainer: ' + self.maintainer.name + ' <' + self.maintainer.email + '>\n'
+				string += 'Maintainer: ' + self.maintainer.name() + ' <' + self.maintainer.email() + '>\n'
 			if len(self.uploaders):
 				string += 'Uploaders: '
 				for x in self.uploaders:
-					string += x.name + ' <' + x.email + '>, '
+					string += x.name() + ' <' + x.email() + '>, '
 				string += '\n'
 			string += 'Standards-Version: 3.6.2\n'
 			for x in self.binary_packages:
