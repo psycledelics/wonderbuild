@@ -7,39 +7,9 @@
 import sys, os.path, fnmatch
 
 if False:
-	Help
-	Options
-	BoolOption
-	EnumOption
-	ListOption
-	PathOption
-	PackageOption
 	SetOption('implicit_cache', True)
-	Environment
-	Configure
-	Node
-	Entry
-	Dir
-	File
-	Depends
-	Ignore
 	SourceSignatures('MD5') ('timestamp')
 	TargetSignatures('build') ('content')
-	Object
-	Program
-	Java
-
-if False:
-	opts = Options()
-	opts.AddOptions(
-		('RELEASE', 'Set to 1 to build for release', 0),
-		('CONFIG', 'Configuration file', '/etc/my_config'),
-		BoolOption('warnings', 'compilation with -Wall and similiar', 1),
-		EnumOption('debug', 'debug output and symbols', 'no', allowed_values=('yes', 'no', 'full'), map={}, ignorecase=0),  # case sensitive
-		ListOption('shared', 'libraries to build as shared libraries', 'all', names = list_of_libs),
-		PackageOption('x11', 'use X11 installed here (yes = search some places)', 'yes'),
-		PathOption('qtdir', 'where the root of Qt is installed', qtdir),
-	)
 
 #@staticmethod
 def _pkg_config(context, packageneric, name, what):
@@ -91,12 +61,27 @@ class Version:
 		self._major = major
 		self._minor = minor
 		self._patch = patch
+
+	def major(self):
+		return self._major
+		
+	def minor(self):
+		return self._minor
+		
+	def patch(self):
+		return self._patch
 		
 	def __str__(self):
 		return str(self._major) + '.' + str(self._minor) + '.' + str(self._patch)
 	
 	def __cmp__(self, other):
-		raise NotImplemented
+		result = cmp(self.major(), other.major())
+		if result:
+			return result
+		result = cmp(self.minor(), other.minoer())
+		if result:
+			return result
+		return cmp(self.patch(), other.patch())
 	
 class Packageneric:
 	
@@ -121,7 +106,7 @@ class Packageneric:
 	def build_directory(self):
 		return self._build_directory
 	
-	def __init__(self, command_line_arguments, Help, ConfigureClass):
+	def __init__(self, command_line_arguments, Help, Configure):
 		self._version = Version(0, 0)
 		self.information('version ' + str(self.version()))
 		
@@ -130,6 +115,7 @@ class Packageneric:
 		import SCons.Options
 		self._options = SCons.Options.Options('packageneric.options', self.command_line_arguments())
 		self.options().Add(SCons.Options.PathOption('packageneric__build_directory', 'directory where to build into', os.path.join('++packageneric', 'build', 'scons'), SCons.Options.PathOption.PathIsDirCreate))
+		self.options().Add(SCons.Options.PathOption('packageneric__install_prefix', 'directory to install under', os.path.join('usr', 'local'), SCons.Options.PathOption.PathIsDirCreate))
 		self.options().Add('packageneric__release', 'set to 1 to build for release', 0)
 		
 		import SCons.Environment
@@ -139,45 +125,36 @@ class Packageneric:
 		)
 		self.environment().EnsurePythonVersion(2, 3)
 		self.environment().EnsureSConsVersion(0, 96)
+		
+		self.options().Save('packageneric.options', self.environment())
+		
 		self.environment().Help(self.options().GenerateHelpText(self.environment()))
 		self._build_directory = os.path.join(self.environment()['packageneric__build_directory'], 'targets')
 		self.environment().BuildDir(self.build_directory(), '.', duplicate = False)
 		self.environment().CacheDir(os.path.join(self.environment()['packageneric__build_directory'], 'cache'))
 
-		if False:
-			#from SCons import SConf.SCons
-			#import SCons.Conftest
-			self._configure = self.environment().Configure(
-				{
-					'packageneric__pkg_config' : lambda context, packageneric, name, what: _pkg_config(context, packageneric, name, what),
-					'packageneric__try_run' : lambda context, packageneric, description, text, language: _try_run(context, packageneric, description, text, language)
-				}
-			)
-		else:
-			self._ConfigureClass = ConfigureClass
-			self._configure = self._ConfigureClass(
-				self.environment(),
-				{
-					'packageneric__pkg_config' : lambda context, packageneric, name, what: _pkg_config(context, packageneric, name, what),
-					'packageneric__try_run' : lambda context, packageneric, description, text, language: _try_run(context, packageneric, description, text, language)
-				}
-			)
-	
-	def installation_prefix(self):
-		# Get our configuration options:
-		self.options().Add(PathOption('prefix', 'directory to install under', '/usr/local'))
-		self.options().Update(self.environment())
-		# Save, so user doesn't have to specify prefix every time
-		self.options().Save('packageneric.options', self.environment())
-		self.environment().Help(self.options().GenerateHelpText(self.environment()))
-		# Here are our installation paths:
 		self._installation_prefix  = '$prefix'
-		self._installation_lib     = '$prefix/lib'
+		self._installation_etc     = '/etc'
 		self._installation_bin     = '$prefix/bin'
+		self._installation_lib     = '$prefix/lib'
 		self._installation_include = '$prefix/include'
 		self._installation_data    = '$prefix/share'
-		self.environment().Export('env prefix')
-
+		self._installation_var     = '$prefix/var'
+		if False:
+			self.environment().Export('env installation_prefix')
+		
+		#from SCons import SConf.SCons
+		#import SCons.Conftest
+		#self._configure = self.environment().Configure(
+		self._Configure = Configure
+		self._configure = self._Configure(
+			self.environment(),
+			{
+				'packageneric__pkg_config' : lambda context, packageneric, name, what: _pkg_config(context, packageneric, name, what),
+				'packageneric__try_run' : lambda context, packageneric, description, text, language: _try_run(context, packageneric, description, text, language)
+			}
+		)
+	
 	class Person:
 		def __init__(self, name, email = None):
 			self._name = name
@@ -284,14 +261,29 @@ class Packageneric:
 
 	class SourcePackage:
 		def __init__(self, name = None, version = None, description = '', long_description = '', path = '.'):
-			self.name = name
+			self._name = name
 			if version is None:
-				self.version = []
+				self._version = []
 			else:
-				self.version = version
-			self.description= description
-			self.long_description = long_description
-			self.path = path
+				self._version = version
+			self._description= description
+			self._long_description = long_description
+			self._path = path
+		
+		def name(self):
+			return self._name
+			
+		def version(self):
+			return self._version
+			
+		def description(self):
+			return self._description
+			
+		def long_description(self):
+			return self._long_description
+			
+		def path(self):
+			return self._path
 		
 	class File:
 		def __init__(self):
@@ -333,32 +325,32 @@ class Packageneric:
 		return self.configure().packageneric__pkg_config(self, name, what)
 
 	def check_header(self, external_package, header, language = 'C++', optional = False):
-		external_package.failed |= not self.configure().CheckHeader(header = header, language = language)
-		if external_package.failed:
+		external_package._failed |= not self.configure().CheckHeader(header = header, language = language)
+		if external_package.failed():
 			if not optional:
 				self.abort('could not find required header: ' + header)
 			else:
 				self.warning('could not find optional header: ' + header)
-		return not external_package.failed
+		return not external_package.failed()
 	
 	def check_library(self, external_package, library, language = 'C++', optional = False):
-		external_package.failed |= not self.configure().CheckLib(library = library, language = language, autoadd = True)
-		if external_package.failed:
+		external_package._failed |= not self.configure().CheckLib(library = library, language = language, autoadd = True)
+		if external_package.failed():
 			if not optional:
 				self.abort('could not find required library: ' + library)
 			else:
 				self.warning('could not find optional library: ' + library)
-		return not external_package.failed
+		return not external_package.failed()
 
 	def check_header_and_library(self, external_package, header, library, language = 'C++', optional = False):
 		if False:
-			external_package.failed |= not self.configure().CheckLibWithHeader(libs = library, header = header, language = language)
-			if external_package.failed:
+			external_package._failed |= not self.configure().CheckLibWithHeader(libs = library, header = header, language = language)
+			if external_package.failed():
 				if not optional:
 					self.abort('could not find required header: ' + header)
 				else:
 					self.warning('could not find optional header: ' + header)
-			return not external_package.failed
+			return not external_package.failed()
 		else:
 			return \
 				   self.check_header(external_package, header, language, optional) and \
@@ -412,44 +404,68 @@ class Packageneric:
 			pkg_config = None,
 			pkg_config_version_compare = None
 		):
-			self.packageneric = packageneric
-			self.pkg_config = pkg_config
-			self.pkg_config_version_compare = pkg_config_version_compare
-			self.debian = debian
-			self.debian_version_compare = debian_version_compare
-			self.failed = False
-			self.parsed = False
+			self._packageneric = packageneric
+			self._pkg_config = pkg_config
+			self._pkg_config_version_compare = pkg_config_version_compare
+			self._debian = debian
+			self._debian_version_compare = debian_version_compare
+			self._failed = False
+			
+			# crap
+			self._parsed = False
 		
-		def get_env(self):
-			if not self.parsed:
-				self.parsed = True
-				env = self.packageneric.environment().Copy()
-				if not self.pkg_config is None:
-					if self.packageneric.pkg_config(self.pkg_config, 'exists'):
-						self.packageneric.pkg_config(self.pkg_config, 'modversion')
-						string = self.pkg_config
-						if not self.pkg_config_version_compare is None:
-							string += ' ' + self.pkg_config_version_compare
-						result = self.packageneric.pkg_config(string, 'exists')
+		def packageneric(self):
+			return self._packageneric
+		
+		def debian(self):
+			return self._debian
+			
+		def debian_version_compare(self):
+			return self._debian_version_compare
+			
+		def pkg_config(self):
+			return self._pkg_config
+
+		def pkg_config_version_compare(self):
+			return self._pkg_config_version_compare
+		
+		def failed(self):
+			return self._failed
+			
+		# crap
+		def env(self):
+			if not self._parsed:
+				self._parsed = True
+				env = self.packageneric().environment().Copy()
+				if not self.pkg_config() is None:
+					if self.packageneric().pkg_config(self.pkg_config(), 'exists'):
+						self.packageneric().pkg_config(self.pkg_config(), 'modversion')
+						string = self.pkg_config()
+						if not self.pkg_config_version_compare() is None:
+							string += ' ' + self.pkg_config_version_compare()
+						result = self.packageneric().pkg_config(string, 'exists')
 			return env
 
 		def __str__(self):
 			string = ''
-			if not self.pkg_config is None:
-				string += self.pkg_config
-				if not self.pkg_config_version_compare is None:
-					string += ' ' + self.pkg_config_version_compare
-				elif not self.debian_version_compare is None:
-					string += ' ' + self.debian_version_compare
+			if not self.pkg_config() is None:
+				string += self.pkg_config()
+				if not self.pkg_config_version_compare() is None:
+					string += ' ' + self.pkg_config_version_compare()
+				elif not self.debian_version_compare() is None:
+					string += ' ' + self.debian_version_compare()
 			else:
-				string += self.debian
-				if not self.debian_version_compare is None:
-					string += ' ' + self.debian_version_compare
+				string += self.debian()
+				if not self.debian_version_compare() is None:
+					string += ' ' + str(self.debian_version_compare())
 			return string
 		
 		def show(self):
-			self.packageneric.information('external package: ' + str(self))
-			_dump_environment(self.get_env())
+			self.packageneric().information('external package: ' + str(self))
+			_dump_environment(self.env())
+			
+		def scons(self):
+			env = self.packageneric.environment().Copy()
 	
 	class Module:
 		class Types:
@@ -460,73 +476,97 @@ class Packageneric:
 			python = 'python'
 			
 		def __init__(self, packageneric, name = None, version = None, description = '', public_requires = None):
-			self.packageneric = packageneric
-			self.name = name
+			self._packageneric = packageneric
+			self._name = name
 			if version is None:
-				self.version = []
+				self._version = []
 			else:
-				self.version = version
-			self.description = description
+				self._version = version
+			self._description = description
 			if public_requires is None:
-				self.public_requires = []
+				self._public_requires = []
 			else:
-				self.public_requires = public_requires
-			self.parsed = False
-			self.sources = []
-			self.headers = []
-			self.include_path = []
+				self._public_requires = public_requires
+			self._sources = []
+			self._headers = []
+			self._include_path = []
+			self._defines = {}
 			
-		def get_name(self):
-			return self.name
+			# crap
+			self._parsed = False
 		
-		def get_version(self):
-			return self.version
+		def packageneric(self):
+			return self._packageneric
+			
+		def name(self):
+			return self._name
 		
-		def get_sources(self):
-			return self.sources
+		def version(self):
+			return self._version
+		
+		def description(self):
+			return self._description
+			
+		def sources(self):
+			return self._sources
 		def add_source(self, source):
-			self.sources.append(os.path.join(self.packageneric.build_directory(), source))
+			self.sources().append(os.path.join(self.packageneric().build_directory(), source))
 		def add_sources(self, sources):
 			for x in sources: self.add_source(x)
 			
-		def get_headers(self):
-			return self.headers
+		def headers(self):
+			return self._headers
 		def add_header(self, header):
-			self.headers.append(header)
+			self.headers().append(header)
 		def add_headers(self, headers):
 			for x in headers: self.add_header(x)
 			
+		def include_path(self):
+			return self._include_path
 		def add_include_path(self, path):
-			self.include_path.append(path)
+			self._include_path.append(path)
+		
+		def defines(self):
+			return self._defines
+		def add_define(self, name, value):
+			self._defines.append({name: value})
 			
-		def get_public_requires(self):
-			return self.public_requires
+		def public_requires(self):
+			return self._public_requires
 		def add_public_requires(self, requires):
-			self.public_requires.append(requires)
+			self.public_requires().append(requires)
 			
-		def get_env(self):
-			if not self.parsed:
-				self.parsed = True
+		# crap
+		def environment(self):
+			if not self._parsed:
+				self._parsed = True
 				public_requires = ''
-				for x in self.public_requires:
+				for x in self.public_requires():
 					public_requires += ' ' + str(x)
 				debian = ''
 				debian_version_compare = ''
-				self._environment = self.packageneric.environment().Copy()
+				self._environment = self.packageneric().environment().Copy()
 			return self._environment
 		
 		def show(self):
-			self.packageneric.information('module: ' + self.name + ' ' + str(self.version))
+			self.packageneric().information('module: ' + self.name() + ' ' + str(self.version()))
 			public_requires = []
-			for x in self.public_requires:
+			for x in self.public_requires():
 				public_requires.append(str(x))
-			self.packageneric.information('module: requires: ' + str(public_requires))
-			_dump_environment(self.get_env())
+			self.packageneric().information('module: requires: ' + str(public_requires))
+			_dump_environment(self.environment())
+			if False:
+				self.packageneric().trace(str(self.sources()))
+				self.packageneric().trace('========')
+				self.packageneric().trace(str(self.headers()))
 			
 		def scons(self):
-			env = self.packageneric.environment().Copy()
+			env = self.packageneric().environment().Copy()
 			env.Append(
-				CPPPATH = self.include_path,
+				CPPPATH = self.include_path(),
+				CPPDEFINES = self.defines()
+			)
+			env.Append(
 				CPPDEFINES = {
 					'PACKAGENERIC': '\\"/dev/null\\"',
 					'PACKAGENERIC__PACKAGE__NAME': '\\"test\\"',
@@ -544,31 +584,43 @@ class Packageneric:
 				}
 			)
 			pkg_config = ''
-			for x in self.public_requires:
-				if not x.pkg_config is None:
-					pkg_config += ' ' + x.pkg_config
-					if not x.pkg_config_version_compare is None:
-						pkg_config += ' ' + x.pkg_config_version_compare
+			for x in self.public_requires():
+				if not x.pkg_config() is None:
+					pkg_config += ' ' + x.pkg_config()
+					if not x.pkg_config_version_compare() is None:
+						pkg_config += ' ' + x.pkg_config_version_compare()
 			if not pkg_config == '':
 				env.ParseConfig('pkg-config --cflags --libs \'' + pkg_config + '\'')
 			_dump_environment(env)
-			return env.SharedLibrary(os.path.join(self.packageneric.build_directory(), self.get_name()), self.get_sources())
+			return env.SharedLibrary(os.path.join(self.packageneric().build_directory(), self.name()), self.sources())
 
 	def module(self, name = None, version = None, description = '', public_requires = None):
 		return Packageneric.Module(self, name, version, description, public_requires)
 		
 	class PkgConfigPackage:
 		def __init__(self, name = None, version = None, description = '', modules = None):
-			self.name = name
+			self._name = name
 			if version is None:
-				self.version = []
+				self._version = []
 			else:
-				self.version = version
-			self.description = description
+				self._version = version
+			self._description = description
 			if modules is None:
-				self.modules = []
+				self._modules = []
 			else:
-				self.modules = modules
+				self._modules = modules
+				
+		def name(self):
+			return self._name
+			
+		def version(self):
+			return self._version
+		
+		def description(self):
+			return self._description
+			
+		def modules(self):
+			return self._modules
 
 	class DebianPackage:
 		def __init__(
@@ -580,30 +632,66 @@ class Packageneric:
 			description = '',
 			long_description = ''
 		):
-			self.source_package = source_package
-			self.name = name
+			self._source_package = source_package
+			self._name = name
 			if section is None:
-				self.section = self.source_package.section
+				self._section = self.source_package().section()
 			else:
-				self.section = section
-			self.architecture = architecture
-			self.provides = []
-			self.depends = []
-			self.recommends = []
-			self.suggests = []
-			self.description = description
-			self.long_description = long_description
-			self.files = []
+				self._section = section
+			self._architecture = architecture
+			self._provides = []
+			self._depends = []
+			self._recommends = []
+			self._suggests = []
+			self._description = description
+			self._long_description = long_description
+			self._files = []
+			
+		def source_package(self):
+			return self._source_package
+			
+		def name(self):
+			return self._name
+			
+		def section(self):
+			return self._section
+			
+		def architecture(self):
+			return self._architecture
+		
+		def provides(self):
+			return self._provides
+		
+		def depends(self):
+			return self._depends
+		
+		def recommends(self):
+			return self._recommends
+			
+		def suggests(self):
+			return self._suggests
+		
+		def description(self):
+			return self._description
+			
+		def long_description(self):
+			return self._long_description
 
-		def	get_build_depends(self):
-			class Depend: pass
+		def	build_depends(self):
+			class Depend:
+				def __init__(self, name, version_compare = None):
+					self._name = name
+					self._version_compare = version_compare
+					
+				def name(self):
+					return self._name
+					
+				def version_compare(self):
+					return self._version_compare
+			
 			result = []
-			for x in self.depends:
-				depend = Depend()
-				depend.name = x.debian
-				if not x.debian_version_compare is None:
-					depend.version_compare = x.debian_version_compare
-				result.append(depend)
+			for x in self.depends():
+				result.append(Depend(x.name(), x.debian_version_compare()))
 			return result
 		
 	class Debian:
@@ -619,88 +707,112 @@ class Packageneric:
 			binary_packages = None,
 			build_depends = None
 		):
-			self.source_package = source_package
-			self.section = section
-			self.priority = priority
-			self.maintainer = maintainer
+			self._source_package = source_package
+			self._section = section
+			self._priority = priority
+			self._maintainer = maintainer
 			if uploaders is None:
-				self.uploaders = []
+				self._uploaders = []
 			else:
-				self.uploaders = uploaders
+				self._uploaders = uploaders
 			if description is None and not source_package is None:
-				self.description = source_package.description
+				self._description = source_package.description
 			else:
-				self.description = description
+				self._description = description
 			if long_description is None and not source_package is None:
-				self.long_description = source_package.long_description
+				self._long_description = source_package.long_description
 			else:
-				self.description = description
+				self._description = description
 			if binary_packages is None:
-				self.binary_packages = []
+				self._binary_packages = []
 			else:
-				self.binary_packages = binary_packages
+				self._binary_packages = binary_packages
 			if build_depends is None:
-				self.build_depends = []
+				self._build_depends = []
 			else:
-				self.build_depends = build_depends
+				self._build_depends = build_depends
 
-		def	get_build_depends(self):
-			result = self.build_depends
-			for x in self.binary_packages:
-				for xx in x.get_build_depends():
-					if not xx in self.build_depends:
+		def source_package(self):
+			return self._source_package
+			
+		def section(self):
+			return self._section
+			
+		def priority(self):
+			return self._priority
+			
+		def maintainer(self):
+			return self._maintainer
+			
+		def uploaders(self):
+			return self._uploaders
+			
+		def description(self):
+			return self._description
+			
+		def long_description(self):
+			return self._long_description
+			
+		def binary_packages(self):
+			return self._binary_packages
+			
+		def	build_depends(self):
+			result = self._build_depends
+			for x in self.binary_packages():
+				for xx in x.build_depends():
+					if not xx in self._build_depends:
 						result.append(xx)
 			return result
 		
 		def control(self):
 			string = ''
-			string += 'Source: ' + self.source_package.name + '\n'
-			string += 'Section: ' + self.section + '\n'
-			string += 'Priority: ' + self.priority + '\n'
+			string += 'Source: ' + self.source_package().name() + '\n'
+			string += 'Section: ' + self.section() + '\n'
+			string += 'Priority: ' + self.priority() + '\n'
 			string += 'Build-Depends: scons'
-			for x in self.get_build_depends():
-				string += x.name + ' (' + x.version_compare + '), '
+			for x in self.build_depends():
+				string += x.name() + ' (' + x.version_compare() + '), '
 			string += '\n'
-			if not self.maintainer is None:
-				string += 'Maintainer: ' + self.maintainer.name() + ' <' + self.maintainer.email() + '>\n'
-			if len(self.uploaders):
+			if not self.maintainer() is None:
+				string += 'Maintainer: ' + self.maintainer().name() + ' <' + self.maintainer().email() + '>\n'
+			if len(self.uploaders()):
 				string += 'Uploaders: '
-				for x in self.uploaders:
+				for x in self.uploaders():
 					string += x.name() + ' <' + x.email() + '>, '
 				string += '\n'
 			string += 'Standards-Version: 3.6.2\n'
-			for x in self.binary_packages:
+			for x in self.binary_packages():
 				string += '\n'
-				string += 'Package: ' + x.name + '\n'
-				if len(x.provides):
+				string += 'Package: ' + x.name() + '\n'
+				if len(x.provides()):
 					string += 'Provides: '
-					for xx in x.provides:
+					for xx in x.provides():
 						string += xx + ', '
 					string += '\n'
-				if len(x.recommends):
+				if len(x.recommends()):
 					string += 'Recommends: '
-					for xx in x.recommends:
-						string += xx.name + ' (' + xx.version_compare, '), '
+					for xx in x.recommends():
+						string += xx.name() + ' (' + xx.version_compare(), '), '
 					string += '\n'
-				if len(x.suggests):
+				if len(x.suggests()):
 					string += 'Suggests: '
-					for xx in x.suggests:
-						string += xx.name + ' (' + xx.version_compare + '), '
+					for xx in x.suggests():
+						string += xx.name() + ' (' + xx.version_compare() + '), '
 					string += '\n'
 				string += 'Depends: ${shlibs:Depends}, ${misc:Depends}'
-				for xx in x.depends:
+				for xx in x.depends():
 					if isinstance(x, Packageneric.ExternalPackage):
-						string += xx.name + ' (' + xx.version_compare + '), '
+						string += xx.name() + ' (' + xx.version_compare() + '), '
 				string += '\n'
 				string += 'Section: '
-				if x.section is None:
-					string += self.section
+				if x.section() is None:
+					string += self.section()
 				else:
-					string += x.section
+					string += x.section()
 				string += '\n'
-				string += 'Architecture: ' + x.architecture + '\n'
-				string += 'Description: ' + x.description + '\n '
-				description = self.long_description + '\n\n' + x.long_description
+				string += 'Architecture: ' + x.architecture() + '\n'
+				string += 'Description: ' + x.description() + '\n '
+				description = self.long_description() + '\n\n' + x.long_description()
 				was_new_line = False
 				for xx in description:
 					if xx == '\n':
@@ -716,6 +828,15 @@ class Packageneric:
 			
 	class DistributionArchive:
 		def __init__(self):
-			self.remote_path = None
-			self.source_packages = []
-			self.binary_packages = []
+			self._remote_path = None
+			self._source_packages = []
+			self._binary_packages = []
+			
+		def remote_path(self):
+			return self._remote_path
+			
+		def source_packages(self):
+			return self._source_packages
+			
+		def binary_packages(self):
+			return self._binary_packages
