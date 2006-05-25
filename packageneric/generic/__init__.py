@@ -78,7 +78,7 @@ class Version:
 		result = cmp(self.major(), other.major())
 		if result:
 			return result
-		result = cmp(self.minor(), other.minoer())
+		result = cmp(self.minor(), other.minor())
 		if result:
 			return result
 		return cmp(self.patch(), other.patch())
@@ -467,6 +467,15 @@ class Packageneric:
 		def scons(self):
 			env = self.packageneric.environment().Copy()
 	
+	def external_package(
+			self,
+			debian,
+			debian_version_compare,
+			pkg_config = None,
+			pkg_config_version_compare = None
+	):
+		return Packageneric.ExternalPackage(self, debian, debian_version_compare, pkg_config, pkg_config_version_compare)
+		
 	class Module:
 		class Types:
 			files = 'files'
@@ -594,7 +603,13 @@ class Packageneric:
 			_dump_environment(env)
 			return env.SharedLibrary(os.path.join(self.packageneric().build_directory(), self.name()), self.sources())
 
-	def module(self, name = None, version = None, description = '', public_requires = None):
+	def module(
+		self,
+		name = None,
+		version = None,
+		description = '',
+		public_requires = None
+	):
 		return Packageneric.Module(self, name, version, description, public_requires)
 		
 	class PkgConfigPackage:
