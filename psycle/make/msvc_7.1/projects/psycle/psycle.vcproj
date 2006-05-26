@@ -260,6 +260,12 @@
 				RelativePath="..\..\..\..\src\psycle\host\engine\constants.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\dither.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\dither.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\dsp.cpp">
 			</File>
 			<File
@@ -294,6 +300,12 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\InstPreview.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\marsennetwister.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\marsennetwister.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\player.cpp">
