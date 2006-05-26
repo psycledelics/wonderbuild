@@ -166,6 +166,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\dither.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\dither.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\dsp.cpp"
 				>
 			</File>
@@ -211,6 +219,14 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\InstPreview.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\mersennetwister.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\mersennetwister.hpp"
 				>
 			</File>
 			<File
