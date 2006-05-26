@@ -302,10 +302,10 @@
 				RelativePath="..\..\..\..\src\psycle\host\engine\InstPreview.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\engine\marsennetwister.cpp">
+				RelativePath="..\..\..\..\src\psycle\host\engine\mersennetwister.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\engine\marsennetwister.hpp">
+				RelativePath="..\..\..\..\src\psycle\host\engine\mersennetwister.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\player.cpp">
