@@ -54,7 +54,7 @@ def _dump_environment(environment, all = False):
 		def show(key):
 			try:
 				environment[key]
-				if len(env[key]):
+				if len(environment[key]):
 					print key, '->', environment[key], '->', environment.subst('$' + key)
 				else:
 					print key, '<- empty'
@@ -120,6 +120,20 @@ def packageneric(
 			return self._environment
 		
 		def configure(self):
+			if self._configure is None:
+				self.trace('creating configure')
+				self._configure = self.environment().Configure(
+					custom_tests =
+					{
+						'packageneric__pkg_config' : lambda context, packageneric, name, what: _pkg_config(context, packageneric, name, what),
+						'packageneric__try_run' : lambda context, packageneric, description, text, language: _try_run(context, packageneric, description, text, language),
+						'packageneric__free' : lambda context, packageneric, free: _free(context, packageneric, free)
+					},
+					conf_dir = os.path.join(self.environment()['packageneric__build_directory'], 'configure'),
+					log_file = os.path.join(self.environment()['packageneric__build_directory'], 'configure.log'),
+					config_h = os.path.join(self.environment()['packageneric__build_directory'], 'configure.hpp')
+				)
+				self._configure_finished = False
 			return self._configure
 		
 		def finish_configure(self):
@@ -127,6 +141,8 @@ def packageneric(
 				self._configure_finished = True
 				self.trace('configure finished')
 				self._environment = self.configure().Finish()
+				self._configure = None
+				_dump_environment(self.environment())
 
 		def options(self):
 			return self._options
@@ -151,10 +167,12 @@ def packageneric(
 			self._command_line_arguments = ARGUMENTS
 			
 			import SCons.Options
-			self._options = SCons.Options.Options('packageneric.options', self.command_line_arguments())
-			self.options().Add(SCons.Options.PathOption('packageneric__build_directory', 'directory where to build into', os.path.join('++packageneric', 'build', 'scons'), SCons.Options.PathOption.PathIsDirCreate))
+			self._options = SCons.Options.Options('packageneric.options', self.command_line_arguments()) # todo cache in packageneric__build_directory
+			self.options().Add(SCons.Options.PathOption('packageneric__build_directory', 'directory where to build into', os.path.join('_++packageneric', 'build', 'scons'), SCons.Options.PathOption.PathIsDirCreate))
 			self.options().Add(SCons.Options.PathOption('packageneric__install_stage_destination', 'directory to install under (stage installation)', '.', SCons.Options.PathOption.PathIsDirCreate))
 			self.options().Add(SCons.Options.PathOption('packageneric__install_prefix', 'directory to install under (final installation)', os.path.join('usr', 'local'), SCons.Options.PathOption.PathIsDirCreate))
+			#self.options().Add('CXX', 'the c++ compiler')
+			#self.options().Add('LD', 'the linker')
 			self.options().Add('packageneric__release', 'set to 1 to build for release', 0)
 			
 			self._environment = Environment(
@@ -164,7 +182,7 @@ def packageneric(
 			self.environment().EnsurePythonVersion(2, 3)
 			self.environment().EnsureSConsVersion(0, 96)
 			
-			self.options().Save('packageneric.options', self.environment())
+			self.options().Save('packageneric.options', self.environment()) # todo cache in packageneric__build_directory
 			
 			self.environment().Help(self.options().GenerateHelpText(self.environment()))
 			self._build_directory = os.path.join(self.environment()['packageneric__build_directory'], 'targets')
@@ -181,15 +199,17 @@ def packageneric(
 			if False:
 				self.environment().Export('env installation_prefix')
 			
-			self._configure = self.environment().Configure(
-				custom_tests =
-				{
-					'packageneric__pkg_config' : lambda context, packageneric, name, what: _pkg_config(context, packageneric, name, what),
-					'packageneric__try_run' : lambda context, packageneric, description, text, language: _try_run(context, packageneric, description, text, language),
-					'packageneric__free' : lambda context, packageneric, free: _free(context, packageneric, free)
+			self.environment().Append(
+				CPPDEFINES = {
+					'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_LIB': '\\"../lib\\"',
+					'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_SHARE': '\\"../share\\"',
+					'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_VAR': '\\"../var\\"',
+					'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_ETC': '\\"../../etc\\"',
+					'PACKAGENERIC__CONFIGURATION__COMPILER__HOST': '\\"test\\"'
 				}
 			)
-			self._configure_finished = False
+			
+			self._configure = None
 			
 			self._indentation = 0
 			self._indentation_pushed = True
@@ -376,6 +396,16 @@ def packageneric(
 					self._description= description
 					self._long_description = long_description
 					self._path = path
+					self.packageneric().environment().Append(
+						CPPDEFINES = {
+							'PACKAGENERIC': '\\"/dev/null\\"',
+							'PACKAGENERIC__PACKAGE__NAME': '\\"' + self.name() + '\\"',
+							'PACKAGENERIC__PACKAGE__VERSION': '\\"' + str(self.version()) + '\\"',
+							'PACKAGENERIC__PACKAGE__VERSION__MAJOR': str(self.version().major()),
+							'PACKAGENERIC__PACKAGE__VERSION__MINOR': str(self.version().minor()),
+							'PACKAGENERIC__PACKAGE__VERSION__PATCH': str(self.version().patch())
+						}
+					)
 				
 				def packageneric(self):
 					return self._packageneric
@@ -549,6 +579,21 @@ def packageneric(
 					self._found = None
 					self._environment = None
 					
+				def __str__(self):
+					string = ''
+					if not self.pkg_config() is None:
+						string += self.pkg_config()
+					else:
+						string += self.debian()
+					for x in self.headers():
+						string += ' ' + x.name()
+					for x in self.libraries():
+						string += ' ' + x.name()
+					return string
+				
+				def show(self):
+					self.packageneric().information('external package: ' + str(self))
+					
 				def found(self):
 					if self._found is None:
 						self._found = True
@@ -564,28 +609,13 @@ def packageneric(
 					
 				def environment(self):
 					if not self.found():
-						packageneric.error('cannot generate environment because dependencies were not found')
+						self.packageneric().error(str(self) + ': cannot generate environment because dependencies were not found')
 					if self._environment is None:
 						self._environment = self.packageneric().environment().Copy()
 						if not self.pkg_config() is None:
 							self._environment.ParseConfig('pkg-config --cflags --libs \'' + self.pkg_config() + '\'')
 					return self._environment
 					
-				def show(self):
-					self.packageneric().information('external package: ' + str(self))
-					
-				def __str__(self):
-					string = ''
-					if not self.pkg_config() is None:
-						string += self.pkg_config()
-					else:
-						string += self.debian()
-					for x in self.headers():
-						string += ' ' + x.name()
-					for x in self.libraries():
-						string += ' ' + x.name()
-					return string
-				
 			return ExternalPackage(
 				self,
 				debian,
@@ -694,26 +724,13 @@ def packageneric(
 							if not x.found():
 								public_requires_not_found.append(str(x))
 						if public_requires_not_found:
-							self.packageneric().abort('cannot generate environment because dependencies were not found: ' + str(public_requires_not_found))
-						self._environment.Append(
-							CPPPATH = self.include_path(),
-							CPPDEFINES = self.defines()
-						)
+							self.packageneric().abort(self.name() + ': cannot generate environment because dependencies were not found: ' + str(public_requires_not_found))
+						self._environment.AppendUnique(CPPPATH = self.include_path())
+						self._environment.Append(CPPDEFINES = self.defines())
 						self._environment.Append(
 							CPPDEFINES = {
-								'PACKAGENERIC': '\\"/dev/null\\"',
-								'PACKAGENERIC__PACKAGE__NAME': '\\"test\\"',
-								'PACKAGENERIC__PACKAGE__VERSION': '\\"0\\"',
-								'PACKAGENERIC__PACKAGE__VERSION__MAJOR': '0',
-								'PACKAGENERIC__PACKAGE__VERSION__MINOR': '0',
-								'PACKAGENERIC__PACKAGE__VERSION__PATCH': '0',
-								'PACKAGENERIC__MODULE__NAME': '\\"test\\"',
-								'PACKAGENERIC__MODULE__VERSION': '\\"0\\"',
-								'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_LIB': '\\"../lib\\"',
-								'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_SHARE': '\\"../share\\"',
-								'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_VAR': '\\"../var\\"',
-								'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_ETC': '\\"../../etc\\"',
-								'PACKAGENERIC__CONFIGURATION__COMPILER__HOST': '\\"test\\"'
+								'PACKAGENERIC__MODULE__NAME': '\\"' + self.name() + '\\"',
+								'PACKAGENERIC__MODULE__VERSION': '\\"' + str(self.version()) + '\\"'
 							}
 						)
 						pkg_config = ''
@@ -729,6 +746,7 @@ def packageneric(
 						self.environment()
 						self.packageneric().finish_configure()
 						self._targets = self.environment().SharedLibrary(os.path.join(self.packageneric().build_directory(), self.name()), self.sources())
+						self.environment().Alias(self.name(), self._targets)
 					return self._targets
 
 			return Module(
@@ -808,6 +826,7 @@ def packageneric(
 						self._section = section
 					self._architecture = architecture
 					self._provides = []
+					self._build_depends = []
 					self._depends = []
 					self._recommends = []
 					self._suggests = []
@@ -835,10 +854,16 @@ def packageneric(
 				
 				def	build_depends(self):
 					result = []
-					for x in self._depends:
+					for x in self._build_depends:
 						if not x.debian() in result:
 							result.append(x.debian())
 					return result
+				def add_build_depend(self, build_depend):
+					self._build_depends.append(build_depend)
+				def add_build_depends(self, build_depends):
+					for x in build_depends:
+						self.add_build_depend(x)
+					
 				def depends(self):
 					result = []
 					for x in self._depends:
