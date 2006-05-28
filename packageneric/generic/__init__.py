@@ -6,16 +6,12 @@
 
 import sys, os.path, fnmatch
 
-if False:
-	SetOption('implicit_cache', True)
-	SourceSignatures('MD5') ('timestamp')
-	TargetSignatures('build') ('content')
-
 #@staticmethod
 def _pkg_config(context, packageneric, name, what):
 	command = 'pkg-config --%s \'%s\'' % (what, name)
 	#packageneric.trace('checking for ' + command + ' ... ')
-	context.Message(packageneric.indentation() + 'checking for ' + command + ' ... ')
+	context.Display(packageneric.indentation())
+	context.Message('checking for ' + command + ' ... ')
 	result, output = context.TryAction(command)
 	context.Result(result)
 	return result, output
@@ -23,7 +19,8 @@ def _pkg_config(context, packageneric, name, what):
 #@staticmethod
 def _try_run(context, packageneric, description, text, language):
 	#packageneric.trace('checking for ' + description + ' ... ')
-	context.Message(packageneric.indentation() + 'trying to build and run program for checking ' + description + ' ... ')
+	context.Display(packageneric.indentation())
+	context.Message('trying to build and run program for checking ' + description + ' ... ')
 	result, output = context.TryRun(text, language)
 	context.Result(result)
 	return result, output
@@ -31,10 +28,12 @@ def _try_run(context, packageneric, description, text, language):
 #@staticmethod
 def _free(context, packageneric, free):
 	#packageneric.trace('checking for ' + str(free) + ' ... ')
-	context.Message(packageneric.indentation() + 'checking for ' + str(free) + ' ... ')
+	context.Display(packageneric.indentation())
+	context.Display('checking for ' + str(free) + ' ... ')
 	packageneric.push_indentation()
 	result = free()
-	context.Message(packageneric.indentation() + 'checking for ' + str(free) + ' ... ')
+	context.Display(packageneric.indentation())
+	context.Display('checking for ' + str(free) + ' ... ')
 	packageneric.pop_indentation()
 	context.Result(result)
 	return result
@@ -67,10 +66,8 @@ def _dump_environment(environment, all = False):
 		show('LIBS')
 		show('LINKFLAGS')
 
-def packageneric(
-	ARGUMENTS,
-	Environment
-):
+def packageneric():
+
 	class Packageneric:
 		def version(
 			self,
@@ -156,15 +153,12 @@ def packageneric(
 		def build_directory(self):
 			return self._build_directory
 		
-		def __init__(
-			self,
-			ARGUMENTS,
-			Environment
-		):
+		def __init__(self):
 			self._version = self.version(0, 0)
 			self.information('packageneric version: ' + str(self.self_version()))
 			
-			self._command_line_arguments = ARGUMENTS
+			from SCons.Script import ARGUMENTS as command_line_arguments
+			self._command_line_arguments = command_line_arguments
 			
 			import SCons.Options
 			self._options = SCons.Options.Options('packageneric.options', self.command_line_arguments()) # todo cache in packageneric__build_directory
@@ -175,13 +169,18 @@ def packageneric(
 			#self.options().Add('LD', 'the linker')
 			self.options().Add('packageneric__release', 'set to 1 to build for release', 0)
 			
-			self._environment = Environment(
-				options = self.options(),
-				CPPDEFINES = {'PACKAGENERIC__RELEASE' : '$packageneric__release'}
-			)
+			if True: # environment is None:
+				from SCons.Script.SConscript import SConsEnvironment as environment
+				self._environment = environment(
+					options = self.options(),
+				)
+			
 			self.environment().EnsurePythonVersion(2, 3)
 			self.environment().EnsureSConsVersion(0, 96)
-			
+			self.environment().SetOption('implicit_cache', True)
+			#self.environment().SourceSignatures('timestamp') # ('MD5')
+			self.environment().TargetSignatures('build') # ('content')
+
 			self.options().Save('packageneric.options', self.environment()) # todo cache in packageneric__build_directory
 			
 			self.environment().Help(self.options().GenerateHelpText(self.environment()))
@@ -196,11 +195,10 @@ def packageneric(
 			self._installation_include = '$prefix/include'
 			self._installation_data    = '$prefix/share'
 			self._installation_var     = '$prefix/var'
-			if False:
-				self.environment().Export('env installation_prefix')
 			
 			self.environment().Append(
 				CPPDEFINES = {
+					'PACKAGENERIC__RELEASE' : '$packageneric__release',
 					'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_LIB': '\\"../lib\\"',
 					'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_SHARE': '\\"../share\\"',
 					'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_VAR': '\\"../var\\"',
@@ -209,6 +207,9 @@ def packageneric(
 				}
 			)
 			
+			if False:
+				self.environment().Export('env installation_prefix')
+				
 			self._configure = None
 			
 			self._indentation = 0
@@ -474,26 +475,24 @@ def packageneric(
 				self,
 				debian,
 				pkg_config = None,
-				headers = None,
-				libraries = None,
+				depends = None,
+				builds = None,
 				frees = None
 		):
-			class NameAndLanguage:
-				def __init__(self, name, language):
-					self._name = name
+			class Build:
+				def __init__(self, library = None, header = None, call = ';', language = 'C++'):
+					self._library = library
+					self._header = header
+					self._call = call
 					self._language = language
-				def name(self):
-					return self._name
+				def library(self):
+					return self._library
+				def header(self):
+					return self._header
+				def call(self):
+					return self._call
 				def language(self):
 					return self._language
-			
-			class Header(NameAndLanguage):
-				def __init__(self, name, language):
-					NameAndLanguage.__init__(self, name, language)
-					
-			class Library(NameAndLanguage):
-				def __init__(self, name, language):
-					NameAndLanguage.__init__(self, name, language)
 					
 			class ExternalPackage:
 				
@@ -509,33 +508,21 @@ def packageneric(
 					return_code, output = self.packageneric().configure().packageneric__pkg_config(self.packageneric(), self.pkg_config(), 'exists')
 					return return_code
 
-				def headers(self):
-					return self._headers
-				def add_header(self, name, language = 'C++'):
-					self._headers.append(Header(name, language))
-				def add_headers(self, name, language = 'C++'):
-					for x in names:
-						self.add_header(x, language)
-				def _check_header(self, header, language = 'C++'):
-					return self.packageneric().configure().CheckHeader(header = header, language = language)
-					
-				def libraries(self):
-					return self._libraries
-				def add_library(self, name, language = 'C++'):
-					self._libraries.append(Library(name, language))
-				def add_libraries(self, names, language = 'C++'):
-					for x in names:
-						self.add_library(x, language)
-				def _check_library(self, library, language = 'C++'):
-					return self.packageneric().configure().CheckLib(library = library, language = language, autoadd = True)
+				def depends(self):
+					return self._depends
+				def add_depend(self, depend):
+					self._depends.append(depend)
+				def add_depends(self, depends):
+					for x in depends:
+						self.add_depend(x)
 
-				def _check_headers_and_libraries(self, headers, libraries, language = 'C++'):
-					return self.packageneric().configure().CheckLibWithHeader(libs = libraries, header = headers, language = language)
+				def builds(self):
+					return self._builds
+				def add_build(self, library, header, call = ';', language = 'C++'):
+					self._builds.append(Build(library, header, call, language))
+				def _check_build(self, libraries, headers, calls = ';', language = 'C++'):
+					return self.packageneric().configure().CheckLibWithHeader(libs = libraries, header = headers, call = calls, language = language, autoadd = True)
 
-				def try_run(self, description, text, language = '.cpp'):
-						return_code, output = self.packageneric().configure().packageneric__try_run(self.packageneric(), description, text, language)
-						return return_code, output
-						
 				def frees(self):
 					return self._frees
 				def add_free(self, free):
@@ -546,32 +533,33 @@ def packageneric(
 				def _check_free(self, free):
 					return self.packageneric().configure().packageneric__free(self.packageneric(), free)
 				
+				def try_run(self, description, text, language = '.cpp'):
+						return_code, output = self.packageneric().configure().packageneric__try_run(self.packageneric(), description, text, language)
+						return return_code, output
+						
 				def __init__(
 					self,
 					packageneric,
 					debian,
 					pkg_config,
-					headers,
-					libraries,
+					depends,
+					builds,
 					frees
 				):
 					self._packageneric = packageneric
 					self._debian = debian
 					self._pkg_config = pkg_config
-					self._headers = []
-					if not headers is None:
-						for x in headers:
-							if type(x) is type([]):
-								self.add_header(x[0], x[1])
+					if not depends is None:
+						self._depends = depends
+					else:
+						self._depends = []
+					self._builds = []
+					if not builds is None:
+						for x in builds:
+							if len(x) == 3:
+								self.add_build(x[0], x[1], x[2])
 							else:
-								self.add_header(x)
-					self._libraries = []
-					if not libraries is None:
-						for x in libraries:
-							if type(x) is type([]):
-								self.add_library(x[0], x[1])
-							else:
-								self.add_library(x)
+								self.add_build(x[0], x[1], x[2], x[3])
 					if not frees is None:
 						self._frees = frees
 					else:
@@ -597,12 +585,12 @@ def packageneric(
 				def found(self):
 					if self._found is None:
 						self._found = True
+						for x in self.depends():
+							self._found &= x.found()
 						if not self.pkg_config() is None:
 							self._found &= self._check_pkg_config()
-						for x in self.headers():
-							self._found &= self._check_header(x.name(), x.language())
-						for x in self.libraries():
-							self._found &= self._check_library(x.name(), x.language())
+						for x in self.builds():
+							self._found &= self._check_build(x.library(), x.header(), x.call(), x.language())
 						for x in self.frees():
 							self._found &= self._check_free(x)
 					return self._found
@@ -618,11 +606,11 @@ def packageneric(
 					
 			return ExternalPackage(
 				self,
-				debian,
-				pkg_config,
-				headers,
-				libraries,
-				frees
+				debian = debian,
+				pkg_config = pkg_config,
+				depends = depends,
+				builds = builds,
+				frees = frees
 			)
 			
 		def module(
@@ -751,10 +739,10 @@ def packageneric(
 
 			return Module(
 				self, 
-				name, 
-				version, 
-				description, 
-				public_requires
+				name = name, 
+				version = version, 
+				description = description, 
+				public_requires = public_requires
 			)
 		
 		def pkg_config_package(
@@ -793,10 +781,10 @@ def packageneric(
 					return self._modules
 			
 			return PkgConfigPackage(
-				name,
-				version,
-				description,
-				modules
+				name = name,
+				version = version,
+				description = description,
+				modules = modules
 			)
 
 		def debian_package(
@@ -1086,7 +1074,4 @@ def packageneric(
 				binary_packages
 			)
 			
-	return Packageneric(
-		ARGUMENTS,
-		Environment
-	)
+	return Packageneric()
