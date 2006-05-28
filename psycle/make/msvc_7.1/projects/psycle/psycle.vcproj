@@ -956,6 +956,12 @@
 				Name="machine"
 				Filter="">
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\engine\internal_machines.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\engine\internal_machines.hpp">
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\engine\machine.cpp">
 				</File>
 				<File
@@ -965,10 +971,10 @@
 					RelativePath="..\..\..\..\src\psycle\host\engine\plugin.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\plugin.hpp">
+					RelativePath="..\..\..\..\src\psycle\host\engine\plugin.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\engine\plugin.hpp">
+					RelativePath="..\..\..\..\src\psycle\plugin.hpp">
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\plugin_gui.hpp">
@@ -981,6 +987,18 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\engine\VSTHost.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\engine\vsthost24.cpp">
+					<FileConfiguration
+						Name="release.g7|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\engine\vsthost24.hpp">
 				</File>
 				<Filter
 					Name="sampler"
