@@ -573,10 +573,8 @@ def packageneric():
 						string += self.pkg_config()
 					else:
 						string += self.debian()
-					for x in self.headers():
-						string += ' ' + x.name()
-					for x in self.libraries():
-						string += ' ' + x.name()
+					for x in self.builds():
+						string += ' ' + x.library() + ' ' + x.header()
 					return string
 				
 				def show(self):
