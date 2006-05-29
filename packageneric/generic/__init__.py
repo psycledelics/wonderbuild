@@ -616,7 +616,8 @@ def packageneric():
 			name = None,
 			version = None,
 			description = '',
-			public_requires = None
+			depends = None,
+			build_depends = None
 		):
 			class Module:
 				class Types:
@@ -632,16 +633,21 @@ def packageneric():
 					name, 
 					version, 
 					description, 
-					public_requires
+					depends,
+					build_depends
 				):
 					self._packageneric = packageneric
 					self._name = name
 					self._version = version
 					self._description = description
-					if public_requires is None:
-						self._public_requires = []
+					if depends is None:
+						self._depends = []
 					else:
-						self._public_requires = public_requires
+						self._depends = depends
+					if build_depends is None:
+						self._build_depends = []
+					else:
+						self._build_depends = build_depends
 					self._sources = []
 					self._headers = []
 					self._include_path = []
@@ -685,17 +691,32 @@ def packageneric():
 				def add_define(self, name, value):
 					self._defines.append({name: value})
 					
-				def public_requires(self):
-					return self._public_requires
-				def add_public_requires(self, requires):
-					self.public_requires().append(requires)
+				def depends(self):
+					return self._depends
+				def add_depend(self, depend):
+					self.depends().append(depend)
+				def add_depends(self, depends):
+					for package in depends:
+						self.add_depend(package)
+					
+				def build_depends(self):
+					return self._build_depends
+				def add_build_depend(self, build_depend):
+					self.build_depends().append(build_depend)
+				def add_build_depends(self, build_depends):
+					for package in build_depends:
+						self.add_build_depend(package)
 					
 				def show(self, list_files = False):
 					self.packageneric().information('module: ' + self.name() + ' ' + str(self.version()))
-					public_requires = []
-					for x in self.public_requires():
-						public_requires.append(str(x))
-					self.packageneric().information('module: requires: ' + str(public_requires))
+					depends = []
+					for package in self.depends():
+						depends.append(str(package))
+					self.packageneric().information('module: depends: ' + str(depends))
+					build_depends = []
+					for package in self.build_depends():
+						build_depends.append(str(package))
+					self.packageneric().information('module: build depends: ' + str(build_depends))
 					if list_files:
 						self.packageneric().trace('module: sources:')
 						self.packageneric().trace(str(self.sources()))
@@ -705,12 +726,12 @@ def packageneric():
 				def environment(self):
 					if self._environment is None:
 						self._environment = self.packageneric().environment().Copy()
-						public_requires_not_found = []
-						for x in self.public_requires():
-							if not x.found():
-								public_requires_not_found.append(str(x))
-						if public_requires_not_found:
-							self.packageneric().abort(self.name() + ': cannot generate environment because dependencies were not found: ' + str(public_requires_not_found))
+						depends_not_found = []
+						for package in self.build_depends() + self.depends():
+							if not package.found():
+								depends_not_found.append(str(package))
+						if depends_not_found:
+							self.packageneric().abort(self.name() + ': cannot generate environment because dependencies were not found: ' + str(depends_not_found))
 						self._environment.AppendUnique(CPPPATH = self.include_path())
 						self._environment.Append(CPPDEFINES = self.defines())
 						self._environment.Append(
@@ -720,9 +741,9 @@ def packageneric():
 							}
 						)
 						pkg_config = ''
-						for x in self.public_requires():
-							if not x.pkg_config() is None:
-								pkg_config += ' ' + x.pkg_config()
+						for package in self.build_depends() + self.depends():
+							if not package.pkg_config() is None:
+								pkg_config += ' ' + package.pkg_config()
 						if not pkg_config == '':
 							self._environment.ParseConfig('pkg-config --cflags --libs \'' + pkg_config + '\'')
 					return self._environment
@@ -740,7 +761,8 @@ def packageneric():
 				name = name, 
 				version = version, 
 				description = description, 
-				public_requires = public_requires
+				depends = depends,
+				build_depends = build_depends
 			)
 		
 		def pkg_config_package(
@@ -777,6 +799,14 @@ def packageneric():
 					
 				def modules(self):
 					return self._modules
+					
+				def build_depends(self):
+					result = []
+					for module in self.modules():
+						for package in module.build_depends() + module.depends():
+							if not package.debian() in result:
+								result.append(package.debian())
+					return result
 			
 			return PkgConfigPackage(
 				name = name,
@@ -840,27 +870,27 @@ def packageneric():
 				
 				def	build_depends(self):
 					result = []
-					for x in self._build_depends:
-						if not x.debian() in result:
-							result.append(x.debian())
+					for package in self._build_depends:
+						if not package in result:
+							result.append(package)
 					return result
 				def add_build_depend(self, build_depend):
 					self._build_depends.append(build_depend)
 				def add_build_depends(self, build_depends):
-					for x in build_depends:
-						self.add_build_depend(x)
+					for package in build_depends:
+						self.add_build_depend(package)
 					
 				def depends(self):
 					result = []
-					for x in self._depends:
-						if not x.debian() in result:
-							result.append(x.debian())
+					for package in self._depends:
+						if not package.debian() in result:
+							result.append(package.debian())
 					return result
 				def add_depend(self, depend):
 					self._depends.append(depend)
 				def add_depends(self, depends):
-					for x in depends:
-						self.add_depend(x)
+					for package in depends:
+						self.add_depend(package)
 				
 				def recommends(self):
 					return self._recommends
@@ -971,8 +1001,8 @@ def packageneric():
 					string += 'Section: ' + self.section() + '\n'
 					string += 'Priority: ' + self.priority() + '\n'
 					string += 'Build-Depends: scons'
-					for x in self.build_depends():
-						string += ', ' + x
+					for package in self.build_depends():
+						string += ', ' + package
 					string += '\n'
 					if not self.maintainer() is None:
 						string += 'Maintainer: ' + self.maintainer().name() + ' <' + self.maintainer().email() + '>\n'
@@ -982,47 +1012,47 @@ def packageneric():
 							string += x.name() + ' <' + x.email() + '>, '
 						string += '\n'
 					string += 'Standards-Version: 3.6.2\n'
-					for x in self.binary_packages():
+					for binary_package in self.binary_packages():
 						string += '\n'
-						string += 'Package: ' + x.name() + '\n'
-						if len(x.provides()):
+						string += 'Package: ' + binary_package.name() + '\n'
+						if len(binary_package.provides()):
 							string += 'Provides: '
-							for xx in x.provides():
-								string += xx + ', '
+							for provide in binary_package.provides():
+								string += provide + ', '
 							string += '\n'
-						if len(x.recommends()):
+						if len(binary_package.recommends()):
 							string += 'Recommends: '
-							for xx in x.recommends():
-								string += xx.name() + ' (' + xx.version_compare(), '), '
+							for recommend in x.recommends():
+								string += recommend + ', '
 							string += '\n'
-						if len(x.suggests()):
+						if len(binary_package.suggests()):
 							string += 'Suggests: '
-							for xx in x.suggests():
-								string += xx.name() + ' (' + xx.version_compare() + '), '
+							for suggest in binary_package.suggests():
+								string += suggest + ', '
 							string += '\n'
 						string += 'Depends: ${shlibs:Depends}, ${misc:Depends}'
-						for xx in x.depends():
-							string += ', ' + xx
+						for package in binary_package.depends():
+							string += ', ' + package
 						string += '\n'
 						string += 'Section: '
-						if x.section() is None:
+						if binary_package.section() is None:
 							string += self.section()
 						else:
-							string += x.section()
+							string += binary_package.section()
 						string += '\n'
-						string += 'Architecture: ' + x.architecture() + '\n'
-						string += 'Description: ' + x.description() + '\n '
-						description = self.long_description() + '\n\n' + x.long_description()
+						string += 'Architecture: ' + binary_package.architecture() + '\n'
+						string += 'Description: ' + binary_package.description() + '\n '
+						description = self.long_description() + '\n\n' + binary_package.long_description()
 						was_new_line = False
-						for xx in description:
-							if xx == '\n':
+						for char in description:
+							if char == '\n':
 								if was_new_line:
 									string += '.'
 								was_new_line = True
 								string += '\n '
 							else:
 								was_new_line = False
-								string += xx
+								string += char
 						string += '\n'
 					return string
 					
