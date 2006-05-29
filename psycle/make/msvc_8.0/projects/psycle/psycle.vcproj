@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="psycle"
 	ProjectGUID="{C6292BF4-9E87-4176-9101-A3D29D074B35}"
 	RootNamespace="psycle"
@@ -1149,6 +1149,14 @@
 				RelativePath="..\..\..\..\src\Seib-vsthost\CVSTHost.Seib.cpp"
 				>
 				<FileConfiguration
+					Name="debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="release|Win32"
 					ExcludedFromBuild="true"
 					>
@@ -1160,6 +1168,22 @@
 			<File
 				RelativePath="..\..\..\..\src\Seib-vsthost\CVSTHost.Seib.hpp"
 				>
+				<FileConfiguration
+					Name="debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\ImplVstHost.cpp"
