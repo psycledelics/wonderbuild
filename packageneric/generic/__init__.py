@@ -11,7 +11,7 @@ def _pkg_config(context, packageneric, name, what):
 	command = 'pkg-config --%s \'%s\'' % (what, name)
 	#packageneric.trace('checking for ' + command + ' ... ')
 	context.Display(packageneric.indentation())
-	context.Message('checking for ' + command + ' ... ')
+	context.Message(packageneric.message('checking for ' + command + ' ... '))
 	result, output = context.TryAction(command)
 	context.Result(result)
 	return result, output
@@ -19,8 +19,7 @@ def _pkg_config(context, packageneric, name, what):
 #@staticmethod
 def _try_run(context, packageneric, description, text, language):
 	#packageneric.trace('checking for ' + description + ' ... ')
-	context.Display(packageneric.indentation())
-	context.Message('trying to build and run program for checking ' + description + ' ... ')
+	context.Message(packageneric.message(packageneric.indentation() + 'trying to build and run program for checking ' + description + ' ... '))
 	result, output = context.TryRun(text, language)
 	context.Result(result)
 	return result, output
@@ -29,10 +28,10 @@ def _try_run(context, packageneric, description, text, language):
 def _free(context, packageneric, free):
 	#packageneric.trace('checking for ' + str(free) + ' ... ')
 	context.Display(packageneric.indentation())
-	context.Display('checking for ' + str(free) + ' ... ')
+	context.Display(packageneric.message('checking for ' + str(free) + ' ... '))
 	packageneric.push_indentation()
 	result = free()
-	context.Display(packageneric.indentation())
+	context.Display(packageneric.message(packageneric.indentation()))
 	context.Display('checking for ' + str(free) + ' ... ')
 	packageneric.pop_indentation()
 	context.Result(result)
@@ -139,7 +138,7 @@ def packageneric():
 				self.trace('configure finished')
 				self._environment = self.configure().Finish()
 				self._configure = None
-				_dump_environment(self.environment())
+				#_dump_environment(self.environment())
 
 		def options(self):
 			return self._options
@@ -162,7 +161,7 @@ def packageneric():
 			
 			import SCons.Options
 			self._options = SCons.Options.Options('packageneric.options', self.command_line_arguments()) # todo cache in packageneric__build_directory
-			self.options().Add(SCons.Options.PathOption('packageneric__build_directory', 'directory where to build into', os.path.join('_++packageneric', 'build', 'scons'), SCons.Options.PathOption.PathIsDirCreate))
+			self.options().Add(SCons.Options.PathOption('packageneric__build_directory', 'directory where to build into', os.path.join('packageneric', '++build'), SCons.Options.PathOption.PathIsDirCreate))
 			self.options().Add(SCons.Options.PathOption('packageneric__install_stage_destination', 'directory to install under (stage installation)', '.', SCons.Options.PathOption.PathIsDirCreate))
 			self.options().Add(SCons.Options.PathOption('packageneric__install_prefix', 'directory to install under (final installation)', os.path.join('usr', 'local'), SCons.Options.PathOption.PathIsDirCreate))
 			#self.options().Add('CXX', 'the c++ compiler')
@@ -172,9 +171,9 @@ def packageneric():
 			if True: # environment is None:
 				from SCons.Script.SConscript import SConsEnvironment as environment
 				self._environment = environment(
-					options = self.options(),
+					options = self.options()
 				)
-			
+
 			self.environment().EnsurePythonVersion(2, 3)
 			self.environment().EnsureSConsVersion(0, 96)
 			self.environment().SetOption('implicit_cache', True)
@@ -442,7 +441,8 @@ def packageneric():
 			return result
 		
 		def message(self, message, font = None):
-			prefix = __name__ + '(' + self.__class__.__name__ + '): '
+			#prefix = __name__ + '(' + self.__class__.__name__ + '): '
+			prefix = 'packageneric: '
 			string = prefix
 			for x in message:
 				string += x
@@ -450,22 +450,22 @@ def packageneric():
 						string += prefix
 			if font:
 				string = self.tty_font(font, string)
-			print string
+			return string
 
 		def trace(self, message):
-			self.message('trace: ' + message, '2;33')
+			print self.message('trace: ' + message, '2;33')
 			
 		def information(self, message):
-			self.message('information: ' + message, '34')
+			print self.message('information: ' + message, '34')
 		
 		def success(self, message):
-			self.message('information: ' + message, '32')
+			print self.message('information: ' + message, '32')
 			
 		def warning(self, message):
-			self.message('warning: ' + message, '35')
+			print self.message('warning: ' + message, '35')
 		
 		def error(self, message):
-			self.message('error: ' + message, '1;31')
+			print self.message('error: ' + message, '1;31')
 
 		def abort(self, message):
 			self.error(message + '\nbailing out.')
@@ -732,6 +732,10 @@ def packageneric():
 								depends_not_found.append(str(package))
 						if depends_not_found:
 							self.packageneric().abort(self.name() + ': cannot generate environment because dependencies were not found: ' + str(depends_not_found))
+						self._environment.Append(
+							SHCXXCOMSTR = packageneric().message('compiling $TARGET'),
+							SHLINKCOMSTR = packageneric().message('linking $TARGET')
+						)
 						self._environment.AppendUnique(CPPPATH = self.include_path())
 						self._environment.Append(CPPDEFINES = self.defines())
 						self._environment.Append(
