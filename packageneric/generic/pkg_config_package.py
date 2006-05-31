@@ -32,9 +32,9 @@ class pkg_config_package:
 		return self._modules
 		
 	def build_depends(self):
-		result = []
+		packages = []
 		for module in self.modules():
 			for package in module.build_depends() + module.depends():
-				if not package.debian() in result:
-					result.append(package.debian())
-		return result
+				if not package in packages:
+					packages.append(package)
+		return packages

@@ -73,17 +73,31 @@ class module:
 		self._defines.append({name: value})
 		
 	def depends(self):
-		return self._depends
+		packages = []
+		for package in self._depends:
+			if not package in packages:
+				packages.append(package)
+			for package in package.depends():
+				if not package in packages:
+					packages.append(package)
+		return packages
 	def add_depend(self, depend):
-		self.depends().append(depend)
+		self._depends.append(depend)
 	def add_depends(self, depends):
 		for package in depends:
 			self.add_depend(package)
 		
 	def build_depends(self):
-		return self._build_depends
+		packages = []
+		for package in self._build_depends:
+			if not package in packages:
+				packages.append(package)
+			for package in package.depends():
+				if not package in packages:
+					packages.append(package)
+		return packages
 	def add_build_depend(self, build_depend):
-		self.build_depends().append(build_depend)
+		self._build_depends.append(build_depend)
 	def add_build_depends(self, build_depends):
 		for package in build_depends:
 			self.add_build_depend(package)

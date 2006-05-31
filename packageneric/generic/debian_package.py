@@ -48,11 +48,11 @@ class debian_package:
 		return self._provides
 	
 	def	build_depends(self):
-		result = []
+		packages = []
 		for package in self._build_depends:
-			if not package in result:
-				result.append(package)
-		return result
+			if not package in packages:
+				packages.append(package)
+		return packages
 	def add_build_depend(self, build_depend):
 		self._build_depends.append(build_depend)
 	def add_build_depends(self, build_depends):
@@ -60,11 +60,11 @@ class debian_package:
 			self.add_build_depend(package)
 		
 	def depends(self):
-		result = []
+		packages = []
 		for package in self._depends:
-			if not package.debian() in result:
-				result.append(package.debian())
-		return result
+			if not package in packages:
+				packages.append(package)
+		return packages
 	def add_depend(self, depend):
 		self._depends.append(depend)
 	def add_depends(self, depends):

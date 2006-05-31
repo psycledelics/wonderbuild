@@ -67,10 +67,10 @@ class debian:
 		
 	def	build_depends(self):
 		result = self._build_depends
-		for x in self.binary_packages():
-			for xx in x.build_depends():
-				if not xx in result:
-					result.append(xx)
+		for binary_package in self.binary_packages():
+			for package in binary_package.build_depends():
+				if not package in result:
+					result.append(package)
 		return result
 	
 	def control(self):
@@ -80,7 +80,7 @@ class debian:
 		string += 'Priority: ' + self.priority() + '\n'
 		string += 'Build-Depends: scons'
 		for package in self.build_depends():
-			string += ', ' + package
+			string += ', ' + package.debian()
 		string += '\n'
 		if not self.maintainer() is None:
 			string += 'Maintainer: ' + self.maintainer().name() + ' <' + self.maintainer().email() + '>\n'
@@ -110,7 +110,7 @@ class debian:
 				string += '\n'
 			string += 'Depends: ${shlibs:Depends}, ${misc:Depends}'
 			for package in binary_package.depends():
-				string += ', ' + package
+				string += ', ' + package.debian()
 			string += '\n'
 			string += 'Section: '
 			if binary_package.section() is None:

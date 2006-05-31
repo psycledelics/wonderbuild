@@ -13,7 +13,14 @@ class external_package:
 		return return_code
 
 	def depends(self):
-		return self._depends
+		packages = []
+		for package in self._depends:
+			if not package in packages:
+				packages.append(package)
+			for package in package.depends():
+				if not package in packages:
+					packages.append(package)
+		return packages
 	def add_depend(self, depend):
 		self._depends.append(depend)
 	def add_depends(self, depends):
