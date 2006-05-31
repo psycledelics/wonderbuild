@@ -19,7 +19,8 @@ def _pkg_config(context, packageneric, name, what):
 #@staticmethod
 def _try_run(context, packageneric, description, text, language):
 	#packageneric.trace('checking for ' + description + ' ... ')
-	context.Message(packageneric.message(packageneric.indentation() + 'trying to build and run program for checking ' + description + ' ... '))
+	context.Display(packageneric.indentation())
+	context.Message(packageneric.message('trying to build and run program for checking ' + description + ' ... '))
 	result, output = context.TryRun(text, language)
 	context.Result(result)
 	return result, output
@@ -31,8 +32,8 @@ def _free(context, packageneric, free):
 	context.Display(packageneric.message('checking for ' + str(free) + ' ... '))
 	packageneric.push_indentation()
 	result = free()
-	context.Display(packageneric.message(packageneric.indentation()))
-	context.Display('checking for ' + str(free) + ' ... ')
+	context.Display(packageneric.indentation())
+	context.Display(packageneric.message('checking for ' + str(free) + ' ... '))
 	packageneric.pop_indentation()
 	context.Result(result)
 	return result
@@ -219,7 +220,7 @@ def packageneric():
 			if self._indentation_pushed:
 				self._indentation_pushed = False
 				result += '\n'
-			return result + '\t' * self._indentation
+			return result + ' -> ' * self._indentation
 			
 		def push_indentation(self):
 			self._indentation += 1
