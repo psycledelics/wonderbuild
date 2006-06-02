@@ -400,6 +400,9 @@
 					RelativePath="..\..\..\..\src\psycle\host\gui\resources\keys_bac.bmp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\leds.bmp">
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\gui\resources\less.bmp">
 				</File>
 				<File
@@ -696,6 +699,12 @@
 				<Filter
 					Name="machine"
 					Filter="">
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\gui\FrameAutomator.cpp">
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\gui\FrameAutomator.hpp">
+					</File>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\gui\FrameLFOMachine.cpp">
 					</File>
