@@ -1,6 +1,6 @@
 AC_PREREQ(2.59)
 
-AC_INIT(Psycle for X Window, 1.9.8, natti__@users.sourceforge.net, xpsycle)
+AC_INIT(Psycle Modular Music Creation Studio (for X Window), 1.9.8, natti__@users.sourceforge.net, xpsycle)
 
 AC_CONFIG_AUX_DIR(autotools.auxiliary-programs)
 
@@ -11,18 +11,49 @@ AC_PROG_CXXCPP
 AC_PROG_CXX
 # dnl # PKG_PROG_PKG_CONFIG(0.18) # dnl # this macro doesn't exist on pre-0.15 versions
 
-XPSYCLE_REQUIRES='alsa >= 1.0.8'
-echo checking for pkg-config XPSYCLE_PKG_CONFIG $XPSYCLE_REQUIRES ...
-PKG_CHECK_MODULES(XPSYCLE_PKG_CONFIG, $XPSYCLE_REQUIRES)
+ALSA='alsa >= 1.0.8'
+PKG_CHECK_MODULES(ALSA, $ALSA,
+	[
+		AC_MSG_RESULT(yes)
+		ALSA_SUPPORT=yes
+		XPSYCLE_PKG_CONFIG="$XPSYCLE_PKG_CONFIG $ALSA"
+	],
+	[
+		AC_MSG_RESULT(no)
+		ALSA_SUPPORT="no (reason: $ALSA_PKG_ERRORS)"
+		AC_MSG_WARN(alsa support will not be built)
+		AC_DEFINE(XPSYCLE__NO_ALSA, [], whether you don't have alsa)
+	]
+)
+
+GSTREAMER='gstreamer-0.10 >= 0.10'
+PKG_CHECK_MODULES(GSTREAMER, $GSTREAMER,
+	[
+		AC_MSG_RESULT(yes)
+		GSTREAMER_SUPPORT=yes
+		XPSYCLE_PKG_CONFIG="$XPSYCLE_PKG_CONFIG $GSTREAMER"
+	],
+	[
+		AC_MSG_RESULT(no)
+		GSTREAMER_SUPPORT="no (reason: $GSTREAMER_PKG_ERRORS)"
+		AC_MSG_WARN(gstreamer support will not be built)
+		AC_DEFINE(XPSYCLE__NO_GSTREAMER, [], whether you don't have gstreamer)
+	]
+)
+
+if test -n "$XPSYCLE_PKG_CONFIG"
+then
+	AC_MSG_NOTICE(checking for pkg-config $XPSYCLE_PKG_CONFIG ...)
+	PKG_CHECK_MODULES(XPSYCLE_PKG_CONFIG, $XPSYCLE_PKG_CONFIG)
+fi
 
 AC_CONFIG_SUBDIRS(nested-source-packages/ngrs)
 NGRS_CFLAGS="\$\$(PKG_CONFIG_PATH=nested-source-packages/ngrs:\$\$PKG_CONFIG_PATH \$(PKG_CONFIG) --cflags ngrs)"
 NGRS_LIBS="\$\$(PKG_CONFIG_PATH=nested-source-packages/ngrs:\$\$PKG_CONFIG_PATH \$(PKG_CONFIG) --libs ngrs)"
 
-AC_SUBST(XPSYCLE_REQUIRES)
 AC_SUBST(XPSYCLE_CFLAGS, "$NGRS_CFLAGS $XPSYCLE_PKG_CONFIG_CFLAGS")
 AC_SUBST(XPSYCLE_LIBS,   "$NGRS_LIBS   $XPSYCLE_PKG_CONFIG_LIBS")
-AC_SUBST(XPSYCLE_LIBS_PRIVATE)
+
 AC_SUBST(abs_top_srcdir)
 AC_SUBST(abs_top_builddir)
 
@@ -50,3 +81,16 @@ AC_DEFINE_UNQUOTED(XPSYCLE__INSTALL_PATHS__PRESETS, "$XPSYCLE__INSTALL_PATHS__PR
 AC_SUBST(XPSYCLE__INSTALL_PATHS__PRESETS)
 
 AC_OUTPUT
+
+echo
+echo ==============================================================================
+echo
+echo AC_PACKAGE_TARNAME AC_PACKAGE_VERSION - 'AC_PACKAGE_NAME'
+echo
+echo AC_PACKAGE_TARNAME has been configured to be built with the following support:
+echo
+echo '	'- alsa: $ALSA_SUPPORT
+echo '	'- gstreamer: $GSTREAMER_SUPPORT
+echo
+echo ==============================================================================
+echo

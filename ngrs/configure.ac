@@ -16,20 +16,41 @@ AC_PATH_XTRA
 X_LIBS="$X_PRE_LIBS $X_LIBS -lX11 $X_EXTRA_LIBS -lXpm"
 
 AC_LANG_PUSH(C++)
-AC_CHECK_LIB(m, main, M_LIBS=-lm, AC_MSG_ERROR(m lib required))
-AC_CHECK_LIB(dl, main, DL_LIBS=-ldl, AC_MSG_ERROR(dl lib required))
+AC_CHECK_LIB(m, main, M_LIBS=-lm, AC_MSG_WARN(no m lib found))
+AC_CHECK_LIB(dl, main, DL_LIBS=-ldl, AC_MSG_WARN(no dl lib found))
 AC_CHECK_LIB(pthread, main, PTHREAD_CFLAGS=-D_REENTRANT && PTHREAD_LIBS=-lpthread, AC_MSG_ERROR(pthread lib required))
 AC_CHECK_LIB(xerces-c, main, XERCES_LIBS=-lxerces-c, AC_MSG_ERROR(xerces-c lib required))
 AC_LANG_POP(C++)
 
-NGRS_REQUIRES='freetype2 >= 0 xft >= 0 xcursor >= 0'
-echo checking for pkg-config NGRS_PKG_CONFIG $NGRS_REQUIRES ...
-PKG_CHECK_MODULES(NGRS_PKG_CONFIG, $NGRS_REQUIRES)
+for package in M DL PTHREAD X XERCES
+do
+	for stanza in CFLAGS LIBS
+	do
+		eval NGRS_NO_PKG_CONFIG_$stanza=\"\$NGRS_NO_PKG_CONFIG_$stanza \$${package}_$stanza\"
+	done
+done
 
-AC_SUBST(NGRS_REQUIRES)
-AC_SUBST(NGRS_CFLAGS, "$M_CFLAGS $DL_CFLAGS $PTHREAD_CFLAGS $X_CFLAGS $XERCES_CFLAGS $NGRS_PKG_CONFIG_CFLAGS")
-AC_SUBST(NGRS_LIBS,   "$M_LIBS   $DL_LIBS   $PTHREAD_LIBS   $X_LIBS   $XERCES_LIBS   $NGRS_PKG_CONFIG_LIBS")
-AC_SUBST(NGRS_LIBS_PRIVATE)
+for private_lib in # list private libs here
+do
+	NGRS_NO_PKG_CONFIG_LIBS_PRIVATE="$NGRS_NO_PKG_CONFIG_LIBS_PRIVATE $private_lib"
+done
+
+AC_SUBST(NGRS_NO_PKG_CONFIG_CFLAGS)
+AC_SUBST(NGRS_NO_PKG_CONFIG_LIBS)
+AC_SUBST(NGRS_NO_PKG_CONFIG_LIBS_PRIVATE)
+
+NGRS_PKG_CONFIG='freetype2 >= 0 xft >= 0 xcursor >= 0'
+
+if test -n "$NGRS_PKG_CONFIG"
+then
+	AC_MSG_NOTICE(checking for pkg-config $NGRS_PKG_CONFIG ...)
+	PKG_CHECK_MODULES(NGRS_PKG_CONFIG,    $NGRS_PKG_CONFIG)
+fi
+AC_SUBST(NGRS_PKG_CONFIG)
+
+AC_SUBST(NGRS_CFLAGS, "$NGRS_NO_PKG_CONFIG_CFLAGS $NGRS_PKG_CONFIG_CFLAGS")
+AC_SUBST(NGRS_LIBS,   "$NGRS_NO_PKG_CONFIG_LIBS   $NGRS_PKG_CONFIG_LIBS  ")
+
 AC_SUBST(abs_top_srcdir)
 AC_SUBST(abs_top_builddir)
 
