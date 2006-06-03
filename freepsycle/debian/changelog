@@ -1,3 +1,10 @@
+psycle (0.1.20060600) unstable; urgency=low
+
+  * after_construction and before_destruction idioms to allow polymorphic calls in ctor/dtor
+    (fixes the clean up bug that was remaining)
+
+ -- Johan Boule <bohan@retropaganda.info>  Sat,  3 Jun 2006 18:23:44 +0000
+
 psycle (0.1.20060430) unstable; urgency=low
 
   * The generic multiple layering design is working up to the gui.
