@@ -56,7 +56,7 @@ class pkg_config_package:
 		Libs: -L${exec_prefix}/lib -L${pkgversionlibdir} -l-universalis  -lboost_thread -lboost_filesystem -lboost_signals 
 		Requires:  diversalis >= 0.0.0 glibmm-2.4 >= 2.4 gthread-2.0 >= 2.0
 		'''
-		string = 'prefix=' + self.packageneric().environment().subst('$PREFIX') + '\n'
+		string = 'prefix=' + self.packageneric().environment().subst('$packageneric__install_prefix') + '\n'
 		string += 'Name: ' + self.name() + ' ' + str(self.version()) + '\n'
 		string += 'Description: ' + self.description() + '\n'
 		string += 'Version: ' + str(self.version()) + '\n' # todo module *interface* version, not package one
