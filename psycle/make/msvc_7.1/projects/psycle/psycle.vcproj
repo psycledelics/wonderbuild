@@ -254,8 +254,23 @@
 	</References>
 	<Files>
 		<Filter
-			Name="psycle/host"
+			Name="legacy/operating_system"
 			Filter="">
+			<File
+				RelativePath="..\..\..\..\src\legacy\operating_system\logger.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\legacy\operating_system\logger.hpp">
+			</File>
+		</Filter>
+		<Filter
+			Name="psycle/host">
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\cacheddllfinder.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\cacheddllfinder.hpp">
+			</File>
 			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\constants.hpp">
 			</File>
@@ -264,6 +279,12 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\dither.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\dllfinder.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\dllfinder.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\dsp.cpp">
@@ -312,6 +333,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\player.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\include\sigslot\sigslot.h">
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\song.cpp">
@@ -1072,16 +1096,6 @@
 			Name="seib/vsthost">
 			<File
 				RelativePath="..\..\..\..\src\Seib-vsthost\CVSTHost.Seib.cpp">
-				<FileConfiguration
-					Name="debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="release.g6|Win32">
-					<Tool
-						Name="VCCLCompilerTool"/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\Seib-vsthost\CVSTHost.Seib.hpp">
@@ -1502,22 +1516,18 @@
 			Name="packagneric"
 			Filter="">
 			<File
-				RelativePath=".\src\packageneric\module.private.hpp">
-			</File>
-		</Filter>
-		<Filter
-			Name="legacy/operating_system"
-			Filter="">
-			<File
-				RelativePath="..\..\..\..\src\legacy\operating_system\logger.cpp">
+				RelativePath="..\..\src\packageneric\configuration.private.hpp"
+				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\legacy\operating_system\logger.hpp">
+				RelativePath=".\src\packageneric\module.private.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\packageneric\package.private.hpp"
+				>
 			</File>
 		</Filter>
-		<File
-			RelativePath="..\..\..\..\ChangeLog">
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

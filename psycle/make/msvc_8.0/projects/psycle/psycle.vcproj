@@ -162,6 +162,14 @@
 			Name="psycle/host"
 			>
 			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\cacheddllfinder.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\cacheddllfinder.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\constants.hpp"
 				>
 			</File>
@@ -171,6 +179,14 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\dither.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\dllfinder.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\dllfinder.hpp"
 				>
 			</File>
 			<File
@@ -235,6 +251,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\player.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\include\sigslot\sigslot.h"
 				>
 			</File>
 			<File
@@ -322,6 +342,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\gui\resources\bmp00009.bmp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\buttons.bmp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\combobox.bmp"
 					>
 				</File>
 				<File
@@ -433,11 +461,27 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\Slider\sliderB-gray.bmp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\gui\resources\Slider\sliderB.bmp"
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\Slider\sliderBh.bmp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\Slider\sliderP-gray.bmp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\gui\resources\Slider\sliderP.bmp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\gui\resources\Slider\sliderPh.bmp"
 					>
 				</File>
 				<File
@@ -512,6 +556,17 @@
 					RelativePath="..\..\..\..\src\psycle\host\engine\XMSongLoader.hpp"
 					>
 				</File>
+				<Filter
+					Name="legacy">
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\engine\legacy\convert_internal_machines.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\engine\legacy\old_file_format.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="(configuration)"
@@ -554,14 +609,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\gui\GreetDialog.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\gui\InterpolateCurveDlg.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\gui\InterpolateCurveDlg.hpp"
 					>
 				</File>
 				<File
@@ -956,6 +1003,14 @@
 					Name="(pattern)"
 					>
 					<File
+						RelativePath="..\..\..\..\src\psycle\host\gui\InterpolateCurveDlg.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\gui\InterpolateCurveDlg.hpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\..\src\psycle\host\gui\PatDlg.cpp"
 						>
 					</File>
@@ -1030,14 +1085,6 @@
 				</Filter>
 			</Filter>
 			<Filter
-				Name="legacy"
-				>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\engine\legacy\old_file_format.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="detail"
 				>
 				<File
@@ -1081,6 +1128,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\plugin.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\plugin_gui.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\plugin_interface.hpp"
 					>
 				</File>
@@ -1091,6 +1146,24 @@
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\engine\VSTHost.hpp"
 					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\engine\vsthost24.cpp">
+					<FileConfiguration
+						Name="debug|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release.g7|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\engine\vsthost24.hpp">
 				</File>
 				<Filter
 					Name="(sampler)"
@@ -1160,74 +1233,10 @@
 			<File
 				RelativePath="..\..\..\..\src\Seib-vsthost\CVSTHost.Seib.cpp"
 				>
-				<FileConfiguration
-					Name="debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\Seib-vsthost\CVSTHost.Seib.hpp"
 				>
-				<FileConfiguration
-					Name="debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\psycle\host\engine\ImplVstHost.cpp"
-				>
-				<FileConfiguration
-					Name="debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="release|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\psycle\host\engine\ImplVstHost.hpp"
-				>
-				<FileConfiguration
-					Name="debug|Win32"
-					ExcludedFromBuild="true"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-					/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
