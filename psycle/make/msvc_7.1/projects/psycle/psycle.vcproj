@@ -1516,19 +1516,19 @@
 			Name="packagneric"
 			Filter="">
 			<File
-				RelativePath="..\..\src\packageneric\configuration.private.hpp"
-				>
+				RelativePath="..\..\src\packageneric\configuration.private.hpp">
 			</File>
 			<File
-				RelativePath=".\src\packageneric\module.private.hpp"
-				>
+				RelativePath=".\src\packageneric\module.private.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\packageneric\package.private.hpp"
-				>
+				RelativePath="..\..\..\..\src\packageneric\package.private.hpp">
 			</File>
 		</Filter>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="..\..\..\..\src\psycle\host\gui\resources\resources.rc"/>
 	</Globals>
 </VisualStudioProject>
