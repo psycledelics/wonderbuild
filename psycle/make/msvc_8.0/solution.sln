@@ -408,8 +408,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.fluidsynth (
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.fluidsynth.sf2.player", "projects\psycle\plugins\fs_sf2_player.vcproj", "{E6905023-50A7-49E0-A5DE-5C0D26414B8D}"
 	ProjectSection(ProjectDependencies) = postProject
+		{28C015FB-3BDA-4B32-8D85-C652E9892216} = {28C015FB-3BDA-4B32-8D85-C652E9892216}
 		{923A9CFD-C2B2-4A53-952B-EC9CD8413704} = {923A9CFD-C2B2-4A53-952B-EC9CD8413704}
-		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
 Global
