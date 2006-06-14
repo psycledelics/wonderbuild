@@ -323,6 +323,12 @@
 				RelativePath="..\..\..\..\src\psycle\host\engine\InstPreview.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\internal_machine_package.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\host\engine\internal_machines_package.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\mersennetwister.cpp">
 			</File>
 			<File
@@ -551,6 +557,12 @@
 					RelativePath="..\..\..\..\src\psycle\host\engine\ITModule2.hpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\engine\psy3loader.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\engine\psy3loader.hpp">
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\engine\riff.cpp">
 				</File>
 				<File
@@ -572,6 +584,9 @@
 					</File>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\engine\legacy\old_file_format.cpp">
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\engine\legacy\psy2loader.hpp">
 					</File>
 				</Filter>
 			</Filter>
