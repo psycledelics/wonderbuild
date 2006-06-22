@@ -326,7 +326,7 @@
 				RelativePath="..\..\..\..\src\psycle\host\engine\internal_machine_package.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\engine\internal_machines_package.hpp">
+				RelativePath="..\..\..\..\src\psycle\host\engine\internal_machine_package.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\psycle\host\engine\mersennetwister.cpp">
@@ -788,6 +788,11 @@
 					</File>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\gui\NewMachine.cpp">
+						<FileConfiguration
+							Name="debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\gui\NewMachine.hpp">
