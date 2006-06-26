@@ -1307,9 +1307,6 @@
 				RelativePath="..\..\..\..\src\psycle\engine\player.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\include\sigslot\sigslot.h">
-			</File>
-			<File
 				RelativePath="..\..\..\..\src\psycle\engine\song.cpp">
 			</File>
 			<File
@@ -1488,7 +1485,10 @@
 			Name="helpers"
 			Filter="">
 			<File
-				RelativePath="..\..\..\..\src\psycle\engine\DataCompression.cpp">
+				RelativePath="..\..\..\..\src\psycle\helpers\DataCompression.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\psycle\helpers\DataCompression.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\psycle\helpers\dither.cpp">
@@ -1525,6 +1525,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\psycle\helpers\riff.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\include\sigslot\sigslot.h">
 			</File>
 		</Filter>
 		<Filter
