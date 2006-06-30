@@ -899,10 +899,10 @@
 					RelativePath="..\..\..\..\src\psycle\engine\ITModule2.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\engine\psy3loader.cpp">
+					RelativePath="..\..\..\..\src\psycle\engine\psy3filter.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\engine\psy3loader.hpp">
+					RelativePath="..\..\..\..\src\psycle\engine\psy3filter.hpp">
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\engine\XMFile.hpp">
@@ -922,7 +922,7 @@
 						RelativePath="..\..\..\..\src\psycle\engine\legacy\old_file_format.cpp">
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\engine\legacy\psy2loader.hpp">
+						RelativePath="..\..\..\..\src\psycle\engine\legacy\psy2filter.hpp">
 					</File>
 				</Filter>
 			</Filter>
