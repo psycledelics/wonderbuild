@@ -41,6 +41,21 @@ PKG_CHECK_MODULES(GSTREAMER, $GSTREAMER,
 	]
 )
 
+ESOUND='esound >= 0'
+PKG_CHECK_MODULES(ESOUND, $ESOUND,
+	[
+		AC_MSG_RESULT(yes)
+		ESOUND_SUPPORT=yes
+		XPSYCLE_PKG_CONFIG="$XPSYCLE_PKG_CONFIG $ESOUND"
+	],
+	[
+		AC_MSG_RESULT(no)
+		ESOUND_SUPPORT="no (reason: $ESOUND_PKG_ERRORS)"
+		AC_MSG_WARN(esound support will not be built)
+		AC_DEFINE(XPSYCLE__NO_ESOUND, [], whether you don't have esound)
+	]
+)
+
 if test -n "$XPSYCLE_PKG_CONFIG"
 then
 	AC_MSG_NOTICE(checking for pkg-config $XPSYCLE_PKG_CONFIG ...)
@@ -91,6 +106,7 @@ echo AC_PACKAGE_TARNAME has been configured to be built with the following suppo
 echo
 echo '	'- alsa: $ALSA_SUPPORT
 echo '	'- gstreamer: $GSTREAMER_SUPPORT
+echo '	'- esound: $ESOUND_SUPPORT
 echo
 echo ==============================================================================
 echo
