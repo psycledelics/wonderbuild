@@ -1,6 +1,6 @@
 AC_PREREQ(2.59)
 
-AC_INIT(Psycle Modular Music Creation Studio (for X Window), 1.9.8, natti__@users.sourceforge.net, xpsycle)
+AC_INIT(Psycle Modular Music Creation Studio (for X Window), 1.10, natti__@users.sourceforge.net, xpsycle)
 
 AC_CONFIG_AUX_DIR(autotools.auxiliary-programs)
 
@@ -14,13 +14,12 @@ AC_PROG_CXX
 ALSA='alsa >= 1.0.8'
 PKG_CHECK_MODULES(ALSA, $ALSA,
 	[
-		AC_MSG_RESULT(yes)
 		ALSA_SUPPORT=yes
 		XPSYCLE_PKG_CONFIG="$XPSYCLE_PKG_CONFIG $ALSA"
 	],
 	[
-		AC_MSG_RESULT(no)
 		ALSA_SUPPORT="no (reason: $ALSA_PKG_ERRORS)"
+		AC_MSG_RESULT($ALSA_SUPPORT)
 		AC_MSG_WARN(alsa support will not be built)
 		AC_DEFINE(XPSYCLE__NO_ALSA, [], whether you don't have alsa)
 	]
@@ -29,13 +28,12 @@ PKG_CHECK_MODULES(ALSA, $ALSA,
 GSTREAMER='gstreamer-0.10 >= 0.10'
 PKG_CHECK_MODULES(GSTREAMER, $GSTREAMER,
 	[
-		AC_MSG_RESULT(yes)
 		GSTREAMER_SUPPORT=yes
 		XPSYCLE_PKG_CONFIG="$XPSYCLE_PKG_CONFIG $GSTREAMER"
 	],
 	[
-		AC_MSG_RESULT(no)
 		GSTREAMER_SUPPORT="no (reason: $GSTREAMER_PKG_ERRORS)"
+		AC_MSG_RESULT($GSTREAMER_SUPPORT)
 		AC_MSG_WARN(gstreamer support will not be built)
 		AC_DEFINE(XPSYCLE__NO_GSTREAMER, [], whether you don't have gstreamer)
 	]
@@ -44,13 +42,12 @@ PKG_CHECK_MODULES(GSTREAMER, $GSTREAMER,
 ESOUND='esound >= 0'
 PKG_CHECK_MODULES(ESOUND, $ESOUND,
 	[
-		AC_MSG_RESULT(yes)
 		ESOUND_SUPPORT=yes
 		XPSYCLE_PKG_CONFIG="$XPSYCLE_PKG_CONFIG $ESOUND"
 	],
 	[
-		AC_MSG_RESULT(no)
 		ESOUND_SUPPORT="no (reason: $ESOUND_PKG_ERRORS)"
+		AC_MSG_RESULT($ESOUND_SUPPORT)
 		AC_MSG_WARN(esound support will not be built)
 		AC_DEFINE(XPSYCLE__NO_ESOUND, [], whether you don't have esound)
 	]
