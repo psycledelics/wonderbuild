@@ -4,6 +4,8 @@ SUBDIRS += . src
 
 EXTRA_DIST += introduction.html
 
+sysconf_DATA = doc/examples/ngrs.xml
+
 lib_LTLIBRARIES += libngrs.la
 libngrs_la_version = 0:0:0
 #libngrs_la_CPPFLAGS = $(AM_CPPFLAGS) ...

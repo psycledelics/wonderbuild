@@ -5,7 +5,7 @@ SUBDIRS += nested-source-packages/ngrs . src doc pixmaps
 include $(srcdir)/EXTRA_DIST.am
 
 nobase_pkgversiondoc_DATA += README README-alpha NEWS ChangeLog TODO AUTHORS COPYING
-sysconf_DATA = doc/examples/xpsycle.xml doc/examples/ngrs.xml
+sysconf_DATA = doc/examples/xpsycle.xml
 
 bin_PROGRAMS += xpsycle
 xpsycle_CPPFLAGS = $(AM_CPPFLAGS) -DXPSYCLE__CONFIGURATION

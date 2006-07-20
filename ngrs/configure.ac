@@ -58,6 +58,7 @@ AC_CONFIG_HEADERS(autotools.autoheader.private.hpp)
 AC_CONFIG_FILES(
 	Makefile
 	src/Makefile
+	doc/examples/ngrs.xml
 )
 
 AC_OUTPUT
