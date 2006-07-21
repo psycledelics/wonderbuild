@@ -5,6 +5,17 @@ main()
 	cd $(dirname $0) &&
 	for x in $(find . -name \*.glob-files)
 	do
+		# Each xxx.glob-files is a script that
+		# looks for various "type" of files in the source package tree
+		# and generates a corresponding xxx file containing
+		# pieces of autoconf or automake code.
+		#
+		# They are a way to implement file globbing
+		# which the autotools unfortunately don't allow.
+		#
+		# For example, automake doesn't let one use wildcards
+		# to list the c++ source files of a module ; so, we can write a script
+		# that builds an explicit list automatically.
 		call $x ||
 		return
 	done &&
