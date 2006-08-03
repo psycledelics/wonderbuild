@@ -439,7 +439,7 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\resources.rc2">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\sampulse.bmp">
+					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\sampulse.bmp">
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\MasterMachine\slider.bmp">
@@ -470,10 +470,10 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\FileIO.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\ITModule2.cpp">
+					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\ITModule2.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\ITModule2.h">
+					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\ITModule2.h">
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Riff.cpp">
@@ -482,13 +482,13 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Riff.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\XMFile.hpp">
+					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\XMFile.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\XMSongLoader.cpp">
+					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\XMSongLoader.cpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\XMSongLoader.hpp">
+					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\XMSongLoader.hpp">
 				</File>
 			</Filter>
 			<Filter
@@ -751,34 +751,34 @@
 						Name="XMSampler"
 						Filter="">
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSamplerMixerPage.cpp">
+							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\XMSamplerMixerPage.cpp">
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSamplerMixerPage.hpp">
+							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\XMSamplerMixerPage.hpp">
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUI.cpp">
+							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\XMSamplerUI.cpp">
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUI.hpp">
+							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\XMSamplerUI.hpp">
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUIGeneral.cpp">
+							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\XMSamplerUIGeneral.cpp">
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUIGeneral.hpp">
+							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\XMSamplerUIGeneral.hpp">
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUIInst.cpp">
+							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\XMSamplerUIInst.cpp">
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUIInst.hpp">
+							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\XMSamplerUIInst.hpp">
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUISample.cpp">
+							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\XMSamplerUISample.cpp">
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSamplerUISample.hpp">
+							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\XMSamplerUISample.hpp">
 						</File>
 					</Filter>
 				</Filter>
@@ -890,9 +890,21 @@
 					</File>
 					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\VstHost.cpp">
+						<FileConfiguration
+							Name="debug|Win32"
+							ExcludedFromBuild="TRUE">
+							<Tool
+								Name="VCCLCompilerTool"/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\VstHost.hpp">
+					</File>
+					<File
+						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\vsthost24.cpp">
+					</File>
+					<File
+						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\vsthost24.hpp">
 					</File>
 					<Filter
 						Name="sampler"
@@ -920,16 +932,16 @@
 						Name="XMSampler"
 						Filter="">
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMInstrument.cpp">
+							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\XMInstrument.cpp">
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMInstrument.hpp">
+							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\XMInstrument.hpp">
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSampler.cpp">
+							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\XMSampler.cpp">
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\psycle\host\XMSampler.hpp">
+							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\XMSampler.hpp">
 						</File>
 					</Filter>
 				</Filter>
@@ -945,10 +957,17 @@
 				</Filter>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="Seib-Vsthost"
+			Filter="">
+			<File
+				RelativePath="$(SolutionDir)\..\..\..\src\Seib-vsthost\CVSTHost.Seib.cpp">
+			</File>
+			<File
+				RelativePath="$(SolutionDir)\..\..\..\src\Seib-vsthost\CVSTHost.Seib.hpp">
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
-		<Global
-			Name="RESOURCE_FILE"
-			Value="\Documents and Settings\All Users\Documentos\Visual C++\portable_psycle\src\psycle\host\resources\resources.rc"/>
 	</Globals>
 </VisualStudioProject>
