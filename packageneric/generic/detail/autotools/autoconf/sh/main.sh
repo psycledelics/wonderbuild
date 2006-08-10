@@ -40,7 +40,7 @@ packageneric__main()
 		for option in "$@"
 		do
 			case $option in
-				--config-cache | --cache-file) cache=true ;;
+				--config-cache | --cache-file | */config.site) cache=true ;;
 			esac ||
 			return
 		done &&

@@ -1,12 +1,15 @@
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# copyright 2006 johan boule <bohan@jabber.org>
+# copyright 2006 psycledelics http://psycle.pastnotecut.org
+
 import os
 
 class module:
 	class types:
-		files = 'files'
-		shared_lib = 'shared_lib'
-		static_lib = 'static_lib'
-		bin = 'bin'
-		python = 'python'
+		shared_lib = 0
+		static_lib = 1
+		bin = 2
+		python = 3
 		
 	def __init__(
 		self, 

@@ -1,3 +1,7 @@
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# copyright 2006 johan boule <bohan@jabber.org>
+# copyright 2006 psycledelics http://psycle.pastnotecut.org
+
 class pkg_config_package:
 	def __init__(
 		self,
@@ -40,22 +44,6 @@ class pkg_config_package:
 		return packages
 
 	def pc(self):
-		'''
-		prefix=/home/bohan/work/dev/++packageneric/install
-		exec_prefix=${prefix}
-		pkgversion=0.0.20060512
-		pkgnameversion=universalis-${pkgversion}
-		pkgversionlibdir=${exec_prefix}/lib/${pkgnameversion}
-		pkgversionincludedir=${prefix}/include/${pkgnameversion}
-		pkgversionsharedincludedir=${prefix}/share/include/${pkgnameversion}
-
-		Name: universalis 0:0:0 i686-pc-linux-gnu
-		Description: universalis platform abstraction layer
-		Version: ${pkgversion}
-		Cflags: -I${prefix}/include -I${pkgversionincludedir}   
-		Libs: -L${exec_prefix}/lib -L${pkgversionlibdir} -l-universalis  -lboost_thread -lboost_filesystem -lboost_signals 
-		Requires:  diversalis >= 0.0.0 glibmm-2.4 >= 2.4 gthread-2.0 >= 2.0
-		'''
 		string = 'prefix=' + self.packageneric().environment().subst('$packageneric__install_prefix') + '\n'
 		string += 'Name: ' + self.name() + ' ' + str(self.version()) + '\n'
 		string += 'Description: ' + self.description() + '\n'

@@ -85,10 +85,6 @@ case $host in
 			# when the build operating system is cygwin,
 			# we can automatically build for the mingw host operating system,
 			# so that they won't have to call configure with --host=mingw32.
-			# If you want to enable this, that is, never building for the cygwin host operating system,
-			# uncomment the *) case, and comment out the *-*-mingw* | *-*-windows*) case.
-			#*)
-			#;;
 			*-*-mingw* | *-*-windows*)
 				#AC_CANONICAL_BUILD # what operating system we are building from
 				case $build in
@@ -103,7 +99,7 @@ case $host in
 esac
 
 {
-	packageneric__echo "environment: CXX=$XX" &&
+	packageneric__echo "environment: CXX=$CXX" &&
 	packageneric__echo "environment: CCACHE_DIR=$CCACHE_DIR" &&
 	packageneric__echo "environment: CPPFLAGS=$CPPFLAGS" &&
 	packageneric__echo "environment: CXXFLAGS=$CXXFLAGS" &&

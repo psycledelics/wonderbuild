@@ -69,4 +69,3 @@ def TOOL_SUBST(env):
 
     subst_action=SCons.Action.Action(subst_in_file, subst_in_file_string)
     env['BUILDERS']['SubstInFile'] = Builder(action=subst_action, emitter=subst_emitter)
-    
