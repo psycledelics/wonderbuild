@@ -25,6 +25,20 @@ PKG_CHECK_MODULES(ALSA, $ALSA,
 	]
 )
 
+JACK='jack >= 0.101.1'
+PKG_CHECK_MODULES(JACK, $JACK,
+	[
+		JACK_SUPPORT=yes
+		XPSYCLE_PKG_CONFIG="$XPSYCLE_PKG_CONFIG $JACK"
+	],
+	[
+		JACK_SUPPORT="no (reason: $JACK_PKG_ERRORS)"
+		AC_MSG_RESULT($JACK_SUPPORT)
+		AC_MSG_WARN(jack support will not be built)
+		AC_DEFINE(XPSYCLE__NO_JACK, [], whether you don't have jack)
+	]
+)
+
 GSTREAMER='gstreamer-0.10 >= 0.10'
 PKG_CHECK_MODULES(GSTREAMER, $GSTREAMER,
 	[
@@ -102,6 +116,7 @@ echo
 echo AC_PACKAGE_TARNAME has been configured to be built with the following support:
 echo
 echo '	'- alsa: $ALSA_SUPPORT
+echo '	'- jack: $JACK_SUPPORT
 echo '	'- gstreamer: $GSTREAMER_SUPPORT
 echo '	'- esound: $ESOUND_SUPPORT
 echo
