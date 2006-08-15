@@ -29,12 +29,12 @@
 		LDFLAGS=$(echo $LDFLAGS)
 } &&
 
-packageneric__main_()
+packageneric__main()
 {
 	packageneric__echoing "note: packageneric__main() disabled since may 2006 due to new bugfeature in autoconf"
 } &&
 
-packageneric__main()
+packageneric__main_()
 {
 	local cache build absolute_name &&
 	
