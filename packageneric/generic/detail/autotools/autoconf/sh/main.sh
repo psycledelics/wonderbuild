@@ -1,5 +1,5 @@
 #! /usr/bin/env cat
-. $(dirname $0)/packageneric/generic/bin/posix.shell
+# . $(dirname $0)/packageneric/generic/bin/posix.shell
 
 ##############################################################################
 #
@@ -27,6 +27,11 @@
 		CFLAGS=$(echo $CFLAGS) \
 		CXXFLAGS=$(echo $CXXFLAGS) \
 		LDFLAGS=$(echo $LDFLAGS)
+} &&
+
+packageneric__main_()
+{
+	packageneric__echoing "note: packageneric__main() disabled since may 2006 due to new bugfeature in autoconf"
 } &&
 
 packageneric__main()
