@@ -1,5 +1,6 @@
 #! /usr/bin/env cat
 # . $(dirname $0)/packageneric/generic/bin/posix.shell
+	# since may 2006, due to new bugfeature in autoconf, the line above (sourcing of posix.shell) has to be disabled
 
 ##############################################################################
 #
@@ -29,12 +30,7 @@
 		LDFLAGS=$(echo $LDFLAGS)
 } &&
 
-packageneric__main()
-{
-	packageneric__echoing "note: packageneric__main() disabled since may 2006 due to new bugfeature in autoconf"
-} &&
-
-packageneric__main_()
+packageneric__main_() # since may 2006, due to new bugfeature in autoconf, the cache stuff below has to be disabled
 {
 	local cache build absolute_name &&
 	
@@ -45,17 +41,19 @@ packageneric__main_()
 		for option in "$@"
 		do
 			case $option in
-				--config-cache | --cache-file | */config.site) cache=true ;;
+				--config-cache | --cache-file) cache=true ;;
 			esac ||
 			return
 		done &&
 		if ! $cache
 		then
-			packageneric__echoing "note: no cache option given ; recalling myself with added option --config-cache" sh $0 --config-cache "$@"
-			exit
+			packageneric__echoing "note: no cache option given ; recalling myself with added optionz --config-cache" sh $0 --config-cache "$@"
 		fi
-	} &&
+	}
+} &&
 
+packageneric__main()
+{
 	###########################################
 	# ensure we use a separate build directory
 	{	
@@ -64,6 +62,12 @@ packageneric__main_()
 			absolute_name=$(cd $(dirname $0) && pwd)/$(basename $0) &&
 			packageneric__echo &&
 			packageneric__echo "note: Canceling because you called $(basename $0) from its own directory ($0)." &&
+{
+	packageneric__tip &&
+	packageneric__echo "sorry, but, since may 2006, due to new bugfeature in autoconf, we have to stop here." &&
+	false
+	return
+}
 			rm -Rf config{.{log,cache},ure.lineno} &&
 			packageneric__echo &&
 			packageneric__tip &&
