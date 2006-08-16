@@ -39,7 +39,7 @@ AC_SUBST(NGRS_NO_PKG_CONFIG_CFLAGS)
 AC_SUBST(NGRS_NO_PKG_CONFIG_LIBS)
 AC_SUBST(NGRS_NO_PKG_CONFIG_LIBS_PRIVATE)
 
-NGRS_PKG_CONFIG='freetype2 >= 0 xft >= 0 xcursor >= 0 xpm >= 0'
+NGRS_PKG_CONFIG='freetype2 >= 0 xft >= 0 xcursor >= 0'
 
 if test -n "$NGRS_PKG_CONFIG"
 then
