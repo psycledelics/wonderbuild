@@ -5,12 +5,12 @@ main()
 	cd $(dirname $0) &&
 	call ./libngrs_la_SOURCES.sh &&
 	call ./src/nobase_pkgversioninclude_HEADERS.sh &&
-	call aclocal &&
+	call aclocal-1.9 &&
 	call mkdir -p autotools.auxiliary-programs &&
 	call libtoolize --force &&
 	call autoheader &&
 	call autoconf &&
-	call automake --add-missing
+	call automake-1.9 --add-missing
 } &&
 
 call()
