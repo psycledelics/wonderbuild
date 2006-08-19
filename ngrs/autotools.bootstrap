@@ -6,7 +6,7 @@ main()
 	call ./libngrs_la_SOURCES.sh &&
 	call ./src/nobase_pkgversioninclude_HEADERS.sh &&
 	call aclocal-1.9 &&
-	call mkdir -p autotools.auxiliary-programs &&
+	call mkdir autotools.auxiliary-programs &&
 	call libtoolize --force &&
 	call autoheader &&
 	call autoconf &&
