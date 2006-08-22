@@ -46,7 +46,7 @@ PKG_CHECK_MODULES(ALSA, $ALSA,
 	]
 )
 
-JACK='jack >= 0.101.1'
+JACK='jack >= 0.100.0'
 PKG_CHECK_MODULES(JACK, $JACK,
 	[
 		JACK_SUPPORT=yes
