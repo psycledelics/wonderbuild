@@ -1,0 +1,2 @@
+#! /bin/sh
+find psycle/plugins/pooplog_synth/ \( -type d -name todo -prune \) -or \( -name \*.cpp -print \)

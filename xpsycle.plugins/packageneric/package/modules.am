@@ -41,7 +41,7 @@ include $(top_srcdir)/packageneric/package/modules/lib.xpsycle.plugin.negative.a
 #include $(top_srcdir)/packageneric/package/modules/lib.xpsycle.plugin.pooplog_delay light.am
 #include $(top_srcdir)/packageneric/package/modules/lib.xpsycle.plugin.pooplog_delay.am
 #include $(top_srcdir)/packageneric/package/modules/lib.xpsycle.plugin.pooplog_filter.am
-#include $(top_srcdir)/packageneric/package/modules/lib.xpsycle.plugin.pooplog_fm_laboratory.am
+include $(top_srcdir)/packageneric/package/modules/lib.xpsycle.plugin.pooplog_fm_laboratory.am
 #include $(top_srcdir)/packageneric/package/modules/lib.xpsycle.plugin.pooplog_fm_light.am
 #include $(top_srcdir)/packageneric/package/modules/lib.xpsycle.plugin.pooplog_fm_ultralight.am
 #include $(top_srcdir)/packageneric/package/modules/lib.xpsycle.plugin.pooplog_lofi_processor.am
