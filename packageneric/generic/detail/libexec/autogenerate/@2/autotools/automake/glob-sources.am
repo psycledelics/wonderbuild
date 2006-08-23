@@ -28,6 +28,7 @@ main()
 	for file in $(eval find . $(packageneric__find__file -name \*.packageneric.glob-sources))
 	do
 		echoing "calling: $file ..." &&
+		$file &&
 		if test -e $(dirname $file)/Makefile.am
 		then
 			echo SUBDIRS += $(dirname $file) >> $output
