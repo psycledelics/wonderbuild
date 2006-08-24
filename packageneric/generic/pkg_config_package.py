@@ -57,7 +57,7 @@ class pkg_config_package:
 		string += 'Requires: '
 		for package in self.build_depends():
 			if package.pkg_config():
-				string += package.pkg_config() + ', '
+				string += package.pkg_config() + ' '
 		string += '\n'
 		#self.packageneric().environment().Alias(self.name() + '.pc', ...)
 		return string
