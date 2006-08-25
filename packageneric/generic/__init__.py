@@ -89,8 +89,8 @@ class packageneric:
 		self._version = self.version(0, 0)
 		self.information('packageneric version: ' + str(self.self_version()))
 		
-		from SCons.Script import ARGUMENTS as command_line_arguments
-		self._command_line_arguments = command_line_arguments
+		import SCons.Script.SConscript
+		self._command_line_arguments = SCons.Script.SConscript.Arguments
 		
 		import SCons.Options
 		self._options = SCons.Options.Options('packageneric.options', self.command_line_arguments()) # todo cache in packageneric__build_directory
