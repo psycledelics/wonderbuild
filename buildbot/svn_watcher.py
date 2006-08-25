@@ -85,7 +85,10 @@ if __name__ == '__main__':
 		oldRevision = -1
 		print "Watching for changes in repo "+  sys.argv[1] + " master " +  sys.argv[2] 
 		while 1:
-			oldRevision = checkChanges(sys.argv[1], sys.argv[2], False, oldRevision)
+			try:
+				oldRevision = checkChanges(sys.argv[1], sys.argv[2], False, oldRevision)
+			except:
+				pass
 			time.sleep(5*60)
 
 	elif len(sys.argv) == 3:
