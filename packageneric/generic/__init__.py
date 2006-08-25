@@ -95,8 +95,8 @@ class packageneric:
 		import SCons.Options
 		self._options = SCons.Options.Options('packageneric.options', self.command_line_arguments()) # todo cache in packageneric__build_directory
 		self.options().Add(SCons.Options.PathOption('packageneric__build_directory', 'directory where to build into', os.path.join('packageneric', '++build'), SCons.Options.PathOption.PathIsDirCreate))
-		self.options().Add(SCons.Options.PathOption('packageneric__install_stage_destination', 'directory to install under (stage installation)', '.', SCons.Options.PathOption.PathIsDirCreate))
-		self.options().Add(SCons.Options.PathOption('packageneric__install_prefix', 'directory to install under (final installation)', os.path.join('usr', 'local'), SCons.Options.PathOption.PathIsDirCreate))
+		self.options().Add(SCons.Options.PathOption('packageneric__install_stage_destination', 'directory to install under (stage installation)', os.path.join('packageneric', '++install-stage'), SCons.Options.PathOption.PathIsDirCreate))
+		self.options().Add(SCons.Options.PathOption('packageneric__install_prefix', 'directory to install under (final installation)', os.path.join('packageneric', '++install'), SCons.Options.PathOption.PathIsDirCreate))
 		#self.options().Add('CXX', 'the c++ compiler')
 		#self.options().Add('LD', 'the linker')
 		self.options().Add('packageneric__release', 'set to 1 to build for release', 0)
