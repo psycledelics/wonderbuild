@@ -3,7 +3,10 @@
 import re
 from SCons.Script import *  # the usual scons stuff you get in a SConscript
 
-def TOOL_SUBST(env):
+def exists(env):
+	return True
+
+def generate(env, **kw):
     """Adds SubstInFile builder, which substitutes the keys->values of SUBST_DICT
     from the source to the target.
     The values of SUBST_DICT first have any construction variables expanded
@@ -51,7 +54,7 @@ def TOOL_SUBST(env):
 
     def subst_in_file_string(target, source, env):
         """This is what gets printed on the console."""
-        return '\n'.join(['Substituting vars from %s into %s'%(str(s), str(t))
+        return '\n'.join(['packageneric: substituting vars from %s into %s'%(str(s), str(t))
                           for (t,s) in zip(target, source)])
 
     def subst_emitter(target, source, env):

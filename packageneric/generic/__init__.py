@@ -101,11 +101,12 @@ class packageneric:
 		#self.options().Add('LD', 'the linker')
 		self.options().Add('packageneric__release', 'set to 1 to build for release', 0)
 		
-		if True: # environment is None:
-			from SCons.Script.SConscript import SConsEnvironment as environment
-			self._environment = environment(
-				options = self.options()
-			)
+		from SCons.Script.SConscript import SConsEnvironment as environment
+		self._environment = environment(
+			options = self.options(),
+			toolpath = ['packageneric/generic/tools'],
+			tools = ['default', 'subst']
+		)
 
 		self.environment().EnsurePythonVersion(2, 3)
 		self.environment().EnsureSConsVersion(0, 96)
@@ -131,22 +132,18 @@ class packageneric:
 		if False:
 			self.environment().Export('env installation_prefix')
 			
-		self.environment().Append(
-			CPPDEFINES = {
-				'PACKAGENERIC__RELEASE' : '$packageneric__release',
-				'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_LIB': '\\"../lib\\"',
-				'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_SHARE': '\\"../share\\"',
-				'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_VAR': '\\"../var\\"',
-				'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_ETC': '\\"../../etc\\"',
-				'PACKAGENERIC__CONFIGURATION__COMPILER__HOST': '\\"test\\"'
-			}
-		)
-		self.environment().Append(
-			CPPPATH = self.build_directory()
-		)
+		if False:
+			self.environment().Append(
+				CPPDEFINES = {
+					'PACKAGENERIC__RELEASE' : '$packageneric__release',
+					'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_LIB': '\\"../lib\\"',
+					'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_SHARE': '\\"../share\\"',
+					'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_VAR': '\\"../var\\"',
+					'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_ETC': '\\"../../etc\\"',
+					'PACKAGENERIC__CONFIGURATION__COMPILER__HOST': '\\"test\\"'
+				}
+			)
 		
-		import subst
-		subst.TOOL_SUBST(self.environment())
 		self.environment().Append(
 			SUBST_DICT = {
 				'#undef PACKAGENERIC__RELEASE' : '#define $packageneric__release',
@@ -158,7 +155,6 @@ class packageneric:
 			}
 		)
 		for i in self.find('.', '.', '*.hpp.in'):
-			self.trace(i)
 			self.environment().SubstInFile(
 				os.path.join(self.build_directory(), os.path.splitext(i)[0]),
 				i
@@ -167,6 +163,9 @@ class packageneric:
 				os.path.join(self.build_directory(), os.path.splitext(os.path.splitext(i)[0])[0] + '.private.hpp'),
 				i
 			)
+		self.environment().Append(
+			CPPPATH = self.build_directory()
+		)
 		
 		self._configure = None
 		

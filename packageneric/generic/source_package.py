@@ -18,15 +18,38 @@ class source_package:
 		self._description= description
 		self._long_description = long_description
 		self._path = path
+		
+		if False:
+			self.packageneric().environment().Append(
+				CPPDEFINES = {
+					'PACKAGENERIC': '\\"/dev/null\\"',
+					'PACKAGENERIC__PACKAGE__NAME': '\\"' + self.name() + '\\"',
+					'PACKAGENERIC__PACKAGE__VERSION': '\\"' + str(self.version()) + '\\"',
+					'PACKAGENERIC__PACKAGE__VERSION__MAJOR': str(self.version().major()),
+					'PACKAGENERIC__PACKAGE__VERSION__MINOR': str(self.version().minor()),
+					'PACKAGENERIC__PACKAGE__VERSION__PATCH': str(self.version().patch())
+				}
+			)
+		import os.path
+		h = os.path.join('packageneric', 'source-package', self.name() + '.private.hpp')
+		self.packageneric().environment().SubstInFile(
+			os.path.join(self.packageneric().build_directory(), h),
+			'packageneric/generic/detail/src/packageneric/package/meta-information.private.hpp.in',
+			SUBST_DICT = {
+				'#undef PACKAGENERIC__PACKAGE__NAME': '#define PACKAGENERIC__PACKAGE__NAME "' + self.name() + '"',
+				'#undef PACKAGENERIC__PACKAGE__VERSION': '#define PACKAGENERIC__PACKAGE__VERSION "' + str(self.version()) + '"',
+				'#undef PACKAGENERIC__PACKAGE__VERSION__MAJOR': '#define PACKAGENERIC__PACKAGE__VERSION__MAJOR ' + str(self.version().major()),
+				'#undef PACKAGENERIC__PACKAGE__VERSION__MINOR': '#define PACKAGENERIC__PACKAGE__VERSION__MINOR ' + str(self.version().minor()),
+				'#undef PACKAGENERIC__PACKAGE__VERSION__PATCH': '#define PACKAGENERIC__PACKAGE__VERSION__PATCH ' + str(self.version().patch())
+			}
+		)
 		self.packageneric().environment().Append(
 			CPPDEFINES = {
-				'PACKAGENERIC': '\\"/dev/null\\"',
-				'PACKAGENERIC__PACKAGE__NAME': '\\"' + self.name() + '\\"',
-				'PACKAGENERIC__PACKAGE__VERSION': '\\"' + str(self.version()) + '\\"',
-				'PACKAGENERIC__PACKAGE__VERSION__MAJOR': str(self.version().major()),
-				'PACKAGENERIC__PACKAGE__VERSION__MINOR': str(self.version().minor()),
-				'PACKAGENERIC__PACKAGE__VERSION__PATCH': str(self.version().patch())
+				'PACKAGENERIC': '\\<' + h + '\\>'
 			}
+		)
+		self.packageneric().environment().AppendUnique(
+			CPPPATH = [self.packageneric().build_directory()]
 		)
 	
 	def packageneric(self):

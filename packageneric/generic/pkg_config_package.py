@@ -61,3 +61,20 @@ class pkg_config_package:
 		string += '\n'
 		#self.packageneric().environment().Alias(self.name() + '.pc', ...)
 		return string
+
+def exists(env):
+	return True
+	
+def generate(env, *kw):
+	def do(target, source, env):
+		pass
+		
+	def string(target, source, env):
+		return '\n'.join(['packageneric: creating pkg-config file %s' % str(t) for t in target])
+
+	def emitter(target, source, env):
+		pc = env['packageneric__pkg_config_file']
+		SCons.Script.Depends(target[0], SCons.Node.Python.Value(pc))
+		return target, source
+		
+	env['BUILDERS']['packageneric__pkg_config_file'] = SCons.Builder(SCons.Action.Action(do, string), emitter)
