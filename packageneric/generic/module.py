@@ -134,7 +134,10 @@ class module:
 				SHCXXCOMSTR = self.packageneric().message('compiling $TARGET'),
 				SHLINKCOMSTR = self.packageneric().message('linking $TARGET')
 			)
+			self.add_include_path('packageneric/generic/detail/src')
 			self._environment.AppendUnique(CPPPATH = self.include_path())
+			for i in self.include_path():
+				self._environment.AppendUnique(CPPPATH = os.path.join(self.packageneric().build_directory(), i))
 			self._environment.Append(CPPDEFINES = self.defines())
 			self._environment.Append(
 				CPPDEFINES = {

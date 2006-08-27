@@ -128,6 +128,9 @@ class packageneric:
 		self._installation_data    = '$prefix/share'
 		self._installation_var     = '$prefix/var'
 		
+		if False:
+			self.environment().Export('env installation_prefix')
+			
 		self.environment().Append(
 			CPPDEFINES = {
 				'PACKAGENERIC__RELEASE' : '$packageneric__release',
@@ -138,10 +141,33 @@ class packageneric:
 				'PACKAGENERIC__CONFIGURATION__COMPILER__HOST': '\\"test\\"'
 			}
 		)
+		self.environment().Append(
+			CPPPATH = self.build_directory()
+		)
 		
-		if False:
-			self.environment().Export('env installation_prefix')
-			
+		import subst
+		subst.TOOL_SUBST(self.environment())
+		self.environment().Append(
+			SUBST_DICT = {
+				'#undef PACKAGENERIC__RELEASE' : '#define $packageneric__release',
+				'#undef PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_LIB': '#define PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_LIB "../lib"',
+				'#undef PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_SHARE': '#define PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_SHARE "../share"',
+				'#undef PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_VAR': '#define PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_VAR "../var"',
+				'#undef PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_ETC': '#define PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_ETC "../../etc"',
+				'#undef PACKAGENERIC__CONFIGURATION__COMPILER__HOST': '#define PACKAGENERIC__CONFIGURATION__COMPILER__HOST "test"'
+			}
+		)
+		for i in self.find('.', '.', '*.hpp.in'):
+			self.trace(i)
+			self.environment().SubstInFile(
+				os.path.join(self.build_directory(), os.path.splitext(i)[0]),
+				i
+			)
+			self.environment().SubstInFile(
+				os.path.join(self.build_directory(), os.path.splitext(os.path.splitext(i)[0])[0] + '.private.hpp'),
+				i
+			)
+		
 		self._configure = None
 		
 		self._indentation = 0

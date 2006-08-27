@@ -1,3 +1,9 @@
+psycle (0.1.20060827) unstable; urgency=low
+
+  * bugfix
+
+ -- Johan Boule <bohan@retropaganda.info>  Sun, 27 Aug 2006 00:31:55 +0000
+
 psycle (0.1.20060600) unstable; urgency=low
 
   * after_construction and before_destruction idioms to allow polymorphic calls in ctor/dtor
