@@ -132,18 +132,6 @@ class packageneric:
 		if False:
 			self.environment().Export('env installation_prefix')
 			
-		if False:
-			self.environment().Append(
-				CPPDEFINES = {
-					'PACKAGENERIC__RELEASE' : '$packageneric__release',
-					'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_LIB': '\\"../lib\\"',
-					'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_SHARE': '\\"../share\\"',
-					'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_VAR': '\\"../var\\"',
-					'PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_ETC': '\\"../../etc\\"',
-					'PACKAGENERIC__CONFIGURATION__COMPILER__HOST': '\\"test\\"'
-				}
-			)
-		
 		self.environment().Append(
 			SUBST_DICT = {
 				'#undef PACKAGENERIC__RELEASE' : '#define $packageneric__release',

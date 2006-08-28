@@ -19,17 +19,6 @@ class source_package:
 		self._long_description = long_description
 		self._path = path
 		
-		if False:
-			self.packageneric().environment().Append(
-				CPPDEFINES = {
-					'PACKAGENERIC': '\\"/dev/null\\"',
-					'PACKAGENERIC__PACKAGE__NAME': '\\"' + self.name() + '\\"',
-					'PACKAGENERIC__PACKAGE__VERSION': '\\"' + str(self.version()) + '\\"',
-					'PACKAGENERIC__PACKAGE__VERSION__MAJOR': str(self.version().major()),
-					'PACKAGENERIC__PACKAGE__VERSION__MINOR': str(self.version().minor()),
-					'PACKAGENERIC__PACKAGE__VERSION__PATCH': str(self.version().patch())
-				}
-			)
 		import os.path
 		h = os.path.join('packageneric', 'source-package', self.name() + '.private.hpp')
 		self.packageneric().environment().SubstInFile(

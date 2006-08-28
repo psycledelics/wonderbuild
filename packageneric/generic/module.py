@@ -13,7 +13,8 @@ class module:
 		
 	def __init__(
 		self, 
-		packageneric, 
+		packageneric,
+		source_package = None,
 		name = None,
 		version = None,
 		description = '',
@@ -21,6 +22,7 @@ class module:
 		build_depends = None
 	):
 		self._packageneric = packageneric
+		self._source_package = source_package
 		self._name = name
 		self._version = version
 		self._description = description
@@ -41,7 +43,21 @@ class module:
 	
 	def packageneric(self):
 		return self._packageneric
-		
+	
+	def source_package(self):
+		return self._source_package
+	
+	def source_package_node(self):
+		if not self._source_package_node:
+			import SCons.Node.Python
+			self._source_package_node = SCons.Node.Python.Value(
+				(
+					self.source_package().name(),
+					self.source_package().version(),
+					self.source_package().sources()
+				)
+			)
+			
 	def name(self):
 		return self._name
 	
@@ -145,6 +161,23 @@ class module:
 					'PACKAGENERIC__MODULE__VERSION': '\\"' + str(self.version()) + '\\"'
 				}
 			)
+			if False: # make it a builder with source = SCons.Node.Python.Value((self.name(), self.version(), self.sources()))
+				for source in self.sources():
+					namespace = 'PACKAGENERIC__MODULE__SOURCE__'
+					for compound in os.path.split(source.relative_path()):
+						if namespace:
+							namespace += '__'
+						for char in compound:
+							namespace += uppercase(char)
+					sources_dict[namespace] = None
+				self._environment.ConfigurationHeader(
+					os.path.join(self.packageneric().build_directory(), 'packageneric', 'module', self.name() + '.private.hpp'),
+					{
+						'PACKAGENERIC__MODULE__NAME': ('"' + self.name() + '"', 'name of the module'),
+						'PACKAGENERIC__MODULE__VERSION': ('"' + str(self.version()) + '"', 'version of the module')
+					} + sources_dict
+				)
+						
 			pkg_config = ''
 			for package in self.build_depends() + self.depends():
 				if not package.pkg_config() is None:
