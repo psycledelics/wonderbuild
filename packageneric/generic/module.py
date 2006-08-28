@@ -47,17 +47,6 @@ class module:
 	def source_package(self):
 		return self._source_package
 	
-	def source_package_node(self):
-		if not self._source_package_node:
-			import SCons.Node.Python
-			self._source_package_node = SCons.Node.Python.Value(
-				(
-					self.source_package().name(),
-					self.source_package().version(),
-					self.source_package().sources()
-				)
-			)
-			
 	def name(self):
 		return self._name
 	
@@ -161,6 +150,10 @@ class module:
 					'PACKAGENERIC__MODULE__VERSION': '\\"' + str(self.version()) + '\\"'
 				}
 			)
+			if True:
+				for source in self.sources():
+					self._environment.Depends(source, self.source_package().node(self._environment))
+					self._environment.Depends(source, 'foo')
 			if False: # make it a builder with source = SCons.Node.Python.Value((self.name(), self.version(), self.sources()))
 				for source in self.sources():
 					namespace = 'PACKAGENERIC__MODULE__SOURCE__'

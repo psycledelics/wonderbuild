@@ -19,10 +19,13 @@ class source_package:
 		self._long_description = long_description
 		self._path = path
 		
+		
+		self._node = None
+		
 		import os.path
-		h = os.path.join('packageneric', 'source-package', self.name() + '.private.hpp')
+		self._header = os.path.join('packageneric', 'source-package', self.name() + '.private.hpp')
 		self.packageneric().environment().SubstInFile(
-			os.path.join(self.packageneric().build_directory(), h),
+			os.path.join(self.packageneric().build_directory(), self._header),
 			'packageneric/generic/detail/src/packageneric/package/meta-information.private.hpp.in',
 			SUBST_DICT = {
 				'#undef PACKAGENERIC__PACKAGE__NAME': '#define PACKAGENERIC__PACKAGE__NAME "' + self.name() + '"',
@@ -34,7 +37,7 @@ class source_package:
 		)
 		self.packageneric().environment().Append(
 			CPPDEFINES = {
-				'PACKAGENERIC': '\\<' + h + '\\>'
+				'PACKAGENERIC': '\\<' + self._header + '\\>'
 			}
 		)
 		self.packageneric().environment().AppendUnique(
@@ -44,6 +47,22 @@ class source_package:
 	def packageneric(self):
 		return self._packageneric
 	
+	def node(self, env):
+		if not self._node:
+			import SCons.Node.Python
+			self._node = SCons.Node.Python.Value(
+				(
+					self.name(),
+					self.version()
+				)
+			)
+			import os.path
+			if False:
+				env.Depends(os.path.join(self.packageneric().build_directory(), self._header), self._node)
+				return self._node
+			else:
+				return os.path.join(self.packageneric().build_directory(), self._header)
+			
 	def name(self):
 		return self._name
 		
