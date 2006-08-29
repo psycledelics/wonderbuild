@@ -19,9 +19,6 @@ class source_package:
 		self._long_description = long_description
 		self._path = path
 		
-		
-		self._node = None
-		
 		import os.path
 		self._header = os.path.join('packageneric', 'source-package', self.name() + '.private.hpp')
 		self.packageneric().environment().SubstInFile(
@@ -47,22 +44,6 @@ class source_package:
 	def packageneric(self):
 		return self._packageneric
 	
-	def node(self, env):
-		if not self._node:
-			import SCons.Node.Python
-			self._node = SCons.Node.Python.Value(
-				(
-					self.name(),
-					self.version()
-				)
-			)
-			import os.path
-			if False:
-				env.Depends(os.path.join(self.packageneric().build_directory(), self._header), self._node)
-				return self._node
-			else:
-				return os.path.join(self.packageneric().build_directory(), self._header)
-			
 	def name(self):
 		return self._name
 		
