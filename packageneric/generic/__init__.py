@@ -105,7 +105,7 @@ class packageneric:
 		self._environment = environment(
 			options = self.options(),
 			toolpath = ['packageneric/generic/tools'],
-			tools = ['default', 'subst']
+			tools = ['default', 'write', 'subst']
 		)
 
 		self.environment().EnsurePythonVersion(2, 3)

@@ -150,7 +150,7 @@ class module:
 					'PACKAGENERIC__MODULE__VERSION': '\\"' + str(self.version()) + '\\"'
 				}
 			)
-			if False: # make it a builder with source = SCons.Node.Python.Value((self.name(), self.version(), self.sources()))
+			if False:
 				for source in self.sources():
 					namespace = 'PACKAGENERIC__MODULE__SOURCE__'
 					for compound in os.path.split(source.relative_path()):
@@ -159,13 +159,14 @@ class module:
 						for char in compound:
 							namespace += uppercase(char)
 					sources_dict[namespace] = None
-				self._environment.ConfigurationHeader(
-					os.path.join(self.packageneric().build_directory(), 'packageneric', 'module', self.name() + '.private.hpp'),
-					{
-						'PACKAGENERIC__MODULE__NAME': ('"' + self.name() + '"', 'name of the module'),
-						'PACKAGENERIC__MODULE__VERSION': ('"' + str(self.version()) + '"', 'version of the module')
-					} + sources_dict
-				)
+			self._environment.WriteToFile(
+				os.path.join(self.packageneric().build_directory(), 'packageneric', 'module.private.hpp'), # self.name()
+				[],
+				{
+					'PACKAGENERIC__MODULE__NAME': ('"' + self.name() + '"', 'name of the module'),
+					'PACKAGENERIC__MODULE__VERSION': ('"' + str(self.version()) + '"', 'version of the module')
+				} #+ sources_dict
+			)
 						
 			pkg_config = ''
 			for package in self.build_depends() + self.depends():
