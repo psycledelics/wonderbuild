@@ -209,11 +209,11 @@ module()
 		##################################################
 		
 		{
-			local module__includes=$modules__path/$module/autoconf/includes.private.hpp
+			local module__includes=$modules__path/$module/autoconf/packageneric/module.private.hpp
 			local module__dependencies=$modules__path/$module/dependencies-stamp.cpp
 			cat <<-eof >> $module__am__conditional
 				$automake__category += $automake__file
-				${automake}_CPPFLAGS = -DPACKAGENERIC__PRE_COMPILED=PACKAGENERIC -DPACKAGENERIC=\<$module__includes\> \$(${module__prefix__lower}__defines) \$(PACKAGENERIC__COMPILER__cppflags) \$(AM_CPPFLAGS)
+				${automake}_CPPFLAGS = -DPACKAGENERIC__PRE_COMPILED=PACKAGENERIC -I$modules__path/$module/autoconf -DPACKAGENERIC=\<packageneric/module.private.hpp\> \$(${module__prefix__lower}__defines) \$(PACKAGENERIC__COMPILER__cppflags) \$(AM_CPPFLAGS)
 				${automake}_CXXFLAGS = \$(${module__prefix__upper}__CFLAGS) \$(PACKAGENERIC__COMPILER__cxxflags) \$(AM_CXXFLAGS)
 				${automake}_LDFLAGS  = $(if test $module__type = lib ; then echo "-version-info \$(${module__prefix__upper}__VERSION)" ; fi) \$(PACKAGENERIC__COMPILER__ldflags) \$(AM_LDFLAGS)
 				${automake}_$automake__link = \$(${module__prefix__upper}__LIBS__NO_SELF)
@@ -348,7 +348,7 @@ eof
 		#############################################################
 		
 		{
-			local module__harcoded__microsoft__includes='$(PACKAGENERIC__HARDCODED)'$modules__path/$module/hardcoded/unknown-microsoft-unknown/includes.private.hpp
+			local module__harcoded__microsoft__includes='$(PACKAGENERIC__HARDCODED)'$modules__path/$module/hardcoded/unknown-microsoft-unknown/packageneric/module.private.hpp
 			cat <<-eof >> $module__am__unconditional
 				BUILT_SOURCES += $module__harcoded__microsoft__includes
 				EXTRA_DIST += $module__harcoded__microsoft__includes

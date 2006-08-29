@@ -150,10 +150,6 @@ class module:
 					'PACKAGENERIC__MODULE__VERSION': '\\"' + str(self.version()) + '\\"'
 				}
 			)
-			if True:
-				for source in self.sources():
-					self._environment.Depends(source, self.source_package().node(self._environment))
-					self._environment.Depends(source, 'foo')
 			if False: # make it a builder with source = SCons.Node.Python.Value((self.name(), self.version(), self.sources()))
 				for source in self.sources():
 					namespace = 'PACKAGENERIC__MODULE__SOURCE__'
