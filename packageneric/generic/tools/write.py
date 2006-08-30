@@ -1,6 +1,6 @@
 # http://www.scons.org/cgi-sys/cgiwrap/scons/moin.cgi/SubstInFileBuilder
 
-import re
+import os.path
 from SCons.Script import *  # the usual scons stuff you get in a SConscript
 
 def exists(env):
@@ -9,9 +9,10 @@ def exists(env):
 def generate(env, **kw):
     """Adds WriteToFile builder, which writes any SCons.Node.Python.Value node to a file."""
     env.Append(TOOLS = 'WRITE')
+
     def do_write_to_file(targetfile, contents):
         try:
-            f = open(targetfile, 'wb')
+            f = open(os.path.basename(targetfile), 'wb')
             f.write(contents)
             f.close()
         except:

@@ -17,6 +17,7 @@ def generate(env, **kw):
     substituted from the corresponding source.
     """
     env.Append(TOOLS = 'SUBST')
+
     def do_subst_in_file(targetfile, sourcefile, dict):
         """Replace all instances of the keys of dict with their values.
         For example, if dict is {'%VERSION%': '1.2345', '%BASE%': 'MyProg'},
