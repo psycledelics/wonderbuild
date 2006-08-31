@@ -28,7 +28,7 @@ AC_CHECK_HEADERS(dlfcn.h,
 	]
 )
 
-AC_CHECK_HEADERS(phtread.h,
+AC_CHECK_HEADERS(pthread.h,
 	[
 		AC_CHECK_LIB(pthread, pthread_create, PTHREAD_CFLAGS=-D_REENTRANT && PTHREAD_LIBS=-lpthread)
 	],
