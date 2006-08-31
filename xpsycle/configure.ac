@@ -32,7 +32,7 @@ AC_CHECK_HEADERS(audio/audiolib.h,
 		)
 	],
 	[
-		NAS_SUPPORT="no (reason nas lib not found)"
+		NAS_SUPPORT="no (reason: nas lib not found)"
 		AC_MSG_RESULT($NAS_SUPPORT)
 		AC_MSG_WARN(nas support will not be built)
 		AC_DEFINE(XPSYCLE__NO_NAS, [], whether you don't have nas)
