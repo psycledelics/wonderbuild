@@ -16,10 +16,36 @@ AC_PATH_XTRA
 X_LIBS="$X_PRE_LIBS $X_LIBS -lX11 $X_EXTRA_LIBS -lXpm"
 
 AC_LANG_PUSH(C++)
+
 AC_CHECK_LIB(m, main, M_LIBS=-lm, AC_MSG_WARN(no m lib found))
-AC_CHECK_LIB(dl, main, DL_LIBS=-ldl, AC_MSG_WARN(no dl lib found))
-AC_CHECK_LIB(pthread, main, PTHREAD_CFLAGS=-D_REENTRANT && PTHREAD_LIBS=-lpthread, AC_MSG_ERROR(pthread lib required))
-AC_CHECK_LIB(xerces-c, main, XERCES_LIBS=-lxerces-c, AC_MSG_ERROR(xerces-c lib required))
+
+AC_CHECK_HEADERS(dlfcn.h,
+	[
+		AC_CHECK_LIB(dl, dlopen, DL_LIBS=-ldl, AC_MSG_WARN(no dl lib found))
+	],
+	[
+		AC_MSG_ERROR(dlfcn.h dlopen not found)
+	]
+)
+
+AC_CHECK_HEADERS(phtread.h,
+	[
+		AC_CHECK_LIB(pthread, pthread_create, PTHREAD_CFLAGS=-D_REENTRANT && PTHREAD_LIBS=-lpthread)
+	],
+	[
+		AC_MSG_ERROR(pthread lib required)
+	]
+)
+
+AC_CHECK_HEADERS(xercesc/sax/Parse.h,
+	[
+		AC_CHECK_LIB(xerces-c, main, XERCES_LIBS=-lxerces-c)
+	],
+	[
+		AC_MSG_ERROR(xerces-c lib required)
+	]
+)
+
 AC_LANG_POP(C++)
 
 for package in M DL PTHREAD X XERCES

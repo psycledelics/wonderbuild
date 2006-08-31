@@ -12,10 +12,36 @@ AC_PROG_CXX
 # dnl # PKG_PROG_PKG_CONFIG(0.18) # dnl # this macro doesn't exist on pre-0.15 versions
 
 AC_LANG_PUSH(C++)
-AC_CHECK_LIB(z, main, Z_LIBS=-lz, AC_MSG_ERROR(z lib required))
+
+AC_CHECK_HEADERS(zlib.h,
+	[
+		AC_CHECK_LIB(z, main, Z_LIBS=-lz)
+	],
+	[
+		AC_MSG_ERROR(z lib required)
+	]
+)
+
+AC_CHECK_HEADERS(audio/audiolib.h,
+	[
+		AC_CHECK_LIB(audio, main,
+			[
+				NAS_SUPPORT=yes
+				NAS_LIBS=-laudio
+			]
+		)
+	],
+	[
+		NAS_SUPPORT="no (reason nas lib not found)"
+		AC_MSG_RESULT($NAS_SUPPORT)
+		AC_MSG_WARN(nas support will not be built)
+		AC_DEFINE(XPSYCLE__NO_NAS, [], whether you don't have nas)
+	]
+)
+
 AC_LANG_POP(C++)
 
-for package in Z
+for package in Z NAS
 do
 	for stanza in CFLAGS LIBS
 	do
@@ -141,6 +167,7 @@ echo '	'- alsa: $ALSA_SUPPORT
 echo '	'- jack: $JACK_SUPPORT
 echo '	'- gstreamer: $GSTREAMER_SUPPORT
 echo '	'- esound: $ESOUND_SUPPORT
+echo '	'- nas: $NAS_SUPPORT
 echo
 echo ==============================================================================
 echo
