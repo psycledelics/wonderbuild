@@ -203,7 +203,7 @@ echo '	'- gstreamer: $GSTREAMER_SUPPORT
 echo '	'- esound: $ESOUND_SUPPORT
 echo '	'- nas: $NAS_SUPPORT
 echo '	'- microsoft direct sound: $MICROSOFT_DIRECT_SOUND_SUPPORT
-echo '	'- steinberg asio: $ASIO_SUPPORT
+echo '	'- steinberg asio: $STEINBERG_ASIO_SUPPORT
 echo
 echo ==============================================================================
 echo
