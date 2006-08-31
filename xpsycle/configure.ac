@@ -44,7 +44,7 @@ AC_CHECK_HEADERS(dsound.h,
 		AC_CHECK_LIB(dsound, main,
 			[
 				MICROSOFT_DIRECT_SOUND_SUPPORT=yes
-				MICROSOFT_DIRECT_SOUND_LIBS=-ldsoun
+				MICROSOFT_DIRECT_SOUND_LIBS=-ldsound
 			]
 		)
 	],
