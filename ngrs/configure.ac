@@ -37,7 +37,7 @@ AC_CHECK_HEADERS(pthread.h,
 	]
 )
 
-AC_CHECK_HEADERS(xercesc/sax/Parser.h,
+AC_CHECK_HEADERS(xercesc/sax/Parser.hpp,
 	[
 		AC_CHECK_LIB(xerces-c, main, XERCES_LIBS=-lxerces-c)
 	],
