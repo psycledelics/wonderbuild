@@ -21,16 +21,14 @@ class source_package:
 		
 		import os.path
 		self._header = os.path.join('packageneric', 'source-package', self.name() + '.private.hpp')
-		self.packageneric().environment().SubstInFile(
+		self.packageneric().environment().WriteToFile(
 			os.path.join(self.packageneric().build_directory(), self._header),
-			'packageneric/generic/detail/src/packageneric/package/meta-information.private.hpp.in',
-			SUBST_DICT = {
-				'#undef PACKAGENERIC__PACKAGE__NAME': '#define PACKAGENERIC__PACKAGE__NAME "' + self.name() + '"',
-				'#undef PACKAGENERIC__PACKAGE__VERSION': '#define PACKAGENERIC__PACKAGE__VERSION "' + str(self.version()) + '"',
-				'#undef PACKAGENERIC__PACKAGE__VERSION__MAJOR': '#define PACKAGENERIC__PACKAGE__VERSION__MAJOR ' + str(self.version().major()),
-				'#undef PACKAGENERIC__PACKAGE__VERSION__MINOR': '#define PACKAGENERIC__PACKAGE__VERSION__MINOR ' + str(self.version().minor()),
-				'#undef PACKAGENERIC__PACKAGE__VERSION__PATCH': '#define PACKAGENERIC__PACKAGE__VERSION__PATCH ' + str(self.version().patch())
-			}
+			'#include <packageneric/configuration.private.hpp>\n' +
+			'#define PACKAGENERIC__PACKAGE__NAME "' + self.name() + '"\n' +
+			'#define PACKAGENERIC__PACKAGE__VERSION "' + str(self.version()) + '"\n' +
+			'#define PACKAGENERIC__PACKAGE__VERSION__MAJOR ' + str(self.version().major()) + '\n' +
+			'#define PACKAGENERIC__PACKAGE__VERSION__MINOR ' + str(self.version().minor()) + '\n' +
+			'#define PACKAGENERIC__PACKAGE__VERSION__PATCH ' + str(self.version().patch()) + '\n'
 		)
 		self.packageneric().environment().Append(
 			CPPDEFINES = {

@@ -133,16 +133,15 @@ class packageneric:
 		if False:
 			self.environment().Export('env installation_prefix')
 			
-		self.environment().Append(
-			SUBST_DICT = {
-				'#undef PACKAGENERIC__RELEASE' : '#define $packageneric__release',
-				'#undef PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_LIB': '#define PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_LIB "../lib"',
-				'#undef PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_SHARE': '#define PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_SHARE "../share"',
-				'#undef PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_VAR': '#define PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_VAR "../var"',
-				'#undef PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_ETC': '#define PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_ETC "../../etc"',
-				'#undef PACKAGENERIC__CONFIGURATION__COMPILER__HOST': '#define PACKAGENERIC__CONFIGURATION__COMPILER__HOST "test"'
-			}
+		self.environment().WriteToFile(
+			os.path.join(self.build_directory(), 'packageneric', 'configuration.private.hpp'),
+			'#define PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_LIB "../lib"\n' +
+			'#define PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_SHARE "../share"\n' +
+			'#define PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_VAR "../var"\n' +
+			'#define PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_ETC "../../etc"\n' +
+			'#define PACKAGENERIC__CONFIGURATION__COMPILER__HOST "test"\n'
 		)
+		self.environment().Append(SUBST_DICT = {})
 		for i in self.find('.', '.', '*.hpp.in'):
 			self.environment().SubstInFile(
 				os.path.join(self.build_directory(), os.path.splitext(i)[0]),
