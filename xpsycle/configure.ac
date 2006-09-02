@@ -26,16 +26,15 @@ AC_CHECK_HEADERS(audio/audiolib.h,
 	[
 		AC_CHECK_LIB(audio, main,
 			[
-				NAS_SUPPORT=yes
-				NAS_LIBS=-laudio
+				NETAUDIO_SUPPORT=yes
+				NETAUDIO_LIBS=-laudio
 			]
 		)
 	],
 	[
-		NAS_SUPPORT="no (reason: nas lib not found)"
-		AC_MSG_RESULT($NAS_SUPPORT)
-		AC_MSG_WARN(nas support will not be built)
-		AC_DEFINE(XPSYCLE__NO_NAS, [], whether you don't have nas)
+		NETAUDIO_SUPPORT="no (reason: netaudio lib not found)"
+		AC_MSG_WARN(netaudio support will not be built)
+		AC_DEFINE(XPSYCLE__NO_NETAUDIO, [], whether you don't have netaudio)
 	]
 )
 
@@ -50,7 +49,6 @@ AC_CHECK_HEADERS(dsound.h,
 	],
 	[
 		MICROSOFT_DIRECT_SOUND_SUPPORT="no (reason: dsound lib not found)"
-		AC_MSG_RESULT($MICROSOFT_DIRECT_SOUND_SUPPORT)
 		AC_MSG_WARN(microsoft direct sound support will not be built)
 		AC_DEFINE(XPSYCLE__NO_MICROSOFT_DIRECT_SOUND, [], whether you don't like microsoft direct sound)
 	]
@@ -67,7 +65,6 @@ AC_CHECK_HEADERS(asio.h,
 	],
 	[
 		STEINBERG_ASIO_SUPPORT="no (reason: asio lib not found)"
-		AC_MSG_RESULT($STEINBERG_ASIO_SUPPORT)
 		AC_MSG_WARN(steinberg asio support will not be built)
 		AC_DEFINE(XPSYCLE__NO_STEINBERG_ASIO, [], whether you don't like steinberg asio)
 	]
@@ -75,7 +72,7 @@ AC_CHECK_HEADERS(asio.h,
 
 AC_LANG_POP(C++)
 
-for package in Z NAS MICROSOFT_DIRECT_SOUND STEINBERG_ASIO
+for package in Z NETAUDIO MICROSOFT_DIRECT_SOUND STEINBERG_ASIO
 do
 	for stanza in CFLAGS LIBS
 	do
@@ -148,8 +145,6 @@ PKG_CHECK_MODULES(ESOUND, $ESOUND,
 	]
 )
 
-AC_CHECK_LIB(audio,main, AUDIO_LIBS=-laudio , AC_MSG_ERROR(libaudio required))
-
 if test -n "$XPSYCLE_PKG_CONFIG"
 then
 	AC_MSG_NOTICE(checking for pkg-config $XPSYCLE_PKG_CONFIG ...)
@@ -203,7 +198,7 @@ echo '	'- alsa: $ALSA_SUPPORT
 echo '	'- jack: $JACK_SUPPORT
 echo '	'- gstreamer: $GSTREAMER_SUPPORT
 echo '	'- esound: $ESOUND_SUPPORT
-echo '	'- nas: $NAS_SUPPORT
+echo '	'- netaudio: $NETAUDIO_SUPPORT
 echo '	'- microsoft direct sound: $MICROSOFT_DIRECT_SOUND_SUPPORT
 echo '	'- steinberg asio: $STEINBERG_ASIO_SUPPORT
 echo
