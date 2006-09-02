@@ -58,3 +58,6 @@ class source_package:
 		
 	def path(self):
 		return self._path
+
+	def header(self):
+		return self._header

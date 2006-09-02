@@ -144,12 +144,6 @@ class module:
 				self._environment.AppendUnique(CPPPATH = os.path.join(self.packageneric().build_directory(), i))
 			self._environment.AppendUnique(CPPPATH = self.include_path())
 			self._environment.Append(CPPDEFINES = self.defines())
-			self._environment.Append(
-				CPPDEFINES = {
-					'PACKAGENERIC__MODULE__NAME': '\\"' + self.name() + '\\"',
-					'PACKAGENERIC__MODULE__VERSION': '\\"' + str(self.version()) + '\\"'
-				}
-			)
 			if False:
 				for source in self.sources():
 					namespace = 'PACKAGENERIC__MODULE__SOURCE__'
@@ -161,11 +155,9 @@ class module:
 					sources_dict[namespace] = None
 			self._environment.WriteToFile(
 				os.path.join(self.packageneric().build_directory(), 'packageneric', 'module.private.hpp'), # self.name()
-				[],
-				{
-					'PACKAGENERIC__MODULE__NAME': ('"' + self.name() + '"', 'name of the module'),
-					'PACKAGENERIC__MODULE__VERSION': ('"' + str(self.version()) + '"', 'version of the module')
-				} #+ sources_dict
+				'#include <' + self.source_package().header() + '>\n' +
+				'#define PACKAGENERIC__MODULE__NAME ' + '"' + self.name() + '"\n' +
+				'#define PACKAGENERIC__MODULE__VERSION ' + '"' + str(self.version()) + '"\n'
 			)
 						
 			pkg_config = ''
