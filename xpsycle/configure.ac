@@ -148,6 +148,8 @@ PKG_CHECK_MODULES(ESOUND, $ESOUND,
 	]
 )
 
+AC_CHECK_LIB(audio,main, AUDIO_LIBS=-laudio , AC_MSG_ERROR(libaudio required))
+
 if test -n "$XPSYCLE_PKG_CONFIG"
 then
 	AC_MSG_NOTICE(checking for pkg-config $XPSYCLE_PKG_CONFIG ...)
