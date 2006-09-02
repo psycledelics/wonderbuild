@@ -120,6 +120,7 @@ class packageneric:
 		self._build_directory = os.path.join(self.environment()['packageneric__build_directory'], 'targets')
 		self.environment().BuildDir(self.build_directory(), '.', duplicate = False)
 		self.environment().CacheDir(os.path.join(self.environment()['packageneric__build_directory'], 'cache'))
+		self.environment().SConsignFile(os.path.join(self.environment()['packageneric__build_directory'], 'signatures'))
 
 		self._installation_prefix  = '$prefix'
 		self._installation_etc     = '/etc'
