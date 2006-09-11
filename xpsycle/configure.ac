@@ -22,6 +22,8 @@ AC_CHECK_HEADERS(zlib.h,
 	]
 )
 
+AC_CHECK_HEADERS(ladspa.h)
+
 AC_CHECK_HEADERS(audio/audiolib.h,
 	[
 		AC_CHECK_LIB(audio, main,
