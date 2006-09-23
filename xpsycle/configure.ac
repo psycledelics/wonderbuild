@@ -22,7 +22,16 @@ AC_CHECK_HEADERS(zlib.h,
 	]
 )
 
-AC_CHECK_HEADERS(ladspa.h)
+AC_CHECK_HEADERS(ladspa.h,
+	[
+		LADSPA_SUPPORT=yes
+	],
+	[
+		LADSPA_SUPPORT="no (reason: ladspa.h not found)"
+		AC_MSG_WARN(ladspa support will not be built)
+		AC_DEFINE(XPSYCLE__NO_LADSPA,[],whether you don't have ladspa)
+	]
+)
 
 AC_CHECK_HEADERS(audio/audiolib.h,
 	[
