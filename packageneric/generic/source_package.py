@@ -2,6 +2,8 @@
 # copyright 2006 johan boule <bohan@jabber.org>
 # copyright 2006 psycledelics http://psycle.pastnotecut.org
 
+import os.path
+
 class source_package:
 	def __init__(
 		self,
@@ -17,45 +19,57 @@ class source_package:
 		self._version = version
 		self._description= description
 		self._long_description = long_description
+		self._common_environment = None
+		self._build_environment = None
+		self._uninstalled_environment = None
+		self._installed_environment = None
 		self._path = path
-		
-		import os.path
-		self._header = os.path.join('packageneric', 'source-package', self.name() + '.private.hpp')
-		self.packageneric().environment().WriteToFile(
-			os.path.join(self.packageneric().build_directory(), self._header),
-			'#include <packageneric/configuration.private.hpp>\n' +
-			'#define PACKAGENERIC__PACKAGE__NAME "' + self.name() + '"\n' +
-			'#define PACKAGENERIC__PACKAGE__VERSION "' + str(self.version()) + '"\n' +
-			'#define PACKAGENERIC__PACKAGE__VERSION__MAJOR ' + str(self.version().major()) + '\n' +
-			'#define PACKAGENERIC__PACKAGE__VERSION__MINOR ' + str(self.version().minor()) + '\n' +
-			'#define PACKAGENERIC__PACKAGE__VERSION__PATCH ' + str(self.version().patch()) + '\n'
-		)
-		self.packageneric().environment().Append(
-			CPPDEFINES = {
-				'PACKAGENERIC': '\\<' + self._header + '\\>'
-			}
-		)
-		self.packageneric().environment().AppendUnique(
-			CPPPATH = [self.packageneric().build_directory()]
-		)
 	
-	def packageneric(self):
-		return self._packageneric
+	def packageneric(self): return self._packageneric
 	
-	def name(self):
-		return self._name
+	def name(self): return self._name
 		
-	def version(self):
-		return self._version
+	def version(self): return self._version
 		
-	def description(self):
-		return self._description
+	def description(self): return self._description
 		
-	def long_description(self):
-		return self._long_description
-		
-	def path(self):
-		return self._path
+	def long_description(self): return self._long_description
 
-	def header(self):
-		return self._header
+	def _common_environment_(self):
+		if not self._common_environment: self._common_environment = self.packageneric().common_environment().Copy()
+		return self._common_environment
+			
+	def build_environment(self):
+		if not self._build_environment:
+			self._build_environment = self.packageneric().build_environment().Copy()
+			self._build_environment.Append(CPPPATH = [os.path.join(self.packageneric().build_directory(), 'packageneric', 'source-packages', self.name(), 'src')])
+			import SCons.Node.Python
+			self._build_environment.WriteToFile(
+				os.path.join(self.packageneric().build_directory(), 'packageneric', 'source-packages', self.name(), 'src', 'packageneric', 'source-package.private.hpp'),
+				SCons.Node.Python.Value(''.join(
+						['#include <packageneric/configuration.private.hpp>\n'] +
+						['#define PACKAGENERIC__PACKAGE__%s %s\n' % (n, v) for n, v in
+							[	('NAME', '"%s"' % self.name()),
+								('VERSION', '"%s"' % str(self.version()))
+							] +
+							[('VERSION__%s' % n, str(v)) for n, v in
+								('MAJOR', self.version().major()),
+								('MINOR', self.version().minor()),
+								('PATCH', self.version().patch())
+							]
+						]
+				))
+			)
+		return self._build_environment
+		
+	def uninstalled_environment(self):
+		if not self._uninstalled_environment:
+			self._uninstalled_environment = self.packageneric().uninstalled_environment().Copy()
+		return self._uninstalled_environment
+
+	def installed_environment(self):
+		if not self._installed_environment:
+			self._installed_environment = self.packageneric().installed_environment().Copy()
+		return self._installed_environment
+
+	def path(self): return self._path

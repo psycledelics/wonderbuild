@@ -16,10 +16,8 @@ class debian_package:
 		self._packageneric = packageneric
 		self._source_package = source_package
 		self._name = name
-		if section is None:
-			self._section = self.source_package().section()
-		else:
-			self._section = section
+		if section is None: self._section = self.source_package().section()
+		else: self._section = section
 		self._architecture = architecture
 		self._provides = []
 		self._build_depends = []
@@ -30,59 +28,44 @@ class debian_package:
 		self._long_description = long_description
 		self._files = []
 		
-	def packageneric(self):
-		return self._packageneric
+	def packageneric(self): return self._packageneric
 		
-	def source_package(self):
-		return self._source_package
+	def source_package(self): return self._source_package
 	
-	def debian(self):
-		return self.name() + ' (= ${Source-Version})'
-	
-	def name(self):
-		return self._name
+	def debian(self): return self.name() + ' (= ${Source-Version})'
 		
-	def section(self):
-		return self._section
-		
-	def architecture(self):
-		return self._architecture
+	def distribution_packages(self): return {'debian': self.debian()}
 	
-	def provides(self):
-		return self._provides
+	def name(self): return self._name
+		
+	def section(self): return self._section
+		
+	def architecture(self): return self._architecture
+	
+	def provides(self): return self._provides
 	
 	def	build_depends(self):
 		packages = []
 		for package in self._build_depends:
-			if not package in packages:
-				packages.append(package)
+			if not package in packages: packages.append(package)
 		return packages
-	def add_build_depend(self, build_depend):
-		self._build_depends.append(build_depend)
+	def add_build_depend(self, build_depend): self._build_depends.append(build_depend)
 	def add_build_depends(self, build_depends):
-		for package in build_depends:
-			self.add_build_depend(package)
+		for package in build_depends: self.add_build_depend(package)
 		
 	def depends(self):
 		packages = []
 		for package in self._depends:
-			if not package in packages:
-				packages.append(package)
+			if not package in packages: packages.append(package)
 		return packages
-	def add_depend(self, depend):
-		self._depends.append(depend)
+	def add_depend(self, depend): self._depends.append(depend)
 	def add_depends(self, depends):
-		for package in depends:
-			self.add_depend(package)
+		for package in depends: self.add_depend(package)
 	
-	def recommends(self):
-		return self._recommends
+	def recommends(self): return self._recommends
 		
-	def suggests(self):
-		return self._suggests
+	def suggests(self): return self._suggests
 	
-	def description(self):
-		return self._description
+	def description(self): return self._description
 		
-	def long_description(self):
-		return self._long_description
+	def long_description(self): return self._long_description

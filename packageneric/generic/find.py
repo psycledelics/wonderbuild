@@ -11,22 +11,18 @@ class find:
 		self,
 		packageneric,
 		strip_path,
-		path,
+		relative_path,
 		pattern = '*'
 	):
 		self._packageneric = packageneric
 		self._strip_path = strip_path
-		self._stack = [path]
+		self._stack = [relative_path]
 		self._pattern = pattern
 		self._files = []
 		self._index = 0
 		
-	def packageneric(self):
-		return self._packageneric
+	def packageneric(self): return self._packageneric
 		
-	def strip_path(self):
-		return self._strip_path
-	
 	def __getitem__(self, index):
 		while True:
 			try:
@@ -35,15 +31,25 @@ class find:
 			except IndexError:
 				# pop next directory from stack
 				self._directory = self._stack.pop()
-				self._files = os.listdir(os.path.join(self.strip_path(), self._directory))
+				self._files = os.listdir(os.path.join(self._strip_path, self._directory))
 				self._index = 0
 			else:
 				# got a filename
-				path = os.path.join(self._directory, file)
-				if os.path.isdir(os.path.join(self.strip_path(), path)):
-					self._stack.append(path)
+				relative_path = os.path.join(self._directory, file)
+				full_path = os.path.join(self._strip_path, relative_path)
+				if os.path.isdir(full_path):
+					self._stack.append(relative_path)
 				if fnmatch.fnmatchcase(file, self._pattern):
-					return path
+					class file:
+						def __init__(self, strip, relative):
+							self._strip = strip
+							self._relative = relative
+						
+						def full(self): return os.path.join(self._strip, self._relative)
+						def strip(self): return self._strip
+						def relative(self): return self._relative
+							
+					return file(self._strip_path, relative_path)
 
 def print_all_nodes(dirnode, level = 0):
 	'''prints all the scons nodes that are children of this node, recursively.'''

@@ -44,230 +44,247 @@ class packageneric:
 	def distribution_archive(self, *args, **kw):
 		from distribution_archive import distribution_archive
 		return apply(distribution_archive, (self,) + args, kw)
-		
-	def environment(self):
-		return self._environment
-	
-	def configure(self):
-		if self._configure is None:
-			self.trace('creating configure')
-			self._configure = self.environment().Configure(
-				custom_tests =
-				{
-					'packageneric__pkg_config' : lambda context, packageneric, name, what: _pkg_config(context, packageneric, name, what),
-					'packageneric__try_run' : lambda context, packageneric, description, text, language: _try_run(context, packageneric, description, text, language),
-					'packageneric__free' : lambda context, packageneric, free: _free(context, packageneric, free)
-				},
-				conf_dir = os.path.join(self.environment()['packageneric__build_directory'], 'configure'),
-				log_file = os.path.join(self.environment()['packageneric__build_directory'], 'configure.log'),
-				config_h = os.path.join(self.environment()['packageneric__build_directory'], 'configure.hpp')
-			)
-			self._configure_finished = False
-		return self._configure
-	
-	def finish_configure(self):
-		if not self._configure_finished:
-			self._configure_finished = True
-			self.trace('configure finished')
-			self._environment = self.configure().Finish()
-			self._configure = None
-			#_dump_environment(self.environment())
 
-	def options(self):
-		return self._options
-
+	def name(self): return self._name
+			
 	def	self_version(self):
+		if not self._version:
+			self._version = self.version(0, 0)
 		return self._version
-		
+
+	def targets(self): return self._targets
+	def add_target(self, target, build): self._targets[target] = build
+
+	def __call__(self):
+		import SCons.Script, SCons.Node.Alias
+		#SCons.Script.main()
+		self.information('targets: ' + ' '.join(SCons.Script.BUILD_TARGETS))
+		for (target, build) in self.targets().items():
+			if target in SCons.Script.BUILD_TARGETS: SCons.Script.Alias(target, build.targets())
+	
 	def command_line_arguments(self):
+		if self._command_line_arguments is None:
+			import SCons.Script
+			self._command_line_arguments = SCons.Script.ARGUMENTS
 		return self._command_line_arguments
 		
+	def options(self):
+		if not self._options:
+			# We create the SCons.Options.Options object in two steps because we first want to know
+			# whether an option file was specified on the command line or env via the option packageneric__options
+			# and then we create again the SCons.Options.Options object telling it to read the option file.
+			def restart(self, create_build_directory):
+				# Options which impact on the path of the option file are put here,
+				# that is, the option packageneric__options itself,
+				# and the other options that its default value is defined as, recursively.
+				self._options.Add('packageneric__build_variant', 'subdirectory where to build into', 'default')
+				if create_build_directory: self._options.Add(SCons.Options.PathOption('packageneric__build_directory', 'directory where to build into', os.path.join('packageneric', '++build', '$packageneric__build_variant'), SCons.Options.PathOption.PathIsDirCreate))
+				else: self._options.Add('packageneric__build_directory', 'directory where to build into', os.path.join('packageneric', '++build', '$packageneric__build_variant'))
+				self._options.Add('packageneric__options', 'file where to read options from', os.path.join('$packageneric__build_directory', 'options'))
+			import SCons.Options
+			# We don't know yet the path of the option file,
+			# so we pass None as the filename.
+			self._options = SCons.Options.Options(None, self.command_line_arguments())
+			restart(self, create_build_directory = False)
+			self._options.Update(self.common_environment())
+			# Now that we know the path of the option file,
+			# we create again the SCons.Options.Options object telling it to read the option file.
+			self.information('using options ' + self.common_environment().subst('$packageneric__options'))
+			self._options = SCons.Options.Options(self.common_environment().subst('$packageneric__options'), self.command_line_arguments())
+			restart(self, create_build_directory = True)
+			self._options.Add(SCons.Options.PathOption('packageneric__install__stage_destination', 'directory to install under (stage installation)', os.path.join('$packageneric__build_directory', 'stage-install'), SCons.Options.PathOption.PathIsDirCreate))
+			self._options.AddOptions(
+				('packageneric__install__prefix', 'directory to install under (final installation)', os.path.join('/', 'opt', self.name())),
+				('packageneric__install__exec_prefix', 'directory to install architecture-dependant excecutables under (final installation)', '$packageneric__install__prefix'),
+				('packageneric__install__bin', 'directory to install programs under (final installation)', os.path.join('$packageneric__install__exec_prefix', 'bin')),
+				('packageneric__install__lib', 'directory to install libraries under (final installation)', os.path.join('$packageneric__install__exec_prefix', 'lib')),
+				('packageneric__install__lib_exec', 'directory to install helper programs under (final installation)', os.path.join('$packageneric__install__exec_prefix', 'libexec')),
+				('packageneric__install__include', 'directory to install headers under (final installation)', os.path.join('$packageneric__install__prefix', 'include')),
+				('packageneric__install__share', 'directory to install archictecture-independent data under (final installation)', os.path.join('$packageneric__install__prefix', 'share')),
+				('packageneric__install__var', 'directory to install machine-specific state-variable data under (final installation)', os.path.join('$packageneric__install__prefix', 'var')),
+				('packageneric__install__etc', 'directory to install machine-specific configuration files under (final installation)', os.path.join('/', 'etc')),
+				('packageneric__cxx_compiler', 'the c++ compiler (default value was autodetected)', self.common_environment().subst('$SHCXX')),
+				('packageneric__linker', 'the linker (default value was autodetected)', self.common_environment().subst('$SHLINK')),
+				('packageneric__verbose', 'set to 1 for build verbiage', '0'),
+				('packageneric__debug', 'set to 1 to build for debugging', '0'),
+				('packageneric__test', 'set to 1 to perform unit tests', '1')
+			)
+			self._options.Update(self.common_environment())
+			self._options.Save(self.common_environment().subst('$packageneric__options'), self.common_environment())
+			self._options.format = '\n%s: %s\n    default: %s\n     actual: %s\n'
+		return self._options
+		
 	def build_directory(self):
+		if not self._build_directory: self._build_directory = os.path.join('$packageneric__build_directory', 'targets')
 		return self._build_directory
 	
-	def __init__(self):
-		self._version = self.version(0, 0)
-		self.information('packageneric version: ' + str(self.self_version()))
+	def common_environment(self):
+		if not self._common_environment:
+			import SCons.Environment
+			self._common_environment = SCons.Environment.Environment()
+			import SCons.Tool
+			toolpath = [os.path.join('packageneric', 'generic', 'tools')]
+			SCons.Tool.Tool('subst', toolpath = toolpath)(self._common_environment)
+			SCons.Tool.Tool('write', toolpath = toolpath)(self._common_environment)
+			self._common_environment.SetOption('implicit_cache', True)
+			#self._common_environment.SourceSignatures('timestamp') # ('MD5')
+			self._common_environment.TargetSignatures('build') # ('content')
+			self._common_environment.Help(self.options().GenerateHelpText(self._common_environment))
+			# Below are settings which depend on self.options(), that we just called above
+			self._common_environment.BuildDir(self.build_directory(), '.', duplicate = False)
+			self._common_environment.CacheDir(os.path.join('$packageneric__build_directory', 'cache'))
+			self._common_environment.SConsignFile(os.path.join('$packageneric__build_directory', 'signatures'))
+		return self._common_environment
 		
-		import SCons.Script.SConscript
-		self._command_line_arguments = SCons.Script.SConscript.Arguments
+	def build_environment(self):
+		if not self._build_environment:
+			self._build_environment = self.common_environment().Copy()
+			self._build_environment['SHCXX'] = '$packageneric__cxx_compiler'
+			self._build_environment['SHLINK'] = '$packageneric__linker'
+			if self._build_environment.subst('$packageneric__verbose') == '0':
+				self._build_environment['SHCXXCOMSTR'] = self.message('packageneric: ', 'compiling c++ $TARGET')
+				self._build_environment['SHLINKCOMSTR'] = self.message('packageneric: ', 'linking shared library $TARGET')
+			self._build_environment.Append(CPPPATH = [os.path.join(self.build_directory(), 'packageneric', 'src')])
+			import SCons.Node.Python
+			self._build_environment.WriteToFile(
+				os.path.join(self.build_directory(), 'packageneric', 'src', 'packageneric', 'configuration.private.hpp'),
+				SCons.Node.Python.Value(''.join(['#define PACKAGENERIC__CONFIGURATION__%s %s\n' % (n, v) for n, v in
+					[('INSTALL_PATH__BIN_TO_%s' % n, '"%s"' % v) for n, v in
+						('LIB', '../lib'),
+						('SHARE', '../share'),
+						('VAR', '../var'),
+						('ETC', '../../etc')
+					] +
+					[('COMPILER__HOST', '"%s"' % self._build_environment.subst('$packageneric__cxx_compiler'))]
+				]))
+			)
+		return self._build_environment
+	
+	def uninstalled_environment(self):
+		if not self._uninstalled_environment:
+			self._uninstalled_environment = self.common_environment().Copy()
+			self._uninstalled_environment.Append(
+				LIBPATH = [self.build_directory()]
+			)	
+		return self._uninstalled_environment
 		
-		import SCons.Options
-		self._options = SCons.Options.Options('packageneric.options', self.command_line_arguments()) # todo cache in packageneric__build_directory
-		self.options().Add(SCons.Options.PathOption('packageneric__build_directory', 'directory where to build into', os.path.join('packageneric', '++build'), SCons.Options.PathOption.PathIsDirCreate))
-		self.options().Add(SCons.Options.PathOption('packageneric__install_stage_destination', 'directory to install under (stage installation)', os.path.join('packageneric', '++install-stage'), SCons.Options.PathOption.PathIsDirCreate))
-		self.options().Add(SCons.Options.PathOption('packageneric__install_prefix', 'directory to install under (final installation)', os.path.join('packageneric', '++install'), SCons.Options.PathOption.PathIsDirCreate))
-		#self.options().Add('CXX', 'the c++ compiler')
-		#self.options().Add('LD', 'the linker')
-		self.options().Add('packageneric__release', 'set to 1 to build for release', 0)
+	def installed_environment(self):
+		if not self._installed_environment:
+			self._installed_environment = self.common_environment().Copy()
+			self._installed_environment.Append(
+				CPPPATH = ['$packageneric__install__include'],
+				LIBPATH = ['$packageneric__install__lib']
+			)	
+		return self._installed_environment
 		
-		from SCons.Script.SConscript import SConsEnvironment as environment
-		self._environment = environment(
-			options = self.options(),
-			toolpath = ['packageneric/generic/tools'],
-			tools = ['default', 'write', 'subst']
-		)
-
-		self.environment().EnsurePythonVersion(2, 3)
-		self.environment().EnsureSConsVersion(0, 96)
-		self.environment().SetOption('implicit_cache', True)
-		#self.environment().SourceSignatures('timestamp') # ('MD5')
-		self.environment().TargetSignatures('build') # ('content')
-
-		self.options().Save('packageneric.options', self.environment()) # todo cache in packageneric__build_directory
+	def __init__(self, name):
+		import SCons.Script
+		SCons.Script.EnsureSConsVersion(0, 96)
+		SCons.Script.EnsurePythonVersion(2, 3)
+		SCons.Script.Default()
 		
-		self.environment().Help(self.options().GenerateHelpText(self.environment()))
-		self._build_directory = os.path.join(self.environment()['packageneric__build_directory'], 'targets')
-		self.environment().BuildDir(self.build_directory(), '.', duplicate = False)
-		self.environment().CacheDir(os.path.join(self.environment()['packageneric__build_directory'], 'cache'))
-		self.environment().SConsignFile(os.path.join(self.environment()['packageneric__build_directory'], 'signatures'))
-
-		self._installation_prefix  = '$prefix'
-		self._installation_etc     = '/etc'
-		self._installation_bin     = '$prefix/bin'
-		self._installation_lib     = '$prefix/lib'
-		self._installation_include = '$prefix/include'
-		self._installation_data    = '$prefix/share'
-		self._installation_var     = '$prefix/var'
+		self._name = name
+		self._version = None
+		self._command_line_arguments = None
+		self._options = None
+		self._build_directory = None
+		self._common_environment = None
+		self._build_environment = None
+		self._uninstalled_environment = None
+		self._installed_environment = None
+		self._targets = {}
+		self._indentation = 0
+		
+		self.information('version of packageneric: ' + str(self.self_version()))
 		
 		if False:
-			self.environment().Export('env installation_prefix')
-			
-		self.environment().WriteToFile(
-			os.path.join(self.build_directory(), 'packageneric', 'configuration.private.hpp'),
-			'#define PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_LIB "../lib"\n' +
-			'#define PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_SHARE "../share"\n' +
-			'#define PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_VAR "../var"\n' +
-			'#define PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_ETC "../../etc"\n' +
-			'#define PACKAGENERIC__CONFIGURATION__COMPILER__HOST "test"\n'
-		)
-		self.environment().Append(SUBST_DICT = {})
-		for i in self.find('.', '.', '*.hpp.in'):
-			self.environment().SubstInFile(
-				os.path.join(self.build_directory(), os.path.splitext(i)[0]),
-				i
-			)
-			self.environment().SubstInFile(
-				os.path.join(self.build_directory(), os.path.splitext(os.path.splitext(i)[0])[0] + '.private.hpp'),
-				i
-			)
-		self.environment().Append(
-			CPPPATH = self.build_directory()
-		)
+			packageneric = self
+			self.common_environment().Export('packageneric')
 		
-		self._configure = None
-		
-		self._indentation = 0
-		self._indentation_pushed = True
+		for i in self.find('.', '.', '*.hpp.in'): # todo private and public
+			self.uninstalled_environment().SubstInFile(os.path.join(self.build_directory(), i.strip(), os.path.splitext(i.relative())[0]), i.full())
+			self.build_environment().SubstInFile(os.path.join(self.build_directory(), i.strip(), os.path.splitext(os.path.splitext(i.relative())[0])[0] + '.private.hpp'), i.full())
 
 	def indentation(self):
-		result = ''
-		if self._indentation_pushed:
-			self._indentation_pushed = False
-			result += '\n'
-		return result + ' -> ' * self._indentation
+		return ' -> ' * self._indentation
 		
 	def push_indentation(self):
 		self._indentation += 1
-		self._indentation_pushed = True
 		
 	def pop_indentation(self):
 		self._indentation -= 1
-		self._indentation_pushed = False
 
-	def tty_font(self, font = '0', text = None):
-		result = '\033[' + font + 'm'
-		if text:
-				result += text + self.tty_font()
-		return result
-	
-	def message(self, message, font = None):
-		#prefix = __name__ + '(' + self.__class__.__name__ + '): '
-		prefix = 'packageneric: '
-		string = prefix
-		for x in message:
-			string += x
+	def message(self, prefix, message, font = None):
+		#prefix_ = __name__ + '(' + self.__class__.__name__ + '): '
+		prefix_ = ''
+		if font: prefix_ += tty_font(font)
+		prefix_ += prefix
+		prefix_ += self.indentation()
+		result = prefix_
+		for x in message[:-1]:
 			if x == '\n':
-					string += prefix
-		if font:
-			string = self.tty_font(font, string)
-		return string
+				if font: result += tty_font()
+				result += '\n'
+				result += prefix_
+			else: result += x
+		if len(message): result += message[-1]
+		result += tty_font()
+		return result
 
-	def trace(self, message):
-		print self.message('trace: ' + message, '2;33')
+	def trace(self, message): print self.message('packageneric: trace: ', message, '2;33')
 		
-	def information(self, message):
-		print self.message('information: ' + message, '34')
+	def information(self, message): print self.message('packageneric: information: ', message, '34')
 	
-	def success(self, message):
-		print self.message('information: ' + message, '32')
+	def success(self, message): print self.message('packageneric: success: ', message, '32')
 		
-	def warning(self, message):
-		print self.message('warning: ' + message, '35')
+	def warning(self, message): print self.message('packageneric: warning: ', message, '35')
 	
-	def error(self, message):
-		print self.message('error: ' + message, '1;31')
+	def error(self, message): print self.message('packageneric: error: ', message, '1;31')
 
 	def abort(self, message):
 		self.error(message + '\nbailing out.')
 		sys.exit(1)
 
 #@staticmethod
-def _pkg_config(context, packageneric, name, what):
-	command = 'pkg-config --%s \'%s\'' % (what, name)
-	#packageneric.trace('checking for ' + command + ' ... ')
-	context.Display(packageneric.indentation())
-	context.Message(packageneric.message('checking for ' + command + ' ... '))
-	result, output = context.TryAction(command)
-	context.Result(result)
-	return result, output
-
-#@staticmethod
-def _try_run(context, packageneric, description, text, language):
-	#packageneric.trace('checking for ' + description + ' ... ')
-	context.Display(packageneric.indentation())
-	context.Message(packageneric.message('trying to build and run program for checking ' + description + ' ... '))
-	result, output = context.TryRun(text, language)
-	context.Result(result)
-	return result, output
+def tty_font(font = '0', text = None):
+	if not sys.stdout.isatty():
+		if text: return text
+		else: return ''
+	result = '\033[' + font + 'm'
+	if text: result += text + tty_font()
+	return result
 	
 #@staticmethod
-def _free(context, packageneric, free):
-	#packageneric.trace('checking for ' + str(free) + ' ... ')
-	context.Display(packageneric.indentation())
-	context.Display(packageneric.message('checking for ' + str(free) + ' ... '))
-	packageneric.push_indentation()
-	result = free()
-	context.Display(packageneric.indentation())
-	context.Display(packageneric.message('checking for ' + str(free) + ' ... '))
-	packageneric.pop_indentation()
-	context.Result(result)
-	return result
-
+def _merge_environment(source, destination):
+	try: destination.AppendUnique(CPPFLAGS = source['CPPFLAGS'])
+	except KeyError: pass
+	try: destination.Append(CPPDEFINES = source['CPPDEFINES'])
+	except KeyError: pass
+	try: destination.AppendUnique(CPPPATH = source['CPPPATH'])
+	except KeyError: pass
+	try: destination.AppendUnique(CXXFLAGS = source['CXXFLAGS'])
+	except KeyError: pass
+	try: destination.AppendUnique(LINKFLAGS = source['LINKFLAGS'])
+	except KeyError: pass
+	try: destination.AppendUnique(LIBPATH = source['LIBPATH'])
+	except KeyError: pass
+	try: destination.AppendUnique(LIBS = source['LIBS'])
+	except KeyError: pass
+	
 #@staticmethod
 def _dump_environment(environment, all = False):
 	if all:
-		if False:
-			print environment.Dump()
+		if False: print environment.Dump()
 		else:
 			dictionary = environment.Dictionary()
 			keys = dictionary.keys()
 			keys.sort()
-			for key in keys:
-				print '%s = %s' % (key, dictionary[key])
+			for key in keys: print '%s = %s' % (key, dictionary[key])
 	else:
 		def show(key):
 			try:
 				environment[key]
-				if len(environment[key]):
-					print key, '->', environment[key], '->', environment.subst('$' + key)
-				else:
-					print key, '<- empty'
-			except:
-				pass
-		show('CPPDEFINES')
-		show('CPPPATH')
-		show('CXXFLAGS')
-		show('LIBPATH')
-		show('LIBS')
-		show('LINKFLAGS')
+				if len(environment[key]): print key, '->', environment[key], '->', environment.subst('$' + key)
+				else: print key, '<- empty'
+			except KeyError: pass
+		for x in 'CPPFLAGS', 'CPPDEFINES', 'CPPPATH', 'CXXFLAGS', 'LIBPATH', 'LIBS', 'LINKFLAGS': show(x)
