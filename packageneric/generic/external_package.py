@@ -146,6 +146,9 @@ class external_package:
 
 #@staticmethod
 def _pkg_config(self, context, name, what):
+	import os
+	try: context.env.AppendUnique(ENV = {'PKG_CONFIG_PATH': os.environ['PKG_CONFIG_PATH']})
+	except KeyError: pass
 	context.Message(self.packageneric().message('packageneric: ', 'checking for ' + name + ' ... '))
 	result, output = context.TryAction("pkg-config --%s '%s'" % (what, name))
 	context.Result(_result(self, result))
@@ -188,10 +191,10 @@ def _call(self, context, call, detail):
 #@staticmethod
 def _result(self, result):
 	if result:
-		font = '32'
+		font = '1;32'
 		text = 'yes'
 	else:
-		font = '31'
+		font = '1;31'
 		text = 'no'
 	import packageneric.generic
 	return packageneric.generic.tty_font(font, text)

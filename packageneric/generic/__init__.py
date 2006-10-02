@@ -19,8 +19,6 @@ class packageneric:
 		from find import find
 		return apply(find, (self,) + args, kw)
 
-	from find import glob, print_all_nodes
-	
 	def external_package(self, *args, **kw):
 		from external_package import external_package
 		return apply(external_package, (self,) + args, kw)
@@ -60,7 +58,7 @@ class packageneric:
 		#SCons.Script.main()
 		self.information('targets: ' + ' '.join(SCons.Script.BUILD_TARGETS))
 		for (target, build) in self.targets().items():
-			if target in SCons.Script.BUILD_TARGETS: SCons.Script.Alias(target, build.targets())
+			if target in SCons.Script.BUILD_TARGETS: self.common_environment().Alias(target, build.targets())
 	
 	def command_line_arguments(self):
 		if self._command_line_arguments is None:
@@ -158,6 +156,9 @@ class packageneric:
 					[('COMPILER__HOST', '"%s"' % self._build_environment.subst('$packageneric__cxx_compiler'))]
 				]))
 			)
+			for i in self.find('.', '.', '*.hpp.in'): # todo private and public
+				self.uninstalled_environment().SubstInFile(os.path.join(self.build_directory(), i.strip(), os.path.splitext(i.relative())[0]), i.full())
+				self.build_environment().SubstInFile(os.path.join(self.build_directory(), i.strip(), os.path.splitext(os.path.splitext(i.relative())[0])[0] + '.private.hpp'), i.full())
 		return self._build_environment
 	
 	def uninstalled_environment(self):
@@ -201,10 +202,6 @@ class packageneric:
 			packageneric = self
 			self.common_environment().Export('packageneric')
 		
-		for i in self.find('.', '.', '*.hpp.in'): # todo private and public
-			self.uninstalled_environment().SubstInFile(os.path.join(self.build_directory(), i.strip(), os.path.splitext(i.relative())[0]), i.full())
-			self.build_environment().SubstInFile(os.path.join(self.build_directory(), i.strip(), os.path.splitext(os.path.splitext(i.relative())[0])[0] + '.private.hpp'), i.full())
-
 	def indentation(self):
 		return ' -> ' * self._indentation
 		

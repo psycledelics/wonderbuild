@@ -2,7 +2,7 @@
 # copyright 2006 johan boule <bohan@jabber.org>
 # copyright 2006 psycledelics http://psycle.pastnotecut.org
 
-import os, fnmatch
+import os, os.path, fnmatch
 
 class find:
 	'''a forward iterator that traverses a directory tree'''
@@ -23,6 +23,10 @@ class find:
 		
 	def packageneric(self): return self._packageneric
 		
+	def full_path(self): return os.path.join(self._strip_path, self._relative_path)
+	def strip_path(self): return self._strip_path
+	def relative_path(self): return self._relative_path
+	
 	def __getitem__(self, index):
 		while True:
 			try:
@@ -44,32 +48,31 @@ class find:
 						def __init__(self, strip, relative):
 							self._strip = strip
 							self._relative = relative
-						
 						def full(self): return os.path.join(self._strip, self._relative)
 						def strip(self): return self._strip
 						def relative(self): return self._relative
-							
 					return file(self._strip_path, relative_path)
 
-def print_all_nodes(dirnode, level = 0):
+def print_all_nodes(dirnode):
 	'''prints all the scons nodes that are children of this node, recursively.'''
-	if type(dirnode)==type(''):
-		dirnode=Dir(dirnode)
-	dt = type(Dir('.'))
+	import SCons.Node.FS
+	if type(dirnode) == type(''): dirnode = SCons.Node.FS.default_fs.Dir(dirnode)
+	dt = type(SCons.Node.FS.default_fs.Dir('.'))
 	for f in dirnode.all_children():
 		if type(f) == dt:
-			print "%s%s: .............." % (level * ' ', str(f))
-			print_dir(f, level+2)
-		print "%s%s" % (level * ' ', str(f))
+			#print '%s/' % str(f)
+			print_all_nodes(f)
+		else: print '%s' % (str(f))
 
 def glob(includes = ['*'], excludes = None, dir = '.'):
-	'''similar to glob.glob, except globs SCons nodes, and thus sees generated files and files from build directories.
+	"""
+	similar to glob.glob, except globs SCons nodes, and thus sees generated files and files from build directories.
 	Basically, it sees anything SCons knows about.
 	A key subtlety is that since this function operates on generated nodes as well as source nodes on the filesystem,
 	it needs to be called after builders that generate files you want to include.
 	
 	It will return both Dir entries and File entries
-	'''
+	"""
 	
 	def fn_filter(node):
 		fn = os.path.basename(str(node))
@@ -93,9 +96,10 @@ def glob(includes = ['*'], excludes = None, dir = '.'):
 		return nodes
 
 	def gen_node(n):
-		'''Checks first to see if the node is a file or a dir, then creates the appropriate node.
+		"""
+		Checks first to see if the node is a file or a dir, then creates the appropriate node.
 		(code seems redundant, if the node is a node, then shouldn't it just be left as is?)
-		'''
+		"""
 		if type(n) in (type(''), type(u'')):
 			path = n
 		else:
