@@ -39,6 +39,12 @@ AC_CHECK_HEADERS(audio/audiolib.h,
 			[
 				NETAUDIO_SUPPORT=yes
 				NETAUDIO_LIBS=-laudio
+				
+				# [bohan] remove the following two lines to try to build netaudio support.
+				# [bohan] ideally, there should be options like --with-netaudio --without-netaudio,
+				# [bohan] but it's painful to add and i prefer not to do further development with the autotools (yes, scons :-)
+				NETAUDIO_SUPPORT="no (it didn't build for me ; jaz, edit the configure.ac to reenable it -- bohan)"
+				AC_DEFINE(XPSYCLE__NO_NETAUDIO, [], whether you don't have/want netaudio)
 			]
 		)
 	],
@@ -176,23 +182,26 @@ AC_SUBST(abs_top_builddir)
 m4_include([AC_CONFIG_FILES].ac)
 m4_include([AC_CONFIG_HEADERS].ac)
 
+test "x$prefix" = "xNONE" && prefix=$ac_default_prefix
+test "x$exec_prefix" = "xNONE" && exec_prefix='${prefix}'
+
 XPSYCLE__INSTALL_PATHS__CONFIGURATION=$(eval echo $sysconfdir)
 AC_DEFINE_UNQUOTED(XPSYCLE__INSTALL_PATHS__CONFIGURATION, "$XPSYCLE__INSTALL_PATHS__CONFIGURATION", directory where system-wide configuration is to be found)
 AC_SUBST(XPSYCLE__INSTALL_PATHS__CONFIGURATION)
 
-XPSYCLE__INSTALL_PATHS__DOC=$(eval echo $datadir)/doc/$PACKAGE_TARNAME-$PACKAGE_VERSION
+XPSYCLE__INSTALL_PATHS__DOC=$(eval echo $(eval echo $datadir))/doc/$PACKAGE_TARNAME-$PACKAGE_VERSION
 AC_DEFINE_UNQUOTED(XPSYCLE__INSTALL_PATHS__DOC, "$XPSYCLE__INSTALL_PATHS__DOC", directory where documentation is to be found)
 AC_SUBST(XPSYCLE__INSTALL_PATHS__DOC)
 
-XPSYCLE__INSTALL_PATHS__PIXMAPS=$(eval echo $datadir)/pixmaps/$PACKAGE_TARNAME-$PACKAGE_VERSION
+XPSYCLE__INSTALL_PATHS__PIXMAPS=$(eval echo $(eval echo $datadir))/pixmaps/$PACKAGE_TARNAME-$PACKAGE_VERSION
 AC_DEFINE_UNQUOTED(XPSYCLE__INSTALL_PATHS__PIXMAPS, "$XPSYCLE__INSTALL_PATHS__PIXMAPS", directory where pixmaps are to be found)
 AC_SUBST(XPSYCLE__INSTALL_PATHS__PIXMAPS)
 
-XPSYCLE__INSTALL_PATHS__PLUGINS=$(echo $(eval echo $libdir) | sed "s:^NONE:$prefix:")
+XPSYCLE__INSTALL_PATHS__PLUGINS=$(eval echo $(eval echo $libdir))
 AC_DEFINE_UNQUOTED(XPSYCLE__INSTALL_PATHS__PLUGINS, "$XPSYCLE__INSTALL_PATHS__PLUGINS", directory where plugins are to be found)
 AC_SUBST(XPSYCLE__INSTALL_PATHS__PLUGINS)
 
-XPSYCLE__INSTALL_PATHS__PRESETS=$(eval echo $datadir)/$PACKAGE_TARNAME.plugins/presets
+XPSYCLE__INSTALL_PATHS__PRESETS=$(eval echo $(eval echo $datadir))/$PACKAGE_TARNAME.plugins/presets
 AC_DEFINE_UNQUOTED(XPSYCLE__INSTALL_PATHS__PRESETS, "$XPSYCLE__INSTALL_PATHS__PRESETS", directory where presets are to be found)
 AC_SUBST(XPSYCLE__INSTALL_PATHS__PRESETS)
 
