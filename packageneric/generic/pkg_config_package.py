@@ -21,7 +21,7 @@ class pkg_config_package:
 		self._uninstalled_environment = None
 		self._installed_environment = None
 		self._targets = None
-		self.packageneric().add_target(self.name() + '.pc', self)
+		self.packageneric().add_target(self)
 		
 	def packageneric(self): return self._packageneric
 		
@@ -63,7 +63,9 @@ class pkg_config_package:
 		def l(l): return ' ' + l_prefix + l + l_suffix
 		string += 'CFlags:'
 		for path in environment.Split(environment.subst('$CPPPATH')): string += I(path)
-		for (k, v) in environment['CPPDEFINES'].items(): string += D(k, environment.subst(v))
+		try:
+			for (k, v) in environment['CPPDEFINES'].items(): string += D(k, environment.subst(v))
+		except KeyError: pass
 		string += ' ' + environment.subst('$CXXFLAGS') + '\n'
 		string += 'Libs:'
 		for module in self.modules(): string += l(module.name())
@@ -89,6 +91,8 @@ class pkg_config_package:
 		if self._installed_environment is None: self._installed_environment = self.packageneric().installed_environment().Copy()
 		return self._installed_environment
 
+	def target_name(self): return self.name() + '.pc'
+
 	def targets(self):
 		if self._targets is None:
 			for module in self.modules():
@@ -99,11 +103,11 @@ class pkg_config_package:
 			import SCons.Node.Python
 			self._targets = [
 				self.uninstalled_environment().WriteToFile(os.path.join(self.packageneric().build_directory(), self.name() + '-uninstalled.pc'), SCons.Node.Python.Value(self.string(uninstalled = True))),
-				self.installed_environment().WriteToFile(os.path.join(self.packageneric().build_directory(), self.name() + '.pc'), SCons.Node.Python.Value(self.string(uninstalled = False)))
+				self.installed_environment().WriteToFile(os.path.join(self.packageneric().build_directory(), self.target_name()), SCons.Node.Python.Value(self.string(uninstalled = False)))
 			]
 			depends = []
 			for depend_list in map(lambda x: x.targets(), self.modules()):
-				depends.extend(depend_list)
+				for depend in depend_list: depends.extend(depend)
 			for target_list in self._targets:
 				for target in target_list:
 					target.add_dependency(depends)

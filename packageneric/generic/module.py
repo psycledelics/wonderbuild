@@ -43,6 +43,7 @@ class module:
 		self._installed_defines = {}
 		self._installed_environment = None
 		self._targets = None
+		self.packageneric().add_target(self)
 	
 	def packageneric(self): return self._packageneric
 	
@@ -104,20 +105,6 @@ class module:
 	def add_depends(self, depends):
 		for package in depends: self.add_depend(package)
 		
-	def show(self, list_files = False):
-		self.packageneric().information('module: ' + self.name() + ' ' + str(self.version()))
-		depends = []
-		for package in self.depends(): depends.append(str(package))
-		self.packageneric().information('module: depends: ' + str(depends))
-		build_depends = []
-		for package in self.build_depends(): build_depends.append(str(package))
-		self.packageneric().information('module: build depends: ' + str(build_depends))
-		if list_files:
-			self.packageneric().trace('module: sources:')
-			self.packageneric().trace(str(self.sources()))
-			self.packageneric().trace('module: headers:')
-			self.packageneric().trace(str(self.headers()))
-	
 	def _merge_common_environment_(self, destination):
 		if not self._common_environment:
 			self._common_environment = self.source_package()._common_environment_().Copy()
@@ -128,6 +115,9 @@ class module:
 			if depends_not_found:
 				message = "cannot build module '" + self.name() + "' because not all dependencies were found:"
 				for depend_not_found in depends_not_found: message += str(depend_not_found)
+				message += '\n'
+				import os.path
+				message += 'for details, see ' + os.path.join(self._common_environment.subst('$packageneric__build_directory'), 'configure.log')
 				self.packageneric().abort(message)
 		import packageneric.generic
 		packageneric.generic._merge_environment(self._common_environment, destination)
@@ -192,12 +182,15 @@ class module:
 	def merge_installed_environment(self, destination):
 		import packageneric.generic
 		packageneric.generic._merge_environment(self.installed_environment(), destination)
-		
+
+	def target_name(self): return 'lib' + self.name()
+	
 	def targets(self):
 		if not self._targets:
 			self.build_environment()
 			self.uninstalled_environment()
 			self.installed_environment()
-			self._targets = self.build_environment().SharedLibrary(os.path.join(self.packageneric().build_directory(), 'lib' + self.name()), [os.path.join(self.packageneric().build_directory(), x.full()) for x in self.sources()])
-			self.packageneric().add_target('lib' + self.name(), self._targets)
+			self._targets = [
+				self.build_environment().SharedLibrary(os.path.join(self.packageneric().build_directory(), self.target_name()), [os.path.join(self.packageneric().build_directory(), x.full()) for x in self.sources()])
+			]
 		return self._targets

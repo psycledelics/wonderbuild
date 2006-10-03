@@ -51,14 +51,17 @@ class packageneric:
 		return self._version
 
 	def targets(self): return self._targets
-	def add_target(self, target, build): self._targets[target] = build
+	def add_target(self, builder): self._targets[builder.target_name()] = builder
 
-	def __call__(self):
+	def __call__(self, *builders):
 		import SCons.Script, SCons.Node.Alias
 		#SCons.Script.main()
-		self.information('targets: ' + ' '.join(SCons.Script.BUILD_TARGETS))
-		for (target, build) in self.targets().items():
-			if target in SCons.Script.BUILD_TARGETS: self.common_environment().Alias(target, build.targets())
+		self.information('targets: ' + ' '.join(SCons.Script.BUILD_TARGETS) + ' '.join(map(lambda x: x.target_name(), builders)))
+		for builder in builders:
+			self.common_environment().Alias(builder.target_name(), builder.targets())
+			self.common_environment().Default(builder.target_name())
+		for (target, builder) in self.targets().items():
+			if target in SCons.Script.BUILD_TARGETS: self.common_environment().Alias(target, builder.targets())
 	
 	def command_line_arguments(self):
 		if self._command_line_arguments is None:

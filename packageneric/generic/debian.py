@@ -45,7 +45,7 @@ class debian:
 			self._build_depends = build_depends
 		self._control = None
 		self._targets = None
-		self.packageneric().add_target('debian', self)
+		self.packageneric().add_target(self)
 
 	def packageneric(self):
 		return self._packageneric
@@ -137,6 +137,8 @@ class debian:
 			self._control = string
 		return self._control
 
+	def target_name(self): return 'debian'
+		
 	def targets(self):
 		if not self._targets:
 			import SCons.Node.Python
