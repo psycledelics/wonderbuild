@@ -1,3 +1,18 @@
+
+NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE
+NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE
+NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE
+
+	this todo list was for the autotools.
+	now that's i've switched to scons, it's mostly caduque.
+	-- bohan
+
+NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE
+NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE
+NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE
+
+
+
 microsoft:
 	
 *	for vcproj, use InheritedPropertySheets pointing to vcprops files.
@@ -38,9 +53,6 @@ wrappers:
 *	readd the packageneric/generic/detail/libexec/colorizers to the PATH env var.
 	-- bohan
 	
-*	change bin/colorgcc to reflect gcc 4.0 that has changed the `x' notation to 'x'.
-	-- bohan
-
 pkg-config:	
 
 *	packageneric/generic/detail/libexec/build
@@ -50,9 +62,6 @@ pkg-config:
 	because invoking the make command directly may retrigger the configure script.
 	-- bohan
 
-*	Honor pkg-config 0.18 Requires.private
-	-- bohan
-	
 *	m4 macro PACKAGENERIC__MODULE__EXTERNAL should allow to just test wether the package is available or not.
 	-- bohan
 	
