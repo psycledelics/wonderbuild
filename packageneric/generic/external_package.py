@@ -149,14 +149,14 @@ def _pkg_config(self, context, name, what):
 	import os
 	try: context.env.AppendUnique(ENV = {'PKG_CONFIG_PATH': os.environ['PKG_CONFIG_PATH']})
 	except KeyError: pass
-	context.Message(self.packageneric().message('packageneric: ', 'checking for ' + name + ' ... '))
+	context.Message(self.packageneric().message('packageneric: ', 'checking for ' + name + ' ... ', font = _font))
 	result, output = context.TryAction("pkg-config --%s '%s'" % (what, name))
 	context.Result(_result(self, result))
 	return result, output
 
 #@staticmethod
 def _try_build(self, context, description, libraries, text, extension):
-	context.Message(self.packageneric().message('packageneric: ', 'checking for ' + description + ' ... '))
+	context.Message(self.packageneric().message('packageneric: ', 'checking for ' + description + ' ... ', font = _font))
 	old_libs = context.AppendLIBS(libraries)
 	result = context.TryBuild(context.env.Program, text, extension)
 	if not result: context.SetLIBS(old_libs)
@@ -165,7 +165,7 @@ def _try_build(self, context, description, libraries, text, extension):
 
 #@staticmethod
 def _call(self, context, call, detail):
-	context.Display(self.packageneric().message('packageneric: ', 'checking for ' + str(call) + ' ... '))
+	context.Display(self.packageneric().message('packageneric: ', 'checking for ' + str(call) + ' ... ', font = _font))
 	if detail: context.Display('\n')
 	else:
 		class nullout:
@@ -180,7 +180,7 @@ def _call(self, context, call, detail):
 		sys.stdout = nullout(sys.stdout)
 	self.packageneric().push_indentation()
 	result = call()
-	if detail: context.Message(self.packageneric().message('packageneric: ', 'result: '))
+	if detail: context.Message(self.packageneric().message('packageneric: ', 'result: ', font = _font))
 	else:
 		sys.stdout = sys.stdout.underlying_out()
 		context.Message('')
@@ -198,3 +198,5 @@ def _result(self, result):
 		text = 'no'
 	import packageneric.generic
 	return packageneric.generic.tty_font(font, text)
+
+_font = '1;34'

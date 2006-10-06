@@ -43,6 +43,8 @@ class packageneric:
 		from distribution_archive import distribution_archive
 		return apply(distribution_archive, (self,) + args, kw)
 
+	from SCons.Util import NodeList as node_list
+
 	def name(self): return self._name
 			
 	def	self_version(self):
@@ -50,18 +52,24 @@ class packageneric:
 			self._version = self.version(0, 0)
 		return self._version
 
-	def targets(self): return self._targets
-	def add_target(self, builder): self._targets[builder.target_name()] = builder
+	def builders(self):
+		try: return self._builders
+		except AttributeError:
+			self._builders = []
+			return self._builders
+	def add_builder(self, builder): self.builders().append(builder)
 
 	def __call__(self, *builders):
 		import SCons.Script, SCons.Node.Alias
 		#SCons.Script.main()
-		self.information('targets: ' + ' '.join(SCons.Script.BUILD_TARGETS) + ' '.join(map(lambda x: x.target_name(), builders)))
+		self.information('targets are ' + ' '.join(map(lambda maybe_node: str(maybe_node), SCons.Script.BUILD_TARGETS)) + ' ' + ' '.join(map(lambda builder: builder.target_name(), builders)))
 		for builder in builders:
 			self.common_environment().Alias(builder.target_name(), builder.targets())
 			self.common_environment().Default(builder.target_name())
-		for (target, builder) in self.targets().items():
-			if target in SCons.Script.BUILD_TARGETS: self.common_environment().Alias(target, builder.targets())
+		for target in SCons.Script.COMMAND_LINE_TARGETS:
+			for builder in self.builders():
+				if target == builder.target_name(): self.common_environment().Alias(target, builder.targets())
+		self.build_environment()
 	
 	def command_line_arguments(self):
 		if self._command_line_arguments is None:
@@ -90,6 +98,8 @@ class packageneric:
 			self._options.Update(self.common_environment())
 			# Now that we know the path of the option file,
 			# we create again the SCons.Options.Options object telling it to read the option file.
+			self.information('source directory is ' + self.common_environment().Dir('.').path)
+			self.information(' build directory is ' + self.common_environment().Dir(self.common_environment().subst('$packageneric__build_directory')).path)
 			self.information('using options ' + self.common_environment().subst('$packageneric__options'))
 			self._options = SCons.Options.Options(self.common_environment().subst('$packageneric__options'), self.command_line_arguments())
 			restart(self, create_build_directory = True)
@@ -127,6 +137,7 @@ class packageneric:
 			toolpath = [os.path.join('packageneric', 'generic', 'tools')]
 			SCons.Tool.Tool('subst', toolpath = toolpath)(self._common_environment)
 			SCons.Tool.Tool('write', toolpath = toolpath)(self._common_environment)
+			self._common_environment.SourceCode('.', None) # we don't use the default source code fetchers (RCS, SCCS, ...), so we disable them to avoid uneeded processing
 			self._common_environment.SetOption('implicit_cache', True)
 			#self._common_environment.SourceSignatures('timestamp') # ('MD5')
 			self._common_environment.TargetSignatures('build') # ('content')
@@ -140,11 +151,50 @@ class packageneric:
 	def build_environment(self):
 		if not self._build_environment:
 			self._build_environment = self.common_environment().Copy()
-			self._build_environment['SHCXX'] = '$packageneric__cxx_compiler'
-			self._build_environment['SHLINK'] = '$packageneric__linker'
+			self._build_environment['CXX'] = '$packageneric__cxx_compiler'
+			self._build_environment['LINK'] = '$packageneric__linker'
+			self.information('c++ compiler is ' + self._build_environment.subst('$CXX') + ' version ' + self._build_environment.subst('$CXXVERSION'))
+			gxx = self.external_package( # gcc -E -dM -std=c++98 -x c++-header /dev/null | sort
+				builds = [
+					[
+						'gnug', [],
+						"""\
+						#if !defined __GNUG__
+							#error this is not gcc g++
+						#endif
+						int main() { return 0; }
+						\n"""
+					]
+				],
+				distribution_packages = {
+					'debian': 'g++',
+					'cygwin': 'gcc-g++-3.4.4-1'
+				},
+				url = 'http://gcc.org'
+			)
+			if gxx.found():
+				self._build_environment.Append(
+					CPPFLAGS = ['-pipe', '-Wall', '-UNDEBUG'],
+					CXXFLAGS = ['-pipe', '-Wall', '-O0', '-ggdb3', '-std=c++98'],
+					LINKFLAGS = ['-O0']
+				)
+				if sys.stdout.isatty():
+					self._build_environment.Append(ENV = {
+						'TERM': 'packageneric--color-pipe',
+						'PACKAGENERIC__GCC': self._build_environment.subst('$CXX')
+					})
+					self._build_environment['CXX'] = 'packageneric/generic/detail/libexec/colorizers/gcc'
+					self._build_environment['LINK'] = 'packageneric/generic/detail/libexec/colorizers/gcc'
 			if self._build_environment.subst('$packageneric__verbose') == '0':
-				self._build_environment['SHCXXCOMSTR'] = self.message('packageneric: ', 'compiling c++ $TARGET')
-				self._build_environment['SHLINKCOMSTR'] = self.message('packageneric: ', 'linking shared library $TARGET')
+				if self._build_environment['STATIC_AND_SHARED_OBJECTS_ARE_THE_SAME']:
+					self._build_environment['CXXCOMSTR'] = self.message('packageneric: ', 'compiling c++ $SOURCE', font = '1')
+					self._build_environment['SHCXXCOMSTR'] = self.message('packageneric: ', 'compiling c++ $SOURCE', font = '1')
+				else:
+					self._build_environment['CXXCOMSTR'] = self.message('packageneric: ', 'compiling static c++ $SOURCE', font = '1')
+					self._build_environment['SHCXXCOMSTR'] = self.message('packageneric: ', 'compiling shared c++ $SOURCE', font = '1')
+				self._build_environment['LINKCOMSTR'] = self.message('packageneric: ', 'linking static library or program $TARGET', font = '1;35')
+				self._build_environment['SHLINKCOMSTR'] = self.message('packageneric: ', 'linking shared library $TARGET', font = '1;35')
+				self._build_environment['LDMODULECOMSTR'] = self.message('packageneric: ', 'linking loadable module $TARGET', font = '1;35')
 			self._build_environment.Append(CPPPATH = [os.path.join(self.build_directory(), 'packageneric', 'src')])
 			import SCons.Node.Python
 			self._build_environment.WriteToFile(
@@ -196,10 +246,9 @@ class packageneric:
 		self._build_environment = None
 		self._uninstalled_environment = None
 		self._installed_environment = None
-		self._targets = {}
 		self._indentation = 0
 		
-		self.information('version of packageneric: ' + str(self.self_version()))
+		self.information('version of packageneric is ' + str(self.self_version()))
 		
 		if False:
 			packageneric = self
@@ -215,7 +264,6 @@ class packageneric:
 		self._indentation -= 1
 
 	def message(self, prefix, message, font = None):
-		#prefix_ = __name__ + '(' + self.__class__.__name__ + '): '
 		prefix_ = ''
 		if font: prefix_ += tty_font(font)
 		prefix_ += prefix
@@ -231,21 +279,22 @@ class packageneric:
 		result += tty_font()
 		return result
 
-	def trace(self, message): print self.message('packageneric: trace: ', message, '2;33')
+	def trace(self, message): print self.message('packageneric: trace: ', message, font = '2;33')
 		
-	def information(self, message): print self.message('packageneric: information: ', message, '34')
+	def information(self, message): print self.message('packageneric: information: ', message, font = '2;34')
 	
-	def success(self, message): print self.message('packageneric: success: ', message, '32')
+	def success(self, message): print self.message('packageneric: success: ', message, font = '32')
 		
-	def warning(self, message): print self.message('packageneric: warning: ', message, '35')
+	def warning(self, message): print self.message('packageneric: warning: ', message, font = '1;35')
 	
-	def error(self, message): print self.message('packageneric: error: ', message, '1;31')
+	def error(self, message): print self.message('packageneric: error: ', message, font = '1;31')
 
 	def abort(self, message):
-		self.error(message + '\nbailing out.')
-		sys.exit(1)
+		print self.message('packageneric: error: ', message, font = '31')
+		self.error('bailing out.')
+		import SCons.Errors
+		raise SCons.Errors.UserError, __name__ + '.' + self.__class__.__name__ + ': exception raised to abort.'
 
-#@staticmethod
 def tty_font(font = '0', text = None):
 	if not sys.stdout.isatty():
 		if text: return text
@@ -253,8 +302,11 @@ def tty_font(font = '0', text = None):
 	result = '\033[' + font + 'm'
 	if text: result += text + tty_font()
 	return result
+
+def flatten(sequence):
+	from SCons.Util import flatten
+	return flatten(sequence)
 	
-#@staticmethod
 def _merge_environment(source, destination):
 	try: destination.AppendUnique(CPPFLAGS = source['CPPFLAGS'])
 	except KeyError: pass
@@ -271,7 +323,6 @@ def _merge_environment(source, destination):
 	try: destination.AppendUnique(LIBS = source['LIBS'])
 	except KeyError: pass
 	
-#@staticmethod
 def _dump_environment(environment, all = False):
 	if all:
 		if False: print environment.Dump()
@@ -287,4 +338,4 @@ def _dump_environment(environment, all = False):
 				if len(environment[key]): print key, '->', environment[key], '->', environment.subst('$' + key)
 				else: print key, '<- empty'
 			except KeyError: pass
-		for x in 'CPPFLAGS', 'CPPDEFINES', 'CPPPATH', 'CXXFLAGS', 'LIBPATH', 'LIBS', 'LINKFLAGS': show(x)
+		for x in 'CPPFLAGS', 'CPPDEFINES', 'CPPPATH', 'CXXFLAGS', 'LINKFLAGS', 'LIBPATH', 'LIBS': show(x)

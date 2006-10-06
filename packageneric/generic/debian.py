@@ -45,7 +45,7 @@ class debian:
 			self._build_depends = build_depends
 		self._control = None
 		self._targets = None
-		self.packageneric().add_target(self)
+		self.packageneric().add_builder(self)
 
 	def packageneric(self):
 		return self._packageneric

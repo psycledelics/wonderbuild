@@ -19,10 +19,6 @@ class source_package:
 		self._version = version
 		self._description= description
 		self._long_description = long_description
-		self._common_environment = None
-		self._build_environment = None
-		self._uninstalled_environment = None
-		self._installed_environment = None
 		self._path = path
 	
 	def packageneric(self): return self._packageneric
@@ -36,11 +32,14 @@ class source_package:
 	def long_description(self): return self._long_description
 
 	def _common_environment_(self):
-		if not self._common_environment: self._common_environment = self.packageneric().common_environment().Copy()
-		return self._common_environment
+		try: return self._common_environment
+		except AttributeError:
+			self._common_environment = self.packageneric().common_environment().Copy()
+			return self._common_environment
 			
 	def build_environment(self):
-		if not self._build_environment:
+		try: return self._build_environment
+		except AttributeError:
 			self._build_environment = self.packageneric().build_environment().Copy()
 			self._build_environment.Append(CPPPATH = [os.path.join(self.packageneric().build_directory(), 'packageneric', 'source-packages', self.name(), 'src')])
 			import SCons.Node.Python
@@ -60,16 +59,18 @@ class source_package:
 						]
 				))
 			)
-		return self._build_environment
+			return self._build_environment
 		
 	def uninstalled_environment(self):
-		if not self._uninstalled_environment:
+		try: return self._uninstalled_environment
+		except AttributeError:
 			self._uninstalled_environment = self.packageneric().uninstalled_environment().Copy()
-		return self._uninstalled_environment
+			return self._uninstalled_environment
 
 	def installed_environment(self):
-		if not self._installed_environment:
+		try: return self._installed_environment
+		except AttributeError:
 			self._installed_environment = self.packageneric().installed_environment().Copy()
-		return self._installed_environment
+			return self._installed_environment
 
 	def path(self): return self._path

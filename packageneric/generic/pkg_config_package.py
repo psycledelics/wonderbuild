@@ -9,7 +9,7 @@ class pkg_config_package:
 		name = None,
 		version = None,
 		description = '',
-		modules = None
+		modules = None,
 	):
 		self._packageneric = packageneric
 		self._name = name
@@ -17,11 +17,7 @@ class pkg_config_package:
 		self._description = description
 		if modules is None: self._modules = []
 		else: self._modules = modules
-		self._build_depends = None
-		self._uninstalled_environment = None
-		self._installed_environment = None
-		self._targets = None
-		self.packageneric().add_target(self)
+		self.packageneric().add_builder(self)
 		
 	def packageneric(self): return self._packageneric
 		
@@ -30,16 +26,53 @@ class pkg_config_package:
 	def version(self): return self._version
 	
 	def description(self): return self._description
+	
+	def add_include_path(self, path, uninstalled = False, installed = False):
+		if uninstalled: self.add_uninstalled_include_path(path)
+		if installed: self.add_installed_include_path(path)
+	
+	def add_define(self, name, value, build = False, uninstalled = False, installed = False):
+		if uninstalled: self.add_uninstalled_define(name, value)
+		if installed: self.add_installed_define(name, value)
+
+	def uninstalled_include_path(self):
+		try: return  self._uninstalled_include_path
+		except AttributeError:
+			self._uninstalled_include_path = []
+			return self._uninstalled_include_path
+	def add_uninstalled_include_path(self, path): self.uninstalled_include_path().append(path)
+	
+	def uninstalled_defines(self):
+		try: return self._uninstalled_defines
+		except AttributeError:
+			self._uninstalled_defines = {}
+			return self._uninstalled_defines
+	def add_uninstalled_define(self, name, value): self.uninstalled_defines()[name] = value
+		
+	def installed_include_path(self):
+		try: return self._installed_include_path
+		except AttributeError:
+			self._installed_include_path = []
+			return self._installed_include_path
+	def add_installed_include_path(self, path): self.installed_include_path().append(path)
+	
+	def installed_defines(self):
+		try: return self._installed_defines
+		except AttributeError:
+			self._installed_defines = {}
+			return self._installed_defines
+	def add_installed_define(self, name, value): self.installed_defines()[name] = value
 		
 	def modules(self): return self._modules
 		
 	def build_depends(self):
-		if self._build_depends is None:
+		try: return self._build_depends
+		except AttributeError:
 			self._build_depends = []
 			for module in self.modules():
 				for package in module.build_depends() + module.depends():
 					if not package in self._build_depends: self._build_depends.append(package)
-		return self._build_depends
+			return self._build_depends
 
 	def string(self, uninstalled):
 		string = 'Name: ' + self.name()
@@ -84,31 +117,40 @@ class pkg_config_package:
 		return string
 	
 	def uninstalled_environment(self):
-		if self._uninstalled_environment is None: self._uninstalled_environment = self.packageneric().uninstalled_environment().Copy()
-		return self._uninstalled_environment
+		try: return self._uninstalled_environment
+		except AttributeError:
+			self._uninstalled_environment = self.packageneric().uninstalled_environment().Copy()
+			for module in self.modules(): module.merge_uninstalled_environment(self._uninstalled_environment)
+			import os.path
+			for i in self.uninstalled_include_path(): self._uninstalled_environment.AppendUnique(CPPPATH = [os.path.join(self.packageneric().build_directory(), i)])
+			self._uninstalled_environment.AppendUnique(CPPPATH = self.uninstalled_include_path())
+			self._uninstalled_environment.Append(CPPDEFINES = self.uninstalled_defines())
+			return self._uninstalled_environment
 
 	def installed_environment(self):
-		if self._installed_environment is None: self._installed_environment = self.packageneric().installed_environment().Copy()
-		return self._installed_environment
+		try: return self._installed_environment
+		except AttributeError:
+			self._installed_environment = self.packageneric().installed_environment().Copy()
+			for module in self.modules(): module.merge_installed_environment(self._installed_environment)
+			self._installed_environment.AppendUnique(CPPPATH = self.installed_include_path())
+			self._installed_environment.Append(CPPDEFINES = self.installed_defines())
+			return self._installed_environment
 
 	def target_name(self): return self.name() + '.pc'
 
 	def targets(self):
-		if self._targets is None:
-			for module in self.modules():
-				module.targets()
-				module.merge_uninstalled_environment(self.uninstalled_environment())
-				module.merge_installed_environment(self.installed_environment())
+		try: return self._targets
+		except AttributeError:
+			depends = []
+			for depend_lists in map(lambda module: module.targets(), self.modules()):
+				for depend_list in depend_lists: depends.extend(depend_list)
 			import os.path
 			import SCons.Node.Python
 			self._targets = [
 				self.uninstalled_environment().WriteToFile(os.path.join(self.packageneric().build_directory(), self.name() + '-uninstalled.pc'), SCons.Node.Python.Value(self.string(uninstalled = True))),
 				self.installed_environment().WriteToFile(os.path.join(self.packageneric().build_directory(), self.target_name()), SCons.Node.Python.Value(self.string(uninstalled = False)))
 			]
-			depends = []
-			for depend_list in map(lambda x: x.targets(), self.modules()):
-				for depend in depend_list: depends.extend(depend)
 			for target_list in self._targets:
 				for target in target_list:
 					target.add_dependency(depends)
-		return self._targets
+			return self._targets

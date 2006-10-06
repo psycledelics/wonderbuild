@@ -5,8 +5,8 @@
 import os
 
 class module:
-	class types:
-		dynamic = 0
+	class binary_types:
+		loadable = 0
 		shared = 1
 		static = 2
 		program = 3
@@ -19,7 +19,8 @@ class module:
 		version = None,
 		description = '',
 		depends = None,
-		build_depends = None
+		build_depends = None,
+		binary_type = binary_types.loadable
 	):
 		self._packageneric = packageneric
 		self._source_package = source_package
@@ -30,20 +31,8 @@ class module:
 		else: self._depends = depends
 		if build_depends is None: self._build_depends = []
 		else: self._build_depends = build_depends
-		self._sources = []
-		self._headers = []
-		self._common_environment = None
-		self._build_include_path = []
-		self._build_defines = {}
-		self._build_environment = None
-		self._uninstalled_include_path = []
-		self._uninstalled_defines = {}
-		self._uninstalled_environment = None
-		self._installed_include_path = []
-		self._installed_defines = {}
-		self._installed_environment = None
-		self._targets = None
-		self.packageneric().add_target(self)
+		self._binary_type = binary_type
+		self.packageneric().add_builder(self)
 	
 	def packageneric(self): return self._packageneric
 	
@@ -55,33 +44,75 @@ class module:
 	
 	def description(self): return self._description
 		
-	def sources(self): return self._sources
+	def sources(self):
+		try: return self._sources
+		except AttributeError:
+			self._sources = []
+		return self._sources
 	def add_source(self, source): self.sources().append(source)
 	def add_sources(self, sources):
 		for x in sources: self.add_source(x)
 		
-	def headers(self): return self._headers
+	def headers(self):
+		try: return self._headers
+		except AttributeError:
+			self._headers = []
+			return self._headers
 	def add_header(self, header): self.headers().append(header)
 	def add_headers(self, headers):
 		for x in headers: self.add_header(x)
 		
-	def build_include_path(self): return self._build_include_path
-	def add_build_include_path(self, path): self._build_include_path.append(path)
+	def add_include_path(self, path, build = False, uninstalled = False, installed = False):
+		if build: self.add_build_include_path(path)
+		if uninstalled: self.add_uninstalled_include_path(path)
+		if installed: self.add_installed_include_path(path)
 	
-	def build_defines(self): return self._build_defines
-	def add_build_define(self, name, value): self._build_defines[name] = value
+	def add_define(self, name, value, build = False, uninstalled = False, installed = False):
+		if build: self.add_build_define(name, value)
+		if uninstalled: self.add_uninstalled_define(name, value)
+		if installed: self.add_installed_define(name, value)
+
+	def build_include_path(self):
+		try: return self._build_include_path
+		except AttributeError:
+			self._build_include_path = []
+			return self._build_include_path
+	def add_build_include_path(self, path): self.build_include_path().append(path)
+	
+	def build_defines(self):
+		try: return self._build_defines
+		except AttributeError:
+			self._build_defines = {}
+			return self._build_defines
+	def add_build_define(self, name, value): self.build_defines()[name] = value
 		
-	def uninstalled_include_path(self): return self._uninstalled_include_path
-	def add_uninstalled_include_path(self, path): self._uninstalled_include_path.append(path)
+	def uninstalled_include_path(self):
+		try: return self._uninstalled_include_path
+		except AttributeError:
+			self._uninstalled_include_path = []
+			return self._uninstalled_include_path
+	def add_uninstalled_include_path(self, path): self.uninstalled_include_path().append(path)
 	
-	def uninstalled_defines(self): return self._uninstalled_defines
-	def add_uninstalled_define(self, name, value): self._uninstalled_defines[name] = value
+	def uninstalled_defines(self):
+		try: return self._uninstalled_defines
+		except AttributeError:
+			self._uninstalled_defines = {}
+			return self._uninstalled_defines
+	def add_uninstalled_define(self, name, value): self.uninstalled_defines()[name] = value
 		
-	def installed_include_path(self): return self._installed_include_path
-	def add_installed_include_path(self, path): self._installed_include_path.append(path)
+	def installed_include_path(self):
+		try: return self._installed_include_path
+		except AttributeError:
+			self._installed_include_path = []
+			return self._installed_include_path
+	def add_installed_include_path(self, path): self.installed_include_path().append(path)
 	
-	def installed_defines(self): return self._installed_defines
-	def add_installed_define(self, name, value): self._installed_defines[name] = value
+	def installed_defines(self):
+		try: return self._installed_defines
+		except AttributeError:
+			self._installed_defines = {}
+			return self._installed_defines
+	def add_installed_define(self, name, value): self.installed_defines()[name] = value
 		
 	def build_depends(self):
 		packages = []
@@ -104,26 +135,29 @@ class module:
 	def add_depend(self, depend): self._depends.append(depend)
 	def add_depends(self, depends):
 		for package in depends: self.add_depend(package)
-		
+	
+	def binary_type(self): return self._binary_type
+	
 	def _merge_common_environment_(self, destination):
-		if not self._common_environment:
-			self._common_environment = self.source_package()._common_environment_().Copy()
-			depends_not_found = []
-			for package in self.build_depends() + self.depends():
-				if package.found(): package.merge_environment(self._common_environment)
-				else: depends_not_found.append(str(package))
-			if depends_not_found:
-				message = "cannot build module '" + self.name() + "' because not all dependencies were found:"
-				for depend_not_found in depends_not_found: message += str(depend_not_found)
-				message += '\n'
-				import os.path
-				message += 'for details, see ' + os.path.join(self._common_environment.subst('$packageneric__build_directory'), 'configure.log')
-				self.packageneric().abort(message)
+		try: self._common_environment
+		except AttributeError: self._common_environment = self.source_package()._common_environment_().Copy()
+		depends_not_found = []
+		for package in self.build_depends() + self.depends():
+			if package.found(): package.merge_environment(self._common_environment)
+			else: depends_not_found.append(str(package))
+		if depends_not_found:
+			message = "cannot build module '" + self.name() + "' because not all dependencies were found:"
+			for depend_not_found in depends_not_found: message += str(depend_not_found)
+			message += '\n'
+			import os.path
+			message += 'for details, see ' + os.path.join(self._common_environment.subst('$packageneric__build_directory'), 'configure.log')
+			self.packageneric().abort(message)
 		import packageneric.generic
 		packageneric.generic._merge_environment(self._common_environment, destination)
 	
 	def build_environment(self):
-		if not self._build_environment:
+		try: return self._build_environment
+		except AttributeError:
 			self._build_environment = self.source_package().build_environment().Copy()
 			self._merge_common_environment_(self._build_environment)
 			self.add_build_include_path('packageneric/generic/detail/src') # todo for pre-compiled headers of std lib
@@ -156,41 +190,59 @@ class module:
 			for package in self.build_depends() + self.depends():
 				if package.pkg_config(): pkg_config += ' ' + package.pkg_config()
 			if len(pkg_config): self._build_environment.ParseConfig('pkg-config --cflags --libs \'' + pkg_config + '\'')
-		return self._build_environment
+			return self._build_environment
 		
 	def uninstalled_environment(self):
-		if not self._uninstalled_environment:
+		try: return self._uninstalled_environment
+		except AttributeError:
 			self._uninstalled_environment = self.source_package().uninstalled_environment().Copy()
 			self._merge_common_environment_(self._uninstalled_environment)
+			import os.path
 			for i in self.uninstalled_include_path(): self._uninstalled_environment.AppendUnique(CPPPATH = [os.path.join(self.packageneric().build_directory(), i)])
 			self._uninstalled_environment.AppendUnique(CPPPATH = self.uninstalled_include_path())
 			self._uninstalled_environment.Append(CPPDEFINES = self.uninstalled_defines())
-		return self._uninstalled_environment
+			return self._uninstalled_environment
 				
 	def merge_uninstalled_environment(self, destination):
 		import packageneric.generic
 		packageneric.generic._merge_environment(self.uninstalled_environment(), destination)
 		
 	def installed_environment(self):
-		if not self._installed_environment:
+		try: return self._installed_environment
+		except AttributeError:
 			self._installed_environment = self.source_package().installed_environment().Copy()
 			self._merge_common_environment_(self._installed_environment)
 			self._installed_environment.AppendUnique(CPPPATH = self.installed_include_path())
 			self._installed_environment.Append(CPPDEFINES = self.installed_defines())
-		return self._installed_environment
+			return self._installed_environment
 
 	def merge_installed_environment(self, destination):
 		import packageneric.generic
 		packageneric.generic._merge_environment(self.installed_environment(), destination)
 
-	def target_name(self): return 'lib' + self.name()
+	def target_name(self):
+		if self.binary_type() == self.binary_types.loadable:
+			return self.build_environment().subst('$LDMODULEPREFIX') + self.name()
+		if self.binary_type() == self.binary_types.shared:
+			return self.build_environment().subst('$SHLIBPREFIX') + self.name()
+		if self.binary_type() == self.binary_types.static:
+			return self.build_environment().subst('$LIBPREFIX') + self.name()
+		elif self.binary_type() == self.binary_types.program:
+			return self.name()
+		else: self.packageneric().abort("unknown binary type for module '%s'" % self.name())
 	
 	def targets(self):
-		if not self._targets:
+		try: return self._targets
+		except AttributeError:
 			self.build_environment()
 			self.uninstalled_environment()
 			self.installed_environment()
+			if self.binary_type() == self.binary_types.loadable: builder = self.build_environment().LoadableModule
+			elif self.binary_type() == self.binary_types.shared: builder = self.build_environment().SharedLibrary
+			elif self.binary_type() == self.binary_types.static: builder = self.build_environment().StaticLibrary
+			elif self.binary_type() == self.binary_types.program: builder = self.build_environment().Program
+			else: self.packageneric().abort("unknown binary type for module '%s'" % self.name())
 			self._targets = [
-				self.build_environment().SharedLibrary(os.path.join(self.packageneric().build_directory(), self.target_name()), [os.path.join(self.packageneric().build_directory(), x.full()) for x in self.sources()])
+				builder(os.path.join(self.packageneric().build_directory(), self.target_name()), [os.path.join(self.packageneric().build_directory(), x.full()) for x in self.sources()])
 			]
-		return self._targets
+			return self._targets
