@@ -19,12 +19,12 @@ main()
 		call $x ||
 		return
 	done &&
-	call aclocal-1.9 &&
+	call aclocal &&
 	call mkdir -p autotools.auxiliary-programs &&
 	call libtoolize --force &&
 	call autoheader &&
 	call autoconf &&
-	call automake-1.9 --add-missing &&
+	call automake --add-missing &&
 	if test -x nested-source-packages/ngrs/autotools.bootstrap
 	then
 		call ./nested-source-packages/ngrs/autotools.bootstrap

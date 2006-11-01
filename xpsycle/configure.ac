@@ -39,12 +39,6 @@ AC_CHECK_HEADERS(audio/audiolib.h,
 			[
 				NETAUDIO_SUPPORT=yes
 				NETAUDIO_LIBS=-laudio
-				
-				# [bohan] remove the following two lines to try to build netaudio support.
-				# [bohan] ideally, there should be options like --with-netaudio --without-netaudio,
-				# [bohan] but it's painful to add and i prefer not to do further development with the autotools (yes, scons :-)
-				NETAUDIO_SUPPORT="no (it didn't build for me ; jaz, edit the configure.ac to reenable it -- bohan)"
-				AC_DEFINE(XPSYCLE__NO_NETAUDIO, [], whether you don't have/want netaudio)
 			]
 		)
 	],
