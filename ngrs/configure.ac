@@ -13,9 +13,11 @@ AC_PROG_CXX
 
 AC_PATH_X
 AC_PATH_XTRA
-X_LIBS="$X_PRE_LIBS $X_LIBS -lX11 $X_EXTRA_LIBS -lXpm"
+X_LIBS="$X_PRE_LIBS $X_LIBS -lX11 $X_EXTRA_LIBS -lXpm -lxerces-c -liconv "
 
 AC_LANG_PUSH(C++)
+
+
 
 AC_CHECK_LIB(m, main, M_LIBS=-lm, AC_MSG_WARN(no m lib found))
 
@@ -48,6 +50,8 @@ AC_CHECK_HEADERS(xercesc/sax/Parser.hpp,
 
 AC_LANG_POP(C++)
 
+
+
 for package in M DL PTHREAD X XERCES
 do
 	for stanza in CFLAGS LIBS
@@ -60,6 +64,36 @@ for private_lib in # list private libs here
 do
 	NGRS_NO_PKG_CONFIG_LIBS_PRIVATE="$NGRS_NO_PKG_CONFIG_LIBS_PRIVATE $private_lib"
 done
+
+dnl platform multi_threaded dependencies
+
+case "${host}" in
+        *-*-solaris*)   multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+        *-*-sco*)       multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+        *-*-sysv5*)     multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+        *-*-UnixWare*)  multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+        *-*-unixware*)  multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+        *-*-beos*)      multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+        *-*-nto*)       multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+        *-*-linux*)     multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+        *-*-freebsd*)   multi_threaded_mode=-DSIGSLOT_GLOBAL ;;
+        *-*-netbsd*)    multi_threaded_mode=-DSIGSLOT_GLOBAL ;;
+        *-*-irix*)      multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+        *-*-aix*)       multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+        *-sequent-*)    multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+        *-*-hp*)        multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+        *-*-mvs*)       multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+        *-*-os400*)     multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+        *-*-OS400*)     multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+        *-*-osf*)	multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+        *-apple-*)	multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+        *-*-cygwin*)    multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+	*-*-openbsd*)	multi_threaded_mode=-DSIGSLOT_GLOBAL ;;
+        *)              multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+esac
+
+NGRS_NO_PKG_CONFIG_CFLAGS="$NGRS_NO_PKG_CONFIG_CFLAGS $multi_threaded_mode"
+
 
 AC_SUBST(NGRS_NO_PKG_CONFIG_CFLAGS)
 AC_SUBST(NGRS_NO_PKG_CONFIG_LIBS)
