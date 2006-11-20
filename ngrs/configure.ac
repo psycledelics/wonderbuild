@@ -13,7 +13,7 @@ AC_PROG_CXX
 
 AC_PATH_X
 AC_PATH_XTRA
-X_LIBS="$X_PRE_LIBS $X_LIBS -lX11 $X_EXTRA_LIBS -lXpm -lxerces-c -liconv "
+X_LIBS="$X_PRE_LIBS $X_LIBS -lX11 $X_EXTRA_LIBS -lXpm "
 
 AC_LANG_PUSH(C++)
 
@@ -22,30 +22,30 @@ AC_LANG_PUSH(C++)
 AC_CHECK_LIB(m, main, M_LIBS=-lm, AC_MSG_WARN(no m lib found))
 
 AC_CHECK_HEADERS(dlfcn.h,
-	[
-		AC_CHECK_LIB(dl, dlopen, DL_LIBS=-ldl, AC_MSG_WARN(no dl lib found))
-	],
-	[
-		AC_MSG_ERROR(dlfcn.h dlopen not found)
-	]
+        [
+                AC_CHECK_LIB(dl, dlopen, DL_LIBS=-ldl, AC_MSG_WARN(no dl lib found))
+        ],
+        [
+                AC_MSG_ERROR(dlfcn.h dlopen not found)
+        ]
 )
 
 AC_CHECK_HEADERS(pthread.h,
-	[
-		AC_CHECK_LIB(pthread, pthread_create, PTHREAD_CFLAGS=-D_REENTRANT && PTHREAD_LIBS=-lpthread)
-	],
-	[
-		AC_MSG_ERROR(pthread lib required)
-	]
+        [
+                AC_CHECK_LIB(pthread, pthread_create, PTHREAD_CFLAGS=-D_REENTRANT && PTHREAD_LIBS=-lpthread)
+        ],
+        [
+                AC_MSG_ERROR(pthread lib required)
+        ]
 )
 
 AC_CHECK_HEADERS(xercesc/sax/Parser.hpp,
-	[
-		AC_CHECK_LIB(xerces-c, main, XERCES_LIBS=-lxerces-c)
-	],
-	[
-		AC_MSG_ERROR(xerces-c lib required)
-	]
+        [
+                AC_CHECK_LIB(xerces-c, main, XERCES_LIBS=-lxerces-c)
+        ],
+        [
+                AC_MSG_ERROR(xerces-c lib required)
+        ]
 )
 
 AC_LANG_POP(C++)
@@ -54,15 +54,15 @@ AC_LANG_POP(C++)
 
 for package in M DL PTHREAD X XERCES
 do
-	for stanza in CFLAGS LIBS
-	do
-		eval NGRS_NO_PKG_CONFIG_$stanza=\"\$NGRS_NO_PKG_CONFIG_$stanza \$${package}_$stanza\"
-	done
+        for stanza in CFLAGS LIBS
+        do
+                eval NGRS_NO_PKG_CONFIG_$stanza=\"\$NGRS_NO_PKG_CONFIG_$stanza \$${package}_$stanza\"
+        done
 done
 
 for private_lib in # list private libs here
 do
-	NGRS_NO_PKG_CONFIG_LIBS_PRIVATE="$NGRS_NO_PKG_CONFIG_LIBS_PRIVATE $private_lib"
+        NGRS_NO_PKG_CONFIG_LIBS_PRIVATE="$NGRS_NO_PKG_CONFIG_LIBS_PRIVATE $private_lib"
 done
 
 dnl platform multi_threaded dependencies
@@ -85,10 +85,10 @@ case "${host}" in
         *-*-mvs*)       multi_threaded_mode=-DSIGSLOT_LOCAL ;;
         *-*-os400*)     multi_threaded_mode=-DSIGSLOT_LOCAL ;;
         *-*-OS400*)     multi_threaded_mode=-DSIGSLOT_LOCAL ;;
-        *-*-osf*)	multi_threaded_mode=-DSIGSLOT_LOCAL ;;
-        *-apple-*)	multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+        *-*-osf*)       multi_threaded_mode=-DSIGSLOT_LOCAL ;;
+        *-apple-*)      multi_threaded_mode=-DSIGSLOT_LOCAL ;;
         *-*-cygwin*)    multi_threaded_mode=-DSIGSLOT_LOCAL ;;
-	*-*-openbsd*)	multi_threaded_mode=-DSIGSLOT_GLOBAL ;;
+        *-*-openbsd*)   multi_threaded_mode=-DSIGSLOT_GLOBAL ;;
         *)              multi_threaded_mode=-DSIGSLOT_LOCAL ;;
 esac
 
@@ -103,8 +103,8 @@ NGRS_PKG_CONFIG='freetype2 >= 0 xft >= 0 xcursor >= 0'
 
 if test -n "$NGRS_PKG_CONFIG"
 then
-	AC_MSG_NOTICE(checking for pkg-config $NGRS_PKG_CONFIG ...)
-	PKG_CHECK_MODULES(NGRS_PKG_CONFIG,    $NGRS_PKG_CONFIG)
+        AC_MSG_NOTICE(checking for pkg-config $NGRS_PKG_CONFIG ...)
+        PKG_CHECK_MODULES(NGRS_PKG_CONFIG,    $NGRS_PKG_CONFIG)
 fi
 AC_SUBST(NGRS_PKG_CONFIG)
 
@@ -116,9 +116,9 @@ AC_SUBST(abs_top_builddir)
 
 AC_CONFIG_HEADERS(autotools.autoheader.private.hpp)
 AC_CONFIG_FILES(
-	Makefile
-	src/Makefile
-	doc/examples/ngrs.xml
+        Makefile
+        src/Makefile
+        doc/examples/ngrs.xml
 )
 
 AC_OUTPUT
