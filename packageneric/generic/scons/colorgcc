@@ -176,7 +176,7 @@ sub srcscan
 	# sequence that turns on the the desired source color, and B is the
 	# escape sequence that returns to $normalColor.
 	$line =~ s/\`(.*?)\'/\`$srcon$1$srcoff\'/g;
-	$line =~ s/\'(.*?)\'/\`$srcon$1$srcoff\'/g;
+	$line =~ s/\'(.*?)\'/\'$srcon$1$srcoff\'/g;
 	$line =~ s/\"(.*?)\"/\"$srcon$1$srcoff\"/g;
 	print($line, color("reset"));
 }
