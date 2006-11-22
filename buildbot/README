@@ -1,0 +1,11 @@
+This directory contains configuration files for
+the buildbot software, which can be found on debian/ubuntu
+(since etch/dapper) -- the buildbot package,
+or otherwise at http://buildbot.sourceforge.net
+
+The svn_watcher.py file is a program that should
+be run as a deamon to poll for updates in subversion
+repositories. This is needed for repositories at
+sourceforge where we cannot install our own
+commit hook scripts to inform the build master
+bot that updates are available.
