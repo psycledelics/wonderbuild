@@ -14,8 +14,10 @@ main()
 		# which the autotools unfortunately don't allow.
 		#
 		# For example, automake doesn't let one use wildcards
-		# to list the c++ source files of a module ; so, we can write a script
-		# that builds an explicit list automatically.
+		# to list the c++ source files of a module.
+		# So, we have to use a script that builds
+		# an explicit list automatically.
+		#
 		call $x ||
 		return
 	done &&
