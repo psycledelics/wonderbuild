@@ -4,7 +4,7 @@ the buildbot software, which can be found on debian/ubuntu
 or otherwise at http://buildbot.sourceforge.net
 
 The svn_watcher.py file is a program that should
-be run as a deamon to poll for updates in subversion
+be run as a daemon to poll for updates in subversion
 repositories. This is needed for repositories at
 sourceforge where we cannot install our own
 commit hook scripts to inform the build master
