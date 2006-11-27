@@ -92,16 +92,6 @@ class module(builder):
 		try: return self._contexes
 		except AttributeError:
 			self._contexes = self.source_package().contexes().attached()
-			dependencies_not_found = []
-			for package in self.build_dependencies() + self.dependencies():
-				if package.result(): self._contexes.build().attach(package.output_env())
-				else: dependencies_not_found.append(package)
-			if dependencies_not_found:
-				message = "cannot build module '" + self.name() + "' because not all dependencies were found:"
-				for dependency_not_found in dependencies_not_found: message += str(dependency_not_found)
-				message += '\n'
-				message += 'for details, see ' + os.path.join(self.project()._scons().subst('$packageneric__build_directory'), 'configure.log')
-				self.project().abort(message)
 			return self._contexes
 			
 	def alias_names(self): return ['packageneric:module', self.name()]
@@ -114,9 +104,25 @@ class module(builder):
 		elif self.target_type() == self.target_types.program: return self.name() # scons.subst('$PROGPREFIX') + self.name() + scons.subst('$PROGSUFFIX')
 		else: self.project().abort("unknown binary type for module '%s'" % self.name())
 	
+	def dynamic_dependencies(self): pass  # todo node class
+	
 	def targets(self, target_type = target_types.loadable):
 		try: return self._targets
 		except AttributeError:
+		
+			self.dynamic_dependencies() # todo node class
+			dependencies_not_found = []
+			self.build_dependencies() ; self.dependencies() # todo method for no recursion
+			for package in self._build_dependencies + self._dependencies: # todo method for no recursion
+				if package.result(): self._contexes.build().attach(package.output_env())
+				else: dependencies_not_found.append(package)
+			if dependencies_not_found:
+				message = "cannot build module '" + self.name() + "' because not all dependencies were found:\n"
+				for dependency_not_found in dependencies_not_found: message += str(dependency_not_found)
+				message += '\n'
+				message += 'for details, see ' + os.path.join(self.project()._scons().subst('$packageneric__build_directory'), 'configure.log')
+				self.project().abort(message)
+
 			dependencies = []
 			for dependency_lists in [package.targets() for package in self.build_dependencies() + self.dependencies()]:
 				for dependency_list in dependency_lists: dependencies.extend(dependency_list)
@@ -125,8 +131,8 @@ class module(builder):
 
 			for context in self.contexes().build(), self.contexes().client().uninstalled():
 				paths = []
-				for path in context.compilers().cxx().paths(): paths.append(path)
-				for path in paths: context.compilers().cxx().paths().add([os.path.join(self.project().build_directory(), path)])
+				for path in context.compilers().cxx().paths(): paths.append(os.path.join(self.project().build_directory(), path))
+				for path in paths: context.compilers().cxx().paths().add(paths)
 
 			self.contexes().build().compilers().cxx().paths().add([os.path.join(self.project().build_directory(), 'packageneric', 'modules', self.name(), 'src')])
 
@@ -140,7 +146,7 @@ class module(builder):
 				save = os.environ.get('PKG_CONFIG_PATH', '')
 				if save: os.environ['PKG_CONFIG_PATH'] = self.contexes().build().os_env()['PKG_CONFIG_PATH'] # todo append with os_env().add_inerited(['PKG_CONFIG_PATH'])
 				try:
-					if self.target_type() == self.target_types.program: static = ' --static'
+					if False: static = '--static ' # todo add option top build a fully static module
 					else: static = ''
 					scons.ParseConfig('pkg-config --cflags --libs ' + static + '\'' + pkg_config + '\'')
 				finally:

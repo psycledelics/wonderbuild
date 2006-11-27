@@ -119,7 +119,7 @@ def gnu(chain, debug):
 			])
 		import sys, os.path
 		if sys.stdout.isatty():
-			colorgcc = os.path.join('packageneric', 'generic', 'scons', 'colorgcc')
+			colorgcc = os.path.join(chain.project().packageneric_directory(), 'generic', 'scons', 'colorgcc')
 			chain.os_env().add({
 				'TERM': 'packageneric--color-pipe',
 				'PACKAGENERIC__GCC': str(chain.compilers().cxx().command())

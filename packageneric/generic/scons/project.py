@@ -15,6 +15,7 @@ class project:
 		self._name = name
 		self.information('project name is ' + self.name())
 		self.information('version of packageneric is ' + str(self.self_version()))
+		self._scons() # SConscriptChDir(0) src_dir build_dir
 
 	def name(self): return self._name
 			
@@ -56,60 +57,14 @@ class project:
 			self._command_line_arguments = SCons.Script.ARGUMENTS # todo doesn't work with all scons versions
 			return self._command_line_arguments
 		
-	def options(self):
-		try: return self._options
-		except AttributeError:
-			# We create the SCons.Options.Options object in two steps because we first want to know
-			# whether an option file was specified on the command line or env via the option packageneric__options
-			# and then we create again the SCons.Options.Options object telling it to read the option file.
-			def restart(self, create_build_directory):
-				# Options which impact on the path of the option file are put here,
-				# that is, the option packageneric__options itself,
-				# and the other options that its default value is defined as, recursively.
-				self._options.Add('packageneric__build_variant', 'subdirectory where to build into', 'default')
-				if create_build_directory: self._options.Add(SCons.Options.PathOption('packageneric__build_directory', 'directory where to build into', os.path.join('packageneric', '++build', '$packageneric__build_variant'), SCons.Options.PathOption.PathIsDirCreate))
-				else: self._options.Add('packageneric__build_directory', 'directory where to build into', os.path.join('packageneric', '++build', '$packageneric__build_variant'))
-				self._options.Add('packageneric__options', 'file where to read options from', os.path.join('$packageneric__build_directory', 'options'))
-			import SCons.Options
-			# We don't know yet the path of the option file,
-			# so we pass None as the filename.
-			self._options = SCons.Options.Options(None, self.command_line_arguments())
-			restart(self, create_build_directory = False)
-			scons = self._scons()
-			self._options.Update(scons)
-			# Now that we know the path of the option file,
-			# we create again the SCons.Options.Options object telling it to read the option file.
-			self.information('source directory is ' + scons.Dir('.').path)
-			self.information('build  directory is ' + scons.Dir(scons.subst('$packageneric__build_directory')).path)
-			self.information('using options ' + scons.subst('$packageneric__options'))
-			self._options = SCons.Options.Options(scons.subst('$packageneric__options'), self.command_line_arguments())
-			restart(self, create_build_directory = True)
-			self._options.Add(SCons.Options.PathOption('packageneric__install__stage_destination', 'directory to install under (stage installation)', os.path.join('$packageneric__build_directory', 'stage-install'), SCons.Options.PathOption.PathIsDirCreate))
-			self._options.AddOptions(
-				('packageneric__install__prefix', 'directory to install under (final installation)', os.path.join('/', 'opt', self.name())),
-				('packageneric__install__exec_prefix', 'directory to install architecture-dependant excecutables under (final installation)', '$packageneric__install__prefix'),
-				('packageneric__install__bin', 'directory to install programs under (final installation)', os.path.join('$packageneric__install__exec_prefix', 'bin')),
-				('packageneric__install__lib', 'directory to install libraries under (final installation)', os.path.join('$packageneric__install__exec_prefix', 'lib')),
-				('packageneric__install__lib_exec', 'directory to install helper programs under (final installation)', os.path.join('$packageneric__install__exec_prefix', 'libexec')),
-				('packageneric__install__include', 'directory to install headers under (final installation)', os.path.join('$packageneric__install__prefix', 'include')),
-				('packageneric__install__share', 'directory to install archictecture-independent data under (final installation)', os.path.join('$packageneric__install__prefix', 'share')),
-				('packageneric__install__var', 'directory to install machine-specific state-variable data under (final installation)', os.path.join('$packageneric__install__prefix', 'var')),
-				('packageneric__install__etc', 'directory to install machine-specific configuration files under (final installation)', os.path.join('/', 'etc')),
-				('packageneric__cxx_compiler', 'the c++ compiler (default value was autodetected)', scons.subst('$SHCXX')),
-				('packageneric__linker', 'the linker (default value was autodetected)', scons.subst('$SHLINK')),
-				('packageneric__verbose', 'set to 1 for build verbiage', '0'),
-				('packageneric__debug', 'set to 1 to build for debugging', '0'),
-				('packageneric__test', 'set to 1 to perform unit tests', '1')
-			)
-			self._options.Update(scons)
-			self._options.Save(scons.subst('$packageneric__options'), scons)
-			self._options.format = '\n%s: %s\n    default: %s\n     actual: %s\n'
-			return self._options
-		
+	def packageneric_directory(self):
+		import packageneric
+		return packageneric.__path__[0]
+	
 	def build_directory(self):
 		try: return self._build_directory
 		except AttributeError:
-			self._build_directory = self._scons().Dir(os.path.join('$packageneric__build_directory', 'targets')).path
+			self._build_directory = self._scons().Dir(os.path.join('$packageneric__build_directory', 'targets', '$packageneric__build_variant', self.name())).path
 			return self._build_directory
 
 	def env_class(self):
@@ -184,32 +139,93 @@ class project:
 		try: return self._scons_
 		except AttributeError:
 			import SCons.Environment
-			self._scons_ = SCons.Environment.Environment()
-			scons = self._scons_
+			scons = self._scons_ = SCons.Environment.Environment()
+			if False:
+				try: scons.Import('packageneric')
+				except: pass
+				else: pass #scons = self._scons_ = ...
 			import SCons.Tool
-			toolpath = [os.path.join('packageneric', 'generic', 'scons', 'tools')]
+			toolpath = [os.path.join(self.packageneric_directory(), 'generic', 'scons', 'tools')]
 			SCons.Tool.Tool('file_from_value', toolpath = toolpath)(scons)
 			SCons.Tool.Tool('substituted_file', toolpath = toolpath)(scons)
 			scons.SourceCode('.', None) # we don't use the default source code fetchers (RCS, SCCS, ...), so we disable them to avoid uneeded processing
 			scons.SetOption('implicit_cache', True)
-			#scons.SourceSignatures('timestamp') # bugs with timestamps of symlinks, or even, always ignores all changes!
+			#scons.SourceSignatures('timestamp') # scons 0.96.92.0002 bugs with timestamps of symlinks, or even, always ignores all changes!
 			scons.SourceSignatures('MD5')
 			scons.TargetSignatures('build')
 			#scons.TargetSignatures('content')
-			scons.Help(self.options().GenerateHelpText(scons))
-			# Below are settings which depend on self.options(), that we just called above
-			scons.BuildDir(self.build_directory(), '.', duplicate = False)
+			self._options()
+			# Below are settings which depend on self._options(), that we just called above
 			try: self.__class__._scons_called
 			except AttributeError:
 				self.__class__._scons_called = scons
-				scons.CacheDir(os.path.join('$packageneric__build_directory', 'cache'))
-				scons.SConsignFile(os.path.join(scons.Dir('$packageneric__build_directory').get_abspath(), 'signatures'))
+				scons.Help(self._options().GenerateHelpText(scons))
+				# Below are settings which depend on self.options(), that we just called above
+				cache = os.path.join('$packageneric__build_directory', 'cache')
+				self.information('cache directory is ' + scons.Dir(cache).path)
+				scons.CacheDir(cache)
+				signature = os.path.join('$packageneric__build_directory', 'signatures')
+				self.information('signature  file is ' + scons.Dir(signature).path)
+				scons.SConsignFile(signature)
+			scons.BuildDir(self.build_directory(), '.', duplicate = False)
 			scons.Export({'packageneric': self})
 			if False:
 				def echo(string, target, source, env): print 'building ' + ' '.join(map(str, target))
 				scons['PRINT_CMD_LINE_FUNC'] = echo
 			return self._scons_
 
+	def _options(self):
+		try: return self._options_
+		except AttributeError:
+			# We create the SCons.Options.Options object in two steps because we first want to know
+			# whether an option file was specified on the command line or env via the option packageneric__options
+			# and then we create again the SCons.Options.Options object telling it to read the option file.
+			def restart(self, create_build_directory):
+				# Options which impact on the path of the option file are put here,
+				# that is, the option packageneric__options itself,
+				# and the other options that its default value is defined as, recursively (currently there are none).
+				if create_build_directory: self._options_.Add(SCons.Options.PathOption('packageneric__build_directory', 'directory where to build into', os.path.join('packageneric', '++build'), SCons.Options.PathOption.PathIsDirCreate))
+				else: self._options_.Add('packageneric__build_directory', 'directory where to build into', os.path.join('packageneric', '++build'))
+				self._options_.Add('packageneric__options', 'file where to read options from', os.path.join('$packageneric__build_directory', 'options'))
+			import SCons.Options
+			# We don't know yet the path of the option file,
+			# so we pass None as the filename.
+			# todo we can actually read the packageneric__build_directory and packageneric__options on command line arguments directly, without creating an option object.
+			self._options_ = SCons.Options.Options(None, self.command_line_arguments())
+			restart(self, create_build_directory = False)
+			scons = self._scons()
+			self._options_.Update(scons)
+			# Now that we know the path of the option file,
+			# we create again the SCons.Options.Options object telling it to read the option file.
+			self.information('source directory is ' + scons.Dir('.').path)
+			self.information('build  directory is ' + scons.Dir('$packageneric__build_directory').path)
+			self.information('options file is ' + scons.subst('$packageneric__options'))
+			self._options_ = SCons.Options.Options(scons.subst('$packageneric__options'), self.command_line_arguments())
+			restart(self, create_build_directory = True)
+			self._options_.Add(SCons.Options.PathOption('packageneric__install__stage_destination', 'directory to install under (stage installation)', os.path.join('$packageneric__build_directory', 'stage-install'), SCons.Options.PathOption.PathIsDirCreate))
+			self._options_.AddOptions(
+				('packageneric__build_variant', 'subdirectory where to build into', 'default'),
+				('packageneric__install__prefix', 'directory to install under (final installation)', os.path.join('/', 'opt', self.name())),
+				('packageneric__install__exec_prefix', 'directory to install architecture-dependant excecutables under (final installation)', '$packageneric__install__prefix'),
+				('packageneric__install__bin', 'directory to install programs under (final installation)', os.path.join('$packageneric__install__exec_prefix', 'bin')),
+				('packageneric__install__lib', 'directory to install libraries under (final installation)', os.path.join('$packageneric__install__exec_prefix', 'lib')),
+				('packageneric__install__lib_exec', 'directory to install helper programs under (final installation)', os.path.join('$packageneric__install__exec_prefix', 'libexec')),
+				('packageneric__install__include', 'directory to install headers under (final installation)', os.path.join('$packageneric__install__prefix', 'include')),
+				('packageneric__install__share', 'directory to install archictecture-independent data under (final installation)', os.path.join('$packageneric__install__prefix', 'share')),
+				('packageneric__install__var', 'directory to install machine-specific state-variable data under (final installation)', os.path.join('$packageneric__install__prefix', 'var')),
+				('packageneric__install__etc', 'directory to install machine-specific configuration files under (final installation)', os.path.join('/', 'etc')),
+				('packageneric__cxx_compiler', 'the c++ compiler (default value was autodetected)', scons.subst('$SHCXX')),
+				('packageneric__linker', 'the linker (default value was autodetected)', scons.subst('$SHLINK')),
+				('packageneric__verbose', 'set to 1 for build verbiage', '0'),
+				('packageneric__debug', 'set to 1 to build for debugging', '0'),
+				('packageneric__test', 'set to 1 to perform unit tests', '1')
+			)
+			self._options_.Update(scons)
+			self.information('build variant is ' + scons.subst('$packageneric__build_variant'))
+			self._options_.Save(scons.subst('$packageneric__options'), scons)
+			self._options_.format = '\n%s: %s\n    default: %s\n     actual: %s\n'
+			return self._options_
+		
 	def message(self, prefix, message, font = None):
 		prefix_ = ''
 		if font: prefix_ += tty_font(font)

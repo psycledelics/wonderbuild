@@ -19,4 +19,4 @@ class cxx_build(base):
 		result = scons_sconf_context.TryBuild(builder = scons_sconf_context.env.Program, text = self.source_text() + '\nint main() { return 0; }\n', extension = '.cpp')
 		return result, None
 
-	def __str__(self): return self.name() + ': libraries '"'" + ' '.join(self.input_env().libraries().get()) + "'"' and their associated headers'
+	def __str__(self): return self.name() + ': libraries '"'" + ' '.join(self.input_env().linker().libraries().get()) + "'"' and their associated headers'

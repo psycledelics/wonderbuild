@@ -37,12 +37,12 @@ class external_package(check):
 	def __str__(self):
 		line = '____________________'
 		bar = '\n|'
-		separator = bar + line + bar
-		string = bar + ' ' + line + bar + ' '
+		string = ' ' + line + bar + ' '
 		from pkg_config import pkg_config
 		for pkg_config_ in filter(lambda x: isinstance(x, pkg_config), self.dependencies()): string += bar + ' pkg-config: ' + str(pkg_config_)
 		from cxx_build import cxx_build
 		for cxx_build_ in filter(lambda x: isinstance(x, cxx_build), self.dependencies()): string += bar + ' ' + str(cxx_build_)
+		separator = bar + line + bar
 		if self.distribution_packages():
 			string += separator
 			for (k, v) in self.distribution_packages().items(): string += bar + ' -> on ' + k + ' distributions, the package names are ' + v
@@ -51,5 +51,5 @@ class external_package(check):
 			string += bar + ' -> '
 			if self.distribution_packages(): string += 'otherwize, '
 			string += 'the source of this package can be downloaded from ' + self.url()
-		string += separator
+		string += bar + line + '\n'
 		return string

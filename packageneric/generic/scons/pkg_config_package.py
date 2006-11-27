@@ -51,7 +51,7 @@ class pkg_config_package(builder):
 		string += 'Version: ' + str(self.version()) + '\n'
 		if uninstalled: env = self.uninstalled_env()
 		else: env = self.installed_env()
-		scons = self.project()._scons()
+		scons = self.project()._scons() # unused
 		string += 'CFlags: ' + \
 			str(env.compilers().cxx().paths()) + ' ' + \
 			str(env.compilers().cxx().defines()) + ' ' + \
@@ -62,7 +62,7 @@ class pkg_config_package(builder):
 			str(env.linker().flags()) + '\n'
 		string += 'Libs.private: ' + \
 			str(env.linker().libraries()) + '\n'
-		string += 'Requires:'
+		string += 'Requires: '
 		import check.pkg_config
 		string += ' '.join([pkg_config.name() for pkg_config in filter(lambda x: isinstance(x, check.pkg_config.pkg_config), self.dependencies())])
 		string += '\n'
@@ -71,18 +71,14 @@ class pkg_config_package(builder):
 	def uninstalled_env(self):
 		try: return self._uninstalled_env_
 		except AttributeError:
-			self._uninstalled_env_ = self.project().contexes().client().uninstalled().attached()
-			env = self._uninstalled_env_
+			env = self._uninstalled_env_ = self.project().contexes().client().uninstalled().attached()
 			for module in self.modules(): env.attach(module.contexes().client().uninstalled())
-			if False: for i in self.uninstalled_include_path(): env.compilers().cxx().paths().add([os.path.join(self.project().build_directory(), i)])
-			if False: for i in [self.project()._scons().Dir(i).get_abspath() for i in self.uninstalled_include_path()]: env.compilers().cxx().paths().add(i)
-			return environment
+			return env
 
 	def installed_env(self):
 		try: return self._installed_env_
 		except AttributeError:
-			self._installed_env_ = self.project().contexes().client().installed().attached()
-			env = self._installed_env_
+			env = self._installed_env_ = self.project().contexes().client().installed().attached()
 			for module in self.modules(): env.attach(module.contexes().client().installed())
 			return env
 
@@ -93,9 +89,31 @@ class pkg_config_package(builder):
 		except AttributeError:
 			uninstalled_file_name = os.path.join(self.project().build_directory(), self.name() + '-uninstalled.pc')
 			installed_file_name = os.path.join(self.project().build_directory(), self.name() + '.pc')
+
 			dependencies = []
 			for dependency_lists in [module.targets() for module in self.modules()]:
 				for dependency_list in dependency_lists: dependencies.extend(dependency_list)
+			
+			env = self.uninstalled_env()
+			
+			paths = []
+			for path in env.compilers().cxx().paths(): paths.append(os.path.join(self.project().build_directory(), path))
+			env.compilers().cxx().paths().add(paths)
+			
+			paths = []
+			for path in env.compilers().cxx().paths(): paths.append(self.project()._scons().Dir(path).get_abspath())
+			env.compilers().cxx().paths().add(paths)
+			
+			paths = []
+			for path in env.linker().paths(): paths.append(os.path.join(self.project().build_directory(), path))
+			env.linker().paths().add(paths)
+
+			paths = []
+			for path in env.linker().paths(): paths.append(self.project()._scons().Dir(path).get_abspath())
+			env.linker().paths().add(paths)
+
+			for module in self.modules(): env.linker().libraries().add([module.name()])
+
 			scons = self.project()._scons()
 			self._targets = [
 				scons.Alias(uninstalled_file_name, [scons.FileFromValue(uninstalled_file_name, self.string(uninstalled = True))] + dependencies),

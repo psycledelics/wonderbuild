@@ -11,7 +11,7 @@ def template(base):
 		class result(base):
 			def execute(self):
 				if not base.execute(self): return False
-				scons = self.project()._scons()
+				scons = self.project()._scons().Copy()
 				self.input_env()._scons(scons)
 				import os.path
 				import SCons.SConf

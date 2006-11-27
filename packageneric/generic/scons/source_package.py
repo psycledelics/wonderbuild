@@ -33,20 +33,9 @@ class source_package:
 		try: return self._contexes
 		except AttributeError:
 			self._contexes = self.project().contexes().attached()
-			return self._contexes
-			
-	def _common_environment_(self):
-		try: return self._common_environment
-		except AttributeError:
-			self._common_environment = self.project().common_environment().copy()
-			return self._common_environment
-			
-	def build_environment(self):
-		try: return self._build_environment
-		except AttributeError:
-			self._build_environment = self.project().build_environment().copy()
-			self._build_environment.compilers().cxx().paths().add([os.path.join(self.project().build_directory(), 'packageneric', 'source-packages', self.name(), 'src')])
-			self._build_environment._scons_environment().FileFromValue(
+			env = self._contexes.build()
+			env.compilers().cxx().paths().add([os.path.join(self.project().build_directory(), 'packageneric', 'source-packages', self.name(), 'src')])
+			self.project()._scons().FileFromValue(
 				os.path.join(self.project().build_directory(), 'packageneric', 'source-packages', self.name(), 'src', 'packageneric', 'source-package.private.hpp'),
 				''.join(
 						['#include <packageneric/configuration.private.hpp>\n'] +
@@ -62,18 +51,6 @@ class source_package:
 						]
 				)
 			)
-			return self._build_environment
-		
-	def uninstalled_environment(self):
-		try: return self._uninstalled_environment
-		except AttributeError:
-			self._uninstalled_environment = self.project().uninstalled_environment().copy()
-			return self._uninstalled_environment
-
-	def installed_environment(self):
-		try: return self._installed_environment
-		except AttributeError:
-			self._installed_environment = self.project().installed_environment().copy()
-			return self._installed_environment
-
+			return self._contexes
+			
 	def path(self): return self._path
