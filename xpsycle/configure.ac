@@ -1,4 +1,4 @@
-AC_PREREQ(2.60)
+AC_PREREQ(2.59) # 2.60 is slowly being distributed...
 
 AC_INIT(Psycle Modular Music Creation Studio (for X Window), 1.10, natti__@users.sourceforge.net, xpsycle)
 
