@@ -8,23 +8,28 @@ from tty_font import tty_font
 class project:
 
 	def __init__(self, name):
-		import SCons.Script
-		SCons.Script.EnsureSConsVersion(0, 96, 90) # todo doesn't work with all scons versions
-		SCons.Script.EnsurePythonVersion(2, 3) # todo doesn't work with all scons versions
-		SCons.Script.Default() # todo doesn't work with all scons versions
+		self._check_scons_and_python_versions()
 		self._name = name
 		self.information('project name is ' + self.name())
 		self.information('version of packageneric is ' + str(self.self_version()))
-		self._scons() # SConscriptChDir(0) src_dir build_dir
+		self._scons()
 
 	def name(self): return self._name
-			
+	
 	def	self_version(self):
 		try: return self._version
 		except AttributeError:
 			from version import version
 			self._version = version(0, 0)
 			return self._version
+
+	def subscript(self, path):
+		try: stack = self.__class__._stack
+		except AttributeError: stack = self.__class__._stack = []
+		stack.append(self)
+		try: result = self._scons().SConscript(path) # SConscriptChDir(0) src_dir build_dir
+		finally: stack.pop()
+		return result
 
 	def builders(self):
 		try: return self._builders
@@ -120,14 +125,10 @@ class project:
 				])
 			)
 			from find import find
-			for i in find(self, '.', '.', '*.hpp.in'): # todo private and public
+			for i in find(self, '.', '.', '*.hpp.in'):
 				self.trace(i.relative())
 				scons.SubstitutedFile(
 					os.path.join(self.build_directory(), i.strip(), os.path.splitext(i.relative())[0]),
-					i.full()
-				)
-				scons.SubstitutedFile(
-					os.path.join(self.build_directory(), i.strip(), os.path.splitext(os.path.splitext(i.relative())[0])[0] + '.private.hpp'),
 					i.full()
 				)
 			self._contexes.client().uninstalled().linker().paths().add([self.build_directory()])
@@ -140,10 +141,7 @@ class project:
 		except AttributeError:
 			import SCons.Environment
 			scons = self._scons_ = SCons.Environment.Environment()
-			if False:
-				try: scons.Import('packageneric')
-				except: pass
-				else: pass #scons = self._scons_ = ...
+			scons.Default()
 			import SCons.Tool
 			toolpath = [os.path.join(self.packageneric_directory(), 'generic', 'scons', 'tools')]
 			SCons.Tool.Tool('file_from_value', toolpath = toolpath)(scons)
@@ -177,6 +175,9 @@ class project:
 	def _options(self):
 		try: return self._options_
 		except AttributeError:
+			import SCons.Script
+			targets = []
+			for target in [str(maybe_node) for maybe_node in SCons.Script.BUILD_TARGETS]: targets.append(target)
 			# We create the SCons.Options.Options object in two steps because we first want to know
 			# whether an option file was specified on the command line or env via the option packageneric__options
 			# and then we create again the SCons.Options.Options object telling it to read the option file.
@@ -225,6 +226,32 @@ class project:
 			self._options_.Save(scons.subst('$packageneric__options'), scons)
 			self._options_.format = '\n%s: %s\n    default: %s\n     actual: %s\n'
 			return self._options_
+
+	def _check_scons_and_python_versions(self):
+		scons_version = 0, 96, 92
+		python_version = 2, 3
+		# We do a rather painful check to be sure a user having very old versions isn't left with an uncomprehensible error message.
+		import SCons.Script
+		try: SCons.Script.EnsureSConsVersion(*scons_version)
+		except SystemExit: raise
+		except:
+			# If it failed with an AttributeError, this means we have a pre 0.96.91 or so version, where the EnsureSConsVersion function cannot be called directly.
+			# If it failed with a TypeError, it's because the EnsureSConsVersion can only handle two numbers for the version.
+			# We call again the EnsureSConsVersion function through the default environment.
+			# This will fail too, but this time with a nice error message.
+			try:
+				import SCons.Defaults ; env = SCons.Defaults.DefaultEnvironment()
+				env.EnsureSConsVersion(*scons_version[0:1]) # first try with only the first two numbers
+				try: env.EnsureSConsVersion(*scons_version) # then with all the numbers
+				except TypeError: env.EnsureSConsVersion(0, 97) # get rid of all old versions
+			except SystemExit: raise
+			except: # if python doesn't understand the syntax or something, we print a message suggesting to upgrade it
+				print 'SCons version and/or python version are too old.'
+				print 'The lowest version of SCons that is known to work is', str(scons_version)
+				print 'The lowest version of python that is known to work is', str(python_version)
+				import sys
+				sys.exit(2)
+		SCons.Script.EnsurePythonVersion(*python_version)
 		
 	def message(self, prefix, message, font = None):
 		prefix_ = ''

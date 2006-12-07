@@ -4,20 +4,31 @@
 
 def gnu(chain, debug):
 	from check.cxx_build import cxx_build as cxx_build_check
-	if cxx_build_check(chain.project(), name = 'gnug', source_text = \
+	gnug = cxx_build_check(chain.project(), name = 'gnug', source_text = \
 		"""\
 			#if !defined __GNUG__
 				#error this is not gcc g++
 			#endif
 		\n""" # gcc -E -dM -std=c++98 -x c++-header /dev/null | sort
-	).result():
+	)
+	if gnug.result():
+		gnug4 = cxx_build_check(chain.project(), name = 'gnug 4', source_text = \
+			"""\
+				#if __GNUG__ < 4
+					#error this is not gcc g++
+				#endif
+			\n""" # gcc -E -dM -std=c++98 -x c++-header /dev/null | sort
+		)
 		chain.compilers().cxx().flags().add([
 			'-pipe',
-			'-combine',
 			'-fmessage-length=0',
-			'-Winvalid-pch',
-			'-Wfatal-errors' # aborts on first error
+			'-Winvalid-pch'
 		])
+		if gnug4.result():
+			chain.compilers().cxx().flags().add([
+				'-combine',
+				'-Wfatal-errors' # aborts on first error
+			])
 		if True:
 			chain.compilers().cxx().flags().add([
 				'-std=c++98',
@@ -40,7 +51,6 @@ def gnu(chain, debug):
 				'-Wfloat-equal',
 				'-Wundef',
 				#####'-Wshadow', # var in subscope hides var of enclosing scope or argument
-				'-Wunsafe-loop-optimizations',
 				'-Wpointer-arith',
 				'-Wcast-qual',
 				'-Wcast-align',
@@ -49,9 +59,13 @@ def gnu(chain, debug):
 				#####'-Wmissing-no-return',
 				#####'-Wmissing-format-attribute',
 				#'-Wunreachable-code',
-				'-Wvolatile-register-var',
 				'-Wno-unused-parameter',
 			])
+			if gnug4.result():
+				chain.compilers().cxx().flags().add([
+					'-Wunsafe-loop-optimizations',
+					'-Wvolatile-register-var'
+				])
 		if False: # for c
 			chain.compilers().cxx().flags().add([
 				'-Wbad-function-cast',

@@ -14,11 +14,18 @@ def template(base):
 				self._args = args
 				self._kw = kw
 				
+			def source(self):
+				try: return self._source
+				except AttributeError:
+					self._source = base(*self._args, **self._kw)
+					self._source.attach(self)
+					return self._source
+
 			def build(self):
 				try: return self._build
 				except AttributeError:
 					self._build = base(*self._args, **self._kw)
-					self._build.attach(self)
+					self._build.attach(self.source())
 					return self._build
 
 			class _client(base):
@@ -30,7 +37,7 @@ def template(base):
 					try: return self._uninstalled
 					except AttributeError:
 						self._uninstalled = base(*self._enclosing._args, **self._enclosing._kw)
-						self._uninstalled.attach(self)
+						self._uninstalled.attach(self._enclosing.source())
 						return self._uninstalled
 						
 				def installed(self):
@@ -56,6 +63,7 @@ def template(base):
 			def attach(self, source):
 				base.attach(self, source)
 				if isinstance(source, result):
+					self.source().attach(source.source())
 					self.build().attach(source.build())
 					self.client().attach(source.client())
 			

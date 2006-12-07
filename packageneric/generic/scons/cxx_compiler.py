@@ -16,14 +16,31 @@ def template(mixin):
 				*args, **kw
 			):
 				base.__init__(*(self, project) + args, **kw)
-				if defines is not None: self.compiler().defines().add(defines)
+				if defines is not None: self.defines().add(defines)
 
+			from dictionary import dictionary
+			class _defines(dictionary):
+				def substituted_files(self):
+					try: return self._substituted_files
+					except AttributeError:
+						self._substituted_files = []
+						return self._substituted_files
+
+				def substituted_file(self, target, source):
+					self.substituted_files().append([target, source])
+
+				def _scons(self, scons):
+					defines = self.get()
+					scons.Append(CPPDEFINES = defines)
+					for target, source in self.substituted_files():
+						# scons.SubstitutedFile(target, source, defines)
+						pass
+						
 			def defines(self):
-				try: return self._defines
+				try: return self._defines_
 				except AttributeError:
-					from dictionary import dictionary
-					self._defines = dictionary()
-					return self._defines
+					self._defines_ = result._defines()
+					return self._defines_
 				
 			def attach(self, source):
 				base.attach(self, source)
@@ -45,13 +62,9 @@ def template(mixin):
 				value = self.shared().message().get()
 				if value is not None: scons['SHCXXCOMSTR'] = value
 				
-				scons.Append(
-					CXXFLAGS = self.flags().get()
-				)
-				scons.AppendUnique(
-					CPPPATH = self.paths().get(),
-					CPPDEFINES = self.defines().get()
-				)
+				scons.Append(CXXFLAGS = self.flags().get())
+				scons.AppendUnique(CPPPATH = self.paths().get())
+				self.defines()._scons(scons)
 					
 		_template[mixin] = result
 		return result

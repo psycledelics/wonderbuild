@@ -114,7 +114,7 @@ class module(builder):
 			dependencies_not_found = []
 			self.build_dependencies() ; self.dependencies() # todo method for no recursion
 			for package in self._build_dependencies + self._dependencies: # todo method for no recursion
-				if package.result(): self._contexes.build().attach(package.output_env())
+				if package.result(): self.contexes().build().attach(package.output_env())
 				else: dependencies_not_found.append(package)
 			if dependencies_not_found:
 				message = "cannot build module '" + self.name() + "' because not all dependencies were found:\n"
