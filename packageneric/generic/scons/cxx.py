@@ -11,10 +11,18 @@ def template(mixin):
 		base = chain.template(mixin)
 
 		class result(base):
-			def __init__(self, project, *args, **kw):
+			def __init__(self, project,
+				cxx_compiler_defines = None,
+				cxx_compiler_paths = None,
+				cxx_compiler_flags = None,
+				*args, **kw
+			):
 				base.__init__(*(self, project) + args, **kw)
 				import cxx_compiler
 				self.compilers().add('cxx', cxx_compiler.template(base)(project, *args, **kw))
+				if cxx_compiler_defines is not None: self.compilers().cxx().defines().add(cxx_compiler_defines)
+				if cxx_compiler_paths is not None: self.compilers().cxx().paths().add(cxx_compiler_paths)
+				if cxx_compiler_flags is not None: self.compilers().cxx().flags().add(cxx_compiler_flags)
 				
 		_template[mixin] = result
 		return result

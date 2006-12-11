@@ -12,8 +12,10 @@ class stdcxx(external_package):
 			name = 'stdc++',
 			dependencies = [cmath(project)],
 			distribution_packages = {
-				'debian': 'libstdc++-dev (>= 0)',
-				'cygwin': 'gcc-g++-3.4.4-1'
+				'debian and ubuntu': 'libstdc++-dev (>= 0)',
+				'gentoo': '...',
+				'fedora': '...',
+				'cygwin': 'gcc-g++ (>= 3.4.4-1)'
 			},
 			url = 'http://google.ch iso c++'
 		)

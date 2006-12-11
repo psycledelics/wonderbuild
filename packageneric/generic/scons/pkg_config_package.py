@@ -51,17 +51,35 @@ class pkg_config_package(builder):
 		string += 'Version: ' + str(self.version()) + '\n'
 		if uninstalled: env = self.uninstalled_env()
 		else: env = self.installed_env()
-		scons = self.project()._scons() # unused
+
+		scons = self.project()._scons()
+
+		D_prefix = scons.subst('$CPPDEFPREFIX')
+		D_suffix = scons.subst('$CPPDEFSUFFIX')
+		def D(name, value): return D_prefix + name + "='" + scons.subst(value) + "'" + D_suffix
+
+		I_prefix = scons.subst('$INCPREFIX')
+		I_suffix = scons.subst('$INCSUFFIX')
+		def I(path): return I_prefix + scons.subst(path) + I_suffix
+
+		L_prefix = scons.subst('$LIBDIRPREFIX')
+		L_suffix = scons.subst('$LIBDIRSUFFIX')
+		def L(path): return L_prefix + scons.subst(path) + L_suffix
+
+		l_prefix = scons.subst('$LIBLINKPREFIX')
+		l_suffix = scons.subst('$LIBLINKSUFFIX')
+		def l(library): return l_prefix + scons.subst(library) + l_suffix
+
 		string += 'CFlags: ' + \
-			str(env.compilers().cxx().paths()) + ' ' + \
-			str(env.compilers().cxx().defines()) + ' ' + \
-			str(env.compilers().cxx().flags()) + '\n'
+			' '.join([D(name, value) for name, value in env.compilers().cxx().defines().get().items()]) + ' ' + \
+			' '.join([I(path) for path in env.compilers().cxx().paths()]) + ' ' + \
+			' '.join([flag for flag in env.compilers().cxx().flags()]) + '\n'
 		string += 'Libs: ' + \
-			str(env.linker().paths()) + ' ' + \
-			str(env.linker().libraries()) + ' ' + \
-			str(env.linker().flags()) + '\n'
+			' '.join([L(path) for path in env.linker().paths()]) + ' ' + \
+			' '.join([l(path) for path in env.linker().libraries()]) + ' ' + \
+			' '.join([flag for flag in env.linker().flags()]) + '\n'
 		string += 'Libs.private: ' + \
-			str(env.linker().libraries()) + '\n'
+			' '.join([l(path) for path in env.linker().libraries()]) + '\n'
 		string += 'Requires: '
 		import check.pkg_config
 		string += ' '.join([pkg_config.name() for pkg_config in filter(lambda x: isinstance(x, check.pkg_config.pkg_config), self.dependencies())])
@@ -87,8 +105,8 @@ class pkg_config_package(builder):
 	def targets(self):
 		try: return self._targets
 		except AttributeError:
-			uninstalled_file_name = os.path.join(self.project().build_directory(), self.name() + '-uninstalled.pc')
-			installed_file_name = os.path.join(self.project().build_directory(), self.name() + '.pc')
+			uninstalled_file_name = os.path.join(self.project().build_variant_intermediate_dir(), 'pkgconfig', self.name() + '-uninstalled.pc')
+			installed_file_name = os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib', 'pkgconfig', self.name() + '.pc')
 
 			dependencies = []
 			for dependency_lists in [module.targets() for module in self.modules()]:
@@ -97,21 +115,19 @@ class pkg_config_package(builder):
 			env = self.uninstalled_env()
 			
 			paths = []
-			for path in env.compilers().cxx().paths(): paths.append(os.path.join(self.project().build_directory(), path))
+			for path in env.compilers().cxx().paths(): paths.append(os.path.join(self.project().intermediate_target_dir(), path))
 			env.compilers().cxx().paths().add(paths)
 			
 			paths = []
 			for path in env.compilers().cxx().paths(): paths.append(self.project()._scons().Dir(path).get_abspath())
 			env.compilers().cxx().paths().add(paths)
 			
-			paths = []
-			for path in env.linker().paths(): paths.append(os.path.join(self.project().build_directory(), path))
-			env.linker().paths().add(paths)
+			env.linker().paths().add([os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib')])
 
 			paths = []
 			for path in env.linker().paths(): paths.append(self.project()._scons().Dir(path).get_abspath())
 			env.linker().paths().add(paths)
-
+			
 			for module in self.modules(): env.linker().libraries().add([module.name()])
 
 			scons = self.project()._scons()

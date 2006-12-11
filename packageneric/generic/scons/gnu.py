@@ -4,21 +4,35 @@
 
 def gnu(chain, debug):
 	from check.cxx_build import cxx_build as cxx_build_check
-	gnug = cxx_build_check(chain.project(), name = 'gnug', source_text = \
+	gnug4 = cxx_build_check(chain.project(), name = 'gnug 4', source_text = \
 		"""\
-			#if !defined __GNUG__
-				#error this is not gcc g++
+			#if __GNUG__ < 4
+				#error this is not gcc g++ >= 4
 			#endif
 		\n""" # gcc -E -dM -std=c++98 -x c++-header /dev/null | sort
 	)
-	if gnug.result():
-		gnug4 = cxx_build_check(chain.project(), name = 'gnug 4', source_text = \
+	if gnug4.result(): gnug = gnug3 = gnug4
+	else:
+		gnug3 = cxx_build_check(chain.project(), name = 'gnug 3', source_text = \
 			"""\
-				#if __GNUG__ < 4
-					#error this is not gcc g++
+				#if __GNUG__ < 3
+					#error this is not gcc g++ >= 3
 				#endif
 			\n""" # gcc -E -dM -std=c++98 -x c++-header /dev/null | sort
 		)
+		if gnug3.result(): gnug = gnug3
+		else:
+			# We don't bother checking for older versions.
+			# Instead we simply make it so the gnu g++ compiler is not detected at all,
+			# and thus gnu-specific options will not be used at all.
+			gnug = gnug3 # this has the effect that gnug.result() is False since we have gnu g++ < 3
+	if gnug.result():
+		build_platform = chain.project()._scons().subst('$PLATFORM')
+		host_platform = build_platform # todo how does scons handle cross-compilation, if it does?
+		target_platform = host_platform # todo how does scons handle cross-compilation, if it does?
+		if target_platform in ('win32', 'win64', 'cygwin'): target_binary_format = 'pe'
+		else: target_binary_format = 'elf'
+		chain.project().trace('target binary format is ' + target_binary_format)
 		chain.compilers().cxx().flags().add([
 			'-pipe',
 			'-fmessage-length=0',
@@ -84,25 +98,38 @@ def gnu(chain, debug):
 		# linker: -Bshareable alias -shared: creates a shared object
 		# linker: -Bdynamic -Bstatic: modifies how following -l flags expand to filenames to link against
 		# linker: one --rpath dir and/or --rpath-link dir for each -L dir (what about dll PE targets?)
-		if False: # for ELF target
+		chain.linker().flags().add([
+			'-Wl,-z origin', # it appears not to be needed on linux, and cygwin's ld says it doesn't know it despite it being in its manpage!
+			'-Wl,--rpath=\\$$ORIGIN/../lib', # todo this is elf-specific (or even linux-specific? ... maybe you can tell, sartorius.)
+			'-Wl,--rpath=$packageneric__install__lib'
+		])
+		if False and target_binary_format == 'elf':
 			chain.linker().flags().add([
 				'-Wl,--soname=xxx',
 				'-Wl,--default-symver',
 				'-Wl,--default-imported-symver'
 			])
-		if False: # for PE target
+		if target_binary_format == 'pe':
 			# --outout-def file.def
 			# --out-implib file.dll.a
 			# if there is no export attributes for any symbol, use --export-all-symbols
-			# for import of data, use --enable-auto-import and for data with offset use --enable-runtime-pseudo-relocs, and use --enable-extra-pe-debug for debug info of thunking
+			# for import of data, use --enable-auto-import and for data with offset use --enable-runtime-pseudo-reloc, and use --enable-extra-pe-debug for debug info of thunking
 			# --enable-auto-image-base: same as --image-base hash(dll file name)
 			# --minor/major-image/os/subsystem-version value
 			# --subsystem which:major.minor: 'which' is native|console|windows|xbox
 			# --dll-search-prefix prefix: for -l, first tries with prefix before trying with 'lib'
 			chain.linker().flags().add([
 				'-Wl,--large-address-aware',
-				'-Wl,--export-dynamic'
+				'-Wl,--export-dynamic',
+				'-Wl,--export-all-symbols',
+				'-Wl,--enable-auto-import',
+				'-Wl,--enable-runtime-pseudo-reloc',
+				'-Wl,--enable-auto-image-base'
 			])
+			if debug:
+				chain.linker().flags().add([
+					'-Wl,--enable-extra-pe-debug'
+				])
 			# --add-std-call-alias exports stdcall symbols both as is (with @* suffix), and without
 		if debug:
 			chain.compilers().cxx().flags().add([
@@ -132,12 +159,13 @@ def gnu(chain, debug):
 				'-Wl,--strip-debug'
 			])
 		import sys, os.path
-		if sys.stdout.isatty():
+		if chain.project()._scons().Detect('perl'): # todo we have to check for perl until our colorgcc is rewritten in python
+			if sys.stdout.isatty(): chain.os_env().add({'TERM': 'packageneric--color-pipe'}) # tells our colorgcc that the pipe eventually ends up being displayed on a tty
+			# We use colorgcc on the command line regardless of whether the output is a tty (teletype terminal), where we can colorise the output.
+			# This is harmless since colorgcc will check again for tty,
+			# and this avoids uneeded rebuild by keeps signatures of command lines the same with and without a tty.
 			colorgcc = os.path.join(chain.project().packageneric_directory(), 'generic', 'scons', 'colorgcc')
-			chain.os_env().add({
-				'TERM': 'packageneric--color-pipe',
-				'PACKAGENERIC__GCC': str(chain.compilers().cxx().command())
-			})
+			chain.os_env().add({'PACKAGENERIC__GCC': str(chain.compilers().cxx().command())})
 			chain.compilers().cxx().command().set(colorgcc)
 			chain.linker().command().set(colorgcc)
 			try: chain.os_env().add_inherited(['HOME'])

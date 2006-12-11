@@ -120,7 +120,7 @@ class module(builder):
 				message = "cannot build module '" + self.name() + "' because not all dependencies were found:\n"
 				for dependency_not_found in dependencies_not_found: message += str(dependency_not_found)
 				message += '\n'
-				message += 'for details, see ' + os.path.join(self.project()._scons().subst('$packageneric__build_directory'), 'configure.log')
+				message += 'for details, see ' + self.project().check_log()
 				self.project().abort(message)
 
 			dependencies = []
@@ -129,12 +129,11 @@ class module(builder):
 
 			self.contexes().build().compilers().cxx().paths().add([os.path.join('packageneric', 'generic', 'detail', 'src')]) # for pre-compiled headers of std lib
 
-			for context in self.contexes().build(), self.contexes().client().uninstalled():
-				paths = []
-				for path in context.compilers().cxx().paths(): paths.append(os.path.join(self.project().build_directory(), path))
-				for path in paths: context.compilers().cxx().paths().add(paths)
+			paths = []
+			for path in self.contexes().source().compilers().cxx().paths(): paths.append(os.path.join(self.project().intermediate_target_dir(), path))
+			for path in paths: self.contexes().source().compilers().cxx().paths().add(paths)
 
-			self.contexes().build().compilers().cxx().paths().add([os.path.join(self.project().build_directory(), 'packageneric', 'modules', self.name(), 'src')])
+			self.contexes().build().compilers().cxx().paths().add([os.path.join(self.project().build_variant_intermediate_dir(), 'modules', self.name(), 'src')])
 
 			scons = self.project()._scons().Copy()
 			self.contexes().build()._scons(scons)
@@ -159,7 +158,7 @@ class module(builder):
 					result.append(re.sub('[^A-Z0-9_]', '_', string.upper(re.sub(os.path.sep, '__', os.path.splitext(source.relative())[0]))))
 				return result
 			scons.FileFromValue(
-				os.path.join(self.project().build_directory(), 'packageneric', 'modules', self.name(), 'src', 'packageneric', 'module.private.hpp'),
+				os.path.join(self.project().build_variant_intermediate_dir(), 'modules', self.name(), 'src', 'packageneric', 'module.private.hpp'),
 				''.join(
 					['#include <packageneric/source-package.private.hpp>\n'] +
 					['#define PACKAGENERIC__MODULE__%s %s\n' % (n, v) for n, v in
@@ -177,8 +176,12 @@ class module(builder):
 			elif self.target_type() == self.target_types.static: builder = scons.StaticLibrary
 			elif self.target_type() == self.target_types.program: builder = scons.Program
 			else: self.project().abort("unknown binary type for module '%s'" % self.name())
+			if self.target_type() == self.target_types.program:
+				destination = os.path.join('$packageneric__install__bin')
+			else:
+				destination = os.path.join('$packageneric__install__lib')
 			self._targets = [
-				builder(os.path.join(self.project().build_directory(), self.target_name()), [os.path.join(self.project().build_directory(), x.full()) for x in self.sources()])
+				builder(os.path.join('$packageneric__install__stage_destination', destination, self.target_name()), [os.path.join(self.project().intermediate_target_dir(), x.full()) for x in self.sources()])
 			]
 			for target_list in self._targets:
 				for target in target_list:

@@ -34,9 +34,9 @@ class source_package:
 		except AttributeError:
 			self._contexes = self.project().contexes().attached()
 			env = self._contexes.build()
-			env.compilers().cxx().paths().add([os.path.join(self.project().build_directory(), 'packageneric', 'source-packages', self.name(), 'src')])
+			env.compilers().cxx().paths().add([os.path.join(self.project().build_variant_intermediate_dir(), 'source-packages', self.name(), 'src')])
 			self.project()._scons().FileFromValue(
-				os.path.join(self.project().build_directory(), 'packageneric', 'source-packages', self.name(), 'src', 'packageneric', 'source-package.private.hpp'),
+				os.path.join(self.project().build_variant_intermediate_dir(), 'source-packages', self.name(), 'src', 'packageneric', 'source-package.private.hpp'),
 				''.join(
 						['#include <packageneric/configuration.private.hpp>\n'] +
 						['#define PACKAGENERIC__PACKAGE__%s %s\n' % (n, v) for n, v in

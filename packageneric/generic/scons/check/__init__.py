@@ -21,6 +21,7 @@ class check(node, named):
 		except AttributeError:
 			# todo parametrize the env class
 			self._input_env = self.project().env_class()(self.project(), *self._environment_args, **self._environment_kw)
+			for dependency in self.dependencies(): self._input_env.attach(dependency.output_env())
 			del self._environment_args
 			del self._environment_kw
 			return self._input_env

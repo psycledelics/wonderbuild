@@ -13,13 +13,12 @@ def template(base):
 				if not base.execute(self): return False
 				scons = self.project()._scons().Copy()
 				self.input_env()._scons(scons)
-				import os.path
 				import SCons.SConf
 				scons_sconf = SCons.SConf.SConf(
 					env = scons,
-					conf_dir = os.path.join('$packageneric__build_directory', 'configure'),
-					log_file = os.path.join('$packageneric__build_directory', 'configure.log'),
-					config_h = os.path.join(scons.subst('$packageneric__build_directory'), 'configure.hpp')
+					conf_dir = self.project().check_dir(),
+					log_file = self.project().check_log(),
+					config_h = None
 				)
 				scons_sconf.AddTest('packageneric__execute', lambda scons_sconf_context, self = self: self._execute_(scons_sconf_context))
 				result = scons_sconf.packageneric__execute()

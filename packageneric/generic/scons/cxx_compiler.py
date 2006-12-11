@@ -29,13 +29,6 @@ def template(mixin):
 				def substituted_file(self, target, source):
 					self.substituted_files().append([target, source])
 
-				def _scons(self, scons):
-					defines = self.get()
-					scons.Append(CPPDEFINES = defines)
-					for target, source in self.substituted_files():
-						# scons.SubstitutedFile(target, source, defines)
-						pass
-						
 			def defines(self):
 				try: return self._defines_
 				except AttributeError:
@@ -62,9 +55,11 @@ def template(mixin):
 				value = self.shared().message().get()
 				if value is not None: scons['SHCXXCOMSTR'] = value
 				
-				scons.Append(CXXFLAGS = self.flags().get())
+				scons.Append(
+					CXXFLAGS = self.flags().get(),
+					CPPDEFINES = self.defines().get()
+				)
 				scons.AppendUnique(CPPPATH = self.paths().get())
-				self.defines()._scons(scons)
-					
+
 		_template[mixin] = result
 		return result

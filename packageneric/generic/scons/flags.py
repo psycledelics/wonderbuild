@@ -22,11 +22,11 @@ def template(base):
 
 		class result(base):
 			def __init__(self, project,
-				paths = None,
+				flags = None,
 				*args, **kw
 			):
 				base.__init__(*(self, project) + args, **kw)
-				if not paths is None: self.paths().add(paths)
+				if not flags is None: self.flags().add(flags)
 
 			def flags(self):
 				try: return self._flags

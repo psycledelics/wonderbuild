@@ -52,18 +52,19 @@ class debian(builder):
 		
 	def binary_packages(self): return self._binary_packages
 
-	def generate_depends(self): pass
-		
 	def	build_depends(self):
-		self.generate_depends()
-		result = self._build_depends
+		result = self._build_depends[:]
 		for binary_package in self.binary_packages():
 			for package in binary_package.build_depends():
 				if not package in result:
 					result.append(package)
 		return result
 	
-	def control(self):
+	def rules(self):
+		pass
+		
+	def control(self, suite = 'debian'):
+		"suite may be 'debian', 'ubuntu' ..."
 		try: return self._control
 		except AttributeError:
 			string = ''
@@ -72,32 +73,22 @@ class debian(builder):
 			string += 'Priority: ' + self.priority() + '\n'
 			string += 'Build-Depends: scons'
 			for package in self.build_depends():
-				if package.distribution_packages().has_key('debian'): string += ', ' + package.distribution_packages()['debian']
+				for key in 'debian and ubuntu', suite:
+					if package.distribution_packages().has_key(key): string += ', ' + package.distribution_packages()[key]
 			string += '\n'
-			if not self.maintainer() is None: string += 'Maintainer: ' + self.maintainer().name() + ' <' + self.maintainer().email() + '>\n'
-			if len(self.uploaders()):
-				string += 'Uploaders: '
-				for x in self.uploaders(): string += x.name() + ' <' + x.email() + '>, ' # use coerce
-				string += '\n'
+			if self.maintainer() is not None: string += 'Maintainer: ' + self.maintainer().name() + ' <' + self.maintainer().email() + '>\n'
+			if len(self.uploaders()): string += 'Uploaders: ' + ', '.join(uploader.name() + ' <' + uploader.email() + '>' for uploader in self.uploaders()) + '\n'
 			string += 'Standards-Version: 3.6.2\n'
 			for binary_package in self.binary_packages():
 				string += '\n'
 				string += 'Package: ' + binary_package.name() + '\n'
-				if len(binary_package.provides()):
-					string += 'Provides: '
-					for provide in binary_package.provides(): string += provide + ', '
-					string += '\n'
-				if len(binary_package.recommends()):
-					string += 'Recommends: '
-					for recommend in x.recommends(): string += recommend + ', '
-					string += '\n'
-				if len(binary_package.suggests()):
-					string += 'Suggests: '
-					for suggest in binary_package.suggests(): string += suggest + ', '
-					string += '\n'
+				if len(binary_package.provides()): string += 'Provides: ' + ', '.join(provide for provide in binary_package.provides()) + '\n'
+				if len(binary_package.recommends()): string += 'Recommends: ' + ', '.join(recommend for recommend in binary_package.recommends()) + '\n'
+				if len(binary_package.suggests()): string += 'Suggests: ' + ', '.join(suggest for suggest in binary_package.suggests()) + '\n'
 				string += 'Depends: ${shlibs:Depends}, ${misc:Depends}'
 				for package in binary_package.depends():
-					if package.distribution_packages().has_key('debian'): string += ', ' + package.distribution_packages()['debian']
+					for key in 'debian and ubuntu', suite:
+						if package.distribution_packages().has_key(key): string += ', ' + package.distribution_packages()[key]
 				string += '\n'
 				string += 'Section: '
 				if binary_package.section() is None: string += self.section()
@@ -126,6 +117,6 @@ class debian(builder):
 		try: return self._targets
 		except AttributeError:
 			self._targets = [
-				self.project().installed_environment()._scons_environment().FileFromValue(os.path.join(self.project().build_directory(), 'debian', 'control'), self.control())
+				self.project()._scons().FileFromValue(os.path.join(self.project().build_variant_intermediate_dir(), 'debian', 'control'), self.control())
 			]
 			return self._targets
