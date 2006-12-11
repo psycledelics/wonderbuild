@@ -2,6 +2,92 @@
 
 main()
 {
+	scons=true &&
+	for argument
+	do
+		case "$argument" in
+			--geek) scons=false ;;
+		esac
+	done &&
+	if $scons && test -t # scons wasn't bypassed with a command argument, and we are on a terminal, so we can interact with the user
+	then
+		if call scons --version 2> /dev/null
+		then
+			echo $(basename $0): &&
+			echo $(basename $0): ====================================================== &&
+			echo $(basename $0): Since you have scons installed on this system, you may &&
+			echo $(basename $0): prefer to build with it instead of with the autotools. &&
+			echo $(basename $0): To do so, simply type the command \'scons\'. &&
+			echo $(basename $0): This is recommended for novice users. &&
+			echo $(basename $0): ====================================================== &&
+			echo $(basename $0): &&
+			echo $(basename $0): Asking whether to use scons instead of the autotools... &&
+			echo $(basename $0): "(You can pass the --geek option to bypass this question and use the autotools.)" &&
+			scons=dunno &&
+			if whiptail --version 1>/dev/null 2>&1
+			then
+				whiptail --title 'Psycle build system' --backtitle "$0" --fb --yesno \
+					"$(cat<<-eof
+						Since you have scons installed on this system, you may prefer to build with it instead of with the autotools.
+
+						To do so directly the next time, simply type the command 'scons' at your shell prompt.
+						
+						Continue with scons instead of the autotools? (recommended for novice users)
+					eof
+					)" 0 0
+					case "$?" in
+						0) scons=yes ;;
+						1) scons=no ;;
+						*)
+							echo "$(basename $0): => You didn't answer the question..." &&
+							scons=dunno ;;
+					esac
+			fi &&
+			if test $scons = dunno
+			then
+				echo $(basename $0): &&
+				echo $(basename $0): You can press "Control + C" to quit anytime. &&
+				echo $(basename $0): &&
+				while test $scons = dunno
+				do
+					read -p "$(basename $0): Continue with scons instead of the autotools? [Y/n]: " scons &&
+					case "$scons" in
+						Y|YES|Yes|y|yes|'') scons=yes ;;
+						N|NO|No|n|no) scons=no ;;
+						*)
+							echo "$(basename $0): => Sorry, did not undestand your \"$scons\" answer... Please answer by yes or no." &&
+							scons=dunno ;;
+					esac
+				done
+			fi &&
+			if test $scons = yes
+			then
+				echo "$(basename $0): => You chose to use scons." &&
+				exec scons --directory=$(dirname $0)
+			else
+				echo "$(basename $0): => You chose to use the autotools." &&
+				sleep=30 &&
+				echo $(basename $0): Sleeping $sleep seconds to give you time to rethink this decision... &&
+				echo $(basename $0): You can still press "Control + C" to abort. &&
+				while test $sleep -gt 0
+				do
+					echo -n "\r$(basename $0): " &&
+					i=0 &&
+					while test $i -lt $sleep
+					do
+						echo -n \? &&
+						i=$(expr $i + 1)
+					done &&
+					echo -n " $sleep  " &&
+					sleep 1 &&
+					{
+						sleep=$(expr $sleep - 1) || test $? = 1 # expr returns 1 when result is 0
+					}
+				done &&
+				echo "\r$(basename $0): Bootstrapping the autotools!"
+			fi
+		fi
+	fi &&
 	cd $(dirname $0) &&
 	for x in $(find . -name \*.glob-files)
 	do
