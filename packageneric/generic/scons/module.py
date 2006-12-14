@@ -16,8 +16,8 @@ class module(builder):
 		self, 
 		source_package,
 		name,
-		version,
-		description,
+		version = None,
+		description = None,
 		dependencies = None,
 		build_dependencies = None,
 		target_type = target_types.loadable # todo defer the decision about what type to build down to the targets() method
@@ -42,9 +42,13 @@ class module(builder):
 	
 	def name(self): return self._name
 	
-	def version(self): return self._version
+	def version(self):
+		try: return self._version
+		except AttributeError: return self.source_package().version()
 	
-	def description(self): return self._description
+	def description(self):
+		try: return self._description
+		except AttributeError: return self.source_package().description()
 		
 	def sources(self):
 		try: return self._sources
@@ -98,7 +102,7 @@ class module(builder):
 	
 	def target_name(self):
 		scons = self.project()._scons()
-		if self.target_type() == self.target_types.loadable: return self.name() # scons.subst('$LDMODULEPREFIX') + self.name() + scons.subst('$LDMODULESUFFIX')
+		if self.target_type() == self.target_types.loadable: return self.name() + scons.subst('$LDMODULESUFFIX') # scons.subst('$LDMODULEPREFIX') + self.name() + scons.subst('$LDMODULESUFFIX')
 		if self.target_type() == self.target_types.shared: return self.name() # scons.subst('$SHLIBPREFIX') + self.name() + scons.subst('$SHLIBSUFFIX')
 		if self.target_type() == self.target_types.static: return self.name() # scons.subst('$LIBPREFIX') + self.name() + scons.subst('$LIBSUFFIX')
 		elif self.target_type() == self.target_types.program: return self.name() # scons.subst('$PROGPREFIX') + self.name() + scons.subst('$PROGSUFFIX')
@@ -127,7 +131,7 @@ class module(builder):
 			for dependency_lists in [package.targets() for package in self.build_dependencies() + self.dependencies()]:
 				for dependency_list in dependency_lists: dependencies.extend(dependency_list)
 
-			self.contexes().build().compilers().cxx().paths().add([os.path.join('packageneric', 'generic', 'detail', 'src')]) # for pre-compiled headers of std lib
+			self.contexes().build().compilers().cxx().paths().add([os.path.join(self.project().packageneric_dir(), 'generic', 'scons', 'src')]) # for pre-compiled headers of std lib
 
 			paths = []
 			for path in self.contexes().source().compilers().cxx().paths(): paths.append(os.path.join(self.project().intermediate_target_dir(), path))

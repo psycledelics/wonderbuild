@@ -164,7 +164,7 @@ def gnu(chain, debug):
 			# We use colorgcc on the command line regardless of whether the output is a tty (teletype terminal), where we can colorise the output.
 			# This is harmless since colorgcc will check again for tty,
 			# and this avoids uneeded rebuild by keeps signatures of command lines the same with and without a tty.
-			colorgcc = os.path.join(chain.project().packageneric_directory(), 'generic', 'scons', 'colorgcc')
+			colorgcc = os.path.join(chain.project().packageneric_dir(), 'generic', 'scons', 'colorgcc')
 			chain.os_env().add({'PACKAGENERIC__GCC': str(chain.compilers().cxx().command())})
 			chain.compilers().cxx().command().set(colorgcc)
 			chain.linker().command().set(colorgcc)

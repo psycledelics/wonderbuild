@@ -7,7 +7,7 @@ from tty_font import tty_font
 
 class project:
 
-	def __init__(self, name):
+	def __init__(self, name, default_build_dir = None):
 		self._check_scons_and_python_versions()
 		self._name = name
 		if not self.is_subscript():
@@ -28,9 +28,12 @@ class project:
 			key = self._scons().File(path).get_abspath()
 			try: result = results[key]
 			except KeyError:
-				self.information('subscript ' + path)
+				self.information('=============================================')
+				self.information('script stack push: ' + ' -> '.join([project.name() for project in self._subscript_stack()]) + ' -> ' + path)
 				result = results[key] = self._scons().SConscript(path) # SConscriptChDir(False) ; SConscript(path, src_dir, build_dir) ; SConscriptChDir(True)
-				self.trace('subscript stack pop: ' + ' -> '.join([project.name() for project in self._subscript_stack()]))
+				self.information('=============================================')
+				self.information('script stack pop: ' + ' -> '.join([project.name() for project in self._subscript_stack()]))
+				self.information('=============================================')
 		finally: self._subscript_stack().pop()
 		return result
 
@@ -53,10 +56,11 @@ class project:
 		self.builders().append(builder)
 		self.trace('added builder ' + builder.name() + ': ' + ' '.join(builder.alias_names()))
 
-	def __call__(self, *builders):
+	def __call__(self, builders):
 		import SCons.Script
 		targets = []
-		for target in [str(maybe_node) for maybe_node in SCons.Script.BUILD_TARGETS]: targets.append(target)
+		if not self.is_subscript():
+			for target in [str(maybe_node) for maybe_node in SCons.Script.BUILD_TARGETS]: targets.append(target)
 		for target in [builder.name() for builder in builders]: targets.append(target)
 		self.information('targets are ' + ' '.join(targets))
 		for builder in builders:
@@ -67,29 +71,6 @@ class project:
 			for builder in self.builders():
 				for alias in builder.alias_names():
 					if target == alias: scons.Alias(target, builder.targets())
-		scons.Alias('packageneric:install-runtime',
-			[
-				os.path.join('$packageneric__install__stage_destination', '$packageneric__install__bin'),
-				os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib'),
-				os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib_exec'),
-				os.path.join('$packageneric__install__stage_destination', '$packageneric__install__share'),
-				os.path.join('$packageneric__install__stage_destination', '$packageneric__install__var'),
-				os.path.join('$packageneric__install__stage_destination', '$packageneric__install__etc')
-			]
-		)
-		scons.Alias('packageneric:install-dev',
-			[
-				os.path.join('$packageneric__install__stage_destination', '$packageneric__install__include')
-			]
-		)
-		scons.Alias('packageneric:install',
-			[
-				'packageneric:install-runtime',
-				'packageneric:install-dev'
-			]
-		)
-		scons.Default('packageneric:install')
-		#scons.Default('$packageneric__install__stage_destination')
 	
 	def command_line_arguments(self):
 		try: return self._command_line_arguments
@@ -98,7 +79,7 @@ class project:
 			self._command_line_arguments = SCons.Script.ARGUMENTS
 			return self._command_line_arguments
 		
-	def packageneric_directory(self):
+	def packageneric_dir(self):
 		import packageneric
 		return packageneric.__path__[0]
 	
@@ -211,22 +192,24 @@ class project:
 	def _scons(self):
 		try: return self._scons_
 		except AttributeError:
-			import SCons.Environment
-			scons = self._scons_ = SCons.Environment.Environment()
-			scons.Default() # todo only for root scons?
-			import SCons.Tool
-			toolpath = [os.path.join(self.packageneric_directory(), 'generic', 'scons', 'tools')]
-			SCons.Tool.Tool('file_from_value', toolpath = toolpath)(scons)
-			SCons.Tool.Tool('substituted_file', toolpath = toolpath)(scons)
-			scons.SourceCode('.', None) # we don't use the default source code fetchers (RCS, SCCS ...), so we disable them to avoid uneeded processing
-			scons.SetOption('implicit_cache', True)
-			#scons.SourceSignatures('timestamp') # scons 0.96.92.0002 bugs with timestamps of symlinks, or even, always ignores all changes!
-			scons.SourceSignatures('MD5')
-			scons.TargetSignatures('build')
-			#scons.TargetSignatures('content')
-			self._options()
-			# Below are settings which depend on self._options(), that we just called above
+			try: scons = self._scons_ = self.__class__._root_scons
+			except AttributeError:
+				import SCons.Environment
+				scons = self._scons_ = self.__class__._root_scons = SCons.Environment.Environment()
+			if self.is_subscript():
+				self.information('    source dir is ' + self.source_dir())
 			if not self.is_subscript():
+				import SCons.Tool
+				toolpath = [os.path.join(self.packageneric_dir(), 'generic', 'scons', 'tools')]
+				SCons.Tool.Tool('file_from_value', toolpath = toolpath)(scons)
+				SCons.Tool.Tool('substituted_file', toolpath = toolpath)(scons)
+				scons.SetOption('implicit_cache', True)
+				#scons.SourceSignatures('timestamp') # scons 0.96.92.0002 bugs with timestamps of symlinks, or even, always ignores all changes!
+				scons.SourceSignatures('MD5')
+				scons.TargetSignatures('build')
+				#scons.TargetSignatures('content')
+				self._options()
+				# Below are settings which depend on self._options(), that we just called above
 				scons.Help(self._options().GenerateHelpText(scons))
 				# Below are settings which depend on self.options(), that we just called above
 				cache = os.path.join(self.build_dir(), 'cache')
@@ -235,8 +218,33 @@ class project:
 				signature = os.path.join(self.build_dir(), 'signatures')
 				self.information('signature file is ' + scons.Dir(signature).path)
 				scons.SConsignFile(signature)
+				scons['INSTALLSTR'] = self.message('packageneric: ', 'linking file $TARGET', font = '1;35')
+				scons.Alias('packageneric:install-runtime',
+					[
+						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__bin'),
+						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib'),
+						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib_exec'),
+						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__share'),
+						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__var'),
+						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__etc')
+					]
+				)
+				scons.Alias('packageneric:install-dev',
+					[
+						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__include')
+					]
+				)
+				scons.Alias('packageneric:install',
+					[
+						'packageneric:install-runtime',
+						'packageneric:install-dev'
+					]
+				)
+				scons.Default() # todo only for root scons?
+				scons.Default('packageneric:install')
+				#scons.Default('$packageneric__install__stage_destination')
+			scons.SourceCode('.', None) # we don't use the default source code fetchers (RCS, SCCS ...), so we disable them to avoid uneeded processing
 			scons.BuildDir(self.intermediate_target_dir(), self.source_dir(), duplicate = False)
-			scons['INSTALLSTR'] = self.message('packageneric: ', 'linking file $TARGET', font = '1;35')
 			return self._scons_
 
 	def _build_variant_dir_with_scons_vars(self): return os.path.join('$packageneric__build_dir', 'variants', '$packageneric__build_variant')
@@ -308,7 +316,7 @@ class project:
 				('packageneric__install__prefix', 'directory to install under (final installation)', os.path.join('/', 'usr', 'local')),
 				('packageneric__install__exec_prefix', 'directory to install architecture-dependant excecutables under (final installation)', '$packageneric__install__prefix'),
 				('packageneric__install__bin', 'directory to install programs under (final installation)', os.path.join('$packageneric__install__exec_prefix', 'bin')),
-				('packageneric__install__lib', 'directory to install libraries under (final installation)', os.path.join('$packageneric__install__exec_prefix', 'lib')),
+				('packageneric__install__lib', 'directory to install libraries under (final installation) (not used on mswindows)', os.path.join('$packageneric__install__exec_prefix', 'lib')),
 				('packageneric__install__lib_exec', 'directory to install helper programs under (final installation)', os.path.join('$packageneric__install__exec_prefix', 'libexec')),
 				('packageneric__install__include', 'directory to install headers under (final installation)', os.path.join('$packageneric__install__prefix', 'include')),
 				('packageneric__install__share', 'directory to install archictecture-independent data under (final installation)', os.path.join('$packageneric__install__prefix', 'share')),
@@ -415,9 +423,9 @@ class project:
 
 	def _log_always(self, message): print message
 
-	def trace(self, message): self._log(self.message('packageneric: trace: ', message, font = '2;33'))
+	def trace(self, message): self._log(self.message('packageneric: trace: ', message, font = '33'))
 		
-	def information(self, message): self._log(self.message('packageneric: information: ', message, font = '2;34'))
+	def information(self, message): self._log(self.message('packageneric: information: ', message, font = '34'))
 	
 	def success(self, message): self._log(self.message('packageneric: success: ', message, font = '32'))
 		
