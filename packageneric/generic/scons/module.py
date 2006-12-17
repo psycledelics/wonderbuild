@@ -113,13 +113,22 @@ class module(builder):
 	def targets(self, target_type = target_types.loadable):
 		try: return self._targets
 		except AttributeError:
-		
+			#import time ; t = time.time ; t0 = t()
+			#print 'OOOOOOOOOOOOOOOOO'
+
 			self.dynamic_dependencies() # todo node class
 			dependencies_not_found = []
-			self.build_dependencies() ; self.dependencies() # todo method for no recursion
-			for package in self._build_dependencies + self._dependencies: # todo method for no recursion
+
+			self.build_dependencies() # todo method for no recursion
+			for package in self._build_dependencies: # todo method for no recursion
 				if package.result(): self.contexes().build().attach(package.output_env())
 				else: dependencies_not_found.append(package)
+
+			self.dependencies() # todo method for no recursion
+			for package in self._dependencies: # todo method for no recursion
+				if package.result(): self.contexes().attach(package.output_env())
+				else: dependencies_not_found.append(package)
+
 			if dependencies_not_found:
 				message = "cannot build module '" + self.name() + "' because not all dependencies were found:\n"
 				for dependency_not_found in dependencies_not_found: message += str(dependency_not_found)
@@ -141,17 +150,14 @@ class module(builder):
 
 			scons = self.project()._scons().Copy()
 			self.contexes().build()._scons(scons)
-
-			import check.pkg_config
-			pkg_config = filter(lambda x: isinstance(x, check.pkg_config.pkg_config), self.build_dependencies() + self.dependencies())
-			if len(pkg_config):
-				pkg_config = ' '.join([pkg_config.name() for pkg_config in pkg_config])
+			
+			if len(self.contexes().build().pkg_config().get()):
 				save = os.environ.get('PKG_CONFIG_PATH', '')
 				if save: os.environ['PKG_CONFIG_PATH'] = self.contexes().build().os_env()['PKG_CONFIG_PATH'] # todo append with os_env().add_inerited(['PKG_CONFIG_PATH'])
 				try:
-					if False: static = '--static ' # todo add option top build a fully static module
+					if False: static = '--static ' # todo add option to build a fully static module
 					else: static = ''
-					scons.ParseConfig('pkg-config --cflags --libs ' + static + '\'' + pkg_config + '\'')
+					scons.ParseConfig('pkg-config --cflags --libs ' + static + '\'' + ' '.join(self.contexes().build().pkg_config().get()) + '\'')
 				finally:
 					if save: os.environ['PKG_CONFIG_PATH'] = save
 
@@ -159,7 +165,7 @@ class module(builder):
 				result = []
 				for source in self.sources():
 					import string, re
-					result.append(re.sub('[^A-Z0-9_]', '_', string.upper(re.sub(os.path.sep, '__', os.path.splitext(source.relative())[0]))))
+					result.append(re.sub('[^A-Z0-9_]', '_', re.sub(os.path.sep, '__', os.path.splitext(source.relative())[0]).upper()))
 				return result
 			scons.FileFromValue(
 				os.path.join(self.project().build_variant_intermediate_dir(), 'modules', self.name(), 'src', 'packageneric', 'module.private.hpp'),
@@ -191,4 +197,9 @@ class module(builder):
 				for target in target_list:
 					if self.target_type() == self.target_types.static: pass # target.set_precious() # update archives instead of recreating them from scratch
 					target.add_dependency(dependencies)
+
+			self.contexes().client().linker().libraries().add([self.name()])
+
+			#print 'OOOOOOOOOOOOOOOOO', t() - t0
+			
 			return self._targets

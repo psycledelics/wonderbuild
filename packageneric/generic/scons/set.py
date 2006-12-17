@@ -7,12 +7,13 @@ from list import list
 class set(list):
 	def add(self, x): self.add_unique(x)
 
-	if False:
-		def add_unique(self, list_):
-			for value in list_: self._value.append(value)
-
-		def get(self):
-			result = []
-			for value in self:
+	def get(self):
+		if self._cached: return self._cached_value
+		result = []
+		result.extend(self._value)
+		for values in [value_.get() for value_ in self._parents]:
+			for value in values:
 				if value not in result: result.append(value)
-			return result
+		self._cached = True
+		self._cached_value = result
+		return self._cached_value

@@ -10,22 +10,21 @@ class dictionary(set):
 		set.__init__(self, dictionary_)
 	
 	def get(self):
+		if self._cached: return self._cached_value
 		values = []
-		values.extend(self._values)
+		values.extend(self._parents)
 		values.reverse()
 		result = {}
-		for value in [value.get() for value in values]: result.update(value)
+		for value in [value_.get() for value_ in values]: result.update(value)
 		result.update(self._value)
-		return result
+		self._cached = True
+		self._cached_value = result
+		return self._cached_value
 	
-	def __getitem__(self, key):
-		try: return self._value[key]
-		except KeyError:
-			for value in self._values:
-				try: return value[key]
-				except KeyError: pass
-			return self._value[key] # raises the original KeyError
+	def __setitem__(self, key, value):
+		self._value[key] = value
+		self._reset_cache()
 
-	def __setitem__(self, key, value): self._value[key] = value
-
-	def add_unique(self, dictionary_): self._value.update(dictionary_)
+	def add_unique(self, dictionary_):
+		self._value.update(dictionary_)
+		self._reset_cache()

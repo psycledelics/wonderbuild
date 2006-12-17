@@ -13,14 +13,14 @@ class node:
 
 	def dependencies(self): return self._dependencies
 	def add_dependencies(self, nodes):
-		if not nodes is None:
+		if nodes is not None:
 			for node in nodes: self.add_dependency(node)
 	def add_dependency(self, node_):
-		if not isinstance(node_, node): raise node_
+		assert isinstance(node_, node)
 		if node_ not in self._dependencies: self._dependencies.append(node_)
 
 	def dynamic_dependencies(self):
-		"""to be overridden in derived classes"""
+		'to be overridden in derived classes'
 		pass
 	
 	def result(self):
@@ -56,5 +56,5 @@ class node:
 		return nodes
 
 	def execute(self):
-		"""to be overridden in derived classes"""
+		'to be overridden in derived classes'
 		return True

@@ -55,10 +55,26 @@ def template(mixin):
 				value = self.shared().message().get()
 				if value is not None: scons['SHCXXCOMSTR'] = value
 				
-				scons.Append(
-					CXXFLAGS = self.flags().get(),
-					CPPDEFINES = self.defines().get()
-				)
+				if False: # problem with Append and dictionaries (like CPPDEFINES) in scons 0.96.93 and python 2.4.4
+					scons.Append(
+						CXXFLAGS = self.flags().get(),
+						CPPDEFINES = self.defines().get()
+					)
+				else:
+					D_prefix = scons.subst('$CPPDEFPREFIX')
+					D_suffix = scons.subst('$CPPDEFSUFFIX')
+					def D(name, value):
+						result = D_prefix + name
+						if value is not None:
+							result += "='" + str(scons.subst(value)).replace("'", "\\'") + "'"
+						result += D_suffix
+						return result
+					scons.Append(
+						CXXFLAGS = \
+							self.flags().get() + \
+							[D(name, value) for name, value in self.defines().get().items()]
+					)
+				
 				scons.AppendUnique(CPPPATH = self.paths().get())
 
 		_template[mixin] = result

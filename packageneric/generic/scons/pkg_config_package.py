@@ -25,8 +25,11 @@ class pkg_config_package(builder):
 	def name(self): return self._name
 	
 	def local_package(self):
-		from local_package import local_package
-		return local_package(self)
+		try: return self._local_package
+		except AttributeError:
+			from local_package import local_package
+			self._local_package = local_package(self)
+			return self._local_package
 	
 	def version(self): return self._version
 	
@@ -56,7 +59,12 @@ class pkg_config_package(builder):
 
 		D_prefix = scons.subst('$CPPDEFPREFIX')
 		D_suffix = scons.subst('$CPPDEFSUFFIX')
-		def D(name, value): return D_prefix + name + "='" + scons.subst(value) + "'" + D_suffix
+		def D(name, value):
+			result = D_prefix + name
+			if value is not None:
+				result += "='" + str(scons.subst(value)).replace("'", "\\'") + "'"
+			result += D_suffix
+			return result
 
 		I_prefix = scons.subst('$INCPREFIX')
 		I_suffix = scons.subst('$INCSUFFIX')
@@ -76,13 +84,11 @@ class pkg_config_package(builder):
 			' '.join([flag for flag in env.compilers().cxx().flags()]) + '\n'
 		string += 'Libs: ' + \
 			' '.join([L(path) for path in env.linker().paths()]) + ' ' + \
-			' '.join([l(path) for path in env.linker().libraries()]) + ' ' + \
+			' '.join([l(library) for library in env.linker().libraries()]) + ' ' \
 			' '.join([flag for flag in env.linker().flags()]) + '\n'
 		string += 'Libs.private: ' + \
-			' '.join([l(path) for path in env.linker().libraries()]) + '\n'
-		string += 'Requires: '
-		import check.pkg_config
-		string += ' '.join([pkg_config.name() for pkg_config in filter(lambda x: isinstance(x, check.pkg_config.pkg_config), self.dependencies())])
+			' '.join([l(library) for library in env.linker().libraries()]) + '\n' # to support for fully static builds
+		string += 'Requires: ' + ' '.join(env.pkg_config().get())
 		string += '\n'
 		return string
 	
@@ -114,14 +120,21 @@ class pkg_config_package(builder):
 			
 			env = self.uninstalled_env()
 			
+			#print '***********', self.name(), env.compilers().cxx().paths().get()
+
 			paths = []
 			for path in env.compilers().cxx().paths(): paths.append(os.path.join(self.project().intermediate_target_dir(), path))
 			env.compilers().cxx().paths().add(paths)
 			
-			paths = []
-			for path in env.compilers().cxx().paths(): paths.append(self.project()._scons().Dir(path).get_abspath())
-			env.compilers().cxx().paths().add(paths)
+			#print 'xxxxxxxxxxx', self.name(), paths
 			
+			abs_paths = []
+			for path in env.compilers().cxx().paths():
+				if not path in paths: abs_paths.append(self.project()._scons().Dir(path).get_abspath())
+			env.compilers().cxx().paths().add(abs_paths)
+			
+			#print 'XXXXXXXXXXX', self.name(), abs_paths
+
 			env.linker().paths().add([os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib')])
 
 			paths = []

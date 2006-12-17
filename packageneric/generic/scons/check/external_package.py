@@ -14,13 +14,8 @@ class external_package(check):
 	
 	def url(self): return self._url
 
-	def add_dependency(self, check_):
-		assert isinstance(check_, check)
-		check.add_dependency(self, check_)
-
 	def execute(self):
 		if not check.execute(self): return False
-		for check_ in filter(lambda x: isinstance(x, check), self.dependencies()): self.input_env().attach(check_.output_env())
 		if not self.result():
 			dependencies_not_found = []
 			for package in self.dependencies():
@@ -38,10 +33,7 @@ class external_package(check):
 		line = '____________________'
 		bar = '\n|'
 		string = ' ' + line + bar + ' '
-		from pkg_config import pkg_config
-		for pkg_config_ in filter(lambda x: isinstance(x, pkg_config), self.dependencies()): string += bar + ' pkg-config: ' + str(pkg_config_)
-		from cxx_build import cxx_build
-		for cxx_build_ in filter(lambda x: isinstance(x, cxx_build), self.dependencies()): string += bar + ' ' + str(cxx_build_)
+		for check_ in filter(lambda x: not isinstance(x, external_package), self.dependencies()): string += bar + ' ' + str(check_)
 		separator = bar + line + bar + bar + ' provided by external package: ' + self.name() + bar
 		if self.distribution_packages():
 			string += separator
@@ -52,4 +44,6 @@ class external_package(check):
 			if self.distribution_packages(): string += 'otherwize, '
 			string += 'the source of this package can be downloaded from ' + self.url()
 		string += bar + line + '\n'
+		# redundant?
+		#for external_package_ in filter(lambda x: isinstance(x, external_package), self.dependencies()): string += str(external_package_)
 		return string

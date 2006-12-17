@@ -9,15 +9,15 @@ base = scons.template(check)
 
 class pkg_config(base):
 	def __init__(self, project, name, **kw):
-		try: inherited_os_en = kw['inherited_os_env']
+		try: inherited_os_env = kw['inherited_os_env']
 		except KeyError: kw['inherited_os_env'] = ['PKG_CONFIG_PATH']
 		else:
 			if 'PKG_CONFIG_PATH' not in inherited_os_env: inherited_os_env.append('PKG_CONFIG_PATH')
-		base.__init__(self, project = project, name = name, **kw)
+		base.__init__(self, project = project, name = name, pkg_config = [name], **kw)
 		
 	def _scons_sconf_execute(self, scons_sconf_context):
 		if not base._scons_sconf_execute(self, scons_sconf_context): return False
 		result, output = scons_sconf_context.TryAction("pkg-config --exists '" + self.name() + "'")
 		return result, output
 
-	def __str__(self): return self.name()
+	def __str__(self): return 'pkg-config: ' + self.name()

@@ -25,6 +25,7 @@ def template(base):
 				library_paths = None,
 				libraries = None,
 				linker_flags = None,
+				pkg_config = None,
 				*args, **kw
 			):
 				base.__init__(*(self, project) + args, **kw)
@@ -37,6 +38,7 @@ def template(base):
 				if library_paths is not None: self.linker().paths().add(library_paths)
 				if libraries is not None: self.linker().libraries().add(libraries)
 				if linker_flags is not None: self.linker().flags().add(linker_flags)
+				if pkg_config is not None: self.pkg_config().add(pkg_config)
 
 			def target_type(self): return self._target_type
 			
@@ -63,6 +65,13 @@ def template(base):
 					self._linker = linker.template(base)(self.project())
 					return self._linker
 
+			def pkg_config(self):
+				try: return self._pkg_config
+				except AttributeError:
+					from set import set
+					self._pkg_config = set()
+					return self._pkg_config
+
 			def attach(self, source):
 				base.attach(self, source)
 				if isinstance(source, result):
@@ -70,6 +79,7 @@ def template(base):
 						for source_compiler in source.compilers(): self_compiler.attach(source_compiler)
 					self.archiver().attach(source.archiver())
 					self.linker().attach(source.linker())
+					self.pkg_config().attach(source.pkg_config())
 					
 			def _scons(self, scons):
 				base._scons(self, scons)
@@ -77,9 +87,5 @@ def template(base):
 				self.archiver()._scons(scons)
 				self.linker()._scons(scons)
 
-			def parse(self, command):
-				self._scons_environment().ParseConfig(command)
-				return True # scons doesn't return anything (fixed in a recent version)
-				
 		_template[base] = result
 		return result

@@ -165,8 +165,8 @@ class project:
 			from gnu import gnu
 			gnu(chain, debug)
 			chain.compilers().cxx().paths().add([os.path.join(self.build_variant_intermediate_dir(), 'project', 'src')])
-			scons.FileFromValue(
-				os.path.join(self.build_variant_intermediate_dir(), 'project', 'src', 'packageneric', 'configuration.private.hpp'),
+			self.file_from_value(
+				os.path.join('project', 'src', 'packageneric', 'configuration.private.hpp'),
 				''.join(['#define PACKAGENERIC__CONFIGURATION__%s %s\n' % (n, v) for n, v in
 					[('INSTALL_PATH__BIN_TO_%s' % n, '"%s"' % v) for n, v in
 						('LIB', '../lib'),
@@ -184,11 +184,13 @@ class project:
 					os.path.join(self.intermediate_target_dir(), i.strip(), os.path.splitext(i.relative())[0]),
 					i.full()
 				)
-			self._contexes.client().uninstalled().linker().paths().add([self.intermediate_target_dir()])
 			self._contexes.client().installed().compilers().cxx().paths().add(['$packageneric__install__include'])
 			self._contexes.client().installed().linker().paths().add(['$packageneric__install__lib'])
 			return self._contexes
-			
+
+	def file_from_value(self, file_path, value): return self._scons().FileFromValue(os.path.join(self.build_variant_intermediate_dir(), file_path), value)[0].path
+	#def substituted_file(self, file_path): return self._scons().SubstitutedFile(os.path.join(self.intermediate_target_dir(), file_path)...
+	
 	def _scons(self):
 		try: return self._scons_
 		except AttributeError:

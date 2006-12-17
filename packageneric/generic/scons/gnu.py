@@ -99,16 +99,24 @@ def gnu(chain, debug):
 		# linker: -Bdynamic -Bstatic: modifies how following -l flags expand to filenames to link against
 		# linker: one --rpath dir and/or --rpath-link dir for each -L dir (what about dll PE targets?)
 		chain.linker().flags().add([
-			'-Wl,-z origin', # it appears not to be needed on linux, and cygwin's ld says it doesn't know it despite it being in its manpage!
 			'-Wl,--rpath=\\$$ORIGIN/../lib', # todo this is elf-specific (or even linux-specific? ... maybe you can tell, sartorius.)
 			'-Wl,--rpath=$packageneric__install__lib'
 		])
-		if False and target_binary_format == 'elf':
+		if gnug4.result():
 			chain.linker().flags().add([
-				'-Wl,--soname=xxx',
-				'-Wl,--default-symver',
-				'-Wl,--default-imported-symver'
+				'-Wl,-z origin' # it appears not to be needed on linux, and cygwin's ld says it doesn't know it despite it being in its manpage!
 			])
+		if target_binary_format == 'elf':
+			if False:
+				chain.linker().flags().add([
+					'-Wl,--soname=xxx',
+					'-Wl,--default-symver',
+					'-Wl,--default-imported-symver'
+				])
+			if gnug4.result():
+				chain.linker().flags().add([
+					'-Wl,--as-needed'
+				])
 		if target_binary_format == 'pe':
 			# --outout-def file.def
 			# --out-implib file.dll.a
@@ -143,8 +151,10 @@ def gnu(chain, debug):
 				'-Wl,-O0'
 			])
 		else:
+			chain.compilers().cxx().defines().add({
+				'NDEBUG': None
+			})
 			chain.compilers().cxx().flags().add([
-				'-DNDEBUG',
 				'-O3',
 				#'-repo',
 				'-fno-enforce-eh-specs',

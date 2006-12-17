@@ -10,7 +10,7 @@ class check(node, named):
 		node.__init__(self, dependencies)
 		named.__init__(self, name)
 		self._project = project
-		self._auto_add = True
+		self._auto_add = auto_add
 		self._environment_args = environment_args
 		self._environment_kw = environment_kw
 
@@ -21,9 +21,9 @@ class check(node, named):
 		except AttributeError:
 			# todo parametrize the env class
 			self._input_env = self.project().env_class()(self.project(), *self._environment_args, **self._environment_kw)
-			for dependency in self.dependencies(): self._input_env.attach(dependency.output_env())
 			del self._environment_args
 			del self._environment_kw
+			for dependency in self.dependencies(): self._input_env.attach(dependency.output_env())
 			return self._input_env
 	
 	def auto_add(self): return self._auto_add

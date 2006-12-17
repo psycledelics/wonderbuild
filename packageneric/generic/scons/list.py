@@ -10,43 +10,33 @@ class list(value):
 		value.__init__(self, list_)
 		
 	def get(self):
+		if self._cached: return self._cached_value
 		result = []
 		result.extend(self._value)
-		for value in [value.get() for value in self._values]: result.extend(value)
-		return result
+		for value in [value_.get() for value_ in self._parents]: result.extend(value)
+		self._cached = True
+		self._cached_value = result
+		return self._cached_value
 
-	def __len__(self):
-		result = len(self._value)
-		for value in self._values: result += len(value)
-		return result
+	def __len__(self): return len(self.get())
 	
-	def __getitem__(self, index):
-		try: return self._value[index]
-		except IndexError:
-			index -= len(self._value)
-			for value in self._values:
-				try: return value[index]
-				except IndexError: index -= len(value)
-			return self._value[index] # raises the original IndexError
+	def __getitem__(self, index): return self.get().__getitem__(index) # or self.get()[index]
 
-	def add(self, list_): self._value.extend(list_)
+	def add(self, list_):
+		self._value.extend(list_)
+		self._reset_cache()
 	
 	def add_unique(self, list_):
+		need_cache_reset = False
 		for value in list_:
-			if not value in self: self._value.append(value)
+			if value not in self:
+				self._value.append(value)
+				need_cache_reset = True
+		if need_cache_reset: self._reset_cache()
 			
-	def __contains__(self, element):
-		if element in self._value: return True
-		for value in self._values:
-			if element in value: return True
-		return False
-		if False:
-			# the following alternative implementation is much more slower
-			for x in self:
-				if x == element: return True
-			return False
+	def __contains__(self, element): return element in self.get()
 
-			# even more slower
-			for x in self:
-				if x is element: return True
-			return False
+	def attach(self, list_):
+		value.attach(self, list_)
+		assert isinstance(list_, list)
+		self._reset_cache()

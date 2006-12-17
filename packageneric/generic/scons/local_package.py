@@ -6,13 +6,9 @@ from check.external_package import external_package as external_package_check
 
 class local_package(external_package_check):
 	def __init__(self, pkg_config_package):
-		import check.pkg_config
-		pkg_config = filter(lambda x: isinstance(x, check.pkg_config.pkg_config), pkg_config_package.dependencies())
-		if not len(pkg_config): dependencies = None
-		else: dependencies = [check.pkg_config.pkg_config(pkg_config_package.project(), name = ' '.join([pkg_config.name() for pkg_config in pkg_config]))]
 		external_package_check.__init__(self, pkg_config_package.project(),
 			name = pkg_config_package.name(),
-			dependencies = dependencies,
+			dependencies = [],
 			distribution_packages = {},
 			url = None
 		)

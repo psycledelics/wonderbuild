@@ -39,7 +39,7 @@ def template(base):
 				return result
 				
 			def _scons_sconf_execute(self, scons_sconf_context):
-				"""to be overridden in derived classes"""
+				'to be overridden in derived classes'
 				return True, 'ok'
 				
 		_template[base] = result
