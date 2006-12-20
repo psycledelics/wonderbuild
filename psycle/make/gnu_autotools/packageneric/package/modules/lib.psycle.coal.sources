@@ -1,2 +1,0 @@
-#! /bin/sh
-find psycle/coal/ \( -type d -name todo -prune \) -or \( -name \*.cpp -print \)

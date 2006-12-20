@@ -1,5 +1,0 @@
-#! /usr/bin/autoconf
-
-PACKAGENERIC__MODULE__EXTERNAL(UNIVERSALIS, universalis >= 0.0.0)
-
-PACKAGENERIC__MODULE__INTERNAL(lib, psycle.coal, 0:0:0, UNIVERSALIS, psycoal - psycle open audio library)
