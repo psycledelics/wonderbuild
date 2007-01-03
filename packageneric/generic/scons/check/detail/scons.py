@@ -1,6 +1,6 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2006 johan boule <bohan@jabber.org>
-# copyright 2006 psycledelics http://psycle.pastnotecut.org
+# copyright 2006-2007 johan boule <bohan@jabber.org>
+# copyright 2006-2007 psycledelics http://psycle.pastnotecut.org
 
 _template = {}
 
@@ -11,8 +11,8 @@ def template(base):
 		class result(base):
 			def execute(self):
 				if not base.execute(self): return False
-				scons = self.project()._scons().Copy()
-				self.input_env()._scons(scons)
+				scons = self.project()._scons().Copy() # .Clone()
+				self.execute_env()._scons(scons)
 				import SCons.SConf
 				scons_sconf = SCons.SConf.SConf(
 					env = scons,

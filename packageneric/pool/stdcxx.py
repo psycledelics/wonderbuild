@@ -1,28 +1,26 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2006 johan boule <bohan@jabber.org>
-# copyright 2006 psycledelics http://psycle.pastnotecut.org
+# copyright 2006-2007 johan boule <bohan@jabber.org>
+# copyright 2006-2007 psycledelics http://psycle.pastnotecut.org
 
 from packageneric.generic.scons.check.external_package import external_package
 from packageneric.generic.scons.check.cxx_build import cxx_build
+from cmath import cmath
 
 class stdcxx(external_package):
 	def __init__(self, project):
-		from cmath import cmath
-		external_package.__init__(self, project,
-			name = 'stdc++',
-			dependencies = [cmath(project)],
+		external_package.__init__(self, project, name = 'iso standard c++ compiler and library',
+			url = 'http://google.ch iso c++',
 			distribution_packages = {
 				'debian and ubuntu': 'libstdc++-dev (>= 0)',
 				'gentoo': '...',
 				'fedora': '...',
 				'cygwin': 'gcc-g++ (>= 3.4.4-1)'
 			},
-			url = 'http://google.ch iso c++'
+			dependencies = [cmath(project)]
 		)
 	
 	def dynamic_dependencies(self):
-		all_in_one = cxx_build(self.project(),
-			name = 'stdc++',
+		all_in_one = cxx_build(self.project(), name = 'stdc++',
 			dependencies = [],
 			libraries = [],
 			source_text = \
@@ -31,16 +29,16 @@ class stdcxx(external_package):
 						#error not a c++ compiler
 					#endif
 					
-					#if !defined __STDC__
+					#if !defined __STDC__ && !defined _MSC_VER // last checked on msvc 14.0 (studio 8.0)
 						#error no standard library
 					#endif
 					
 					//#include <cstdint>
 					//void cstdint() { std::int32_t i; }
 					
-					#include <stdint.h>
-					#include <inttypes.h>
-					void stdint() { int32_t i; }
+					//#include <stdint.h>
+					//#include <inttypes.h>
+					//void stdint() { int32_t i; }
 				"""
 		)
 		self.add_dependency(all_in_one)

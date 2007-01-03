@@ -1,8 +1,8 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2006 johan boule <bohan@jabber.org>
-# copyright 2006 psycledelics http://psycle.pastnotecut.org
+# copyright 2006-2007 johan boule <bohan@jabber.org>
+# copyright 2006-2007 psycledelics http://psycle.pastnotecut.org
 
-import os, os.path
+import os
 from builder import builder
 
 class module(builder):
@@ -11,6 +11,7 @@ class module(builder):
 		shared = 1
 		static = 2
 		program = 3
+		shared_but_pe = 4 # will be shared unless the platform uses pe executable format, in which case it will be static (windows dll needs import/export attributes on symbols)
 		
 	def __init__(
 		self, 
@@ -90,25 +91,20 @@ class module(builder):
 	def add_dependencies(self, dependencies):
 		for package in dependencies: self.add_dependency(package)
 	
-	def target_type(self): return self._target_type
+	def dynamic_dependencies(self): pass  # todo node class
 	
 	def contexes(self):
 		try: return self._contexes
 		except AttributeError:
 			self._contexes = self.source_package().contexes().attached()
+			#self._contexes.client().linker().libraries().add([self.name()])
+			# added *before* targets is called (or else targets isn't called!).
+			# todo BUG this doesn't make it transitive!
 			return self._contexes
 			
 	def alias_names(self): return ['packageneric:module', self.name()]
 	
-	def target_name(self):
-		scons = self.project()._scons()
-		if self.target_type() == self.target_types.loadable: return self.name() + scons.subst('$LDMODULESUFFIX') # scons.subst('$LDMODULEPREFIX') + self.name() + scons.subst('$LDMODULESUFFIX')
-		if self.target_type() == self.target_types.shared: return self.name() # scons.subst('$SHLIBPREFIX') + self.name() + scons.subst('$SHLIBSUFFIX')
-		if self.target_type() == self.target_types.static: return self.name() # scons.subst('$LIBPREFIX') + self.name() + scons.subst('$LIBSUFFIX')
-		elif self.target_type() == self.target_types.program: return self.name() # scons.subst('$PROGPREFIX') + self.name() + scons.subst('$PROGSUFFIX')
-		else: self.project().abort("unknown binary type for module '%s'" % self.name())
-	
-	def dynamic_dependencies(self): pass  # todo node class
+	def target_type(self): return self._target_type
 	
 	def targets(self, target_type = target_types.loadable):
 		try: return self._targets
@@ -148,24 +144,14 @@ class module(builder):
 
 			self.contexes().build().compilers().cxx().paths().add([os.path.join(self.project().build_variant_intermediate_dir(), 'modules', self.name(), 'src')])
 
-			scons = self.project()._scons().Copy()
+			scons = self.project()._scons().Copy() # .Clone()
 			self.contexes().build()._scons(scons)
 			
-			if len(self.contexes().build().pkg_config().get()):
-				save = os.environ.get('PKG_CONFIG_PATH', '')
-				if save: os.environ['PKG_CONFIG_PATH'] = self.contexes().build().os_env()['PKG_CONFIG_PATH'] # todo append with os_env().add_inerited(['PKG_CONFIG_PATH'])
-				try:
-					if False: static = '--static ' # todo add option to build a fully static module
-					else: static = ''
-					scons.ParseConfig('pkg-config --cflags --libs ' + static + '\'' + ' '.join(self.contexes().build().pkg_config().get()) + '\'')
-				finally:
-					if save: os.environ['PKG_CONFIG_PATH'] = save
-
 			def namespaces():
 				result = []
 				for source in self.sources():
-					import string, re
-					result.append(re.sub('[^A-Z0-9_]', '_', re.sub(os.path.sep, '__', os.path.splitext(source.relative())[0]).upper()))
+					import re
+					result.append(re.sub('[^A-Z0-9_]', '_', os.path.splitext(source.relative())[0].replace(os.path.sep, '__').upper()))
 				return result
 			scons.FileFromValue(
 				os.path.join(self.project().build_variant_intermediate_dir(), 'modules', self.name(), 'src', 'packageneric', 'module.private.hpp'),
@@ -181,25 +167,46 @@ class module(builder):
 				)
 			)
 			
+			target_type = self.target_type()
+			if target_type == self.target_types.shared_but_pe:
+				if self.project().platform_executable_format() == 'pe': target_type = self.target_types.static
+				else: target_type = self.target_types.shared
 			if self.target_type() == self.target_types.loadable: builder = scons.LoadableModule
-			elif self.target_type() == self.target_types.shared: builder = scons.SharedLibrary
-			elif self.target_type() == self.target_types.static: builder = scons.StaticLibrary
+			elif target_type == self.target_types.shared: builder = scons.SharedLibrary
+			elif target_type == self.target_types.static: builder = scons.StaticLibrary
 			elif self.target_type() == self.target_types.program: builder = scons.Program
 			else: self.project().abort("unknown binary type for module '%s'" % self.name())
 			if self.target_type() == self.target_types.program:
 				destination = os.path.join('$packageneric__install__bin')
 			else:
 				destination = os.path.join('$packageneric__install__lib')
+				 # todo bin dir also if self.project.platform_executable_format() == 'pe' and shared or loadable
+				 # but this is tricky since only the .dll file needs to go to bin dir ; the .lib, .pdb, .exp still need to go to the lib dir (and .ilk kept in intermediate dir)
 			self._targets = [
-				builder(os.path.join('$packageneric__install__stage_destination', destination, self.target_name()), [os.path.join(self.project().intermediate_target_dir(), x.full()) for x in self.sources()])
+				builder(os.path.join('$packageneric__install__stage_destination', destination, self._target_name()), [os.path.join(self.project().intermediate_target_dir(), x.full()) for x in self.sources()])
 			]
 			for target_list in self._targets:
 				for target in target_list:
 					if self.target_type() == self.target_types.static: pass # target.set_precious() # update archives instead of recreating them from scratch
 					target.add_dependency(dependencies)
 
-			self.contexes().client().linker().libraries().add([self.name()])
-
 			#print 'OOOOOOOOOOOOOOOOO', t() - t0
 			
+			self._contexes.client().linker().libraries().add([self.name()])
+			# added *before* targets is called (or else targets isn't called!).
+			# todo BUG this doesn't make it transitive!
+
 			return self._targets
+
+	def _target_name(self):
+		scons = self.project()._scons()
+		if self.target_type() == self.target_types.loadable: return self.name() + scons.subst('$LDMODULESUFFIX') # scons.subst('$LDMODULEPREFIX') + self.name() + scons.subst('$LDMODULESUFFIX')
+		target_type = self.target_type()
+		if target_type == self.target_types.shared_but_pe:
+			if self.project().platform_executable_format() == 'pe': target_type = self.target_types.static
+			else: target_type = self.target_types.shared
+		if target_type == self.target_types.shared: return self.name() # scons.subst('$SHLIBPREFIX') + self.name() + scons.subst('$SHLIBSUFFIX')
+		if target_type == self.target_types.static: return self.name() # scons.subst('$LIBPREFIX') + self.name() + scons.subst('$LIBSUFFIX')
+		if self.target_type() == self.target_types.program: return self.name() + scons.subst('$PROGSUFFIX') # scons.subst('$PROGPREFIX') + self.name() + scons.subst('$PROGSUFFIX')
+		else: self.project().abort("unknown binary type for module '%s'" % self.name())
+	

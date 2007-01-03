@@ -1,6 +1,6 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2006 johan boule <bohan@jabber.org>
-# copyright 2006 psycledelics http://psycle.pastnotecut.org
+# copyright 2006-2007 johan boule <bohan@jabber.org>
+# copyright 2006-2007 psycledelics http://psycle.pastnotecut.org
 
 from packageneric.generic.scons.node import node
 from packageneric.generic.scons.named import named
@@ -16,18 +16,24 @@ class check(node, named):
 
 	def project(self): return self._project
 	
+	def auto_add(self): return self._auto_add
+	
 	def input_env(self):
 		try: return self._input_env
 		except AttributeError:
-			# todo parametrize the env class
 			self._input_env = self.project().env_class()(self.project(), *self._environment_args, **self._environment_kw)
 			del self._environment_args
 			del self._environment_kw
 			for dependency in self.dependencies(): self._input_env.attach(dependency.output_env())
 			return self._input_env
 	
-	def auto_add(self): return self._auto_add
-	
+	def execute_env(self):
+		try: return self._execute_env
+		except AttributeError:
+			self._execute_env = self.project().contexes().check_and_build().attached()
+			self._execute_env.attach(self.input_env())
+			return self._execute_env
+
 	def output_env(self):
 		try: return self._output_env
 		except AttributeError:

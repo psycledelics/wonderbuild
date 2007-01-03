@@ -3,7 +3,7 @@
 rem ###########################################################################
 rem #
 rem # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-rem # Copyright (C) 2004-2005 Psycledelics http://psycle.pastnotecut.org : Johan Boule
+rem # copyright 2004-2007 psycledelics http://psycle.pastnotecut.org : johan boule
 rem #
 rem # Startup script for rxvt terminal (msys),
 rem # using the value of the SHELL env var for the shell program (or if not set, setting it to interactive bash shell)
@@ -12,7 +12,7 @@ rem ###########################################################################
 
 pushd %~dp0 || goto :failed
 
-rem set DISPLAY to nothing, otherwize, msys' rxvt won't start (it has no support for the X Window protocol, unlike cygwin's).
+rem set DISPLAY to nothing, otherwise, msys' rxvt won't start (it has no support for the X Window protocol, unlike cygwin's).
 set DISPLAY=
 
 if "%DISPLAY%" == "" (

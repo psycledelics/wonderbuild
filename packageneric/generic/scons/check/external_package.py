@@ -1,6 +1,6 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2006 johan boule <bohan@jabber.org>
-# copyright 2006 psycledelics http://psycle.pastnotecut.org
+# copyright 2006-2007 johan boule <bohan@jabber.org>
+# copyright 2006-2007 psycledelics http://psycle.pastnotecut.org
 
 from packageneric.generic.scons.check import check
 
@@ -34,16 +34,23 @@ class external_package(check):
 		bar = '\n|'
 		string = ' ' + line + bar + ' '
 		for check_ in filter(lambda x: not isinstance(x, external_package), self.dependencies()): string += bar + ' ' + str(check_)
-		separator = bar + line + bar + bar + ' provided by external package: ' + self.name() + bar
+		separator = bar + line + bar
+		provided = separator + bar + ' provided by external package: ' + self.name() + bar
 		if self.distribution_packages():
-			string += separator
+			string += provided
 			for (k, v) in self.distribution_packages().items(): string += bar + ' -> on ' + k + ' distributions, the package names are ' + v
 		if self.url() is not None:
-			if not self.distribution_packages(): string += separator
+			if not self.distribution_packages(): string += provided
 			string += bar + ' -> '
-			if self.distribution_packages(): string += 'otherwize, '
+			if self.distribution_packages(): string += 'otherwise, '
 			string += 'the source of this package can be downloaded from ' + self.url()
+			from packageneric.generic.scons.tty_font import tty_font
+			for external_package_ in filter(lambda x: isinstance(x, external_package), self.dependencies()):
+				string += separator
+				indent = bar + ' ' + tty_font('37')
+				string += indent + 'which should bring indirect dependencies:'
+				recursive = str(external_package_)
+				if recursive[-1] == '\n': recursive = recursive[:-1]
+				string += indent + recursive.replace('\n', indent) + tty_font()
 		string += bar + line + '\n'
-		# redundant?
-		#for external_package_ in filter(lambda x: isinstance(x, external_package), self.dependencies()): string += str(external_package_)
 		return string

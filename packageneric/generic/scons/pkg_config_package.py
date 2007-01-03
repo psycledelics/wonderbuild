@@ -1,6 +1,6 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2006 johan boule <bohan@jabber.org>
-# copyright 2006 psycledelics http://psycle.pastnotecut.org
+# copyright 2006-2007 johan boule <bohan@jabber.org>
+# copyright 2006-2007 psycledelics http://psycle.pastnotecut.org
 
 import os.path
 from builder import builder
@@ -24,28 +24,10 @@ class pkg_config_package(builder):
 		
 	def name(self): return self._name
 	
-	def local_package(self):
-		try: return self._local_package
-		except AttributeError:
-			from local_package import local_package
-			self._local_package = local_package(self)
-			return self._local_package
-	
 	def version(self): return self._version
 	
 	def description(self): return self._description
 	
-	def modules(self): return self._modules
-
-	def dependencies(self):
-		try: return self._build_dependencies
-		except AttributeError:
-			self._build_dependencies = []
-			for module in self.modules():
-				for package in module.build_dependencies() + module.dependencies():
-					if not package in self._build_dependencies: self._build_dependencies.append(package)
-			return self._build_dependencies
-
 	def string(self, uninstalled):
 		string = 'Name: ' + self.name()
 		if uninstalled: string += ' (uninstalled)'
@@ -92,6 +74,17 @@ class pkg_config_package(builder):
 		string += '\n'
 		return string
 	
+	def modules(self): return self._modules
+
+	def dependencies(self):
+		try: return self._build_dependencies
+		except AttributeError:
+			self._build_dependencies = []
+			for module in self.modules():
+				for package in module.build_dependencies() + module.dependencies():
+					if not package in self._build_dependencies: self._build_dependencies.append(package)
+			return self._build_dependencies
+
 	def uninstalled_env(self):
 		try: return self._uninstalled_env_
 		except AttributeError:
@@ -106,6 +99,13 @@ class pkg_config_package(builder):
 			for module in self.modules(): env.attach(module.contexes().client().installed())
 			return env
 
+	def local_package(self):
+		try: return self._local_package
+		except AttributeError:
+			from local_package import local_package
+			self._local_package = local_package(self)
+			return self._local_package
+	
 	def alias_names(self): return ['packageneric:pkg-config-package', self.name()]
 
 	def targets(self):
@@ -141,7 +141,7 @@ class pkg_config_package(builder):
 			for path in env.linker().paths(): paths.append(self.project()._scons().Dir(path).get_abspath())
 			env.linker().paths().add(paths)
 			
-			for module in self.modules(): env.linker().libraries().add([module.name()])
+			for module in self.modules(): env.linker().libraries().add([module.name()]) # todo redundant
 
 			scons = self.project()._scons()
 			self._targets = [

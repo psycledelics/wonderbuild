@@ -1,18 +1,19 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2006 johan boule <bohan@jabber.org>
-# copyright 2006 psycledelics http://psycle.pastnotecut.org
+# copyright 2006-2007 johan boule <bohan@jabber.org>
+# copyright 2006-2007 psycledelics http://psycle.pastnotecut.org
 
-from list import list
+#from list import list as base
+from set import set as base
 
-class flags_list(list):
+class flags_list(base):
 	def add(self, flags):
 		if flags is None: return
 		string_flags = []
 		for flag in flags:
 			if len(flag) > 1: string_flags.append(flag)
-			elif not len(self): list.add([flag])
+			elif not len(self): base.add([flag])
 			elif not flag in self[0]: self[0] += flag
-		list.add(self, string_flags)
+		base.add(self, string_flags)
 
 _template = {}
 

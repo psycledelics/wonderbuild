@@ -1,6 +1,6 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2006 johan boule <bohan@jabber.org>
-# copyright 2006 psycledelics http://psycle.pastnotecut.org
+# copyright 2006-2007 johan boule <bohan@jabber.org>
+# copyright 2006-2007 psycledelics http://psycle.pastnotecut.org
 
 import sys, os.path
 from tty_font import tty_font
@@ -67,11 +67,24 @@ class project:
 			scons = self._scons()
 			scons.Alias(builder.alias_names(), builder.targets())
 			scons.Default(builder.alias_names()[0])
-		for target in SCons.Script.COMMAND_LINE_TARGETS:
+		for target in self.command_line_targets():
 			for builder in self.builders():
 				for alias in builder.alias_names():
 					if target == alias: scons.Alias(target, builder.targets())
 	
+	def default_target(self, builders):
+		for builder in builders:
+			scons = self._scons()
+			scons.Alias(builder.alias_names(), builder.targets())
+			scons.Default(builder.alias_names()[0])
+	
+	def command_line_targets(self):
+		try: return self._command_line_targets
+		except AttributeError:
+			import SCons.Script
+			self._command_line_targets = SCons.Script.COMMAND_LINE_TARGETS
+			return self._command_line_targets
+		
 	def command_line_arguments(self):
 		try: return self._command_line_arguments
 		except AttributeError:
@@ -92,7 +105,7 @@ class project:
 	def build_dir(self):
 		try: return self._build_dir
 		except AttributeError:
-			self._build_dir = self._scons().Dir('$packageneric__build_dir').get_abspath()
+			self._build_dir = self._scons().Dir('$packageneric__build_dir').path #get_abspath()
 			return self._build_dir
 
 	def build_variant(self):
@@ -125,67 +138,93 @@ class project:
 			self._intermediate_target_dir = self._scons().Dir(os.path.join(self.build_variant_intermediate_dir(), 'source-twin-targets')).path
 			return self._intermediate_target_dir
 
+	def platform(self):
+		try: return self._platform
+		except AttributeError:
+			build_platform = self._scons().subst('$PLATFORM') # todo cross-compilation
+			host_platform = build_platform # todo cross-compilation
+			target_platform = host_platform # todo cross-compilation
+			platform = host_platform
+			self.trace('platform is ' + platform)
+			self._platform = platform
+			return self._platform
+
+	def platform_executable_format(self):
+		try: return self._platform_executable_format
+		except AttributeError:
+			if self.platform() in ('win64', 'win32', 'cygwin'): format = 'pe'
+			else: format = 'elf'
+			self.trace('platform executable format is ' + format)
+			self._platform_executable_format = format
+			return self._platform_executable_format
+
 	def env_class(self):
-		try: return self._env_class
+		try: return self.__class__._env_class
 		except AttributeError:
 			from env import env
 			import os_env
+			import chain
 			import cxx
-			self._env_class = \
+			import pkg_config_env
+			self.__class__._env_class = \
+				pkg_config_env.template(
 				cxx.template(
+				chain.template(
 				os_env.template(
-				env))
-			return self._env_class
+				env))))
+			return self.__class__._env_class
 		
 	def contexes(self):
 		try: return self._contexes
 		except AttributeError:
-			#self.trace('creating build env')
-			import contexes
-			self._contexes = contexes.template(self.env_class())(self)
-			chain = self._contexes.build()
-			chain.compilers().cxx().command().set('$packageneric__cxx_compiler')
-			chain.linker().command().set('$packageneric__linker') # todo SMARTLINK for C++ vs C
-			scons = self._scons()
-			self.trace('c++ compiler is ' + scons.subst('$CXX') + ' version ' + scons.subst('$CXXVERSION'))
-			if scons.subst('$packageneric__verbose') == '0':
-				if scons['STATIC_AND_SHARED_OBJECTS_ARE_THE_SAME']:
-					chain.compilers().cxx().static().message().set(self.message('packageneric: ', 'compiling object from c++ $SOURCE', font = '1'))
-					chain.compilers().cxx().shared().message().set(self.message('packageneric: ', 'compiling object from c++ $SOURCE', font = '1'))
-				else:
-					chain.compilers().cxx().static().message().set(self.message('packageneric: ', 'compiling static object from c++ $SOURCE', font = '1'))
-					chain.compilers().cxx().shared().message().set(self.message('packageneric: ', 'compiling shared object from c++ $SOURCE', font = '1'))
-				chain.archiver().message().set(self.message('packageneric: ', 'archiving objects into $TARGET', font = '1;35'))
-				chain.archiver().indexer().message().set(self.message('packageneric: ', 'building symbol index table in archive $TARGET', font = '1;35'))
-				chain.linker().static().message().set(self.message('packageneric: ', 'linking program $TARGET', font = '1;35'))
-				chain.linker().shared().message().set(self.message('packageneric: ', 'linking shared library $TARGET', font = '1;35'))
-				chain.linker().loadable().message().set(self.message('packageneric: ', 'linking loadable module $TARGET', font = '1;35'))
-			if scons.subst('$packageneric__debug') == '0': debug = False
-			else: debug = True
-			from gnu import gnu
-			gnu(chain, debug)
-			chain.compilers().cxx().paths().add([os.path.join(self.build_variant_intermediate_dir(), 'project', 'src')])
-			self.file_from_value(
-				os.path.join('project', 'src', 'packageneric', 'configuration.private.hpp'),
-				''.join(['#define PACKAGENERIC__CONFIGURATION__%s %s\n' % (n, v) for n, v in
-					[('INSTALL_PATH__BIN_TO_%s' % n, '"%s"' % v) for n, v in
-						('LIB', '../lib'),
-						('SHARE', '../share'),
-						('VAR', '../var'),
-						('ETC', '../../etc')
-					] +
-					[('COMPILER__HOST', '"' + scons.subst('$CXX') + ' version ' + scons.subst('$CXXVERSION') + '"')]
-				])
-			)
+			try: self._contexes = self.__class__._root_contexes
+			except AttributeError:
+				import contexes
+				self._contexes = self.__class__._root_contexes = contexes.template(self.env_class())(self)
+				contexes = self._contexes
+				contexes.client().installed().compilers().cxx().paths().add(['$packageneric__install__include'])
+				contexes.client().installed().linker().paths().add(['$packageneric__install__lib'])
+				scons = self._scons()
+				self.trace('c++ compiler is ' + scons.subst('$CXX') + ' version ' + scons.subst('$CXXVERSION'))
+				contexes.check_and_build().detect_implementation()
+				if scons.subst('$packageneric__debug') == '0': contexes.check_and_build().debug().set(False)
+				elif scons.subst('$packageneric__debug') == '1': contexes.check_and_build().debug().set(True)
+				else: self.warning('debug or not debug?')
+				if scons.subst('$packageneric__verbose') == '0':
+					if scons['STATIC_AND_SHARED_OBJECTS_ARE_THE_SAME']:
+						contexes.build().compilers().cxx().static().message().set(self.message('packageneric: ', 'compiling object from c++ $SOURCE', font = '1'))
+						contexes.build().compilers().cxx().shared().message().set(self.message('packageneric: ', 'compiling object from c++ $SOURCE', font = '1'))
+					else:
+						contexes.build().compilers().cxx().static().message().set(self.message('packageneric: ', 'compiling static object from c++ $SOURCE', font = '1'))
+						contexes.build().compilers().cxx().shared().message().set(self.message('packageneric: ', 'compiling shared object from c++ $SOURCE', font = '1'))
+					contexes.build().archiver().message().set(self.message('packageneric: ', 'archiving objects into $TARGET', font = '1;35'))
+					contexes.build().archiver().indexer().message().set(self.message('packageneric: ', 'building symbol index table in archive $TARGET', font = '1;35'))
+					contexes.build().linker().static().message().set(self.message('packageneric: ', 'linking program $TARGET', font = '1;35'))
+					contexes.build().linker().shared().message().set(self.message('packageneric: ', 'linking shared library $TARGET', font = '1;35'))
+					contexes.build().linker().loadable().message().set(self.message('packageneric: ', 'linking loadable module $TARGET', font = '1;35'))
+			if True: # this could also be shared amongst all projects
+				contexes = self._contexes
+				contexes.build().compilers().cxx().paths().add([os.path.join(self.build_variant_intermediate_dir(), 'project', 'src')])
+				scons = self._scons()
+				self.file_from_value(
+					os.path.join('project', 'src', 'packageneric', 'configuration.private.hpp'),
+					''.join(['#define PACKAGENERIC__CONFIGURATION__%s %s\n' % (n, v) for n, v in
+						[('INSTALL_PATH__BIN_TO_%s' % n, '"%s"' % v) for n, v in
+							('LIB', '../lib'),
+							('SHARE', '../share'),
+							('VAR', '../var'),
+							('ETC', '../../etc')
+						] +
+						[('COMPILER__HOST', '"' + scons.subst('$CXX') + ' version ' + scons.subst('$CXXVERSION') + '"')]
+					])
+				)
 			from find import find
-			for i in find(self, '.', '.', '*.hpp.in'):
+			for i in find(self, '.', ['*.hpp.in']):
 				self.trace(i.relative())
-				scons.SubstitutedFile(
+				self._scons().SubstitutedFile(
 					os.path.join(self.intermediate_target_dir(), i.strip(), os.path.splitext(i.relative())[0]),
 					i.full()
 				)
-			self._contexes.client().installed().compilers().cxx().paths().add(['$packageneric__install__include'])
-			self._contexes.client().installed().linker().paths().add(['$packageneric__install__lib'])
 			return self._contexes
 
 	def file_from_value(self, file_path, value): return self._scons().FileFromValue(os.path.join(self.build_variant_intermediate_dir(), file_path), value)[0].path
@@ -200,7 +239,7 @@ class project:
 				scons = self._scons_ = self.__class__._root_scons = SCons.Environment.Environment()
 			if self.is_subscript():
 				self.information('    source dir is ' + self.source_dir())
-			if not self.is_subscript():
+			else:
 				import SCons.Tool
 				toolpath = [os.path.join(self.packageneric_dir(), 'generic', 'scons', 'tools')]
 				SCons.Tool.Tool('file_from_value', toolpath = toolpath)(scons)
@@ -314,8 +353,8 @@ class project:
 				('packageneric__build_dir', 'directory where to build into'),
 				('packageneric__install__stage_destination', 'directory to install under (stage installation)', self._build_variant_install_dir_with_scons_vars()),
 				('packageneric__build_variant', 'subdirectory where to build into'),
-				#('packageneric__install__prefix', 'directory to install under (final installation)', os.path.join('/', 'opt', self.name())),
-				('packageneric__install__prefix', 'directory to install under (final installation)', os.path.join('/', 'usr', 'local')),
+				#('packageneric__install__prefix', 'directory to install under (final installation)', os.path.join(os.path.sep, 'opt', self.name())),
+				('packageneric__install__prefix', 'directory to install under (final installation)', os.path.join(os.path.sep, 'usr', 'local')),
 				('packageneric__install__exec_prefix', 'directory to install architecture-dependant excecutables under (final installation)', '$packageneric__install__prefix'),
 				('packageneric__install__bin', 'directory to install programs under (final installation)', os.path.join('$packageneric__install__exec_prefix', 'bin')),
 				('packageneric__install__lib', 'directory to install libraries under (final installation) (not used on mswindows)', os.path.join('$packageneric__install__exec_prefix', 'lib')),
@@ -323,9 +362,7 @@ class project:
 				('packageneric__install__include', 'directory to install headers under (final installation)', os.path.join('$packageneric__install__prefix', 'include')),
 				('packageneric__install__share', 'directory to install archictecture-independent data under (final installation)', os.path.join('$packageneric__install__prefix', 'share')),
 				('packageneric__install__var', 'directory to install machine-specific state-variable data under (final installation)', os.path.join('$packageneric__install__prefix', 'var')),
-				('packageneric__install__etc', 'directory to install machine-specific configuration files under (final installation)', os.path.join('/', 'etc')),
-				('packageneric__cxx_compiler', 'the c++ compiler (default value was autodetected)', scons.subst('$SHCXX')),
-				('packageneric__linker', 'the linker (default value was autodetected)', scons.subst('$SHLINK')),
+				('packageneric__install__etc', 'directory to install machine-specific configuration files under (final installation)', os.path.join(os.path.sep, 'etc')),
 				('packageneric__verbose', '(0|1) set to 1 for build verbiage', '0'),
 				('packageneric__debug', '(0|1) set to 1 to build for debugging', '0'),
 				('packageneric__test', '(0|1) set to 1 to perform unit tests', '1')
@@ -376,8 +413,7 @@ class project:
 				print 'SCons version and/or python version are too old.'
 				print 'The lowest version of SCons that is known to work is', str(scons_version)
 				print 'The lowest version of python that is known to work is', str(python_version)
-				import sys
-				sys.exit(2)
+				import sys ; sys.exit(2)
 		SCons.Script.EnsurePythonVersion(*python_version)
 
 	###########################	

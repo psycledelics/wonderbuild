@@ -176,7 +176,7 @@ sub srcscan
 	# sequence that turns on the the desired source color, and B is the
 	# escape sequence that returns to $normalColor.
 	$line =~ s/\`(.*?)\'/\`$srcon$1$srcoff\'/g;
-	$line =~ s/\'(.*?)\'/\`$srcon$1$srcoff\'/g;
+	$line =~ s/\'(.*?)\'/\'$srcon$1$srcoff\'/g;
 	$line =~ s/\"(.*?)\"/\"$srcon$1$srcoff\"/g;
 	print($line, color("reset"));
 }
@@ -330,6 +330,15 @@ while(<GCCOUT>)
 			print($colors{"noteMessageColor"}, " note:", color("reset"));
 			srcscan($field4, $colors{"noteMessageColor"});
 		}
+		elsif($field4 =~ s/\s+missing binary operator before token (.*)/$1/)
+		{
+			# note
+			print($colors{"introFileNameColor"}, "$field1:", color("reset"));
+				# bohan, is that a joke? it should be errorFileNameColor, but then it doesn't work, fuck perl.
+			print($colors{"errorNumberColor"}, "$field2:$field3", color("reset"));
+			print($colors{"errorMessageColor"}, " missing binary operator before token ", color("reset"));
+			srcscan($field4, $colors{"noteMessageColor"});
+		}
 		else
 		{
 			# ?
@@ -382,6 +391,63 @@ while(<GCCOUT>)
 		}
 		print("\n");
 	}
+	elsif(m#^(.+?\.[^:/ ]+):([^ [:]+):([^ []+\+0x.*): undefined reference to (.*)$#) # objectfilename:sourcefilename:(section+offset): undefined reference to 'symbol'
+	{
+		$field1 = $1 || "";
+		$field2 = $2 || "";
+		$field3 = $3 || "";
+		$field4 = $4 || "";
+		print($colors{"introFileNameColor"}, "$field1:", color("reset"));
+				# bohan, is that a joke? it should be errorFileNameColor, but then it doesn't work, fuck perl.
+		print($colors{"noteMessageColor"}, "$field2:", color("reset"));
+		print($colors{"infoColor"}, "$field3:", color("reset"));
+		print($colors{"errorMessageColor"}, " undefined reference to ", color("reset"));
+		srcscan($field4, $colors{"introMessageColor"});
+		print("\n");
+	}
+	elsif(m#^(.+?\.[^:/ ]+):([^ []+\+0x.*): undefined reference to (.*)$#) # sourcefilename:(section+offset): undefined reference to 'symbol'
+	{
+		$field1 = $1 || "";
+		$field2 = $2 || "";
+		$field3 = $3 || "";
+		print($colors{"introFileNameColor"}, "$field1:", color("reset"));
+				# bohan, is that a joke? it should be errorFileNameColor, but then it doesn't work, fuck perl.
+		print($colors{"infoColor"}, "$field2:", color("reset"));
+		print($colors{"errorMessageColor"}, " undefined reference to ", color("reset"));
+		srcscan($field3, $colors{"introMessageColor"});
+		print("\n");
+	}
+	elsif(m#^(.+?\.[^:/ ]+):([^[:]+)([^ ]+)(\+0.*): undefined reference to (.*)$#) # sourcefilename:(section[symbol]+offset): undefined reference to 'symbol'
+	{
+		$field1 = $1 || "";
+		$field2 = $2 || "";
+		$field3 = $3 || "";
+		$field4 = $4 || "";
+		$field5 = $5 || "";
+		print($colors{"introFileNameColor"}, "$field1:", color("reset"));
+				# bohan, is that a joke? it should be errorFileNameColor, but then it doesn't work, fuck perl.
+		print($colors{"infoColor"}, "$field2:", color("reset"));
+		srcscan($field3, $colors{"introMessageColor"});
+		print($colors{"infoColor"}, "$field4:", color("reset"));
+		print($colors{"errorMessageColor"}, " undefined reference to ", color("reset"));
+		srcscan($field5, $colors{"introMessageColor"});
+		print("\n");
+	}
+	elsif(m#^(.+?\.[^:/ ]+):([^:[]+):([^ ]+): more undefined references to (.*) follow$#) # objectfilename:sourcefilename:(section+offset): more undefined references to 'symbol' follow
+	{
+		$field1 = $1 || "";
+		$field2 = $2 || "";
+		$field3 = $3 || "";
+		$field4 = $4 || "";
+		print($colors{"introFileNameColor"}, "$field1:", color("reset"));
+				# bohan, is that a joke? it should be errorFileNameColor, but then it doesn't work, fuck perl.
+		print($colors{"noteMessageColor"}, "$field2:", color("reset"));
+		print($colors{"infoColor"}, "$field3:", color("reset"));
+		print($colors{"errorMessageColor"}, " more undefined reference to ", color("reset"));
+		srcscan($field4, $colors{"introMessageColor"});
+		print($colors{"noteMessageColor"}, " follow", color("reset"));
+		print("\n");
+	}
 	elsif(m#^(.+?\.[^:/ ]+):(.*)$#) # filename:message
 	{
 		$field1 = $1 || "";
@@ -403,6 +469,67 @@ while(<GCCOUT>)
 	elsif(m#^Info: resolving (.*)$#)
 	{
 		print($colors{"infoColor"}, $_);
+	}
+	elsif(m#^([^.: ]+?):(.*)$#) # xxx/xxx/xxx:message
+	{
+		$field1 = $1 || "";
+		$field2 = $2 || "";
+		if($field2 =~ s/\s+[Ww]arning:(.*)/$1/)
+		{
+			# warning
+			print($colors{"introFileNameColor"}, "$field1:", color("reset"));
+				# bohan, is that a joke? it should be warningFileNameColor, but then it doesn't work, fuck perl.
+			print($colors{"warningMessageColor"}, " warning:", color("reset"));
+			srcscan($field2, $colors{"noteMessageColor"});
+		}
+		elsif($field2 =~ s/\s+[Ee]rror:(.*)/$1/)
+		{
+			# error
+			print($colors{"introFileNameColor"}, "$field1:", color("reset"));
+				# bohan, is that a joke? it should be errorFileNameColor, but then it doesn't work, fuck perl.
+			print($colors{"errorMessageColor"}, " error:", color("reset"));
+			srcscan($field2, $colors{"noteMessageColor"});
+		}
+		elsif($field2 =~ s/\s+[Nn]ote:(.*)/$1/)
+		{
+			# note
+			print($colors{"introFileNameColor"}, "$field1:", color("reset"));
+				# bohan, is that a joke? it should be noteFileNameColor, but then it doesn't work, fuck perl.
+			print($colors{"noteMessageColor"}, " note:", color("reset"));
+			srcscan($field2, $colors{"noteMessageColor"});
+		}
+		elsif($field2 =~ s/\s+[Dd]isabling relaxation:(.*)/$1/)
+		{
+			# error
+			print($colors{"introFileNameColor"}, "$field1:", color("reset"));
+				# bohan, is that a joke? it should be errorFileNameColor, but then it doesn't work, fuck perl.
+			print($colors{"errorMessageColor"}, " disabling relaxation:", color("reset"));
+			srcscan($field2, $colors{"noteMessageColor"});
+		}
+		elsif($field2 =~ s/\s+[Cc]annot find (.*)/$1/)
+		{
+			# error
+			print($colors{"introFileNameColor"}, "$field1:", color("reset"));
+				# bohan, is that a joke? it should be errorFileNameColor, but then it doesn't work, fuck perl.
+			print($colors{"errorMessageColor"}, " cannot find ", color("reset"));
+			srcscan($field2, $colors{"noteMessageColor"});
+		}
+		elsif($field2 =~ s/\s+(.*)exit status(.*)/$1/)
+		{
+			$field3 = $2 || "";
+			# error
+			print($colors{"introFileNameColor"}, "$field1:", color("reset"));
+				# bohan, is that a joke? it should be errorFileNameColor, but then it doesn't work, fuck perl.
+			print($colors{"errorMessageColor"}, " $field2", "exit status", "$field3", color("reset"));
+		}
+		else
+		{
+			# ?
+			print($colors{"introFileNameColor"}, "$field1:", color("reset"));
+				# bohan, is that a joke? it should be noteFileNameColor, but then it doesn't work, fuck perl.
+			srcscan($field2, $colors{"noteMessageColor"});
+		}
+		print("\n");
 	}
 	else # Anything else.        
 	{
