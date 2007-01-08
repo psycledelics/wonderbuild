@@ -3,7 +3,7 @@ body
 	/*background-color: #e0e0e0;*/
 	background-color: #cccc99;
 	color: #000000;
-	font-family: verdana;
+	font-family: helvetica;
 	font-size: 12px;
 }
 td /* body's font size isn't inherited in tables! */

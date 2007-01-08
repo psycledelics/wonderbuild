@@ -3,11 +3,11 @@
 
 [Setup]
 AppName=Psycle Modular Music Creation Studio
-AppVerName=Psycle 1.8
+AppVerName=Psycle 1.9
 AppPublisher=Psycledelics
 AppPublisherURL=http://psycle.pastnotecut.org/
 AppSupportURL=http://psycle.pastnotecut.org/
-AppUpdatesURL=http://psycle.pastnotecut.org/
+AppUpdatesURL=http://psycle.sourceforge.net
 DefaultDirName={pf}\Psycle
 DefaultGroupName=Psycle
 AllowNoIcons=true
@@ -17,7 +17,7 @@ OutputBaseFilename=PsycleInstaller
 SetupIconFile=I:\Documents and Settings\All Users\Documentos\Visual C++\portable_psycle\src\psycle\host\resources\Psycle.ico
 Compression=lzma
 SolidCompression=true
-AppCopyright=© Psycledelics 2000-2005
+AppCopyright=copyright 2000-2007 psycledelics
 ChangesAssociations=true
 ShowLanguageDialog=no
 WizardImageFile=compiler:wizmodernimage-IS.bmp
@@ -49,7 +49,7 @@ Source: ..\..\doc\for-end-users\*; DestDir: {app}\Docs; Flags: ignoreversion rec
 Source: Psycle.exe.manifest; DestDir: {app}; Components: " Windows_XP_theme_support"
 Source: ..\..\closed-source\*; DestDir: {app}\PsyclePlugins\closed-source; Flags: ignoreversion createallsubdirs recursesubdirs; Components: Closed_Source_Plugins
 Source: ..\msvc_7.1\output\release.g7\bin\Skins\*; DestDir: {app}\Skins; Flags: confirmoverwrite recursesubdirs ignoreversion createallsubdirs; Components: Skins
-Source: ..\..\src\psycle\plugins\*.prs; DestDir: {app}\PsyclePlugins; Flags: recursesubdirs ignoreversion; Components: Open_Source_Plugins
+Source: ..\..\presets\*.prs; DestDir: {app}\PsyclePlugins; Flags: recursesubdirs ignoreversion; Components: Open_Source_Plugins
 
 [INI]
 Filename: {app}\psycle.url; Section: InternetShortcut; Key: URL; String: http://psycle.pastnotecut.org; Flags: uninsdeleteentry uninsdeletesectionifempty; Tasks: ; Languages: 

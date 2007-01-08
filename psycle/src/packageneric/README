@@ -103,4 +103,4 @@ The purpose of the notation is that the sources know nothing about the way they 
 This let us freely build the source files into whatever modules: we can split a module, regroup several modules into one,
 build as a dynamic or as a static lib, etc.. without editing the sources themselves.
 
-some more explanations are (not well) written there: http://retropaganda.info/cgi-bin/archzoom.cgi/psycle@sourceforge.net/packageneric--mainline--LATEST--LATEST/doc/coding-standard?download
+some more explanations are (not well) written in <root-of-repository>/packageneric/doc/coding-standard
