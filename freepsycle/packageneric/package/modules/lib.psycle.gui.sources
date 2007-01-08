@@ -1,2 +1,0 @@
-#! /bin/sh
-find psycle/front_ends/gui/ \( -type d \( -name todo -or -wholename psycle/front_ends/gui/x_window \) -prune \) -or \( -name \*.cpp -print \)
