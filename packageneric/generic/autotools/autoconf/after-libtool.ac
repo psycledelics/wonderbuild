@@ -1,2 +1,0 @@
-#! /usr/bin/autoconf
-m4_include(packageneric/generic/detail/autotools/autoconf/after-libtool.ac)

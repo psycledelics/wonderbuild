@@ -1,4 +1,0 @@
-#! /bin/sh
-
-$(dirname $0)/gnu-arch/commit "$@"
-$(dirname $0)/subversion/commit "$@"
