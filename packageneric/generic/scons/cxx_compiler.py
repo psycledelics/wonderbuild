@@ -66,7 +66,8 @@ def template(mixin):
 					def D(name, value):
 						result = D_prefix + name
 						if value is not None:
-							result += "='" + str(scons.subst(value)).replace("'", "\\'") + "'"
+							#result += "='" + str(scons.subst(value)).replace("'", "\\'") + "'"
+							result += '=' + str(scons.subst(value))
 						result += D_suffix
 						return result
 					scons.Append(

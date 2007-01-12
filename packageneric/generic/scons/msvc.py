@@ -19,6 +19,15 @@ def detect(chain):
 		msvc = msvc14 # this has the effect that msvc.result() is False since we have msvc < 14.0
 	if msvc.result():
 		chain.project().contexes().check_and_build().os_env().add_inherited(['PATH', 'INCLUDE', 'LIB', 'LIBPATH'])
+		if True:
+			chain.compilers().cxx().defines().add({
+				'STRICT': None,
+				'NOMINMAX': None,
+				'WINVER': '0x510',
+				'_WIN32_WINDOWS': 'WINVER',
+				'_WIN32_NT': 'WINVER',
+				'_WIN32_IE': '0x600',
+			})
 		chain.compilers().cxx().flags().add([
 			#'-WL', # enable one line diagnostics
 			#####'-GX', # same as EHsc

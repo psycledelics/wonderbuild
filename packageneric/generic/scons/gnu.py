@@ -67,6 +67,7 @@ def detect(chain):
 		chain.linker().flags().add([
 			'-Wl,--demangle',
 			'-Wl,--default-symver,--default-imported-symver,--no-undefined-version',
+			#####'-Wl,--export-dynamic',
 			#'-Wl,--unresolved-symbols=report-all', # default
 			'-Wl,--unresolved-symbols=ignore-in-shared-libs',
 			#'-Wl,--unresolved-symbols=ignore-in-object-files',
@@ -100,7 +101,7 @@ def detect(chain):
 			])
 			if gnug.version().major() >= 4:
 				chain.linker().flags().add([
-					'-Wl,-z origin' # marks objects (cygwin's ld says it doesn't know it despite it being in its manpage!)
+					'-Wl,-z origin' # marks objects (cygwin's ld says it doesn't know it despite it being in both its info node and man page!)
 					#'-Wl,-z nodlopen' # marks objects
 					#'-Wl,-z defs' # marks objects, like -no-undefined
 				])
@@ -121,17 +122,23 @@ def detect(chain):
 			chain.linker().flags().add([
 				'-Wl,-undefine',
 				#'-Wl,-no-undefined'
-				'-Wl,--export-dynamic',
 				'-Wl,--export-all-symbols',
 				'-Wl,--enable-auto-import',
 				'-Wl,--enable-runtime-pseudo-reloc',
 				'-Wl,--enable-auto-image-base',
+				'-Wl,--large-address-aware',
 				#'-Wl,--subsystem=native',
 				#'-Wl,--subsystem=windows',
 				'-Wl,--subsystem=console',
 				#'-Wl,--subsystem=xbox',
-				'-Wl,--large-address-aware',
 			])
+			# -lxxx searches, in order:
+			# 1) libxxx.dll.a
+			# 2) xxx.dll.a
+			# 3) libxxx.a (warning: this is the static lib)
+			# 4) <prefix>xxx.dll (e.g. cygxxx.dll on cygwin)
+			# 5) libxxx.dll
+			# 6) xxx.dll
 
 		if chain.project().platform() == 'cygwin':
 			if False:
@@ -146,6 +153,9 @@ def detect(chain):
 		           # standards-compliant handling of static destructors, but will only work if your C library supports "__cxa_atexit".
 		           # bohan says: does not work on cygwin 1.5 gcc 3.3.4
 			])
+		# -pthread(s) for posix threads (this option sets flags for both the preprocessor and linker)
+		# -threads for native threads (this option sets flags for both the preprocessor and linker)
+		# mingw: -mthreads (thread-safe exception handling, this adds the _MT define, and -lmingwthrd linker option)
 		if gnug.mingw().result():
 			chain.compilers().cxx().flags().add([
 				'-mthreads' # defines _MT for thread-safe exception handling
@@ -157,17 +167,25 @@ def detect(chain):
 			from packageneric.pool.pthread import pthread
 			pthread = pthread(chain.project())
 			if pthread.result():
-				chain.compilers().cxx().flags().add([
-					'-pthread' # defines _REENTRANT
-				])
-				chain.linker().flags().add([
-					'-pthread' # links with -lpthread
-				])
+				if chain.project().platform() == 'cygwin':
+					chain.compilers().cxx().defines().add({
+						'_REENTRANT': None
+					})
+					chain.linker().flags().add([
+						'-lpthread'
+					])
+				else:
+					chain.compilers().cxx().flags().add([
+						'-pthread' # defines _REENTRANT
+					])
+					chain.linker().flags().add([
+						'-pthread' # links with -lpthread
+					])
 
 		if chain.project()._scons().Detect('perl'): # todo we have to check for perl until our colorgcc is rewritten in python
 			import tty_font
 			if tty_font.ansi_term(): chain.os_env().add({'TERM': 'packageneric--color-pipe'}) # tells our colorgcc that the pipe eventually ends up being displayed on a tty
-			# We use colorgcc on the command line regardless of whether the output is a tty (teletype terminal), where we can colorise the output.
+			# We use colorgcc on the command line regardless of whether the output is a tty (teletype) terminal, where we can colorise the output.
 			# This is harmless since colorgcc will check again for tty (which is always false since it's piped) and for the TERM env var to see if it's 'packageneric--color-pipe',
 			# and this avoids uneeded rebuild by keeping signatures of command lines the same with and without a tty.
 			gcc = chain.compilers().cxx().command().get()

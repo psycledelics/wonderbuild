@@ -97,9 +97,6 @@ class module(builder):
 		try: return self._contexes
 		except AttributeError:
 			self._contexes = self.source_package().contexes().attached()
-			#self._contexes.client().linker().libraries().add([self.name()])
-			# added *before* targets is called (or else targets isn't called!).
-			# todo BUG this doesn't make it transitive!
 			return self._contexes
 			
 	def alias_names(self): return ['packageneric:module', self.name()]
@@ -112,17 +109,31 @@ class module(builder):
 			#import time ; t = time.time ; t0 = t()
 			#print 'OOOOOOOOOOOOOOOOO'
 
+			self.build_dependencies() # todo method for no recursion
+			for package in self._build_dependencies: # todo method for no recursion
+				if package.result():
+					package.targets()
+
+			self.dependencies() # todo method for no recursion
+			for package in self._dependencies: # todo method for no recursion
+				if package.result():
+					package.targets()
+
 			self.dynamic_dependencies() # todo node class
 			dependencies_not_found = []
 
 			self.build_dependencies() # todo method for no recursion
 			for package in self._build_dependencies: # todo method for no recursion
-				if package.result(): self.contexes().build().attach(package.output_env())
+				if package.result():
+					package.targets()
+					self.contexes().build().attach(package.output_env())
 				else: dependencies_not_found.append(package)
 
 			self.dependencies() # todo method for no recursion
 			for package in self._dependencies: # todo method for no recursion
-				if package.result(): self.contexes().attach(package.output_env())
+				if package.result():
+					package.targets()
+					self.contexes().attach(package.output_env())
 				else: dependencies_not_found.append(package)
 
 			if dependencies_not_found:

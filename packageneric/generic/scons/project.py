@@ -192,16 +192,16 @@ class project:
 				else: self.warning('debug or not debug?')
 				if scons.subst('$packageneric__verbose') == '0':
 					if scons['STATIC_AND_SHARED_OBJECTS_ARE_THE_SAME']:
-						contexes.build().compilers().cxx().static().message().set(self.message('packageneric: ', 'compiling object from c++ $SOURCE', font = '1'))
-						contexes.build().compilers().cxx().shared().message().set(self.message('packageneric: ', 'compiling object from c++ $SOURCE', font = '1'))
+						contexes.build().compilers().cxx().static().message().set(self.message('packageneric: ', 'compiling object from c++ $SOURCE', font = '34;7;1'))
+						contexes.build().compilers().cxx().shared().message().set(self.message('packageneric: ', 'compiling object from c++ $SOURCE', font = '34;7;1'))
 					else:
-						contexes.build().compilers().cxx().static().message().set(self.message('packageneric: ', 'compiling static object from c++ $SOURCE', font = '1'))
-						contexes.build().compilers().cxx().shared().message().set(self.message('packageneric: ', 'compiling shared object from c++ $SOURCE', font = '1'))
-					contexes.build().archiver().message().set(self.message('packageneric: ', 'archiving objects into $TARGET', font = '1;35'))
-					contexes.build().archiver().indexer().message().set(self.message('packageneric: ', 'building symbol index table in archive $TARGET', font = '1;35'))
-					contexes.build().linker().static().message().set(self.message('packageneric: ', 'linking program $TARGET', font = '1;35'))
-					contexes.build().linker().shared().message().set(self.message('packageneric: ', 'linking shared library $TARGET', font = '1;35'))
-					contexes.build().linker().loadable().message().set(self.message('packageneric: ', 'linking loadable module $TARGET', font = '1;35'))
+						contexes.build().compilers().cxx().static().message().set(self.message('packageneric: ', 'compiling static object from c++ $SOURCE', font = '34;7'))
+						contexes.build().compilers().cxx().shared().message().set(self.message('packageneric: ', 'compiling shared object from c++ $SOURCE', font = '34;7;1'))
+					contexes.build().archiver().message().set(self.message('packageneric: ', 'archiving objects into $TARGET', font = '37;7'))
+					contexes.build().archiver().indexer().message().set(self.message('packageneric: ', 'building symbol index table in archive $TARGET', font = '37;7;1'))
+					contexes.build().linker().static().message().set(self.message('packageneric: ', 'linking program $TARGET', font = '32;7;1'))
+					contexes.build().linker().shared().message().set(self.message('packageneric: ', 'linking shared library $TARGET', font = '33;7;1'))
+					contexes.build().linker().loadable().message().set(self.message('packageneric: ', 'linking loadable module $TARGET', font = '36;7;1'))
 			if True: # this could also be shared amongst all projects
 				contexes = self._contexes
 				contexes.build().compilers().cxx().paths().add([os.path.join(self.build_variant_intermediate_dir(), 'project', 'src')])
