@@ -95,7 +95,7 @@ def detect(chain):
 						'-Wl,--as-needed'
 					])
 			# linker: one --rpath dir and/or --rpath-link dir for each -L dir
-			chain.linker().flags().add([ # todo send to scons RPATH env var
+			chain.linker().flags().add([ # todo send to scons RPATH env var (chain.linker().rpaths())
 				'-Wl,--rpath=\\$$ORIGIN/../lib', # todo this is elf-specific (or even linux-specific? ... maybe you can tell, sartorius.)
 				'-Wl,--rpath=$packageneric__install__lib'
 			])

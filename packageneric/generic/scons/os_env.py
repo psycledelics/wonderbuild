@@ -10,13 +10,14 @@ class env(dictionary):
 		for key in keys:
 			try: value = os.environ[key]
 			except KeyError: pass
-			else: dictionary.add(self, {key: value})
+			else: self[key] = value
 
-	def add_paths(self, key, paths):
-		try: value = self[key]
-		except KeyError: value = ''
-		from SCons.Util import AppendPath as append_path_unique
-		self[key] = append_path_unique(value, os.pathsep.join(paths))
+	def add_paths(self, dictionary_):
+		for key, value in dictionary_:
+			try: current_value = self[key]
+			except KeyError: current_value = ''
+			from SCons.Util import AppendPath as append_path_unique
+			self[key] = append_path_unique(current_value, value)
 
 _template = {}
 
@@ -44,8 +45,14 @@ def template(base):
 
 			def _scons(self, scons):
 				base._scons(self, scons)
+				scons_env = scons['ENV']
 				env = {}
-				for key, value in self.os_env().get().items(): env[key] = scons.subst(value)
+				for key, value in self.os_env().get().items():
+					if scons_env.has_key(key) and os.pathsep in value: # todo kluge
+						from SCons.Util import AppendPath as append_path_unique
+						env[key] = append_path_unique(scons_env[key], scons.subst(value))
+					else:
+						env[key] = scons.subst(value)
 				scons.Append(ENV = env)
 			
 		_template[base] = result

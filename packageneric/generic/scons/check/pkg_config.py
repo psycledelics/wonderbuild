@@ -13,11 +13,19 @@ class pkg_config(base):
 		except KeyError: kw['inherited_os_env'] = ['PKG_CONFIG_PATH']
 		else:
 			if 'PKG_CONFIG_PATH' not in inherited_os_env: inherited_os_env.append('PKG_CONFIG_PATH')
-		base.__init__(self, project = project, name = name, pkg_config = [name], **kw)
-		
+		#base.__init__(self, project = project, name = name, pkg_config = [name], **kw)
+		base.__init__(self, project = project, name = name, **kw)
+				
 	def _scons_sconf_execute(self, scons_sconf_context):
 		if not base._scons_sconf_execute(self, scons_sconf_context): return False
-		result, output = scons_sconf_context.TryAction("pkg-config --exists '" + self.name() + "'") # or ' '.join(self.execute_env().pkg_config().get())
+		result, output = scons_sconf_context.TryAction(self.execute_env().pkg_config_program() + ' --exists "' + self.name() + '"') # or ' '.join(self.execute_env().pkg_config().get())
 		return result, output
+
+	def output_env(self):
+		try: return self._output_env
+		except AttributeError:
+			self._output_env = base.output_env(self)
+			self._output_env.pkg_config().add([self.name()])
+			return self._output_env
 
 	def __str__(self): return 'pkg-config: ' + self.name()

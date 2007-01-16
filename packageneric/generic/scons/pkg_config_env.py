@@ -15,7 +15,17 @@ def template(base): # chain, os_env
 			):
 				base.__init__(*(self, project) + args, **kw)
 				if pkg_config is not None: self.pkg_config().add(pkg_config)
+				try: self.__class__._pkg_config_program
+				except AttributeError:
+					if True or project.platform() != 'cygwin': self.__class__._pkg_config_program = 'pkg_config'
+					else:
+						import os
+						self.__class__._pkg_config_program = project._scons().WhereIs('pkg-config', os.environ['PATH'], reject = ['/bin/pkg-config', '/usr/bin/pkg-config'])
+						project.trace('selecting pkg-config: ' + self.__class__._pkg_config_program)
 
+			def pkg_config_program(self):
+				return self.__class__._pkg_config_program
+				
 			def pkg_config(self):
 				try: return self._pkg_config
 				except AttributeError:
@@ -38,13 +48,25 @@ def template(base): # chain, os_env
 				if len(self.pkg_config().get()):
 					if self.link_with_static_libraries().get(): static = '--static '
 					else: static = ''
-					#print 'xxxxxxxxxxxxx', self.os_env()['PKG_CONFIG_PATH']
+
+					# unlike builders, scons.ParseConfig inherits os.environ and not the ENV var, so we set os.environ temporarily
+
 					import os
-					save = os.environ.get('PKG_CONFIG_PATH', '')
-					if save: os.environ['PKG_CONFIG_PATH'] = self.os_env()['PKG_CONFIG_PATH']
-					try: scons.ParseConfig('pkg-config --cflags --libs ' + static + '"' + ' '.join(self.pkg_config().get()) + '"')
+					save_path = os.environ.get('PATH', '')
+					save_pkg_config_path = os.environ.get('PKG_CONFIG_PATH', '')
+
+					from SCons.Util import AppendPath as append_path_unique
+
+					try: os.environ['PATH'] = append_path_unique(save_path, self.os_env()['PATH'])
+					except KeyError: pass
+
+					try: os.environ['PKG_CONFIG_PATH'] = append_path_unique(save_pkg_config_path, self.os_env()['PKG_CONFIG_PATH'])
+					except KeyError: pass
+
+					try: scons.ParseConfig(self.pkg_config_program() + ' --cflags --libs ' + static + '"' + ' '.join(self.pkg_config().get()) + '"')
 					finally:
-						if save: os.environ['PKG_CONFIG_PATH'] = save
+						os.environ['PATH'] = save_path
+						os.environ['PKG_CONFIG_PATH'] = save_pkg_config_path
 				
 		_template[base] = result
 		return result

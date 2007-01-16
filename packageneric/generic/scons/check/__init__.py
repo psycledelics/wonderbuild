@@ -33,7 +33,7 @@ class check(node, named):
 			self._execute_env = self.project().contexes().check_and_build().attached()
 			self._execute_env.attach(self.input_env())
 			return self._execute_env
-
+	
 	def output_env(self):
 		try: return self._output_env
 		except AttributeError:

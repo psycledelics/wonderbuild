@@ -45,12 +45,14 @@ class external_package(check):
 			if self.distribution_packages(): string += 'otherwise, '
 			string += 'the source of this package can be downloaded from ' + self.url()
 			from packageneric.generic.scons.tty_font import tty_font
-			for external_package_ in filter(lambda x: isinstance(x, external_package), self.dependencies()):
+			external_packages = filter(lambda x: isinstance(x, external_package) and not x.result(), self.dependencies())
+			if len(external_packages):
 				string += separator
 				indent = bar + ' ' + tty_font('37')
 				string += indent + 'which should bring indirect dependencies:'
-				recursive = str(external_package_)
-				if recursive[-1] == '\n': recursive = recursive[:-1]
-				string += indent + recursive.replace('\n', indent) + tty_font()
+				for external_package_ in external_packages:
+					recursive = str(external_package_)
+					if recursive[-1] == '\n': recursive = recursive[:-1]
+					string += indent + recursive.replace('\n', indent) + tty_font()
 		string += bar + line + '\n'
 		return string

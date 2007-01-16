@@ -132,7 +132,7 @@ class boost(external_package):
 		cxx_compiler_paths = []
 		libraries = self._libraries
 
-		if self.project().platform() == 'cygwin':
+		if self.project().platform() == 'cygwin': # todo and not mingw
 			# damn cygwin installs boost headers in e.g. /usr/include/boost-1_33_1/ and doesn't give symlinks for library files
 			import os
 			dir = os.path.join(os.path.sep, 'usr', 'include')
@@ -196,10 +196,12 @@ class boost(external_package):
 				)
 			)
 			for library in libraries:
+				if len(link_libraries): link_library = ['boost_' + library]
+				else: link_library = [] # todo cygwin
 				checks.append(
 					cxx_build(self.project(), name = 'boost ' + library,
 						cxx_compiler_paths = cxx_compiler_paths,
-						libraries = ['boost_' + library],
+						libraries = link_library,
 						source_text = source_texts[library]
 					)
 				)

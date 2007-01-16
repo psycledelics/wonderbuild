@@ -470,7 +470,7 @@ while(<GCCOUT>)
 	{
 		print($colors{"infoColor"}, $_);
 	}
-	elsif(m#^([^.: ]+?):(.*)$#) # xxx/xxx/xxx:message
+	elsif(m#^([^: ]+?):(.*)$#) # xxx/xxx/xxx:message
 	{
 		$field1 = $1 || "";
 		$field2 = $2 || "";

@@ -18,15 +18,16 @@ def detect(chain):
 		# and thus microsoft-specific options will not be used at all.
 		msvc = msvc14 # this has the effect that msvc.result() is False since we have msvc < 14.0
 	if msvc.result():
-		chain.project().contexes().check_and_build().os_env().add_inherited(['PATH', 'INCLUDE', 'LIB', 'LIBPATH'])
+		chain.project().contexes().check_and_build().os_env().add_inherited(['INCLUDE', 'LIB', 'LIBPATH'])
 		if True:
-			chain.compilers().cxx().defines().add({
+			chain.compilers().cxx().defines().add({ # todo for mingw too!
 				'STRICT': None,
+				'_CRT_SECURE_NO_DEPRECATE': None,
 				'NOMINMAX': None,
 				'WINVER': '0x510',
 				'_WIN32_WINDOWS': 'WINVER',
-				'_WIN32_NT': 'WINVER',
-				'_WIN32_IE': '0x600',
+				'_WIN32_WINNT': 'WINVER',
+				'_WIN32_IE': '0x600'
 			})
 		chain.compilers().cxx().flags().add([
 			#'-WL', # enable one line diagnostics
