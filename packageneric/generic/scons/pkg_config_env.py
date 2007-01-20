@@ -4,6 +4,8 @@
 
 _template = {}
 
+_pkg_config_program = None
+
 def template(base): # chain, os_env
 	try: return _template[base]
 	except KeyError:
@@ -15,16 +17,18 @@ def template(base): # chain, os_env
 			):
 				base.__init__(*(self, project) + args, **kw)
 				if pkg_config is not None: self.pkg_config().add(pkg_config)
-				try: self.__class__._pkg_config_program
-				except AttributeError:
-					if True or project.platform() != 'cygwin': self.__class__._pkg_config_program = 'pkg_config'
-					else:
-						import os
-						self.__class__._pkg_config_program = project._scons().WhereIs('pkg-config', os.environ['PATH'], reject = ['/bin/pkg-config', '/usr/bin/pkg-config'])
-						project.trace('selecting pkg-config: ' + self.__class__._pkg_config_program)
+				global _pkg_config_program
+				if _pkg_config_program is None:
+					import os
+					if False and project.platform() == 'cygwin': reject = ['/bin/pkg-config', '/usr/bin/pkg-config'] # when -mno-cygwin is passed to gcc
+					else: reject = []
+					_pkg_config_program = project._scons().WhereIs('pkg-config', os.environ['PATH'], reject = reject)
+					if _pkg_config_program is None: _pkg_config_program = 'pkg-config-program-not-found'
+					project.trace('selecting pkg-config: ' + _pkg_config_program)
 
 			def pkg_config_program(self):
-				return self.__class__._pkg_config_program
+				global _pkg_config_program
+				return _pkg_config_program
 				
 			def pkg_config(self):
 				try: return self._pkg_config
