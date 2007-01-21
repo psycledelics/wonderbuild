@@ -120,6 +120,9 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
+				RelativePath="..\..\src\xpsycle\aboutbox.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\xpsycle\analyzer.cpp">
 			</File>
 			<File
@@ -180,9 +183,6 @@
 				RelativePath="..\..\src\xpsycle\playertimeinfo.cpp">
 			</File>
 			<File
-				RelativePath="..\..\src\xpsycle\sequencerbar.cpp">
-			</File>
-			<File
 				RelativePath="..\..\src\xpsycle\sequencerbeatchangelineal.cpp">
 			</File>
 			<File
@@ -195,6 +195,9 @@
 				RelativePath="..\..\src\xpsycle\skinreader.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\xpsycle\songexplorer.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\xpsycle\songpdlg.cpp">
 			</File>
 			<File
@@ -205,9 +208,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\xpsycle\waveedinsertsilencedlg.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\xpsycle\wavefileout.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\xpsycle\wiredlg.cpp">
@@ -235,6 +235,9 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+			<File
+				RelativePath="..\..\src\xpsycle\aboutbox.h">
+			</File>
 			<File
 				RelativePath="..\..\src\xpsycle\analyzer.h">
 			</File>
@@ -299,9 +302,6 @@
 				RelativePath="..\..\src\xpsycle\playertimeinfo.h">
 			</File>
 			<File
-				RelativePath="..\..\src\xpsycle\sequencerbar.h">
-			</File>
-			<File
 				RelativePath="..\..\src\xpsycle\sequencerbeatchangelineal.h">
 			</File>
 			<File
@@ -312,6 +312,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\xpsycle\skinreader.h">
+			</File>
+			<File
+				RelativePath="..\..\src\xpsycle\songexplorer.h">
 			</File>
 			<File
 				RelativePath="..\..\src\xpsycle\songpdlg.h">
@@ -327,9 +330,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\xpsycle\waveedinsertsilencedlg.h">
-			</File>
-			<File
-				RelativePath="..\..\src\xpsycle\wavefileout.h">
 			</File>
 			<File
 				RelativePath="..\..\src\xpsycle\wiredlg.h">
