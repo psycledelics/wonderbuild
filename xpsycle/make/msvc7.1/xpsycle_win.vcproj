@@ -46,7 +46,8 @@
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="copy  /Y &quot;$(ProjectDir)..\..\..\external-packages\zlib-1.2.3\lib-mswindows-cabi\zlib1.dll&quot; &quot;$(OutDir)&quot;"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
@@ -95,7 +96,8 @@
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCPostBuildEventTool"
+				CommandLine="copy $(ProjectDir)..\..\..\external-packages\zlib-1.2.3\lib-mswindows-cabi\zlib1.dll $(OutDir)"/>
 			<Tool
 				Name="VCPreBuildEventTool"/>
 			<Tool
