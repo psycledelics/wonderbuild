@@ -15,8 +15,10 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(ProjectDir)..\output\$(ConfigurationName)\"
 			IntermediateDirectory="$(ProjectDir)..\output\$(ConfigurationName)\intermediate\"
-			ConfigurationType="2"
-			CharacterSet="2">
+			ConfigurationType="1"
+			CharacterSet="2"
+			ManagedExtensions="FALSE"
+			WholeProgramOptimization="FALSE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
@@ -39,7 +41,7 @@
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\..\psycore\make\output\$(ConfigurationName)\&quot;;&quot;$(ProjectDir)..\..\..\external-packages\zlib-1.2.3\lib-mswindows-cabi\&quot;;&quot;$(ProjectDir)..\..\..\ngrs\make\output\$(ConfigurationName)\&quot;"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/xpsycle_win.pdb"
-				SubSystem="2"
+				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"/>
@@ -66,7 +68,7 @@
 			Name="Release|Win32"
 			OutputDirectory="$(ProjectDir)..\output\$(ConfigurationName)\"
 			IntermediateDirectory="$(ProjectDir)..\output\$(ConfigurationName)\intermediate\"
-			ConfigurationType="2"
+			ConfigurationType="1"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
@@ -86,7 +88,7 @@
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\..\psycore\make\output\$(ConfigurationName)\&quot;;&quot;$(ProjectDir)..\..\..\external-packages\zlib-1.2.3\lib-mswindows-cabi\&quot;;&quot;$(ProjectDir)..\..\..\ngrs\make\output\$(ConfigurationName)\&quot;"
 				GenerateDebugInformation="TRUE"
-				SubSystem="2"
+				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				TargetMachine="1"/>
