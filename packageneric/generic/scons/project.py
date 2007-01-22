@@ -54,7 +54,7 @@ class project:
 			return self._builders
 	def add_builder(self, builder):
 		self.builders().append(builder)
-		self.trace('added builder ' + builder.name() + ': ' + ' '.join(builder.alias_names()))
+		#self.trace('added builder ' + builder.name() + ': ' + ' '.join(builder.alias_names()))
 
 	def __call__(self, builders):
 		import SCons.Script
@@ -306,7 +306,7 @@ class project:
 			scons['packageneric__build_variant'] = build_variant
 
 			try: options_file_path = self.command_line_arguments()['packageneric__options']
-			except KeyError: options_file_path = scons.File(os.path.join(scons.subst(self._build_variant_dir_with_scons_vars()), 'options')).get_abspath()
+			except KeyError: options_file_path = scons.File(os.path.join(scons.subst(self._build_variant_dir_with_scons_vars()), 'options.py')).get_abspath()
 			self.information('  options file is ' + options_file_path)
 
 			import SCons.Options
