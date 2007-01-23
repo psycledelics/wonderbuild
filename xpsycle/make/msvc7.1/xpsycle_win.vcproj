@@ -154,9 +154,6 @@
 				RelativePath="..\..\src\xpsycle\defaultbitmaps.cpp">
 			</File>
 			<File
-				RelativePath="..\..\src\xpsycle\eventdriver.cpp">
-			</File>
-			<File
 				RelativePath="..\..\src\xpsycle\greetdlg.cpp">
 			</File>
 			<File
@@ -173,9 +170,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\xpsycle\mainwindow.cpp">
-			</File>
-			<File
-				RelativePath="..\..\src\xpsycle\microsoft_direct_sound_out.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\xpsycle\patternboxproperties.cpp">
@@ -270,9 +264,6 @@
 				RelativePath="..\..\src\xpsycle\defaultbitmaps.h">
 			</File>
 			<File
-				RelativePath="..\..\src\xpsycle\eventdriver.h">
-			</File>
-			<File
 				RelativePath="..\..\src\xpsycle\greetdlg.h">
 			</File>
 			<File
@@ -282,9 +273,6 @@
 				RelativePath="..\..\src\xpsycle\inputhandler.h">
 			</File>
 			<File
-				RelativePath="..\..\src\xpsycle\ladspa.h">
-			</File>
-			<File
 				RelativePath="..\..\src\xpsycle\machinegui.h">
 			</File>
 			<File
@@ -292,9 +280,6 @@
 			</File>
 			<File
 				RelativePath="..\..\src\xpsycle\mainwindow.h">
-			</File>
-			<File
-				RelativePath="..\..\src\xpsycle\microsoft_direct_sound_out.h">
 			</File>
 			<File
 				RelativePath="..\..\src\xpsycle\patternboxproperties.h">
