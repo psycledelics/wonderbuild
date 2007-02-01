@@ -103,7 +103,19 @@
 				RelativePath="..\..\src\psycore\abstractmachinefactory.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\psycore\binread.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\psycore\instrument.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\psycore\instrumentdata.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\psycore\machine.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\psycore\machinedata.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\psycore\patterndata.cpp">
@@ -118,7 +130,16 @@
 				RelativePath="..\..\src\psycore\patternsequence.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\psycore\player.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\psycore\prototypemachinefactory.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\psycore\sample.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\psycore\samplefilefilter.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\psycore\singlepattern.cpp">
@@ -129,6 +150,9 @@
 			<File
 				RelativePath="..\..\src\psycore\timesignature.cpp">
 			</File>
+			<File
+				RelativePath="..\..\src\psycore\wavfilefilter.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -138,7 +162,19 @@
 				RelativePath="..\..\src\psycore\abstractmachinefactory.h">
 			</File>
 			<File
+				RelativePath="..\..\src\psycore\binread.h">
+			</File>
+			<File
+				RelativePath="..\..\src\psycore\instrument.h">
+			</File>
+			<File
+				RelativePath="..\..\src\psycore\instrumentdata.h">
+			</File>
+			<File
 				RelativePath="..\..\src\psycore\machine.h">
+			</File>
+			<File
+				RelativePath="..\..\src\psycore\machinedata.h">
 			</File>
 			<File
 				RelativePath="..\..\src\psycore\patterndata.h">
@@ -153,7 +189,19 @@
 				RelativePath="..\..\src\psycore\patternsequence.h">
 			</File>
 			<File
+				RelativePath="..\..\src\psycore\player.h">
+			</File>
+			<File
 				RelativePath="..\..\src\psycore\prototypemachinefactory.h">
+			</File>
+			<File
+				RelativePath="..\..\src\psycore\psyaudio.h">
+			</File>
+			<File
+				RelativePath="..\..\src\psycore\sample.h">
+			</File>
+			<File
+				RelativePath="..\..\src\psycore\samplefilefilter.h">
 			</File>
 			<File
 				RelativePath="..\..\src\psycore\singlepattern.h">
@@ -166,6 +214,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\psycore\tr1stdint.h">
+			</File>
+			<File
+				RelativePath="..\..\src\psycore\wavfilefilter.h">
 			</File>
 		</Filter>
 		<Filter

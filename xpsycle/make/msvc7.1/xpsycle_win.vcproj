@@ -163,6 +163,12 @@
 				RelativePath="..\..\src\xpsycle\inputhandler.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\xpsycle\keyconfigdlg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\xpsycle\logopanel.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\xpsycle\machinegui.cpp">
 			</File>
 			<File
@@ -172,6 +178,9 @@
 				RelativePath="..\..\src\xpsycle\mainwindow.cpp">
 			</File>
 			<File
+				RelativePath="..\..\src\xpsycle\module.cpp">
+			</File>
+			<File
 				RelativePath="..\..\src\xpsycle\patternboxproperties.cpp">
 			</File>
 			<File
@@ -179,6 +188,15 @@
 			</File>
 			<File
 				RelativePath="..\..\src\xpsycle\playertimeinfo.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\xpsycle\pluginfinder.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\xpsycle\projectdata.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\xpsycle\sampleview.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\xpsycle\sequencerbeatchangelineal.cpp">
@@ -197,6 +215,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\xpsycle\songpdlg.cpp">
+			</File>
+			<File
+				RelativePath="..\..\src\xpsycle\startpage.cpp">
 			</File>
 			<File
 				RelativePath="..\..\src\xpsycle\virtualpattern.cpp">
@@ -246,12 +267,6 @@
 				RelativePath="..\..\src\xpsycle\bendedlineshape.h">
 			</File>
 			<File
-				RelativePath="..\..\src\xpsycle\binread.h">
-			</File>
-			<File
-				RelativePath="..\..\src\xpsycle\childview.h">
-			</File>
-			<File
 				RelativePath="..\..\src\xpsycle\configuration.h">
 			</File>
 			<File
@@ -273,6 +288,12 @@
 				RelativePath="..\..\src\xpsycle\inputhandler.h">
 			</File>
 			<File
+				RelativePath="..\..\src\xpsycle\keyconfigdlg.h">
+			</File>
+			<File
+				RelativePath="..\..\src\xpsycle\logopanel.h">
+			</File>
+			<File
 				RelativePath="..\..\src\xpsycle\machinegui.h">
 			</File>
 			<File
@@ -282,6 +303,9 @@
 				RelativePath="..\..\src\xpsycle\mainwindow.h">
 			</File>
 			<File
+				RelativePath="..\..\src\xpsycle\module.h">
+			</File>
+			<File
 				RelativePath="..\..\src\xpsycle\patternboxproperties.h">
 			</File>
 			<File
@@ -289,6 +313,15 @@
 			</File>
 			<File
 				RelativePath="..\..\src\xpsycle\playertimeinfo.h">
+			</File>
+			<File
+				RelativePath="..\..\src\xpsycle\pluginfinder.h">
+			</File>
+			<File
+				RelativePath="..\..\src\xpsycle\projectdata.h">
+			</File>
+			<File
+				RelativePath="..\..\src\xpsycle\sampleview.h">
 			</File>
 			<File
 				RelativePath="..\..\src\xpsycle\sequencerbeatchangelineal.h">
@@ -307,6 +340,9 @@
 			</File>
 			<File
 				RelativePath="..\..\src\xpsycle\songpdlg.h">
+			</File>
+			<File
+				RelativePath="..\..\src\xpsycle\startpage.h">
 			</File>
 			<File
 				RelativePath="..\..\src\xpsycle\tr1stdint.h">
