@@ -411,8 +411,8 @@ class project:
 			except SystemExit: raise
 			except: # if python doesn't understand the syntax or something, we print a message suggesting to upgrade it
 				print 'SCons version and/or python version are too old.'
-				print 'The lowest version of SCons that is known to work is', str(scons_version)
-				print 'The lowest version of python that is known to work is', str(python_version)
+				print 'The lowest version of SCons that is known to work is', '.'.join(map(lambda x: str(x), scons_version))
+				print 'The lowest version of python that is known to work is', '.'.join(map(lambda x: str(x), python_version))
 				import sys ; sys.exit(2)
 		SCons.Script.EnsurePythonVersion(*python_version)
 
