@@ -272,12 +272,14 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.sublime", "projects\psycle\plugins\sublime.vcproj", "{A5BF47C9-76B0-454D-8564-804E42CA3315}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {984A85EE-BA08-473F-9ADB-1C1692DFD77F}
 		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.dsp (static build)", "projects\psycle\plugins\dsp.vcproj", "{F46EC0F9-8440-418D-91E7-41176165E294}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {984A85EE-BA08-473F-9ADB-1C1692DFD77F}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.blwtbl (wavetable)", "projects\psycle\plugins\blwtbl.vcproj", "{984A85EE-BA08-473F-9ADB-1C1692DFD77F}"
@@ -288,14 +290,12 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.slicit", "projects\psycle\plugins\Slicit.vcproj", "{A5BF47C9-76B0-454D-8564-804E42CA3315}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
-		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {984A85EE-BA08-473F-9ADB-1C1692DFD77F}
 		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.eq3", "projects\psycle\plugins\EQ3.vcproj", "{A5BF47C9-76B0-454D-8564-804E42CA3315}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
-		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {984A85EE-BA08-473F-9ADB-1C1692DFD77F}
 		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
 	EndProjectSection
 EndProject
@@ -358,13 +358,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_tremolo",
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.fluidsynth (dynanic dll)", "projects\psycle\plugins\fluidsynth.vcproj", "{984A85EE-BA08-473F-9ADB-1C1692DFD77F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.fluidsynth (dynanic dll)", "projects\psycle\plugins\fluidsynth.vcproj", "{E6905023-50A7-49E0-A5DE-FFFFFFFFFFFF}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.fluidsynth.sf2.player", "projects\psycle\plugins\fs_sf2_player.vcproj", "{E6905023-50A7-49E0-A5DE-5C0D26414B8D}"
 	ProjectSection(ProjectDependencies) = postProject
-		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {984A85EE-BA08-473F-9ADB-1C1692DFD77F}
+		{E6905023-50A7-49E0-A5DE-FFFFFFFFFFFF} = {E6905023-50A7-49E0-A5DE-FFFFFFFFFFFF}
 		{28C015FB-3BDA-4B32-8D85-C652E9892216} = {28C015FB-3BDA-4B32-8D85-C652E9892216}
 	EndProjectSection
 EndProject
@@ -1024,16 +1024,16 @@ Global
 		{8ADD9C4A-378B-48D8-9853-4EA253F05190}.release.g7.Build.0 = release.g7|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05190}.unpack.ActiveCfg = release.g7|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05190}.unpack.Build.0 = release.g7|Win32
-		{984A85EE-BA08-473F-9ADB-1C1692DFD77F}.debug.ActiveCfg = debug|Win32
-		{984A85EE-BA08-473F-9ADB-1C1692DFD77F}.debug.Build.0 = debug|Win32
-		{984A85EE-BA08-473F-9ADB-1C1692DFD77F}.documentation.ActiveCfg = debug|Win32
-		{984A85EE-BA08-473F-9ADB-1C1692DFD77F}.documentation.Build.0 = debug|Win32
-		{984A85EE-BA08-473F-9ADB-1C1692DFD77F}.release.g6.ActiveCfg = release.g6|Win32
-		{984A85EE-BA08-473F-9ADB-1C1692DFD77F}.release.g6.Build.0 = release.g6|Win32
-		{984A85EE-BA08-473F-9ADB-1C1692DFD77F}.release.g7.ActiveCfg = release.g7|Win32
-		{984A85EE-BA08-473F-9ADB-1C1692DFD77F}.release.g7.Build.0 = release.g7|Win32
-		{984A85EE-BA08-473F-9ADB-1C1692DFD77F}.unpack.ActiveCfg = release.g7|Win32
-		{984A85EE-BA08-473F-9ADB-1C1692DFD77F}.unpack.Build.0 = release.g7|Win32
+		{E6905023-50A7-49E0-A5DE-FFFFFFFFFFFF}.debug.ActiveCfg = debug|Win32
+		{E6905023-50A7-49E0-A5DE-FFFFFFFFFFFF}.debug.Build.0 = debug|Win32
+		{E6905023-50A7-49E0-A5DE-FFFFFFFFFFFF}.documentation.ActiveCfg = debug|Win32
+		{E6905023-50A7-49E0-A5DE-FFFFFFFFFFFF}.documentation.Build.0 = debug|Win32
+		{E6905023-50A7-49E0-A5DE-FFFFFFFFFFFF}.release.g6.ActiveCfg = release.g6|Win32
+		{E6905023-50A7-49E0-A5DE-FFFFFFFFFFFF}.release.g6.Build.0 = release.g6|Win32
+		{E6905023-50A7-49E0-A5DE-FFFFFFFFFFFF}.release.g7.ActiveCfg = release.g7|Win32
+		{E6905023-50A7-49E0-A5DE-FFFFFFFFFFFF}.release.g7.Build.0 = release.g7|Win32
+		{E6905023-50A7-49E0-A5DE-FFFFFFFFFFFF}.unpack.ActiveCfg = release.g7|Win32
+		{E6905023-50A7-49E0-A5DE-FFFFFFFFFFFF}.unpack.Build.0 = release.g7|Win32
 		{E6905023-50A7-49E0-A5DE-5C0D26414B8D}.debug.ActiveCfg = debug|Win32
 		{E6905023-50A7-49E0-A5DE-5C0D26414B8D}.debug.Build.0 = debug|Win32
 		{E6905023-50A7-49E0-A5DE-5C0D26414B8D}.documentation.ActiveCfg = debug|Win32

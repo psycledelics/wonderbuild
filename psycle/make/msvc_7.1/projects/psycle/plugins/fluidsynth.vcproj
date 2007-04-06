@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="psycle.plugins.fluidsynth (dynanic dll)"
-	ProjectGUID="{984A85EE-BA08-473F-9ADB-1C1692DFD77F}"
+	ProjectGUID="{E6905023-50A7-49E0-A5DE-FFFFFFFFFFFF}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -168,7 +168,7 @@
 			ConfigurationType="2"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.cmd;$(TargetPath)"
-			WholeProgramOptimization="TRUE">
+			WholeProgramOptimization="FALSE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="4"
