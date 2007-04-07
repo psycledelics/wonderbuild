@@ -385,6 +385,9 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\idr_vstf.ico">
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\keys_bac.bmp">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\less.bmp">
 				</File>
 				<File
@@ -415,6 +418,9 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\moremore.bmp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\notekey.bmp">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\MasterMachine\numbers.bmp">
 				</File>
 				<File
@@ -440,6 +446,9 @@
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\sampulse.bmp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\sharpkey.bmp">
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\MasterMachine\slider.bmp">
@@ -524,6 +533,12 @@
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\GreetDialog.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\InterpolateCurveDlg.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\InterpolateCurveDlg.hpp">
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\keybhandler.private.hpp">
@@ -646,12 +661,6 @@
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\GearRackDlg.hpp">
 					</File>
 					<File
-						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\GearTracker.cpp">
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\GearTracker.hpp">
-					</File>
-					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MacProp.cpp">
 					</File>
 					<File
@@ -691,6 +700,12 @@
 							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\EnvDialog.hpp">
 						</File>
 						<File
+							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\GearTracker.cpp">
+						</File>
+						<File
+							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\GearTracker.hpp">
+						</File>
+						<File
 							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\InstrumentEditor.cpp">
 						</File>
 						<File
@@ -699,6 +714,12 @@
 						<Filter
 							Name="waveform"
 							Filter="">
+							<File
+								RelativePath="..\..\..\..\src\psycle\host\ScrollableDlgBar.cpp">
+							</File>
+							<File
+								RelativePath="..\..\..\..\src\psycle\host\ScrollableDlgBar.hpp">
+							</File>
 							<File
 								RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\WaveEdAmplifyDialog.cpp">
 							</File>
@@ -712,10 +733,28 @@
 								RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\WaveEdChildView.hpp">
 							</File>
 							<File
+								RelativePath="..\..\..\..\src\psycle\host\WaveEdCrossfadeDialog.cpp">
+							</File>
+							<File
+								RelativePath="..\..\..\..\src\psycle\host\WaveEdCrossfadeDialog.hpp">
+							</File>
+							<File
 								RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\WaveEdFrame.cpp">
 							</File>
 							<File
 								RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\WaveEdFrame.hpp">
+							</File>
+							<File
+								RelativePath="..\..\..\..\src\psycle\host\WaveEdInsertSilenceDialog.cpp">
+							</File>
+							<File
+								RelativePath="..\..\..\..\src\psycle\host\WaveEdInsertSilenceDialog.hpp">
+							</File>
+							<File
+								RelativePath="..\..\..\..\src\psycle\host\WaveEdMixDialog.cpp">
+							</File>
+							<File
+								RelativePath="..\..\..\..\src\psycle\host\WaveEdMixDialog.hpp">
 							</File>
 							<File
 								RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\wavfiledlg.cpp">
@@ -857,6 +896,12 @@
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Helpers.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\InstPreview.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\InstPreview.hpp">
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Player.cpp">
