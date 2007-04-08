@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="psycle.plugins.audacity.wahwah (wrapper by sartorius)"
-	ProjectGUID="{8ADD9C4A-378B-48D8-9853-4EA253F05186}"
+	ProjectGUID="{8ADD9C4A-4444-48D8-9853-4EA253F05186}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>

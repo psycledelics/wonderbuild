@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="psycle.plugins.voskomo.gamefx"
-	ProjectGUID="{652E2772-861D-48C6-A710-FDC1078CBA09}"
+	ProjectGUID="{652E2772-6666-48C6-A710-FDC1078CBA09}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>

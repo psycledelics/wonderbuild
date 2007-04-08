@@ -4,6 +4,7 @@
 	Version="7.10"
 	Name="psycle.plugins.pooplog.delay.light"
 	RootNamespace="psycle.plugins.pooplog.delay.light"
+	ProjectGUID="{8ADD9C4A-CCCC-48D8-9853-4EA253F05186}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
