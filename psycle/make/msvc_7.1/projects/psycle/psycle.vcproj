@@ -655,6 +655,12 @@
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\FrameMachine.hpp">
 					</File>
 					<File
+						RelativePath="..\..\..\..\src\psycle\host\FrameMixerMachine.cpp">
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\FrameMixerMachine.hpp">
+					</File>
+					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\GearRackDlg.cpp">
 					</File>
 					<File
@@ -1024,6 +1030,27 @@
 				RelativePath="$(SolutionDir)\..\..\..\src\Seib-vsthost\CVSTHost.Seib.hpp">
 			</File>
 		</Filter>
+		<File
+			RelativePath="..\..\..\..\src\psycle\host\resources\Slider\sliderB.bmp">
+		</File>
+		<File
+			RelativePath="..\..\..\..\src\psycle\host\resources\Slider\sliderBh.bmp">
+		</File>
+		<File
+			RelativePath="..\..\..\..\src\psycle\host\resources\Slider\sliderP.bmp">
+		</File>
+		<File
+			RelativePath="..\..\..\..\src\psycle\host\resources\Slider\sliderPh.bmp">
+		</File>
+		<File
+			RelativePath="..\..\..\..\src\psycle\host\resources\toolbar1.bmp">
+		</File>
+		<File
+			RelativePath="..\..\..\..\src\psycle\host\resources\Slider\VuOff.bmp">
+		</File>
+		<File
+			RelativePath="..\..\..\..\src\psycle\host\resources\Slider\VuOn.bmp">
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
