@@ -892,6 +892,12 @@
 				Name="host"
 				Filter="">
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\dither.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\dither.hpp">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Dsp.cpp">
 				</File>
 				<File
@@ -908,6 +914,12 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\InstPreview.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\mersennetwister.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\mersennetwister.hpp">
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Player.cpp">
