@@ -1,1 +1,0 @@
-../packageneric/generic/@root/pixmaps/Makefile.am
