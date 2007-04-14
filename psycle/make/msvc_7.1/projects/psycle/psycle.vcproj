@@ -454,6 +454,18 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\MasterMachine\slider.bmp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\Slider\sliderB.bmp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\Slider\sliderBh.bmp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\Slider\sliderP.bmp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\Slider\sliderPh.bmp">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\splash copia.bmp">
 				</File>
 				<File
@@ -461,6 +473,15 @@
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\Toolbar.bmp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\toolbar1.bmp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\Slider\VuOff.bmp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\Slider\VuOn.bmp">
 				</File>
 			</Filter>
 			<Filter
@@ -1042,27 +1063,6 @@
 				RelativePath="$(SolutionDir)\..\..\..\src\Seib-vsthost\CVSTHost.Seib.hpp">
 			</File>
 		</Filter>
-		<File
-			RelativePath="..\..\..\..\src\psycle\host\resources\Slider\sliderB.bmp">
-		</File>
-		<File
-			RelativePath="..\..\..\..\src\psycle\host\resources\Slider\sliderBh.bmp">
-		</File>
-		<File
-			RelativePath="..\..\..\..\src\psycle\host\resources\Slider\sliderP.bmp">
-		</File>
-		<File
-			RelativePath="..\..\..\..\src\psycle\host\resources\Slider\sliderPh.bmp">
-		</File>
-		<File
-			RelativePath="..\..\..\..\src\psycle\host\resources\toolbar1.bmp">
-		</File>
-		<File
-			RelativePath="..\..\..\..\src\psycle\host\resources\Slider\VuOff.bmp">
-		</File>
-		<File
-			RelativePath="..\..\..\..\src\psycle\host\resources\Slider\VuOn.bmp">
-		</File>
 	</Files>
 	<Globals>
 	</Globals>
