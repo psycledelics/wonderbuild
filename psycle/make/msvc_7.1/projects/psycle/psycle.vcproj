@@ -633,6 +633,12 @@
 					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\SkinDlg.hpp">
 					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\SpecialKeys.cpp">
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\SpecialKeys.hpp">
+					</File>
 					<Filter
 						Name="devices"
 						Filter="">
@@ -1065,5 +1071,8 @@
 		</Filter>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="\Documents and Settings\All Users\Documentos\Visual C++\psycle-1.8-bugfixes\psycle\src\psycle\host\resources\resources.rc"/>
 	</Globals>
 </VisualStudioProject>
