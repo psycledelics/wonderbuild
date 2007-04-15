@@ -112,7 +112,7 @@ class pkg_config_package(builder):
 		try: return self._targets
 		except AttributeError:
 			uninstalled_file_name = os.path.join(self.project().build_variant_intermediate_dir(), 'pkgconfig', self.name() + '-uninstalled.pc')
-			installed_file_name = os.path.join('${packageneric:install:stage-destination}', '${packageneric:install:lib}', 'pkgconfig', self.name() + '.pc')
+			installed_file_name = os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib', 'pkgconfig', self.name() + '.pc')
 
 			dependencies = []
 			for dependency_lists in [module.targets() for module in self.modules()]:
@@ -135,7 +135,7 @@ class pkg_config_package(builder):
 			
 			#print 'XXXXXXXXXXX', self.name(), abs_paths
 
-			env.linker().paths().add([os.path.join('${packageneric:install:stage-destination}', '${packageneric:install:lib}')])
+			env.linker().paths().add([os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib')])
 
 			paths = []
 			for path in env.linker().paths(): paths.append(self.project()._scons().Dir(path).get_abspath())
