@@ -105,13 +105,13 @@ class project:
 	def build_dir(self):
 		try: return self._build_dir
 		except AttributeError:
-			self._build_dir = self._scons().Dir('$packageneric__build_dir').path #get_abspath()
+			self._build_dir = self._scons().Dir('${packageneric:build-dir}').path #get_abspath()
 			return self._build_dir
 
 	def build_variant(self):
 		try: return self._build_variant
 		except AttributeError:
-			self._build_variant = self._scons().subst('$packageneric__build_variant')
+			self._build_variant = self._scons().subst('${packageneric:build-variant}')
 			return self._build_variant
 
 	def build_variant_intermediate_dir(self):
@@ -182,15 +182,15 @@ class project:
 				import contexes
 				self._contexes = self.__class__._root_contexes = contexes.template(self.env_class())(self)
 				contexes = self._contexes
-				contexes.client().installed().compilers().cxx().paths().add(['$packageneric__install__include'])
-				contexes.client().installed().linker().paths().add(['$packageneric__install__lib'])
+				contexes.client().installed().compilers().cxx().paths().add(['${packageneric:install:include}'])
+				contexes.client().installed().linker().paths().add(['${packageneric:install:lib}'])
 				scons = self._scons()
 				self.trace('c++ compiler is ' + scons.subst('$CXX') + ' version ' + scons.subst('$CXXVERSION'))
 				contexes.check_and_build().detect_implementation()
-				if scons.subst('$packageneric__debug') == '0': contexes.check_and_build().debug().set(False)
-				elif scons.subst('$packageneric__debug') == '1': contexes.check_and_build().debug().set(True)
+				if scons.subst('${packageneric:debug}') == '0': contexes.check_and_build().debug().set(False)
+				elif scons.subst('${packageneric:debug}') == '1': contexes.check_and_build().debug().set(True)
 				else: self.warning('debug or not debug?')
-				if scons.subst('$packageneric__verbose') == '0':
+				if scons.subst('${packageneric:verbose}') == '0':
 					if scons['STATIC_AND_SHARED_OBJECTS_ARE_THE_SAME']:
 						contexes.build().compilers().cxx().static().message().set(self.message('packageneric: ', 'compiling object from c++ $SOURCE', font = '34;7;1'))
 						contexes.build().compilers().cxx().shared().message().set(self.message('packageneric: ', 'compiling object from c++ $SOURCE', font = '34;7;1'))
@@ -262,17 +262,17 @@ class project:
 				scons['INSTALLSTR'] = self.message('packageneric: ', 'linking file $TARGET', font = '1;35')
 				scons.Alias('packageneric:install-runtime',
 					[
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__bin'),
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib'),
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib_exec'),
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__share'),
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__var'),
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__etc')
+						os.path.join('${packageneric:install:stage-destination}', '${packageneric:install:bin}'),
+						os.path.join('${packageneric:install:stage-destination}', '${packageneric:install:lib}'),
+						os.path.join('${packageneric:install:stage-destination}', '${packageneric:install:lib-exec}'),
+						os.path.join('${packageneric:install:stage-destination}', '${packageneric:install:share}'),
+						os.path.join('${packageneric:install:stage-destination}', '${packageneric:install:var}'),
+						os.path.join('${packageneric:install:stage-destination}', '${packageneric:install:etc}')
 					]
 				)
 				scons.Alias('packageneric:install-dev',
 					[
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__include')
+						os.path.join('${packageneric:install:stage-destination}', '${packageneric:install:include}')
 					]
 				)
 				scons.Alias('packageneric:install',
@@ -283,12 +283,12 @@ class project:
 				)
 				scons.Default() # todo only for root scons?
 				scons.Default('packageneric:install')
-				#scons.Default('$packageneric__install__stage_destination')
+				#scons.Default('${packageneric:install:stage-destination}')
 			scons.SourceCode('.', None) # we don't use the default source code fetchers (RCS, SCCS ...), so we disable them to avoid uneeded processing
 			scons.BuildDir(self.intermediate_target_dir(), self.source_dir(), duplicate = False)
 			return self._scons_
 
-	def _build_variant_dir_with_scons_vars(self): return os.path.join('$packageneric__build_dir', 'variants', '$packageneric__build_variant')
+	def _build_variant_dir_with_scons_vars(self): return os.path.join('${packageneric:build-dir}', 'variants', '${packageneric:build-variant}')
 	def _build_variant_intermediate_dir_with_scons_vars(self): return os.path.join(self._build_variant_dir_with_scons_vars(), 'intermediate', self.name())
 	def _build_variant_install_dir_with_scons_vars(self): return os.path.join(self._build_variant_dir_with_scons_vars(), 'stage-install')
 
@@ -297,15 +297,15 @@ class project:
 		except AttributeError:
 			scons = self._scons()
 
-			try: build_dir = self.command_line_arguments()['packageneric__build_dir']
+			try: build_dir = self.command_line_arguments()['packageneric:build_dir']
 			except KeyError: build_dir = os.path.join(scons.GetLaunchDir(), '++packageneric')
-			scons['packageneric__build_dir'] = build_dir
+			scons['packageneric:build_dir'] = build_dir
 
-			try: build_variant = self.command_line_arguments()['packageneric__build_variant']
+			try: build_variant = self.command_line_arguments()['packageneric:build_variant']
 			except KeyError: build_variant = 'default'
-			scons['packageneric__build_variant'] = build_variant
+			scons['packageneric:build_variant'] = build_variant
 
-			try: options_file_path = self.command_line_arguments()['packageneric__options']
+			try: options_file_path = self.command_line_arguments()['packageneric:options']
 			except KeyError: options_file_path = scons.File(os.path.join(scons.subst(self._build_variant_dir_with_scons_vars()), 'options.py')).get_abspath()
 			self.information('  options file is ' + options_file_path)
 
@@ -350,22 +350,22 @@ class project:
 			self._options_.AddOptions(
 				# todo change underscores to colons and hypens since variables can be referred to as ${packageneric:build-dir}
 				#('packageneric:build-dir', 'directory where to build into'),
-				('packageneric__build_dir', 'directory where to build into'),
-				('packageneric__install__stage_destination', 'directory to install under (stage installation)', self._build_variant_install_dir_with_scons_vars()),
-				('packageneric__build_variant', 'subdirectory where to build into'),
-				#('packageneric__install__prefix', 'directory to install under (final installation)', os.path.join(os.path.sep, 'opt', self.name())),
-				('packageneric__install__prefix', 'directory to install under (final installation)', os.path.join(os.path.sep, 'usr', 'local')),
-				('packageneric__install__exec_prefix', 'directory to install architecture-dependant excecutables under (final installation)', '$packageneric__install__prefix'),
-				('packageneric__install__bin', 'directory to install programs under (final installation)', os.path.join('$packageneric__install__exec_prefix', 'bin')),
-				('packageneric__install__lib', 'directory to install libraries under (final installation) (not used on mswindows)', os.path.join('$packageneric__install__exec_prefix', 'lib')),
-				('packageneric__install__lib_exec', 'directory to install helper programs under (final installation)', os.path.join('$packageneric__install__exec_prefix', 'libexec')),
-				('packageneric__install__include', 'directory to install headers under (final installation)', os.path.join('$packageneric__install__prefix', 'include')),
-				('packageneric__install__share', 'directory to install archictecture-independent data under (final installation)', os.path.join('$packageneric__install__prefix', 'share')),
-				('packageneric__install__var', 'directory to install machine-specific state-variable data under (final installation)', os.path.join('$packageneric__install__prefix', 'var')),
-				('packageneric__install__etc', 'directory to install machine-specific configuration files under (final installation)', os.path.join(os.path.sep, 'etc')),
-				('packageneric__verbose', '(0|1) set to 1 for build verbiage', '0'),
-				('packageneric__debug', '(0|1) set to 1 to build for debugging', '0'),
-				('packageneric__test', '(0|1) set to 1 to perform unit tests', '1')
+				('packageneric:build_dir', 'directory where to build into'),
+				('packageneric:install:stage_destination', 'directory to install under (stage installation)', self._build_variant_install_dir_with_scons_vars()),
+				('packageneric:build_variant', 'subdirectory where to build into'),
+				#('packageneric:install:prefix', 'directory to install under (final installation)', os.path.join(os.path.sep, 'opt', self.name())),
+				('packageneric:install:prefix', 'directory to install under (final installation)', os.path.join(os.path.sep, 'usr', 'local')),
+				('packageneric:install:exec_prefix', 'directory to install architecture-dependant excecutables under (final installation)', '${packageneric:install:prefix}'),
+				('packageneric:install:bin', 'directory to install programs under (final installation)', os.path.join('${packageneric:install:exec_prefix}', 'bin')),
+				('packageneric:install:lib', 'directory to install libraries under (final installation) (not used on mswindows)', os.path.join('${packageneric:install:exec_prefix}', 'lib')),
+				('packageneric:install:lib_exec', 'directory to install helper programs under (final installation)', os.path.join('${packageneric:install:exec_prefix}', 'libexec')),
+				('packageneric:install:include', 'directory to install headers under (final installation)', os.path.join('${packageneric:install:prefix}', 'include')),
+				('packageneric:install:share', 'directory to install archictecture-independent data under (final installation)', os.path.join('${packageneric:install:prefix}', 'share')),
+				('packageneric:install:var', 'directory to install machine-specific state-variable data under (final installation)', os.path.join('${packageneric:install:prefix}', 'var')),
+				('packageneric:install:etc', 'directory to install machine-specific configuration files under (final installation)', os.path.join(os.path.sep, 'etc')),
+				('packageneric:verbose', '(0|1) set to 1 for build verbiage', '0'),
+				('packageneric:debug', '(0|1) set to 1 to build for debugging', '0'),
+				('packageneric:test', '(0|1) set to 1 to perform unit tests', '1')
 			)
 			self._options_.Update(scons)
 			self.information('    source dir is ' + self.source_dir())
@@ -375,17 +375,17 @@ class project:
 					'source and build directories are the same.\n' +
 					'please choose a build dir separate from the source dir so that the latter is not polluted with derived files.'
 				)
-			self.information(' build variant is ' + scons.subst('$packageneric__build_variant'))
+			self.information(' build variant is ' + scons.subst('${packageneric:build_variant}'))
 			for path in [os.path.split(options_file_path)[0]] + [
 					scons.subst(path) for path in
 					(
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__bin'),
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib'),
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib_exec'),
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__include'),
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__share'),
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__var'),
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__etc')
+						os.path.join('${packageneric:install:stage_destination}', '${packageneric:install:bin}'),
+						os.path.join('${packageneric:install:stage_destination}', '${packageneric:install:lib}'),
+						os.path.join('${packageneric:install:stage_destination}', '${packageneric:install:lib_exec}'),
+						os.path.join('${packageneric:install:stage_destination}', '${packageneric:install:include}'),
+						os.path.join('${packageneric:install:stage_destination}', '${packageneric:install:share}'),
+						os.path.join('${packageneric:install:stage_destination}', '${packageneric:install:var}'),
+						os.path.join('${packageneric:install:stage_destination}', '${packageneric:install:etc}')
 					)
 			]: SCons.Options.PathOption.PathIsDirCreate('', path, scons)
 			self._options_.Save(options_file_path, scons)
