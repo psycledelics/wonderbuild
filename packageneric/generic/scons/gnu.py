@@ -102,7 +102,7 @@ def detect(chain):
 			if gnug.version().major() >= 4:
 				chain.linker().flags().add([
 					'-Wl,-z origin' # marks objects (cygwin's ld says it doesn't know it despite it being in both its info node and man page!)
-					#'-Wl,-z nodlopen' # marks objects
+					#'-Wl,-z nodlopen' # marks objects as not supporting dlopening
 					#'-Wl,-z defs' # marks objects, like -no-undefined
 				])
 		else:
