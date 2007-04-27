@@ -219,8 +219,8 @@ def implementation(chain):
 			'-UNDEBUG'
 		])
 		chain.linker().flags().add([
-			'-Wl,-O0',
-			'-Wl,--trace'
+			'-Wl,-O0'
+			#'-Wl,--trace'
 		])
 		if chain.project().platform_executable_format() == 'pe':
 			chain.linker().flags().add([
