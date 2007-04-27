@@ -233,7 +233,11 @@ def implementation(chain):
 		chain.compilers().cxx().flags().add([
 			'-O3',
 			#'-repo',
-			'-fno-enforce-eh-specs',
+			#'-fno-enforce-eh-specs',
+				# Don't generate code to check for violation of exception specifications at runtime.  This option violates the C++ standard, but may
+				# be useful for reducing code size in production builds, much like defining NDEBUG.  This does not give user code permission to
+				# throw exceptions in violation of the exception specifications; the compiler will still optimize based on the specifications, so
+				# throwing an unexpected exception will result in undefined behavior.
 			'-Wpacked',
 			#'-Wpadded',
 			#'-Winline', # warns about explicit inline functions not inlined
