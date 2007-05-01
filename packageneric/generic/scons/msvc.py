@@ -103,6 +103,7 @@ def implementation(chain):
 			'-O2', # maximize speed
 			'-Ob2', # inline expansion level 2
 			'-Oi', # enable intrinsic functions
+			'-Op-', # keep all 80-bit intermediate results
 			'-Ot', # favor code speed
 			'-Oy', # enable frame pointer omission
 			#####'-Op-', # this option is being removed in msvc 14
