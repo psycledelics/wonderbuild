@@ -108,7 +108,7 @@ def implementation(chain):
 			'-Oy', # enable frame pointer omission
 			#####'-Op-', # this option is being removed in msvc 14
 			'-fp:fast', # fast but unpredictable floating point operations
-			#####'-QIfist', # not so interesting since SSE
+			#####'-QIfist', # not so interesting since SSE, and dangerous since it changes the behaviour of static_cast<int>
 			#'-arch:SSE2', # use SSE2 CPU instructions (x86 specific)
 			'-arch:SSE', # use SSE CPU instructions (x86 specific)
 			#'-Zi' # enable debug info

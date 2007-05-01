@@ -24,7 +24,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/EHa
-/QIfist
+/
 /Op-
 /WL"
 				Optimization="4"
@@ -104,7 +104,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/EHa
-/QIfist
+/
 /Op-
 /WL"
 				Optimization="0"
@@ -176,7 +176,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/EHa
-/QIfist
+/
 /Op-
 /WL"
 				Optimization="4"
