@@ -100,6 +100,7 @@ def implementation(chain):
 			'-GL', # enable link-time code generation
 			'-GF', # enable read-only string pooling
 			'-GS-', # disable security checks
+			'-O2', # maximize speed
 			'-Ob2', # inline expansion level 2
 			'-Oi', # enable intrinsic functions
 			'-Ot', # favor code speed
