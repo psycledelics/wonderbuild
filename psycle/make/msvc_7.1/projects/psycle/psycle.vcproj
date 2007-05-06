@@ -181,7 +181,6 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/EHa
-/
 /Op-
 /WL"
 				Optimization="4"
@@ -555,12 +554,6 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\GreetDialog.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\InterpolateCurveDlg.cpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\InterpolateCurveDlg.hpp">
-				</File>
-				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\keybhandler.private.hpp">
 				</File>
 				<File
@@ -856,6 +849,12 @@
 				<Filter
 					Name="pattern"
 					Filter="">
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\InterpolateCurveDlg.cpp">
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\InterpolateCurveDlg.hpp">
+					</File>
 					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\PatDlg.cpp">
 					</File>
