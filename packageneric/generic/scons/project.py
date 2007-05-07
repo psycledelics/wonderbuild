@@ -210,10 +210,10 @@ class project:
 					os.path.join('project', 'src', 'packageneric', 'configuration.private.hpp'),
 					''.join(['#define PACKAGENERIC__CONFIGURATION__%s %s\n' % (n, v) for n, v in
 						[('INSTALL_PATH__BIN_TO_%s' % n, '"%s"' % v) for n, v in
-							('LIB', '../lib'),
-							('SHARE', '../share'),
-							('VAR', '../var'),
-							('ETC', '../../etc')
+							('LIB', '../lib'), # todo from options, function to compute a relative path
+							('SHARE', '../share'), # todo from options, function to compute a relative path
+							('VAR', '../var'), # todo from options, function to compute a relative path
+							('ETC', '../etc') # todo from options, function to compute a relative path
 						] +
 						[('COMPILER__HOST', '"' + scons.subst('$CXX') + ' version ' + scons.subst('$CXXVERSION') + '"')]
 					])
@@ -260,7 +260,7 @@ class project:
 				self.information('signature file is ' + scons.Dir(signature).path)
 				scons.SConsignFile(signature)
 				scons['INSTALLSTR'] = self.message('packageneric: ', 'linking file $TARGET', font = '1;35')
-				scons.Alias('packageneric:install-runtime',
+				scons.Alias('packageneric:install:runtime',
 					[
 						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__bin'),
 						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib'),
@@ -270,15 +270,15 @@ class project:
 						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__etc')
 					]
 				)
-				scons.Alias('packageneric:install-dev',
+				scons.Alias('packageneric:install:dev',
 					[
 						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__include')
 					]
 				)
 				scons.Alias('packageneric:install',
 					[
-						'packageneric:install-runtime',
-						'packageneric:install-dev'
+						'packageneric:install:runtime',
+						'packageneric:install:dev'
 					]
 				)
 				scons.Default() # todo only for root scons?
