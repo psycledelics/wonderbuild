@@ -361,7 +361,7 @@ class project:
 				('packageneric__install__lib_exec', 'directory where to install subroutine programs (final installation)', os.path.join('$packageneric__install__exec_prefix', 'libexec')),
 				('packageneric__install__include', 'directory where to install headers (final installation)', os.path.join('$packageneric__install__prefix', 'include')),
 				('packageneric__install__share__root', 'the root of the directory tree where to install read-only archictecture-independent data (final installation)', os.path.join('$packageneric__install__prefix', 'share')),
-				('packageneric__install__share', 'directory where to install read-only archictecture-independent data used by executables (final installation)', os.path.join('$packageneric__share__root', 'share')),
+				('packageneric__install__share', 'directory where to install read-only archictecture-independent data used by executables (final installation)', os.path.join('$packageneric__install__share__root')),
 				('packageneric__install__com', 'directory where to install archictecture-independent state-variable data (final installation)', os.path.join('$packageneric__install__prefix', 'com')),
 				('packageneric__install__var', 'directory where to install machine-specific state-variable data (final installation)', os.path.join('$packageneric__install__prefix', 'var')),
 				('packageneric__install__etc', 'directory where to install machine-specific configuration files (final installation)', os.path.join(os.path.sep, 'etc')),
