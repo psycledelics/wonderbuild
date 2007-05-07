@@ -351,20 +351,23 @@ class project:
 				# todo change underscores to colons and hypens since variables can be referred to as ${packageneric:build-dir}
 				#('packageneric:build-dir', 'directory where to build into'),
 				('packageneric__build_dir', 'directory where to build into'),
-				('packageneric__install__stage_destination', 'directory to install under (stage installation)', self._build_variant_install_dir_with_scons_vars()),
-				('packageneric__build_variant', 'subdirectory where to build into'),
-				#('packageneric__install__prefix', 'directory to install under (final installation)', os.path.join(os.path.sep, 'opt', self.name())),
-				('packageneric__install__prefix', 'directory to install under (final installation)', os.path.join(os.path.sep, 'usr', 'local')),
-				('packageneric__install__exec_prefix', 'directory to install architecture-dependant excecutables under (final installation)', '$packageneric__install__prefix'),
-				('packageneric__install__bin', 'directory to install programs under (final installation)', os.path.join('$packageneric__install__exec_prefix', 'bin')),
-				('packageneric__install__lib', 'directory to install libraries under (final installation) (not used on mswindows)', os.path.join('$packageneric__install__exec_prefix', 'lib')),
-				('packageneric__install__lib_exec', 'directory to install helper programs under (final installation)', os.path.join('$packageneric__install__exec_prefix', 'libexec')),
-				('packageneric__install__include', 'directory to install headers under (final installation)', os.path.join('$packageneric__install__prefix', 'include')),
-				('packageneric__install__share', 'directory to install archictecture-independent data under (final installation)', os.path.join('$packageneric__install__prefix', 'share')),
-				('packageneric__install__var', 'directory to install machine-specific state-variable data under (final installation)', os.path.join('$packageneric__install__prefix', 'var')),
-				('packageneric__install__etc', 'directory to install machine-specific configuration files under (final installation)', os.path.join(os.path.sep, 'etc')),
+				('packageneric__install__stage_destination', 'directory where to place the final install tree (stage installation)', self._build_variant_install_dir_with_scons_vars()),
+				('packageneric__build_variant', 'subdirectory of the build directory where to build into'),
+				('packageneric__install__prefix', 'directory from which the final executable are meant to be run from (final installation)', os.path.join(os.path.sep, 'usr', 'local')),
+				('packageneric__install__exec_prefix', 'directory where to install architecture-dependant excecutables (final installation)', '$packageneric__install__prefix'),
+				('packageneric__install__bin', 'directory where to install programs (final installation)', os.path.join('$packageneric__install__exec_prefix', 'bin')),
+				('packageneric__install__sbin', 'directory where to install system administrator programs (final installation)', os.path.join('$packageneric__install__exec_prefix', 'sbin')),
+				('packageneric__install__lib', 'directory where to install libraries (final installation) (not used on mswindows)', os.path.join('$packageneric__install__exec_prefix', 'lib')),
+				('packageneric__install__lib_exec', 'directory where to install subroutine programs (final installation)', os.path.join('$packageneric__install__exec_prefix', 'libexec')),
+				('packageneric__install__include', 'directory where to install headers (final installation)', os.path.join('$packageneric__install__prefix', 'include')),
+				('packageneric__install__share__root', 'the root of the directory tree where to install read-only archictecture-independent data (final installation)', os.path.join('$packageneric__install__prefix', 'share')),
+				('packageneric__install__share', 'directory where to install read-only archictecture-independent data used by executables (final installation)', os.path.join('$packageneric__share__root', 'share')),
+				('packageneric__install__com', 'directory where to install archictecture-independent state-variable data (final installation)', os.path.join('$packageneric__install__prefix', 'com')),
+				('packageneric__install__var', 'directory where to install machine-specific state-variable data (final installation)', os.path.join('$packageneric__install__prefix', 'var')),
+				('packageneric__install__etc', 'directory where to install machine-specific configuration files (final installation)', os.path.join(os.path.sep, 'etc')),
 				('packageneric__verbose', '(0|1) set to 1 for build verbiage', '0'),
-				('packageneric__debug', '(0|1) set to 1 to build for debugging', '0'),
+				('packageneric__debug', '(0|1) set to 1 to build for debugging (turns optimizations off, and enables debugging information)', '0'),
+				('packageneric__debug__info', '(0|1) set to 1 to build with debugging information', '0'),
 				('packageneric__test', '(0|1) set to 1 to perform unit tests', '1')
 			)
 			self._options_.Update(scons)
@@ -380,10 +383,13 @@ class project:
 					scons.subst(path) for path in
 					(
 						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__bin'),
+						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__sbin'),
 						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib'),
 						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib_exec'),
 						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__include'),
+						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__share__root'),
 						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__share'),
+						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__com'),
 						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__var'),
 						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__etc')
 					)
