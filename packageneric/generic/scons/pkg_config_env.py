@@ -71,7 +71,6 @@ def template(base): # chain, os_env
 					finally:
 						os.environ['PATH'] = save_path
 						os.environ['PKG_CONFIG_PATH'] = save_pkg_config_path
-					print 'xxxxxxxxxxxxx'
 				
 		_template[base] = result
 		return result

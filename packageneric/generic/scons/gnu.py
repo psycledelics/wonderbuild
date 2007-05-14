@@ -139,6 +139,9 @@ def detect(chain):
 			# 4) <prefix>xxx.dll (e.g. cygxxx.dll on cygwin)
 			# 5) libxxx.dll
 			# 6) xxx.dll
+			# There is no standard location for libraries on mswindows, so we get paths from the os env:
+			chain.os_env.add_inherited('CPATH')
+			chain.os_env.add_inherited('LIBRARY_PATH')
 
 		if chain.project().platform() == 'cygwin':
 			if False:
