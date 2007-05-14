@@ -235,8 +235,10 @@ class project:
 		except AttributeError:
 			try: scons = self._scons_ = self.__class__._root_scons
 			except AttributeError:
+				if self.platform_executable_format() = 'pe': tools = 'mingw' # todo allow tools='msvc' too via config option
+				else: tools = 'default'
 				import SCons.Environment
-				scons = self._scons_ = self.__class__._root_scons = SCons.Environment.Environment(tools='g++')
+				scons = self._scons_ = self.__class__._root_scons = SCons.Environment.Environment(tools=tools)
 			if self.is_subscript():
 				self.information('    source dir is ' + self.source_dir())
 			else:
