@@ -236,7 +236,7 @@ class project:
 			try: scons = self._scons_ = self.__class__._root_scons
 			except AttributeError:
 				import SCons.Environment
-				scons = self._scons_ = self.__class__._root_scons = SCons.Environment.Environment()
+				scons = self._scons_ = self.__class__._root_scons = SCons.Environment.Environment(tools='g++')
 			if self.is_subscript():
 				self.information('    source dir is ' + self.source_dir())
 			else:
