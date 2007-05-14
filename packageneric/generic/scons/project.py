@@ -235,10 +235,10 @@ class project:
 		except AttributeError:
 			try: scons = self._scons_ = self.__class__._root_scons
 			except AttributeError:
-				if self.platform_executable_format() = 'pe': tools = 'mingw' # todo allow tools='msvc' too via config option
-				else: tools = 'default'
 				import SCons.Environment
-				scons = self._scons_ = self.__class__._root_scons = SCons.Environment.Environment(tools=tools)
+				scons = self._scons_ = self.__class__._root_scons = SCons.Environment.Environment()
+				# don't use msvc as the default tool on mswindows!
+				if self.platform_executable_format() = 'pe': scons = self._scons_ = self.__class__._root_scons = SCons.Environment.Environment(tools = ['mingw', 'default') # todo allow tools='msvc' too via command line
 			if self.is_subscript():
 				self.information('    source dir is ' + self.source_dir())
 			else:
@@ -350,8 +350,8 @@ class project:
 
 			self._options_ = options(options_file_path, self.command_line_arguments())
 			self._options_.AddOptions(
-				# todo change underscores to colons and hypens since variables can be referred to as ${packageneric:build-dir}
-				#('packageneric:build-dir', 'directory where to build into'),
+				# change underscores to colons and hypens since variables can be referred to as ${packageneric:build-dir}
+				# nope, can't use ':' in names ('packageneric:build-dir', 'directory where to build into'),
 				('packageneric__build_dir', 'directory where to build into'),
 				('packageneric__install__stage_destination', 'directory where to place the final install tree (stage installation)', self._build_variant_install_dir_with_scons_vars()),
 				('packageneric__build_variant', 'subdirectory of the build directory where to build into'),
@@ -371,6 +371,8 @@ class project:
 				('packageneric__debug', '(0|1) set to 1 to build for debugging (turns optimizations off, and enables debugging information)', '0'),
 				('packageneric__debug__info', '(0|1) set to 1 to build with debugging information', '0'),
 				('packageneric__test', '(0|1) set to 1 to perform unit tests', '1')
+				# todo ('packageneric__tools', 'scons tools to use', 'default')
+				# todo ('packageneric__platform', 'platform to build for', 'xxxx')
 			)
 			self._options_.Update(scons)
 			self.information('    source dir is ' + self.source_dir())
