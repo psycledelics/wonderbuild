@@ -238,7 +238,7 @@ class project:
 				import SCons.Environment
 				scons = self._scons_ = self.__class__._root_scons = SCons.Environment.Environment()
 				# don't use msvc as the default tool on mswindows!
-				if self.platform_executable_format() == 'pe': scons = self._scons_ = self.__class__._root_scons = SCons.Environment.Environment(tools = ['mingw', 'default']) # todo allow tools='msvc' too via command line
+				if self.platform_executable_format() == 'pe': scons = self._scons_ = self.__class__._root_scons = SCons.Environment.Environment(tools = ['mingw']) # todo allow tools='msvc' too via command line
 			if self.is_subscript():
 				self.information('    source dir is ' + self.source_dir())
 			else:

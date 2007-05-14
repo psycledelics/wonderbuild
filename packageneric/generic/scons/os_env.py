@@ -48,7 +48,7 @@ def template(base):
 				scons_env = scons['ENV']
 				env = {}
 				for key, value in self.os_env().get().items():
-					if scons_env.has_key(key) and os.pathsep in value: # todo kluge
+					if scons_env.has_key(key) and 'PATH' in key: # todo kluge
 						from SCons.Util import AppendPath as append_path_unique
 						env[key] = append_path_unique(scons_env[key], scons.subst(value))
 					else:

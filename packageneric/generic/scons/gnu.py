@@ -66,7 +66,6 @@ def detect(chain):
 			])
 		chain.linker().flags().add([
 			'-Wl,--demangle',
-			'-Wl,--default-symver,--default-imported-symver,--no-undefined-version',
 			#####'-Wl,--export-dynamic',
 			#'-Wl,--unresolved-symbols=report-all', # default
 			'-Wl,--unresolved-symbols=ignore-in-shared-libs',
@@ -85,9 +84,7 @@ def detect(chain):
 						'-Wl,--soname=' + xxxx
 					])
 				chain.linker().flags().add([
-					'-Wl,--default-symver',
-					'-Wl,--default-imported-symver',
-					'-Wl,--no-undefined-version',
+					'-Wl,--default-symver,--default-imported-symver,--no-undefined-version',
 					'-Wl,--enable-new-dtags'
 				])
 				if gnug.version().major() >= 4: # or before?
@@ -140,8 +137,7 @@ def detect(chain):
 			# 5) libxxx.dll
 			# 6) xxx.dll
 			# There is no standard location for libraries on mswindows, so we get paths from the os env:
-			chain.os_env.add_inherited('CPATH')
-			chain.os_env.add_inherited('LIBRARY_PATH')
+			chain.os_env().add_inherited(['CPATH', 'LIBRARY_PATH'])
 
 		if chain.project().platform() == 'cygwin':
 			if False:
