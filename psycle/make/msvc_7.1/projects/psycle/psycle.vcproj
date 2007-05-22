@@ -799,28 +799,7 @@
 							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\DefaultVstGui.hpp">
 						</File>
 						<File
-							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\VstEditorDlg.cpp">
-						</File>
-						<File
-							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\VstEditorDlg.hpp">
-						</File>
-						<File
 							RelativePath="..\..\..\..\src\psycle\host\VstEffectWnd.cpp">
-							<FileConfiguration
-								Name="release.g6|Win32">
-								<Tool
-									Name="VCCLCompilerTool"/>
-							</FileConfiguration>
-							<FileConfiguration
-								Name="debug|Win32">
-								<Tool
-									Name="VCCLCompilerTool"/>
-							</FileConfiguration>
-							<FileConfiguration
-								Name="release.g7|Win32">
-								<Tool
-									Name="VCCLCompilerTool"/>
-							</FileConfiguration>
 						</File>
 						<File
 							RelativePath="..\..\..\..\src\psycle\host\VstEffectWnd.hpp">
