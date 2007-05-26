@@ -698,6 +698,12 @@
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\MasterDlg.hpp">
 					</File>
 					<File
+						RelativePath="..\..\..\..\src\psycle\host\NativeGui.cpp">
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\NativeGui.hpp">
+					</File>
+					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\NewMachine.cpp">
 					</File>
 					<File
@@ -1043,6 +1049,9 @@
 				RelativePath="..\..\..\..\src\Seib-vsthost\EffectWnd.hpp">
 			</File>
 		</Filter>
+		<File
+			RelativePath="..\..\..\..\src\psycle\host\resources\bmp00001.bmp">
+		</File>
 	</Files>
 	<Globals>
 		<Global
