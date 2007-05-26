@@ -1,2 +1,2 @@
-unix: include(unix.pri)
-else:win32: include(win32.pri)
+unix: include(platform-unix.pri)
+else:win32: include(platform-win32.pri)
