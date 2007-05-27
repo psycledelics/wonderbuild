@@ -18,10 +18,8 @@ unix {
         message( "pkg-config thinks alsa libs are available..." )
         PKGCONFIG += alsa 
         DEFINES += PSYCLE__ALSA_AVAILABLE # This is used in the source to determine when to include alsa-specific things.
-        HEADERS += src/audiodrivers/alsaout.h \
-                   src/mididrivers/alsaseqin.h 
-        SOURCES += src/audiodrivers/alsaout.cpp \
-                   src/mididrivers/alsaseqin.cpp 
+        HEADERS += src/audiodrivers/alsaout.h
+        SOURCES += src/audiodrivers/alsaout.cpp
     }
 
     system( pkg-config --exists jack ) {
