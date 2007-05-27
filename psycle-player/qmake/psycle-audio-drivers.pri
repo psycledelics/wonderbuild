@@ -1,13 +1,10 @@
 HEADERS += \
 	src/audiodrivers/audiodriver.h \
-	src/audiodrivers/wavefileout.h \
-	src/audiodrivers/dsound.h \
-	src/audiodrivers/gstreamerout.h
+	src/audiodrivers/wavefileout.h
 	
 SOURCES += \
 	src/audiodrivers/audiodriver.cpp \
-	src/audiodrivers/wavefileout.cpp \
-	src/audiodrivers/gstreamerout.cpp
+	src/audiodrivers/wavefileout.cpp
 
 include(boost.pri)
 
