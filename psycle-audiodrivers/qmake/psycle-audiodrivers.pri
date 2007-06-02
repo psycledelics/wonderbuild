@@ -1,10 +1,14 @@
+PSYCLE_AUDIODRIVERS_DIR = $$TOP_SRC_DIR/../psycle-audiodrivers
+INCLUDEPATH *= $$PSYCLE_AUDIODRIVERS_DIR/src
+DEPENDPATH *= $$PSYCLE_AUDIODRIVERS_DIR/src
+
 HEADERS += \
-	src/audiodrivers/audiodriver.h \
-	src/audiodrivers/wavefileout.h
+	$$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/audiodriver.h \
+	$$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/wavefileout.h
 	
 SOURCES += \
-	src/audiodrivers/audiodriver.cpp \
-	src/audiodrivers/wavefileout.cpp
+	$$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/audiodriver.cpp \
+	$$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/wavefileout.cpp
 
 include(boost.pri)
 
@@ -15,24 +19,24 @@ unix {
         message( "pkg-config thinks alsa libs are available..." )
         PKGCONFIG += alsa 
         DEFINES += PSYCLE__ALSA_AVAILABLE # This is used in the source to determine when to include alsa-specific things.
-        HEADERS += src/audiodrivers/alsaout.h
-        SOURCES += src/audiodrivers/alsaout.cpp
+        HEADERS += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/alsaout.h
+        SOURCES += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/alsaout.cpp
     }
 
     system( pkg-config --exists jack ) {
         message( "pkg-config thinks jack libs are available..." )
         PKGCONFIG += jack 
         DEFINES += PSYCLE__JACK_AVAILABLE # This is used in the source to determine when to include jack-specific things.
-        HEADERS += src/audiodrivers/jackout.h
-        SOURCES += src/audiodrivers/jackout.cpp 
+        HEADERS += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/jackout.h
+        SOURCES += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/jackout.cpp 
     }
 
     system( pkg-config --exists esound ) {
         message( "pkg-config thinks esound libs are available..." )
         PKGCONFIG += esound
         DEFINES += PSYCLE__ESOUND_AVAILABLE # This is used in the source to determine when to include esound-specific things.
-        HEADERS += src/audiodrivers/esoundout.h
-        SOURCES += src/audiodrivers/esoundout.cpp 
+        HEADERS += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/esoundout.h
+        SOURCES += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/esoundout.cpp 
     }
 
     false { # gstreamer output is unfinished
@@ -40,8 +44,8 @@ unix {
             message( "pkg-config thinks gstreamer libs are available..." )
             PKGCONFIG += gstreamer
             DEFINES += PSYCLE__GSTREAMER_AVAILABLE # This is used in the source to determine when to include gstreamer-specific things.
-            HEADERS += src/audiodrivers/gstreamerout.h
-            SOURCES += src/audiodrivers/gstreamerout.cpp 
+            HEADERS += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/gstreamerout.h
+            SOURCES += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/gstreamerout.cpp 
         }
     }
 
@@ -50,13 +54,12 @@ unix {
         exists(/usr/include/audio/audiolib.h) {
             LIBS += -laudio
             DEFINES += PSYCLE__NET_AUDIO_AVAILABLE # This is used in the source to determine when to include net-audio-specific things.
-            HEADERS += src/audiodrivers/netaudioout.h
-            SOURCES += src/audiodrivers/netaudioout.cpp
+            HEADERS += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/netaudioout.h
+            SOURCES += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/netaudioout.cpp
         }
     }
 } else:win32 {
-    PWD = $$system(echo %CD%)
-    EXTERNAL_PKG_DIR = $$PWD/../external-packages
+    EXTERNAL_PKG_DIR = $$TOP_SRC_DIR/../external-packages
     
     DSOUND_DIR = $$EXTERNAL_PKG_DIR/dsound-9
     !exists($$DSOUND_DIR) {
@@ -84,8 +87,8 @@ unix {
             LIBS *= uuid.lib
         }
         DEFINES += PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE # This is used in the source to determine when to include direct-sound-specific things.
-        HEADERS += src/audiodrivers/microsoftdirectsoundout.h
-        SOURCES += src/audiodrivers/microsoftdirectsoundout.cpp
+        HEADERS += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/microsoftdirectsoundout.h
+        SOURCES += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/microsoftdirectsoundout.cpp
     }
     
     true { # FIXME: not sure how to test for mme...
@@ -98,8 +101,8 @@ unix {
             LIBS *= uuid.lib
         }
         DEFINES += PSYCLE__MICROSOFT_MME_AVAILABLE # This is used in the source to determine when to include mme-specific things.
-        HEADERS += src/audiodrivers/microsoftmmewaveout.h
-        SOURCES += src/audiodrivers/microsoftmmewaveout.cpp
+        HEADERS += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/microsoftmmewaveout.h
+        SOURCES += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/microsoftmmewaveout.cpp
     }
 
     false { # FIXME: asio needs to be built as a lib, which is rather cubersome, or embeeded into qpsycle itself, which sucks...
@@ -110,7 +113,7 @@ unix {
             LIBS *= asio.lib
         }
         DEFINES += PSYCLE__STEINBERG_ASIO_AVAILABLE # This is used in the source to determine when to include asio-specific things.
-        HEADERS += src/audiodrivers/steinbergasioout.h
-        SOURCES += src/audiodrivers/steinbergasioout.cpp
+        HEADERS += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/steinbergasioout.h
+        SOURCES += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/steinbergasioout.cpp
     }
 }

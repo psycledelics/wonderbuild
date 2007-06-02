@@ -1,7 +1,6 @@
 unix: LIBS += -lboost_signals
 else:win32 {
-    PWD = $$system(echo %CD%)
-    EXTERNAL_PKG_DIR = $$PWD/../external-packages
+    EXTERNAL_PKG_DIR = $$TOP_SRC_DIR/../external-packages
     
     BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.33.1
     !exists($$BOOST_DIR) {
