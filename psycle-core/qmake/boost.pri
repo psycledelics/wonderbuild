@@ -4,7 +4,6 @@ unix {
 } else:win32 {
     EXTERNAL_PKG_DIR = $$TOP_SRC_DIR/../external-packages
     
-    BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.33.1
 	exists($(BOOST_DIR)) {
 		message("Existing BOOST_DIR is [$(BOOST_DIR)].")
 		BOOST_DIR = $(BOOST_DIR)
