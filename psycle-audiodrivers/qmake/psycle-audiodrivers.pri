@@ -10,8 +10,6 @@ SOURCES += \
 	$$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/audiodriver.cpp \
 	$$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/wavefileout.cpp
 
-include(boost.pri)
-
 unix {
     CONFIG *= link_pkgconfig # adds support for pkg-config via the PKG_CONFIG var
 
@@ -61,36 +59,43 @@ unix {
 } else:win32 {
     EXTERNAL_PKG_DIR = $$TOP_SRC_DIR/../external-packages
     
-    DSOUND_DIR = $$EXTERNAL_PKG_DIR/dsound-9
-    !exists($$DSOUND_DIR) {
-        warning("The local dsound dir does not exist: $${DSOUND_DIR}. Make sure you have the dsound lib installed.")
-        !CONFIG(dsound) {
-            message("Assuming you do not have dsound lib. Call qmake CONFIG+=dsound to enable dsound support.")
-        }
-    } else {
-        CONFIG += dsound
-        INCLUDEPATH += $$DSOUND_DIR/include
-        win32-g++ {
-            LIBPATH += $$DSOUND_DIR/lib-mswindows-mingw-cxxabi-1002
-        } else {
-            LIBPATH += $$DSOUND_DIR/lib-mswindows-msvc-cxxabi
-        }
-    }
-    CONFIG(dsound) {
-        win32-g++ {
-            LIBS *= -ldsound
-            LIBS *= -lwinmm # is this one needed?
-            LIBS *= -luuid
-        } else {
-            LIBS *= dsound.lib
-            LIBS *= winmm.lib # is this one needed?
-            LIBS *= uuid.lib
-        }
-        DEFINES += PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE # This is used in the source to determine when to include direct-sound-specific things.
-        HEADERS += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/microsoftdirectsoundout.h
-        SOURCES += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/microsoftdirectsoundout.cpp
-    }
-    
+	exists($(DXSDK_DIR)) {
+		message("Existing DXSDK_DIR is [$(DXSDK_DIR)].")
+		INCLUDEPATH += $(DXSDK_DIR)/include
+		LIBPATH += $(DXSDK_DIR)/lib
+		CONFIG += dsound
+	} else {
+		DSOUND_DIR = $$EXTERNAL_PKG_DIR/dsound-9
+		!exists($$DSOUND_DIR) {
+			warning("The local dsound dir does not exist: $${DSOUND_DIR}. Make sure you have the dsound lib installed.")
+			!CONFIG(dsound) {
+				message("Assuming you do not have dsound lib. Call qmake CONFIG+=dsound to enable dsound support.")
+			}
+		} else {
+			CONFIG += dsound
+			INCLUDEPATH += $$DSOUND_DIR/include
+			win32-g++ {
+				LIBPATH += $$DSOUND_DIR/lib-mswindows-mingw-cxxabi-1002
+			} else {
+				LIBPATH += $$DSOUND_DIR/lib-mswindows-msvc-cxxabi
+			}
+		}
+	}
+	CONFIG(dsound) {
+		win32-g++ {
+			LIBS *= -ldsound
+			LIBS *= -luuid
+			LIBS *= -lwinmm # is this one needed?
+		} else {
+			LIBS *= dsound.lib
+			LIBS *= uuid.lib
+			LIBS *= winmm.lib # is this one needed?
+		}
+		DEFINES += PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE # This is used in the source to determine when to include direct-sound-specific things.
+		HEADERS += $$PSYCLE_AUDIODRIVERS_DIR/src/audiodrivers/microsoftdirectsoundout.h
+		SOURCES += $$PSYCLE_AUDIODRIVERS_DIR/src/audiodrivers/microsoftdirectsoundout.cpp
+	}
+
     true { # FIXME: not sure how to test for mme...
         message( "Assuming you have microsoft mme." )
         win32-g++ {
