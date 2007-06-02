@@ -2,8 +2,8 @@ unix {
 	macx: LIBS += -lboost_signals-1_33_1
 	else: LIBS += -lboost_signals
 } else:win32 {
-    EXTERNAL_PKG_DIR = $$TOP_SRC_DIR/../external-packages
-    
+	EXTERNAL_PKG_DIR = $$TOP_SRC_DIR/../external-packages
+	
 	exists($(BOOST_DIR)) {
 		message("Existing BOOST_DIR is [$(BOOST_DIR)].")
 		BOOST_DIR = $(BOOST_DIR)
