@@ -5,7 +5,8 @@ win32 {
 		message("Compiler is: g++.")
 	} else:win32-msvc* {
 		message("Compiler is: MS Visual C++.")
-		QMAKE_LFLAGS += /PDB:"release\$${QMAKE_TARGET}.pdb"
+	      QMAKE_CXXFLAGS += /Zi
+	      QMAKE_LFLAGS += /debug
 		win32-msvc2005 {
 			message("Compiler is: MS Visual C++ 14 (2005).")
 			# Question: Do these regiser db entries depend on the IDE Studio being installed?
