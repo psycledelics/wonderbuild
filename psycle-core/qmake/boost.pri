@@ -9,6 +9,7 @@ unix {
 		BOOST_DIR = $(BOOST_DIR)
 		INCLUDEPATH *= $${BOOST_DIR}
 		LIBPATH *= $${BOOST_DIR}/lib
+		# Note: this is broken unless the compiler has auto-linking because we also need to set the LIBS var
 	} else {
 		BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.33.1
 		!exists($$BOOST_DIR) {
