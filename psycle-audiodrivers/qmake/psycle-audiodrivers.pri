@@ -92,8 +92,8 @@ unix {
 			LIBS *= winmm.lib # is this one needed?
 		}
 		DEFINES += PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE # This is used in the source to determine when to include direct-sound-specific things.
-		HEADERS += $$PSYCLE_AUDIODRIVERS_DIR/src/audiodrivers/microsoftdirectsoundout.h
-		SOURCES += $$PSYCLE_AUDIODRIVERS_DIR/src/audiodrivers/microsoftdirectsoundout.cpp
+		HEADERS += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/microsoftdirectsoundout.h
+		SOURCES += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/microsoftdirectsoundout.cpp
 	}
 
     true { # FIXME: not sure how to test for mme...
