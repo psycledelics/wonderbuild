@@ -587,6 +587,12 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\seqview.private.hpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\sinstance.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\sinstance.h">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\SongpDlg.cpp">
 				</File>
 				<File
@@ -798,12 +804,6 @@
 					<Filter
 						Name="vst"
 						Filter="">
-						<File
-							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\DefaultVstGui.cpp">
-						</File>
-						<File
-							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\DefaultVstGui.hpp">
-						</File>
 						<File
 							RelativePath="..\..\..\..\src\psycle\host\VstEffectWnd.cpp">
 						</File>
