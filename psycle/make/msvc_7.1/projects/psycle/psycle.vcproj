@@ -359,6 +359,9 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\beta.bmp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\bmp00001.bmp">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\resources\bmp00002.bmp">
 				</File>
 				<File
@@ -1050,7 +1053,7 @@
 			</File>
 		</Filter>
 		<File
-			RelativePath="..\..\..\..\src\psycle\host\resources\bmp00001.bmp">
+			RelativePath="..\..\..\..\src\psycle\host\resources\183beta4splash.bmp">
 		</File>
 	</Files>
 	<Globals>
