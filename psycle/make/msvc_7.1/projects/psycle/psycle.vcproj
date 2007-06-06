@@ -813,6 +813,12 @@
 						<File
 							RelativePath="..\..\..\..\src\psycle\host\VstEffectWnd.hpp">
 						</File>
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\VstParamList.cpp">
+						</File>
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\VstParamList.hpp">
+						</File>
 					</Filter>
 					<Filter
 						Name="XMSampler"
@@ -1052,9 +1058,6 @@
 				RelativePath="..\..\..\..\src\Seib-vsthost\EffectWnd.hpp">
 			</File>
 		</Filter>
-		<File
-			RelativePath="..\..\..\..\src\psycle\host\resources\183beta4splash.bmp">
-		</File>
 	</Files>
 	<Globals>
 		<Global
