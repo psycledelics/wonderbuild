@@ -5,7 +5,6 @@ DEPENDPATH *= $$PSYCLE_COR_DIR/src
 HEADERS += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/binread.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/constants.h \
-	$$PSYCLE_CORE_DIR/src/psycle/core/convert_internal_machines.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/cstdint.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/datacompression.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/dither.h \
@@ -53,7 +52,6 @@ HEADERS += \
 	
 SOURCES += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/binread.cpp \
-	$$PSYCLE_CORE_DIR/src/psycle/core/convert_internal_machines.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/datacompression.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/dither.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/dsp.cpp \
