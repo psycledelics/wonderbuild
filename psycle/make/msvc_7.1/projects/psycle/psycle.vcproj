@@ -551,6 +551,12 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\ChildView.hpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\ExListBox.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\ExListBox.h">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\GreetDialog.cpp">
 				</File>
 				<File
@@ -1063,6 +1069,10 @@
 			<File
 				RelativePath="..\..\..\..\src\Seib-vsthost\EffectWnd.hpp">
 			</File>
+		</Filter>
+		<Filter
+			Name="dspguru"
+			Filter="">
 		</Filter>
 	</Files>
 	<Globals>
