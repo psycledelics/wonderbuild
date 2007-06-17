@@ -205,6 +205,7 @@ class project:
 			if True: # this could also be shared amongst all projects
 				contexes = self._contexes
 				contexes.build().compilers().cxx().paths().add([os.path.join(self.build_variant_intermediate_dir(), 'project', 'src')])
+				contexes.build().compilers().cxx().defines().add({'PACKAGENERIC': None})
 				scons = self._scons()
 				self.file_from_value(
 					os.path.join('project', 'src', 'packageneric', 'configuration.private.hpp'),
