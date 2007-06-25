@@ -736,6 +736,12 @@
 					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\PresetsDlg.hpp">
 					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\WaveInMacDlg.cpp">
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\WaveInMacDlg.hpp">
+					</File>
 					<Filter
 						Name="sampler"
 						Filter="">
