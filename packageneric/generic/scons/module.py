@@ -44,12 +44,12 @@ class module(builder):
 	def name(self): return self._name
 	
 	def version(self):
-		try: return self._version
-		except AttributeError: return self.source_package().version()
+		if self._version is not None: return self._version
+		return self.source_package().version()
 	
 	def description(self):
-		try: return self._description
-		except AttributeError: return self.source_package().description()
+		if self._description is not None: return self._description
+		return self.source_package().description()
 		
 	def sources(self):
 		try: return self._sources
