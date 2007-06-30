@@ -72,7 +72,7 @@ class project:
 				for alias in builder.alias_names():
 					if target == alias: scons.Alias(target, builder.targets())
 	
-	def default_target(self, builders):
+	def default_targets(self, builders):
 		for builder in builders:
 			scons = self._scons()
 			scons.Alias(builder.alias_names(), builder.targets())

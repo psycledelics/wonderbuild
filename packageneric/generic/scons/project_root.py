@@ -36,32 +36,7 @@ class project_root:
 			self._subscript_stack_ = []
 			return self._subscript_stack_
 
-	def builders(self):
-		try: return self._builders
-		except AttributeError:
-			self._builders = []
-			return self._builders
-	def add_builder(self, builder):
-		self.builders().append(builder)
-		#self.trace('added builder ' + builder.name() + ': ' + ' '.join(builder.alias_names()))
-
-	def __call__(self, builders):
-		import SCons.Script
-		targets = []
-		if not self.is_subscript():
-			for target in [str(maybe_node) for maybe_node in SCons.Script.BUILD_TARGETS]: targets.append(target)
-		for target in [builder.name() for builder in builders]: targets.append(target)
-		self.information('targets are ' + ' '.join(targets))
-		for builder in builders:
-			scons = self._scons()
-			scons.Alias(builder.alias_names(), builder.targets())
-			scons.Default(builder.alias_names()[0])
-		for target in self.command_line_targets():
-			for builder in self.builders():
-				for alias in builder.alias_names():
-					if target == alias: scons.Alias(target, builder.targets())
-	
-	def default_target(self, builders):
+	def default_targets(self, builders):
 		for builder in builders:
 			scons = self._scons()
 			scons.Alias(builder.alias_names(), builder.targets())

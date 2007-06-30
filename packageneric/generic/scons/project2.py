@@ -25,8 +25,7 @@ class project:
 			return self.__class__._root
 				
 	def subscript(self, path): return self.root().subscript(self, path)
-	def __call__(self, builders): self.root()(builders)
-	def default_target(self, builders): self.root().default_target(builders)
+	def default_targets(self, builders): self.root().default_target(builders)
 	def command_line_targets(self): return self.root().command_line_targets()
 	def command_line_arguments(self): return self.root().command_line_arguments()
 		
