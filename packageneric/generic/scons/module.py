@@ -109,27 +109,25 @@ class module(builder):
 			#import time ; t = time.time ; t0 = t()
 			#print 'OOOOOOOOOOOOOOOOO'
 
-			self.build_dependencies() # todo method for no recursion
-			for package in self._build_dependencies: # todo method for no recursion
-				if package.result():
-					package.targets()
+			#self.build_dependencies() # todo method for no recursion
+			#for package in self._build_dependencies: # todo method for no recursion
+			#	if package.result(): package.targets()
 
-			self.dependencies() # todo method for no recursion
-			for package in self._dependencies: # todo method for no recursion
-				if package.result():
-					package.targets()
+			#self.dependencies() # todo method for no recursion
+			#for package in self._dependencies: # todo method for no recursion
+			#	if package.result(): package.targets()
 
 			self.dynamic_dependencies() # todo node class
 			dependencies_not_found = []
 
-			self.build_dependencies() # todo method for no recursion
+			#self.build_dependencies() # todo method for no recursion
 			for package in self._build_dependencies: # todo method for no recursion
 				if package.result():
 					package.targets()
 					self.contexes().build().attach(package.output_env())
 				else: dependencies_not_found.append(package)
 
-			self.dependencies() # todo method for no recursion
+			#self.dependencies() # todo method for no recursion
 			for package in self._dependencies: # todo method for no recursion
 				if package.result():
 					package.targets()
