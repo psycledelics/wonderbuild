@@ -7,11 +7,14 @@ from tty_font import tty_font
 
 class project_root:
 
-	def __init__(self, default_build_dir = None):
+	def __init__(self, project, default_build_dir = None):
 		self._check_scons_and_python_versions()
 		import packageneric.generic.scons
 		self.information('version of packageneric is ' + str(packageneric.generic.scons.version()))
+		self._project = project
 		self._scons()
+
+	def project(self): return self._project
 
 	def subscript(self, project, path):
 		self._subscript_stack().append(project)
@@ -75,6 +78,12 @@ class project_root:
 			self._build_variant = self._scons().subst('$packageneric__build_variant')
 			return self._build_variant
 
+	def _build_variant_dir_with_scons_vars(self):
+		return os.path.join('$packageneric__build_dir', 'variants', '$packageneric__build_variant')
+		
+	def _build_variant_install_dir_with_scons_vars(self):
+		return os.path.join(self._build_variant_dir_with_scons_vars(), 'stage-install')
+
 	def platform(self):
 		try: return self._platform
 		except AttributeError:
@@ -115,7 +124,7 @@ class project_root:
 		try: return self._contexes
 		except AttributeError:
 			import contexes
-			self._contexes = contexes.template(self.env_class())(self)
+			self._contexes = contexes.template(self.env_class())(self.project())
 			contexes = self._contexes
 			contexes.client().installed().compilers().cxx().paths().add(['$packageneric__install__include'])
 			contexes.client().installed().linker().paths().add(['$packageneric__install__lib'])
@@ -137,21 +146,6 @@ class project_root:
 				contexes.build().linker().static().message().set(self.message('packageneric: ', 'linking program $TARGET', font = '32;7;1'))
 				contexes.build().linker().shared().message().set(self.message('packageneric: ', 'linking shared library $TARGET', font = '33;7;1'))
 				contexes.build().linker().loadable().message().set(self.message('packageneric: ', 'linking loadable module $TARGET', font = '36;7;1'))
-			contexes.build().compilers().cxx().paths().add([os.path.join(self.build_variant_intermediate_dir(), 'project', 'src')])
-			contexes.build().compilers().cxx().defines().add({'PACKAGENERIC': None})
-			scons = self._scons()
-			self.file_from_value(
-				os.path.join('project', 'src', 'packageneric', 'configuration.private.hpp'),
-				''.join(['#define PACKAGENERIC__CONFIGURATION__%s %s\n' % (n, v) for n, v in
-					[('INSTALL_PATH__BIN_TO_%s' % n, '"%s"' % v) for n, v in
-						('LIB', '../lib'), # todo from options, function to compute a relative path
-						('SHARE', '../share'), # todo from options, function to compute a relative path
-						('VAR', '../var'), # todo from options, function to compute a relative path
-						('ETC', '../etc') # todo from options, function to compute a relative path
-					] +
-					[('COMPILER__HOST', '"' + scons.subst('$CXX') + ' version ' + scons.subst('$CXXVERSION') + '"')]
-				])
-			)
 			return self._contexes
 		
 	def _scons(self):
@@ -288,9 +282,8 @@ class project_root:
 				# todo ('packageneric__platform', 'platform to build for', 'xxxx')
 			)
 			self._options_.Update(scons)
-			self.information('    source dir is ' + self.source_dir())
 			self.information('     build dir is ' + self.build_dir())
-			if scons.Dir(self.build_dir()).get_abspath() == scons.Dir(self.source_dir()).get_abspath():
+			if scons.Dir(self.build_dir()).get_abspath() == scons.Dir('.').get_abspath():
 				self.abort(
 					'source and build directories are the same.\n' +
 					'please choose a build dir separate from the source dir so that the latter is not polluted with derived files.'
@@ -345,7 +338,7 @@ class project_root:
 	try:
 		import SCons.Script.Main
 		_progress_display_ = SCons.Script.Main.progress_display
-		def _progress_display(message): project._progress_display_(message)
+		def _progress_display(message): project_root._progress_display_(message)
 		SCons.Script.Main.progress_display = _progress_display
 	except: pass # for old scons versions
 	

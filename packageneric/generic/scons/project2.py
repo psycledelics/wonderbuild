@@ -21,13 +21,15 @@ class project:
 		try: return self.__class__._root
 		except AttributeError:
 			from project_root import project_root
-			self.__class__._root = project_root()
+			self.__class__._root = project_root(self)
 			return self.__class__._root
 				
 	def subscript(self, path): return self.root().subscript(self, path)
-	def default_targets(self, builders): self.root().default_target(builders)
+	def default_targets(self, builders): self.root().default_targets(builders)
 	def command_line_targets(self): return self.root().command_line_targets()
 	def command_line_arguments(self): return self.root().command_line_arguments()
+
+	def add_builder(self, x): pass
 		
 	def source_dir(self):
 		try: return self._source_dir
@@ -35,13 +37,14 @@ class project:
 			self._source_dir = self._scons().Dir('.').get_abspath()
 			return self._source_dir
 
+	def packageneric_dir(self): return self.root().packageneric_dir()
 	def build_dir(self): return self.root().build_dir()
 	def build_variant(self): return self.root().build_variant()
 
 	def build_variant_intermediate_dir(self):
 		try: return self._build_variant_intermediate_dir
 		except AttributeError:
-			self._build_variant_intermediate_dir = self._scons().Dir(os.path.join('$packageneric__build_dir', 'variants', self.build_variant(), 'intermediate', self.name())).path
+			self._build_variant_intermediate_dir = self._scons().Dir(os.path.join(self.root()._build_variant_dir_with_scons_vars(), 'intermediate', self.name())).path
 			return self._build_variant_intermediate_dir
 
 	def check_dir(self):
@@ -70,11 +73,27 @@ class project:
 		try: return self._contexes
 		except AttributeError:
 			contexes = self._contexes = self.root().contexes()
+			contexes.build().compilers().cxx().paths().add([os.path.join(self.build_variant_intermediate_dir(), 'project', 'src')])
+			contexes.build().compilers().cxx().defines().add({'PACKAGENERIC': None})
+			scons = self._scons()
+			self.file_from_value( # todo make that shared amongst projects
+				os.path.join('project', 'src', 'packageneric', 'configuration.private.hpp'),
+				''.join(['#define PACKAGENERIC__CONFIGURATION__%s %s\n' % (n, v) for n, v in
+					[('INSTALL_PATH__BIN_TO_%s' % n, '"%s"' % v) for n, v in
+						('LIB', '../lib'), # todo from options, function to compute a relative path
+						('SHARE', '../share'), # todo from options, function to compute a relative path
+						('VAR', '../var'), # todo from options, function to compute a relative path
+						('ETC', '../etc') # todo from options, function to compute a relative path
+					] +
+					[('COMPILER__HOST', '"' + scons.subst('$CXX') + ' version ' + scons.subst('$CXXVERSION') + '"')]
+				])
+			)
 			from find import find
-			for i in find(self, '.', ['*.hpp.in']):
+			for i in find(self, self.source_dir(), ['*.hpp.in']):
 				self.trace(i.relative())
+				#self.trace(os.path.join('/a', '/b')) <-- beware that the result in '/b'
 				self._scons().SubstitutedFile(
-					os.path.join(self.intermediate_target_dir(), i.strip(), os.path.splitext(i.relative())[0]),
+					os.path.join(self.intermediate_target_dir(), os.path.splitext(i.relative())[0]),
 					i.full()
 				)
 			return self._contexes
@@ -86,7 +105,7 @@ class project:
 		try: return self._scons_
 		except AttributeError:
 			scons = self._scons_ = self.root()._scons()
-			if self.is_subscript(): self.information('    source dir is ' + self.source_dir())
+			self.information('    source dir is ' + self.source_dir())
 			scons.SourceCode('.', None) # we don't use the default source code fetchers (RCS, SCCS ...), so we disable them to avoid uneeded processing
 			scons.BuildDir(self.intermediate_target_dir(), self.source_dir(), duplicate = False)
 			return self._scons_
@@ -99,7 +118,7 @@ class project:
 	def progress(self): return self.root().progress()
 	def progress_add_todo(self, count = 1): self.root().progress_add_todo(count)
 	def progress_add_done(self, count = 1): self.root().progress_add_done(count)
-	def message(self, prefix, message, font = None): self.root().message(prefix, message, font)
+	def message(self, prefix, message, font = None): return self.root().message(prefix, message, font)
 	def trace(self, message): self.root().trace(message)
 	def information(self, message): self.root().information(message)
 	def success(self, message): self.root().success(message)		
