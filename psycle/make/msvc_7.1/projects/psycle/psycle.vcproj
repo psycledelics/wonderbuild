@@ -977,9 +977,6 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Song.cpp">
 				</File>
 				<File
-					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Song.hpp">
-				</File>
-				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\SongStructs.hpp">
 				</File>
 				<Filter
@@ -1002,6 +999,9 @@
 					</File>
 					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Plugin.hpp">
+					</File>
+					<File
+						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Song.hpp">
 					</File>
 					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\vsthost24.cpp">
@@ -1084,6 +1084,6 @@
 	<Globals>
 		<Global
 			Name="RESOURCE_FILE"
-			Value="\psycle\psycle\src\psycle\host\resources\resources.rc"/>
+			Value="\Documents and Settings\All Users\Documentos\Visual C++\psycle-1.8-bugfixes\psycle\src\psycle\host\resources\resources.rc"/>
 	</Globals>
 </VisualStudioProject>
