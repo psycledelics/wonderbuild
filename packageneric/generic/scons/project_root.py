@@ -82,8 +82,11 @@ class project_root:
 			return self._command_line_arguments
 		
 	def packageneric_dir(self):
-		import packageneric
-		return packageneric.__path__[0]
+		try: return self._packageneric_dir
+		except AttributeError:
+			import packageneric
+			self._packageneric_dir = packageneric.__path__[0]
+			return self._packageneric_dir
 	
 	def build_dir(self):
 		try: return self._build_dir
@@ -96,30 +99,6 @@ class project_root:
 		except AttributeError:
 			self._build_variant = self._scons().subst('$packageneric__build_variant')
 			return self._build_variant
-
-	def build_variant_intermediate_dir(self):
-		try: return self._build_variant_intermediate_dir
-		except AttributeError:
-			self._build_variant_intermediate_dir = self._scons().Dir(self._build_variant_intermediate_dir_with_scons_vars()).path
-			return self._build_variant_intermediate_dir
-
-	def check_dir(self):
-		try: return self._check_dir
-		except AttributeError:
-			self._check_dir = self._scons().Dir(os.path.join(self.build_variant_intermediate_dir(), 'checks')).path
-			return self._check_dir
-
-	def check_log(self):
-		try: return self._check_log
-		except AttributeError:
-			self._check_log = self._scons().File(self.check_dir() + '.log').path
-			return self._check_log
-
-	def intermediate_target_dir(self):
-		try: return self._intermediate_target_dir
-		except AttributeError:
-			self._intermediate_target_dir = self._scons().Dir(os.path.join(self.build_variant_intermediate_dir(), 'source-twin-targets')).path
-			return self._intermediate_target_dir
 
 	def platform(self):
 		try: return self._platform
@@ -183,8 +162,6 @@ class project_root:
 				contexes.build().linker().static().message().set(self.message('packageneric: ', 'linking program $TARGET', font = '32;7;1'))
 				contexes.build().linker().shared().message().set(self.message('packageneric: ', 'linking shared library $TARGET', font = '33;7;1'))
 				contexes.build().linker().loadable().message().set(self.message('packageneric: ', 'linking loadable module $TARGET', font = '36;7;1'))
-		if True: # this could also be shared amongst all projects
-			contexes = self._contexes
 			contexes.build().compilers().cxx().paths().add([os.path.join(self.build_variant_intermediate_dir(), 'project', 'src')])
 			contexes.build().compilers().cxx().defines().add({'PACKAGENERIC': None})
 			scons = self._scons()
@@ -200,81 +177,60 @@ class project_root:
 					[('COMPILER__HOST', '"' + scons.subst('$CXX') + ' version ' + scons.subst('$CXXVERSION') + '"')]
 				])
 			)
-		from find import find
-		for i in find(self, '.', ['*.hpp.in']):
-			self.trace(i.relative())
-			self._scons().SubstitutedFile(
-				os.path.join(self.intermediate_target_dir(), i.strip(), os.path.splitext(i.relative())[0]),
-				i.full()
-			)
-		return self._contexes
+			return self._contexes
 		
-	def file_from_value(self, file_path, value): return self._scons().FileFromValue(os.path.join(self.build_variant_intermediate_dir(), file_path), value)[0].path
-	#def substituted_file(self, file_path): return self._scons().SubstitutedFile(os.path.join(self.intermediate_target_dir(), file_path)...
-	
 	def _scons(self):
 		try: return self._scons_
 		except AttributeError:
-			try: scons = self._scons_ = self.__class__._root_scons
-			except AttributeError:
-				import SCons.Environment
-				scons = self._scons_ = self.__class__._root_scons = SCons.Environment.Environment()
-				# don't use msvc as the default tool on mswindows!
-				if self.platform_executable_format() == 'pe': scons = self._scons_ = self.__class__._root_scons = SCons.Environment.Environment(tools = ['mingw']) # todo allow tools='msvc' too via command line
-			if self.is_subscript():
-				self.information('    source dir is ' + self.source_dir())
-			else:
-				import SCons.Tool
-				toolpath = [os.path.join(self.packageneric_dir(), 'generic', 'scons', 'tools')]
-				SCons.Tool.Tool('file_from_value', toolpath = toolpath)(scons)
-				SCons.Tool.Tool('substituted_file', toolpath = toolpath)(scons)
-				scons.SetOption('implicit_cache', True)
-				#scons.SourceSignatures('timestamp') # scons 0.96.92.0002 bugs with timestamps of symlinks, or even, always ignores all changes!
-				scons.SourceSignatures('MD5')
-				scons.TargetSignatures('build')
-				#scons.TargetSignatures('content')
-				self._options()
-				# Below are settings which depend on self._options(), that we just called above
-				scons.Help(self._options().GenerateHelpText(scons))
-				# Below are settings which depend on self.options(), that we just called above
-				cache = os.path.join(self.build_dir(), 'cache')
-				self.information('     cache dir is ' + scons.Dir(cache).path)
-				scons.CacheDir(cache)
-				signature = os.path.join(self.build_dir(), 'signatures')
-				self.information('signature file is ' + scons.Dir(signature).path)
-				scons.SConsignFile(signature)
-				scons['INSTALLSTR'] = self.message('packageneric: ', 'linking file $TARGET', font = '1;35')
-				scons.Alias('packageneric:install:runtime',
-					[
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__bin'),
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib'),
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib_exec'),
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__share'),
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__var'),
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__etc')
-					]
-				)
-				scons.Alias('packageneric:install:dev',
-					[
-						os.path.join('$packageneric__install__stage_destination', '$packageneric__install__include')
-					]
-				)
-				scons.Alias('packageneric:install',
-					[
-						'packageneric:install:runtime',
-						'packageneric:install:dev'
-					]
-				)
-				scons.Default() # todo only for root scons?
-				scons.Default('packageneric:install')
-				#scons.Default('$packageneric__install__stage_destination')
-			scons.SourceCode('.', None) # we don't use the default source code fetchers (RCS, SCCS ...), so we disable them to avoid uneeded processing
-			scons.BuildDir(self.intermediate_target_dir(), self.source_dir(), duplicate = False)
+			import SCons.Environment
+			scons = self._scons_ = self.__class__._root_scons = SCons.Environment.Environment()
+			# don't use msvc as the default tool on mswindows!
+			if self.platform_executable_format() == 'pe': scons = self._scons_ = self.__class__._root_scons = SCons.Environment.Environment(tools = ['mingw']) # todo allow tools='msvc' too via command line
+			import SCons.Tool
+			toolpath = [os.path.join(self.packageneric_dir(), 'generic', 'scons', 'tools')]
+			SCons.Tool.Tool('file_from_value', toolpath = toolpath)(scons)
+			SCons.Tool.Tool('substituted_file', toolpath = toolpath)(scons)
+			scons.SetOption('implicit_cache', True)
+			#scons.SourceSignatures('timestamp') # scons 0.96.92.0002 bugs with timestamps of symlinks, or even, always ignores all changes!
+			scons.SourceSignatures('MD5')
+			scons.TargetSignatures('build')
+			#scons.TargetSignatures('content')
+			self._options()
+			# Below are settings which depend on self._options(), that we just called above
+			scons.Help(self._options().GenerateHelpText(scons))
+			# Below are settings which depend on self.options(), that we just called above
+			cache = os.path.join(self.build_dir(), 'cache')
+			self.information('     cache dir is ' + scons.Dir(cache).path)
+			scons.CacheDir(cache)
+			signature = os.path.join(self.build_dir(), 'signatures')
+			self.information('signature file is ' + scons.Dir(signature).path)
+			scons.SConsignFile(signature)
+			scons['INSTALLSTR'] = self.message('packageneric: ', 'linking file $TARGET', font = '1;35')
+			scons.Alias('packageneric:install:runtime',
+				[
+					os.path.join('$packageneric__install__stage_destination', '$packageneric__install__bin'),
+					os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib'),
+					os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib_exec'),
+					os.path.join('$packageneric__install__stage_destination', '$packageneric__install__share'),
+					os.path.join('$packageneric__install__stage_destination', '$packageneric__install__var'),
+					os.path.join('$packageneric__install__stage_destination', '$packageneric__install__etc')
+				]
+			)
+			scons.Alias('packageneric:install:dev',
+				[
+					os.path.join('$packageneric__install__stage_destination', '$packageneric__install__include')
+				]
+			)
+			scons.Alias('packageneric:install',
+				[
+					'packageneric:install:runtime',
+					'packageneric:install:dev'
+				]
+			)
+			scons.Default()
+			scons.Default('packageneric:install')
+			#scons.Default('$packageneric__install__stage_destination')
 			return self._scons_
-
-	def _build_variant_dir_with_scons_vars(self): return os.path.join('$packageneric__build_dir', 'variants', '$packageneric__build_variant')
-	def _build_variant_intermediate_dir_with_scons_vars(self): return os.path.join(self._build_variant_dir_with_scons_vars(), 'intermediate', self.name())
-	def _build_variant_install_dir_with_scons_vars(self): return os.path.join(self._build_variant_dir_with_scons_vars(), 'stage-install')
 
 	def _options(self):
 		try: return self._options_

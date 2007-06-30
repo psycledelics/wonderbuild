@@ -8,7 +8,7 @@ from tty_font import tty_font
 class project:
 
 	def __init__(self, name, default_build_dir = None):
-		self._check_scons_and_python_versions()
+		self.root()
 		self._name = name
 		self.information('=============================================')
 		self.information('  project name is ' + self.name())
@@ -18,20 +18,16 @@ class project:
 	def name(self): return self._name
 
 	def root(self):
-		try: return self._root
+		try: return self.__class__._root
 		except AttributeError:
 			from project_root import project_root
-			self._root = project_root()
-			return self._root
+			self.__class__._root = project_root()
+			return self.__class__._root
 				
-	def subscript(self, path): return self.root().subscript(path)
-
+	def subscript(self, path): return self.root().subscript(self, path)
 	def __call__(self, builders): self.root()(builders)
-	
 	def default_target(self, builders): self.root().default_target(builders)
-	
 	def command_line_targets(self): return self.root().command_line_targets()
-		
 	def command_line_arguments(self): return self.root().command_line_arguments()
 		
 	def source_dir(self):
@@ -40,14 +36,14 @@ class project:
 			self._source_dir = self._scons().Dir('.').get_abspath()
 			return self._source_dir
 
-	def build_dir(self):
-		return self.root().build_dir()
-
-	def build_variant(self):
-		return self.root().build_variant()
+	def build_dir(self): return self.root().build_dir()
+	def build_variant(self): return self.root().build_variant()
 
 	def build_variant_intermediate_dir(self):
-		return self.root().build_variant_intermediate_dir()
+		try: return self._build_variant_intermediate_dir
+		except AttributeError:
+			self._build_variant_intermediate_dir = self._scons().Dir(os.path.join('$packageneric__build_dir', 'variants', self.build_variant(), 'intermediate', self.name())).path
+			return self._build_variant_intermediate_dir
 
 	def check_dir(self):
 		try: return self._check_dir
@@ -68,9 +64,7 @@ class project:
 			return self._intermediate_target_dir
 
 	def platform(self): return self.root().platform()
-
 	def platform_executable_format(self): return self.root().platform_executable_format()
-
 	def env_class(self): return self.root().env_class()
 		
 	def contexes(self):
@@ -97,10 +91,6 @@ class project:
 			scons.SourceCode('.', None) # we don't use the default source code fetchers (RCS, SCCS ...), so we disable them to avoid uneeded processing
 			scons.BuildDir(self.intermediate_target_dir(), self.source_dir(), duplicate = False)
 			return self._scons_
-
-	def _build_variant_dir_with_scons_vars(self): return os.path.join('$packageneric__build_dir', 'variants', '$packageneric__build_variant')
-	def _build_variant_intermediate_dir_with_scons_vars(self): return os.path.join(self._build_variant_dir_with_scons_vars(), 'intermediate', self.name())
-	def _build_variant_install_dir_with_scons_vars(self): return os.path.join(self._build_variant_dir_with_scons_vars(), 'stage-install')
 
 	def _options(self): return self.root()._options()
 
