@@ -69,7 +69,7 @@ class project_root:
 	def build_dir(self):
 		try: return self._build_dir
 		except AttributeError:
-			self._build_dir = self._scons().Dir('$packageneric__build_dir').path #get_abspath()
+			self._build_dir = self._scons().Dir('$packageneric__build_dir').get_abspath()
 			return self._build_dir
 
 	def build_variant(self):
@@ -78,11 +78,9 @@ class project_root:
 			self._build_variant = self._scons().subst('$packageneric__build_variant')
 			return self._build_variant
 
-	def _build_variant_dir_with_scons_vars(self):
-		return os.path.join('$packageneric__build_dir', 'variants', '$packageneric__build_variant')
+	def _build_variant_dir(self): return os.path.join(self.build_dir(), 'variants', self.build_variant())
 		
-	def _build_variant_install_dir_with_scons_vars(self):
-		return os.path.join(self._build_variant_dir_with_scons_vars(), 'stage-install')
+	def _build_variant_install_dir(self): return os.path.join(self._build_variant_dir(), 'stage-install')
 
 	def platform(self):
 		try: return self._platform
@@ -215,7 +213,7 @@ class project_root:
 			scons['packageneric__build_variant'] = build_variant
 
 			try: options_file_path = self.command_line_arguments()['packageneric__options']
-			except KeyError: options_file_path = scons.File(os.path.join(scons.subst(self._build_variant_dir_with_scons_vars()), 'options.py')).get_abspath()
+			except KeyError: options_file_path = scons.File(os.path.join(scons.subst(self._build_variant_dir()), 'options.py')).get_abspath()
 			self.information('  options file is ' + options_file_path)
 
 			import SCons.Options
@@ -260,7 +258,7 @@ class project_root:
 				# change underscores to colons and hypens since variables can be referred to as ${packageneric:build-dir}
 				# nope, can't use ':' in names ('packageneric:build-dir', 'directory where to build into'),
 				('packageneric__build_dir', 'directory where to build into'),
-				('packageneric__install__stage_destination', 'directory where to place the final install tree (stage installation)', self._build_variant_install_dir_with_scons_vars()),
+				('packageneric__install__stage_destination', 'directory where to place the final install tree (stage installation)', self._build_variant_install_dir()),
 				('packageneric__build_variant', 'subdirectory of the build directory where to build into'),
 				('packageneric__install__prefix', 'directory from which the final executable are meant to be run from (final installation)', os.path.join(os.path.sep, 'usr', 'local')),
 				('packageneric__install__exec_prefix', 'directory where to install architecture-dependant excecutables (final installation)', '$packageneric__install__prefix'),

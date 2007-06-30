@@ -44,25 +44,25 @@ class project:
 	def build_variant_intermediate_dir(self):
 		try: return self._build_variant_intermediate_dir
 		except AttributeError:
-			self._build_variant_intermediate_dir = self._scons().Dir(os.path.join(self.root()._build_variant_dir_with_scons_vars(), 'intermediate', self.name())).path
+			self._build_variant_intermediate_dir = os.path.join(self.root()._build_variant_dir(), 'intermediate', self.name())
 			return self._build_variant_intermediate_dir
 
 	def check_dir(self):
 		try: return self._check_dir
 		except AttributeError:
-			self._check_dir = self._scons().Dir(os.path.join(self.build_variant_intermediate_dir(), 'checks')).path
+			self._check_dir = os.path.join(self.build_variant_intermediate_dir(), 'checks')
 			return self._check_dir
 
 	def check_log(self):
 		try: return self._check_log
 		except AttributeError:
-			self._check_log = self._scons().File(self.check_dir() + '.log').path
+			self._check_log = self.check_dir() + '.log'
 			return self._check_log
 
 	def intermediate_target_dir(self):
 		try: return self._intermediate_target_dir
 		except AttributeError:
-			self._intermediate_target_dir = self._scons().Dir(os.path.join(self.build_variant_intermediate_dir(), 'source-twin-targets')).path
+			self._intermediate_target_dir = os.path.join(self.build_variant_intermediate_dir(), 'source-twin-targets')
 			return self._intermediate_target_dir
 
 	def platform(self): return self.root().platform()
@@ -106,7 +106,7 @@ class project:
 		except AttributeError:
 			scons = self._scons_ = self.root()._scons()
 			self.information('    source dir is ' + self.source_dir())
-			scons.SourceCode('.', None) # we don't use the default source code fetchers (RCS, SCCS ...), so we disable them to avoid uneeded processing
+			scons.SourceCode(self.source_dir(), None) # we don't use the default source code fetchers (RCS, SCCS ...), so we disable them to avoid uneeded processing
 			scons.BuildDir(self.intermediate_target_dir(), self.source_dir(), duplicate = False)
 			return self._scons_
 
