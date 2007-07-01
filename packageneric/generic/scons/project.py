@@ -74,7 +74,7 @@ class project:
 		except AttributeError:
 			contexes = self._contexes = self.root().contexes()
 			contexes.build().compilers().cxx().paths().add([os.path.join(self.build_variant_intermediate_dir(), 'project', 'src')])
-			contexes.build().compilers().cxx().defines().add({'PACKAGENERIC': None})
+			contexes.build().compilers().cxx().defines().add({'PACKAGENERIC': None}) # todo make that shared amongst projects
 			scons = self._scons()
 			self.file_from_value( # todo make that shared amongst projects
 				os.path.join('project', 'src', 'packageneric', 'configuration.private.hpp'),
@@ -91,7 +91,7 @@ class project:
 			from find import find
 			for i in find(self, self.source_dir(), ['*.hpp.in']):
 				self.trace(i.relative())
-				#self.trace(os.path.join('/a', '/b')) <-- beware that the result in '/b'
+				#self.trace(os.path.join('/a', '/b')) <-- beware that the result is '/b'
 				self._scons().SubstitutedFile(
 					os.path.join(self.intermediate_target_dir(), os.path.splitext(i.relative())[0]),
 					i.full()
@@ -107,7 +107,7 @@ class project:
 			scons = self._scons_ = self.root()._scons()
 			self.information('    source dir is ' + self.source_dir())
 			scons.SourceCode(self.source_dir(), None) # we don't use the default source code fetchers (RCS, SCCS ...), so we disable them to avoid uneeded processing
-			scons.BuildDir(self.intermediate_target_dir(), self.source_dir(), duplicate = False)
+			scons.BuildDir(self.intermediate_target_dir(), self.source_dir(), duplicate = False) # This allows source files to referenced as is they where in the build dir.
 			return self._scons_
 
 	def _options(self): return self.root()._options()
