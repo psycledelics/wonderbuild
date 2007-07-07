@@ -35,6 +35,7 @@ def template(base): # chain, os_env
 				except AttributeError:
 					from set import set
 					self._pkg_config = set()
+					# note: this is an example of optimised attachment
 					for attached in self._attached:
 						if isinstance(attached, result): self._pkg_config.attach(attached.pkg_config())
 					return self._pkg_config
@@ -42,6 +43,7 @@ def template(base): # chain, os_env
 			def attach(self, source):
 				base.attach(self, source)
 				if isinstance(source, result):
+					# note: this is an example of optimised attachment
 					try: pkg_config = self._pkg_config
 					except AttributeError: pass
 					else: pkg_config.attach(source.pkg_config())
