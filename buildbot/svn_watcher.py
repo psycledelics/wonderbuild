@@ -17,81 +17,48 @@
 # 2006.03.29 by Niklaus Giger, added support to run under windows, added invocation option
 # 2006.08.23 by Johan Boule, added support for multiple commits in the log
 
-import commands
-import xml.dom.minidom
-import sys
-import time
-import os
-if sys.platform == 'win32':
-	import win32pipe
+import commands, xml.dom.minidom, sys, time, os
+if sys.platform == 'win32': import win32pipe
 
-def checkChanges(repo, master, verbose=False, oldRevision = -1):
-	if oldRevision >= 0:
-		revisionRange = str(oldRevision + 1) + ':HEAD'
-	else:
-		revisionRange = 'HEAD'
-		
-	cmd = 'svn log --non-interactive --xml --verbose --revision ' + revisionRange + ' ' + repo
-
-	if verbose == True:
-		print "Getting last revision of repository: " + repo
-
+def check_changes(repo, master, verbose=False, old_revision = -1):
+	if old_revision >= 0: revision_range = str(old_revision + 1) + ':HEAD'
+	else: revision_range = 'HEAD'
+	cmd = 'svn log --non-interactive --xml --verbose --revision ' + revision_range + ' ' + repo
+	if verbose: print "Getting last revision of repository: " + repo
 	if sys.platform == 'win32':
 		f = win32pipe.popen(cmd)
 		xml1 = ''.join(f.readlines())
 		f.close()
-	else:
-		xml1 = commands.getoutput(cmd)
-    
-	if verbose == True:
-		print "XML\n-----------\n" + xml1 + "\n\n"
-    
+	else: xml1 = commands.getoutput(cmd)
+	if verbose: print "XML\n-----------\n" + xml1 + "\n\n"
 	doc = xml.dom.minidom.parseString(xml1)
 	els = doc.getElementsByTagName("logentry")
 	if els:
 		for el in els:
 			revision = int(el.getAttribute("revision"))
-			author = "".join([t.data for t in
-				el.getElementsByTagName("author")[0].childNodes])
-			comments = "".join([t.data for t in
-				el.getElementsByTagName("msg")[0].childNodes])
-			
+			author = "".join([t.data for t in el.getElementsByTagName("author")[0].childNodes])
+			comments = "".join([t.data for t in el.getElementsByTagName("msg")[0].childNodes])
 			pathlist = el.getElementsByTagName("paths")[0]
 			paths = []
-			for p in pathlist.getElementsByTagName("path"):
-				paths.append("".join([t.data for t in p.childNodes]))
-	
-			if verbose == True:
-				print "PATHS"
-				print paths
-	
+			for p in pathlist.getElementsByTagName("path"): paths.append("".join([t.data for t in p.childNodes]))
+			if verbose: print "PATHS" ; print paths
 			cmd = 'buildbot sendchange --master=' + master + ' --revision="' + str(revision) + '" --username="' + author + '" --comments="' + comments + '" ' + ' '.join(paths)
-			
-			if verbose == True:
-				print cmd
-			
+			if verbose: print cmd
 			if sys.platform == 'win32':
 				f = win32pipe.popen(cmd)
 				print time.strftime("%H.%M.%S ") + "Revision " + revision + ": " + ''.join(f.readlines())
 				f.close()
-			else:
-				xml1 = commands.getoutput(cmd)  
-	else:
-		print time.strftime("%H.%M.%S ") + "nothing has changed since revision " + str(oldRevision)
+			else: xml1 = commands.getoutput(cmd)  
+	else: print time.strftime("%H.%M.%S ") + "nothing has changed since revision " + str(old_revision)
 	return revision
 
 if __name__ == '__main__':
 	if len(sys.argv) == 4 and sys.argv[3] == 'watch':
-		oldRevision = -1
+		old_revision = -1
 		print "Watching for changes in repo "+  sys.argv[1] + " master " +  sys.argv[2] 
-		while 1:
-			try:
-				oldRevision = checkChanges(sys.argv[1], sys.argv[2], False, oldRevision)
-			except:
-				pass
+		while True:
+			try: old_revision = check_changes(sys.argv[1], sys.argv[2], False, old_revision)
+			except: pass
 			time.sleep(5*60)
-
-	elif len(sys.argv) == 3:
-		checkChanges(sys.argv[1], sys.argv[2], True )
-	else:
-		print os.path.basename(sys.argv[0]) + ":  http://host/path/to/repo master:port [watch]"
+	elif len(sys.argv) == 3: check_changes(sys.argv[1], sys.argv[2], True )
+	else: print os.path.basename(sys.argv[0]) + ":  http://host/path/to/repo master:port [watch]"

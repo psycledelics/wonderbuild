@@ -21,8 +21,8 @@ class local_package(external_package_check):
 			self._pkg_config_package.targets() # todo klugde
 			self._local_package_output_env.attach(self._pkg_config_package.uninstalled_env())
 			#self._output_env.attach(self._pkg_config_package.installed_env())
-			print 'xxxxxxxxxxxx', self._local_package_output_env.compilers().cxx().paths()
-			print 'XXXXXXXXXXXX', self._local_package_output_env.linker().paths()
+			print 'xxxxxxxxxxxx -I', self._local_package_output_env.compilers().cxx().paths()
+			print 'xxxxxxxxxxxx -L', self._local_package_output_env.linker().paths()
 			return self._local_package_output_env
 		
 	def installed_env(self):
