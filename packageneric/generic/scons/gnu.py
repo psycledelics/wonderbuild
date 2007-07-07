@@ -102,6 +102,20 @@ def detect(chain):
 					#'-Wl,-z nodlopen' # marks objects as not supporting dlopening
 					#'-Wl,-z defs' # marks objects, like -no-undefined
 				])
+
+			chain.compilers().cxx().flags().add([
+				'-fuse-cxa-atexit',
+		           # man gcc says:
+		           # Register destructors for objects with static storage duration with the "__cxa_atexit" function rather than the "atexit" function.  This option is required for fully
+		           # standards-compliant handling of static destructors, but will only work if your C library supports "__cxa_atexit".
+		           # bohan says: does not work on cygwin 1.5 gcc 3.3.4, nor with mingw 3.4.2 (msvcrt)
+				 # note: we're assuming the use of msvcrt's c runtime
+			])
+			
+			# for fink on macosx
+			import os
+			if os.path.exists('/sw/include'): chain.compilers.cxx().paths().add(['/sw/include'])
+			if os.path.exists('/sw/lib'): chain.linker().paths().add(['/sw/lib'])
 		else:
 			# --add-std-call-alias exports stdcall symbols both as is (with @* suffix), and without
 			# --outout-def file.def
@@ -144,14 +158,7 @@ def detect(chain):
 				chain.compilers().cxx().flags().add([
 					'-mno-cygwin',
 				])
-		if chain.project().platform_executable_format() != 'pe': # note: we're assuming the use of msvcrt's c runtime
-			chain.compilers().cxx().flags().add([
-				'-fuse-cxa-atexit',
-		           # man gcc says:
-		           # Register destructors for objects with static storage duration with the "__cxa_atexit" function rather than the "atexit" function.  This option is required for fully
-		           # standards-compliant handling of static destructors, but will only work if your C library supports "__cxa_atexit".
-		           # bohan says: does not work on cygwin 1.5 gcc 3.3.4, nor with mingw 3.4.2 (msvcrt)
-			])
+
 		# -pthread(s) for posix threads (this option sets flags for both the preprocessor and linker)
 		# -threads for native threads (this option sets flags for both the preprocessor and linker)
 		# mingw: -mthreads (thread-safe exception handling, this adds the _MT define, and -lmingwthrd linker option)
