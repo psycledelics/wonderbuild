@@ -226,7 +226,7 @@ class project_root:
 						options = self.options
 
 					def format(opt, self=self, env=env):
-						if opt.key in env:
+						if env.has_key(opt.key):
 							actual_no_subst = env[opt.key].replace('$', '$$')
 							actual_subst = env.subst('${%s}' % opt.key)
 						else:
