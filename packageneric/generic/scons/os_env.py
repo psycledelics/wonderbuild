@@ -12,12 +12,24 @@ class env(dictionary):
 			except KeyError: pass
 			else: self[key] = value
 
-	def add_paths(self, dictionary_):
-		for key, value in dictionary_:
+	def paths(self):
+		try: return self._paths
+		except AttributeError:
+			self._paths = env_paths()
+			return self._paths
+		
+class env_paths(env):
+	def add_unique(self, dictionary_):
+		for key, value in dictionary_.items():
 			try: current_value = self[key]
 			except KeyError: current_value = ''
 			from SCons.Util import AppendPath as append_path_unique
 			self[key] = append_path_unique(current_value, value)
+
+	def attach(self, source):
+		env.attach(self, source)
+		if isinstance(source, env):
+			self.paths().attach(source.paths())
 
 _template = {}
 
@@ -28,11 +40,13 @@ def template(base):
 		class result(base):
 			def __init__(self, project,
 				inherited_os_env = None,
+				inherited_os_env_paths = None,
 				*args, **kw
 			):
 				base.__init__(*(self, project) + args, **kw)
 				if inherited_os_env is not None: self.os_env().add_inherited(inherited_os_env)
-
+				if inherited_os_env_paths is not None: self.os_env().paths().add_inherited(inherited_os_env_paths)
+				
 			def os_env(self):
 				try: return self._os_env
 				except AttributeError:
@@ -41,18 +55,19 @@ def template(base):
 					
 			def attach(self, source):
 				base.attach(self, source)
-				if isinstance(source, result): self.os_env().attach(source.os_env())
+				if isinstance(source, result):
+					self.os_env().attach(source.os_env())
 
 			def _scons(self, scons):
 				base._scons(self, scons)
 				scons_env = scons['ENV']
 				env = {}
-				for key, value in self.os_env().get().items():
-					if scons_env.has_key(key) and 'PATH' in key: # todo kluge
+				for key, value in self.os_env().get().items(): env[key] = scons.subst(value)
+				for key, value in self.os_env().paths().get().items():
+					if scons_env.has_key(key):
 						from SCons.Util import AppendPath as append_path_unique
 						env[key] = append_path_unique(scons_env[key], scons.subst(value))
-					else:
-						env[key] = scons.subst(value)
+					else: env[key] = scons.subst(value)
 				scons.Append(ENV = env)
 			
 		_template[base] = result

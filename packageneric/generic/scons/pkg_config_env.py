@@ -61,10 +61,10 @@ def template(base): # chain, os_env
 
 					from SCons.Util import AppendPath as append_path_unique
 
-					try: os.environ['PATH'] = append_path_unique(save_path, self.os_env()['PATH'])
+					try: os.environ['PATH'] = append_path_unique(save_path, self.os_env().paths()['PATH'])
 					except KeyError: pass
 
-					try: os.environ['PKG_CONFIG_PATH'] = append_path_unique(save_pkg_config_path, self.os_env()['PKG_CONFIG_PATH'])
+					try: os.environ['PKG_CONFIG_PATH'] = append_path_unique(save_pkg_config_path, self.os_env().paths()['PKG_CONFIG_PATH'])
 					except KeyError: pass
 
 					try: scons.ParseConfig(self.pkg_config_program() + ' --cflags --libs ' + static + '"' + ' '.join(self.pkg_config().get()) + '"')

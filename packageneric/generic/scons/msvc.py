@@ -18,7 +18,7 @@ def detect(chain):
 		# and thus microsoft-specific options will not be used at all.
 		msvc = msvc14 # this has the effect that msvc.result() is False since we have msvc < 14.0
 	if msvc.result():
-		chain.project().contexes().check_and_build().os_env().add_inherited(['INCLUDE', 'LIB', 'LIBPATH'])
+		chain.project().contexes().check_and_build().os_env().paths().add_inherited(['INCLUDE', 'LIB', 'LIBPATH'])
 		if True:
 			chain.compilers().cxx().defines().add({ # todo for mingw too!
 				'STRICT': None,
