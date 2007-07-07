@@ -16,6 +16,7 @@
 # 2006.03.15 by John Pye
 # 2006.03.29 by Niklaus Giger, added support to run under windows, added invocation option
 # 2006.08.23 by Johan Boule, added support for multiple commits in the log
+# 2007.07.07 this file is deprecated since buildbot 0.7.5 has a buildbot.changes.svnpoller.SVNPoller class
 
 import commands, xml.dom.minidom, sys, time, os
 if sys.platform == 'win32': import win32pipe
@@ -43,13 +44,14 @@ def check_changes(repo, master, verbose=False, old_revision = -1):
 			for p in pathlist.getElementsByTagName("path"): paths.append("".join([t.data for t in p.childNodes]))
 			if verbose: print "PATHS" ; print paths
 			cmd = 'buildbot sendchange --master=' + master + ' --revision="' + str(revision) + '" --username="' + author + '" --comments="' + comments + '" ' + ' '.join(paths)
-			if True or verbose: print cmd
+			if True or verbose: print time.strftime("%H.%M.%S ") + cmd
 			if sys.platform == 'win32':
 				f = win32pipe.popen(cmd)
 				print time.strftime("%H.%M.%S ") + "Revision " + revision + ": " + ''.join(f.readlines())
 				f.close()
 			else: xml1 = commands.getoutput(cmd)  
-	else: print time.strftime("%H.%M.%S ") + "nothing has changed since revision " + str(old_revision)
+	else:
+		if True or verbose: print time.strftime("%H.%M.%S ") + "nothing has changed since revision " + str(old_revision)
 	return revision
 
 if __name__ == '__main__':

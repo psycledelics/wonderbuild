@@ -148,7 +148,7 @@ class Scheduler(BaseUpstreamScheduler):
 
     def addUnimportantChange(self, change):
         log.msg("%s: change is not important, ignoring %s" % (self, change))
-        #self.unimportantChanges.append(change)
+        #self.unimportantChanges.append(change) # commented out by bohan
 
     def setTimer(self, when):
         log.msg("%s: setting timer to %s" %

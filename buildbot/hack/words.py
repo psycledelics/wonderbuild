@@ -587,27 +587,26 @@ class IRC(base.StatusReceiverMultiService):
     def setServiceParent(self, parent):
         base.StatusReceiverMultiService.setServiceParent(self, parent)
         self.f.status = parent.getStatus()
-	self.f.status.subscribe(self)
+        self.f.status.subscribe(self) # added by bohan
         if self.allowForce:
             self.f.control = interfaces.IControl(parent)
 
-    def disownServiceParent(self):
-	self.f.status.unsubscribe(self)
-	for w in self.watched:
-		w.unsubscribe(self)
-	return base.StatusReceiverMultiService.disownServiceParent(self)
+    def disownServiceParent(self):  # added by bohan
+        self.f.status.unsubscribe(self)
+        for w in self.watched: w.unsubscribe(self)
+        return base.StatusReceiverMultiService.disownServiceParent(self)
 
     def stopService(self):
         # make sure the factory will stop reconnecting
         self.f.shutdown()
         return base.StatusReceiverMultiService.stopService(self)
 
-    def builderAdded(self, builderName, builder):
-	self.watched.append(builder)
-	return self
+    def builderAdded(self, builderName, builder): # added by bohan
+        self.watched.append(builder)
+        return self
 
-    def buildFinished(self, builderName, build, results):
-	self.f.p.buildFinished(build, None)
+    def buildFinished(self, builderName, build, results): # added by bohan
+        self.f.p.buildFinished(build, None)
 
 
 def main():
