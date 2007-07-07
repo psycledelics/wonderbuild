@@ -116,6 +116,8 @@ def detect(chain):
 			import os
 			if os.path.exists('/sw/include'): chain.compilers().cxx().paths().add(['/sw/include'])
 			if os.path.exists('/sw/lib'): chain.linker().paths().add(['/sw/lib'])
+			# fink's paths are not in gcc's default paths on macosx so we get paths from the os env:
+			chain.os_env().paths().add_inherited(['CPATH', 'LIBRARY_PATH'])
 		else:
 			# --add-std-call-alias exports stdcall symbols both as is (with @* suffix), and without
 			# --outout-def file.def
