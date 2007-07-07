@@ -114,7 +114,7 @@ def detect(chain):
 			
 			# for fink on macosx
 			import os
-			if os.path.exists('/sw/include'): chain.compilers.cxx().paths().add(['/sw/include'])
+			if os.path.exists('/sw/include'): chain.compilers().cxx().paths().add(['/sw/include'])
 			if os.path.exists('/sw/lib'): chain.linker().paths().add(['/sw/lib'])
 		else:
 			# --add-std-call-alias exports stdcall symbols both as is (with @* suffix), and without
