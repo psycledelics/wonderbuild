@@ -74,7 +74,7 @@ class debian(builder):
 			string += 'Build-Depends: scons'
 			for package in self.build_depends():
 				for key in 'debian and ubuntu', suite:
-					if package.distribution_packages().has_key(key): string += ', ' + package.distribution_packages()[key]
+					if key in package.distribution_packages(): string += ', ' + package.distribution_packages()[key]
 			string += '\n'
 			if self.maintainer() is not None: string += 'Maintainer: ' + self.maintainer().name() + ' <' + self.maintainer().email() + '>\n'
 			if len(self.uploaders()): string += 'Uploaders: ' + ', '.join(uploader.name() + ' <' + uploader.email() + '>' for uploader in self.uploaders()) + '\n'
@@ -88,7 +88,7 @@ class debian(builder):
 				string += 'Depends: ${shlibs:Depends}, ${misc:Depends}'
 				for package in binary_package.depends():
 					for key in 'debian and ubuntu', suite:
-						if package.distribution_packages().has_key(key): string += ', ' + package.distribution_packages()[key]
+						if key in package.distribution_packages(): string += ', ' + package.distribution_packages()[key]
 				string += '\n'
 				string += 'Section: '
 				if binary_package.section() is None: string += self.section()

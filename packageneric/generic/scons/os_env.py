@@ -64,7 +64,7 @@ def template(base):
 				env = {}
 				for key, value in self.os_env().get().items(): env[key] = scons.subst(value)
 				for key, value in self.os_env().paths().get().items():
-					if scons_env.has_key(key):
+					if key in scons_env:
 						from SCons.Util import AppendPath as append_path_unique
 						env[key] = append_path_unique(scons_env[key], scons.subst(value))
 					else: env[key] = scons.subst(value)
