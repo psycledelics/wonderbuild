@@ -72,4 +72,4 @@ def generate(env, **kw):
 
 	import SCons.Builder, SCons.Action
 	env['BUILDERS'][name] = SCons.Builder.Builder(action = SCons.Action.Action(action, string), emitter = emitter)
-	if not dictionary_name in env: env[dictionary_name] = {}
+	if not env.has_key(dictionary_name): env[dictionary_name] = {}
