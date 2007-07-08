@@ -12,7 +12,7 @@ if not master_host_fqdn.endswith(domain):
 	from socket import gethostname
 	host = gethostname()
 	if host in ('factoid', 'anechoid'): master_host_fqdn = host + '.' + domain
-c['buildbotURL'] = 'http://' + master_host_fqdn + ':' + str(master_port)
+BuildmasterConfig['buildbotURL'] = 'http://' + master_host_fqdn + ':' + str(master_port)
 
 BuildmasterConfig['sources'] = []
 
