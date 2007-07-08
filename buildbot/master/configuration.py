@@ -21,7 +21,8 @@ BuildmasterConfig['sources'].append(PBChangeSource())
 
 branch = 'trunk'
 svn_url = 'https://' + project_name + '.svn.sourceforge.net/svnroot/' + project_name + '/' + branch
-svn_dir = project_name + '-' + branch
+import os
+svn_dir = project_name + '-' + branch + os.sep
 poll_interval = 5 * 60
 bunch_timer = poll_interval + 60
 
@@ -65,7 +66,7 @@ BuildmasterConfig['builders'].append(
 	{
 		'name': 'freepsycle',
 		'slavenames': slaves,
-		'builddir': svn_dir,
+		'builddir': svn_dir + 'freepsycle',
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
@@ -88,7 +89,7 @@ BuildmasterConfig['builders'].append(
 	{
 		'name': 'psycle-core',
 		'slavenames': slaves,
-		'builddir': svn_dir,
+		'builddir': svn_dir + 'psycle-core',
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
@@ -111,7 +112,7 @@ BuildmasterConfig['builders'].append(
 	{
 		'name': 'psycle-player',
 		'slavenames': slaves,
-		'builddir': svn_dir,
+		'builddir': svn_dir + 'psycle-player',
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
@@ -134,7 +135,7 @@ BuildmasterConfig['builders'].append(
 	{
 		'name': 'qpsycle',
 		'slavenames': slaves,
-		'builddir': svn_dir,
+		'builddir': svn_dir + 'qpsycle',
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
@@ -157,7 +158,7 @@ BuildmasterConfig['builders'].append(
 	{
 		'name': 'psycle-plugins',
 		'slavenames': slaves,
-		'builddir': svn_dir,
+		'builddir': svn_dir + 'psycle-plugins',
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
