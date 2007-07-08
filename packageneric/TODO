@@ -7,7 +7,7 @@ microsoft:
 *	for vcproj, use InheritedPropertySheets pointing to vcprops files.
 	-- bohan
 
-config headers:
+configuration headers:
 	
 *	to allow for static libraries to be built,
 	split packageneric/package/modules/*/defines.private.hpp
