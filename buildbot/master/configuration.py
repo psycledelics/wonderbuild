@@ -65,7 +65,7 @@ from buildbot.process import factory, step
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'freepsycle',
-		'slavenames': slaves,
+		'slavenames': ['anechoid'], # uses too much memory for factoid
 		'builddir': svn_dir + 'freepsycle',
 		'factory': factory.BuildFactory(
 			[
