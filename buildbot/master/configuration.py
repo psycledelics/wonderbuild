@@ -256,8 +256,9 @@ class IRC(BaseIRC):
 		if watched.results in (FAILURE, WARNINGS, EXCEPTION):
 			if watched.results == WARNINGS: msg('Some warnings occured while building %s.' % builderName)
 			elif watched.results == EXCEPTION: msg('An exception occured while trying to build %s!' % builderName)
-			buildurl = self._parent_status.getURLForThing(build)
-			if buildurl: msg('Build details are at %s' % buildurl)
+			url = self._parent_status.getURLForThing(build)
+			if not url: url = self._parent_status.getBuildbotURL()
+			if url: msg('Build details are at %s' % url)
 
 BuildmasterConfig['status'].append(IRC(host = 'irc.efnet.pl', nick = 'buildborg', channels = ['#psycle']))
 BuildmasterConfig['status'].append(IRC(host = 'irc.freenode.net', nick = 'buildborg', channels = ['#psycle']))
