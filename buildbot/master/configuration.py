@@ -51,12 +51,14 @@ class Scheduler(BaseScheduler):
 		from twisted.python import log
 		log.msg("%s: change is not important, forgetting %s" % (self, change))
 
-def filter(change, include_prefixes = [], exclude_prefixes = []):
+def filter(change, include_prefixes = None, exclude_prefixes = None):
 	for file in change.files:
-		for prefix in exclude_prefixes:
-			if file.startswith(branch_filter + prefix): return False
-		for prefix in include_prefixes:
-			if file.startswith(branch_filter + prefix): return True
+		if exclude_prefixes is not None:
+			for prefix in exclude_prefixes:
+				if file.startswith(branch_filter + prefix): return False
+		if include_prefixes is not None:
+			for prefix in include_prefixes:
+				if file.startswith(branch_filter + prefix): return True
 	return False
 
 from buildbot import locks
