@@ -264,7 +264,7 @@ class IRC(BaseIRC):
 			if not url: url = self._parent_status.getBuildbotURL()
 			if url: msg('Build details are at %s' % url)
 
-	def channelMap(builderName):
+	def channelMap(self, builderName):
 		if builderName == 'libzzub': return self.irc().channels
 		else: return ['#psycle']
 	
