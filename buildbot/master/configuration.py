@@ -1,3 +1,5 @@
+import os
+
 BuildmasterConfig = {}
 
 project_name = 'psycle'
@@ -21,7 +23,6 @@ BuildmasterConfig['sources'].append(PBChangeSource())
 
 branch = 'trunk'
 svn_url = 'https://' + project_name + '.svn.sourceforge.net/svnroot/' + project_name + '/' + branch
-import os
 svn_dir = project_name + '-' + branch + os.sep
 poll_interval = 5 * 60
 bunch_timer = poll_interval + 60
@@ -50,9 +51,11 @@ class Scheduler(BaseScheduler):
 		from twisted.python import log
 		log.msg("%s: change is not important, forgetting %s" % (self, change))
 
-def filter(change, prefixes):
+def filter(change, include_prefixes = [], exclude_prefixes = []):
 	for file in change.files:
-		for prefix in prefixes:
+		for prefix in exclude_prefixes:
+			if file.startswith(branch_filter + prefix): return False
+		for prefix in include_prefixes:
 			if file.startswith(branch_filter + prefix): return True
 	return False
 
@@ -220,10 +223,11 @@ class IRC(BaseIRC):
 		except KeyError: pass
 		else: watched.builder.unsubscribe(self) ; del self.watched[builderName]
 
+	def irc(self): return self.f.p
+	
 	def buildFinished(self, builderName, build, results):
 		def msg(message):
-			irc = self.f.p
-			for channel in irc.channels: irc.msg(channel, message.encode('ascii', 'replace'))
+			for channel in self.channelMap(builderName): self.irc().msg(channel, message.encode('ascii', 'replace'))
 		watched = self.watched[builderName]
 		from buildbot.status.builder import SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION
 		if build.getResults() == FAILURE:
@@ -260,7 +264,39 @@ class IRC(BaseIRC):
 			if not url: url = self._parent_status.getBuildbotURL()
 			if url: msg('Build details are at %s' % url)
 
-BuildmasterConfig['status'].append(IRC(host = 'irc.efnet.pl', nick = 'buildborg', channels = ['#psycle']))
-BuildmasterConfig['status'].append(IRC(host = 'irc.freenode.net', nick = 'buildborg', channels = ['#psycle']))
+	def channelMap(builderName):
+		if builderName == 'libzzub': return self.irc().channels
+		else: return ['#psycle']
+	
+BuildmasterConfig['status'].append(IRC(host = 'irc.efnet.pl', nick = 'buildborg', channels = ['#psycle', '#buzz']))
+BuildmasterConfig['status'].append(IRC(host = 'irc.freenode.net', nick = 'buildborg', channels = ['#psycle', '#aldrin']))
 
 BuildmasterConfig['debugPassword'] = 'debugpassword'
+
+##################################### non-psycle stuff below ######################################
+if True:
+	BuildmasterConfig['builders'].append(
+		{
+			'name': 'libzzub',
+			'slavenames': slaves
+			'builddir': os.path.join('zzub-trunk', 'libzzub'),
+			'factory': factory.BuildFactory(
+				[
+					factory.s(step.SVN, mode = 'update', svnurl = 'http://svn.zeitherrschaft.org/zzub/trunk', locks = [svn_lock]),
+					factory.s(step.Compile, command = 'scons configure && scons', locks = [compile_lock])
+				]
+			)
+		}
+	)
+	BuildmasterConfig['schedulers'].append(
+		Scheduler(
+			name = 'libzzub',
+			branch = None,
+			treeStableTimer = bunch_timer,
+			builderNames = ['libzzub'],
+			fileIsImportant = lambda change: filter(change,
+				include_prefixes = ['/'],
+				exclude_prefixes = ['freepsycle/', 'qpsycle/', 'psycle-core/', 'psycle-audiodrivers/', 'psycle-plugins/', 'psycle/', 'universalis/', 'diversalis/', 'packageneric/', 'buildbot/', 'external-packages/', 'www/']
+			)
+		)
+	)
