@@ -278,7 +278,7 @@ if True:
 	BuildmasterConfig['builders'].append(
 		{
 			'name': 'libzzub',
-			'slavenames': slaves
+			'slavenames': slaves,
 			'builddir': os.path.join('zzub-trunk', 'libzzub'),
 			'factory': factory.BuildFactory(
 				[
