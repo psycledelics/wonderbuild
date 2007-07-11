@@ -297,7 +297,7 @@ if True:
 			treeStableTimer = bunch_timer,
 			builderNames = ['libzzub'],
 			fileIsImportant = lambda change: filter(change,
-				include_prefixes = ['/'],
+				include_prefixes = [''],
 				exclude_prefixes = ['freepsycle/', 'qpsycle/', 'psycle-core/', 'psycle-audiodrivers/', 'psycle-plugins/', 'psycle/', 'universalis/', 'diversalis/', 'packageneric/', 'buildbot/', 'external-packages/', 'www/']
 			)
 		)
