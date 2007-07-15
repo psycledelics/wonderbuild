@@ -122,30 +122,20 @@ class pkg_config_package(builder):
 			
 			#print '***********', self.name(), env.compilers().cxx().paths().get()
 
+			# for each include path, we add the same path in the build dir
+			# note that we could just use build dir paths only since scons makes the src path a vpath like make
 			paths = []
 			for path in env.compilers().cxx().paths(): paths.append(os.path.join(self.project().intermediate_target_dir(), path))
 			env.compilers().cxx().paths().add(paths)
 			
 			#print 'xxxxxxxxxxx', self.name(), paths
 			
-			#abs_paths = []
-			#for path in env.compilers().cxx().paths():
-			#	if not path in paths: abs_paths.append(self.project()._scons().Dir(path).get_abspath())
-			#env.compilers().cxx().paths().add(abs_paths)
-			
-			#print 'XXXXXXXXXXX', self.name(), abs_paths
-
+			# add the install lib path to the library path
 			env.linker().paths().add([os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib')])
-
-			#paths = []
-			#for path in env.linker().paths(): paths.append(self.project()._scons().Dir(path).get_abspath())
-			#env.linker().paths().add(paths)
-			
-			#for module in self.modules(): env.linker().libraries().add([module.name()]) # todo redundant
 
 			scons = self.project()._scons()
 			self._targets = [
-				#scons.Alias(uninstalled_file_name, [scons.FileFromValue(uninstalled_file_name, self.string(uninstalled = True))] + dependencies),
+				scons.Alias(uninstalled_file_name, [scons.FileFromValue(uninstalled_file_name, self.string(uninstalled = True))] + dependencies),
 				scons.Alias(installed_file_name, [scons.FileFromValue(installed_file_name, self.string(uninstalled = False))] + dependencies),
 			]
 			return self._targets
