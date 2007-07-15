@@ -22,6 +22,16 @@ configuration headers:
 	it's not part of the public interface, and it doesn't contain any functions or objects.
 	-- bohan
 
+*	the generated .pc files have suprious or missing paths and dependencies
+	-- bohan
+
+*	headers are not copied to install include dir
+	-- bohan
+	
+*	have a look at new scons features added in the two last google summer of code projects,
+	particularly, the automake-like features
+	-- bohan
+
 misc:
 
 *	remember to update the TODO file.
