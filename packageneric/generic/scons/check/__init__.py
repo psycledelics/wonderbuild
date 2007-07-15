@@ -2,20 +2,19 @@
 # copyright 2006-2007 johan boule <bohan@jabber.org>
 # copyright 2006-2007 psycledelics http://psycle.pastnotecut.org
 
+from packageneric.generic.scons.projected import projected
 from packageneric.generic.scons.node import node
 from packageneric.generic.scons.named import named
 
-class check(node, named):
+class check(projected, node, named):
 	def __init__(self, project, name, dependencies = None, auto_add = True, *environment_args, **environment_kw):
+		projected.__init__(self, project)
 		node.__init__(self, dependencies)
 		named.__init__(self, name)
-		self._project = project
 		self._auto_add = auto_add
 		self._environment_args = environment_args
 		self._environment_kw = environment_kw
 
-	def project(self): return self._project
-	
 	def auto_add(self): return self._auto_add
 	
 	def input_env(self):

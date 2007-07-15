@@ -8,5 +8,4 @@ class projected:
 		assert isinstance(project, project_)
 		self._project = project
 		
-	def project(self):
-		return self._project
+	def project(self): return self._project

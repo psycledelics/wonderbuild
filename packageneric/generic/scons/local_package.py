@@ -18,11 +18,15 @@ class local_package(external_package_check):
 		try: return self._local_package_output_env
 		except AttributeError:
 			self._local_package_output_env = external_package_check.output_env(self)
-			self._pkg_config_package.targets() # todo klugde
+			self._pkg_config_package.targets() # todo klugde. it is probably best to be triggered from the result() method.
+			# The underlying pkg_config_package contains modules that:
+			# - define some env settings
+			# - have dependencies of type check that define an output_env to attach
 			self._local_package_output_env.attach(self._pkg_config_package.uninstalled_env())
 			#self._output_env.attach(self._pkg_config_package.installed_env())
-			print 'xxxxxxxxxxxx -I', self._local_package_output_env.compilers().cxx().paths()
-			print 'xxxxxxxxxxxx -L', self._local_package_output_env.linker().paths()
+			if False:
+				print 'xxxxxxxxxxxx -I', self._local_package_output_env.compilers().cxx().paths()
+				print 'xxxxxxxxxxxx -L', self._local_package_output_env.linker().paths()
 			return self._local_package_output_env
 		
 	def installed_env(self):

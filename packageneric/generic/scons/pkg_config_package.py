@@ -3,27 +3,25 @@
 # copyright 2006-2007 psycledelics http://psycle.pastnotecut.org
 
 import os.path
+from projected import projected
 from builder import builder
 
-class pkg_config_package(builder):
+class pkg_config_package(projected, builder):
 	def __init__(self, project,
 		name,
 		version,
 		description,
 		modules = None,
 	):
+		projected.__init__(self, project)
+		builder.__init__(self, name)
 		self._project = project
-		self._name = name
 		self._version = version
 		self._description = description
 		if modules is None: self._modules = []
 		else: self._modules = modules
 		self.project().add_builder(self)
 		
-	def project(self): return self._project
-		
-	def name(self): return self._name
-	
 	def version(self): return self._version
 	
 	def description(self): return self._description
@@ -76,15 +74,6 @@ class pkg_config_package(builder):
 	
 	def modules(self): return self._modules
 
-	def dependencies(self):
-		try: return self._build_dependencies
-		except AttributeError:
-			self._build_dependencies = []
-			for module in self.modules():
-				for package in module.build_dependencies() + module.dependencies():
-					if not package in self._build_dependencies: self._build_dependencies.append(package)
-			return self._build_dependencies
-
 	def uninstalled_env(self):
 		try: return self._uninstalled_env_
 		except AttributeError:
@@ -98,9 +87,9 @@ class pkg_config_package(builder):
 			env = self._installed_env_ = self.project().contexes().client().installed().attached()
 			for module in self.modules():
 				env.attach(module.contexes().client().installed())
-				for package in module.dependencies(): # todo method for no recursion
+				for package in module.build_immediate_dependencies() + module.immediate_dependencies():
 					from local_package import local_package
-					if isinstance(package, local_package):
+					if isinstance(package, local_package): # todo this doesn't look nice
 						if package.result():
 							package.targets()
 							env.pkg_config().add([package.name()]) # todo this doesn't look nice

@@ -3,9 +3,10 @@
 # copyright 2006-2007 psycledelics http://psycle.pastnotecut.org
 
 import os
+from projected import projected
 from builder import builder
 
-class module(builder):
+class module(projected, builder): # todo decide whether this can be derived from the node class too
 	class target_types:
 		loadable = 0
 		shared = 1
@@ -21,10 +22,11 @@ class module(builder):
 		description = None,
 		dependencies = None,
 		build_dependencies = None,
-		target_type = target_types.loadable # todo defer the decision about what type to build down to the targets() method
+		target_type = target_types.loadable
 	):
+		projected.__init__(self, source_package.project())
+		builder.__init__(self, name)
 		self._source_package = source_package
-		self._name = name
 		self._version = version
 		self._description = description
 
@@ -37,11 +39,7 @@ class module(builder):
 		self._target_type = target_type
 		self.project().add_builder(self)
 	
-	def project(self): return self.source_package().project()
-	
 	def source_package(self): return self._source_package
-	
-	def name(self): return self._name
 	
 	def version(self):
 		if self._version is not None: return self._version
@@ -69,7 +67,9 @@ class module(builder):
 	def add_headers(self, headers):
 		for x in headers: self.add_header(x)
 
-	def build_dependencies(self):
+	def build_immediate_dependencies(self): return self._build_dependencies
+	
+	def build_deep_dependencies(self):
 		packages = []
 		for package in self._build_dependencies:
 			if not package in packages: packages.append(package)
@@ -79,8 +79,10 @@ class module(builder):
 	def add_build_dependency(self, build_dependency): self._build_dependencies.append(build_dependency)
 	def add_build_dependencies(self, build_dependencies):
 		for package in build_dependencies: self.add_build_dependency(package)
-		
-	def dependencies(self):
+	
+	def immediate_dependencies(self): return self._dependencies
+	
+	def deep_dependencies(self):
 		packages = []
 		for package in self._dependencies:
 			if not package in packages: packages.append(package)
@@ -91,7 +93,7 @@ class module(builder):
 	def add_dependencies(self, dependencies):
 		for package in dependencies: self.add_dependency(package)
 	
-	def dynamic_dependencies(self): pass  # todo node class
+	def dynamic_dependencies(self): pass # todo this is also a method of the node class
 	
 	def contexes(self):
 		try: return self._contexes
@@ -103,32 +105,23 @@ class module(builder):
 	
 	def target_type(self): return self._target_type
 	
-	def targets(self, target_type = target_types.loadable):
+	def targets(self): # todo to allow libraries to be built as several types at the same time, pass target_type here instead of in the constructor
 		try: return self._targets
 		except AttributeError:
+			
 			#import time ; t = time.time ; t0 = t()
 			#print 'OOOOOOOOOOOOOOOOO'
 
-			#self.build_dependencies() # todo method for no recursion
-			#for package in self._build_dependencies: # todo method for no recursion
-			#	if package.result(): package.targets()
-
-			#self.dependencies() # todo method for no recursion
-			#for package in self._dependencies: # todo method for no recursion
-			#	if package.result(): package.targets()
-
-			self.dynamic_dependencies() # todo node class
+			self.dynamic_dependencies() # todo this is also a method of the node class
 			dependencies_not_found = []
 
-			#self.build_dependencies() # todo method for no recursion
-			for package in self._build_dependencies: # todo method for no recursion
+			for package in self.build_immediate_dependencies():
 				if package.result():
 					package.targets()
 					self.contexes().build().attach(package.output_env())
 				else: dependencies_not_found.append(package)
 
-			#self.dependencies() # todo method for no recursion
-			for package in self._dependencies: # todo method for no recursion
+			for package in self.immediate_dependencies():
 				if package.result():
 					package.targets()
 					self.contexes().attach(package.output_env())
@@ -142,7 +135,7 @@ class module(builder):
 				self.project().abort(message)
 
 			dependencies = []
-			for dependency_lists in [package.targets() for package in self.build_dependencies() + self.dependencies()]:
+			for dependency_lists in [package.targets() for package in self.build_immediate_dependencies() + self.immediate_dependencies()]:
 				for dependency_list in dependency_lists: dependencies.extend(dependency_list)
 
 			# add include path for pre-compiled headers of std lib

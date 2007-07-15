@@ -5,6 +5,6 @@
 from named import named
 
 class builder(named):
-	def name(self): raise self
+	def __init__(self, name): named.__init__(self, name)
 	def alias_names(self): raise self
 	def targets(self): raise self
