@@ -96,7 +96,14 @@ class pkg_config_package(builder):
 		try: return self._installed_env_
 		except AttributeError:
 			env = self._installed_env_ = self.project().contexes().client().installed().attached()
-			for module in self.modules(): env.attach(module.contexes().client().installed())
+			for module in self.modules():
+				env.attach(module.contexes().client().installed())
+				for package in module.dependencies(): # todo method for no recursion
+					from local_package import local_package
+					if isinstance(package, local_package):
+						if package.result():
+							package.targets()
+							env.pkg_config().add([package.name()]) # todo this doesn't look nice
 			return env
 
 	def local_package(self):
