@@ -131,7 +131,7 @@ class pkg_config_package(builder):
 			#print 'xxxxxxxxxxx', self.name(), paths
 			
 			# add the install lib path to the library path
-			env.linker().paths().add([os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib')])
+			if self.modules(): env.linker().paths().add([os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib')])
 
 			scons = self.project()._scons()
 			self._targets = [
