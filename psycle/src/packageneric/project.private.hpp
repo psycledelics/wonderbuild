@@ -4,7 +4,6 @@
 
 ///\file
 #pragma once
-#error packageneric
 #include <packageneric/stringized.private.hpp>
 
 #define PACKAGENERIC__PACKAGE__VERSION \
