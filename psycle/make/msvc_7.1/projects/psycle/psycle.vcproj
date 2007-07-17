@@ -1053,6 +1053,16 @@
 							RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\XMSampler.hpp">
 						</File>
 					</Filter>
+					<Filter
+						Name="interface"
+						Filter="">
+						<File
+							RelativePath="..\..\..\..\src\psycle\plugin.hpp">
+						</File>
+						<File
+							RelativePath="..\..\..\..\src\psycle\plugin_interface.hpp">
+						</File>
+					</Filter>
 				</Filter>
 				<Filter
 					Name="midi"

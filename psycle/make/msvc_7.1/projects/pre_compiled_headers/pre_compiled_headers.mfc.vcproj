@@ -255,7 +255,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="pre_compiled_headers.cpp">
+			RelativePath=".\pre_compiled_headers.mfc.cpp">
 		</File>
 		<File
 			RelativePath="$(SolutionDir)\..\..\..\src\pre_compiled_headers.mfc.private.hpp">

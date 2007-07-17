@@ -249,17 +249,73 @@
 	<References>
 	</References>
 	<Files>
+		<Filter
+			Name="diversalis"
+			Filter="">
+			<File
+				RelativePath="..\..\..\..\src\diversalis\compiler.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\diversalis\diversalis.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\diversalis\operating_system.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\diversalis\processor.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\diversalis\standard_library.hpp">
+			</File>
+		</Filter>
+		<Filter
+			Name="universalis"
+			Filter="">
+			<File
+				RelativePath="..\..\..\..\src\universalis\compiler.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\universalis\exception.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\universalis\exception.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\universalis\operating_system.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\universalis\processor.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\universalis\standard_library.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\universalis\universalis.hpp">
+			</File>
+		</Filter>
+		<File
+			RelativePath="..\..\..\..\src\packageneric\configuration.private.hpp">
+		</File>
+		<File
+			RelativePath="..\..\..\..\src\packageneric\module.private.hpp">
+		</File>
+		<File
+			RelativePath="..\..\..\..\src\packageneric\package.private.hpp">
+		</File>
+		<File
+			RelativePath="..\..\..\..\src\packageneric\pre-compiled.private.hpp">
+		</File>
 		<File
 			RelativePath="pre_compiled_headers.cpp">
 		</File>
 		<File
-			RelativePath="$(SolutionDir)\..\..\..\src\pre_compiled_headers.private.hpp">
+			RelativePath="..\..\..\..\src\packageneric\project.private.hpp">
 		</File>
 		<File
-			RelativePath="$(SolutionDir)\..\..\..\src\project.hpp">
+			RelativePath="..\..\..\..\src\packageneric\stringized.private.hpp">
 		</File>
 		<File
-			RelativePath="$(SolutionDir)\..\..\..\src\project.private.hpp">
+			RelativePath="..\..\..\..\src\packageneric\translation-unit.private.hpp">
 		</File>
 	</Files>
 	<Globals>
