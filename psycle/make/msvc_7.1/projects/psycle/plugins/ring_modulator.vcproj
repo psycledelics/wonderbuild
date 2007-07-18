@@ -50,7 +50,7 @@
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4652"
-				ForcedIncludeFiles="project.private.hpp"/>
+				ForcedIncludeFiles=""/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -198,7 +198,7 @@
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4652"
-				ForcedIncludeFiles="project.private.hpp"/>
+				ForcedIncludeFiles=""/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
