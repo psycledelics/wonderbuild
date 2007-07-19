@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="pre_compiled_headers/use"
+	InheritedPropertySheets="..\top_output_dir.vsprops"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		UsePrecompiledHeader="2"
+		PrecompiledHeaderThrough="$(PreCompiledHeader)"
+		PrecompiledHeaderFile="$(TopOutputDir)/intermediate/pre_compiled_headers (no mfc).pch"
+		ProgramDataBaseFileName="$(TopOutputDir)/intermediate/pre_compiled_headers (no mfc).pdb"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="$(PreCompiledObject)"
+	/>
+	<UserMacro
+		Name="PreCompiledHeader"
+		Value="packageneric/pre-compiled.private.hpp"
+	/>
+	<UserMacro
+		Name="Defines"
+		Value="PACKAGENERIC__PRE_COMPILED=&lt;$(PreCompiledHeader)&gt;"
+		InheritsFromParent="true"
+		Delimiter=";"
+	/>
+	<UserMacro
+		Name="PreCompiledObject"
+		Value="&quot;$(TopOutputDir)/intermediate/pre_compiled_headers (no mfc)/pre_compiled_headers.obj&quot;"
+	/>
+</VisualStudioPropertySheet>
