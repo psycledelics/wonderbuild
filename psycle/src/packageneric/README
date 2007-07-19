@@ -1,0 +1,106 @@
+
+From bohan to jaz ...
+
+Hi, i saw when you created the psycoal project for msvc7.1 that you must have come accross
+some weird things that were in the msvc8.0 project ; i'll try to explain what this is for.
+
+========================
+About the .vcproj itself
+
+( ERRATUM! The trick described below doesn't work because the IDE tries to compile all .cpp files to .obj in one cl.exe command line, passing just one common directory for as the .obj path (/Fo <dir>). )
+
+You may have noticed there's a filter (ms's jargon for virtual folder)
+named "psycle/coal", rather than a folder "psycle" with a sub folder "coal" inside it.
+This is a trick i found working in msvc 8.0 but i don't know if it works the same in msvc 7.1.
+It may actually not be necessary for psycoal, i originally used it to be able to properly compile the sources in src/universalis.
+Under src/universalis, i have several source files that have the same basename but are in different dirs,
+for example:
+	src/universalis/exception.cpp
+	src/universalis/operating_system/exception.cpp
+	
+I wanted to setup a .vcproj so that it outputs each .obj file in a directory corresponding to its "full source path"
+rather than putting all .obj file directly at the root of the $(IntDir).
+
+In this case, this means:
+	src/universalis/exception.cpp                  -> $(IntDir)/universalis/exception.obj
+	src/universalis/operating_system/exception.cpp -> $(IntDir)/universalis/operating_system/exception.obj
+rather than:
+	src/universalis/exception.cpp                  -> $(IntDir)/exception.obj
+	src/universalis/operating_system/exception.cpp -> $(IntDir)/exception.obj
+the latter clashing.
+
+One way to define a unique .obj path for each .cpp is to set the path of the object file
+for each .cpp (and for each build config) ; this is rather tedious.
+
+Another way is to set the path of object files for the whole project as: $(IntDir)/$(ParentName).
+$(ParentName) refers to the name of the virtual folder which "contains" the .cpp file being compiled.
+But the $(ParentName) doesn't let us include name of the parent of that parent etc.. so, i had to define unique names for each virtual folder.
+
+=================================
+Directory make/msvc_<version>/src
+
+These files are handwritten/hardcoded versions of the files autoconf's configure generates out of the *.hpp.in files
+that are in the top-level src dir.
+for example,
+	make/msvc_8.0/src/diversalis/detail/configuration.hpp
+corresponds to the "instanciation" of
+	              src/diversalis/detail/configuration.hpp.in
+for the msvc 8.0 compiler.
+
+==========================================================================
+About "packageneric" stuff and the boilerplate code in every .cpp and .hpp
+
+( ERRATUM! #include PACKAGENERIC__PRE_COMPILED works fine in gcc and msvc 8 but not in msvc 7.1 ; we have to write #include <packageneric/pre-compiled.private.hpp> )
+
+Each .cpp file first does #include PACKAGENERIC__PRE_COMPILED.
+msvc (and some other compilers) requires that the pre-compiled headers are included first, with one #include statement.
+There's a "Force Include" option for .vcproj files that could be used instead, but i've seen it making the compiler crash
+in the debug build of psycle on msvc7.1, and it's possible some other compiler has no alternative.
+I find that using a macro rather than a hardcoded file path gives us maximum flexibility.
+Since it's the first line of code in the source file, it of course has to be defined on the command line that invokes the compiler.
+The sources shouldn't assume anything about what is included via this #include <packageneric/pre-compiled.private.hpp> ;
+it could be /dev/null (or an equivalent empty file on windows).
+
+Then each .cpp file does #include PACKAGENERIC.
+This let us include a per-module (per-project), or even per-source configuration header.
+This include should indirectly include other config headers ; for example, the include chain might look like:
+	- per-module config and meta-information: $(ProjectDir)/src/packageneric/module.private.hpp
+	- per-compiler config and meta-information: $(SolutionDir)/src/packageneric/configuration.private.hpp
+	- package meta-information: $(ProjectDir)/../ (...) /../../src/packageneric/package.private.hpp
+
+Appart from meta-information like the name of the package, the name of the compiler, the name of the module, etc,
+these inclusions also declare some build settings,
+and particularly, settings that let us determing what functions and objects should be either imported or exported
+when compiling a microsoft dll.
+
+This handling of import or export attributes goes in the .hpp files and could be done like this:
+
+file psycle/coal/foo_bar.hpp:
+	// all other #includes comes before
+	#define UNIVERSALIS__COMPILER__DYNAMIC_LINK  PSYCLE__COAL__FOO_BAR
+	#include <universalis/compiler/dynamic_link/begin.hpp>
+		// declare functions and objects to be dynamically linked here using the UNIVERSALIS__COMPILER__DYNAMIC_LINK macro.
+		namespace psycle
+		{
+			namespace coal
+			{
+				class UNIVERSALIS__COMPILER__DYNAMIC_LINK foo_bar
+				{
+					// ... every member function is implicitely declared with dynamic linkage here.
+				}
+			}
+		}
+	#include <universalis/compiler/dynamic_link/end.hpp>
+
+PSYCLE__COAL__FOO_BAR corresponds to the source (and header) file psycle/coal/foo_bar.cpp,
+and is defined to 1 when building the module that contains the code of the source file psycle/coal/foo_bar.cpp
+( this may for example be defined in the module's $(ProjectDir)/src/packageneric/module.private.hpp )
+
+Between the two includes "begin" and "end", UNIVERSALIS__COMPILER__DYNAMIC_LINK expands either to
+the attribute telling the compiler/linker to import the definition of the symbol, or to export it,
+or it may expands to nothing if it's compiled as a static lib or if it's a unix/elf system, or if it's mingw.
+The purpose of the notation is that the sources know nothing about the way they are compiled.
+This let us freely build the source files into whatever modules: we can split a module, regroup several modules into one,
+build as a dynamic or as a static lib, etc.. without editing the sources themselves.
+
+some more explanations are (not well) written in <root-of-repository>/packageneric/doc/coding-standard
