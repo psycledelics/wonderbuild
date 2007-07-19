@@ -185,7 +185,7 @@
 				OmitFramePointers="TRUE"
 				EnableFiberSafeOptimizations="TRUE"
 				OptimizeForProcessor="3"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
@@ -317,16 +317,6 @@
 				RelativePath="..\..\..\..\src\universalis\exception.hpp">
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\universalis\operating_system\exception2.cpp">
-				<FileConfiguration
-					Name="release.g7|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\..\..\src\universalis\operating_system\threads\id.cpp">
 				<FileConfiguration
 					Name="release.g7|Win32">
@@ -358,6 +348,22 @@
 			<File
 				RelativePath="..\..\..\..\src\universalis\universalis.hpp">
 			</File>
+			<Filter
+				Name="os"
+				Filter="">
+				<File
+					RelativePath="..\..\..\..\src\universalis\operating_system\exception.cpp">
+					<FileConfiguration
+						Name="release.g7|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="3"
+							PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
+							AssemblerListingLocation="$(IntDir)/exceptions.so.asm"
+							ObjectFile="$(IntDir)/exceptions.so.obj"/>
+					</FileConfiguration>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath="..\..\..\..\src\packageneric\configuration.private.hpp">
