@@ -244,7 +244,13 @@
 	</References>
 	<Files>
 		<File
+			RelativePath="..\..\..\..\..\src\psycle\plugins\y_midi\gmnames.h">
+		</File>
+		<File
 			RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugins\y_midi\y_midi.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\..\..\src\psycle\plugins\y_midi\y_midi.hpp">
 		</File>
 	</Files>
 	<Globals>

@@ -192,7 +192,6 @@
 				BufferSecurityCheck="FALSE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="1"
 				PrecompiledHeaderThrough=""
 				PrecompiledHeaderFile="$(OutDir)/$(ProjectName).pch"
 				AssemblerListingLocation="$(IntDir)/"
@@ -272,13 +271,80 @@
 			Name="universalis"
 			Filter="">
 			<File
+				RelativePath="..\..\..\..\src\universalis\operating_system\detail\check_version.cpp">
+				<FileConfiguration
+					Name="release.g7|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="3"
+						PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\universalis\operating_system\exceptions\code_description.cpp">
+				<FileConfiguration
+					Name="release.g7|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="3"
+						PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\..\src\universalis\compiler.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\src\universalis\compiler\detail\pragmatic\demangle.cpp">
+				<FileConfiguration
+					Name="release.g7|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="3"
+						PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\..\src\universalis\exception.cpp">
+				<FileConfiguration
+					Name="release.g7|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="3"
+						PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\universalis\exception.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\universalis\operating_system\exception2.cpp">
+				<FileConfiguration
+					Name="release.g7|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="3"
+						PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\universalis\operating_system\threads\id.cpp">
+				<FileConfiguration
+					Name="release.g7|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="3"
+						PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\universalis\operating_system\loggers.cpp">
+				<FileConfiguration
+					Name="release.g7|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="3"
+						PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\universalis\operating_system.hpp">
@@ -306,7 +372,13 @@
 			RelativePath="..\..\..\..\src\packageneric\pre-compiled.private.hpp">
 		</File>
 		<File
-			RelativePath="pre_compiled_headers.cpp">
+			RelativePath=".\pre_compiled_headers.cpp">
+			<FileConfiguration
+				Name="release.g7|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="1"/>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\..\src\packageneric\project.private.hpp">
