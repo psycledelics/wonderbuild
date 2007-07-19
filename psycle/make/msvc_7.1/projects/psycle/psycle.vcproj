@@ -258,7 +258,7 @@
 	</References>
 	<Files>
 		<Filter
-			Name="operating_system"
+			Name="legacy/operating_system"
 			Filter="">
 			<File
 				RelativePath="$(SolutionDir)\..\..\..\src\operating_system\exception.cpp">

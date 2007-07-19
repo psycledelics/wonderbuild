@@ -334,6 +334,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.stk.reverbs 
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "universalis", "projects\universalis\universalis.vcproj", "{E6148530-C7D4-4E3B-A1D4-5659B096692F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1} = {29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		debug = debug
@@ -865,6 +870,13 @@ Global
 		{652E2772-861D-48C6-A710-FDC1078CCCCC}.release.g6.Build.0 = release.g6|Win32
 		{652E2772-861D-48C6-A710-FDC1078CCCCC}.release.g7.ActiveCfg = release.g7|Win32
 		{652E2772-861D-48C6-A710-FDC1078CCCCC}.release.g7.Build.0 = release.g7|Win32
+		{E6148530-C7D4-4E3B-A1D4-5659B096692F}.debug.ActiveCfg = debug|Win32
+		{E6148530-C7D4-4E3B-A1D4-5659B096692F}.debug.Build.0 = debug|Win32
+		{E6148530-C7D4-4E3B-A1D4-5659B096692F}.documentation.ActiveCfg = debug|Win32
+		{E6148530-C7D4-4E3B-A1D4-5659B096692F}.release.g6.ActiveCfg = release.g6|Win32
+		{E6148530-C7D4-4E3B-A1D4-5659B096692F}.release.g6.Build.0 = release.g6|Win32
+		{E6148530-C7D4-4E3B-A1D4-5659B096692F}.release.g7.ActiveCfg = release.g7|Win32
+		{E6148530-C7D4-4E3B-A1D4-5659B096692F}.release.g7.Build.0 = release.g7|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

@@ -21,7 +21,6 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/EHa
-/
 /Op-
 /WL"
 				Optimization="4"
@@ -32,7 +31,7 @@
 				OmitFramePointers="TRUE"
 				EnableFiberSafeOptimizations="TRUE"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
@@ -103,11 +102,10 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/EHa
-/
 /Op-
 /WL"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
 				ExceptionHandling="FALSE"
 				BasicRuntimeChecks="3"
 				SmallerTypeCheck="TRUE"
@@ -174,7 +172,6 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/EHa
-/
 /Op-
 /WL"
 				Optimization="4"
@@ -185,7 +182,7 @@
 				OmitFramePointers="TRUE"
 				EnableFiberSafeOptimizations="TRUE"
 				OptimizeForProcessor="3"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
@@ -248,132 +245,6 @@
 	<References>
 	</References>
 	<Files>
-		<Filter
-			Name="diversalis"
-			Filter="">
-			<File
-				RelativePath="..\..\..\..\src\diversalis\compiler.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\diversalis\diversalis.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\diversalis\operating_system.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\diversalis\processor.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\diversalis\standard_library.hpp">
-			</File>
-		</Filter>
-		<Filter
-			Name="universalis"
-			Filter="">
-			<File
-				RelativePath="..\..\..\..\src\universalis\operating_system\detail\check_version.cpp">
-				<FileConfiguration
-					Name="release.g7|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\universalis\operating_system\exceptions\code_description.cpp">
-				<FileConfiguration
-					Name="release.g7|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\universalis\compiler.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\universalis\compiler\detail\pragmatic\demangle.cpp">
-				<FileConfiguration
-					Name="release.g7|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\universalis\exception.cpp">
-				<FileConfiguration
-					Name="release.g7|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\universalis\exception.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\universalis\operating_system\threads\id.cpp">
-				<FileConfiguration
-					Name="release.g7|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\universalis\operating_system\loggers.cpp">
-				<FileConfiguration
-					Name="release.g7|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="3"
-						PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\universalis\operating_system.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\universalis\processor.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\universalis\standard_library.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\universalis\universalis.hpp">
-			</File>
-			<Filter
-				Name="os"
-				Filter="">
-				<File
-					RelativePath="..\..\..\..\src\universalis\operating_system\exception.cpp">
-					<FileConfiguration
-						Name="release.g7|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="3"
-							PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
-							AssemblerListingLocation="$(IntDir)/exceptions.so.asm"
-							ObjectFile="$(IntDir)/exceptions.so.obj"/>
-					</FileConfiguration>
-				</File>
-			</Filter>
-		</Filter>
-		<File
-			RelativePath="..\..\..\..\src\packageneric\configuration.private.hpp">
-		</File>
-		<File
-			RelativePath="..\..\..\..\src\packageneric\module.private.hpp">
-		</File>
-		<File
-			RelativePath="..\..\..\..\src\packageneric\package.private.hpp">
-		</File>
 		<File
 			RelativePath="..\..\..\..\src\packageneric\pre-compiled.private.hpp">
 		</File>
@@ -387,13 +258,10 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\packageneric\project.private.hpp">
+			RelativePath="..\..\..\..\src\project.hpp">
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\packageneric\stringized.private.hpp">
-		</File>
-		<File
-			RelativePath="..\..\..\..\src\packageneric\translation-unit.private.hpp">
+			RelativePath="..\..\..\..\src\project.private.hpp">
 		</File>
 	</Files>
 	<Globals>
