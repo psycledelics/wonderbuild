@@ -11,7 +11,7 @@
 	</Platforms>
 	<Configurations>
 		<Configuration
-			Name="unique|Win32"
+			Name="unpack|Win32"
 			OutputDirectory="$(SolutionDir)\..\..\..\include"
 			IntermediateDirectory="$(SolutionDir)\output\$(ConfigurationName)\$(ProjectName)\intermediate_output"
 			ConfigurationType="0">
