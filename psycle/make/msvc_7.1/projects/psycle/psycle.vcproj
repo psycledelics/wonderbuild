@@ -199,7 +199,7 @@
 				BufferSecurityCheck="FALSE"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="3"
+				UsePrecompiledHeader="1"
 				PrecompiledHeaderThrough="project.private.hpp"
 				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
 				AssemblerListingLocation="$(IntDir)/"
@@ -1100,6 +1100,6 @@
 	<Globals>
 		<Global
 			Name="RESOURCE_FILE"
-			Value="\Documents and Settings\All Users\Documentos\Visual C++\psycle-1.8-bugfixes\psycle\src\psycle\host\resources\resources.rc"/>
+			Value="\psycle\psycle\src\psycle\host\resources\resources.rc"/>
 	</Globals>
 </VisualStudioProject>
