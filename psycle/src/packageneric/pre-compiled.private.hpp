@@ -10,7 +10,6 @@
 	#error pre-compiled headers already included
 #else
 	#define PACKAGENERIC__PRE_COMPILED__INCLUDED
-#endif
 
 
 
@@ -328,3 +327,4 @@
 
 
 #endif // defined DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION
+#endif // !defined PACKAGENERIC__PRE_COMPILED__INCLUDED
