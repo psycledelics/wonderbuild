@@ -211,70 +211,16 @@
 			Name="asio"
 			Filter="">
 			<File
-				RelativePath=".\src\asio.cpp">
-				<FileConfiguration
-					Name="release.g6|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="release.g7|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
+				RelativePath="..\..\..\msvc_common\src\asio\asio.cpp">
 			</File>
 			<File
-				RelativePath=".\src\asio.private.hpp">
+				RelativePath="..\..\..\msvc_common\src\asio\asio.private.hpp">
 			</File>
 			<File
-				RelativePath=".\src\asiodrivers.cpp">
-				<FileConfiguration
-					Name="release.g6|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="release.g7|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
+				RelativePath="..\..\..\msvc_common\src\asio\asiodrivers.cpp">
 			</File>
 			<File
-				RelativePath=".\src\asiolist.cpp">
-				<FileConfiguration
-					Name="release.g6|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="release.g7|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-				</FileConfiguration>
+				RelativePath="..\..\..\msvc_common\src\asio\asiolist.cpp">
 			</File>
 		</Filter>
 	</Files>
