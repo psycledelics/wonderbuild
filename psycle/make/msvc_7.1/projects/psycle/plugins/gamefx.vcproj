@@ -22,7 +22,6 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/EHa
-/
 /Op-
 /WL"
 				Optimization="4"
@@ -38,6 +37,7 @@
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
+				EnableEnhancedInstructionSet="1"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
@@ -47,7 +47,6 @@
 				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.pdb"
 				WarningLevel="4"
-				WarnAsError="TRUE"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4652"
@@ -101,11 +100,11 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/EHa
-/
 /Op-
 /WL"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src&quot;"
+				MinimalRebuild="TRUE"
 				ExceptionHandling="FALSE"
 				BasicRuntimeChecks="3"
 				SmallerTypeCheck="TRUE"
@@ -170,7 +169,6 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/EHa
-/
 /Op-
 /WL"
 				Optimization="4"
@@ -186,6 +184,7 @@
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
+				EnableEnhancedInstructionSet="2"
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
@@ -195,7 +194,6 @@
 				ObjectFile="$(IntDir)/"
 				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.pdb"
 				WarningLevel="4"
-				WarnAsError="TRUE"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4652"
@@ -244,16 +242,16 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugins\voskomo\gamefx\license.txt">
+			RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugins\voskomo\gamefx\filter.cpp">
 		</File>
 		<File
 			RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugins\voskomo\gamefx\gamefx.cpp">
 		</File>
 		<File
-			RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugins\voskomo\gamefx\voice.cpp">
+			RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugins\voskomo\gamefx\license.txt">
 		</File>
 		<File
-			RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugins\voskomo\gamefx\filter.cpp">
+			RelativePath="$(SolutionDir)\..\..\..\src\psycle\plugins\voskomo\gamefx\voice.cpp">
 		</File>
 	</Files>
 	<Globals>

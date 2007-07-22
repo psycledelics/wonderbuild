@@ -23,15 +23,4 @@ pushd ..\..\output && (
 			popd
 		)
 	)
-) && (
-	pushd ..\..\..\..\include\ && (
-		if exist dsound.h (
-			rem [bohan] i don't know why sometimes it fails
-			rem [bohan] it seems we need to do it 5 times ...
-			rmdir/s/q dsound.h || exit /b 1
-			rem [bohan] i don't know why sometimes it doesn't report the failure
-			if exist dsound.h exit /b 1
-		)
-		popd
-	)
 )

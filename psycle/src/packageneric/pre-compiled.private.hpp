@@ -4,8 +4,7 @@
 
 ///\file
 ///\brief inclusions of headers which must be pre-compiled.
-///\meta generic
-///\meta depends-on-set-of-libraries
+#pragma once
 #if defined PACKAGENERIC__PRE_COMPILED__INCLUDED
 	#error pre-compiled headers already included
 #else
@@ -18,7 +17,7 @@
 
 
 
-#include <diversalis/compiler.hpp>
+#include <diversalis/compiler.hpp> // defines DIVERSALIS__COMPILER__xxx
 
 
 
@@ -27,7 +26,7 @@
 
 
 
-#if defined DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION
+#if defined DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION // if the compiler supports pre-compilation
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,8 +45,8 @@
 
 
 
-#include <diversalis/diversalis.hpp>
-#include <universalis/compiler.hpp> // includes universalis' warning settings
+#include <diversalis/diversalis.hpp> // defines DIVERSALIS__COMPILER__xxx and DIVERSALIS__OPERATING_SYSTEM__xxx
+#include <universalis/compiler.hpp> // includes warning settings
 
 
 

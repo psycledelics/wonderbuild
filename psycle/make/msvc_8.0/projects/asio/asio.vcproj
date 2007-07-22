@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="asio (steinberg&apos;s sdk)"
 	ProjectGUID="{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
+	RootNamespace="asio (steinberg&apos;s sdk)"
 	>
 	<Platforms>
 		<Platform
@@ -15,7 +16,7 @@
 	<Configurations>
 		<Configuration
 			Name="debug|Win32"
-			ConfigurationType="2"
+			ConfigurationType="4"
 			InheritedPropertySheets="..\debug.vsprops"
 			>
 			<Tool
@@ -35,6 +36,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../src/asio/common&quot;;&quot;$(SolutionDir)/../../src/asio/host&quot;;&quot;$(SolutionDir)/../../src/asio/host/pc&quot;"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -46,13 +48,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -64,18 +63,12 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
 			Name="release|Win32"
-			ConfigurationType="2"
+			ConfigurationType="4"
 			InheritedPropertySheets="..\release.vsprops"
 			WholeProgramOptimization="1"
 			>
@@ -96,6 +89,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../src/asio/common&quot;;&quot;$(SolutionDir)/../../src/asio/host&quot;;&quot;$(SolutionDir)/../../src/asio/host/pc&quot;"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -107,13 +101,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -123,12 +114,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -142,15 +127,15 @@
 			Name="asio"
 			>
 			<File
-				RelativePath="..\..\..\..\src\asio\asio.cpp"
+				RelativePath="src\asio.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\asio\asiodrivers.cpp"
+				RelativePath="src\asiodrivers.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\asio\asiolist.cpp"
+				RelativePath="src\asiolist.cpp"
 				>
 			</File>
 		</Filter>

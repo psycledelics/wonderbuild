@@ -2,8 +2,6 @@
 // copyright 1999-2007 johan boule <bohan@jabber.org>
 // copyright 2004-2007 psycledelics http://psycle.pastnotecut.org
 
-///\file
-///\meta generic
 #include <diversalis/compiler.hpp>
 #if !defined DIVERSALIS__COMPILER__RESOURCE
 	#error "This file is for resource compilers (only relevant on microsoft's operating system)."
