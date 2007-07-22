@@ -1,5 +1,5 @@
 ///\file
-///\brief packageneric configuration for universalis module
+///\brief packageneric configuration for the universalis module 
 #pragma once
 #include <packageneric/configuration.private.hpp>
 
