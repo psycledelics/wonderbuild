@@ -13,7 +13,7 @@
 	/>
 	<UserMacro
 		Name="PreCompiledHeader"
-		Value="project.private.hpp"
+		Value="psycle/project.private.hpp"
 	/>
 	<UserMacro
 		Name="Defines"

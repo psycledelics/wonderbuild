@@ -16,6 +16,7 @@
 	<Configurations>
 		<Configuration
 			Name="debug|Win32"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="..\debug.vsprops;..\pre_compiled_headers\use.mfc.vsprops;..\program.vsprops"
 			UseOfMFC="2"
@@ -39,6 +40,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PrecompiledHeaderThrough="psycle/project.private.hpp"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -51,6 +53,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="htmlhelp.lib"
 				SubSystem="2"
 			/>
 			<Tool
@@ -80,6 +83,7 @@
 		</Configuration>
 		<Configuration
 			Name="release|Win32"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			InheritedPropertySheets="..\release.vsprops;..\pre_compiled_headers\use.mfc.vsprops;..\program.vsprops"
 			UseOfMFC="2"
@@ -103,6 +107,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PrecompiledHeaderThrough="psycle/project.private.hpp"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -115,6 +120,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="htmlhelp.lib"
 				SubSystem="2"
 			/>
 			<Tool
@@ -146,50 +152,6 @@
 	<References>
 	</References>
 	<Files>
-		<Filter
-			Name="legacy/operating_system"
-			>
-			<File
-				RelativePath="$(SolutionDir)\..\..\src\operating_system\exception.cpp"
-				>
-			</File>
-			<File
-				RelativePath="$(SolutionDir)\..\..\src\operating_system\exception.hpp"
-				>
-			</File>
-			<File
-				RelativePath="$(SolutionDir)\..\..\src\operating_system\logger.cpp"
-				>
-			</File>
-			<File
-				RelativePath="$(SolutionDir)\..\..\src\operating_system\logger.hpp"
-				>
-			</File>
-			<Filter
-				Name="exceptions"
-				>
-				<File
-					RelativePath="$(SolutionDir)\..\..\src\operating_system\exceptions\code_description.hpp"
-					>
-				</File>
-				<File
-					RelativePath="$(SolutionDir)\..\..\src\operating_system\exceptions.code_description.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="library"
-				>
-				<File
-					RelativePath="$(SolutionDir)\..\..\src\operating_system\library\export.hpp"
-					>
-				</File>
-				<File
-					RelativePath="$(SolutionDir)\..\..\src\operating_system\library\import.hpp"
-					>
-				</File>
-			</Filter>
-		</Filter>
 		<Filter
 			Name="psycle"
 			>

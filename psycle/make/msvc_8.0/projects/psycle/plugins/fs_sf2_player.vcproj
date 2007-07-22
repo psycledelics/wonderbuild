@@ -16,6 +16,7 @@
 	<Configurations>
 		<Configuration
 			Name="debug|Win32"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="..\..\debug.vsprops;.\plugins.vsprops;..\..\pre_compiled_headers\use.mfc.vsprops"
 			>
@@ -76,6 +77,7 @@
 		</Configuration>
 		<Configuration
 			Name="release|Win32"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="..\..\release.vsprops;..\..\pre_compiled_headers\use.mfc.vsprops;.\plugins.vsprops"
 			UseOfMFC="0"
