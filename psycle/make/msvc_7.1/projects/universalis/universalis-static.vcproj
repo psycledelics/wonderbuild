@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="universalis (dll)"
-	ProjectGUID="{E6148530-C7D4-4E3B-A1D4-5659B096692F}"
+	Name="universalis (static archive)"
+	ProjectGUID="{E6148530-C7D4-4E3B-A1D4-5659B096692E}"
 	Keyword="ExtStoredProcProj">
 	<Platforms>
 		<Platform
@@ -12,9 +12,9 @@
 	<Configurations>
 		<Configuration
 			Name="debug|Win32"
-			OutputDirectory="$(SolutionDir)/output/$(ConfigurationName)/bin/"
+			OutputDirectory="$(SolutionDir)/output/$(ConfigurationName)/lib/"
 			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
-			ConfigurationType="2"
+			ConfigurationType="4"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			CharacterSet="0"
 			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.cmd;$(TargetPath)">
@@ -42,16 +42,8 @@
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/$(InputName).dll"
-				LinkIncremental="2"
-				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
-				GenerateDebugInformation="TRUE"
-				SubSystem="2"
-				LargeAddressAware="1"
-				TurnOffAssemblyGeneration="TRUE"
-				ImportLibrary="$(SolutionDir)/output/$(ConfigurationName)/lib/$(InputName).lib"/>
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)/$(InputName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
@@ -71,17 +63,15 @@
 			<Tool
 				Name="VCXMLDataGeneratorTool"/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
 				Name="VCManagedWrapperGeneratorTool"/>
 			<Tool
 				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="release.g7|Win32"
-			OutputDirectory="$(SolutionDir)/output/$(ConfigurationName)/bin/"
+			OutputDirectory="$(SolutionDir)/output/$(ConfigurationName)/lib/"
 			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
-			ConfigurationType="2"
+			ConfigurationType="4"
 			CharacterSet="0"
 			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.cmd;$(TargetPath)"
 			WholeProgramOptimization="TRUE">
@@ -117,19 +107,8 @@
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/$(InputName).dll"
-				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
-				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
-				SubSystem="2"
-				LargeAddressAware="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TurnOffAssemblyGeneration="TRUE"
-				ImportLibrary="$(SolutionDir)/output/$(ConfigurationName)/lib/$(InputName).lib"/>
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)/$(InputName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
@@ -149,17 +128,15 @@
 			<Tool
 				Name="VCXMLDataGeneratorTool"/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
 				Name="VCManagedWrapperGeneratorTool"/>
 			<Tool
 				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="release.g6|Win32"
-			OutputDirectory="$(SolutionDir)/output/$(ConfigurationName)/bin/"
+			OutputDirectory="$(SolutionDir)/output/$(ConfigurationName)/lib/"
 			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
-			ConfigurationType="2"
+			ConfigurationType="4"
 			CharacterSet="0"
 			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.cmd;$(TargetPath)"
 			WholeProgramOptimization="TRUE">
@@ -195,19 +172,8 @@
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/$(InputName).dll"
-				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
-				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
-				SubSystem="2"
-				LargeAddressAware="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TurnOffAssemblyGeneration="TRUE"
-				ImportLibrary="$(SolutionDir)/output/$(ConfigurationName)/lib/$(InputName).lib"/>
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)/$(InputName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
@@ -226,8 +192,6 @@
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
 			<Tool
 				Name="VCManagedWrapperGeneratorTool"/>
 			<Tool

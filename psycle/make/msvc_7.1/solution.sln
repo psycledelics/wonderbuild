@@ -337,7 +337,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.stk.reverbs 
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "universalis", "projects\universalis\universalis.vcproj", "{E6148530-C7D4-4E3B-A1D4-5659B096692F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "universalis (dll)", "projects\universalis\universalis.vcproj", "{E6148530-C7D4-4E3B-A1D4-5659B096692F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1} = {29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}
@@ -345,6 +345,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "universalis", "projects\uni
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "direct_sound", "projects\direct_sound\direct_sound.vcproj", "{69C0ACBE-EA30-4F1E-9B41-B2DD71C39DF1}"
 	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "universalis (static archive)", "projects\universalis\universalis-static.vcproj", "{E6148530-C7D4-4E3B-A1D4-5659B096692E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
 Global
@@ -929,6 +934,16 @@ Global
 		{69C0ACBE-EA30-4F1E-9B41-B2DD71C39DF1}.release.g7.Build.0 = unpack|Win32
 		{69C0ACBE-EA30-4F1E-9B41-B2DD71C39DF1}.unpack.ActiveCfg = unpack|Win32
 		{69C0ACBE-EA30-4F1E-9B41-B2DD71C39DF1}.unpack.Build.0 = unpack|Win32
+		{E6148530-C7D4-4E3B-A1D4-5659B096692E}.debug.ActiveCfg = debug|Win32
+		{E6148530-C7D4-4E3B-A1D4-5659B096692E}.debug.Build.0 = debug|Win32
+		{E6148530-C7D4-4E3B-A1D4-5659B096692E}.documentation.ActiveCfg = debug|Win32
+		{E6148530-C7D4-4E3B-A1D4-5659B096692E}.documentation.Build.0 = debug|Win32
+		{E6148530-C7D4-4E3B-A1D4-5659B096692E}.release.g6.ActiveCfg = release.g6|Win32
+		{E6148530-C7D4-4E3B-A1D4-5659B096692E}.release.g6.Build.0 = release.g6|Win32
+		{E6148530-C7D4-4E3B-A1D4-5659B096692E}.release.g7.ActiveCfg = release.g7|Win32
+		{E6148530-C7D4-4E3B-A1D4-5659B096692E}.release.g7.Build.0 = release.g7|Win32
+		{E6148530-C7D4-4E3B-A1D4-5659B096692E}.unpack.ActiveCfg = release.g6|Win32
+		{E6148530-C7D4-4E3B-A1D4-5659B096692E}.unpack.Build.0 = release.g6|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
