@@ -75,7 +75,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(step.Compile, command = 'scons --directory=freepsycle', locks = [compile_lock])
+				factory.s(step.Compile, command = 'scons --directory=freepsycle packageneric__debug=1', locks = [compile_lock])
 			]
 		)
 	}
@@ -167,7 +167,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(step.Compile, command = 'scons --directory=psycle-plugins', locks = [compile_lock])
+				factory.s(step.Compile, command = 'scons --directory=psycle-plugins packageneric__debug=1', locks = [compile_lock])
 			]
 		)
 	}
