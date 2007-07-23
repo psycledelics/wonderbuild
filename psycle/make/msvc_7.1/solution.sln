@@ -937,7 +937,6 @@ Global
 		{E6148530-C7D4-4E3B-A1D4-5659B096692E}.debug.ActiveCfg = debug|Win32
 		{E6148530-C7D4-4E3B-A1D4-5659B096692E}.debug.Build.0 = debug|Win32
 		{E6148530-C7D4-4E3B-A1D4-5659B096692E}.documentation.ActiveCfg = debug|Win32
-		{E6148530-C7D4-4E3B-A1D4-5659B096692E}.documentation.Build.0 = debug|Win32
 		{E6148530-C7D4-4E3B-A1D4-5659B096692E}.release.g6.ActiveCfg = release.g6|Win32
 		{E6148530-C7D4-4E3B-A1D4-5659B096692E}.release.g6.Build.0 = release.g6|Win32
 		{E6148530-C7D4-4E3B-A1D4-5659B096692E}.release.g7.ActiveCfg = release.g7|Win32
