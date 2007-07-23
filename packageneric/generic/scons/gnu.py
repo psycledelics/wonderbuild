@@ -230,6 +230,11 @@ def implementation(chain):
 			'-Wl,-O0'
 			#'-Wl,--trace'
 		])
+		if False: # low-memory machine
+			chain.linker().flags().add([
+				'-Wl,--reduce-memory-overheads', # use less memory to link
+				'-Wl,--no-keep-memory' # use less memory to link
+			])
 		if chain.project().platform_executable_format() == 'pe':
 			chain.linker().flags().add([
 				'-Wl,--enable-extra-pe-debug'
