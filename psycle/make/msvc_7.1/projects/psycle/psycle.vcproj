@@ -960,6 +960,9 @@
 					Name="machine"
 					Filter="">
 					<File
+						RelativePath="..\..\..\..\src\psycle\host\convert_internal_machines.hpp">
+					</File>
+					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\internal_machines.cpp">
 					</File>
 					<File
