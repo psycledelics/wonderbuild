@@ -1074,6 +1074,6 @@
 	<Globals>
 		<Global
 			Name="RESOURCE_FILE"
-			Value="\Documents and Settings\All Users\Documentos\Visual C++\psycle-1.8-bugfixes\psycle\src\psycle\host\resources\resources.rc"/>
+			Value="\psycle\psycle\src\psycle\host\resources\resources.rc"/>
 	</Globals>
 </VisualStudioProject>
