@@ -954,6 +954,9 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Song.cpp">
 				</File>
 				<File
+					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Song.hpp">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\SongStructs.hpp">
 				</File>
 				<Filter
@@ -979,9 +982,6 @@
 					</File>
 					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Plugin.hpp">
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\Song.hpp">
 					</File>
 					<File
 						RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\vsthost24.cpp">
