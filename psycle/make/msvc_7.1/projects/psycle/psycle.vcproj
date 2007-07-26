@@ -262,9 +262,6 @@
 			Name="psycle"
 			Filter="">
 			<File
-				RelativePath="$(SolutionDir)\..\..\..\src\configuration.hpp">
-			</File>
-			<File
 				RelativePath="..\..\..\..\src\psycle\host\configuration_options.hpp">
 			</File>
 			<File
