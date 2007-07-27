@@ -30,10 +30,6 @@ unix {
 						#FIXME: is there any reason not to use the following instead?
 						#LIBS *= -lboost_signals-mgw-mt-1_33_1
 					}
-				} else:win32-msvc {
-					warning("We do not have boost libs built for your compiler. Make sure you have them installed")
-					# remove our local include path
-					INCLUDEPATH -= $$BOOST_DIR/include
 				} else:win32-msvc2005 {
 					!exists($$BOOST_DIR/lib-mswindows-msvc-8.0-cxxabi-1400) {
 						warning("The boost libraries are not unpacked. See the dir $$BOOST_DIR".)
@@ -43,6 +39,10 @@ unix {
 						LIBPATH *= $$BOOST_DIR/lib-mswindows-msvc-8.0-cxxabi-1400
 						LIBS *= boost_signals-vc80-mt-1_33_1.lib
 					}
+				} else:win32-msvc {
+					warning("We do not have boost libs built for your compiler. Make sure you have them installed")
+					# remove our local include path
+					INCLUDEPATH -= $$BOOST_DIR/include
 				} else {
 					warning("We do not have boost libs built for your compiler. Make sure you have them installed.")
 					# remove our local include path
