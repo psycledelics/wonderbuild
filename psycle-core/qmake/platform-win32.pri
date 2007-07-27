@@ -5,8 +5,10 @@ win32 {
 		message("Compiler is: g++.")
 	} else:win32-msvc* {
 		message("Compiler is: MS Visual C++.")
-	      QMAKE_CXXFLAGS += /Zi
-	      QMAKE_LFLAGS += /debug
+		QMAKE_CXXFLAGS += /Zi
+		QMAKE_LFLAGS += /debug
+		LIBS *= advapi32.lib
+		LIBS *= user32.lib
 		win32-msvc2005 {
 			message("Compiler is: MS Visual C++ 14 (2005).")
 			# Question: Do these regiser db entries depend on the IDE Studio being installed?
@@ -23,9 +25,6 @@ win32 {
 				LIBPATH *= "$${VC_DIR}/lib"
 				LIBPATH *= "$${VC_DIR}/PlatformSDK/lib"
 			}
-			
-			LIBS *= advapi32.lib
-			LIBS *= user32.lib
 		}
 	} else {
 		warning("Untested compiler.")
