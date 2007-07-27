@@ -642,7 +642,7 @@
 			Name="packageneric"
 			>
 			<File
-				RelativePath="..\..\src\packageneric\configuration.private.hpp"
+				RelativePath="..\..\..\msvc_common\src\packageneric\configuration.private.hpp"
 				>
 			</File>
 			<File
@@ -685,7 +685,11 @@
 				Name="diversalis/detail"
 				>
 				<File
-					RelativePath="..\..\src\diversalis\detail\configuration.hpp"
+					RelativePath="..\..\..\msvc_common\src\diversalis\detail\configuration.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\msvc_common\src\universalis\detail\configuration.private.hpp"
 					>
 				</File>
 				<File
