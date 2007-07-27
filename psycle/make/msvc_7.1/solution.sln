@@ -352,6 +352,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "universalis (static archive
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.bexter.bexphase", "projects\psycle\plugins\bexphase.vcproj", "{8ADD9C4A-EEEE-48D8-9853-4EA253F00F0F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		debug = debug
@@ -943,6 +947,16 @@ Global
 		{E6148530-C7D4-4E3B-A1D4-5659B096692E}.release.g7.Build.0 = release.g7|Win32
 		{E6148530-C7D4-4E3B-A1D4-5659B096692E}.unpack.ActiveCfg = release.g6|Win32
 		{E6148530-C7D4-4E3B-A1D4-5659B096692E}.unpack.Build.0 = release.g6|Win32
+		{8ADD9C4A-EEEE-48D8-9853-4EA253F00F0F}.debug.ActiveCfg = debug|Win32
+		{8ADD9C4A-EEEE-48D8-9853-4EA253F00F0F}.debug.Build.0 = debug|Win32
+		{8ADD9C4A-EEEE-48D8-9853-4EA253F00F0F}.documentation.ActiveCfg = debug|Win32
+		{8ADD9C4A-EEEE-48D8-9853-4EA253F00F0F}.documentation.Build.0 = debug|Win32
+		{8ADD9C4A-EEEE-48D8-9853-4EA253F00F0F}.release.g6.ActiveCfg = release.g6|Win32
+		{8ADD9C4A-EEEE-48D8-9853-4EA253F00F0F}.release.g6.Build.0 = release.g6|Win32
+		{8ADD9C4A-EEEE-48D8-9853-4EA253F00F0F}.release.g7.ActiveCfg = release.g7|Win32
+		{8ADD9C4A-EEEE-48D8-9853-4EA253F00F0F}.release.g7.Build.0 = release.g7|Win32
+		{8ADD9C4A-EEEE-48D8-9853-4EA253F00F0F}.unpack.ActiveCfg = release.g7|Win32
+		{8ADD9C4A-EEEE-48D8-9853-4EA253F00F0F}.unpack.Build.0 = release.g7|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

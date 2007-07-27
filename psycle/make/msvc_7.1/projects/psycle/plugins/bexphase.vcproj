@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="psycle.plugins.fluidsynth.sf2.player"
-	ProjectGUID="{E6905023-50A7-49E0-A5DE-5C0D26414B8D}"
+	Name="psycle.plugins.bexter.bexphase"
+	ProjectGUID="{8ADD9C4A-EEEE-48D8-9853-4EA253F00F0F}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -16,7 +16,6 @@
 			OutputDirectory="$(SolutionDir)/output/$(ConfigurationName)/bin/psycle.plugins"
 			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="2"
-			UseOfMFC="2"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.cmd;$(TargetPath)"
 			WholeProgramOptimization="TRUE">
@@ -43,10 +42,10 @@
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
 				PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
-				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
+				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.pch"
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
+				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
@@ -105,7 +104,6 @@
 /WL"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../msvc_common/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;"
-				PreprocessorDefinitions="PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;"
 				MinimalRebuild="TRUE"
 				ExceptionHandling="FALSE"
 				BasicRuntimeChecks="3"
@@ -115,10 +113,10 @@
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
 				PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
-				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
-				AssemblerListingLocation=""
+				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.pch"
+				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
+				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
@@ -128,7 +126,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fluidsynth.lib"
 				OutputFile="$(OutDir)/$(InputName).dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -166,7 +163,6 @@
 			OutputDirectory="$(SolutionDir)/output/$(ConfigurationName)/bin/psycle.plugins"
 			IntermediateDirectory="$(SolutionDir)/output/$(ConfigurationName)/intermediate_output/$(ProjectName)"
 			ConfigurationType="2"
-			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			DeleteExtensionsOnClean="*.obj;*.ilk;$(TargetDir)/$(TargetName).ilk;*.pdb;*.tlb;*.tli;*.tlh;*.tmp;*.rsp;*.cmd;$(TargetPath)"
 			WholeProgramOptimization="TRUE">
@@ -184,7 +180,6 @@
 				EnableFiberSafeOptimizations="TRUE"
 				OptimizeForProcessor="3"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../msvc_common/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;"
-				PreprocessorDefinitions="PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;;_USRDLL"
 				StringPooling="TRUE"
 				ExceptionHandling="FALSE"
 				RuntimeLibrary="2"
@@ -193,11 +188,11 @@
 				ForceConformanceInForLoopScope="TRUE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
-				PrecompiledHeaderThrough="psycle/project.private.hpp"
-				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
-				AssemblerListingLocation=""
+				PrecompiledHeaderThrough="packageneric/pre-compiled.private.hpp"
+				PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.pch"
+				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
+				ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.pdb"
 				WarningLevel="4"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="3"
@@ -207,12 +202,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="fluidsynth.lib"
 				OutputFile="$(OutDir)/$(InputName).dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="$(SolutionDir)/output/$(ConfigurationName)/lib"
-				IgnoreAllDefaultLibraries="FALSE"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
 				LargeAddressAware="1"
@@ -220,8 +213,7 @@
 				EnableCOMDATFolding="2"
 				OptimizeForWindows98="1"
 				TurnOffAssemblyGeneration="TRUE"
-				ImportLibrary="$(SolutionDir)/output/$(ConfigurationName)/lib/$(InputName).lib"
-				TargetMachine="0"/>
+				ImportLibrary="$(SolutionDir)/output/$(ConfigurationName)/lib/$(InputName).lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				TypeLibraryName="$(SolutionDir)/output/$(ConfigurationName)/lib/$(ProjectName).tlb"/>
@@ -233,8 +225,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				Culture="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../../src&quot;;&quot;$(SolutionDir)/../../include&quot;;&quot;$(SolutionDir)/../../src/legacy&quot;;&quot;$(SolutionDir)/../../src/psycle/host&quot;;&quot;$(SolutionDir)/../../src/psycle/host/resources&quot;"/>
+				Culture="1047"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -251,12 +242,9 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\fluid_synth_sf2_player\FS_sf2_player.cpp">
+			RelativePath="..\..\..\..\..\src\psycle\plugins\bexphase\bexphase.cpp">
 		</File>
 	</Files>
 	<Globals>
-		<Global
-			Name="RESOURCE_FILE"
-			Value="\distr\Multimedia\Trackers\Psycle\Sources\psycle\src\psycle\plugins\fluid_synth_sf2_player\fs_sf2.rc"/>
 	</Globals>
 </VisualStudioProject>

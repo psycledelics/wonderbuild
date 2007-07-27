@@ -242,6 +242,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.alk.muter", 
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.bexter.bexphase", "projects\psycle\plugins\bexphase.vcproj", "{47AA9119-8F87-4B37-A5D1-AA4EA2346565}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+	EndProjectSection
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.thunderpalace_softsat", "projects\psycle\plugins\thunderpalace softsat.vcproj", "{CDD9BC26-289D-4558-A22D-500F0BB76828}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
@@ -710,6 +715,12 @@ Global
 		{47AA9119-8F87-4B37-A5D1-AA4EA234CAAE}.release|win32.ActiveCfg = release|Win32
 		{47AA9119-8F87-4B37-A5D1-AA4EA234CAAE}.release|win32.Build.0 = release|Win32
 		{47AA9119-8F87-4B37-A5D1-AA4EA234CAAE}.unpack|win32.ActiveCfg = debug|Win32
+		{47AA9119-8F87-4B37-A5D1-AA4EA2346565}.debug|win32.ActiveCfg = debug|Win32
+		{47AA9119-8F87-4B37-A5D1-AA4EA2346565}.debug|win32.Build.0 = debug|Win32
+		{47AA9119-8F87-4B37-A5D1-AA4EA2346565}.documentation|win32.ActiveCfg = debug|Win32
+		{47AA9119-8F87-4B37-A5D1-AA4EA2346565}.release|win32.ActiveCfg = release|Win32
+		{47AA9119-8F87-4B37-A5D1-AA4EA2346565}.release|win32.Build.0 = release|Win32
+		{47AA9119-8F87-4B37-A5D1-AA4EA2346565}.unpack|win32.ActiveCfg = debug|Win32
 		{CDD9BC26-289D-4558-A22D-500F0BB76828}.debug|win32.ActiveCfg = debug|Win32
 		{CDD9BC26-289D-4558-A22D-500F0BB76828}.debug|win32.Build.0 = debug|Win32
 		{CDD9BC26-289D-4558-A22D-500F0BB76828}.documentation|win32.ActiveCfg = debug|Win32
