@@ -10,21 +10,25 @@ win32 {
 		LIBS *= advapi32.lib
 		LIBS *= user32.lib
 		win32-msvc2005 {
+			VC_VERSION = 8.0
 			message("Compiler is: MS Visual C++ 14 (2005).")
-			# Question: Do these regiser db entries depend on the IDE Studio being installed?
-			VC_DIR = $$system("reg query HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\8.0\Setup\VC /v ProductDir|findstr REG_SZ")
-			VC_DIR -= ProductDir  REG_SZ
+		} else {
+			VC_VERSION = 7.1
+		}
 
-			#VC_DIR = $$system("reg query HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\8.0 /v InstallDir|findstr REG_SZ")
-			#VC_DIR -= InstallDir REG_SZ
+		# Question: Do these regiser db entries depend on the IDE Studio being installed?
+		VC_DIR = $$system("reg query HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\$${VC_VERSION}\Setup\VC /v ProductDir|findstr REG_SZ")
+		VC_DIR -= ProductDir  REG_SZ
 
-			exists($${VC_DIR}) {
-				#VC_DIR = $$system("dir \"$${VC_DIR}..\..\VC\"|findstr Directory")
-				#VC_DIR -= Directory of
-				message("Existing VC_DIR is [$${VC_DIR}].")
-				LIBPATH *= "$${VC_DIR}/lib"
-				LIBPATH *= "$${VC_DIR}/PlatformSDK/lib"
-			}
+		#VC_DIR = $$system("reg query HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\$${VC_VERSION} /v InstallDir|findstr REG_SZ")
+		#VC_DIR -= InstallDir REG_SZ
+
+		exists($${VC_DIR}) {
+			#VC_DIR = $$system("dir \"$${VC_DIR}..\..\VC\"|findstr Directory")
+			#VC_DIR -= Directory of
+			message("Existing VC_DIR is [$${VC_DIR}].")
+			LIBPATH *= "$${VC_DIR}/lib"
+			LIBPATH *= "$${VC_DIR}/PlatformSDK/lib"
 		}
 	} else {
 		warning("Untested compiler.")
