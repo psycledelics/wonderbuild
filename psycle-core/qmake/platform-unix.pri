@@ -1,6 +1,7 @@
 unix {
-	message("System is: unix.")
-	TOP_SRC_DIR = $$system(cd .. && pwd)
+	message("System is unix")
+	TOP_SRC_DIR = $$system(cd ../.. && pwd)
+	message("Top src dir is $$TOP_SRC_DIR")
 	macx {
 		#CONFIG += x86 ppc # make universal binaries on mac
 		
@@ -10,8 +11,11 @@ unix {
 		for(path, env_cpath): INCLUDEPATH *= $$path
 		for(path, env_library_path): LIBPATH *= $$path
 		
-		# We add fink's dirs to the search paths, which are installed by default to the /sw prefix
-		exists(/sw/include): INCLUDEPATH *= /sw/include
-		exists(/sw/lib): LIBPATH *= /sw/lib
+		# We add fink's dirs to the search paths. Fink is installed by default with the /sw/ prefix.
+		exists(/sw) {
+			message("Found fink dir /sw")
+			exists(/sw/include): INCLUDEPATH *= /sw/include
+			exists(/sw/lib): LIBPATH *= /sw/lib
+		}
 	}
 }

@@ -1,4 +1,4 @@
-PSYCLE_AUDIODRIVERS_DIR = $$TOP_SRC_DIR/../psycle-audiodrivers
+PSYCLE_AUDIODRIVERS_DIR = $$TOP_SRC_DIR/psycle-audiodrivers
 INCLUDEPATH *= $$PSYCLE_AUDIODRIVERS_DIR/src
 DEPENDPATH *= $$PSYCLE_AUDIODRIVERS_DIR/src
 
@@ -57,10 +57,10 @@ unix {
 		}
 	}
 } else:win32 {
-	EXTERNAL_PKG_DIR = $$TOP_SRC_DIR/../external-packages
+	EXTERNAL_PKG_DIR = $$TOP_SRC_DIR/external-packages
 	
 	exists($(DXSDK_DIR)) {
-		message("Existing DXSDK_DIR is [$(DXSDK_DIR)].")
+		message("Existing DXSDK_DIR is $(DXSDK_DIR)")
 		INCLUDEPATH += $(DXSDK_DIR)/include
 		LIBPATH += $(DXSDK_DIR)/lib
 		CONFIG += dsound

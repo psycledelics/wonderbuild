@@ -1,6 +1,12 @@
-PSYCLE_CORE_DIR = $$TOP_SRC_DIR/../psycle-core
+PSYCLE_CORE_DIR = $$TOP_SRC_DIR/psycle-core
+
 INCLUDEPATH *= $$PSYCLE_CORE_DIR/src
 DEPENDPATH *= $$PSYCLE_COR_DIR/src
+
+INCLUDEPATH *= $$TOP_SRC_DIR/diversalis/src
+DEPENDPATH *= $$TOP_SRC_DIR/diversalis/src
+INCLUDEPATH *= $$TOP_SRC_DIR/universalis/src
+DEPENDPATH *= $$TOP_SRC_DIR/universalis/src
 
 HEADERS += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/binread.h \
