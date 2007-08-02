@@ -68,7 +68,7 @@ def detect(chain):
 			'-Wl,--demangle',
 			#####'-Wl,--export-dynamic',
 			#'-Wl,--unresolved-symbols=report-all', # default
-			'-Wl,--unresolved-symbols=ignore-in-shared-libs',
+			#'-Wl,--unresolved-symbols=ignore-in-shared-libs', # this caused a build error on the factoid host when using thread-local storage variable in shared library: undefined reference to `___tls_get_addr'
 			#'-Wl,--unresolved-symbols=ignore-in-object-files',
 			#'-Wl,--unresolved-symbols=ignore-all',
 			#'-Wl,--warn-unresolved-symbols' # warn instead of erroring
@@ -100,7 +100,7 @@ def detect(chain):
 				chain.linker().flags().add([
 					'-Wl,-z origin' # marks objects (cygwin's ld says it doesn't know it despite it being in both its info node and man page!)
 					#'-Wl,-z nodlopen' # marks objects as not supporting dlopening
-					#'-Wl,-z defs' # marks objects, like -no-undefined
+					#'-Wl,-z defs' # marks objects, like -no-undefined, dissallows undefined symbols even in shared libraries where it is normally allowed
 				])
 
 			chain.compilers().cxx().flags().add([
