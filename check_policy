@@ -137,6 +137,8 @@ if __name__ == '__main__':
 			'*.cpp',
 			'*.hpp',
 			'*.h',
+			'*.py',
+			'*.text',
 			'*.txt',
 			'*.html',
 			'README',
