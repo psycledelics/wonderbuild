@@ -5,7 +5,7 @@
 import os, fnmatch
 
 class find:
-	'a forward iterator that traverses a directory tree'	
+	'a forward iterator that traverses a directory tree'	
 	def __init__(
 		self,
 		project,
