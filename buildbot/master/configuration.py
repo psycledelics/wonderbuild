@@ -298,7 +298,7 @@ if True:
 			builderNames = ['libzzub'],
 			fileIsImportant = lambda change: filter(change,
 				include_prefixes = [''],
-				exclude_prefixes = ['branches/', 'tags/', 'freepsycle/', 'qpsycle/', 'psycle-core/', 'psycle-audiodrivers/', 'psycle-plugins/', 'psycle/', 'universalis/', 'diversalis/', 'packageneric/', 'buildbot/', 'external-packages/', 'www/']
+				exclude_prefixes = ['branches/', 'tags/', 'freepsycle/', 'qpsycle/', 'psycle-core/', 'psycle-helpers', 'psycle-audiodrivers/', 'psycle-plugins/', 'psycle/', 'universalis/', 'diversalis/', 'packageneric/', 'buildbot/', 'external-packages/', 'www/']
 			)
 		)
 	)
