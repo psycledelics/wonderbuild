@@ -3,10 +3,27 @@
 %~d0
 cd %~p0
 
-if not exist ..\..\output\direct_sound_stamp (
-	pushd ..\..\ && (
-		output.direct_sound -y || exit /b 1
-		echo direct_sound extracted > output\direct_sound_stamp || exit /b 1
-		popd
+set pkgdir=..\..\..\..\..\external-packages\dsound-9
+set libdir=lib-mswindows-msvc-cxxabi
+
+if not exist ..\..\..\..\include\dsound.h (
+	if not exist ..\..\..\..\include (
+		mkdir ..\..\..\..\include || exit /b 1
 	)
+	xcopy/f %pkgdir%\include\dsound.h ..\..\..\..\include\ || exit /b 1
+)
+
+if not exist ..\..\output\direct_sound_stamp (
+
+	if not exist ..\..\output\debug\lib (
+		mkdir ..\..\output\debug\lib || exit /b 1
+	)
+	xcopy/f %pkgdir%\%libdir%\dsound.lib ..\..\output\debug\lib\ || exit /b 1
+
+	if not exist ..\..\output\release\lib (
+		mkdir ..\..\output\release\lib || exit /b 1
+	)
+	xcopy/f %pkgdir%\%libdir%\dsound.lib ..\..\output\release\lib\ || exit /b 1
+
+	echo direct_sound copied > ..\..\output\direct_sound_stamp || exit /b 1
 )
