@@ -356,6 +356,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.bexter.bexph
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "projects\zlib\zlib.vcproj", "{69C0ACBE-EA30-4F1E-9B41-A1DD71C33DE2}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		debug = debug
@@ -957,6 +961,15 @@ Global
 		{8ADD9C4A-EEEE-48D8-9853-4EA253F00F0F}.release.g7.Build.0 = release.g7|Win32
 		{8ADD9C4A-EEEE-48D8-9853-4EA253F00F0F}.unpack.ActiveCfg = release.g7|Win32
 		{8ADD9C4A-EEEE-48D8-9853-4EA253F00F0F}.unpack.Build.0 = release.g7|Win32
+		{69C0ACBE-EA30-4F1E-9B41-A1DD71C33DE2}.debug.ActiveCfg = unpack|Win32
+		{69C0ACBE-EA30-4F1E-9B41-A1DD71C33DE2}.debug.Build.0 = unpack|Win32
+		{69C0ACBE-EA30-4F1E-9B41-A1DD71C33DE2}.documentation.ActiveCfg = unpack|Win32
+		{69C0ACBE-EA30-4F1E-9B41-A1DD71C33DE2}.release.g6.ActiveCfg = unpack|Win32
+		{69C0ACBE-EA30-4F1E-9B41-A1DD71C33DE2}.release.g6.Build.0 = unpack|Win32
+		{69C0ACBE-EA30-4F1E-9B41-A1DD71C33DE2}.release.g7.ActiveCfg = unpack|Win32
+		{69C0ACBE-EA30-4F1E-9B41-A1DD71C33DE2}.release.g7.Build.0 = unpack|Win32
+		{69C0ACBE-EA30-4F1E-9B41-A1DD71C33DE2}.unpack.ActiveCfg = unpack|Win32
+		{69C0ACBE-EA30-4F1E-9B41-A1DD71C33DE2}.unpack.Build.0 = unpack|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
