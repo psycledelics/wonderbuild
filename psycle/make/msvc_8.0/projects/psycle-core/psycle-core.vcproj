@@ -524,7 +524,6 @@
 					>
 					<FileConfiguration
 						Name="debug|Win32"
-						ExcludedFromBuild="true"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -532,7 +531,6 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="release|Win32"
-						ExcludedFromBuild="true"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -548,7 +546,6 @@
 					>
 					<FileConfiguration
 						Name="debug|Win32"
-						ExcludedFromBuild="true"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -556,7 +553,6 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="release|Win32"
-						ExcludedFromBuild="true"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -572,7 +568,6 @@
 					>
 					<FileConfiguration
 						Name="debug|Win32"
-						ExcludedFromBuild="true"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -580,7 +575,6 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="release|Win32"
-						ExcludedFromBuild="true"
 						>
 						<Tool
 							Name="VCCLCompilerTool"

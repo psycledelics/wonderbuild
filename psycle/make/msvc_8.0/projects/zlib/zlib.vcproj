@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="direct_sound"
-	ProjectGUID="{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}"
+	Name="zlib"
+	ProjectGUID="{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}"
 	Keyword="MakeFileProj"
 	>
 	<Platforms>
