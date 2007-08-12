@@ -1,39 +1,25 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
-	Name="direct_sound"
-	ProjectGUID="{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}"
-	Keyword="MakeFileProj"
-	>
+	Version="7.10"
+	Name="zlib"
+	ProjectGUID="{69C0ACBE-EA30-4F1E-9B41-A1DD71C33DE2}"
+	Keyword="MakeFileProj">
 	<Platforms>
 		<Platform
-			Name="Win32"
-		/>
+			Name="Win32"/>
 	</Platforms>
-	<ToolFiles>
-	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="unpack|Win32"
-			OutputDirectory="$(TopSrcDir)/include"
-			IntermediateDirectory="$(TopOutputDir)/intermediate/intermediate"
-			ConfigurationType="0"
-			InheritedPropertySheets="..\top_output_dir.vsprops;..\top_src_dir.vsprops"
-			>
+			OutputDirectory="$(SolutionDir)\..\..\..\include"
+			IntermediateDirectory="$(SolutionDir)\output\$(ConfigurationName)\$(ProjectName)\intermediate_output"
+			ConfigurationType="0">
 			<Tool
 				Name="VCNMakeTool"
 				BuildCommandLine="cmd.exe /c build.cmd"
 				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd &amp;&amp; build.cmd&quot;"
-				CleanCommandLine="cmd.exe /c clean.cmd"
-				Output=""
-				PreprocessorDefinitions=""
-				IncludeSearchPath=""
-				ForcedIncludes=""
-				AssemblySearchPath=""
-				ForcedUsingAssemblies=""
-				CompileAsManaged=""
-			/>
+				CleanCommandLine="cmd.exe /c clean.cmd"/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -41,14 +27,12 @@
 	<Files>
 		<Filter
 			Name="commands"
-			>
+			Filter="">
 			<File
-				RelativePath=".\build.cmd"
-				>
+				RelativePath=".\build.cmd">
 			</File>
 			<File
-				RelativePath=".\clean.cmd"
-				>
+				RelativePath=".\clean.cmd">
 			</File>
 		</Filter>
 	</Files>
