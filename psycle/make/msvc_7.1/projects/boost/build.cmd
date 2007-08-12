@@ -37,15 +37,25 @@ if not exist ..\..\output\boost_stamp (
 	)
 	move %pkgdir%\%libdir%\*-gd-*.lib ..\..\output\debug\lib || exit /b 1
 
-	if not exist ..\..\output\release\bin (
-		mkdir ..\..\output\release\bin || exit /b 1
+	if not exist ..\..\output\release.g6\bin (
+		mkdir ..\..\output\release.g6\bin || exit /b 1
 	)
-	move %pkgdir%\%libdir%\*.dll ..\..\output\release\bin || exit /b 1
+	xcopy/f/i %pkgdir%\%libdir%\*.dll ..\..\output\release.g6\bin\ || exit /b 1
 
-	if not exist ..\..\output\release\lib (
-		mkdir ..\..\output\release\lib || exit /b 1
+	if not exist ..\..\output\release.g6\lib (
+		mkdir ..\..\output\release.g6\lib || exit /b 1
 	)
-	move %pkgdir%\%libdir%\*.lib ..\..\output\release\lib || exit /b 1
+	xcopy/f/i %pkgdir%\%libdir%\*.lib ..\..\output\release.g6\lib\ || exit /b 1
+
+	if not exist ..\..\output\release.g7\bin (
+		mkdir ..\..\output\release.g7\bin || exit /b 1
+	)
+	move %pkgdir%\%libdir%\*.dll ..\..\output\release.g7\bin\ || exit /b 1
+
+	if not exist ..\..\output\release.g7\lib (
+		mkdir ..\..\output\release.g7\lib || exit /b 1
+	)
+	move %pkgdir%\%libdir%\*.lib ..\..\output\release.g7\lib\ || exit /b 1
 
 	echo boost extracted > ..\..\output\boost_stamp || exit /b 1
 	rmdir/s/q %pkgdir%\%libdir% || exit /b 1
