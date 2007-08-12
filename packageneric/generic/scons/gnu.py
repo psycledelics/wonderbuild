@@ -46,6 +46,8 @@ def detect(chain):
 				#####'-Wmissing-format-attribute',
 				#'-Wunreachable-code',
 				'-Wno-unused-parameter'
+				#"-Werror=sequence-point" # makes undefined behavior an error. man gcc: The present implementation of this option only works for C programs.  A future implementation may also work for C++ programs.
+				#"-Werror=return-type" # makes this an error.
 			])
 			if gnug.version().major() >= 4:
 				chain.compilers().cxx().flags().add([
