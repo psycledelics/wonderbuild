@@ -70,8 +70,14 @@ from buildbot.process import factory, step
 class PolicyCheck(step.Test):
 	name = 'policy check'
 	description = ['checking policy']
-	descriptionDone = ['policy check']
+	descriptionDone = ['policy']
 	command = ['./tools/check-policy']
+
+class LintCheck(step.Test):
+	name = 'lint check'
+	description = ['checking lint']
+	descriptionDone = ['lint']
+	command = ['true']
 
 BuildmasterConfig['builders'].append(
 	{
