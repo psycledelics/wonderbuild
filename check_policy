@@ -114,22 +114,22 @@ def check_tabs_spaces_and_carriage_returns(path):
 		for char in line:
 			if char == '\r':
 				print path + ':' + str(line_number) + ':', 'carriage return'
-				return
+				break
 			elif indentation:
 				if char == ' ':
 					spaces += 1
 					if spaces == spaces_to_tab:
 						print path + ':' + str(line_number) + ':', 'spaces used for indentation'
-						return
 						spaces = 0
+						break
 				elif char != ' ' and char != '\t':
 					indentation = False
 					if spaces != 0: # sometimes indentation with spaces is inconsistent, using varying lengths
 						print path + ':' + str(line_number) + ':', 'inconsistent space indentation'
-						return
+						break
 			elif char == '\t':
 					print path + ':' + str(line_number) + ':', 'tab not used for indentation'
-					return
+					break
 
 if __name__ == '__main__':
 	if len(sys.argv) > 1: os.chdir(sys.argv[1])
