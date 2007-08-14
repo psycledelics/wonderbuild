@@ -42,7 +42,6 @@ HEADERS += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psyfilter.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/riff.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/sampler.h \
-	$$PSYCLE_CORE_DIR/src/psycle/core/sigslot.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/singlepattern.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/song.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/timesignature.h \
