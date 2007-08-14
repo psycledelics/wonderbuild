@@ -7,7 +7,8 @@
 import os, sys, fnmatch
 
 class find:
-	'a forward iterator that traverses a directory tree'	
+	'a forward iterator that traverses a directory tree'
+	
 	def __init__(
 		self,
 		strip_path,
@@ -131,16 +132,31 @@ def check_tabs_spaces_and_carriage_returns(path):
 					return
 
 if __name__ == '__main__':
-	os.chdir(os.path.join(os.path.split(sys.argv[0])[0], os.pardir, os.pardir, 'trunk'))
+	if len(sys.argv) > 1: os.chdir(sys.argv[1])
+	else: os.chdir(os.path.join(os.path.split(sys.argv[0])[0], os.pardir, os.pardir, 'trunk'))
 	files = find('.',
 		include_patterns = [
 			'*.cpp',
 			'*.hpp',
+			'*.hpp.in',
+			'*.ipp',
 			'*.h',
+			'*.h.in',
+			'*.i',
+			'*.rc',
+			'*.xpm',
 			'*.py',
 			'*.text',
 			'*.txt',
 			'*.html',
+			'*.xml',
+			'*.m4',
+			'*.ac',
+			'*.am',
+			'*.pc',
+			'*.pc.in',
+			'SConstruct',
+			'SConscript',
 			'README',
 			'AUTHORS'
 		],
