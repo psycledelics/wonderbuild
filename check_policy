@@ -136,10 +136,12 @@ def check_tabs_spaces_and_carriage_returns(path):
 	return result
 
 if __name__ == '__main__':
+	result = True
 	if len(sys.argv) > 1: paths = sys.argv[1:]
 	else:
 		os.chdir(os.path.join(os.path.split(sys.argv[0])[0], os.pardir, os.pardir, 'trunk'))
 		paths = [os.curdir]
+	print paths
 	for path in paths:
 		files = find(path,
 			include_patterns = [
@@ -170,8 +172,6 @@ if __name__ == '__main__':
 			exclude_patterns = [
 				os.path.join(os.curdir, 'external-packages', '*')
 			])
-		result = True
-		for f in files:
-			result &= check_tabs_spaces_and_carriage_returns(f.full())
-		if result: sys.exit(0)
-		else: sys.exit(1)
+		for f in files: result &= check_tabs_spaces_and_carriage_returns(f.full())
+	if result: sys.exit(0)
+	else: sys.exit(1)
