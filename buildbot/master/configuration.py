@@ -67,6 +67,12 @@ compile_lock = locks.SlaveLock('compile')
 
 from buildbot.process import factory, step
 
+class PolicyCheck(step.Test):
+	name = 'policy check'
+	description = ['checking policy']
+	descriptionDone = ['policy check']
+	command = ['./tools/check-policy']
+
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'freepsycle',
@@ -75,6 +81,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
+				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis freepsycle', locks = [svn_lock]),
 				factory.s(step.Compile, command = 'scons --directory=freepsycle packageneric__debug=1', locks = [compile_lock])
 			]
 		)
@@ -98,7 +105,8 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(step.Compile, command = 'cd psycle-core && qmake && make', locks = [compile_lock])
+				factory.s(PolicyCheck, command = './tools/check-policy psycle-core', locks = [svn_lock]),
+				factory.s(step.Compile, command = 'cd psycle-core && qmake && make', locks = [compile_lock]),
 			]
 		)
 	}
@@ -121,6 +129,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
+				factory.s(PolicyCheck, command = './tools/check-policy psycle-player', locks = [svn_lock]),
 				factory.s(step.Compile, command = 'cd psycle-player && qmake && make', locks = [compile_lock])
 			]
 		)
@@ -144,6 +153,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
+				factory.s(PolicyCheck, command = './tools/check-policy qpsycle', locks = [svn_lock]),
 				factory.s(step.Compile, command = 'cd qpsycle && qmake && make', locks = [compile_lock])
 			]
 		)
@@ -298,7 +308,7 @@ if True:
 			builderNames = ['libzzub'],
 			fileIsImportant = lambda change: filter(change,
 				include_prefixes = [''],
-				exclude_prefixes = ['branches/', 'tags/', 'freepsycle/', 'qpsycle/', 'psycle-core/', 'psycle-helpers', 'psycle-audiodrivers/', 'psycle-plugins/', 'psycle/', 'universalis/', 'diversalis/', 'packageneric/', 'buildbot/', 'external-packages/', 'www/']
+				exclude_prefixes = ['branches/', 'tags/', 'tools/', 'freepsycle/', 'qpsycle/', 'psycle-core/', 'psycle-helpers', 'psycle-audiodrivers/', 'psycle-plugins/', 'psycle/', 'universalis/', 'diversalis/', 'packageneric/', 'buildbot/', 'external-packages/', 'www/']
 			)
 		)
 	)
