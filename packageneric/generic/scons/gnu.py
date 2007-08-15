@@ -6,6 +6,13 @@ def detect(chain):
 	from packageneric.pool.gnug import gnug
 	gnug = gnug(chain.project())
 	if gnug.result():
+		chain.project().contexes().check_and_build().os_env().paths().add_inherited([
+			'CPATH',
+			'C_INCLUDE_PATH',
+			'CPLUS_INCLUDE_PATH',
+			'OBJC_INCLUDE_PATH',
+			'LIBRARY_PATH'
+		])
 		chain.compilers().cxx().flags().add([
 			'-pipe',
 			'-fmessage-length=0',
