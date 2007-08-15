@@ -6,13 +6,16 @@ def detect(chain):
 	from packageneric.pool.gnug import gnug
 	gnug = gnug(chain.project())
 	if gnug.result():
-		chain.project().contexes().check_and_build().os_env().paths().add_inherited([
+		chain_os_env_paths_vars = [
 			'CPATH',
 			'C_INCLUDE_PATH',
 			'CPLUS_INCLUDE_PATH',
 			'OBJC_INCLUDE_PATH',
 			'LIBRARY_PATH'
-		])
+		]
+		#chain.project().contexes().check_and_build().os_env().paths().add_inherited(chain_os_env_paths_vars)
+		chain.os_env().paths().add_inherited(chain_os_env_paths_vars)
+
 		chain.compilers().cxx().flags().add([
 			'-pipe',
 			'-fmessage-length=0',
@@ -126,7 +129,7 @@ def detect(chain):
 			if os.path.exists('/sw/include'): chain.compilers().cxx().paths().add(['/sw/include'])
 			if os.path.exists('/sw/lib'): chain.linker().paths().add(['/sw/lib'])
 			# fink's paths are not in gcc's default paths on macosx so we get paths from the os env:
-			chain.os_env().paths().add_inherited(['CPATH', 'LIBRARY_PATH'])
+			# already done above in all case: chain.os_env().paths().add_inherited(chain_os_env_paths_vars)
 		else:
 			# --add-std-call-alias exports stdcall symbols both as is (with @* suffix), and without
 			# --outout-def file.def
@@ -162,7 +165,7 @@ def detect(chain):
 			# 5) libxxx.dll
 			# 6) xxx.dll
 			# There is no standard location for libraries on mswindows, so we get paths from the os env:
-			chain.os_env().paths().add_inherited(['CPATH', 'LIBRARY_PATH'])
+			# already done above in all case: chain.os_env().paths().add_inherited(chain_os_env_paths_vars)
 
 		if chain.project().platform() == 'cygwin':
 			if False:

@@ -18,18 +18,23 @@ class env(dictionary):
 			self._paths = env_paths()
 			return self._paths
 		
-class env_paths(env):
+	def attach(self, source):
+		dictionary.attach(self, source)
+		if isinstance(source, env): self.paths().attach(source.paths())
+
+class env_paths(dictionary):
+	def add_inherited(self, keys):
+		for key in keys:
+			try: value = os.environ[key]
+			except KeyError: pass
+			else: self[key] = value
+
 	def add_unique(self, dictionary_):
 		for key, value in dictionary_.items():
 			try: current_value = self[key]
 			except KeyError: current_value = ''
 			from SCons.Util import AppendPath as append_path_unique
 			self[key] = append_path_unique(current_value, value)
-
-	def attach(self, source):
-		env.attach(self, source)
-		if isinstance(source, env):
-			self.paths().attach(source.paths())
 
 _template = {}
 
