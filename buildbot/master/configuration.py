@@ -68,13 +68,13 @@ compile_lock = locks.SlaveLock('compile')
 from buildbot.process import factory, step
 
 class PolicyCheck(step.Test):
-	name = 'policy check'
+	name = 'policy-check'
 	description = ['checking policy']
 	descriptionDone = ['policy']
 	command = ['./tools/check-policy']
 
 class LintCheck(step.Test):
-	name = 'lint check'
+	name = 'lint-check'
 	description = ['checking lint']
 	descriptionDone = ['lint']
 	command = ['true']
