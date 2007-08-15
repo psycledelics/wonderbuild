@@ -249,7 +249,7 @@ def implementation(chain):
 			])
 		if chain.project().platform_executable_format() == 'pe':
 			chain.linker().flags().add([
-				'-Wl,--enable-extra-pe-debug'
+				#'-Wl,--enable-extra-pe-debug'
 			])
 	else:
 		chain.compilers().cxx().defines().add({
