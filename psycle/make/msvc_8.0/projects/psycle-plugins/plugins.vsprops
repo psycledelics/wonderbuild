@@ -4,6 +4,6 @@
 	Version="8.00"
 	Name="plugins"
 	OutputDirectory="$(TopOutputDir)/bin/psycle.plugins"
-	InheritedPropertySheets="..\..\top_output_dir.vsprops"
+	InheritedPropertySheets="..\top_output_dir.vsprops"
 	>
 </VisualStudioPropertySheet>
