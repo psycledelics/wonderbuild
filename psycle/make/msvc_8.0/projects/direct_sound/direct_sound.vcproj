@@ -16,8 +16,6 @@
 	<Configurations>
 		<Configuration
 			Name="unpack|Win32"
-			OutputDirectory="$(TopSrcDir)/include"
-			IntermediateDirectory="$(TopOutputDir)/intermediate/intermediate"
 			ConfigurationType="0"
 			InheritedPropertySheets="..\top_output_dir.vsprops;..\top_src_dir.vsprops"
 			>

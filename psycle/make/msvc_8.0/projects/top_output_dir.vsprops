@@ -3,6 +3,8 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="top_output_dir"
+	OutputDirectory="$(TopOutputDir)/bin"
+	IntermediateDirectory="$(TopOutputDir)/intermediate/$(ProjectName)"
 	>
 	<UserMacro
 		Name="TopOutputDir"

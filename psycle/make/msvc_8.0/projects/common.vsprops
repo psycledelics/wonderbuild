@@ -3,8 +3,6 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="common"
-	OutputDirectory="$(TopOutputDir)/bin"
-	IntermediateDirectory="$(TopOutputDir)/intermediate/$(ProjectName)"
 	InheritedPropertySheets=".\top_output_dir.vsprops;.\lib_path.vsprops;.\include_path.vsprops;.\pre_compiled_headers\use.vsprops;.\defines.vsprops"
 	>
 	<Tool
