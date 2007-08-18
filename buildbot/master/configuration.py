@@ -198,6 +198,30 @@ BuildmasterConfig['schedulers'].append(
 	)
 )
 
+BuildmasterConfig['builders'].append(
+	{
+		'name': 'psycle-helpers',
+		'slavenames': slaves,
+		'builddir': svn_dir + 'psycle-helpers',
+		'factory': factory.BuildFactory(
+			[
+				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
+				factory.s(step.Compile, command = 'scons --directory=psycle-helpers packageneric__debug=0 packageneric__test=1', locks = [compile_lock]),
+				factory.s(step.Test, command = './++packageneric/variants/default/stage-install/usr/local/bin/psycle-helpers_unit_tests', locks = [compile_lock])
+			]
+		)
+	}
+)
+BuildmasterConfig['schedulers'].append(
+	Scheduler(
+		name = 'psycle-helpers',
+		branch = None,
+		treeStableTimer = bunch_timer,
+		builderNames = ['psycle-helpers'],
+		fileIsImportant = lambda change: filter(change, ['psycle-helpers/', 'universalis/', 'diversalis/', 'packageneric/'])
+	)
+)
+
 BuildmasterConfig['status'] = []
 
 from buildbot.status.html import Waterfall
