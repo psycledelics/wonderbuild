@@ -139,11 +139,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\moreamp_eq\maEqualizer.h"
+			RelativePath="..\..\..\..\src\psycle\plugins\moreamp_eq\maEqualizer.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\moreamp_eq\moreamp_eq.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\moreamp_eq\moreamp_eq.cpp"
 			>
 		</File>
 	</Files>

@@ -139,11 +139,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\zephod_super_fm\envelope.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\zephod_super_fm\envelope.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\zephod_super_fm\zephod_superfm.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\zephod_super_fm\zephod_superfm.cpp"
 			>
 		</File>
 	</Files>

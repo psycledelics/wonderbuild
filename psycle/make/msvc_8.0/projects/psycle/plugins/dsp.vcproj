@@ -122,63 +122,63 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\dsp\Biquad.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\dsp\Biquad.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\dsp\Biquad.h"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\dsp\Biquad.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\dsp\Dsp.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\dsp\Dsp.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\dsp\Dsp.h"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\dsp\Dsp.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\dsp\DspMath.h"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\dsp\DspMath.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\dsp\Envelope.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\dsp\Envelope.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\dsp\Envelope.h"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\dsp\Envelope.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\dsp\Filter.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\dsp\Filter.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\dsp\Filter.h"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\dsp\Filter.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\dsp\Formant.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\dsp\Formant.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\dsp\Formant.h"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\dsp\Formant.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\dsp\Inertia.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\dsp\Inertia.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\dsp\Inertia.h"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\dsp\Inertia.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\dsp\Waveform.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\dsp\Waveform.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\dsp\Waveform.h"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\dsp\Waveform.h"
 			>
 		</File>
 	</Files>

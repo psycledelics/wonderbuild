@@ -142,64 +142,64 @@
 			Name="stk"
 			>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\ADSR.cpp"
+				RelativePath="..\..\..\..\src\stk\ADSR.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\BiQuad.cpp"
+				RelativePath="..\..\..\..\src\stk\BiQuad.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\Delay.cpp"
+				RelativePath="..\..\..\..\src\stk\Delay.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\DelayA.cpp"
+				RelativePath="..\..\..\..\src\stk\DelayA.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\DelayL.cpp"
+				RelativePath="..\..\..\..\src\stk\DelayL.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\Envelope.cpp"
+				RelativePath="..\..\..\..\src\stk\Envelope.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\Filter.cpp"
+				RelativePath="..\..\..\..\src\stk\Filter.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\Generator.cpp"
+				RelativePath="..\..\..\..\src\stk\Generator.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\Instrmnt.cpp"
+				RelativePath="..\..\..\..\src\stk\Instrmnt.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\Noise.cpp"
+				RelativePath="..\..\..\..\src\stk\Noise.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\OnePole.cpp"
+				RelativePath="..\..\..\..\src\stk\OnePole.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\OneZero.cpp"
+				RelativePath="..\..\..\..\src\stk\OneZero.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\Plucked.cpp"
+				RelativePath="..\..\..\..\src\stk\Plucked.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\stk.cpp"
+				RelativePath="..\..\..\..\src\stk\stk.cpp"
 				>
 			</File>
 		</Filter>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\stk\stk.plucked.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\stk\stk.plucked.cpp"
 			>
 		</File>
 	</Files>

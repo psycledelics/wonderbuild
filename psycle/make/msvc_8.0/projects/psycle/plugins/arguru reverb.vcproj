@@ -139,19 +139,19 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\arguru_reverb\AllPass.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\arguru_reverb\AllPass.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\arguru_reverb\arguru_reverb.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\arguru_reverb\arguru_reverb.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\arguru_reverb\CombFilter.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\arguru_reverb\CombFilter.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\arguru_reverb\LowPass.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\arguru_reverb\LowPass.cpp"
 			>
 		</File>
 	</Files>

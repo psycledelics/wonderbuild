@@ -139,31 +139,31 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\sublime\Globals.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\sublime\Globals.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\sublime\Globals.h"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\sublime\Globals.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\sublime\Shared.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\sublime\Shared.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\sublime\Shared.h"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\sublime\Shared.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\sublime\Sublime.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\sublime\Sublime.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\sublime\Voice.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\sublime\Voice.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\sublime\Voice.h"
+			RelativePath="..\..\..\..\src\psycle\plugins\druttis\sublime\Voice.h"
 			>
 		</File>
 	</Files>

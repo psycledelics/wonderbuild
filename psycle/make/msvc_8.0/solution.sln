@@ -18,49 +18,49 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pre_compiled_headers.mfc", 
 		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1} = {29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.ayeternal.gainer", "projects\psycle\plugins\gainer.vcproj", "{5EDF4167-AEA5-49BA-9B25-AFCEEF12F5E9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.ayeternal.gainer", "projects\psycle-plugins\gainer.vcproj", "{5EDF4167-AEA5-49BA-9B25-AFCEEF12F5E9}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.ayeternal.delay", "projects\psycle\plugins\delay.vcproj", "{F9D890D8-B4BF-4C41-BE8A-9AC222AA396B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.ayeternal.delay", "projects\psycle-plugins\delay.vcproj", "{F9D890D8-B4BF-4C41-BE8A-9AC222AA396B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.ayeternal.distortion", "projects\psycle\plugins\distortion.vcproj", "{B7971021-83E8-4CC7-A926-DFF0B4530A41}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.ayeternal.distortion", "projects\psycle-plugins\distortion.vcproj", "{B7971021-83E8-4CC7-A926-DFF0B4530A41}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.ayeternal.filter_2_poles", "projects\psycle\plugins\filter_2_poles.vcproj", "{88974F25-2F34-4F4B-99D9-F93B097CD24D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.ayeternal.filter_2_poles", "projects\psycle-plugins\filter_2_poles.vcproj", "{88974F25-2F34-4F4B-99D9-F93B097CD24D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.ayeternal.flanger", "projects\psycle\plugins\flanger.vcproj", "{5E7F1902-C3E3-43DE-A35D-402E42CD78B8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.ayeternal.flanger", "projects\psycle-plugins\flanger.vcproj", "{5E7F1902-C3E3-43DE-A35D-402E42CD78B8}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.ayeternal.ring_modulator", "projects\psycle\plugins\ring_modulator.vcproj", "{BA57DEBE-F6E2-412F-B58F-56BD5BBBDB34}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.ayeternal.ring_modulator", "projects\psycle-plugins\ring_modulator.vcproj", "{BA57DEBE-F6E2-412F-B58F-56BD5BBBDB34}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.bdzld.negative", "projects\psycle\plugins\negative.vcproj", "{57779BFB-E246-4305-9431-C0639619C17A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.bdzld.negative", "projects\psycle-plugins\negative.vcproj", "{57779BFB-E246-4305-9431-C0639619C17A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.arguru.synth", "projects\psycle\plugins\arguru synth 2f.vcproj", "{4F58513B-F7E3-46CD-8196-9B3E4A07AF20}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.arguru.synth", "projects\psycle-plugins\arguru synth 2f.vcproj", "{4F58513B-F7E3-46CD-8196-9B3E4A07AF20}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "doxygen", "projects\doxygen\doxygen.vcproj", "{7C2EC99A-E859-4DF0-B21F-40F81E97735C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.arguru.reverb", "projects\psycle\plugins\arguru reverb.vcproj", "{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.arguru.reverb", "projects\psycle-plugins\arguru reverb.vcproj", "{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
@@ -70,255 +70,255 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "asio (steinberg's sdk)", "p
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.arguru.distortion", "projects\psycle\plugins\arguru distortion.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05186}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.arguru.distortion", "projects\psycle-plugins\arguru distortion.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05186}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.yezar.freeverb", "projects\psycle\plugins\arguru freeverb.vcproj", "{2911A2EB-A0F2-4C99-802C-ED694E557DE6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.yezar.freeverb", "projects\psycle-plugins\arguru freeverb.vcproj", "{2911A2EB-A0F2-4C99-802C-ED694E557DE6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.arguru.goaslicer", "projects\psycle\plugins\arguru goaslicer.vcproj", "{6199ABC3-ABFE-4947-8270-D9248CCAC88D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.arguru.goaslicer", "projects\psycle-plugins\arguru goaslicer.vcproj", "{6199ABC3-ABFE-4947-8270-D9248CCAC88D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.arguru.xfilter (aka cross-delay)", "projects\psycle\plugins\arguru xfilter.vcproj", "{1B5F9342-46EE-4359-8178-DAB8BB37E979}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.arguru.xfilter (aka cross-delay)", "projects\psycle-plugins\arguru xfilter.vcproj", "{1B5F9342-46EE-4359-8178-DAB8BB37E979}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.jaz.drum (aka Josep-Maria Drum, or JMDrum)", "projects\psycle\plugins\JMDrum.vcproj", "{28D6932C-A980-4A38-AAA0-EDCE59682766}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.jaz.drum (aka Josep-Maria Drum, or JMDrum)", "projects\psycle-plugins\JMDrum.vcproj", "{28D6932C-A980-4A38-AAA0-EDCE59682766}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.karlkox.surround", "projects\psycle\plugins\karlkox surround.vcproj", "{511ADAA7-7A6D-45CB-9F3A-7BCBC1DB8E15}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.karlkox.surround", "projects\psycle-plugins\karlkox surround.vcproj", "{511ADAA7-7A6D-45CB-9F3A-7BCBC1DB8E15}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.makk.m3", "projects\psycle\plugins\m3.vcproj", "{B7B85261-D124-4CF6-B12A-91D4105B3CDC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.makk.m3", "projects\psycle-plugins\m3.vcproj", "{B7B85261-D124-4CF6-B12A-91D4105B3CDC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.yannis.midi", "projects\psycle\plugins\ymidi.vcproj", "{43FE77F2-4C22-40D0-9527-A15943C83536}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.yannis.midi", "projects\psycle-plugins\ymidi.vcproj", "{43FE77F2-4C22-40D0-9527-A15943C83536}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.zephod.super_fm", "projects\psycle\plugins\zephod SuperFM.vcproj", "{652E2772-861D-48C6-A710-FDC1078CBA09}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.zephod.super_fm", "projects\psycle-plugins\zephod SuperFM.vcproj", "{652E2772-861D-48C6-A710-FDC1078CBA09}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.crasher", "projects\psycle\plugins\crasher.vcproj", "{520E5BA9-4E94-45B7-A37F-EEB90EFF86A7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.crasher", "projects\psycle-plugins\crasher.vcproj", "{520E5BA9-4E94-45B7-A37F-EEB90EFF86A7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.haas", "projects\psycle\plugins\haas.vcproj", "{16A3B78E-D26B-4057-A524-9158B9559D9F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.haas", "projects\psycle-plugins\haas.vcproj", "{16A3B78E-D26B-4057-A524-9158B9559D9F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.stk.plucked (stk wrapper by sartorius)", "projects\psycle\plugins\stk Plucked.vcproj", "{88A154E0-A206-4880-B65D-C8B43CE45A47}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.stk.plucked (stk wrapper by sartorius)", "projects\psycle-plugins\stk Plucked.vcproj", "{88A154E0-A206-4880-B65D-C8B43CE45A47}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.stk.shakers (stk wrapper by sartorius)", "projects\psycle\plugins\stk Shakers.vcproj", "{6A82474F-4EF8-4A94-A696-7D0757F11332}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.stk.shakers (stk wrapper by sartorius)", "projects\psycle-plugins\stk Shakers.vcproj", "{6A82474F-4EF8-4A94-A696-7D0757F11332}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.schorus", "projects\psycle\plugins\schorus.vcproj", "{3EBF292A-E10B-4389-88ED-C99522F04A5A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.schorus", "projects\psycle-plugins\schorus.vcproj", "{3EBF292A-E10B-4389-88ED-C99522F04A5A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.vd.allpass", "projects\psycle\plugins\vdallpass.vcproj", "{3F6026D4-85D0-492F-A9B6-FFE49D8DD1C7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.vd.allpass", "projects\psycle-plugins\vdallpass.vcproj", "{3F6026D4-85D0-492F-A9B6-FFE49D8DD1C7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.vd.echo", "projects\psycle\plugins\vdecho.vcproj", "{75C36F66-DB9A-4586-BDC8-7F3AEFA76E34}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.vd.echo", "projects\psycle-plugins\vdecho.vcproj", "{75C36F66-DB9A-4586-BDC8-7F3AEFA76E34}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.vd.noisegate", "projects\psycle\plugins\vdnoisegate.vcproj", "{29688DF6-F5D9-4BE8-9014-81436D967603}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.vd.noisegate", "projects\psycle-plugins\vdnoisegate.vcproj", "{29688DF6-F5D9-4BE8-9014-81436D967603}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.vd.fastverb", "projects\psycle\plugins\vsfastverb.vcproj", "{B252B9E6-DBEA-4701-9F7B-9F4294B571D0}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.vd.fastverb", "projects\psycle-plugins\vsfastverb.vcproj", "{B252B9E6-DBEA-4701-9F7B-9F4294B571D0}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "boost", "projects\boost\boost.vcproj", "{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.voskomo.gamefx", "projects\psycle\plugins\gamefx.vcproj", "{485B9E85-CBC7-4B27-8AD2-5DD97234FBED}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.voskomo.gamefx", "projects\psycle-plugins\gamefx.vcproj", "{485B9E85-CBC7-4B27-8AD2-5DD97234FBED}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.voskomo.blitz", "projects\psycle\plugins\blitz.vcproj", "{C55834ED-9038-4D48-AE49-122834E68B25}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.voskomo.blitz", "projects\psycle-plugins\blitz.vcproj", "{C55834ED-9038-4D48-AE49-122834E68B25}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.audacity.wahwah", "projects\psycle\plugins\wahwah.vcproj", "{25CF6AC2-6555-41FC-AAB7-A92C9DAE2A61}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.audacity.wahwah", "projects\psycle-plugins\wahwah.vcproj", "{25CF6AC2-6555-41FC-AAB7-A92C9DAE2A61}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.legasynth.303", "projects\psycle\plugins\legasynth_303.vcproj", "{F3ABFF20-76B9-4113-805F-2B7EB67CAB0F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.legasynth.303", "projects\psycle-plugins\legasynth_303.vcproj", "{F3ABFF20-76B9-4113-805F-2B7EB67CAB0F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.moreamp.maeq", "projects\psycle\plugins\maeq.vcproj", "{17801124-1DB1-4DB1-9E56-7E862219A20D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.moreamp.maeq", "projects\psycle-plugins\maeq.vcproj", "{17801124-1DB1-4DB1-9E56-7E862219A20D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.autopan", "projects\psycle\plugins\pooplog autopan.vcproj", "{33D48225-E32B-4952-9F31-A46130F40E1F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.autopan", "projects\psycle-plugins\pooplog autopan.vcproj", "{33D48225-E32B-4952-9F31-A46130F40E1F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.delay", "projects\psycle\plugins\pooplog delay.vcproj", "{343A5812-CBF3-4E09-AF81-8500476DE5E5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.delay", "projects\psycle-plugins\pooplog delay.vcproj", "{343A5812-CBF3-4E09-AF81-8500476DE5E5}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.delay.light", "projects\psycle\plugins\pooplog delay light.vcproj", "{63104BFE-4941-4D07-8F3F-A868E88F87D8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.delay.light", "projects\psycle-plugins\pooplog delay light.vcproj", "{63104BFE-4941-4D07-8F3F-A868E88F87D8}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.filter", "projects\psycle\plugins\pooplog filter.vcproj", "{A4A90A56-8CE8-480A-97BE-AB9B194436C6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.filter", "projects\psycle-plugins\pooplog filter.vcproj", "{A4A90A56-8CE8-480A-97BE-AB9B194436C6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.fm.laboratory", "projects\psycle\plugins\pooplog fm laboratory.vcproj", "{FCFE88A2-E6F1-4643-BF64-6EBFDCDF1AB1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.fm.laboratory", "projects\psycle-plugins\pooplog fm laboratory.vcproj", "{FCFE88A2-E6F1-4643-BF64-6EBFDCDF1AB1}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.fm.light", "projects\psycle\plugins\pooplog fm light.vcproj", "{9ADD208D-3BEA-476F-A0CE-5ED4D10A62E7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.fm.light", "projects\psycle-plugins\pooplog fm light.vcproj", "{9ADD208D-3BEA-476F-A0CE-5ED4D10A62E7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.lofi", "projects\psycle\plugins\pooplog lofi processor.vcproj", "{E50C03CC-FE5F-4E33-9A7D-196AA6D17E00}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.lofi", "projects\psycle-plugins\pooplog lofi processor.vcproj", "{E50C03CC-FE5F-4E33-9A7D-196AA6D17E00}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.scratch", "projects\psycle\plugins\pooplog scratch master.vcproj", "{66B5D7EA-4CF3-4F52-AA46-203E0B173B99}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.scratch", "projects\psycle-plugins\pooplog scratch master.vcproj", "{66B5D7EA-4CF3-4F52-AA46-203E0B173B99}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.scratch2", "projects\psycle\plugins\pooplog scratch master 2.vcproj", "{169A62CC-C6C2-4FDA-B320-B813D6FB7748}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.scratch2", "projects\psycle-plugins\pooplog scratch master 2.vcproj", "{169A62CC-C6C2-4FDA-B320-B813D6FB7748}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.fm.ultralight", "projects\psycle\plugins\pooplog fm ultralight.vcproj", "{D356E06A-1FE4-4F70-9F38-5359ADC68AD8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.fm.ultralight", "projects\psycle-plugins\pooplog fm ultralight.vcproj", "{D356E06A-1FE4-4F70-9F38-5359ADC68AD8}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.alk.muter", "projects\psycle\plugins\alk muter.vcproj", "{47AA9119-8F87-4B37-A5D1-AA4EA234CAAE}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.alk.muter", "projects\psycle-plugins\alk muter.vcproj", "{47AA9119-8F87-4B37-A5D1-AA4EA234CAAE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.bexter.bexphase", "projects\psycle\plugins\bexphase.vcproj", "{47AA9119-8F87-4B37-A5D1-AA4EA2346565}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.bexter.bexphase", "projects\psycle-plugins\bexphase.vcproj", "{47AA9119-8F87-4B37-A5D1-AA4EA2346565}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.thunderpalace_softsat", "projects\psycle\plugins\thunderpalace softsat.vcproj", "{CDD9BC26-289D-4558-A22D-500F0BB76828}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.thunderpalace_softsat", "projects\psycle-plugins\thunderpalace softsat.vcproj", "{CDD9BC26-289D-4558-A22D-500F0BB76828}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.audacity.compressor", "projects\psycle\plugins\audacity compressor.vcproj", "{A5CED440-30E1-4B72-B1EC-62C752B8A1E4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.audacity.compressor", "projects\psycle-plugins\audacity compressor.vcproj", "{A5CED440-30E1-4B72-B1EC-62C752B8A1E4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.audacity.phaser", "projects\psycle\plugins\audacity phaser.vcproj", "{D9481658-10F2-4007-905A-0873271C6045}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.audacity.phaser", "projects\psycle-plugins\audacity phaser.vcproj", "{D9481658-10F2-4007-905A-0873271C6045}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.ladspa.gverb", "projects\psycle\plugins\ladspa gverb.vcproj", "{1EDE3137-50AB-4565-AA60-1E8F7C11164F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.ladspa.gverb", "projects\psycle-plugins\ladspa gverb.vcproj", "{1EDE3137-50AB-4565-AA60-1E8F7C11164F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.stk.reverbs (stk wrapper by sartorius)", "projects\psycle\plugins\stk Rev.vcproj", "{9BD0D570-BD65-4CA6-8D82-F55311A160BD}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.stk.reverbs (stk wrapper by sartorius)", "projects\psycle-plugins\stk Rev.vcproj", "{9BD0D570-BD65-4CA6-8D82-F55311A160BD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.sublime", "projects\psycle\plugins\sublime.vcproj", "{A5BF47C9-76B0-454D-8564-804E42CA3315}"
-	ProjectSection(ProjectDependencies) = postProject
-		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
-		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {984A85EE-BA08-473F-9ADB-1C1692DFD77F}
-		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.dsp (static build)", "projects\psycle\plugins\dsp.vcproj", "{F46EC0F9-8440-418D-91E7-41176165E294}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.blwtbl (wavetable)", "projects\psycle\plugins\blwtbl.vcproj", "{984A85EE-BA08-473F-9ADB-1C1692DFD77F}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.slicit", "projects\psycle\plugins\Slicit.vcproj", "{6C83DB3F-10C7-4488-A20D-8C6985AFFC03}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.sublime", "projects\psycle-plugins\sublime.vcproj", "{A5BF47C9-76B0-454D-8564-804E42CA3315}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
 		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {984A85EE-BA08-473F-9ADB-1C1692DFD77F}
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.eq3", "projects\psycle\plugins\EQ3.vcproj", "{1C7E86D5-7D35-4C8F-BDF0-6BE89FD0C58F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.dsp (static build)", "projects\psycle-plugins\dsp.vcproj", "{F46EC0F9-8440-418D-91E7-41176165E294}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.blwtbl (wavetable)", "projects\psycle-plugins\blwtbl.vcproj", "{984A85EE-BA08-473F-9ADB-1C1692DFD77F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.slicit", "projects\psycle-plugins\Slicit.vcproj", "{6C83DB3F-10C7-4488-A20D-8C6985AFFC03}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
 		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {984A85EE-BA08-473F-9ADB-1C1692DFD77F}
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.plucked string", "projects\psycle\plugins\PluckedString.vcproj", "{CCBCA650-988B-4454-954E-3F25121AE411}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.eq3", "projects\psycle-plugins\EQ3.vcproj", "{1C7E86D5-7D35-4C8F-BDF0-6BE89FD0C58F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
+		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {984A85EE-BA08-473F-9ADB-1C1692DFD77F}
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.plucked string", "projects\psycle-plugins\PluckedString.vcproj", "{CCBCA650-988B-4454-954E-3F25121AE411}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.phantom", "projects\psycle\plugins\Phantom.vcproj", "{A517216B-EE2E-4473-B342-2842C5F5BCBC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.phantom", "projects\psycle-plugins\Phantom.vcproj", "{A517216B-EE2E-4473-B342-2842C5F5BCBC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.feedme", "projects\psycle\plugins\FeedMe.vcproj", "{49BA720B-BEB2-42F6-9168-C6EEA8C8BE30}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.feedme", "projects\psycle-plugins\FeedMe.vcproj", "{49BA720B-BEB2-42F6-9168-C6EEA8C8BE30}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.koruz", "projects\psycle\plugins\Koruz.vcproj", "{C233B433-2D3A-41BD-ABAB-F92B569E95EA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.koruz", "projects\psycle-plugins\Koruz.vcproj", "{C233B433-2D3A-41BD-ABAB-F92B569E95EA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
@@ -333,7 +333,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "properties", "properties", "{776C8571-9FCC-4B32-82DF-7D634E51B05A}"
 	ProjectSection(SolutionItems) = preProject
 		projects\debug.vsprops = projects\debug.vsprops
-		projects\psycle\plugins\plugins.vsprops = projects\psycle\plugins\plugins.vsprops
+		projects\psycle-plugins\plugins.vsprops = projects\psycle\plugins\plugins.vsprops
 		projects\release.vsprops = projects\release.vsprops
 	EndProjectSection
 EndProject
@@ -397,9 +397,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "midi", "midi", "{0134E93B-1
 		..\..\doc\for-end-users\psycle-midi-2.2b\PsycleMIDIChart.txt = ..\..\doc\for-end-users\psycle-midi-2.2b\PsycleMIDIChart.txt
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.fluidsynth (dynamic library)", "projects\psycle\plugins\fluidsynth.vcproj", "{923A9CFD-C2B2-4A53-952B-EC9CD8413704}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.fluidsynth (dynamic library)", "projects\psycle-plugins\fluidsynth.vcproj", "{923A9CFD-C2B2-4A53-952B-EC9CD8413704}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.fluidsynth.sf2.player", "projects\psycle\plugins\fs_sf2_player.vcproj", "{E6905023-50A7-49E0-A5DE-5C0D26414B8D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.fluidsynth.sf2.player", "projects\psycle-plugins\fs_sf2_player.vcproj", "{E6905023-50A7-49E0-A5DE-5C0D26414B8D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{923A9CFD-C2B2-4A53-952B-EC9CD8413704} = {923A9CFD-C2B2-4A53-952B-EC9CD8413704}
 		{28C015FB-3BDA-4B32-8D85-C652E9892216} = {28C015FB-3BDA-4B32-8D85-C652E9892216}

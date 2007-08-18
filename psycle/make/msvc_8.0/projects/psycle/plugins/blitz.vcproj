@@ -139,27 +139,27 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\voskomo\blitz\blitz.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\voskomo\blitz\blitz.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\voskomo\blitz\filter.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\voskomo\blitz\filter.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\voskomo\blitz\lfo.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\voskomo\blitz\lfo.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\voskomo\blitz\license.txt"
+			RelativePath="..\..\..\..\src\psycle\plugins\voskomo\blitz\license.txt"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\voskomo\blitz\pwm.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\voskomo\blitz\pwm.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\voskomo\blitz\voice.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\voskomo\blitz\voice.cpp"
 			>
 		</File>
 	</Files>

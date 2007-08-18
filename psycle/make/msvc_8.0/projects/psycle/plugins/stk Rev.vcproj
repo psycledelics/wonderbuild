@@ -142,64 +142,64 @@
 			Name="stk"
 			>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\Delay.cpp"
+				RelativePath="..\..\..\..\src\stk\Delay.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\Delay.h"
+				RelativePath="..\..\..\..\src\stk\Delay.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\Effect.cpp"
+				RelativePath="..\..\..\..\src\stk\Effect.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\Effect.h"
+				RelativePath="..\..\..\..\src\stk\Effect.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\Filter.cpp"
+				RelativePath="..\..\..\..\src\stk\Filter.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\Filter.h"
+				RelativePath="..\..\..\..\src\stk\Filter.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\JCRev.cpp"
+				RelativePath="..\..\..\..\src\stk\JCRev.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\JCRev.h"
+				RelativePath="..\..\..\..\src\stk\JCRev.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\NRev.cpp"
+				RelativePath="..\..\..\..\src\stk\NRev.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\NRev.h"
+				RelativePath="..\..\..\..\src\stk\NRev.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\PRCRev.cpp"
+				RelativePath="..\..\..\..\src\stk\PRCRev.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\PRCRev.h"
+				RelativePath="..\..\..\..\src\stk\PRCRev.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\Stk.cpp"
+				RelativePath="..\..\..\..\src\stk\Stk.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\src\stk\Stk.h"
+				RelativePath="..\..\..\..\src\stk\Stk.h"
 				>
 			</File>
 		</Filter>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\stk\stk.reverbs.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\stk\stk.reverbs.cpp"
 			>
 		</File>
 	</Files>

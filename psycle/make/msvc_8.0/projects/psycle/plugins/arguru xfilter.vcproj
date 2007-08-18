@@ -139,11 +139,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\arguru_xfilter\arguru_xfilter.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\arguru_xfilter\arguru_xfilter.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\arguru_xfilter\filter_x.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\arguru_xfilter\filter_x.cpp"
 			>
 		</File>
 	</Files>

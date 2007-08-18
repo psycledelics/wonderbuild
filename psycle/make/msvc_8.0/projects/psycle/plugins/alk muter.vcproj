@@ -139,7 +139,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\alk_muter\alk_muter.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\alk_muter\alk_muter.cpp"
 			>
 		</File>
 	</Files>

@@ -139,7 +139,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\pooplog_scratch_2\pooplog_scratch_2.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\pooplog_scratch_2\pooplog_scratch_2.cpp"
 			>
 		</File>
 	</Files>

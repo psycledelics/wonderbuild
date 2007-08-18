@@ -139,23 +139,23 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\arguru_synth_2_final\arguru_synth_2_final.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\arguru_synth_2_final\arguru_synth_2_final.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\arguru_synth_2_final\filter.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\arguru_synth_2_final\filter.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\arguru_synth_2_final\filter.hpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\arguru_synth_2_final\filter.hpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\arguru_synth_2_final\SynthTrack.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\arguru_synth_2_final\SynthTrack.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\arguru_synth_2_final\SynthTrack.hpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\arguru_synth_2_final\SynthTrack.hpp"
 			>
 		</File>
 	</Files>

@@ -139,11 +139,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\m3\m3.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\m3\m3.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\m3\track.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\m3\track.cpp"
 			>
 		</File>
 	</Files>

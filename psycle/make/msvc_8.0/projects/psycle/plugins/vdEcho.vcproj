@@ -139,7 +139,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\vincenzo_demasi\vdEcho\vdEcho.cpp"
+			RelativePath="..\..\..\..\src\psycle\plugins\vincenzo_demasi\vdEcho\vdEcho.cpp"
 			>
 		</File>
 	</Files>
