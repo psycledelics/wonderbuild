@@ -16,7 +16,10 @@ class boost(external_package):
 		self._libraries = libraries
 
 		debian_packages = 'libboost-dev (>= %s)' % self._version_wanted
-		for library in libraries: debian_packages += ', libboost-%s-dev (>= %s)' % (library, self._version_wanted)
+		for library in libraries:
+			name = library
+			if name in ['unit_test_framework', 'test_exec_monitor', 'prg_exec_monitor']: name = 'test'
+			debian_packages += ', libboost-%s-dev (>= %s)' % (name, self._version_wanted)
 
 		external_package.__init__(self, project, name = 'boost' + ' '.join(libraries),
 			url = 'http://boost.org',
