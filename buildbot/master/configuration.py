@@ -159,7 +159,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(PolicyCheck, command = './tools/check-policy qpsycle', locks = [svn_lock]),
+				factory.s(PolicyCheck, command = './tools/check-policy qpsycle/src', locks = [svn_lock]),
 				factory.s(step.Compile, command = 'cd qpsycle && qmake && make', locks = [compile_lock])
 			]
 		)
