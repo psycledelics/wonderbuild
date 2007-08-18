@@ -333,7 +333,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "properties", "properties", "{776C8571-9FCC-4B32-82DF-7D634E51B05A}"
 	ProjectSection(SolutionItems) = preProject
 		projects\debug.vsprops = projects\debug.vsprops
-		projects\psycle-plugins\plugins.vsprops = projects\psycle\plugins\plugins.vsprops
+		projects\psycle-plugins\plugins.vsprops = projects\psycle-plugins\plugins.vsprops
 		projects\release.vsprops = projects\release.vsprops
 	EndProjectSection
 EndProject

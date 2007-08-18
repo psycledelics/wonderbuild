@@ -7,10 +7,21 @@ cd %~p0
 
 del/s/q "*.ncb"
 del/s/q/ah "*.suo"
+del/s/q "*.vcproj.*.*.user"
 
 rmdir/s/q output
 
+pushd projects\direct_sound && (
+	call clean
+	popd
+)
+
 pushd projects\boost && (
+	call clean
+	popd
+)
+
+pushd projects\zlib && (
 	call clean
 	popd
 )
