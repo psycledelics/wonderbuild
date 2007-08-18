@@ -18,7 +18,7 @@ class boost(external_package):
 		debian_packages = 'libboost-dev (>= %s)' % self._version_wanted
 		for library in libraries: debian_packages += ', libboost-%s-dev (>= %s)' % (library, self._version_wanted)
 
-		external_package.__init__(self, project, name = 'boost',
+		external_package.__init__(self, project, name = 'boost' + ' '.join(libraries),
 			url = 'http://boost.org',
 			distribution_packages = {
 				'debian and ubuntu': debian_packages,
