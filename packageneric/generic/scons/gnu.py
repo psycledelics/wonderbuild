@@ -266,9 +266,10 @@ def implementation(chain):
 			'-Wpacked',
 			#'-Wpadded',
 			#'-Winline', # warns about explicit inline functions not inlined
-			'-Wdisabled-optimization'
-			#'-mfpmath=sse', # todo need to check for x86 or is it ignored otherwise?
+			'-Wdisabled-optimization',
+			'-mfpmath=sse', # todo need to check for x86 or is it ignored otherwise?
 			#'-msse' # -msse2 is implicit on 64-bit platforms
+			'-msse2' # -msse2 is implicit on 64-bit platforms
 		])
 		chain.linker().flags().add([
 			'-Wl,-O3',

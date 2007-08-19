@@ -21,7 +21,7 @@ class boost(external_package):
 			if name in ['unit_test_framework', 'test_exec_monitor', 'prg_exec_monitor']: name = 'test'
 			debian_packages += ', libboost-%s-dev (>= %s)' % (name, self._version_wanted)
 
-		external_package.__init__(self, project, name = 'boost' + ' '.join(libraries),
+		external_package.__init__(self, project, name = 'boost ' + ' '.join(libraries),
 			url = 'http://boost.org',
 			distribution_packages = {
 				'debian and ubuntu': debian_packages,
