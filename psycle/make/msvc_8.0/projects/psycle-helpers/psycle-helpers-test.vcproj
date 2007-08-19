@@ -82,7 +82,7 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\release.vsprops;..\pre_compiled_headers\use.mfc.vsprops;..\program.vsprops"
+			InheritedPropertySheets="..\release.vsprops;..\pre_compiled_headers\use.vsprops;..\program.vsprops"
 			UseOfMFC="0"
 			WholeProgramOptimization="1"
 			ExcludeBuckets="5;6;8;15;16;18;20"
@@ -104,7 +104,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PrecompiledHeaderThrough="psycle/project.private.hpp"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -117,7 +116,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="htmlhelp.lib"
 				SubSystem="1"
 			/>
 			<Tool
