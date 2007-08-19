@@ -153,57 +153,97 @@
 		<Filter
 			Name="psycle"
 			>
-			<File
-				RelativePath="..\..\..\..\src\psycle\helpers\helpers.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\psycle\helpers\helpers.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\psycle\helpers\math.hpp"
-				>
-			</File>
 			<Filter
-				Name="math"
+				Name="helpers"
 				>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\math\clip.hpp"
+					RelativePath="..\..\..\..\src\psycle\helpers\dither.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\math\erase_all_nans_infinities_and_denormals.hpp"
+					RelativePath="..\..\..\..\src\psycle\helpers\dither.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\math\log.hpp"
+					RelativePath="..\..\..\..\src\psycle\helpers\dsp.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\math\math.hpp"
+					RelativePath="..\..\..\..\src\psycle\helpers\dsp.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\math\pi.hpp"
+					RelativePath="..\..\..\..\src\psycle\helpers\fft.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\math\remainder.hpp"
+					RelativePath="..\..\..\..\src\psycle\helpers\fft.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\math\round.hpp"
+					RelativePath="..\..\..\..\src\psycle\helpers\helpers.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\math\sinus_sequence.hpp"
+					RelativePath="..\..\..\..\src\psycle\helpers\helpers.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\math\truncate.hpp"
+					RelativePath="..\..\..\..\src\psycle\helpers\math.hpp"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\helpers\mersennetwister.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\helpers\mersennetwister.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\helpers\scale.hpp"
+					>
+				</File>
+				<Filter
+					Name="math"
+					>
+					<File
+						RelativePath="..\..\..\..\src\psycle\helpers\math\clip.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\helpers\math\erase_all_nans_infinities_and_denormals.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\helpers\math\log.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\helpers\math\math.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\helpers\math\pi.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\helpers\math\remainder.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\helpers\math\round.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\helpers\math\sinus_sequence.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\helpers\math\truncate.hpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
