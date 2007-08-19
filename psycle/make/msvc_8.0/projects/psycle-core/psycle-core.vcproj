@@ -4,7 +4,7 @@
 	Version="8.00"
 	Name="psycle-core"
 	ProjectGUID="{B78DFE59-051A-43FD-B489-785A3982541C}"
-	RootNamespace="psycle-core"
+	RootNamespace="psycle.core"
 	>
 	<Platforms>
 		<Platform

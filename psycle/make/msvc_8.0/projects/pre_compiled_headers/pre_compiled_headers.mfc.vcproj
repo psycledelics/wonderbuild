@@ -4,7 +4,6 @@
 	Version="8.00"
 	Name="pre_compiled_headers.mfc"
 	ProjectGUID="{28C015FB-3BDA-4B32-8D85-C652E9892216}"
-	RootNamespace="pre_compiled_headers.mfc"
 	>
 	<Platforms>
 		<Platform

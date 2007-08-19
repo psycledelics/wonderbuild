@@ -4,7 +4,6 @@
 	Version="8.00"
 	Name="psycle"
 	ProjectGUID="{C6292BF4-9E87-4176-9101-A3D29D074B35}"
-	RootNamespace="psycle"
 	>
 	<Platforms>
 		<Platform
@@ -1182,10 +1181,6 @@
 				RelativePath="$(SolutionDir)\..\..\src\Seib-vsthost\EffectWnd.hpp"
 				>
 			</File>
-		</Filter>
-		<Filter
-			Name="dspguru"
-			>
 		</Filter>
 	</Files>
 	<Globals>
