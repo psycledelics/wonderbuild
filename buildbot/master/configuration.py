@@ -19,7 +19,7 @@ BuildmasterConfig['buildbotURL'] = 'http://' + master_host_fqdn + ':' + str(mast
 BuildmasterConfig['sources'] = []
 
 from buildbot.changes.pb import PBChangeSource
-BuildmasterConfig['sources'].append(PBChangeSource())
+BuildmasterConfig['sources'].append(PBChangeSource()) # prefix = branch_filter
 
 branch = 'trunk'
 svn_url = 'https://' + project_name + '.svn.sourceforge.net/svnroot/' + project_name + '/' + branch
@@ -82,11 +82,13 @@ class LintCheck(step.Test):
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'freepsycle',
+		'category': 'psycle',
 		'slavenames': ['anechoid'], # uses too much memory for factoid
 		'builddir': svn_dir + 'freepsycle',
 		'factory': factory.BuildFactory(
 			[
-				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
+				#factory.s(step.SVN, retry = (600, 3), mode = 'update', baseURL = svn_url, defaultBranch = 'trunk', locks = [svn_lock]),
+				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis freepsycle', locks = [svn_lock]),
 				factory.s(step.Compile, command = 'scons --directory=freepsycle packageneric__debug=1', locks = [compile_lock])
 			]
@@ -106,6 +108,7 @@ BuildmasterConfig['schedulers'].append(
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'psycle-core',
+		'category': 'psycle',
 		'slavenames': slaves,
 		'builddir': svn_dir + 'psycle-core',
 		'factory': factory.BuildFactory(
@@ -130,6 +133,7 @@ BuildmasterConfig['schedulers'].append(
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'psycle-player',
+		'category': 'psycle',
 		'slavenames': slaves,
 		'builddir': svn_dir + 'psycle-player',
 		'factory': factory.BuildFactory(
@@ -154,6 +158,7 @@ BuildmasterConfig['schedulers'].append(
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'qpsycle',
+		'category': 'psycle',
 		'slavenames': slaves,
 		'builddir': svn_dir + 'qpsycle',
 		'factory': factory.BuildFactory(
@@ -178,6 +183,7 @@ BuildmasterConfig['schedulers'].append(
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'psycle-plugins',
+		'category': 'psycle',
 		'slavenames': slaves,
 		'builddir': svn_dir + 'psycle-plugins',
 		'factory': factory.BuildFactory(
@@ -201,6 +207,7 @@ BuildmasterConfig['schedulers'].append(
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'psycle-helpers',
+		'category': 'psycle',
 		'slavenames': slaves,
 		'builddir': svn_dir + 'psycle-helpers',
 		'factory': factory.BuildFactory(
@@ -225,8 +232,10 @@ BuildmasterConfig['schedulers'].append(
 
 BuildmasterConfig['status'] = []
 
+categories = ['psycle', 'zzub']
+
 from buildbot.status.html import Waterfall
-BuildmasterConfig['status'].append(Waterfall(http_port = 8010))
+BuildmasterConfig['status'].append(Waterfall(http_port = 8010, categories = categories))
 
 import os
 try: del os.environ['TERM']
@@ -311,8 +320,8 @@ class IRC(BaseIRC):
 		if builderName == 'libzzub': return self.irc().channels
 		else: return ['#psycle']
 	
-BuildmasterConfig['status'].append(IRC(host = 'irc.efnet.pl', nick = 'buildborg', channels = ['#psycle', '#buzz']))
-BuildmasterConfig['status'].append(IRC(host = 'irc.freenode.net', nick = 'buildborg', channels = ['#psycle', '#aldrin']))
+BuildmasterConfig['status'].append(IRC(host = 'irc.efnet.pl', nick = 'buildborg', channels = ['#psycle', '#buzz'], categories = categories))
+BuildmasterConfig['status'].append(IRC(host = 'irc.freenode.net', nick = 'buildborg', channels = ['#psycle', '#aldrin'], categories = categories))
 
 BuildmasterConfig['debugPassword'] = 'debugpassword'
 
@@ -321,6 +330,7 @@ if True:
 	BuildmasterConfig['builders'].append(
 		{
 			'name': 'libzzub',
+			'category': 'zzub',
 			'slavenames': slaves,
 			'builddir': os.path.join('zzub-trunk', 'libzzub'),
 			'factory': factory.BuildFactory(
