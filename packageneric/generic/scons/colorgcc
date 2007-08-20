@@ -3,8 +3,8 @@
 ##############################################################################
 #
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2 of the License, or (at your option) any later version.
-# copyright 2004-2006 johan boule <bohan@jabber.org>
-# copyright 2004-2006 psycledelics http://psycle.pastnotecut.org
+# copyright 2004-2007 johan boule <bohan@jabber.org>
+# copyright 2004-2007 psycledelics http://psycle.pastnotecut.org
 #
 # modified by johan boule
 # based on ...
@@ -268,6 +268,8 @@ $ENV{"LC_ALL"} = 'C';
 # Keep the pid of the compiler process so we can get its return
 # code and use that as our return code.
 $compiler_pid = open3('<&STDIN', \*GCCOUT, \*GCCOUT, $compiler, @ARGV);
+
+$forced_error_code = 0;
 
 # Colorize the output from the compiler.
 while(<GCCOUT>)
@@ -536,8 +538,19 @@ while(<GCCOUT>)
 		# Doesn't seem to be a warning or an error. Print normally.
 		print(color("reset"), $_);
 	}
+	if(m#^.* [Ww]arning:.* may be undefined$#)
+	{
+		$forced_error_code = 1
+	}
 }
 
 # Get the return code of the compiler and exit with that.
 waitpid($compiler_pid, 0);
-exit ($? >> 8);
+if($forced_error_code != 0)
+{
+	exit($forced_error_code);
+}
+else
+{
+	exit($? >> 8);
+}
