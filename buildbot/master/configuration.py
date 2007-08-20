@@ -232,7 +232,7 @@ BuildmasterConfig['schedulers'].append(
 
 BuildmasterConfig['status'] = []
 
-categories = ['psycle', 'zzub']
+categories = None #['psycle', 'zzub']
 
 from buildbot.status.html import Waterfall
 BuildmasterConfig['status'].append(Waterfall(http_port = 8010, categories = categories))
