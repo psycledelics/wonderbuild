@@ -266,7 +266,7 @@ def implementation(chain):
 			'-Wpacked',
 			#'-Wpadded',
 			#'-Winline', # warns about explicit inline functions not inlined
-			'-Wdisabled-optimization',
+			'-Wdisabled-optimization'
 			#'-march=k8', # implies -mtune=k8, moreover, use specific instruction set
 			#'-mfpmath=sse', # todo need to check for x86 or is it ignored otherwise?
 			#'-msse,387' # experimental!
