@@ -267,9 +267,12 @@ def implementation(chain):
 			#'-Wpadded',
 			#'-Winline', # warns about explicit inline functions not inlined
 			'-Wdisabled-optimization',
-			#'-mfpmath=sse', # todo need to check for x86 or is it ignored otherwise?
+			'-march=k8', # implies -mtune=k8, moreover, use specific instruction set
+			'-mfpmath=sse', # todo need to check for x86 or is it ignored otherwise?
+			#'-msse,387' # experimental!
 			#'-msse' # -msse2 is implicit on 64-bit platforms
-			#'-msse2' # -msse2 is implicit on 64-bit platforms
+			'-msse2' # -msse2 is implicit on 64-bit platforms
+			#-ffast-math
 		])
 		chain.linker().flags().add([
 			'-Wl,-O3',
