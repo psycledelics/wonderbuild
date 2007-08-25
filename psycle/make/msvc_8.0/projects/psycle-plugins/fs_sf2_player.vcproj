@@ -138,6 +138,10 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{923A9CFD-C2B2-4A53-952B-EC9CD8413704}"
+			RelativePathToProject=".\projects\psycle-plugins\fluidsynth.vcproj"
+		/>
 	</References>
 	<Files>
 		<File
