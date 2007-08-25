@@ -237,9 +237,9 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis psycle-helpers', locks = [svn_lock]),
+				factory.s(PolicyCheck, command = os.path.join('.', 'tools', 'check-policy') + ' diversalis universalis psycle-helpers', locks = [svn_lock]),
 				factory.s(step.Compile, command = 'scons --directory=psycle-helpers packageneric__debug=0 packageneric__test=1', locks = [compile_lock]),
-				factory.s(step.Test, command = './++packageneric/variants/default/stage-install/usr/local/bin/psycle-helpers_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
+				factory.s(step.Test, command = os.path.join('.', '++packageneric', 'variants', 'default', 'stage-install', 'usr', 'local', 'bin', 'psycle-helpers_unit_tests') + ' --log_level=test_suite --report_level=detailed', locks = [compile_lock])
 			]
 		)
 	}
@@ -263,7 +263,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(step.Compile, command = '"%VS80ComnTools%\VSVars32" && vcbuild psycle\make\msvc_8.0\solution.sln "debug|Win32"')
+				factory.s(step.Compile, command = os.path.join('psycle', 'make', 'msvc_8.0', 'build') + ' debug')
 			]
 		)
 	}
