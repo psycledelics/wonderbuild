@@ -84,7 +84,7 @@ class LintCheck(step.Test):
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'dummy',
-		'category': None,
+		'category': 'psycle',
 		'slavenames': slaves + microsoft_slaves
 		'builddir': svn_dir + 'dummy',
 		'factory': factory.BuildFactory(

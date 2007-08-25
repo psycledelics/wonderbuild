@@ -4,7 +4,7 @@ from buildbot.slave.bot import BuildSlave
 import os
 
 basedir = os.getcwd()
-host = 'winux.retropaganda.info'
+host = 'factoid.retropaganda.info'
 port = 9989
 slavename = 'winux'
 passwd = 'password'
