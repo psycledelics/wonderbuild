@@ -83,6 +83,27 @@ class LintCheck(step.Test):
 
 BuildmasterConfig['builders'].append(
 	{
+		'name': 'dummy',
+		'category': None,
+		'slavenames': slaves + microsoft_slaves
+		'builddir': svn_dir + 'dummy',
+		'factory': factory.BuildFactory(
+			[
+				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnURL = svn_url, locks = [svn_lock])
+			]
+		)
+	}
+BuildmasterConfig['schedulers'].append(
+	Scheduler(
+		name = 'dummy',
+		branch = None,
+		treeStableTimer = bunch_timer,
+		builderNames = ['dummy']
+	)
+)
+
+BuildmasterConfig['builders'].append(
+	{
 		'name': 'freepsycle',
 		'category': 'psycle',
 		'slavenames': ['anechoid'], # uses too much memory for factoid
