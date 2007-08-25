@@ -274,7 +274,7 @@ BuildmasterConfig['schedulers'].append(
 		name = 'psycle-msvc',
 		branch = None,
 		treeStableTimer = bunch_timer,
-		builderNames = ['dummy'],
+		builderNames = ['psycle-msvc'],
 		fileIsImportant = lambda change: filter(change, ['psycle/', 'psycle-helpers/', 'psycle-core/', 'psycle-audiodrivers/', 'universalis/', 'diversalis/', 'packageneric/'])
 	)
 )
