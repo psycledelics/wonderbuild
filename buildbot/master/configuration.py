@@ -85,14 +85,15 @@ BuildmasterConfig['builders'].append(
 	{
 		'name': 'dummy',
 		'category': 'psycle',
-		'slavenames': slaves + microsoft_slaves
+		'slavenames': slaves + microsoft_slaves,
 		'builddir': svn_dir + 'dummy',
 		'factory': factory.BuildFactory(
 			[
-				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnURL = svn_url, locks = [svn_lock])
+				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock])
 			]
 		)
 	}
+)
 BuildmasterConfig['schedulers'].append(
 	Scheduler(
 		name = 'dummy',
