@@ -262,7 +262,7 @@ BuildmasterConfig['builders'].append(
 		'builddir': svn_dir + 'psycle-mfc',
 		'factory': factory.BuildFactory(
 			[
-				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock])
+				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(step.Compile, command = '"%VS80ComnTools%\VSVars32" && vcbuild psycle\make\msvc_8.0\solution.sln "debug|Win32"')
 			]
 		)
