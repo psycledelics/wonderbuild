@@ -88,7 +88,7 @@ rem ----------------
 	
 		echo %~n0: sourcing mircosoft visual studio 8.0 environement ...
 			rem microsoft made a dumb script that keeps appending things to the env vars,
-			rem so, when invoke many times, we ends up with "too long line", sic. they can rot in hell.
+			rem so, when invoke many times, we end up with "too long line", sic.
 			rem so, we're saving the env to restore it after.
 			call :save_env
 			call "%VS80ComnTools%\VSVars32" || goto :failed
