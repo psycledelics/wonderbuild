@@ -84,7 +84,7 @@ class LintCheck(step.Test):
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'dummy',
-		'category': 'psycle',
+		'category': None,
 		'slavenames': slaves + microsoft_slaves,
 		'builddir': svn_dir + 'dummy',
 		'factory': factory.BuildFactory(
@@ -251,6 +251,30 @@ BuildmasterConfig['schedulers'].append(
 		treeStableTimer = bunch_timer,
 		builderNames = ['psycle-helpers'],
 		fileIsImportant = lambda change: filter(change, ['psycle-helpers/', 'universalis/', 'diversalis/', 'packageneric/'])
+	)
+)
+
+BuildmasterConfig['builders'].append(
+	{
+		'name': 'psycle-msvc',
+		'category': 'psycle',
+		'slavenames': microsoft_slaves,
+		'builddir': svn_dir + 'psycle-mfc',
+		'factory': factory.BuildFactory(
+			[
+				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock])
+				factory.s(step.Compile, command = '"%VS80ComnTools%\VSVars32" && vcbuild psycle\make\msvc_8.0\solution.sln "debug|Win32"')
+			]
+		)
+	}
+)
+BuildmasterConfig['schedulers'].append(
+	Scheduler(
+		name = 'psycle-msvc',
+		branch = None,
+		treeStableTimer = bunch_timer,
+		builderNames = ['dummy'],
+		fileIsImportant = lambda change: filter(change, ['psycle/', 'psycle-helpers/', 'psycle-core/', 'psycle-audiodrivers/', 'universalis/', 'diversalis/', 'packageneric/'])
 	)
 )
 
