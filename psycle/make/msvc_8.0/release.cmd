@@ -246,6 +246,7 @@ rem -------------------------------------
 	rem for %%o in (clean build) do (
 	for %%o in (build) do (
 		echo %~n0: %%oing %configuration% ...
+		rem TODO use vcbuild (not msbuild)
 		DevEnv ..\solution.sln /%%o %configuration% /out %configuration%.%%o.log || goto :failed
 	)
 goto :eof
