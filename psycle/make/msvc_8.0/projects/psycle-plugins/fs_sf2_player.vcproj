@@ -142,6 +142,10 @@
 			ReferencedProjectIdentifier="{923A9CFD-C2B2-4A53-952B-EC9CD8413704}"
 			RelativePathToProject=".\projects\psycle-plugins\fluidsynth.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{28C015FB-3BDA-4B32-8D85-C652E9892216}"
+			RelativePathToProject=".\projects\pre_compiled_headers\pre_compiled_headers.mfc.vcproj"
+		/>
 	</References>
 	<Files>
 		<File

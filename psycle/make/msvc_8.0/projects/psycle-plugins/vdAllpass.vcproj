@@ -136,6 +136,10 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
+			RelativePathToProject=".\projects\pre_compiled_headers\pre_compiled_headers.vcproj"
+		/>
 	</References>
 	<Files>
 		<File

@@ -147,6 +147,22 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{B78DFE59-051A-43FD-B489-775A4982581C}"
+			RelativePathToProject=".\projects\universalis\universalis.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
+			RelativePathToProject=".\projects\asio\asio.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{28C015FB-3BDA-4B32-8D85-C652E9892216}"
+			RelativePathToProject=".\projects\pre_compiled_headers\pre_compiled_headers.mfc.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{C6292BF4-9E87-4176-9101-A3D29D163B35}"
+			RelativePathToProject=".\projects\psycle-helpers\psycle-helpers-test.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
