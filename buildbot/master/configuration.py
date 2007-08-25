@@ -81,27 +81,28 @@ class LintCheck(step.Test):
 	descriptionDone = ['lint']
 	command = ['true']
 
-BuildmasterConfig['builders'].append(
-	{
-		'name': 'dummy',
-		'category': None,
-		'slavenames': slaves + microsoft_slaves,
-		'builddir': svn_dir + 'dummy',
-		'factory': factory.BuildFactory(
-			[
-				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock])
-			]
-		)
-	}
-)
-BuildmasterConfig['schedulers'].append(
-	Scheduler(
-		name = 'dummy',
-		branch = None,
-		treeStableTimer = bunch_timer,
-		builderNames = ['dummy']
+if False:
+	BuildmasterConfig['builders'].append(
+		{
+			'name': 'dummy',
+			'category': None,
+			'slavenames': slaves + microsoft_slaves,
+			'builddir': svn_dir + 'dummy',
+			'factory': factory.BuildFactory(
+				[
+					factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock])
+				]
+			)
+		}
 	)
-)
+	BuildmasterConfig['schedulers'].append(
+		Scheduler(
+			name = 'dummy',
+			branch = None,
+			treeStableTimer = bunch_timer,
+			builderNames = ['dummy']
+		)
+	)
 
 BuildmasterConfig['builders'].append(
 	{
