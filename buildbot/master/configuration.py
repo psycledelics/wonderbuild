@@ -36,10 +36,12 @@ except: branch_filter = '/' + branch + '/'
 BuildmasterConfig['slavePortnum'] = 9989
 
 slaves = ['anechoid', 'factoid']
+microsoft_slaves = ['winux']
 
 BuildmasterConfig['bots'] = [
 	('anechoid', 'password'),
-	('factoid', 'password')
+	('factoid', 'password'),
+	('winux', 'password')
 ]
 
 BuildmasterConfig['builders'] = []
