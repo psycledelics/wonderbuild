@@ -1,4 +1,9 @@
 %~d0
 cd %~p0
-call "%VS80ComnTools%\VSVars32"
-vcbuild solution.sln "%1|Win32"
+set configuration=%1
+if "%configuration%" == "" (
+	set configuration=release
+)
+call "%VS80ComnTools%\VSVars32" || exit /b 1
+rem msbuild solution.sln -property:configuration=%configuration% || exit /b 1
+vcbuild solution.sln "%configuration%|Win32" || exit /b 1
