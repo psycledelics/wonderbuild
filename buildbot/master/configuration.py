@@ -132,6 +132,31 @@ BuildmasterConfig['schedulers'].append(
 
 BuildmasterConfig['builders'].append(
 	{
+		'name': 'freepsycle.mingw',
+		'category': 'psycle',
+		'slavenames': microsoft_slaves,
+		'builddir': svn_dir + 'freepsycle.mingw',
+		'factory': factory.BuildFactory(
+			[
+				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
+				factory.s(PolicyCheck, command = 'python .\\tools\\check-policy diversalis universalis freepsycle', locks = [svn_lock]),
+				factory.s(step.Compile, command = '..\\..\\..\\dev-pack && scons --directory=freepsycle packageneric__debug=1', locks = [compile_lock])
+			]
+		)
+	}
+)
+BuildmasterConfig['schedulers'].append(
+	Scheduler(
+		name = 'freepsycle.mingw',
+		branch = None,
+		treeStableTimer = bunch_timer,
+		builderNames = ['freepsycle.mingw'],
+		fileIsImportant = lambda change: filter(change, ['freepsycle/', 'universalis/', 'diversalis/', 'packageneric/'])
+	)
+)
+
+BuildmasterConfig['builders'].append(
+	{
 		'name': 'psycle-core',
 		'category': 'psycle',
 		'slavenames': slaves,
@@ -231,6 +256,30 @@ BuildmasterConfig['schedulers'].append(
 
 BuildmasterConfig['builders'].append(
 	{
+		'name': 'psycle-plugins.mingw',
+		'category': 'psycle',
+		'slavenames': microsoft_slaves,
+		'builddir': svn_dir + 'psycle-plugins.mingw',
+		'factory': factory.BuildFactory(
+			[
+				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
+				factory.s(step.Compile, command = '..\\..\\..\\dev-pack && scons --directory=psycle-plugins packageneric__debug=1', locks = [compile_lock])
+			]
+		)
+	}
+)
+BuildmasterConfig['schedulers'].append(
+	Scheduler(
+		name = 'psycle-plugins.mingw',
+		branch = None,
+		treeStableTimer = bunch_timer,
+		builderNames = ['psycle-plugins.mingw'],
+		fileIsImportant = lambda change: filter(change, ['psycle-plugins/', 'universalis/', 'diversalis/', 'packageneric/'])
+	)
+)
+
+BuildmasterConfig['builders'].append(
+	{
 		'name': 'psycle-helpers',
 		'category': 'psycle',
 		'slavenames': slaves,
@@ -257,10 +306,10 @@ BuildmasterConfig['schedulers'].append(
 
 BuildmasterConfig['builders'].append(
 	{
-		'name': 'psycle-msvc',
+		'name': 'psycle.msvc',
 		'category': 'psycle',
 		'slavenames': microsoft_slaves,
-		'builddir': svn_dir + 'psycle-mfc',
+		'builddir': svn_dir + 'psycle.msvc',
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
@@ -271,10 +320,10 @@ BuildmasterConfig['builders'].append(
 )
 BuildmasterConfig['schedulers'].append(
 	Scheduler(
-		name = 'psycle-msvc',
+		name = 'psycle.msvc',
 		branch = None,
 		treeStableTimer = bunch_timer,
-		builderNames = ['psycle-msvc'],
+		builderNames = ['psycle.msvc'],
 		fileIsImportant = lambda change: filter(change, ['psycle/', 'psycle-helpers/', 'psycle-core/', 'psycle-audiodrivers/', 'universalis/', 'diversalis/', 'packageneric/'])
 	)
 )
