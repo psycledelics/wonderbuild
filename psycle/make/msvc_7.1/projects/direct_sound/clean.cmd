@@ -23,4 +23,11 @@ pushd ..\..\output && (
 			popd
 		)
 	)
+) && (
+	pushd ..\..\..\..\include\ && (
+		if exist dsound.h (
+			del/s/q dsound.h || exit /b 1
+		)
+		popd
+	)
 )
