@@ -18,6 +18,7 @@ if not exist ..\..\..\..\include\boost (
 	)
 	rem cmd's move command bugs with long paths, so we try cygwin's mv command first
 	mv %pkgdir%\include\boost ..\..\..\..\include\boost || (
+		echo "no mv command ... using cmd move builtin as fallback"
 		move %pkgdir%\include\boost ..\..\..\..\include\boost || exit /b 1
 	)
 	rmdir/s/q %pkgdir%\include || exit /b 1
