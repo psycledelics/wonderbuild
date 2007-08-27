@@ -28,6 +28,6 @@
 	/>
 	<UserMacro
 		Name="PreCompiledObject"
-		Value="&quot;$(TopOutputDir)/intermediate/pre_compiled_headers (no mfc)/pre_compiled_headers.obj&quot;"
+		Value="&quot;$(TopOutputDir)/intermediate/pre_compiled_headers.vcproj/pre_compiled_headers.obj&quot;"
 	/>
 </VisualStudioPropertySheet>

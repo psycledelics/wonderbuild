@@ -4,7 +4,7 @@
 	Version="8.00"
 	Name="top_output_dir"
 	OutputDirectory="$(TopOutputDir)/bin"
-	IntermediateDirectory="$(TopOutputDir)/intermediate/$(ProjectName)"
+	IntermediateDirectory="$(TopOutputDir)/intermediate/$(ProjectFileName)"
 	>
 	<UserMacro
 		Name="TopOutputDir"
