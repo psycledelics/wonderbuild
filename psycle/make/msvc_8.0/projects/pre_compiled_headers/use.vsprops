@@ -9,8 +9,8 @@
 		Name="VCCLCompilerTool"
 		UsePrecompiledHeader="2"
 		PrecompiledHeaderThrough="$(PreCompiledHeader)"
-		PrecompiledHeaderFile="$(TopOutputDir)/intermediate/pre_compiled_headers (no mfc).pch"
-		ProgramDataBaseFileName="$(TopOutputDir)/intermediate/pre_compiled_headers (no mfc).pdb"
+		PrecompiledHeaderFile="$(TopOutputDir)/intermediate/pre_compiled_headers.pch"
+		ProgramDataBaseFileName="$(TopOutputDir)/intermediate/pre_compiled_headers.pdb"
 	/>
 	<Tool
 		Name="VCLinkerTool"
