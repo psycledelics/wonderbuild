@@ -140,7 +140,7 @@ BuildmasterConfig['builders'].append(
 			[
 				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = []),
 				factory.s(PolicyCheck, command = 'python .\\tools\\check-policy diversalis universalis freepsycle', locks = []),
-				factory.s(step.Compile, command = '..\\..\\..\\dev-pack && scons --directory=freepsycle packageneric__debug=1', locks = [compile_lock])
+				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=freepsycle packageneric__debug=1', locks = [compile_lock])
 			]
 		)
 	}
@@ -263,7 +263,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = []),
-				factory.s(step.Compile, command = '..\\..\\..\\dev-pack && scons --directory=psycle-plugins packageneric__debug=1', locks = [compile_lock])
+				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=psycle-plugins packageneric__debug=1', locks = [compile_lock])
 			]
 		)
 	}
@@ -313,7 +313,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(step.Compile, command = '.\\psycle\\make\\msvc_8.0\\build debug')
+				factory.s(step.Compile, command = 'call .\\psycle\\make\\msvc_8.0\\build debug')
 			]
 		)
 	}
