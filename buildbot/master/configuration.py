@@ -114,7 +114,7 @@ BuildmasterConfig['builders'].append(
 			[
 				#factory.s(step.SVN, retry = (600, 3), mode = 'update', baseURL = svn_url, defaultBranch = 'trunk', locks = [svn_lock]),
 				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis freepsycle', locks = [svn_lock]),
+				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis freepsycle', locks = [compile_lock]),
 				factory.s(step.Compile, command = 'scons --directory=freepsycle packageneric__debug=1', locks = [compile_lock])
 			]
 		)
@@ -139,7 +139,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = []),
-				factory.s(PolicyCheck, command = 'python .\\tools\\check-policy diversalis universalis freepsycle', locks = []),
+				factory.s(PolicyCheck, command = 'python .\\tools\\check-policy diversalis universalis freepsycle', locks = [compile_lock]),
 				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=freepsycle packageneric__debug=1', locks = [compile_lock])
 			]
 		)
@@ -164,7 +164,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(PolicyCheck, command = './tools/check-policy psycle-core', locks = [svn_lock]),
+				factory.s(PolicyCheck, command = './tools/check-policy psycle-core', locks = [compile_lock]),
 				factory.s(step.Compile, command = 'cd psycle-core && qmake && make', locks = [compile_lock]),
 			]
 		)
@@ -189,7 +189,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(PolicyCheck, command = './tools/check-policy psycle-player', locks = [svn_lock]),
+				factory.s(PolicyCheck, command = './tools/check-policy psycle-player', locks = [compile_lock]),
 				factory.s(step.Compile, command = 'cd psycle-player && qmake && make', locks = [compile_lock])
 			]
 		)
@@ -214,7 +214,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(PolicyCheck, command = './tools/check-policy qpsycle', locks = [svn_lock]),
+				factory.s(PolicyCheck, command = './tools/check-policy qpsycle', locks = [compile_lock]),
 				factory.s(step.Compile, command = 'cd qpsycle && qmake && make', locks = [compile_lock])
 			]
 		)
@@ -287,7 +287,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis psycle-helpers', locks = [svn_lock]),
+				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis psycle-helpers', locks = [compile_lock]),
 				factory.s(step.Compile, command = 'scons --directory=psycle-helpers packageneric__debug=0 packageneric__test=1', locks = [compile_lock]),
 				factory.s(step.Test, command = './++packageneric/variants/default/stage-install/usr/local/bin/psycle-helpers_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
 			]
@@ -306,6 +306,32 @@ BuildmasterConfig['schedulers'].append(
 
 BuildmasterConfig['builders'].append(
 	{
+		'name': 'psycle-helpers.mingw',
+		'category': 'psycle',
+		'slavenames': microsoft_slaves,
+		'builddir': svn_dir + 'psycle-helpers.mingw',
+		'factory': factory.BuildFactory(
+			[
+				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = []),
+				factory.s(PolicyCheck, command = 'python .\\tools\\check-policy diversalis universalis psycle-helpers', locks = [compile_lock]),
+				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=psycle-helpers packageneric__debug=0 packageneric__test=1', locks = [compile_lock]),
+				factory.s(step.Test, command = '.\\++packageneric\\variants\\default\\stage-install\\usr\\local\\bin\\psycle-helpers_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
+			]
+		)
+	}
+)
+BuildmasterConfig['schedulers'].append(
+	Scheduler(
+		name = 'psycle-helpers.mingw',
+		branch = None,
+		treeStableTimer = bunch_timer,
+		builderNames = ['psycle-helpers.mingw'],
+		fileIsImportant = lambda change: filter(change, ['psycle-helpers/', 'universalis/', 'diversalis/', 'packageneric/'])
+	)
+)
+
+BuildmasterConfig['builders'].append(
+	{
 		'name': 'psycle.msvc',
 		'category': 'psycle',
 		'slavenames': microsoft_slaves,
@@ -313,7 +339,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(step.Compile, command = 'call .\\psycle\\make\\msvc_8.0\\build debug')
+				factory.s(step.Compile, command = 'call .\\psycle\\make\\msvc_8.0\\build debug', locks = [compile_lock])
 			]
 		)
 	}
