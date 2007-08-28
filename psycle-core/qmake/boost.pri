@@ -40,13 +40,10 @@ unix {
 						LIBS *= boost_signals-vc80-mt-1_33_1.lib
 					}
 				} else:win32-msvc* {
-					warning("We do not have boost libs built for your compiler. Make sure you have them installed")
-					# remove our local include path
-					INCLUDEPATH -= $$BOOST_DIR/include
+					#warning("We do not have boost libs built for your compiler. Make sure you have them installed")
+					LIBPATH *= $$BOOST_DIR/lib-mswindows-mcvc-7-cxxabi
 				} else {
 					warning("We do not have boost libs built for your compiler. Make sure you have them installed.")
-					# remove our local include path
-					INCLUDEPATH -= $$BOOST_DIR/include
 				}
 			}
 		}
