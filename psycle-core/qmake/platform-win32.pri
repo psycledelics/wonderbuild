@@ -10,7 +10,9 @@ win32 {
 		QMAKE_LFLAGS += /debug
 		LIBS *= advapi32.lib
 		LIBS *= user32.lib
-		
+		LIBPATH *= "../external-packages/zlib-1.2.3/lib-mswindows-cabi"
+		DEFINES += NOMINMAX # This stops windows headers from creating min & max as defines
+
 		win32-msvc2005 {
 			VC_VERSION = 8.0
 			message("Compiler is MS Visual C++ version 14 (2005)")
