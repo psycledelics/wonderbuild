@@ -176,6 +176,14 @@
 				Name="core"
 				>
 				<File
+					RelativePath="..\..\..\..\src\psycle\core\pluginFinderKey.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\core\pluginFinderKey.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\core\binread.cpp"
 					>
 				</File>
