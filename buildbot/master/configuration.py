@@ -315,7 +315,7 @@ BuildmasterConfig['builders'].append(
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = []),
 				factory.s(PolicyCheck, command = 'python .\\tools\\check-policy diversalis universalis psycle-helpers', locks = [compile_lock]),
 				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=psycle-helpers packageneric__debug=0 packageneric__test=1', locks = [compile_lock]),
-				factory.s(step.Test, command = '.\\++packageneric\\variants\\default\\stage-install\\usr\\local\\bin\\psycle-helpers_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
+				factory.s(step.Test, command = 'call ..\\..\\..\\dev-pack && .\\++packageneric\\variants\\default\\stage-install\\usr\\local\\bin\\psycle-helpers_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
 			]
 		)
 	}
