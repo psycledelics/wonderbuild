@@ -110,6 +110,8 @@ class pkg_config_package(projected, builder):
 			uninstalled_file_name = os.path.join(self.project().build_variant_intermediate_dir(), 'pkgconfig', self.name() + '-uninstalled.pc')
 			installed_file_name = os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib', 'pkgconfig', self.name() + '.pc')
 
+			# todo: when the dependency is a shared lib, we can avoid unneeded relinking of
+			#       the target(s) by depending only on the header files, not the lib file itself. 
 			dependencies = []
 			for dependency_lists in [module.targets() for module in self.modules()]:
 				for dependency_list in dependency_lists: dependencies.extend(dependency_list)
