@@ -1,6 +1,6 @@
-# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2006-2007 johan boule <bohan@jabber.org>
-# copyright 2006-2007 psycledelics http://psycle.pastnotecut.org
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ;
+# either version 2, or (at your option) any later version. copyright 2006-2007 johan boule <bohan@jabber.org> copyright 2006-2007 psycledelics
+# http://psycle.pastnotecut.org
 
 import os.path
 from projected import projected
@@ -129,7 +129,10 @@ class pkg_config_package(projected, builder):
 			#print 'xxxxxxxxxxx', self.name(), paths
 			
 			# add the install lib path to the library path
-			if self.modules(): env.linker().paths().add([os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib')])
+			if self.modules():
+				env.linker().paths().add([os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib')])
+				if self.project().platform_executable_format() == 'pe':
+					env.linker().paths().add([os.path.join('$packageneric__install__stage_destination', '$packageneric__install__bin')])
 
 			scons = self.project()._scons()
 			self._targets = [

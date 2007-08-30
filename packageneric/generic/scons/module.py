@@ -182,12 +182,12 @@ class module(projected, builder): # todo decide whether this can be derived from
 			elif target_type == self.target_types.static: builder = scons.StaticLibrary
 			elif self.target_type() == self.target_types.program: builder = scons.Program
 			else: self.project().abort("unknown binary type for module '%s'" % self.name())
-			if self.target_type() == self.target_types.program:
+			if self.target_type() == self.target_types.program or \
+				(target_type in (self.target_types.shared, self.target_types.loadable) and self.project().platform_executable_format() == 'pe'):
 				destination = os.path.join('$packageneric__install__bin')
+				# todo the .dll file needs to go to bin dir ; the .lib, .pdb, .exp still need to go to the lib dir (and .ilk kept in intermediate dir)
 			else:
 				destination = os.path.join('$packageneric__install__lib')
-				 # todo bin dir also if self.project.platform_executable_format() == 'pe' and shared or loadable
-				 # but this is tricky since only the .dll file needs to go to bin dir ; the .lib, .pdb, .exp still need to go to the lib dir (and .ilk kept in intermediate dir)
 			self._targets = [
 				builder(os.path.join('$packageneric__install__stage_destination', destination, self._target_name()), [os.path.join(self.project().intermediate_target_dir(), x.full()) for x in self.sources()])
 			]
