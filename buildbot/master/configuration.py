@@ -139,7 +139,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = []),
-				factory.s(PolicyCheck, command = 'python .\\tools\\check-policy diversalis universalis freepsycle', locks = [compile_lock]),
+				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy diversalis universalis freepsycle', locks = [compile_lock]),
 				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=freepsycle packageneric__debug=1', locks = [compile_lock])
 			]
 		)
@@ -182,6 +182,31 @@ BuildmasterConfig['schedulers'].append(
 
 BuildmasterConfig['builders'].append(
 	{
+		'name': 'psycle-core.mingw',
+		'category': 'psycle',
+		'slavenames': microsoft_slaves,
+		'builddir': svn_dir + 'psycle-core.mingw',
+		'factory': factory.BuildFactory(
+			[
+				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
+				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy psycle-core', locks = [compile_lock]),
+				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && cd psycle-core && qmake && make', locks = [compile_lock])
+			]
+		)
+	}
+)
+BuildmasterConfig['schedulers'].append(
+	Scheduler(
+		name = 'psycle-core.mingw',
+		branch = None,
+		treeStableTimer = bunch_timer,
+		builderNames = ['psycle-core.mingw'],
+		fileIsImportant = lambda change: filter(change, ['psycle-core/', 'psycle-audiodrivers/'])
+	)
+)
+
+BuildmasterConfig['builders'].append(
+	{
 		'name': 'psycle-player',
 		'category': 'psycle',
 		'slavenames': slaves,
@@ -207,6 +232,31 @@ BuildmasterConfig['schedulers'].append(
 
 BuildmasterConfig['builders'].append(
 	{
+		'name': 'psycle-player.mingw',
+		'category': 'psycle',
+		'slavenames': microsoft_slaves,
+		'builddir': svn_dir + 'psycle-player.mingw',
+		'factory': factory.BuildFactory(
+			[
+				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
+				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy psycle-player', locks = [compile_lock]),
+				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && cd psycle-player && qmake && make', locks = [compile_lock])
+			]
+		)
+	}
+)
+BuildmasterConfig['schedulers'].append(
+	Scheduler(
+		name = 'psycle-player.mingw',
+		branch = None,
+		treeStableTimer = bunch_timer,
+		builderNames = ['psycle-player.mingw'],
+		fileIsImportant = lambda change: filter(change, ['psycle-player/', 'psycle-core/', 'psycle-audiodrivers/'])
+	)
+)
+
+BuildmasterConfig['builders'].append(
+	{
 		'name': 'qpsycle',
 		'category': 'psycle',
 		'slavenames': slaves,
@@ -226,6 +276,31 @@ BuildmasterConfig['schedulers'].append(
 		branch = None,
 		treeStableTimer = bunch_timer,
 		builderNames = ['qpsycle'],
+		fileIsImportant = lambda change: filter(change, ['qpsycle/', 'psycle-core/', 'psycle-audiodrivers/'])
+	)
+)
+
+BuildmasterConfig['builders'].append(
+	{
+		'name': 'qpsycle.mingw',
+		'category': 'psycle',
+		'slavenames': microsoft_slaves,
+		'builddir': svn_dir + 'qpsycle.mingw',
+		'factory': factory.BuildFactory(
+			[
+				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
+				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy qpsycle', locks = [compile_lock]),
+				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && cd qpsycle && qmake && make', locks = [compile_lock])
+			]
+		)
+	}
+)
+BuildmasterConfig['schedulers'].append(
+	Scheduler(
+		name = 'qpsycle.mingw',
+		branch = None,
+		treeStableTimer = bunch_timer,
+		builderNames = ['qpsycle.mingw'],
 		fileIsImportant = lambda change: filter(change, ['qpsycle/', 'psycle-core/', 'psycle-audiodrivers/'])
 	)
 )
@@ -313,7 +388,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = []),
-				factory.s(PolicyCheck, command = 'python .\\tools\\check-policy diversalis universalis psycle-helpers', locks = [compile_lock]),
+				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy diversalis universalis psycle-helpers', locks = [compile_lock]),
 				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=psycle-helpers packageneric__debug=0 packageneric__test=1', locks = [compile_lock]),
 				factory.s(step.Test, command = 'call ..\\..\\..\\dev-pack && .\\++packageneric\\variants\\default\\stage-install\\usr\\local\\bin\\psycle-helpers_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
 			]
