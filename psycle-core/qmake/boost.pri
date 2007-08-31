@@ -1,6 +1,6 @@
 unix {
-	macx: LIBS += -lboost_signals-1_33_1
-	else: LIBS += -lboost_signals
+	macx: LIBS *= -lboost_signals-1_33_1
+	else: LIBS *= -lboost_signals
 } else:win32 {
 	EXTERNAL_PKG_DIR = $$TOP_SRC_DIR/external-packages
 	
@@ -22,22 +22,18 @@ unix {
 					!exists($$BOOST_DIR/lib-mswindows-mingw-cxxabi-1002) {
 						warning("The boost libraries are not unpacked. See the dir $$BOOST_DIR")
 					} else {
-						INCLUDEPATH += $$BOOST_DIR/include
+						INCLUDEPATH *= $$BOOST_DIR/include
 						LIBPATH *= $$BOOST_DIR/lib-mswindows-mingw-cxxabi-1002
-						LIBS *= -llibboost_signals-mgw-mt-1_33_1
-						#FIXME: is there any reason not to use the following instead?
-						#LIBS *= -lboost_signals-mgw-mt-1_33_1
 					}
 				} else:win32-msvc2005 {
 					!exists($$BOOST_DIR/lib-mswindows-msvc-8.0-cxxabi-1400) {
 						warning("The boost libraries are not unpacked. See the dir $$BOOST_DIR")
 					} else {
-						INCLUDEPATH += $$BOOST_DIR/include
+						INCLUDEPATH *= $$BOOST_DIR/include
 						LIBPATH *= $$BOOST_DIR/lib-mswindows-msvc-8.0-cxxabi-1400
-						LIBS *= boost_signals-vc80-mt-1_33_1.lib
 					}
 				} else:win32-msvc* {
-					INCLUDEPATH += $$BOOST_DIR/include
+					INCLUDEPATH *= $$BOOST_DIR/include
 					LIBPATH *= $$BOOST_DIR/lib-mswindows-mcvc-7-cxxabi
 				} else {
 					warning("We do not have boost libs built for your compiler. Make sure you have them installed.")
@@ -45,4 +41,8 @@ unix {
 			}
 		}
 	}
+	
+	win32-g++: LIBS *= -lboost_signals-mgw-mt-1_33_1
+	else: win32-msvc2005: LIBS *= boost_signals-vc80-mt-1_33_1.lib
+	else: win32-msvc*: LIBS *= boost_signals-vc71-mt-1_33_1.lib
 }

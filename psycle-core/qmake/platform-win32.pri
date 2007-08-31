@@ -4,14 +4,15 @@ win32 {
 	message("Top src dir is $$TOP_SRC_DIR")
 	win32-g++ {
 		message("Compiler is g++")
+		#DEFINES *= NOMINMAX # no problem on mingw if stl algo header is included before the winapi
 	} else:win32-msvc* {
 		message("Compiler is MS Visual C++")
-		QMAKE_CXXFLAGS += /Zi
-		QMAKE_LFLAGS += /debug
+		QMAKE_CXXFLAGS *= /Zi
+		QMAKE_LFLAGS *= /debug
 		LIBS *= advapi32.lib
 		LIBS *= user32.lib
 		LIBPATH *= "../external-packages/zlib-1.2.3/lib-mswindows-cabi"
-		DEFINES += NOMINMAX # This stops windows headers from creating min & max as defines
+		DEFINES *= NOMINMAX # This stops windows headers from creating min & max as defines (not needed on mingw)
 
 		win32-msvc2005 {
 			VC_VERSION = 8.0

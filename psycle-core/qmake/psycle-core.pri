@@ -41,7 +41,6 @@ HEADERS += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/preset.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psy3filter.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psy4filter.h \
-	$$PSYCLE_CORE_DIR/src/psycle/core/psycleCorePch.hpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psyfilter.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/riff.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/sampler.h \
