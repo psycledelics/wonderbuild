@@ -37,7 +37,7 @@ unix {
 		SOURCES += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/esoundout.cpp 
 	}
 
-	false { # gstreamer output is unfinished
+	false { # gstreamer output is unfinished (we could rip the code from freepsycle, which has it complete)
 		system( pkg-config --exists gstreamer ) {
 			message( "pkg-config thinks gstreamer libs are available..." )
 			PKGCONFIG *= gstreamer
