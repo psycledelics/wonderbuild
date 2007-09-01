@@ -434,7 +434,7 @@ BuildmasterConfig['status'] = []
 categories = None #['psycle', 'zzub']
 
 from buildbot.status.html import Waterfall
-BuildmasterConfig['status'].append(Waterfall(http_port = 8010, categories = categories))
+BuildmasterConfig['status'].append(Waterfall(http_port = 8010, css = 'waterfall.css', robots_txt = 'robots.txt', categories = categories))
 
 import os
 try: del os.environ['TERM']
