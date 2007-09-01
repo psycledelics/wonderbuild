@@ -526,6 +526,8 @@ BuildmasterConfig['debugPassword'] = 'debugpassword'
 
 ##################################### non-psycle stuff below ######################################
 if True:
+	zzub_exclude_prefixes = ['branches/', 'tags/', 'tools/', 'freepsycle/', 'qpsycle/', 'psycle-core/', 'psycle-player/', 'psycle-helpers', 'psycle-audiodrivers/', 'psycle-plugins/', 'psycle/', 'universalis/', 'diversalis/', 'packageneric/', 'buildbot/', 'external-packages/', 'www/']
+
 	BuildmasterConfig['builders'].append(
 		{
 			'name': 'libzzub',
@@ -548,7 +550,62 @@ if True:
 			builderNames = ['libzzub'],
 			fileIsImportant = lambda change: filter(change,
 				include_prefixes = [''],
-				exclude_prefixes = ['branches/', 'tags/', 'tools/', 'freepsycle/', 'qpsycle/', 'psycle-core/', 'psycle-player/', 'psycle-helpers', 'psycle-audiodrivers/', 'psycle-plugins/', 'psycle/', 'universalis/', 'diversalis/', 'packageneric/', 'buildbot/', 'external-packages/', 'www/']
+				exclude_prefixes = zzub_exclude_prefixes
+			)
+		)
+	)
+
+
+	BuildmasterConfig['builders'].append(
+		{
+			'name': 'libzzub.mingw',
+			'category': 'zzub',
+			'slavenames': microsoft_slaves,
+			'builddir': os.path.join('zzub-trunk', 'libzzub.mingw'),
+			'factory': factory.BuildFactory(
+				[
+					factory.s(step.SVN, mode = 'update', svnurl = 'http://svn.zeitherrschaft.org/zzub/trunk', locks = [svn_lock]),
+					factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack scons-tools-mingw && scons configure && scons', locks = [compile_lock])
+				]
+			)
+		}
+	)
+	BuildmasterConfig['schedulers'].append(
+		Scheduler(
+			name = 'libzzub.mingw',
+			branch = None,
+			treeStableTimer = bunch_timer,
+			builderNames = ['libzzub.mingw'],
+			fileIsImportant = lambda change: filter(change,
+				include_prefixes = [''],
+				exclude_prefixes = zzub_exclude_prefixes
+			)
+		)
+	)
+
+	BuildmasterConfig['builders'].append(
+		{
+			'name': 'libzzub.msvc',
+			'category': 'zzub',
+			'slavenames': microsoft_slaves,
+			'builddir': os.path.join('zzub-trunk', 'libzzub.msvc'),
+			'factory': factory.BuildFactory(
+				[
+					factory.s(step.SVN, mode = 'update', svnurl = 'http://svn.zeitherrschaft.org/zzub/trunk', locks = [svn_lock]),
+					factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack scons-tools-msvc && scons configure && scons', locks = [compile_lock])
+				]
+			)
+		}
+	)
+	BuildmasterConfig['schedulers'].append(
+		Scheduler(
+			name = 'libzzub.msvc',
+			branch = None,
+			treeStableTimer = bunch_timer,
+			builderNames = ['libzzub.msvc'],
+			fileIsImportant = lambda change: filter(change,
+				include_prefixes = [''],
+				exclude_prefixes = zzub_exclude_prefixes
 			)
 		)
 	)
