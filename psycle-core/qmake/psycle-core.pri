@@ -11,6 +11,7 @@ DEPENDPATH *= $$TOP_SRC_DIR/universalis/src
 HEADERS += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/binread.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/constants.h \
+	$$PSYCLE_CORE_DIR/src/psycle/core/convert_internal_machines.private.hpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/cstdint.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/datacompression.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/dither.h \
@@ -39,6 +40,7 @@ HEADERS += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/pluginfinder.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/pluginFinderKey.hpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/preset.h \
+	$$PSYCLE_CORE_DIR/src/psycle/core/psy2filter.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psy3filter.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psy4filter.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psyfilter.h \
@@ -59,6 +61,7 @@ HEADERS += \
 	
 SOURCES += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/binread.cpp \
+	$$PSYCLE_CORE_DIR/src/psycle/core/convert_internal_machines.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/datacompression.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/dither.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/dsp.cpp \
@@ -82,6 +85,7 @@ SOURCES += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/pluginfinder.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/pluginFinderKey.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/preset.cpp \
+	$$PSYCLE_CORE_DIR/src/psycle/core/psy2filter.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psy3filter.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psy4filter.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psycleCorePch.cpp \
