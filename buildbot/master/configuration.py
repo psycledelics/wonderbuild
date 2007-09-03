@@ -503,7 +503,7 @@ class IRC(BaseIRC):
 	def buildFinished(self, builderName, build, results):
 		def msg(message):
 			for channel in self.channelMap(builderName):
-				if self.irc().quiet.get(channel, False): self.irc().msg(channel, message.encode('ascii', 'replace'))
+				if not self.irc().quiet.get(channel, False): self.irc().msg(channel, message.encode('ascii', 'replace'))
 		watched = self.watched[builderName]
 		from buildbot.status.builder import SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION
 		if build.getResults() == FAILURE:
