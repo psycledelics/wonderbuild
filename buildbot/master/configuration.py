@@ -440,11 +440,35 @@ import os
 try: del os.environ['TERM']
 except KeyError: pass
 
-from buildbot.status.words import IRC as BaseIRC
+from buildbot.status.words import IRC as BaseIRC, IrcStatusBot as BaseIrcStatusBot, IrcStatusFactory
+
+class IrcStatusBot(BaseIrcStatusBot):
+	def __init__(self, *args, **kw):
+		BaseIrcStatusBot.__init__(self, *args, **kw)
+		self.quiet = {}
+	
+	def command_QUIET(self, user, reply, args):
+		if reply.startswith('#'):
+			if not reply in self.quiet: self.quiet[reply] = False
+			args = args.split()
+			if len(args) == 0: self.quiet[reply] = not self.quiet[reply]
+			else: self.quiet[reply] = args[0] == 'on'
+			if self.quiet[reply]: self.reply(reply, 'I am now quiet.')
+			else: self.reply(reply, 'I will speak from now on!')
+	command_QUIET.usage = "quiet - mutes/unmutes unsolicited reports"
+
+	def build_commands(self):
+		commands = []
+		for k in self.__class__.__dict__.keys() + BaseIrcStatusBot.__dict__.keys():
+			if k.startswith('command_'): commands.append(k[8:].lower())
+		commands.sort()
+		return commands
+
+IrcStatusFactory.protocol = IrcStatusBot
+
 class IRC(BaseIRC):
 	def __init__(self, *args, **kw):
 		BaseIRC.__init__(self, *args, **kw)
-		#BaseIRC.__init__(*((self,) + args), **kw)
 		self.watched = {}
 	
 	class Watched:
@@ -478,7 +502,8 @@ class IRC(BaseIRC):
 	
 	def buildFinished(self, builderName, build, results):
 		def msg(message):
-			for channel in self.channelMap(builderName): self.irc().msg(channel, message.encode('ascii', 'replace'))
+			for channel in self.channelMap(builderName):
+				if self.irc().quiet.get(channel, False): self.irc().msg(channel, message.encode('ascii', 'replace'))
 		watched = self.watched[builderName]
 		from buildbot.status.builder import SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION
 		if build.getResults() == FAILURE:
@@ -516,7 +541,7 @@ class IRC(BaseIRC):
 			if url: msg('Build details are at %s' % url)
 
 	def channelMap(self, builderName):
-		if builderName == 'libzzub': return self.irc().channels
+		if builderName.startswith('libzzub'): return self.irc().channels
 		else: return ['#psycle']
 	
 BuildmasterConfig['status'].append(IRC(host = 'irc.efnet.pl', nick = 'buildborg', channels = ['#psycle', '#buzz'], categories = categories))
