@@ -409,7 +409,7 @@ BuildmasterConfig['builders'].append(
 	{
 		'name': 'psycle.msvc',
 		'category': 'psycle',
-		'slavenames': microsoft_slaves,
+		'slavenames': [], # msvc8 is unstable on anechoid microsoft_slaves,
 		'builddir': svn_dir + 'psycle.msvc',
 		'factory': factory.BuildFactory(
 			[
@@ -612,7 +612,7 @@ if True:
 		{
 			'name': 'libzzub.msvc',
 			'category': 'zzub',
-			'slavenames': microsoft_slaves,
+			'slavenames': [], # msvc8 is unstable on anechoid microsoft_slaves,
 			'builddir': os.path.join('zzub-trunk', 'libzzub.msvc'),
 			'factory': factory.BuildFactory(
 				[
