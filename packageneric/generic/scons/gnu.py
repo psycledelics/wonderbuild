@@ -251,6 +251,7 @@ def implementation(chain):
 			chain.linker().flags().add([
 				#'-Wl,--enable-extra-pe-debug'
 			])
+		# tip: on linux, set env var MALLOC_CHECK_ to 1 (man malloc)
 	else:
 		chain.compilers().cxx().defines().add({
 			'NDEBUG': None
