@@ -193,7 +193,7 @@ class boost(external_package):
 				name = 'boost ' + ' '.join(link_libraries) + ' >= ' + self._version_wanted,
 				cxx_compiler_paths = cxx_compiler_paths,
 				libraries = ['boost_' + library for library in link_libraries],
-				source_text = source_texts['version'] + '\n' + '\n'.join([source_texts[link_libraries] for library in link_libraries])
+				source_text = source_texts['version'] + '\n' + '\n'.join([source_texts[library] for library in link_libraries])
 			)
 
 		all_in_one = make_all_in_one()
