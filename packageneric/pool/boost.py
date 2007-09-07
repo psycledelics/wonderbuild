@@ -136,11 +136,11 @@ class boost(external_package):
 		libraries = self._libraries[:]
 
 		if self.project().platform() == 'posix':
-				for library in self._libraries:
-					library_select = library + '-mt'
-					source_texts[library_select] = source_texts[library]
-					libraries.remove(library)
-					libraries.append(library_select)
+			for library in self._libraries:
+				library_select = library + '-mt'
+				source_texts[library_select] = source_texts[library]
+				libraries.remove(library)
+				libraries.append(library_select)
 		elif self.project().platform() == 'cygwin': # todo and no -mno-cygwin passed to the compiler
 			# damn cygwin installs boost headers in e.g. /usr/include/boost-1_33_1/ and doesn't give symlinks for library files
 			import os
@@ -188,31 +188,43 @@ class boost(external_package):
 				"""
 		).result(): link_libraries = []
 
-		all_in_one = cxx_build(self.project(),
-			name = 'boost ' + ' '.join(libraries) + ' >= ' + self._version_wanted,
-			cxx_compiler_paths = cxx_compiler_paths,
-			libraries = ['boost_' + library for library in link_libraries],
-			source_text = source_texts['version'] + '\n' + '\n'.join([source_texts[library] for library in libraries])
-		)
+		def make_all_in_one():
+			return cxx_build(self.project(),
+				name = 'boost ' + ' '.join(libraries) + ' >= ' + self._version_wanted,
+				cxx_compiler_paths = cxx_compiler_paths,
+				libraries = ['boost_' + library for library in link_libraries],
+				source_text = source_texts['version'] + '\n' + '\n'.join([source_texts[library] for library in libraries])
+			)
 
-		if all_in_one.result(): self.add_dependency(all_in_one)
-		else: # report exactly what is missing
-			checks = []
+		all_in_one = make_all_in_one()
+		if all_in_one.result():
+			self.add_dependency(all_in_one)
+			return
+			
+		if self.project().platform() == 'posix':
+			link_libraries = self._libraries
+			all_in_one = make_all_in_one()
+			if all_in_one.result():
+				self.add_dependency(all_in_one)
+				return
+				
+		# report exactly what is missing
+		checks = []
+		checks.append(
+			cxx_build(self.project(), name = 'boost version >= ' + self._version_wanted,
+				cxx_compiler_paths = cxx_compiler_paths,
+				source_text = source_texts['version']
+			)
+		)
+		for library in libraries:
+			if len(link_libraries): link_library = ['boost_' + library]
+			else: link_library = [] # todo cygwin
 			checks.append(
-				cxx_build(self.project(), name = 'boost version >= ' + self._version_wanted,
+				cxx_build(self.project(), name = 'boost ' + library,
 					cxx_compiler_paths = cxx_compiler_paths,
-					source_text = source_texts['version']
+					libraries = link_library,
+					source_text = source_texts[library]
 				)
 			)
-			for library in libraries:
-				if len(link_libraries): link_library = ['boost_' + library]
-				else: link_library = [] # todo cygwin
-				checks.append(
-					cxx_build(self.project(), name = 'boost ' + library,
-						cxx_compiler_paths = cxx_compiler_paths,
-						libraries = link_library,
-						source_text = source_texts[library]
-					)
-				)
-			for check in checks:
-				if not check.result(): self.add_dependency(check)
+		for check in checks:
+			if not check.result(): self.add_dependency(check)
