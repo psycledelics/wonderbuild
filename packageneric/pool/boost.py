@@ -133,9 +133,15 @@ class boost(external_package):
 			""" + auto_link('wave', dynamic = False)
 
 		cxx_compiler_paths = []
-		libraries = self._libraries
+		libraries = self._libraries[:]
 
-		if self.project().platform() == 'cygwin': # todo and no -mno-cygwin passed to the compiler
+		if self.project().platform() == 'posix':
+				for library in self._libraries:
+					library_select = library + '-mt'
+					source_texts[library_select] = source_texts[library]
+					libraries.remove(library)
+					libraries.append(library_select)
+		elif self.project().platform() == 'cygwin': # todo and no -mno-cygwin passed to the compiler
 			# damn cygwin installs boost headers in e.g. /usr/include/boost-1_33_1/ and doesn't give symlinks for library files
 			import os
 			dir = os.path.join(os.path.sep, 'usr', 'include')
