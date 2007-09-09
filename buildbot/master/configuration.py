@@ -590,7 +590,7 @@ if True:
 			'factory': factory.BuildFactory(
 				[
 					factory.s(step.SVN, mode = 'update', svnurl = 'http://svn.zeitherrschaft.org/zzub/trunk', locks = [svn_lock]),
-					factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack scons-tools-mingw && scons configure && scons', locks = [compile_lock])
+					factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons TOOLS=mingw configure && scons', locks = [compile_lock])
 				]
 			)
 		}
@@ -617,7 +617,7 @@ if True:
 			'factory': factory.BuildFactory(
 				[
 					factory.s(step.SVN, mode = 'update', svnurl = 'http://svn.zeitherrschaft.org/zzub/trunk', locks = [svn_lock]),
-					factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack scons-tools-msvc && scons configure && scons', locks = [compile_lock])
+					factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons configure && scons', locks = [compile_lock])
 				]
 			)
 		}
