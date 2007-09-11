@@ -551,7 +551,12 @@ BuildmasterConfig['debugPassword'] = 'debugpassword'
 
 ##################################### non-psycle stuff below ######################################
 if True:
-	zzub_exclude_prefixes = ['branches/', 'tags/', 'tools/', 'freepsycle/', 'qpsycle/', 'psycle-core/', 'psycle-player/', 'psycle-helpers', 'psycle-audiodrivers/', 'psycle-plugins/', 'psycle/', 'universalis/', 'diversalis/', 'packageneric/', 'buildbot/', 'external-packages/', 'www/']
+	zzub_exclude_prefixes = [
+		'branches/', 'tags/',
+		'/dependencies.dot', '/dependencies.png', '/README', 'tools/', 'freepsycle/', 'qpsycle/', 'psycle-core/',
+		'psycle-player/', 'psycle-helpers', 'psycle-audiodrivers/', 'psycle-plugins/', 'psycle/',
+		'universalis/', 'diversalis/', 'packageneric/', 'buildbot/', 'external-packages/', 'www/'
+	]
 
 	BuildmasterConfig['builders'].append(
 		{
