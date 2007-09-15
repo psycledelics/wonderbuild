@@ -40,7 +40,7 @@ def detect(chain):
 				'-Winit-self',
 				#'-Wmissing-include-dirs',
 				'-Wswitch-default',
-				'-Wswitch-enum',
+				#'-Wswitch-enum',
 				#'-Wunused-parameter', # or put '-Wno-unused-parameter' at the end
 				'-Wstrict-aliasing=2',
 				'-Wextra',
