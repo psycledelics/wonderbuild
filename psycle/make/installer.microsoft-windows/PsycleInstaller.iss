@@ -3,135 +3,113 @@
 
 [Setup]
 AppName=Psycle Modular Music Creation Studio
-AppVerName=Psycle 1.8
-AppPublisher=Psycledelics
-AppPublisherURL=http://psycle.pastnotecut.org/
+AppVerName=Psycle 1.8.5
+AppPublisher=psycledelics
+AppPublisherURL=http://psycle.sourceforge.net/
 AppSupportURL=http://psycle.pastnotecut.org/
-AppUpdatesURL=http://psycle.pastnotecut.org/
+AppUpdatesURL=http://psycle.sourceforge.net/
 DefaultDirName={pf}\Psycle
 DefaultGroupName=Psycle
 AllowNoIcons=true
-InfoBeforeFile=I:\Documents and Settings\All Users\Documentos\Visual C++\portable_psycle\doc\for-end-users\readme.txt
-InfoAfterFile=I:\Documents and Settings\All Users\Documentos\Visual C++\portable_psycle\doc\for-end-users\whatsnew.txt
+InfoBeforeFile=..\..\doc\for-end-users\readme.txt
+InfoAfterFile=..\..\doc\for-end-users\whatsnew.txt
 OutputBaseFilename=PsycleInstaller
-SetupIconFile=I:\Documents and Settings\All Users\Documentos\Visual C++\portable_psycle\src\psycle\host\resources\Psycle.ico
+SetupIconFile=..\..\pixmaps\psycle.ico
 Compression=lzma
 SolidCompression=true
-AppCopyright=© Psycledelics 2000-2005
-ChangesAssociations=true
-ShowLanguageDialog=no
-WizardImageFile=compiler:wizmodernimage-IS.bmp
-WizardSmallImageFile=compiler:wizmodernsmallimage-IS.bmp
-AppVersion=1.8
+VersionInfoVersion=1.8.5
+VersionInfoCompany=psycledelics
+VersionInfoDescription=Psycle Installer
+VersionInfoCopyright=2000-2007 psycledelics
+SetupLogging=false
+AppCopyright=© psycledelics 2000-2007
+PrivilegesRequired=poweruser
+AllowRootDirectory=true
+ShowLanguageDialog=auto
+AppVersion=1.8.5
 AppID={{8E7D0A7F-B85F-44DC-8C1C-2A2C27BAEA0B}
 UninstallDisplayIcon={app}\psycle.exe
+ChangesAssociations=true
 
 [Languages]
-Name: eng; MessagesFile: compiler:Default.isl
+Name: english; MessagesFile: compiler:Default.isl
 
 [Tasks]
 Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked
 Name: quicklaunchicon; Description: {cm:CreateQuickLaunchIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked
-Name: Clear_Plugin_Cache; Description: Delete the plugin cache. Useful to reparse all the information; Flags: unchecked
-Name: Clear_Registry_Settings; Description: Delete the configuration data from the Windows Registry. Useful to restore to the default settings; Flags: unchecked
+Name: Delete_plugins_cache; Description: deletes the cache of plugin names to force it to be regenerated.; Flags: unchecked; Components: ; Languages: 
+Name: Delete_registry_settings; Description: deletes the existing settings in the registry, allowing psycle to regenerate the defaults.
 
 [Files]
-Source: ..\msvc_7.1\output\release.g7\bin\psycle.exe; DestDir: {app}; Flags: ignoreversion; Components: Application
-Source: ..\msvc_7.1\output\release.g7\bin\psycle.plugins\*.dll; DestDir: {app}\PsyclePlugins; Flags: ignoreversion; Components: Open_Source_Plugins
-Source: ..\msvc_7.1\output\release.g7\bin\msvcp71.dll; DestDir: {app}; Flags: ignoreversion; Components: Microsoft_dlls; Tasks: ; Languages: 
-Source: ..\msvc_7.1\output\release.g7\bin\msvcr71.dll; DestDir: {app}; Flags: ignoreversion; Components: Microsoft_dlls
-Source: ..\msvc_7.1\output\release.g7\bin\asio.dll; DestDir: {app}; Flags: ignoreversion; Components: Application
+Source: ..\msvc_7.1\output\release.g7\bin\psycle.exe; DestDir: {app}; Flags: ignoreversion; Tasks: ; Languages: ; Components: Application
+Source: ..\msvc_7.1\output\release.g7\bin\zlib1.dll; DestDir: {app}; Flags: ignoreversion; Components: Application
 Source: ..\msvc_7.1\output\release.g7\bin\boost_filesystem-vc71-mt-1_32.dll; DestDir: {app}; Flags: ignoreversion; Components: Application
 Source: ..\msvc_7.1\output\release.g7\bin\boost_thread-vc71-mt-1_32.dll; DestDir: {app}; Flags: ignoreversion; Components: Application
-Source: ..\msvc_7.1\output\release.g7\bin\MFC71.dll; DestDir: {app}; Flags: ignoreversion; Components: Microsoft_dlls; Tasks: ; Languages: 
-Source: ..\..\doc\for-end-users\*; DestDir: {app}\Docs; Flags: ignoreversion recursesubdirs createallsubdirs; Components: Documentation
+Source: ..\msvc_7.1\output\release.g7\bin\universalis.dll; DestDir: {app}; Flags: ignoreversion; Components: Application
+Source: ..\msvc_7.1\output\release.g7\bin\psycle.plugins\*.dll; DestDir: {app}\PsyclePlugins; Flags: ignoreversion; Components: Open_Source_Plugins; Excludes: crasher.dll
+Source: ..\..\closed-source\*; DestDir: {app}\PsyclePlugins\closed-source; Flags: ignoreversion recursesubdirs createallsubdirs; Components: Closed_Source_Plugins
+Source: ..\..\doc\for-end-users\*; DestDir: {app}\docs; Flags: ignoreversion recursesubdirs createallsubdirs; Components: Documentation; Excludes: .svn, Log1.log
+Source: ..\..\..\psycle-plugins\presets\*.prs; DestDir: {app}\PsyclePlugins; Flags: ignoreversion onlyifdoesntexist; Components: Presets
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: Psycle.exe.manifest; DestDir: {app}; Components: " Windows_XP_theme_support"
-Source: ..\..\closed-source\*; DestDir: {app}\PsyclePlugins\closed-source; Flags: ignoreversion createallsubdirs recursesubdirs; Components: Closed_Source_Plugins
-Source: ..\msvc_7.1\output\release.g7\bin\Skins\*; DestDir: {app}\Skins; Flags: confirmoverwrite recursesubdirs ignoreversion createallsubdirs; Components: Skins
-Source: ..\..\src\psycle\plugins\*.prs; DestDir: {app}\PsyclePlugins; Flags: recursesubdirs ignoreversion; Components: Open_Source_Plugins
+Source: ..\msvc_7.1\output\release.g7\bin\MFC71.dll; DestDir: {app}; Components: " Microsoft_dlls"; Tasks: ; Languages: 
+Source: ..\msvc_7.1\output\release.g7\bin\MSVCP71.dll; DestDir: {app}; Components: " Microsoft_dlls"
+Source: ..\msvc_7.1\output\release.g7\bin\MSVCR71.dll; DestDir: {app}; Components: " Microsoft_dlls"
+Source: ..\..\doc\*.psy; DestDir: {app}\Songs; Flags: ignoreversion replacesameversion; Components: " Songs"
 
 [INI]
 Filename: {app}\psycle.url; Section: InternetShortcut; Key: URL; String: http://psycle.pastnotecut.org; Flags: uninsdeleteentry uninsdeletesectionifempty; Tasks: ; Languages: 
 
 [Icons]
-Name: {group}\Psycle Modular Music Creation Studio; Filename: {app}\psycle.exe; IconIndex: 0; Components: Application
-Name: {group}\{cm:ProgramOnTheWeb,Psycle Modular Music Creation Studio}; Filename: {app}\psycle.url
-Name: {group}\{cm:UninstallProgram,Psycle Modular Music Creation Studio}; Filename: {uninstallexe}
-Name: {userdesktop}\Psycle Modular Music Creation Studio; Filename: {app}\psycle.exe; Tasks: desktopicon; IconIndex: 0; Components: Application
-Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\Psycle Modular Music Creation Studio; Filename: {app}\psycle.exe; Tasks: quicklaunchicon
+Name: {group}\Psycle; Filename: {app}\psycle.exe
+Name: {group}\{cm:UninstallProgram,Psycle}; Filename: {uninstallexe}
+Name: {group}\{cm:ProgramOnTheWeb,Psycle}; Filename: {app}\psycle.url
+Name: {commondesktop}\Psycle; Filename: {app}\psycle.exe; Tasks: desktopicon
+Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\Psycle; Filename: {app}\psycle.exe; Tasks: quicklaunchicon
 Name: {group}\Documents\How to Skin Psycle; Filename: {app}\Docs\how to skin psycle.txt; WorkingDir: {app}\Docs; IconIndex: 0; Components: Documentation
 Name: {group}\Documents\Version History; Filename: {app}\Docs\whatsnew.txt; WorkingDir: {app}\Docs; IconIndex: 0; Components: Documentation
 Name: {group}\Documents\Pattern Keys; Filename: {app}\Docs\keys.txt; WorkingDir: {app}\Docs; IconIndex: 0; Components: Documentation
 Name: {group}\Documents\MIDI Help; Filename: {app}\Docs\MIDI Help\psyclemidi.html; IconIndex: 0; WorkingDir: {app}\Docs\MIDI input Docs; Components: Documentation
 Name: {group}\Documents\Upwego Tutorial; Filename: {app}\Docs\Upwego\upwego5.html; IconIndex: 0; WorkingDir: {app}\Docs\MIDI input Docs; Components: Documentation
 Name: {group}\Documents\Tweakings And Commands; Filename: {app}\Docs\tweakings and commands.txt; IconIndex: 0
+Name: {group}\{cm:UninstallProgram, Psycle Modular Music Creation Studio}; Filename: {uninstallexe}
+Name: {group}\{cm:UninstallProgram, Psycle Modular Music Creation Studio}; Filename: {uninstallexe}
 
 [Run]
-Filename: {app}\psycle.exe; Description: {cm:LaunchProgram,Psycle Modular Music Creation Studio}; Flags: nowait postinstall skipifsilent
-
-[UninstallDelete]
-Type: files; Name: {app}\psycle.url
-Name: {app}\psycle.plugin-scan.cache; Type: files; Components: ; Tasks: ; Languages: 
-Name: {app}\psycle.plugin-scan.log.txt; Type: files
-Name: {app}\psycle.log.txt; Type: files
-Name: {app}; Type: dirifempty
+Filename: {app}\psycle.exe; Description: {cm:LaunchProgram,Psycle}; Flags: nowait postinstall skipifsilent runasoriginaluser; Components: Application
+Filename: {tmp}\Vst Bundle.exe; WorkingDir: {tmp}; Components: " VstPack"; Flags: runasoriginaluser; StatusMsg: Select the location of your VST Plugins Dir (use Psycle\VstPlugins if in doubt); Tasks: ; Languages: 
+[InstallDelete]
+Name: {userappdata}\..\.psycle\psycle.plugin-scan.cache; Type: files; Tasks: " Delete_plugins_cache"; Languages: 
+Name: {win}\Psyclekeys.ini; Type: files; Tasks: " Delete_registry_settings"; Components: 
+[Components]
+Name: Closed_Source_Plugins; Description: Install those plugins of which we don't have the sources; Languages: ; Types: custom full
+Name: Open_Source_Plugins; Description: Install those plugins which the developer made their sources available; Types: custom compact full
+Name: Application; Description: Main Application and needed dlls; Types: custom compact full
+Name: Documentation; Description: Install the documentation of the program; Types: custom full
+Name: Microsoft_dlls; Description: Install the needed microsoft runtime dlls; Types: custom full
+Name: Presets; Description: Install presets for selected plugins (does not overwrite existing files); Types: custom full
+Name: VstPack; Description: Download and Install VST plugins pack; Types: custom full; Languages: ; ExtraDiskSpaceRequired: 19038208
+Name: Songs; Description: Install Demo songs
+[Registry]
+Root: HKCU; Subkey: software\psycle; Components: ; Tasks: " Delete_registry_settings"; Flags: deletekey; Languages: 
+Root: HKCU; Subkey: software\psycle; Flags: uninsdeletekey
+Root: HKCU; Subkey: software\AAS\Psycle; Flags: deletekey; Tasks: " Delete_registry_settings"
+Root: HKCR; SubKey: .psy; ValueType: string; ValueData: Psycle Music Archive; Flags: uninsdeletekey
+Root: HKCR; SubKey: Psycle.Music.File; ValueType: string; ValueData: Psycle Music Archive; Flags: uninsdeletekey
+Root: HKCR; SubKey: Psycle.Music.File\Shell\Open\Command; ValueType: string; ValueData: """{app}\psycle.exe"" ""%1"""; Flags: uninsdeletevalue
+Root: HKCR; Subkey: Psycle Music Archive\DefaultIcon; ValueType: string; ValueData: {app}\psycle.exe,0; Flags: uninsdeletevalue
 [_ISTool]
 UseAbsolutePaths=false
-[Registry]
-Root: HKCU; Subkey: software\psycle; Flags: uninsdeletekey
-Root: HKCR; Subkey: .psy; Flags: uninsdeletekey; ValueType: string; ValueData: Psycle Music Archive
-Root: HKCR; Subkey: Psycle Music Archive; Flags: uninsdeletekey; ValueType: string; ValueData: Psycle Music Archive
-Root: HKCR; Subkey: Psycle Music Archive\Shell\Open\Command; ValueType: string; ValueData: """""{app}\Psycle.exe"""" """"%1"""""; Flags: uninsdeletevalue
-Root: HKCR; Subkey: Psycle Music Archive\DefaultIcon; ValueType: string; ValueData: {app}\Psycle.exe; Flags: uninsdeletevalue
-[Types]
-Name: Full_Instalation; Description: Install all the components provided with the installer
-Name: Custom; Description: Custom Installation; Flags: iscustom
-[Components]
-Name: Application; Description: Installs the executable file; Types: Full_Instalation Custom; Flags: fixed
-Name: Documentation; Description: Installs the documentation provided for Psycle; Types: Custom Full_Instalation
-Name: Open_Source_Plugins; Description: Installs the Psycle plugins of which the source code is open.; Types: Custom Full_Instalation
-Name: Closed_Source_Plugins; Description: Installs the rest of Native Plugins, which includes those which the source code isn't open; Types: Full_Instalation
-Name: Windows_XP_theme_support; Description: "Installs the ""manifest"" file which makes psycle show an interface with XP style."; Types: Full_Instalation
-Name: Microsoft_dlls; Description: Installs the redistributable dll's from Microsoft for use with C++ applications; Types: Full_Instalation
-Name: Skins; Description: Adds some skins for Psycle; Types: Full_Instalation
 [Dirs]
-Name: {app}\Skins; Components: " Skins"; Tasks: ; Languages: 
-Name: {app}\Songs
+Name: {app}\Skins
+Name: {app}\Songs; Tasks: ; Languages: 
 Name: {app}\VstPlugins
 Name: {app}\PsyclePlugins
 Name: {app}\Docs; Components: Documentation
 [Code]
-program Setup;
-
+// Function generated by ISTool.
 function NextButtonClick(CurPage: Integer): Boolean;
-var
-  ExecResult: Integer;
-  ApplPath, Tasks, ExecFile, ExecParam, CacheFile: String;
 begin
-  if CurPage = wpReady then
-  begin
-
-	  Tasks := WizardSelectedTasks(false)
-	  if Pos('Clear_Registry_Settings', Tasks)>0 then
-	  begin
-		if RegKeyExists(HKEY_CURRENT_USER, 'Software\psycle') then
-			RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER, 'Software\psycle')
-		if RegKeyExists(HKEY_CURRENT_USER, 'Software\AAS\Psycle') then
-			RegDeleteKeyIncludingSubkeys(HKEY_CURRENT_USER, 'Software\AAS\Psycle')
-	  end;
-      if Pos('Clear_Plugin_Cache', Tasks)>0 then
-      begin
-        CacheFile := ApplPath + 'psycle.plugin-scan.cache';
-        Delete(CacheFile,1,1);
-        CacheFile := ApplPath + 'psycle.plugin-scan.log.txt';
-        Delete(CacheFile,1,1);
-        CacheFile := ApplPath + 'psycle.log.txt';
-        Delete(CacheFile,1,1);
-      end;
-  end;
-  Result := True;
+	Result := istool_download(CurPage);
 end;
-
-
-
+[_ISToolDownload]
+Source: http://192.168.1.2/Vst Bundle.exe; DestDir: {tmp}; DestName: Vst Bundle.exe; Components: " VstPack"; Tasks: ; Languages: 
