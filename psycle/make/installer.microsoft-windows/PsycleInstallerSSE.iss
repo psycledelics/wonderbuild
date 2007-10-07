@@ -13,7 +13,7 @@ DefaultGroupName=Psycle
 AllowNoIcons=true
 InfoBeforeFile=..\..\doc\for-end-users\readme.txt
 InfoAfterFile=..\..\doc\for-end-users\whatsnew.txt
-OutputBaseFilename=PsycleInstaller
+OutputBaseFilename=PsycleInstallerSSE
 SetupIconFile=..\..\pixmaps\psycle.ico
 Compression=lzma
 SolidCompression=true
@@ -77,7 +77,7 @@ Name: {group}\{cm:UninstallProgram, Psycle Modular Music Creation Studio}; Filen
 
 [Run]
 Filename: {app}\psycle.exe; Description: {cm:LaunchProgram,Psycle}; Flags: nowait postinstall skipifsilent runasoriginaluser; Components: Application
-Filename: {tmp}\Vst Bundle.exe; WorkingDir: {tmp}; Components: " VstPack"; Flags: runasoriginaluser; StatusMsg: Select the location of your VST Plugins Dir (use Psycle\VstPlugins if in doubt); Tasks: ; Languages: 
+Filename: {tmp}\Vst-Bundle.exe; WorkingDir: {tmp}; Components: " VstPack"; Flags: runasoriginaluser; StatusMsg: Select the location of your VST Plugins Dir (use Psycle\VstPlugins if in doubt); Tasks: ; Languages: 
 [InstallDelete]
 Name: {userappdata}\..\.psycle\psycle.plugin-scan.cache; Type: files; Tasks: " Delete_plugins_cache"; Languages: 
 Name: {win}\Psyclekeys.ini; Type: files; Tasks: " Delete_registry_settings"; Components: 
@@ -89,7 +89,7 @@ Name: Documentation; Description: Install the documentation of the program; Type
 Name: Microsoft_dlls; Description: Install the needed microsoft runtime dlls; Types: custom full
 Name: Presets; Description: Install presets for selected plugins (does not overwrite existing files); Types: custom full
 Name: VstPack; Description: Download and Install VST plugins pack; Types: custom full; Languages: ; ExtraDiskSpaceRequired: 19038208
-Name: Songs; Description: Install Demo songs
+Name: Songs; Description: Install Demo songs; Types: custom full
 [Registry]
 Root: HKCU; Subkey: software\psycle; Components: ; Tasks: " Delete_registry_settings"; Flags: deletekey; Languages: 
 Root: HKCU; Subkey: software\psycle; Flags: uninsdeletekey
@@ -113,4 +113,4 @@ begin
 	Result := istool_download(CurPage);
 end;
 [_ISToolDownload]
-Source: http://192.168.1.2/Vst Bundle.exe; DestDir: {tmp}; DestName: Vst Bundle.exe; Components: " VstPack"; Tasks: ; Languages: 
+Source: http://ovh.dl.sourceforge.net/sourceforge/psycle/Psycle-VST-Bundle.exe; DestDir: {tmp}; DestName: Vst-Bundle.exe; Components: " VstPack"; Tasks: ; Languages: 
