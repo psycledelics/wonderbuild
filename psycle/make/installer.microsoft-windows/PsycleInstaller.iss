@@ -55,6 +55,7 @@ Source: ..\msvc_7.1\output\release.g7\bin\MFC71.dll; DestDir: {app}; Components:
 Source: ..\msvc_7.1\output\release.g7\bin\MSVCP71.dll; DestDir: {app}; Components: " Microsoft_dlls"
 Source: ..\msvc_7.1\output\release.g7\bin\MSVCR71.dll; DestDir: {app}; Components: " Microsoft_dlls"
 Source: ..\..\doc\*.psy; DestDir: {app}\Songs; Flags: ignoreversion replacesameversion; Components: " Songs"
+Source: ..\..\..\psycle-plugins\src\psycle\plugins\*.txt; DestDir: {app}\Docs; Excludes: license.txt; Flags: recursesubdirs ignoreversion
 
 [INI]
 Filename: {app}\psycle.url; Section: InternetShortcut; Key: URL; String: http://psycle.pastnotecut.org; Flags: uninsdeleteentry uninsdeletesectionifempty; Tasks: ; Languages: 
@@ -93,10 +94,10 @@ Name: Songs; Description: Install Demo songs
 Root: HKCU; Subkey: software\psycle; Components: ; Tasks: " Delete_registry_settings"; Flags: deletekey; Languages: 
 Root: HKCU; Subkey: software\psycle; Flags: uninsdeletekey
 Root: HKCU; Subkey: software\AAS\Psycle; Flags: deletekey; Tasks: " Delete_registry_settings"
-Root: HKCR; SubKey: .psy; ValueType: string; ValueData: Psycle Music Archive; Flags: uninsdeletekey
-Root: HKCR; SubKey: Psycle.Music.File; ValueType: string; ValueData: Psycle Music Archive; Flags: uninsdeletekey
+Root: HKCR; SubKey: .psy; ValueType: string; ValueData: Psycle.Music.File; Flags: uninsdeletekey
+Root: HKCR; SubKey: Psycle.Music.File; ValueType: none; Flags: uninsdeletekey
 Root: HKCR; SubKey: Psycle.Music.File\Shell\Open\Command; ValueType: string; ValueData: """{app}\psycle.exe"" ""%1"""; Flags: uninsdeletevalue
-Root: HKCR; Subkey: Psycle Music Archive\DefaultIcon; ValueType: string; ValueData: {app}\psycle.exe,0; Flags: uninsdeletevalue
+Root: HKCR; Subkey: Psycle.Music.File\DefaultIcon; ValueType: string; ValueData: """{app}\psycle.exe"",0"; Flags: uninsdeletevalue
 [_ISTool]
 UseAbsolutePaths=false
 [Dirs]
