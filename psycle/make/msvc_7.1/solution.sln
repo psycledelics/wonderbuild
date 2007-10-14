@@ -379,6 +379,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "projects\zlib\zlib.
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "in_psycle", "projects\psycle\in_psycle.vcproj", "{E4658688-3A4A-43E8-A710-26D4F328AE80}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E6148530-C7D4-4E3B-A1D4-5659B096692F} = {E6148530-C7D4-4E3B-A1D4-5659B096692F}
+		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1} = {29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}
+		{28C015FB-3BDA-4B32-8D85-C652E9892216} = {28C015FB-3BDA-4B32-8D85-C652E9892216}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		debug = debug
@@ -989,6 +996,14 @@ Global
 		{69C0ACBE-EA30-4F1E-9B41-A1DD71C33DE2}.release.g7.Build.0 = unpack|Win32
 		{69C0ACBE-EA30-4F1E-9B41-A1DD71C33DE2}.unpack.ActiveCfg = unpack|Win32
 		{69C0ACBE-EA30-4F1E-9B41-A1DD71C33DE2}.unpack.Build.0 = unpack|Win32
+		{E4658688-3A4A-43E8-A710-26D4F328AE80}.debug.ActiveCfg = debug|Win32
+		{E4658688-3A4A-43E8-A710-26D4F328AE80}.debug.Build.0 = debug|Win32
+		{E4658688-3A4A-43E8-A710-26D4F328AE80}.documentation.ActiveCfg = debug|Win32
+		{E4658688-3A4A-43E8-A710-26D4F328AE80}.release.g6.ActiveCfg = release.g6|Win32
+		{E4658688-3A4A-43E8-A710-26D4F328AE80}.release.g6.Build.0 = release.g6|Win32
+		{E4658688-3A4A-43E8-A710-26D4F328AE80}.release.g7.ActiveCfg = release.g7|Win32
+		{E4658688-3A4A-43E8-A710-26D4F328AE80}.release.g7.Build.0 = release.g7|Win32
+		{E4658688-3A4A-43E8-A710-26D4F328AE80}.unpack.ActiveCfg = release.g7|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
