@@ -5,7 +5,7 @@
 	Name="top_src_dir"
 	>
 	<UserMacro
-		Name="TopSrcDir"
+		Name="TopDir"
 		Value="$(SolutionDir)/../.."
 	/>
 </VisualStudioPropertySheet>
