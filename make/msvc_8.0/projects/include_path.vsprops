@@ -15,7 +15,7 @@
 	/>
 	<UserMacro
 		Name="IncludePath"
-		Value="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../msvc_common/src&quot;;&quot;$(TopDir)/psycle-core/src&quot;;&quot;$(TopDir)/psycle-helpers/src&quot;;&quot;$(TopDir)/psycle-audiodrivers/src&quot;;&quot;$(TopDir)/psycle-player/src&quot;;&quot;$(TopDir)/diversalis/src&quot;;&quot;$(TopDir)/universalis/src&quot;;&quot;$(TopDir)/external-packages/boost-1.33.1/include&quot;;&quot;$(TopDir)/external-packages/zlib-1.2.3/include&quot;;&quot;$(TopDir)/external-packages/dsound-9/include&quot;;&quot;$(TopDir)/external-packages/asio-2.1/common&quot;;&quot;$(TopDir)/external-packages/asio-2.1/host&quot;;&quot;$(TopDir)/external-packages/asio-2.1/host/pc&quot;;"
+		Value="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../msvc_common/src&quot;;&quot;$(TopDir)/psycle-core/src&quot;;&quot;$(TopDir)/psycle-helpers/src&quot;;&quot;$(TopDir)/psycle-audiodrivers/src&quot;;&quot;$(TopDir)/psycle-player/src&quot;;&quot;$(TopDir)/diversalis/src&quot;;&quot;$(TopDir)/universalis/src&quot;;&quot;$(TopDir)/external-packages/boost-1.33.1/include&quot;;&quot;$(TopDir)/external-packages/zlib-1.2.3/include&quot;;&quot;$(TopDir)/external-packages/dsound-9/include&quot;;&quot;$(TopDir)/external-packages/asio-2.1&quot;;&quot;$(TopDir)/external-packages/asio-2.1/common&quot;;&quot;$(TopDir)/external-packages/asio-2.1/host&quot;;&quot;$(TopDir)/external-packages/asio-2.1/host/pc&quot;;"
 		InheritsFromParent="true"
 		Delimiter=";"
 	/>

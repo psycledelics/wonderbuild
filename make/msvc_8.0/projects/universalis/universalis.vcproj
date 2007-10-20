@@ -251,6 +251,30 @@
 						Name="universalis/compiler/detail/pragmatic"
 						>
 						<File
+							RelativePath="..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\align.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\asm.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\attribute.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\auto_link.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\calling_convention.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\const_function.hpp"
+							>
+						</File>
+						<File
 							RelativePath="..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\demangle.cpp"
 							>
 							<FileConfiguration
@@ -270,6 +294,46 @@
 									ObjectFile="$(IntDir)/$(ParentName)/"
 								/>
 							</FileConfiguration>
+						</File>
+						<File
+							RelativePath="..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\demangle.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\deprecated.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\dynamic_link.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\finally.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\hardware_exception.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\pack.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\pragmas.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\thread_local_storage.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\virtual.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\weak.hpp"
+							>
 						</File>
 					</Filter>
 				</Filter>
@@ -645,19 +709,11 @@
 			Name="packageneric"
 			>
 			<File
-				RelativePath="..\..\..\msvc_common\src\packageneric\configuration.private.hpp"
-				>
-			</File>
-			<File
 				RelativePath=".\src\packageneric\module.private.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\packageneric\package.private.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\packageneric\resources.rc"
+				RelativePath="..\..\..\msvc_common\src\packageneric\resources.rc"
 				>
 			</File>
 		</Filter>
@@ -693,6 +749,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\diversalis\src\diversalis\detail\project.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\diversalis\src\diversalis\detail\stringized.hpp"
 					>
 				</File>
 			</Filter>

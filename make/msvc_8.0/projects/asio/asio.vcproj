@@ -35,7 +35,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../src/asio/common&quot;;&quot;$(SolutionDir)/../../src/asio/host&quot;;&quot;$(SolutionDir)/../../src/asio/host/pc&quot;"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -88,7 +87,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../src/asio/common&quot;;&quot;$(SolutionDir)/../../src/asio/host&quot;;&quot;$(SolutionDir)/../../src/asio/host/pc&quot;"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -132,24 +130,6 @@
 			<File
 				RelativePath="..\..\..\msvc_common\src\asio\asio.cpp"
 				>
-				<FileConfiguration
-					Name="debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\msvc_common\src\asio\asio.private.hpp"
@@ -158,46 +138,10 @@
 			<File
 				RelativePath="..\..\..\msvc_common\src\asio\asiodrivers.cpp"
 				>
-				<FileConfiguration
-					Name="debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\msvc_common\src\asio\asiolist.cpp"
 				>
-				<FileConfiguration
-					Name="debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 	</Files>

@@ -38,8 +38,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{C0AA21
 		projects\defines.vsprops = projects\defines.vsprops
 		projects\include_path.vsprops = projects\include_path.vsprops
 		projects\lib_path.vsprops = projects\lib_path.vsprops
+		projects\top_dir.vsprops = projects\top_dir.vsprops
 		projects\top_output_dir.vsprops = projects\top_output_dir.vsprops
-		projects\top_src_dir.vsprops = projects\top_src_dir.vsprops
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "direct_sound", "projects\direct_sound\direct_sound.vcproj", "{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}"
