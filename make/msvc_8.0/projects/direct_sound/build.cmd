@@ -3,15 +3,8 @@
 %~d0
 cd %~p0
 
-set pkgdir=..\..\..\..\..\external-packages\dsound-9
+set pkgdir=..\..\..\..\external-packages\dsound-9
 set libdir=lib-mswindows-msvc-cxxabi
-
-if not exist ..\..\..\..\include\dsound.h (
-	if not exist ..\..\..\..\include (
-		mkdir ..\..\..\..\include || exit /b 1
-	)
-	xcopy/f %pkgdir%\include\dsound.h ..\..\..\..\include\ || exit /b 1
-)
 
 if not exist ..\..\output\direct_sound_stamp (
 

@@ -1,10 +1,10 @@
 @echo off
 
 
-rem ================================================================================================
-rem disabled because there's no way to make it work on windows.. file and or dirs seems to be locked
+rem =================================================================================================
+rem disabled because there's no way to make it work on windows.. files and/or dirs seem to be locked
 goto :eof
-rem ================================================================================================
+rem =================================================================================================
 
 
 

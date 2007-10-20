@@ -1,10 +1,10 @@
 @echo off
 
 
-rem ================================================================================================
-rem disabled because there's no way to make it work on windows.. file and or dirs seems to be locked
+rem =================================================================================================
+rem disabled because there's no way to make it work on windows.. files and/or dirs seem to be locked
 goto :eof
-rem ================================================================================================
+rem =================================================================================================
 
 
 
@@ -24,13 +24,13 @@ pushd ..\..\output && (
 		)
 	)
 ) && (
-	pushd ..\..\..\..\include\ && (
-		if exist boost (
+	pushd ..\..\..\..\external-packages\boost-1.33.1\ && (
+		if exist include (
 			rem [bohan] i don't know why sometimes it fails
 			rem [bohan] it seems we need to do it 5 times ...
-			rmdir/s/q boost || exit /b 1
+			rmdir/s/q include || exit /b 1
 			rem [bohan] i don't know why sometimes it doesn't report the failure
-			if exist boost exit /b 1
+			if exist include exit /b 1
 		)
 		popd
 	)

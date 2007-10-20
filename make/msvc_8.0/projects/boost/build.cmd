@@ -3,25 +3,15 @@
 %~d0
 cd %~p0
 
-set pkgdir=..\..\..\..\..\external-packages\boost-1.33.1
+set pkgdir=..\..\..\..\external-packages\boost-1.33.1
 set libdir=lib-mswindows-msvc-8.0-cxxabi-1400
 
-if not exist ..\..\..\..\include\boost (
+if not exist %pkgdir%\include\boost (
 	pushd %pkgdir% || exit /b 1
 	..\7za\7za x -y include.tar.bz2 || exit /b 1
 	..\7za\7za x -y include.tar || exit /b 1
 	del/q include.tar || exit /b 1
 	popd || exit /b 1
-
-	if not exist ..\..\..\..\include\ (
-		mkdir ..\..\..\..\include\ || exit /b 1
-	)
-	rem cmd's move command bugs with long paths, so we try cygwin's mv command first
-	mv %pkgdir%\include\boost ..\..\..\..\include\boost || (
-		echo "no mv command ... using cmd move builtin as fallback"
-		move %pkgdir%\include\boost ..\..\..\..\include\boost || exit /b 1
-	)
-	rmdir/s/q %pkgdir%\include || exit /b 1
 )
 
 if not exist ..\..\output\boost_stamp (

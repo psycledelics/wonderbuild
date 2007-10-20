@@ -176,255 +176,255 @@
 				Name="core"
 				>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\pluginFinderKey.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\pluginFinderKey.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\pluginFinderKey.hpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\pluginFinderKey.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\binread.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\binread.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\binread.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\binread.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\commands.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\commands.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\constants.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\constants.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\convert_internal_machines.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\convert_internal_machines.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\convert_internal_machines.private.hpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\convert_internal_machines.private.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\cstdint.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\cstdint.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\datacompression.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\datacompression.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\datacompression.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\datacompression.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\dither.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\dither.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\dither.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\dither.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\dsp.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\dsp.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\dsp.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\dsp.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\eventdriver.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\eventdriver.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\eventdriver.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\eventdriver.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\file.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\file.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\file.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\file.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\fileio.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\fileio.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\fileio.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\fileio.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\filter.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\filter.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\filter.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\filter.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\helpers.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\helpers.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\helpers.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\helpers.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\instpreview.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\instpreview.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\instpreview.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\instpreview.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\instrument.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\instrument.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\instrument.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\instrument.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\internal_machines.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\internal_machines.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\internal_machines.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\internal_machines.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\ladspa.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\ladspa.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\ladspamachine.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\ladspamachine.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\ladspamachine.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\ladspamachine.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\machine.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\machine.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\machine.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\machine.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\mersennetwister.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\mersennetwister.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\mersennetwister.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\mersennetwister.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\pattern.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\pattern.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\patterndata.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\patterndata.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\patterndata.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\patterndata.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\patternevent.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\patternevent.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\patternevent.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\patternevent.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\patternline.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\patternline.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\patternline.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\patternline.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\patternsequence.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\patternsequence.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\patternsequence.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\patternsequence.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\player.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\player.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\player.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\player.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\playertimeinfo.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\playertimeinfo.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\playertimeinfo.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\playertimeinfo.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\plugin.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\plugin.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\plugin.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\plugin.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\plugin_interface.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\plugin_interface.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\pluginfinder.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\pluginfinder.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\pluginfinder.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\pluginfinder.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\preset.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\preset.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\preset.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\preset.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\psy2filter.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\psy2filter.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\psy2filter.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\psy2filter.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\psy3filter.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\psy3filter.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\psy3filter.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\psy3filter.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\psy4filter.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\psy4filter.cpp"
 					>
 					<FileConfiguration
 						Name="debug|Win32"
@@ -444,125 +444,125 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\psy4filter.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\psy4filter.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\psyfilter.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\psyfilter.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\psyfilter.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\psyfilter.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\riff.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\riff.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\riff.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\riff.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\sampler.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\sampler.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\sampler.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\sampler.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\signalslib.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\signalslib.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\sigslot.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\sigslot.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\singlepattern.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\singlepattern.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\singlepattern.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\singlepattern.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\song.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\song.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\song.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\song.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\timesignature.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\timesignature.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\timesignature.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\timesignature.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\xminstrument.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\xminstrument.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\xminstrument.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\xminstrument.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\xmsampler.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\xmsampler.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\xmsampler.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\xmsampler.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\zipreader.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\zipreader.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\zipreader.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\zipreader.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\zipwriter.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\zipwriter.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\zipwriter.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\zipwriter.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\zipwriterstream.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\zipwriterstream.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\zipwriterstream.h"
+					RelativePath="..\..\..\..\psycle-core\src\psyclecore\zipwriterstream.h"
 					>
 				</File>
 				<Filter
 					Name="helpers"
 					>
 					<File
-						RelativePath="..\..\..\..\src\psycle\core\helpers\scale.hpp"
+						RelativePath="..\..\..\..\psycle-core\src\psyclecore\helpers\scale.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\core\helpers\xml.cpp"
+						RelativePath="..\..\..\..\psycle-core\src\psyclecore\helpers\xml.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\core\helpers\xml.h"
+						RelativePath="..\..\..\..\psycle-core\src\psyclecore\helpers\xml.h"
 						>
 					</File>
 					<Filter
 						Name="math"
 						>
 						<File
-							RelativePath="..\..\..\..\src\psycle\core\helpers\math\pi.hpp"
+							RelativePath="..\..\..\..\psycle-core\src\psyclecore\helpers\math\pi.hpp"
 							>
 						</File>
 					</Filter>
@@ -572,79 +572,79 @@
 				Name="audiodrivers"
 				>
 				<File
-					RelativePath="..\..\..\..\src\psycle\audiodrivers\alsaout.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psycleaudiodrivers\alsaout.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\audiodrivers\alsaout.h"
+					RelativePath="..\..\..\..\psycle-core\src\psycleaudiodrivers\alsaout.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\audiodrivers\audiodriver.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psycleaudiodrivers\audiodriver.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\audiodrivers\audiodriver.h"
+					RelativePath="..\..\..\..\psycle-core\src\psycleaudiodrivers\audiodriver.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\audiodrivers\dsound.h"
+					RelativePath="..\..\..\..\psycle-core\src\psycleaudiodrivers\dsound.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\audiodrivers\esoundout.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psycleaudiodrivers\esoundout.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\audiodrivers\esoundout.h"
+					RelativePath="..\..\..\..\psycle-core\src\psycleaudiodrivers\esoundout.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\audiodrivers\gstreamerout.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psycleaudiodrivers\gstreamerout.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\audiodrivers\gstreamerout.h"
+					RelativePath="..\..\..\..\psycle-core\src\psycleaudiodrivers\gstreamerout.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\audiodrivers\jackout.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psycleaudiodrivers\jackout.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\audiodrivers\jackout.h"
+					RelativePath="..\..\..\..\psycle-core\src\psycleaudiodrivers\jackout.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\audiodrivers\microsoftdirectsoundout.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psycleaudiodrivers\microsoftdirectsoundout.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\audiodrivers\microsoftdirectsoundout.h"
+					RelativePath="..\..\..\..\psycle-core\src\psycleaudiodrivers\microsoftdirectsoundout.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\audiodrivers\microsoftmmewaveout.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psycleaudiodrivers\microsoftmmewaveout.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\audiodrivers\microsoftmmewaveout.h"
+					RelativePath="..\..\..\..\psycle-core\src\psycleaudiodrivers\microsoftmmewaveout.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\audiodrivers\netaudioout.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psycleaudiodrivers\netaudioout.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\audiodrivers\netaudioout.h"
+					RelativePath="..\..\..\..\psycle-core\src\psycleaudiodrivers\netaudioout.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\audiodrivers\wavefileout.cpp"
+					RelativePath="..\..\..\..\psycle-core\src\psycleaudiodrivers\wavefileout.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\audiodrivers\wavefileout.h"
+					RelativePath="..\..\..\..\psycle-core\src\psycleaudiodrivers\wavefileout.h"
 					>
 				</File>
 			</Filter>
