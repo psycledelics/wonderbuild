@@ -16,8 +16,9 @@
 	<Configurations>
 		<Configuration
 			Name="unpack|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="0"
-			InheritedPropertySheets="..\top_output_dir.vsprops;..\top_src_dir.vsprops"
 			>
 			<Tool
 				Name="VCNMakeTool"
