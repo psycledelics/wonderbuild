@@ -1,0 +1,101 @@
+// This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+// copyright 2004-2007 psycledelics http://psycle.pastnotecut.org ; johan boule <bohan@jabber.org>
+
+#include <diversalis/compiler.hpp>
+#if !defined DIVERSALIS__COMPILER__RESOURCE
+	#error "This file is for resource compilers (only relevant on microsoft's operating system)."
+#endif
+#include <winver.h>
+#include <packageneric/module.private.hpp>
+#if defined PACKAGENERIC__MODULE__LOGO && defined DIVERSALIS__COMPILER__GNU // only enabled with mingw because microsoft's rc.exe's preprocessor doesn't expand the what we put after 1 ICON DISCARDABLE
+	1 ICON DISCARDABLE "../" PACKAGENERIC__CONFIGURATION__STAGE_PATH__BUILD_TO_SOURCE "/pixmaps/" PACKAGENERIC__MODULE__LOGO ".ico"
+#endif
+// http://msdn.microsoft.com/library/default.asp?url=/library/en-us/tools/tools/versioninfo_resource.asp
+VS_VERSION_INFO VERSIONINFO
+	#define PACKAGENERIC__COMPILER__RESOURCE__VERSION_INFO  PACKAGENERIC__MODULE__VERSION__INTERFACE__MININUM_COMPATIBLE,PACKAGENERIC__MODULE__VERSION__INTERFACE,PACKAGENERIC__MODULE__VERSION__IMPLEMENTATION,0
+	PRODUCTVERSION PACKAGENERIC__COMPILER__RESOURCE__VERSION_INFO
+	FILEVERSION    PACKAGENERIC__COMPILER__RESOURCE__VERSION_INFO
+	FILEFLAGSMASK VS_FF_DEBUG
+	#if defined NDEBUG
+		#define PACKAGENERIC__COMPILER__RESOURCE__DEBUG "compiled with debugging disabled"
+		FILEFLAGS 0
+	#else
+		#define PACKAGENERIC__COMPILER__RESOURCE__DEBUG "compiled with debugging enabled"
+		FILEFLAGS VS_FF_DEBUG
+	#endif
+	FILEOS VOS_NT
+	FILETYPE VFT_UNKNOWN
+	FILESUBTYPE VFT2_UNKNOWN
+	{
+		BLOCK "StringFileInfo"
+		{
+			// 0x0409 == lang-id for en_US, 0x04b0 == 1200 == unicode charset
+			BLOCK "040904b0"
+			{
+				VALUE "CompanyName"   , PACKAGENERIC__PACKAGE__ORIGIN
+				VALUE "LegalCopyright", PACKAGENERIC__PACKAGE__COPYRIGHT
+				VALUE "License"       ,
+					#if defined PACKAGENERIC__PACKAGE__LICENSE
+						PACKAGENERIC__PACKAGE__LICENSE
+					#else
+						"GNU General Public License http://fsf.org/licenses/gpl.txt"
+					#endif
+
+				VALUE "ProductName"       , PACKAGENERIC__PACKAGE__DESCRIPTION
+				VALUE "InternalName"      , PACKAGENERIC__PACKAGE__NAME
+				VALUE "ProductVersion"    , PACKAGENERIC__PACKAGE__VERSION " " PACKAGENERIC__PACKAGE__ARCHIVE
+
+				VALUE "FileDescription"   , PACKAGENERIC__MODULE__DESCRIPTION
+				VALUE "OriginalFilename"  , PACKAGENERIC__MODULE__NAME
+				VALUE "FileVersion"       , PACKAGENERIC__MODULE__VERSION ", " PACKAGENERIC__COMPILER__RESOURCE__DEBUG
+
+				VALUE "SpecialBuild",
+					"build platform:\r\n"            PACKAGENERIC__OPERATING_SYSTEM__UNAME
+					"\r\n\r\n"
+					"compiler build tool chain:\r\n" PACKAGENERIC__CONFIGURATION__COMPILER__BUILD
+					"\r\n\r\n"
+					"compiler host tool chain:\r\n"  PACKAGENERIC__CONFIGURATION__COMPILER__HOST
+					#ifdef DIVERSALIS__COMPILER__VERSION__MAJOR // [bohan] #ifdef and not #if defined ; see bug http://lab.msdn.microsoft.com/ProductFeedback/viewFeedback.aspx?FeedbackID=FDBK45638
+						"\r\n\r\n"
+						"compiler version:\r\n" PACKAGENERIC__STRINGIZED(DIVERSALIS__COMPILER__VERSION__MAJOR)
+						#if defined DIVERSALIS__COMPILER__VERSION__MINOR
+						    "."                 PACKAGENERIC__STRINGIZED(DIVERSALIS__COMPILER__VERSION__MINOR)
+						    #if defined DIVERSALIS__COMPILER__VERSION__PATCH
+						        "."             PACKAGENERIC__STRINGIZED(DIVERSALIS__COMPILER__VERSION__PATCH)
+						    #endif
+						#endif
+					#endif
+					"" // o_O`
+					#if defined DIVERSALIS__COMPILER__GNU
+						#if defined DIVERSALIS__COMPILER__GNU__ABI__VERSION
+							"\r\n\r\n"
+							"compiler abi version:\r\n" PACKAGENERIC__STRINGIZED(DIVERSALIS__COMPILER__GNU__ABI__VERSION)
+						#endif
+					#endif
+					"\r\n\r\n"
+					"compiler options:\r\n" PACKAGENERIC__CONFIGURATION__COMPILER__CXXFLAGS
+					"\r\n\r\n"
+					"linker options:\r\n"   PACKAGENERIC__CONFIGURATION__COMPILER__LDFLAGS
+
+				VALUE "PrivateBuild",
+					"built on "
+					#if !defined __DATE__
+						"a sunny day"
+					#else
+						__DATE__
+					#endif
+					" "
+					#if !defined __TIME__
+						"after hours"
+					#else
+						__TIME__
+					#endif
+					" by " PACKAGENERIC__OPERATING_SYSTEM__ID
+			}
+	}
+	BLOCK "VarFileInfo"
+	{
+		// 0x0409 == lang-id for en_US, 0x04b0 == 1200 == unicode charset
+		VALUE "Translation", 0x409, 1200
+	}
+END

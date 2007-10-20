@@ -61,7 +61,7 @@
 ///\name build environment from which the source package was built (optional information not really needed).
 ///\{
 	/// tool chain used to build the source package.
-	#define PACKAGENERIC__CONFIGURATION__COMPILER__BUILD "unknown-microsoft-msvc-7.1-unknown"
+	#define PACKAGENERIC__CONFIGURATION__COMPILER__BUILD "unknown-microsoft-msvc-unknown"
 	/// name of the operating system from which the source package was built $(uname --all)
 	#define PACKAGENERIC__OPERATING_SYSTEM__UNAME "microsoft proprietary corpobscurantism unknown operating system" " version " PACKAGENERIC__STRINGIZED(PACKAGENERIC__CONFIGURATION__OPERATING_SYSTEM__VERSION__MAJOR) "." PACKAGENERIC__STRINGIZED(PACKAGENERIC__CONFIGURATION__OPERATING_SYSTEM__VERSION__MINOR) "." PACKAGENERIC__STRINGIZED(PACKAGENERIC__CONFIGURATION__OPERATING_SYSTEM__VERSION__PATCH)
 	/// who built the source package $(id --user --name)@$(hostname --long)
