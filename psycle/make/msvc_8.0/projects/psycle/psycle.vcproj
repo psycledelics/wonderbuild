@@ -39,7 +39,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="psycle/project.private.hpp"
 			/>
 			<Tool
@@ -1208,10 +1207,6 @@
 				>
 			</File>
 		</Filter>
-		<File
-			RelativePath=".\stdafx.h"
-			>
-		</File>
 	</Files>
 	<Globals>
 		<Global
