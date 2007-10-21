@@ -4,6 +4,7 @@
 	Version="8.00"
 	Name="psycle"
 	ProjectGUID="{C6292BF4-9E87-4176-9101-A3D29D074B35}"
+	RootNamespace="psycle"
 	>
 	<Platforms>
 		<Platform
@@ -38,6 +39,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="psycle/project.private.hpp"
 			/>
 			<Tool
@@ -959,6 +961,14 @@
 						RelativePath="$(SolutionDir)\..\..\src\psycle\host\SwingFillDlg.hpp"
 						>
 					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\TransformPatternDlg.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\TransformPatternDlg.hpp"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="monitors"
@@ -1198,7 +1208,15 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\stdafx.h"
+			>
+		</File>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="\psycle_source\psycle\src\psycle\host\resources\resources.rc"
+		/>
 	</Globals>
 </VisualStudioProject>
