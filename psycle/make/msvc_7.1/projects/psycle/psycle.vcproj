@@ -581,6 +581,12 @@
 				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\SongpDlg.hpp">
 				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\TransformPatternDlg.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\TransformPatternDlg.hpp">
+				</File>
 				<Filter
 					Name="configuration"
 					Filter="">

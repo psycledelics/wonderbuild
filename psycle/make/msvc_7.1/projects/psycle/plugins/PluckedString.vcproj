@@ -260,10 +260,10 @@
 			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\PluckedString\CVoice.h">
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\Lib\DLineL.h">
+			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\Lib\DLineN.cpp">
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\Lib\DLineN.cpp">
+			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\Lib\DLineN.h">
 		</File>
 		<File
 			RelativePath="..\..\..\..\..\src\psycle\plugins\druttis\PluckedString\PluckedString.cpp">
