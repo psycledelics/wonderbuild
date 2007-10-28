@@ -1,6 +1,6 @@
 win32 {
 	message("System is win32")
-	TOP_SRC_DIR = $$system(cd ..\.. && cd)
+	TOP_SRC_DIR = "$$system(cd ..\.. && cd)"
 	message("Top src dir is $$TOP_SRC_DIR")
 	win32-g++ {
 		message("Compiler is g++")
