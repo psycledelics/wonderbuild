@@ -17,7 +17,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\debug.vsprops"
+			InheritedPropertySheets="..\debug.vsprops;..\pre_compiled_headers\use.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -36,6 +36,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE;PSYCLE__MICROSOFT_MME_AVAILABLE"
 				ForcedIncludeFiles="packageneric/pre-compiled.private.hpp"
 			/>
 			<Tool
@@ -69,7 +70,7 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\release.vsprops"
+			InheritedPropertySheets="..\release.vsprops;..\pre_compiled_headers\use.vsprops"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -89,6 +90,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE;PSYCLE__MICROSOFT_MME_AVAILABLE"
 				ForcedIncludeFiles="packageneric/pre-compiled.private.hpp"
 			/>
 			<Tool
