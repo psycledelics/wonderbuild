@@ -46,7 +46,7 @@ class boost(external_package):
 				"""
 					#define BOOST_LIB_NAME boost_%s
 				""" % name
-			if True or dynamic: result += \
+			if dynamic: result += \
 				"""
 					#if defined _DLL || defined _RTLDLL // as tested in <boost/config/auto_link.hpp>
 						#define BOOST_DYN_LINK
