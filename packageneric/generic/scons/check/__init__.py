@@ -49,6 +49,7 @@ class check(projected, node, named):
 		except AttributeError:
 			self.__class__._results = {}
 			results = self.__class__._results
+		self.dynamic_dependencies() # todo kludge: it calls it several times
 		try: return results[self.name()]
 		except KeyError:
 			result = node.result(self)

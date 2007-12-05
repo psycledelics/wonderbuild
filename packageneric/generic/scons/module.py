@@ -108,7 +108,6 @@ class module(projected, builder): # todo decide whether this can be derived from
 	def targets(self): # todo to allow libraries to be built as several types at the same time, pass target_type here instead of in the constructor
 		try: return self._targets
 		except AttributeError:
-			
 			#import time ; t = time.time ; t0 = t()
 			#print 'OOOOOOOOOOOOOOOOO'
 
@@ -194,7 +193,7 @@ class module(projected, builder): # todo decide whether this can be derived from
 			for target_list in self._targets:
 				for target in target_list:
 					if self.target_type() == self.target_types.static: pass # target.set_precious() # update archives instead of recreating them from scratch
-					target.add_dependency(dependencies)
+				target.add_dependency(dependencies)
 
 			#print 'OOOOOOOOOOOOOOOOO', t() - t0
 			

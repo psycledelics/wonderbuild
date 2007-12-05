@@ -36,4 +36,4 @@ class local_package(external_package_check):
 			self._installed_env.attach(self._pkg_config_package.installed_env())
 			return self._installed_env
 		
-	def target(self): return self._pkg_config_package.targets()
+	def targets(self): return self._pkg_config_package.targets()
