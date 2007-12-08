@@ -141,7 +141,7 @@ BuildmasterConfig['builders'].append(
 				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = []),
 				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy diversalis universalis', locks = [compile_lock]),
 				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=universalis packageneric__debug=1', locks = [compile_lock]),
-				factory.s(step.Test, command = './++packageneric/variants/default/stage-install/usr/local/bin/universalis_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
+				factory.s(step.Test, command = 'call ..\\..\\..\\dev-pack && .\\++packageneric\\variants\\default\\stage-install\\usr\\local\\bin\\universalis_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
 			]
 		)
 	}
