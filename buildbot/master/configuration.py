@@ -106,6 +106,58 @@ if False:
 
 BuildmasterConfig['builders'].append(
 	{
+		'name': 'universalis',
+		'category': 'psycle',
+		'slavenames': slaves,
+		'builddir': svn_dir + 'universalis',
+		'factory': factory.BuildFactory(
+			[
+				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
+				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis', locks = [compile_lock]),
+				factory.s(step.Compile, command = 'scons --directory=universalis packageneric__debug=1', locks = [compile_lock]),
+				factory.s(step.Test, command = './++packageneric/variants/default/stage-install/usr/local/bin/universalis_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
+			]
+		)
+	}
+)
+BuildmasterConfig['schedulers'].append(
+	Scheduler(
+		name = 'universalis',
+		branch = None,
+		treeStableTimer = bunch_timer,
+		builderNames = ['universalis'],
+		fileIsImportant = lambda change: filter(change, ['universalis/', 'diversalis/', 'packageneric/'])
+	)
+)
+
+BuildmasterConfig['builders'].append(
+	{
+		'name': 'universalis.mingw',
+		'category': 'psycle',
+		'slavenames': microsoft_slaves,
+		'builddir': svn_dir + 'universalis.mingw',
+		'factory': factory.BuildFactory(
+			[
+				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = []),
+				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy diversalis universalis', locks = [compile_lock]),
+				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=universalis packageneric__debug=1', locks = [compile_lock]),
+				factory.s(step.Test, command = './++packageneric/variants/default/stage-install/usr/local/bin/universalis_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
+			]
+		)
+	}
+)
+BuildmasterConfig['schedulers'].append(
+	Scheduler(
+		name = 'universalis.mingw',
+		branch = None,
+		treeStableTimer = bunch_timer,
+		builderNames = ['universalis.mingw'],
+		fileIsImportant = lambda change: filter(change, ['universalis/', 'diversalis/', 'packageneric/'])
+	)
+)
+
+BuildmasterConfig['builders'].append(
+	{
 		'name': 'freepsycle',
 		'category': 'psycle',
 		'slavenames': ['anechoid'], # uses too much memory for factoid
