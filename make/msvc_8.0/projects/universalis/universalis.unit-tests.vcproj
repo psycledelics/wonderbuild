@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle-player"
-	ProjectGUID="{FF5C7558-CB3B-4D75-9105-55D986039B65}"
-	RootNamespace="psycle.player"
+	Name="universalis.unit-tests"
+	ProjectGUID="{15447E72-E8B4-4545-AC7B-091E68221C41}"
+	RootNamespace="universalis.unit-tests"
 	>
 	<Platforms>
 		<Platform
@@ -39,8 +39,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE;PSYCLE__MICROSOFT_MME_AVAILABLE"
-				ForcedIncludeFiles="packageneric/pre-compiled.private.hpp"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -78,6 +76,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="$(TargetPath) --log_level=test_suite --report_level=detailed"
 			/>
 		</Configuration>
 		<Configuration
@@ -105,8 +104,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE;PSYCLE__MICROSOFT_MME_AVAILABLE"
-				ForcedIncludeFiles="packageneric/pre-compiled.private.hpp"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -144,6 +141,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="$(TargetPath) --log_level=test_suite --report_level=detailed"
 			/>
 		</Configuration>
 	</Configurations>
@@ -153,16 +151,8 @@
 			RelativePathToProject=".\projects\pre_compiled_headers\pre_compiled_headers.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{B78DFE59-051A-43FD-B489-785A3982541C}"
-			RelativePathToProject=".\projects\psycle-core\psycle-core.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{B78DFE59-051A-43FD-B489-775A4982581C}"
 			RelativePathToProject=".\projects\universalis\universalis.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{15447E72-E8B4-4545-AC7B-091E68221C41}"
-			RelativePathToProject=".\projects\universalis\universalis.unit-tests.vcproj"
 		/>
 	</References>
 	<Files>
@@ -173,31 +163,11 @@
 				RelativePath=".\src\packageneric\module.private.hpp"
 				>
 			</File>
-			<File
-				RelativePath="..\..\..\msvc_common\src\packageneric\resources.rc"
-				>
-			</File>
 		</Filter>
-		<Filter
-			Name="psycle"
+		<File
+			RelativePath="..\..\..\..\universalis\src\unit_tests.cpp"
 			>
-			<Filter
-				Name="player"
-				>
-				<File
-					RelativePath="..\..\..\..\psycle-player\src\psycle\player\configuration.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-player\src\psycle\player\configuration.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-player\src\psycle\player\main.cpp"
-					>
-				</File>
-			</Filter>
-		</Filter>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

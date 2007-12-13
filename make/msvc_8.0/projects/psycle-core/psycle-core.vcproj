@@ -131,6 +131,18 @@
 			ReferencedProjectIdentifier="{B78DFE59-051A-43FD-B489-775A4982581C}"
 			RelativePathToProject=".\projects\universalis\universalis.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{15447E72-E8B4-4545-AC7B-091E68221C41}"
+			RelativePathToProject=".\projects\universalis\universalis.unit-tests.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{C6292BF4-9E87-4176-9101-A3D29D163B35}"
+			RelativePathToProject=".\projects\psycle-helpers\psycle-helpers.unit-tests.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
+			RelativePathToProject=".\projects\asio\asio.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
