@@ -701,6 +701,26 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\..\..\src\condition"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\..\src\cstdint"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\..\src\date_time"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\..\src\mutex"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\..\src\thread"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

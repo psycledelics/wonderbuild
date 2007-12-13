@@ -147,8 +147,8 @@
 	</Configurations>
 	<References>
 		<ProjectReference
-			ReferencedProjectIdentifier="{28C015FB-3BDA-4B32-8D85-C652E9892216}"
-			RelativePathToProject=".\projects\pre_compiled_headers\pre_compiled_headers.mfc.vcproj"
+			ReferencedProjectIdentifier="{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
+			RelativePathToProject=".\projects\pre_compiled_headers\pre_compiled_headers.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{B78DFE59-051A-43FD-B489-775A4982581C}"

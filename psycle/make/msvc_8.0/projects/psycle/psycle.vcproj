@@ -164,6 +164,10 @@
 			ReferencedProjectIdentifier="{C6292BF4-9E87-4176-9101-A3D29D163B35}"
 			RelativePathToProject=".\projects\psycle-helpers\psycle-helpers-test.vcproj"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{15447E72-E8B4-4545-AC7B-091E68221C41}"
+			RelativePathToProject=".\projects\universalis\universalis-test.vcproj"
+		/>
 	</References>
 	<Files>
 		<Filter
