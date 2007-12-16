@@ -586,7 +586,31 @@
 				Name="universalis/standard_library"
 				>
 				<File
+					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\condition.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\date_time.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\duration.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\mutex.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\universalis\standard_library\standard_library.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\thread.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\utc_time.hpp"
 					>
 				</File>
 				<Filter
