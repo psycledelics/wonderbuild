@@ -746,6 +746,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\universalis\src\universalis\standard_library\duration.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\universalis\src\universalis\standard_library\mutex.hpp"
 					>
 				</File>
@@ -759,6 +763,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\universalis\src\universalis\standard_library\thread.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\universalis\src\universalis\standard_library\utc_time.hpp"
 					>
 				</File>
 				<Filter
