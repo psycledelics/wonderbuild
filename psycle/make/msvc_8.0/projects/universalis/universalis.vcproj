@@ -586,19 +586,19 @@
 				Name="universalis/standard_library"
 				>
 				<File
-					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\condition.hpp"
+					RelativePath="..\..\..\..\src\universalis\standard_library\condition.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\date_time.hpp"
+					RelativePath="..\..\..\..\src\universalis\standard_library\date_time.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\duration.hpp"
+					RelativePath="..\..\..\..\src\universalis\standard_library\duration.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\mutex.hpp"
+					RelativePath="..\..\..\..\src\universalis\standard_library\mutex.hpp"
 					>
 				</File>
 				<File
@@ -606,11 +606,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\thread.hpp"
+					RelativePath="..\..\..\..\src\universalis\standard_library\thread.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\utc_time.hpp"
+					RelativePath="..\..\..\..\src\universalis\standard_library\utc_time.hpp"
 					>
 				</File>
 				<Filter
