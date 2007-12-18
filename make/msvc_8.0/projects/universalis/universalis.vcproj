@@ -750,6 +750,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\universalis\src\universalis\standard_library\hiresolution_clock.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\universalis\src\universalis\standard_library\mutex.hpp"
 					>
 				</File>
