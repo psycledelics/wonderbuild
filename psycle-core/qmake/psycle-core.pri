@@ -82,6 +82,7 @@ SOURCES += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/player.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/playertimeinfo.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/plugin.cpp \
+	$$PSYCLE_CORE_DIR/src/psycle/core/plugin_interface.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/pluginfinder.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/pluginFinderKey.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/preset.cpp \
