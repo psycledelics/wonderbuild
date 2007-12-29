@@ -613,60 +613,6 @@
 						>
 					</File>
 				</Filter>
-				<Filter
-					Name="universalis/operating_system/threads"
-					>
-					<File
-						RelativePath="..\..\..\..\universalis\src\universalis\operating_system\threads\id.cpp"
-						>
-						<FileConfiguration
-							Name="debug|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(ParentName)/"
-								BrowseInformationFile="$(IntDir)/$(ParentName)/"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="release|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(ParentName)/"
-							/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\..\..\..\universalis\src\universalis\operating_system\threads\id.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\..\universalis\src\universalis\operating_system\threads\sleep.cpp"
-						>
-						<FileConfiguration
-							Name="debug|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(ParentName)/"
-								BrowseInformationFile="$(IntDir)/$(ParentName)/"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="release|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(ParentName)/"
-							/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\..\..\..\universalis\src\universalis\operating_system\threads\sleep.hpp"
-						>
-					</File>
-				</Filter>
 			</Filter>
 			<Filter
 				Name="universalis/processor"
@@ -734,14 +680,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\universalis\src\universalis\standard_library\duration.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\universalis\src\universalis\standard_library\hiresolution_clock.hpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\universalis\src\universalis\standard_library\mutex.hpp"
 					>
 				</File>
@@ -750,15 +688,15 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\universalis\src\universalis\standard_library\stdc_secure_lib.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\universalis\src\universalis\standard_library\stdint.hpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\..\universalis\src\universalis\standard_library\thread.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\universalis\src\universalis\standard_library\utc_time.hpp"
 					>
 				</File>
 				<Filter
@@ -790,7 +728,23 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\..\universalis\src\universalis\standard_library\detail\boost_xtime.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\universalis\src\universalis\standard_library\detail\duration.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\universalis\src\universalis\standard_library\detail\hiresolution_clock.hpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\..\universalis\src\universalis\standard_library\detail\iso646.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\universalis\src\universalis\standard_library\detail\utc_time.hpp"
 						>
 					</File>
 				</Filter>
