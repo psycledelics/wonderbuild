@@ -672,6 +672,10 @@
 				Name="universalis/standard_library"
 				>
 				<File
+					RelativePath="..\..\..\..\universalis\src\universalis\standard_library\allocators.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\universalis\src\universalis\standard_library\condition.hpp"
 					>
 				</File>
@@ -681,6 +685,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\universalis\src\universalis\standard_library\mutex.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\universalis\src\universalis\standard_library\ndebug.hpp"
 					>
 				</File>
 				<File
