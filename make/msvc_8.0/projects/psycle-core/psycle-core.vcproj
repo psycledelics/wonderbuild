@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="psycle-core"
 	ProjectGUID="{B78DFE59-051A-43FD-B489-785A3982541C}"
 	RootNamespace="psycle.core"
@@ -164,14 +164,6 @@
 				Name="core"
 				>
 				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\binread.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\binread.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\psycle-core\src\psycle\core\commands.h"
 					>
 				</File>
@@ -189,30 +181,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\psycle-core\src\psycle\core\cstdint.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\datacompression.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\datacompression.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\dither.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\dither.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\dsp.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\dsp.h"
 					>
 				</File>
 				<File
@@ -300,23 +268,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\mersennetwister.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\mersennetwister.h"
+					RelativePath="..\..\..\..\psycle-core\src\psycle\core\pattern.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\..\psycle-core\src\psycle\core\pattern.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\patterndata.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\patterndata.h"
 					>
 				</File>
 				<File
@@ -333,6 +289,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\psycle-core\src\psycle\core\patternline.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\psycle-core\src\psycle\core\patternpool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\psycle-core\src\psycle\core\patternpool.h"
 					>
 				</File>
 				<File
@@ -460,22 +424,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\signalslib.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\sigslot.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\singlepattern.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\singlepattern.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\psycle-core\src\psycle\core\song.cpp"
 					>
 				</File>
@@ -507,35 +455,59 @@
 					RelativePath="..\..\..\..\psycle-core\src\psycle\core\xmsampler.h"
 					>
 				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\zipreader.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\zipreader.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\zipwriter.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\zipwriter.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\zipwriterstream.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\psycle-core\src\psycle\core\zipwriterstream.h"
-					>
-				</File>
 				<Filter
 					Name="helpers"
 					>
 					<File
+						RelativePath="..\..\..\..\psycle-core\src\psycle\core\binread.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\psycle-core\src\psycle\core\binread.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\psycle-core\src\psycle\core\datacompression.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\psycle-core\src\psycle\core\datacompression.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\psycle-core\src\psycle\core\dither.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\psycle-core\src\psycle\core\dither.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\psycle-core\src\psycle\core\dsp.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\psycle-core\src\psycle\core\dsp.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\psycle-core\src\psycle\core\mersennetwister.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\psycle-core\src\psycle\core\mersennetwister.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\..\psycle-core\src\psycle\core\helpers\scale.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\psycle-core\src\psycle\core\signalslib.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\psycle-core\src\psycle\core\sigslot.h"
 						>
 					</File>
 					<File
@@ -544,6 +516,30 @@
 					</File>
 					<File
 						RelativePath="..\..\..\..\psycle-core\src\psycle\core\helpers\xml.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\psycle-core\src\psycle\core\zipreader.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\psycle-core\src\psycle\core\zipreader.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\psycle-core\src\psycle\core\zipwriter.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\psycle-core\src\psycle\core\zipwriter.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\psycle-core\src\psycle\core\zipwriterstream.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\psycle-core\src\psycle\core\zipwriterstream.h"
 						>
 					</File>
 					<Filter
