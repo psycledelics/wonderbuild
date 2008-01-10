@@ -595,8 +595,10 @@ class IRC(BaseIRC):
 	def channelMap(self, builderName):
 		if builderName.startswith('libzzub'): return self.irc().channels
 		else: return ['#psycle']
-	
-BuildmasterConfig['status'].append(IRC(host = 'irc.efnet.pl', nick = 'buildborg', channels = ['#psycle'], categories = categories))
+
+decent_efnet_irc_server = 'irc.efnet.net'
+#decent_efnet_irc_server = 'irc.choopa.ca'
+BuildmasterConfig['status'].append(IRC(host = decent_efnet_irc_server, nick = 'buildborg', channels = ['#psycle'], categories = categories))
 BuildmasterConfig['status'].append(IRC(host = 'irc.freenode.net', nick = 'buildborg', channels = ['#psycle', '#aldrin'], categories = categories))
 
 BuildmasterConfig['debugPassword'] = 'debugpassword'
