@@ -163,7 +163,7 @@ BuildmasterConfig['builders'].append(
 	{
 		'name': 'freepsycle',
 		'category': 'psycle',
-		'slavenames': ['anechoid'], # uses too much memory for factoid
+		'slavenames': slaves,
 		'builddir': svn_dir + 'freepsycle',
 		'factory': factory.BuildFactory(
 			[
