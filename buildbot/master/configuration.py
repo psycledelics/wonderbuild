@@ -1,5 +1,8 @@
 import os
 
+try: del os.environ['TERM']
+except KeyError: pass
+
 BuildmasterConfig = {}
 
 project_name = 'psycle'
@@ -487,10 +490,6 @@ categories = None #['psycle', 'zzub']
 
 from buildbot.status.html import Waterfall
 BuildmasterConfig['status'].append(Waterfall(http_port = 8010, css = 'waterfall.css', robots_txt = 'robots.txt', categories = categories))
-
-import os
-try: del os.environ['TERM']
-except KeyError: pass
 
 from buildbot.status.words import IRC as BaseIRC, IrcStatusBot as BaseIrcStatusBot, IrcStatusFactory
 
