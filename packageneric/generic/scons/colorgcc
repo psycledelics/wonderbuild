@@ -140,7 +140,7 @@ sub loadPreferences
 		next if (!m/(.*):\s*(.*)/);  # It's not of the form "foo: bar".
 		$option = $1;
 		$value = $2;
-		if($option =~ m/(.*)(cc|c\+\+|gcc|g\+\+|g77|gobjc|gnat|gcj|gpc)(.*)/)
+		if($option =~ m/\A(cc|c\+\+|gcc|g\+\+|g77|f77|gcj)\Z/)
 		{
 			$compilerPaths{$option} = $value;
 		}
