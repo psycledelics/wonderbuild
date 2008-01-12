@@ -1,8 +1,6 @@
-unix {
-	LIBS *= -lz
-} else:win32 {
+unix: LIBS *= -lz
+else:win32 {
 	win32-g++: LIBS *= -lz
-	else: win32-msvc2005: LIBS *= zlib.lib
 	else: win32-msvc*: LIBS *= zlib.lib
 
 	EXTERNAL_PKG_DIR = $$TOP_SRC_DIR/external-packages
