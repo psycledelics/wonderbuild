@@ -105,3 +105,4 @@ SOURCES += \
 
 include(boost.pri)
 include(qt-xml.pri)
+include(zlib.pri)

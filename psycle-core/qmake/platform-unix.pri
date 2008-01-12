@@ -2,6 +2,10 @@ unix {
 	message("System is unix")
 	TOP_SRC_DIR = $$system(cd ../.. && pwd)
 	message("Top src dir is $$TOP_SRC_DIR")
+
+	# math and dynamic loader
+	LIBS *= -lm -ldl
+
 	macx {
 		#CONFIG += x86 ppc # make universal binaries on mac
 		
