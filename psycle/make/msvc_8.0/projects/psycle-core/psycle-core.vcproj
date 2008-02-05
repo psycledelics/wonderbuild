@@ -433,23 +433,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\core\psy4filter.cpp"
-					>
-					<FileConfiguration
-						Name="debug|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="release|Win32"
-						ExcludedFromBuild="true"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\core\psy4filter.h"
