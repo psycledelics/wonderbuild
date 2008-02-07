@@ -104,7 +104,7 @@ SOURCES += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/helpers/xml.cpp
 
 include(boost.pri)
-include(qt-xml.pri)
+# include(qt-xml.pri)
 include(zlib.pri)
 
 unix {
