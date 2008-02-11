@@ -1,3 +1,4 @@
+/* -*- mode:c++, indent-tabs-mode:t -*- */
 #define _CRT_SECURE_NO_DEPRECATE
 #include PACKAGENERIC__PRE_COMPILED
 #pragma hdrstop // borland and msvc: instructs the compiler to stop pre-compiling headers
