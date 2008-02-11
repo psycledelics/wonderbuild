@@ -1,4 +1,4 @@
-/* -*- mode:c++, indent-tabs-mode:t -*- */
+// -*- mode:c++; indent-tabs-mode:t -*-
 ///\file
 ///\brief description of a fake source package (there's no notion of source package in psycle's cvs).
 #pragma once
