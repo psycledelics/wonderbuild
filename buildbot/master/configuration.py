@@ -141,7 +141,7 @@ BuildmasterConfig['builders'].append(
 		'builddir': svn_dir + 'universalis.mingw',
 		'factory': factory.BuildFactory(
 			[
-				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = []),
+				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy diversalis universalis', locks = [compile_lock]),
 				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=universalis packageneric__debug=1', locks = [compile_lock]),
 				factory.s(step.Test, command = 'call ..\\..\\..\\dev-pack && .\\++packageneric\\variants\\default\\stage-install\\usr\\local\\bin\\universalis_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
@@ -193,7 +193,7 @@ BuildmasterConfig['builders'].append(
 		'builddir': svn_dir + 'freepsycle.mingw',
 		'factory': factory.BuildFactory(
 			[
-				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = []),
+				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy diversalis universalis freepsycle', locks = [compile_lock]),
 				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=freepsycle packageneric__debug=1', locks = [compile_lock])
 			]
@@ -392,7 +392,7 @@ BuildmasterConfig['builders'].append(
 		'builddir': svn_dir + 'psycle-plugins.mingw',
 		'factory': factory.BuildFactory(
 			[
-				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = []),
+				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=psycle-plugins packageneric__debug=1', locks = [compile_lock])
 			]
 		)
@@ -442,7 +442,7 @@ BuildmasterConfig['builders'].append(
 		'builddir': svn_dir + 'psycle-helpers.mingw',
 		'factory': factory.BuildFactory(
 			[
-				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = []),
+				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy diversalis universalis psycle-helpers', locks = [compile_lock]),
 				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=psycle-helpers packageneric__debug=0 packageneric__test=1', locks = [compile_lock]),
 				factory.s(step.Test, command = 'call ..\\..\\..\\dev-pack && .\\++packageneric\\variants\\default\\stage-install\\usr\\local\\bin\\psycle-helpers_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
