@@ -118,7 +118,7 @@ class project:
 	def progress(self): return self.root().progress()
 	def progress_add_todo(self, count = 1): self.root().progress_add_todo(count)
 	def progress_add_done(self, count = 1): self.root().progress_add_done(count)
-	def message(self, prefix, message, font = None): return self.root().message(prefix, message, font)
+	def message(self, prefix, message, font = None): return self.root().message(prefix + self.name() + ': ', message, font)
 	def trace(self, message): self.root().trace(message)
 	def information(self, message): self.root().information(message)
 	def success(self, message): self.root().success(message)		
