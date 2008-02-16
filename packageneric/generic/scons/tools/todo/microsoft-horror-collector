@@ -1,0 +1,185 @@
+#!/bin/bash
+
+##############################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# copyright 1999-2007 psycledelics http://psycle.pastnotecut.org : johan boule
+#
+# On microsoft's operating system, we lack a software distribution system
+# (This operating system is not a distribution, it's both proprietary and anarchic).
+# So, this script is called by 'install' and 'install-strip' make targets
+# to create a post install dir containing every bits of software needed
+# so that we can distribute the dir as a self-contained raw binary package.
+#
+# This file is included by ./Makefile.am
+# \meta hook ./Makefile.am
+# \meta generic
+# \meta standard gnu
+#
+##############################################################################
+
+function main
+{
+	local install=$1 && shift ||
+	{
+		echo-custom "$(basename $0): parameter expected: the directory you passed as --prefix option to the configure script." &&
+		false
+	} &&
+	cd $(dirname $0)/.. &&
+	local src=$(pwd) &&
+	echo-custom "$(basename $0): Entering directory $install" &&
+	cd $install &&
+	local package_tar_name=$(cat $src/+package-meta-information/tar-name | sed 's/"//g') &&
+	local package_version=$(cat $src/+package-meta-information/version | sed 's/"//g') &&
+	local post=$package_tar_name-$package_version &&
+	rm --verbose --force --recursive $post &&
+	mkdir --verbose $post &&
+	if test -d bin
+	then
+		mv --verbose bin $post
+	else
+		mkdir --verbose $post/bin
+	fi &&
+	if test -d lib
+	then
+		if test -d lib/bin
+		then
+			test -d $post/bin || mkdir --verbose $post/bin &&
+			mv --verbose lib/bin/* $post/bin &&
+			rmdir --verbose lib/bin
+		fi &&
+		mv --verbose lib $post
+	else
+		mkdir --verbose $post/lib
+	fi &&
+	if test -d libexec
+	then
+		rmdir --verbose libexec 2>/dev/null || mv --verbose libexec $post
+	else
+		mkdir --verbose $post/share
+	fi &&
+	if test -d share
+	then
+		mv --verbose share $post
+	else
+		mkdir --verbose $post/share
+	fi &&
+	if test -d include
+	then
+		mv --verbose include $post
+	fi &&
+	dependencies $post $post/bin &&
+	split-debugging-information . &&
+	echo-custom "$(basename $0): Standalone/self-contained binary distribution package is at $(pwd)/$post" &&
+	echo-custom "$(basename $0): You can move and run this directory anywhere you want. The executables binaries are under the bin subdirectory." &&
+	(cd $(pwd) && start explorer .) &&
+	echo-custom "$(basename $0): Completed successfully." ||
+	{
+		echo-custom "$(basename $0): Failed for $src in $(pwd)/$post." &&
+		false
+	}
+}
+
+function dependencies
+{
+	local for=$1 && shift &&
+	local to=$1 && shift &&
+	echo-custom "$(basename $0): Computing and bringing dependencies for $for to $to ..." &&
+	
+	cp --verbose --recursive \
+		$(which exchndl.dll) \
+		$to &&
+				
+	local deps=$(cygcheck $(find $for/ \( -name \*.dll -or -name \*.exe \)) | sort -ub | sed 's|\\|/|g')
+	for dep in $deps
+	do
+		if $(echo $dep | grep --silent libgdk-)
+		then
+			cp --verbose --recursive \
+				$(which gtkthemeselector) \
+				$(which gtk2_prefs) \
+				$to &&
+			local gtk=$(dirname $(pkg-config --libs-only-L $(pkg-config --list-all | grep ^gtk | sed 's/  *.*//') | sed 's/^-L//')) &&
+			cp --verbose --recursive $gtk/etc $for &&
+			cp-compound $gtk $for 'lib/pango/*/modules' &&
+			cp-compound $gtk $for 'lib/gtk-*/*/'{immodules,loaders,engines} &&
+			cp-compound $gtk $for share/themes &&
+			cp-compound $gtk $for share/gtkthemeselector &&
+			break
+		fi ||
+		return
+	done &&
+	
+	local deps=$(cygcheck $(find $for/ \( -name \*.dll -or -name \*.exe \)) | sort -ub | sed 's|\\|/|g')
+	#echo $deps &&
+	local system="$(echo $SYSTEMROOT | sed 's|\\|/|g')" &&
+	for dep in $deps
+	do
+		if $(echo $dep | grep --silent --invert-match "$system")
+		then
+			if $(echo $dep | grep --silent --invert-match ^$for/)
+			then
+				cp --verbose $dep $to
+			else
+				echo-custom "$(basename $0): skipping already in package $dep"
+			fi
+		else
+			echo-custom "$(basename $0): skipping system-wide (SYSTEMROOT environment variable) $dep"
+		fi ||
+		return
+	done
+}
+
+function cp-compound
+{
+	local from=$1 && shift &&
+	local to=$1 && shift &&
+	for compound in $(cd $from && echo $*)
+	do
+	echo $from/$compound
+		mkdir --verbose --parents $to/$compound &&
+		cp --verbose --recursive $from/$compound/* $to/$compound || return
+	done
+}
+
+function split-debugging-information
+{
+	local pop=$(pwd) &&
+	(
+		cd $1 && shift &&
+		echo-custom "$(basename $0): Splitting debugging information for $(pwd) ..." &&
+		for binary in $(find . \( -name \*.dll -or -name \*.exe \))
+		do
+			#if test ! -d debuging-information/$(dirname $binary)
+			#then
+			#	mkdir --verbose --parents debuging-information/$(dirname $binary)
+			#fi &&
+			#objcopy --verbose --only-keep-debug $binary debuging-information/$binary.debugging-information &&
+			#objcopy --verbose --strip-debug $binary &&
+			#objcopy --verbose --add-gnu-debuglink=debuging-information/$binary.debugging-information $binary &&
+	
+			# --add-gnu-debuglink seems not to bo working... :-( ... well, let's just strip
+	
+			#objcopy --verbose --strip-unneeded $binary &&
+			#strip --verbose --strip-unneeded $binary &&
+	
+			# --strip-unneeded seems not to be working... :-(
+			
+			#objcopy --verbose --strip-debug $binary &&
+			#strip --verbose --strip-debug $binary &&
+	
+			# erm, neither --strip-debug :-(
+	
+			true || return
+		done
+	)
+}
+
+function echo-custom
+{
+	echo -en '\e[1;36m'
+	echo "$@"
+	echo -en '\e[0m'
+}
+
+main "$@"
