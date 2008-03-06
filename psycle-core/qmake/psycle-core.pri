@@ -39,6 +39,7 @@ HEADERS += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/plugin_interface.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/pluginfinder.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/pluginFinderKey.hpp \
+	$$PSYCLE_CORE_DIR/src/psycle/core/pluginCatcher.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/preset.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psy2filter.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psy3filter.h \
@@ -84,6 +85,7 @@ SOURCES += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/plugin.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/pluginfinder.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/pluginFinderKey.cpp \
+	$$PSYCLE_CORE_DIR/src/psycle/core/pluginCatcher.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/preset.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psy2filter.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psy3filter.cpp \
