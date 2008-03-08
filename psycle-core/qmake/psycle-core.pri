@@ -28,7 +28,6 @@ HEADERS += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/ladspamachine.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/machine.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/mersennetwister.h \
-	$$PSYCLE_CORE_DIR/src/psycle/core/pattern.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patterndata.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternevent.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternline.h \
