@@ -40,6 +40,7 @@ BuildmasterConfig['slavePortnum'] = 9989
 
 slaves = ['anechoid', 'factoid']
 microsoft_slaves = ['winux', 'alk']
+microsoft_slaves_msvc = ['winux']
 
 BuildmasterConfig['bots'] = [
 	('anechoid', 'password'),
@@ -465,7 +466,7 @@ BuildmasterConfig['builders'].append(
 	{
 		'name': 'psycle.msvc',
 		'category': 'psycle',
-		'slavenames': microsoft_slaves,
+		'slavenames': microsoft_slaves_msvc,
 		'builddir': svn_dir + 'psycle.msvc',
 		'factory': factory.BuildFactory(
 			[
