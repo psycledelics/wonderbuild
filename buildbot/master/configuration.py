@@ -39,12 +39,13 @@ except: branch_filter = '/' + branch + '/'
 BuildmasterConfig['slavePortnum'] = 9989
 
 slaves = ['anechoid', 'factoid']
-microsoft_slaves = ['winux']
+microsoft_slaves = ['winux', 'alk']
 
 BuildmasterConfig['bots'] = [
 	('anechoid', 'password'),
 	('factoid', 'password'),
-	('winux', 'password')
+	('winux', 'password'),
+	('alk', 'alk')
 ]
 
 BuildmasterConfig['builders'] = []
@@ -604,6 +605,9 @@ BuildmasterConfig['debugPassword'] = 'debugpassword'
 
 ##################################### non-psycle stuff below ######################################
 if True:
+
+	microsoft_slaves = ['winux']
+
 	zzub_exclude_prefixes = [
 		'branches/', 'tags/',
 		'/trunk/dependencies.dot', '/trunk/dependencies.png', '/README', 'tools/', 'freepsycle/', 'qpsycle/', 'psycle-core/',
