@@ -606,7 +606,7 @@ BuildmasterConfig['debugPassword'] = 'debugpassword'
 ##################################### non-psycle stuff below ######################################
 if True:
 
-	microsoft_slaves = ['winux']
+	microsoft_slaves_zzub = ['winux']
 
 	zzub_exclude_prefixes = [
 		'branches/', 'tags/',
@@ -647,7 +647,7 @@ if True:
 		{
 			'name': 'libzzub.mingw',
 			'category': 'zzub',
-			'slavenames': microsoft_slaves,
+			'slavenames': microsoft_slaves_zzub,
 			'builddir': os.path.join('zzub-trunk', 'libzzub.mingw'),
 			'factory': factory.BuildFactory(
 				[
@@ -674,7 +674,7 @@ if True:
 		{
 			'name': 'libzzub.msvc',
 			'category': 'zzub',
-			'slavenames': microsoft_slaves,
+			'slavenames': microsoft_slaves_zzub,
 			'builddir': os.path.join('zzub-trunk', 'libzzub.msvc'),
 			'factory': factory.BuildFactory(
 				[
