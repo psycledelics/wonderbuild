@@ -433,6 +433,7 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\core\psy4filter.cpp"
+					>
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\core\psy4filter.h"
