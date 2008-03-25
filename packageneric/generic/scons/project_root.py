@@ -333,13 +333,6 @@ class project_root:
 	###########################	
 	######### logging #########
 
-	try:
-		import SCons.Script.Main
-		_progress_display_ = SCons.Script.Main.progress_display
-		def _progress_display(message): project_root._progress_display_(message)
-		SCons.Script.Main.progress_display = _progress_display
-	except: pass # for old scons versions
-	
 	def progress(self): # todo progress is not counted yet.. it would be nice for lengthy builds
 		try: todo = self.__class__._progress_todo
 		except AttributeError: todo = 0
