@@ -1,9 +1,9 @@
-#!/bin/bash
+#! /bin/bash
 
 ##############################################################################
 #
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 1999-2007 psycledelics http://psycle.pastnotecut.org : johan boule
+# copyright 2002-2008 psycle development team http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 #
 # On microsoft's operating system, we lack a software distribution system
 # (This operating system is not a distribution, it's both proprietary and anarchic).
@@ -12,9 +12,6 @@
 # so that we can distribute the dir as a self-contained raw binary package.
 #
 # This file is included by ./Makefile.am
-# \meta hook ./Makefile.am
-# \meta generic
-# \meta standard gnu
 #
 ##############################################################################
 
@@ -22,16 +19,16 @@ function main
 {
 	local install=$1 && shift ||
 	{
-		echo-custom "$(basename $0): parameter expected: the directory you passed as --prefix option to the configure script." &&
+		echo-custom "$(basename $0): parameter expected: the directory containing the install tree." &&
 		false
 	} &&
-	cd $(dirname $0)/.. &&
-	local src=$(pwd) &&
+	local post=$1 && shift ||
+	{
+		echo-custom "$(basename $0): parameter expected: the basename of the destination dir for the package tar." &&
+		false
+	} &&
 	echo-custom "$(basename $0): Entering directory $install" &&
 	cd $install &&
-	local package_tar_name=$(cat $src/+package-meta-information/tar-name | sed 's/"//g') &&
-	local package_version=$(cat $src/+package-meta-information/version | sed 's/"//g') &&
-	local post=$package_tar_name-$package_version &&
 	rm --verbose --force --recursive $post &&
 	mkdir --verbose $post &&
 	if test -d bin
@@ -56,7 +53,7 @@ function main
 	then
 		rmdir --verbose libexec 2>/dev/null || mv --verbose libexec $post
 	else
-		mkdir --verbose $post/share
+		mkdir --verbose $post/libexec
 	fi &&
 	if test -d share
 	then
@@ -66,19 +63,19 @@ function main
 	fi &&
 	if test -d include
 	then
-		mv --verbose include $post
+		rmdir --verbose include 2>/dev/null || mv --verbose include $post
 	fi &&
 	dependencies $post $post/bin &&
 	split-debugging-information . &&
 	echo-custom "$(basename $0): Standalone/self-contained binary distribution package is at $(pwd)/$post" &&
 	echo-custom "$(basename $0): You can move and run this directory anywhere you want. The executables binaries are under the bin subdirectory." &&
-	(cd $(pwd) && start explorer .) &&
+	#(cd $(pwd) && start explorer .) &&
 	echo-custom "$(basename $0): Completed successfully." ||
 	{
-		echo-custom "$(basename $0): Failed for $src in $(pwd)/$post." &&
+		echo-custom "$(basename $0): Failed for $install/$post." &&
 		false
 	}
-}
+} &&
 
 function dependencies
 {
@@ -128,7 +125,7 @@ function dependencies
 		fi ||
 		return
 	done
-}
+} &&
 
 function cp-compound
 {
@@ -136,11 +133,11 @@ function cp-compound
 	local to=$1 && shift &&
 	for compound in $(cd $from && echo $*)
 	do
-	echo $from/$compound
+		echo $from/$compound
 		mkdir --verbose --parents $to/$compound &&
 		cp --verbose --recursive $from/$compound/* $to/$compound || return
 	done
-}
+} &&
 
 function split-debugging-information
 {
@@ -173,13 +170,13 @@ function split-debugging-information
 			true || return
 		done
 	)
-}
+} &&
 
 function echo-custom
 {
 	echo -en '\e[1;36m'
 	echo "$@"
 	echo -en '\e[0m'
-}
+} &&
 
 main "$@"
