@@ -37,21 +37,33 @@ function main
 	else
 		mkdir --verbose $post/bin
 	fi &&
-	if test -d lib && ! rmdir --verbose lib 2>/dev/null
+	if test -d lib
 	then
+		if test -d lib/bin
+		then
+			test -d $post/bin || mkdir --verbose $post/bin &&
+			mv --verbose lib/bin/* $post/bin &&
+			rmdir --verbose lib/bin
+		fi &&
 		mv --verbose lib $post
+	else
+		mkdir --verbose $post/lib
 	fi &&
-	if test -d libexec && ! rmdir --verbose libexec 2>/dev/null
+	if test -d libexec
 	then
-		mv --verbose libexec $post
+		rmdir --verbose libexec 2>/dev/null || mv --verbose libexec $post
+	else
+		mkdir --verbose $post/libexec
 	fi &&
-	if test -d share && ! rmdir --verbose share 2>/dev/null
+	if test -d share
 	then
 		mv --verbose share $post
+	else
+		mkdir --verbose $post/share
 	fi &&
-	if test -d include && ! rmdir --verbose include 2>/dev/null
+	if test -d include
 	then
-		mv --verbose include $post
+		rmdir --verbose include 2>/dev/null || mv --verbose include $post
 	fi &&
 	dependencies $post $post/bin &&
 	split-debugging-information . &&
@@ -71,60 +83,48 @@ function dependencies
 	local to=$1 && shift &&
 	echo-custom "$(basename $0): Computing and bringing dependencies for $for to $to ..." &&
 	
-	cp --verbose \
+	cp --verbose --recursive \
 		$(which exchndl.dll) \
 		$to &&
+				
+	local deps=$(cygcheck $(find $for/ \( -name \*.dll -or -name \*.exe \)) | sort -ub | sed 's|\\|/|g')
+	for dep in $deps
+	do
+		if $(echo $dep | grep --silent libgdk-)
+		then
+			cp --verbose --recursive \
+				$(which gtkthemeselector) \
+				$(which gtk2_prefs) \
+				$to &&
+			local gtk=$(dirname $(pkg-config --libs-only-L $(pkg-config --list-all | grep ^gtk | sed 's/  *.*//') | sed 's/^-L//')) &&
+			cp --verbose --recursive $gtk/etc $for &&
+			cp-compound $gtk $for 'lib/pango/*/modules' &&
+			cp-compound $gtk $for 'lib/gtk-*/*/'{immodules,loaders,engines} &&
+			cp-compound $gtk $for share/themes &&
+			cp-compound $gtk $for share/gtkthemeselector &&
+			break
+		fi ||
+		return
+	done &&
 	
-	found=$(find $for/ \( -name \*.dll -or -name \*.exe \)) &&
-	if LC_ALL=C cygcheck $found | grep '^Error\: '
-	then
-		false
-	else
-		true
-	fi &&
-	
-	if cygcheck-fix-paths $found | grep --silent /libgdk-
-	then
-		cp --verbose --recursive \
-			$(which gtkthemeselector) \
-			$(which gtk2_prefs) \
-			$to &&
-		local gtk=$(dirname $(pkg-config --libs-only-L $(pkg-config --list-all | grep ^gtk | sed 's/  *.*//') | sed 's/^-L//')) &&
-		cp --verbose --recursive $gtk/etc $for &&
-		cp-compound $gtk $for 'lib/pango/*/modules' &&
-		cp-compound $gtk $for 'lib/gtk-*/*/'{immodules,loaders,engines} &&
-		cp-compound $gtk $for share/themes &&
-		cp-compound $gtk $for share/gtkthemeselector
-	fi &&
-	
+	local deps=$(cygcheck $(find $for/ \( -name \*.dll -or -name \*.exe \)) | sort -ub | sed 's|\\|/|g')
+	#echo $deps &&
 	local system="$(echo $SYSTEMROOT | sed 's|\\|/|g')" &&
-
-	cygcheck-fix-paths $(find $for/ \( -name \*.dll -or -name \*.exe \)) |
-	(
-		while read dep
-		do
-			if test -n "$dep"
+	for dep in $deps
+	do
+		if $(echo $dep | grep --silent --invert-match "$system")
+		then
+			if $(echo $dep | grep --silent --invert-match ^$for/)
 			then
-				if $(echo "$dep" | grep --silent --ignore-case "$system")
-				then
-					echo-custom "$(basename $0): skipping system-wide (SYSTEMROOT environment variable) $dep"
-				else
-					if $(echo "$dep" | grep --silent --ignore-case ^$for/)
-					then
-						echo-custom "$(basename $0): skipping already in package $dep"
-					else
-						cp --verbose "$dep" $to
-					fi
-				fi
-			fi ||
-			return
-		done
-	)
-} &&
-
-function cygcheck-fix-paths
-{
-	cygcheck "$@" | sort -ub | sed 's|\\|/|g' | sed 's|^ *||g'
+				cp --verbose $dep $to
+			else
+				echo-custom "$(basename $0): skipping already in package $dep"
+			fi
+		else
+			echo-custom "$(basename $0): skipping system-wide (SYSTEMROOT environment variable) $dep"
+		fi ||
+		return
+	done
 } &&
 
 function cp-compound
@@ -141,12 +141,6 @@ function cp-compound
 
 function split-debugging-information
 {
-	#####################
-	##### disabled ######
-	return
-	##### disabled ######
-	#####################
-
 	local pop=$(pwd) &&
 	(
 		cd $1 && shift &&
