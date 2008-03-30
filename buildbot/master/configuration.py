@@ -471,7 +471,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(step.Compile, command = 'call .\\psycle\\make\\msvc_8.0\\build debug', locks = [compile_lock])
+				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack _ msvc-solution && call .\\psycle\\make\\msvc_8.0\\build debug', locks = [compile_lock])
 			]
 		)
 	}
