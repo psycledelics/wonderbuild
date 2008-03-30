@@ -7,11 +7,8 @@
 #
 # On microsoft's operating system, we lack a software distribution system
 # (This operating system is not a distribution, it's both proprietary and anarchic).
-# So, this script is called by 'install' and 'install-strip' make targets
-# to create a post install dir containing every bits of software needed
+# So, this script creates a post install dir containing every bits of software needed
 # so that we can distribute the dir as a self-contained raw binary package.
-#
-# This file is included by ./Makefile.am
 #
 ##############################################################################
 
