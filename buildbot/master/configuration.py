@@ -73,6 +73,7 @@ svn_lock = locks.SlaveLock('svn')
 compile_lock = locks.SlaveLock('compile')
 
 from buildbot.process import factory, step
+from buildbot.status.builder import SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION
 
 class PolicyCheck(step.Test):
 	name = 'policy-check'
