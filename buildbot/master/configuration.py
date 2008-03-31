@@ -80,11 +80,21 @@ class PolicyCheck(step.Test):
 	descriptionDone = ['policy']
 	command = ['./tools/check-policy']
 
+	def evaluateCommand(self, cmd):
+		if cmd.rc != 0: return WARNINGS
+		return SUCCESS
+
 class LintCheck(step.Test):
 	name = 'lint-check'
 	description = ['checking lint']
 	descriptionDone = ['lint']
 	command = ['true']
+
+class Upload(step.ShellCommand):
+	name = 'upload'
+	description = ['uploading']
+	descriptionDone = ['uploaded']
+	command = ['echo download the package at http://psycle.sourceforge.net/packages']
 
 if False:
 	BuildmasterConfig['builders'].append(
@@ -360,6 +370,22 @@ BuildmasterConfig['schedulers'].append(
 		builderNames = ['qpsycle.mingw'],
 		fileIsImportant = lambda change: filter(change, ['qpsycle/', 'psycle-core/', 'psycle-audiodrivers/'])
 	)
+)
+
+BuildmasterConfig['builders'].append(
+	{
+		'name': 'qpsycle.mingw.pkg',
+		'category': 'psycle',
+		'slavenames': microsoft_slaves,
+		'builddir': svn_dir + 'qpsycle.mingw.pkg',
+		'factory': factory.BuildFactory(
+			[
+				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
+				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && cd qpsycle && sh -c ./make-microsoft-raw-package', locks = [compile_lock]),
+				factory.s(Upload, command = 'scp -F ../../../../.ssh/config qpsycle/++build/install/qpsycle.tar.bz2 upload.buildborg.retropaganda.info:psycle/htdocs/packages/microsoft/ && echo download the package at http://psycle.sourceforge.net/packages/microsoft/qpsycle.tar.bz2', locks = [svn_lock])
+			]
+		)
+	}
 )
 
 BuildmasterConfig['builders'].append(
