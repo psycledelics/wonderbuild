@@ -92,7 +92,7 @@ function dependencies
 		then
 			qt=$(cygpath --unix "$qt")
 		fi &&
-		qt=$(dirname $(dirname "$qt")) &&
+		qt=$(dirname "$(dirname \"$qt\")") &&
 		cp --verbose --recursive \
 			"$qt/plugins" \
 			$post/bin/plugins
