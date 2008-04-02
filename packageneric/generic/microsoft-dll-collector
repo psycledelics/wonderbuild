@@ -95,9 +95,7 @@ function dependencies
 		fi &&
 		qt=$(dirname "$qt") &&
 		qt=$(dirname "$qt") &&
-		cp --verbose --recursive \
-			"$qt/plugins" \
-			$post/bin/plugins
+		cp-compound "$qt" $post/bin/ 'plugins/*/*.dll'
 	fi &&
 
 	local system="$(echo $SYSTEMROOT | sed 's|\\|/|g')" &&
@@ -134,12 +132,16 @@ function cp-compound
 {
 	local from=$1 && shift &&
 	local to=$1 && shift &&
-	for compound in $(cd $from && echo $*)
-	do
-		echo $from/$compound
-		mkdir --verbose --parents $to/$compound &&
-		cp --verbose --recursive $from/$compound/* $to/$compound || return
-	done
+	(cd "$from" && echo "$@") |
+	(
+		while read compound
+		do
+			echo "$from/$compound" &&
+			mkdir --verbose --parents "$to/$compound" &&
+			cp --verbose --recursive "$from/$compound/*" "$to/$compound" ||
+			return
+		done
+	)
 } &&
 
 function split-debugging-information
