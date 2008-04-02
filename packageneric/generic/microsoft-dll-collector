@@ -124,7 +124,7 @@ function dependencies
 
 function cygcheck-fix-paths
 {
-	cygcheck "$@" | sed 's|^ *||' | sed 's|\\|/|g' | sort -ub
+	cygcheck "$@" | sed 's|^ *||' | sed 's|\\|/|g' | sort -ubf
 } &&
 
 function cp-find
