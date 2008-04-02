@@ -71,7 +71,7 @@ function dependencies
 		$(which exchndl.dll) \
 		$post/bin/ &&
 				
-	if cygcheck-fix-paths $(find $post/ \( -name \*.dll -or -name \*.exe \)) | grep -E --silent --ignore-case /libgdk-
+	if cygcheck-fix-paths $(find $post/ \( -iname \*.dll -or -iname \*.exe \)) | grep -E --silent --ignore-case /libgdk-
 	then
 		cp --verbose --recursive \
 			$(which gtkthemeselector) \
@@ -79,14 +79,13 @@ function dependencies
 			$post/bin/ &&
 		local gtk=$(dirname $(pkg-config --libs-only-L $(pkg-config --list-all | grep -E ^gtk | sed 's/  *.*//') | sed 's/^-L//')) &&
 		cp --verbose --recursive $gtk/etc $post &&
-		cp-compound $gtk $post 'lib/pango/*/modules' &&
-		cp-compound $gtk $post 'lib/gtk-*/*/'{immodules,loaders,engines} &&
-		cp-compound $gtk $post share/themes &&
-		cp-compound $gtk $post share/gtkthemeselector
+		cp-find $gtk $post 'lib/pango/*/modules' &&
+		cp-find $gtk $post 'lib/gtk-*/*/'{immodules,loaders,engines} &&
+		cp-find $gtk $post share/themes &&
+		cp-find $gtk $post share/gtkthemeselector
 	fi &&
 
-	qt=$(cygcheck-fix-paths $(find $post/ \( -name \*.dll -or -name \*.exe \)) | grep -E --ignore-case '/qtgui[0-9]*\.dll') &&
-
+	local qt=$(cygcheck-fix-paths $(find $post/ \( -iname \*.dll -or -iname \*.exe \)) | grep -E --ignore-case '/qtgui[0-9]*\.dll') &&
 	if test -n "$qt"
 	then
 		if test "$OSTYPE" = cygwin
@@ -95,12 +94,12 @@ function dependencies
 		fi &&
 		qt=$(dirname "$qt") &&
 		qt=$(dirname "$qt") &&
-		cp-compound "$qt" $post/bin/ 'plugins/*/*.dll'
+		cp-find "$qt" "$post/bin" plugins/ -iname \*.dll
 	fi &&
 
 	local system="$(echo $SYSTEMROOT | sed 's|\\|/|g')" &&
 
-	cygcheck-fix-paths $(find $post/ \( -name \*.dll -or -name \*.exe \)) |
+	cygcheck-fix-paths $(find $post/ \( -iname \*.dll -or -iname \*.exe \)) |
 	(
 		while read dep
 		do
@@ -128,17 +127,18 @@ function cygcheck-fix-paths
 	cygcheck "$@" | sed 's|^ *||' | sed 's|\\|/|g' | sort -ub
 } &&
 
-function cp-compound
+function cp-find
 {
 	local from=$1 && shift &&
 	local to=$1 && shift &&
-	(cd "$from" && echo "$@") |
+	(cd "$from" && find "$@") |
 	(
-		while read compound
+		cd "$to" &&
+		while read found
 		do
-			echo "$from/$compound" &&
-			mkdir --verbose --parents "$to/$compound" &&
-			cp --verbose --recursive "$from/$compound/*" "$to/$compound" ||
+			local dir=$(dirname "$found") &&
+			mkdir --parents "$dir" &&
+			cp --verbose "$from/$found" "$dir" ||
 			return
 		done
 	)
