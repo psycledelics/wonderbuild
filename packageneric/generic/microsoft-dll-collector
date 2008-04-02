@@ -50,7 +50,7 @@ function main
 	then
 		mv --verbose include $post
 	fi &&
-	dependencies $post $post/bin &&
+	dependencies $post &&
 	split-debugging-information . &&
 	echo-custom "$(basename $0): Standalone/self-contained binary distribution package is at $(pwd)/$post" &&
 	echo-custom "$(basename $0): You can move and run this directory anywhere you want. The executables binaries are under the bin subdirectory." &&
@@ -64,31 +64,43 @@ function main
 
 function dependencies
 {
-	local for=$1 && shift &&
-	local to=$1 && shift &&
-	echo-custom "$(basename $0): Computing and bringing dependencies for $for to $to ..." &&
+	local post=$1 && shift &&
+	echo-custom "$(basename $0): Computing and bringing dependencies for $post ..." &&
 	
 	cp --verbose --recursive \
 		$(which exchndl.dll) \
-		$to &&
+		$post/bin/ &&
 				
-	if cygcheck-fix-paths $(find $for/ \( -name \*.dll -or -name \*.exe \)) | grep --silent /libgdk-
+	if cygcheck-fix-paths $(find $post/ \( -name \*.dll -or -name \*.exe \)) | grep -E --silent --ignore-case /libgdk-
 	then
 		cp --verbose --recursive \
 			$(which gtkthemeselector) \
 			$(which gtk2_prefs) \
-			$to &&
-		local gtk=$(dirname $(pkg-config --libs-only-L $(pkg-config --list-all | grep ^gtk | sed 's/  *.*//') | sed 's/^-L//')) &&
-		cp --verbose --recursive $gtk/etc $for &&
-		cp-compound $gtk $for 'lib/pango/*/modules' &&
-		cp-compound $gtk $for 'lib/gtk-*/*/'{immodules,loaders,engines} &&
-		cp-compound $gtk $for share/themes &&
-		cp-compound $gtk $for share/gtkthemeselector
+			$post/bin/ &&
+		local gtk=$(dirname $(pkg-config --libs-only-L $(pkg-config --list-all | grep -E ^gtk | sed 's/  *.*//') | sed 's/^-L//')) &&
+		cp --verbose --recursive $gtk/etc $post &&
+		cp-compound $gtk $post 'lib/pango/*/modules' &&
+		cp-compound $gtk $post 'lib/gtk-*/*/'{immodules,loaders,engines} &&
+		cp-compound $gtk $post share/themes &&
+		cp-compound $gtk $post share/gtkthemeselector
 	fi &&
 	
+	qt=$(cygcheck-fix-paths $(find $post/ \( -name \*.dll -or -name \*.exe \)) | grep -E --ignore-case '/qtgui[0-9]*\.dll') &&
+	if test -n "$qt"
+	then
+		if test "$OSTYPE" = cygwin
+		then
+			qt=$(cygpath --unix "$qt")
+		fi &&
+		qt=$(dirname $(dirname "$qt")) &&
+		cp --verbose --recursive \
+			"$qt/plugins" \
+			$post/bin/plugins
+	fi &&
+
 	local system="$(echo $SYSTEMROOT | sed 's|\\|/|g')" &&
 
-	cygcheck-fix-paths $(find $for/ \( -name \*.dll -or -name \*.exe \)) |
+	cygcheck-fix-paths $(find $post/ \( -name \*.dll -or -name \*.exe \)) |
 	(
 		while read dep
 		do
@@ -98,11 +110,11 @@ function dependencies
 				then
 					echo-custom "$(basename $0): skipping system-wide (SYSTEMROOT environment variable) $dep"
 				else
-					if $(echo $dep | grep --silent --ignore-case ^$for/)
+					if $(echo $dep | grep --silent --ignore-case ^$post/)
 					then
 						echo-custom "$(basename $0): skipping already in package $dep"
 					else
-						cp --verbose "$dep" $to
+						cp --verbose "$dep" $post/bin/
 					fi
 				fi
 			fi ||
@@ -166,9 +178,9 @@ function split-debugging-information
 
 function echo-custom
 {
-	echo -en '\e[1;36m'
-	echo "$@"
-	echo -en '\e[0m'
+	#echo -en '\e[1;36m' &&
+	echo "$@" #&&
+	#echo -en '\e[0m'
 } &&
 
 main "$@"
