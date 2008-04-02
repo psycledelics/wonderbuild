@@ -84,15 +84,17 @@ function dependencies
 		cp-compound $gtk $post share/themes &&
 		cp-compound $gtk $post share/gtkthemeselector
 	fi &&
-	
+
 	qt=$(cygcheck-fix-paths $(find $post/ \( -name \*.dll -or -name \*.exe \)) | grep -E --ignore-case '/qtgui[0-9]*\.dll') &&
+
 	if test -n "$qt"
 	then
 		if test "$OSTYPE" = cygwin
 		then
 			qt=$(cygpath --unix "$qt")
 		fi &&
-		qt=$(dirname "$(dirname \"$qt\")") &&
+		qt=$(dirname "$qt") &&
+		qt=$(dirname "$qt") &&
 		cp --verbose --recursive \
 			"$qt/plugins" \
 			$post/bin/plugins
