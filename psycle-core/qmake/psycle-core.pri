@@ -23,10 +23,14 @@ HEADERS += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/helpers.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/instpreview.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/instrument.h \
+	$$PSYCLE_CORE_DIR/src/psycle/core/internalhost.hpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/internal_machines.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/ladspa.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/ladspamachine.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/machine.h \
+	$$PSYCLE_CORE_DIR/src/psycle/core/machinehost.hpp \
+	$$PSYCLE_CORE_DIR/src/psycle/core/machinefactory.h \
+	$$PSYCLE_CORE_DIR/src/psycle/core/machinekey.hpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/mersennetwister.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/pattern.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternpool.h \
@@ -37,8 +41,8 @@ HEADERS += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/playertimeinfo.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/plugin.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/plugin_interface.h \
+	$$PSYCLE_CORE_DIR/src/psycle/core/plugincatcher.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/pluginfinder.h \
-	$$PSYCLE_CORE_DIR/src/psycle/core/pluginFinderKey.hpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/preset.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psy2filter.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psy3filter.h \
@@ -70,17 +74,21 @@ SOURCES += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/helpers.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/instpreview.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/instrument.cpp \
+	$$PSYCLE_CORE_DIR/src/psycle/core/internalhost.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/internal_machines.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/ladspamachine.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/machine.cpp \
+	$$PSYCLE_CORE_DIR/src/psycle/core/machinehost.cpp \
+	$$PSYCLE_CORE_DIR/src/psycle/core/machinefactory.cpp \
+	$$PSYCLE_CORE_DIR/src/psycle/core/machineKey.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/mersennetwister.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternpool.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternevent.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternsequence.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/playertimeinfo.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/plugin.cpp \
+	$$PSYCLE_CORE_DIR/src/psycle/core/plugincatcher.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/pluginfinder.cpp \
-	$$PSYCLE_CORE_DIR/src/psycle/core/pluginFinderKey.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/preset.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psycleCorePch.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psyfilter.cpp \
