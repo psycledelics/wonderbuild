@@ -29,7 +29,7 @@ HEADERS += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/machine.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/mersennetwister.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/pattern.h \
-	$$PSYCLE_CORE_DIR/src/psycle/core/patterndata.h \
+	$$PSYCLE_CORE_DIR/src/psycle/core/patternpool.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternevent.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternline.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternsequence.h \
@@ -46,7 +46,6 @@ HEADERS += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psyfilter.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/riff.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/sampler.h \
-	$$PSYCLE_CORE_DIR/src/psycle/core/singlepattern.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/song.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/timesignature.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/xminstrument.h \
@@ -75,24 +74,17 @@ SOURCES += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/ladspamachine.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/machine.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/mersennetwister.cpp \
-	$$PSYCLE_CORE_DIR/src/psycle/core/patterndata.cpp \
+	$$PSYCLE_CORE_DIR/src/psycle/core/patternpool.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternevent.cpp \
-	$$PSYCLE_CORE_DIR/src/psycle/core/patternline.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternsequence.cpp \
-	$$PSYCLE_CORE_DIR/src/psycle/core/player.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/playertimeinfo.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/plugin.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/pluginfinder.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/pluginFinderKey.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/preset.cpp \
-	$$PSYCLE_CORE_DIR/src/psycle/core/psy2filter.cpp \
-	$$PSYCLE_CORE_DIR/src/psycle/core/psy3filter.cpp \
-	$$PSYCLE_CORE_DIR/src/psycle/core/psy4filter.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psycleCorePch.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psyfilter.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/riff.cpp \
-	$$PSYCLE_CORE_DIR/src/psycle/core/sampler.cpp \
-	$$PSYCLE_CORE_DIR/src/psycle/core/singlepattern.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/song.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/timesignature.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/xminstrument.cpp \
@@ -104,4 +96,5 @@ SOURCES += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/helpers/xml.cpp
 
 include(boost.pri)
-include(qt-xml.pri)
+include(libxml++.pri)
+include(zlib.pri)
