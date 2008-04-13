@@ -106,7 +106,7 @@ if False:
 			'builddir': svn_dir + 'dummy',
 			'factory': factory.BuildFactory(
 				[
-					factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock])
+					factory.s(step.ShellCommand, command='echo dummy', locks = [])
 				]
 			)
 		}
