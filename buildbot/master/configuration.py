@@ -455,6 +455,22 @@ BuildmasterConfig['schedulers'].append(
 
 BuildmasterConfig['builders'].append(
 	{
+		'name': 'psycle-plugins.mingw.pkg',
+		'category': 'psycle',
+		'slavenames': microsoft_slaves,
+		'builddir': svn_dir + 'psycle-plugins.mingw.pkg',
+		'factory': factory.BuildFactory(
+			[
+				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
+				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && cd psycle-plugins && sh -c ./make-microsoft-raw-package', locks = [compile_lock]),
+				factory.s(Upload, command = 'scp -F ../../../../.ssh/config psycle-plugins/++packageneric/variants/default/install/psycle-plugins.tar.bz2 upload.buildborg.retropaganda.info:psycle/htdocs/packages/microsoft/ && echo download the package at http://psycle.sourceforge.net/packages/microsoft/psycle-plugins.tar.bz2', locks = [svn_lock])
+			]
+		)
+	}
+)
+
+BuildmasterConfig['builders'].append(
+	{
 		'name': 'psycle-helpers',
 		'category': 'psycle',
 		'slavenames': slaves,
