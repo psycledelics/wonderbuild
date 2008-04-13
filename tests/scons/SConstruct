@@ -1,0 +1,22 @@
+env0 = Environment()
+if env0['PLATFORM'] == 'win32': env0 = Environment(tools=['mingw'])
+
+env3 = env0.Clone()
+env3.BuildDir('#/++build/lib-static', '#', duplicate = 0)
+env3.StaticLibrary('#/++build/lib-static/foo', '#/++build/lib-static/foo.cpp')
+
+env1 = env0.Clone()
+env1.BuildDir('#/++build/lib-shared', '#', duplicate = 0)
+env1.SharedLibrary('#/++build/lib-shared/foo', '#/++build/lib-shared/foo.cpp')
+
+env2 = env0.Clone()
+env2.BuildDir('#/++build/prog-static', '#', duplicate = 0)
+env2.Append(LIBPATH = '#/++build/lib-static')
+env2.Append(LIBS = 'foo')
+env2.Program('#/++build/prog-static/prog', '#/++build/prog-static/main.cpp')
+
+env4 = env0.Clone()
+env4.BuildDir('#/++build/prog-shared', '#', duplicate = 0)
+env4.Append(LIBPATH = '#/++build/lib-shared')
+env4.Append(LIBS = 'foo')
+env4.Program('#/++build/prog-shared/prog', '#/++build/prog-shared/main.cpp')
