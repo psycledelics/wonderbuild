@@ -1,5 +1,6 @@
+#include "foo.hpp"
 #include <iostream>
 
-__attribute__((dllexport)) void f() {
+void f() {
 	std::cout << "f\n";
 }
