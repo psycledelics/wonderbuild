@@ -225,6 +225,22 @@ BuildmasterConfig['schedulers'].append(
 
 BuildmasterConfig['builders'].append(
 	{
+		'name': 'freepsycle.mingw.pkg',
+		'category': 'psycle',
+		'slavenames': microsoft_slaves,
+		'builddir': svn_dir + 'freepsycle.mingw.pkg',
+		'factory': factory.BuildFactory(
+			[
+				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
+				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && cd freepsycle && sh -c ./make-microsoft-raw-package', locks = [compile_lock]),
+				factory.s(Upload, command = 'scp -F ../../../../.ssh/config freepsycle/++packageneric/variants/default/install/freepsycle.tar.bz2 upload.buildborg.retropaganda.info:psycle/htdocs/packages/microsoft/ && echo download the package at http://psycle.sourceforge.net/packages/microsoft/freepsycle.tar.bz2', locks = [svn_lock])
+			]
+		)
+	}
+)
+
+BuildmasterConfig['builders'].append(
+	{
 		'name': 'psycle-core',
 		'category': 'psycle',
 		'slavenames': slaves,
