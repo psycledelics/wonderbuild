@@ -4,14 +4,15 @@ if env0['PLATFORM'] == 'win32':
 	shared_lib_install_dir = '#/++build/install/shared/bin/'
 else:
 	shared_lib_install_dir = '#/++build/install/shared/lib/'
-	env0.Append('RPATH', '\\$$ORIGIN/../lib')
+	#env0.Append(RPATH = '\\$$ORIGIN/../lib')
+	env0.Append(LINKFLAGS = '-Wl,--rpath=\\$$ORIGIN/../lib')
 
 env1 = env0.Clone()
 env1.BuildDir('#/++build/intermediate/shared', '#', duplicate = 0)
 env1.Append(CPPDEFINES = [('FOO', 1)])
 shared_lib = env1.SharedLibrary('#/++build/intermediate/shared/foo', '#/++build/intermediate/shared/foo.cpp')
 env1.Install(shared_lib_install_dir, shared_lib[0])
-env1.Install('#/++build/install/shared/lib/', shared_lib[1])
+if len(shared_lib) > 1: env1.Install('#/++build/install/shared/lib/', shared_lib[1:])
 env1.Install('#/++build/install/shared/include/', '#/++build/intermediate/shared/foo.hpp')
 
 env4 = env0.Clone()
