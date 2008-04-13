@@ -79,10 +79,10 @@ function dependencies
 			$post/bin/ &&
 		local gtk=$(dirname $(pkg-config --libs-only-L $(pkg-config --list-all | grep -E ^gtk | sed 's/  *.*//') | sed 's/^-L//')) &&
 		cp --verbose --recursive $gtk/etc $post &&
-		cp-find $gtk $post 'lib/pango/*/modules' &&
-		cp-find $gtk $post 'lib/gtk-*/*/'{immodules,loaders,engines} &&
-		cp-find $gtk $post share/themes &&
-		cp-find $gtk $post share/gtkthemeselector
+		cp-find $gtk $post lib/pango -type d -iname modules &&
+		cp-find $gtk $post lib -type d \( -path 'lib/gtk-*/*/immodules' -or -path 'lib/gtk-*/*/loaders' -or -path 'lib/gtk-*/*/engines' \) &&
+		cp-find $gtk $post share -type d -iname themes &&
+		cp-find $gtk $post share -type d -iname gtkthemeselector
 	fi &&
 
 	local qt=$(cygcheck-fix-paths $(find $post/ \( -iname \*.dll -or -iname \*.exe \)) | grep -E --ignore-case '/qtgui[0-9]*\.dll') &&
@@ -138,7 +138,7 @@ function cp-find
 		do
 			local dir=$(dirname "$found") &&
 			mkdir --parents "$dir" &&
-			cp --verbose "$from/$found" "$dir" ||
+			cp --verbose --recursive "$from/$found" "$dir" ||
 			return
 		done
 	)
