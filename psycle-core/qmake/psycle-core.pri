@@ -40,6 +40,7 @@ HEADERS += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/mixer.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/pattern.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternevent.h \
+	$$PSYCLE_CORE_DIR/src/psycle/core/patternline.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternpool.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternsequence.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/player.h \
@@ -57,6 +58,7 @@ HEADERS += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/riff.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/sampler.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/signalslib.h \
+	$$PSYCLE_CORE_DIR/src/psycle/core/singlepattern.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/songfactory.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/song.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/timesignature.h \
@@ -90,6 +92,7 @@ SOURCES += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/machine.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/machinefactory.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/machinehost.cpp \
+	$$PSYCLE_CORE_DIR/src/psycle/core/machinekey.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/mersennetwister.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/mixer.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/nativehost.cpp \
@@ -109,6 +112,7 @@ SOURCES += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psy4filter.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/riff.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/sampler.cpp \
+	$$PSYCLE_CORE_DIR/src/psycle/core/singlepattern.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/song.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/songfactory.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/timesignature.cpp \
