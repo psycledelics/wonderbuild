@@ -11,7 +11,12 @@ def template(base):
 		class result(base):
 			def execute(self):
 				if not base.execute(self): return False
-				scons = self.project()._scons().Copy() # .Clone()
+				
+				if not self.project()._scons().Clone is None:
+					scons = self.project()._scons().Clone()
+				else:
+					scons = self.project()._scons().Copy()
+					
 				self.execute_env()._scons(scons)
 				import SCons.SConf
 				scons_sconf = SCons.SConf.SConf(
