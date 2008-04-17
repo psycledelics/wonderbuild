@@ -59,7 +59,7 @@ HEADERS += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/sampler.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/signalslib.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/singlepattern.h \
-	$$PSYCLE_CORE_DIR/src/psycle/core/songfactory.h \
+	$$PSYCLE_CORE_DIR/src/psycle/core/songserializer.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/song.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/timesignature.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/xminstrument.h \
@@ -114,7 +114,7 @@ SOURCES += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/sampler.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/singlepattern.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/song.cpp \
-	$$PSYCLE_CORE_DIR/src/psycle/core/songfactory.cpp \
+	$$PSYCLE_CORE_DIR/src/psycle/core/songserializer.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/timesignature.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/xminstrument.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/xmsampler.cpp \
