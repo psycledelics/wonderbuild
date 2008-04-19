@@ -28,7 +28,7 @@ class BinUtils(Package):
 				'--disable-nls \\\n'
 				'--disable-shared'
 		)
-		self.shell(self.make() + ' -C binutils-' + self._version_short() + ' all install')
+		self.shell(self.gmake() + ' -C binutils-' + self._version_short() + ' all install')
 
 	def clean_build(self):
 		self.shell('rm -Rf binutils-' + self._version_short())
