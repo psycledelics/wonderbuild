@@ -67,10 +67,13 @@ class Packages:
 		for package in self.flatten_deps(package_names):
 			build = os.path.join(self._build, package.name() + '-' + package.version())
 			if not os.path.exists(build): os.mkdir(build)
+			save = os.curdir
 			os.chdir(build)
-			package.download()
-			package.build()
-			os.chdir(os.pardir)
+			try:
+				package.download()
+				package.build()
+			finally:
+				os.chdir(save)
 
 class Package:
 	def __init__(self, packages, name, version = None):
