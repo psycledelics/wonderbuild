@@ -8,5 +8,7 @@ class ZLib(Package):
 		Package.__init__(self, packages, 'zlib', '1.2.3')
 		self.add_dep('gcc')
 
+	def description(self): return 'compression library'
+	
 	def download(self): self.http_get(self.mirror('sourceforge') + '/libpng/zlib-' + self.version() + '.tar.bz2')
 

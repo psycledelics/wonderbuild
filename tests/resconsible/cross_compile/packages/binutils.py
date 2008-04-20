@@ -8,6 +8,8 @@ class BinUtils(Package):
 		Package.__init__(self, packages, 'binutils', self._version_short() + '-20080109')
 	
 	def _version_short(self): return '2.18.50'
+	
+	def description(self): return 'The GNU assembler, linker and binary utilities'
 
 	def _tarball(self): return 'binutils-' + self.version() + '-src.tar.gz'
 	

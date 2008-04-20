@@ -12,12 +12,16 @@ class Packages:
 
 		self._target = 'i386-mingw32msvc'
 
-		self._build = os.path.join(os.getcwd(), '++build')
-		if not os.path.exists(self._build): os.mkdir(self._build)
+		self._build_dir = os.path.join(os.getcwd(), '++build')
+		if not os.path.exists(self._build_dir): os.mkdir(self._build_dir)
 
 		self._prefix = os.path.join(os.sep, 'prefix')
 		
-		self._install = os.path.join(os.getcwd(), '++install')
+		self._install_dir = os.path.join(os.getcwd(), '++install')
+		if not os.path.exists(self._install_dir): os.mkdir(self._install_dir)
+		
+		self._state_dir = os.path.join(self._install_dir, 'package-states')
+		if not os.path.exists(self._state_dir): os.mkdir(self._state_dir)
 
 		sys.path.append(os.getcwd())
 
@@ -52,12 +56,29 @@ class Packages:
 				#sys.exit(1)
 
 	def list(self):
+		name_width = 35
+		version_width = 27
+		description_width = 40
+		print 'Status=Not/Installed'
+		print '| Installed=Auto/User'
+		print '|/ ' + 'Name'.ljust(name_width) + 'Version'.ljust(version_width) + 'Description'
+		print '++-' + '=' * (name_width - 1) + '-' + '=' * (version_width - 1) + '-' + '=' * description_width
 		for path in __path__:
 			for file in os.listdir(path):
 				if fnmatch.fnmatch(file, '*.py') and file != '__init__.py' and not fnmatch.fnmatch(file, '.*'):
 					mod = import_package(file)
 					package = mod.package(self)
-					print package.name(), package.version()
+					
+					state_dir = self.state_dir(package)
+					if not os.path.exists(os.path.join(state_dir, 'installed')): installed = 'n '
+					elif os.path.exists(os.path.join(state_dir, 'installed-user')): installed = 'iu'
+					elif os.path.exists(os.path.join(state_dir, 'installed-auto')): installed = 'ia'
+					else: installed = 'i?'
+					
+					print installed.ljust(3) + \
+						package.name().ljust(name_width) + \
+						package.version().ljust(version_width) + \
+						package.description().ljust(description_width)
 				
 	def flatten_deps(self, package_names):
 		result = []
@@ -69,18 +90,20 @@ class Packages:
 					if not dep_package_recurse in result: result.append(dep_package_recurse)
 			if not package in result: result.append(package)
 		return result
-		
-	def builddir(self, package): return os.path.join(self._build, package.name() + '-' + package.version())
+	
+	def build_dir(self, package): return os.path.join(self._build_dir, package.name() + '-' + package.version())
+	def state_dir(self, package): return os.path.join(self._state_dir, package.name() + '-' + package.version())
 		
 	def build(self, package_names, continue_build = False):
 		for package in self.flatten_deps(package_names):
-			build = self.builddir(package)
-			if not os.path.exists(build): os.mkdir(build)
+			build_dir = self.build_dir(package)
+			if not os.path.exists(build_dir): os.mkdir(build_dir)
 			save = os.curdir
-			os.chdir(build)
+			os.chdir(build_dir)
 			try:
+				state_dir = self.state_dir(package)
 				try:
-					if not os.path.exists('installed'):
+					if not os.path.exists(os.path.join(state_dir, 'installed')):
 						self._destdir = os.path.join(os.getcwd(), 'destdir')
 						if not os.path.exists('build'): os.mkdir('build')
 						os.chdir('build')
@@ -90,18 +113,21 @@ class Packages:
 						else: package.continue_build()
 						if os.path.exists(self._destdir):
 							os.chdir(self._destdir)
-							self.shell('find . -type f -exec md5sum {} \\; > ../files')
-							self.shell('find . -mindepth 1 -type d | sort -r > ../dirs')
-							if not os.path.exists(self._install): os.mkdir(self._install)
-							self.shell('cp -R * ' + self._install)
-							os.chdir(os.pardir)
+							self.shell('find . -type f -exec md5sum {} \\; > ' + os.path.join(state_dir, 'files'))
+							self.shell('find . -mindepth 1 -type d | sort -r > ' + os.path.join(state_dir, 'dirs'))
+							self.shell('cp -R * ' + self._install_dir)
+							os.chdir(state_dir)
+							self.shell('rm -f rdeps && touch rdeps')
+							for d in self.flatten_deps(package.deps()): self.shell('echo ' + d.name() + ' > rdeps')
 							self.shell('touch installed')
 							if not package.name() in package_names: self.shell('touch installed-auto')
 					if package.name() in package_names:
+						os.chdir(state_dir)
 						if not os.path.exists('installed-user'):
 							if os.path.exists('installed-auto'): self.shell('rm -f installed-auto')
 							self.shell('touch installed-user')
 				except:
+					os.chdir(state_dir)
 					if not os.path.exists('installed-user') or not os.path.exists('installed-auto'):
 						self.shell('rm -f installed')
 					raise
@@ -109,15 +135,15 @@ class Packages:
 			
 	def remove(self, package_names):
 		for package in self.flatten_deps(package_names):
-			build = self.builddir(package)
-			if not os.path.exists(build):
-				print 'no information about: ', package.name()
+			state_dir = self.state_dir(package)
+			if not os.path.exists(state_dir):
+				print 'no information about package:', package.name()
 			else:
 				save = os.curdir
-				os.chdir(build)
+				os.chdir(state_dir)
 				try:
 					if not package.name() in package_names:
-						print 'not removing: ', package.name()
+						print 'not removing:', package.name()
 					else:
 						self.shell('rm -f installed installed-*')
 						self.shell('for f in $(cut -d\\  -f3 < files); do rm -fv ' + self._install + '/$f; done')
@@ -152,6 +178,7 @@ class Package:
 	def add_dep(self, name, version = None):
 		self._deps.append((name, version))
 
+	def description(self): return '(no description)'
 	def download(self): pass
 	def configure(self): pass
 	def build(self): pass
