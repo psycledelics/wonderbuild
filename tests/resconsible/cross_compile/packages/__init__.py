@@ -15,7 +15,9 @@ class Packages:
 		self._build = os.path.join(os.getcwd(), '++build')
 		if not os.path.exists(self._build): os.mkdir(self._build)
 
-		self._prefix = os.path.join(os.getcwd(), '++install')
+		self._prefix = os.path.join(os.sep, 'prefix')
+		
+		self._install = os.path.join(os.getcwd(), '++install')
 
 		sys.path.append(os.getcwd())
 
@@ -28,8 +30,13 @@ class Packages:
 	def mirror(self, name): return self._mirrors[name]
 	def target(self): return self._target
 	def prefix(self): return self._prefix
+	def destdir(self): return self._destdir
 	def gmake(self): return self._gmake
 	
+	def shell(self, script):
+		print script
+		return os.system(script)
+
 	def add(self, package):
 		self._packages[package.name()] = package
 		
@@ -63,17 +70,62 @@ class Packages:
 			if not package in result: result.append(package)
 		return result
 		
-	def build(self, package_names):
+	def builddir(self, package): return os.path.join(self._build, package.name() + '-' + package.version())
+		
+	def build(self, package_names, continue_build = False):
 		for package in self.flatten_deps(package_names):
-			build = os.path.join(self._build, package.name() + '-' + package.version())
+			build = self.builddir(package)
 			if not os.path.exists(build): os.mkdir(build)
 			save = os.curdir
 			os.chdir(build)
 			try:
-				package.download()
-				package.build()
-			finally:
-				os.chdir(save)
+				try:
+					if not os.path.exists('installed'):
+						self._destdir = os.path.join(os.getcwd(), 'destdir')
+						if not os.path.exists('build'): os.mkdir('build')
+						os.chdir('build')
+						if not continue_build:
+							package.download()
+							package.build()
+						else: package.continue_build()
+						if os.path.exists(self._destdir):
+							os.chdir(self._destdir)
+							self.shell('find . -type f -exec md5sum {} \\; > ../files')
+							self.shell('find . -mindepth 1 -type d | sort -r > ../dirs')
+							if not os.path.exists(self._install): os.mkdir(self._install)
+							self.shell('cp -R * ' + self._install)
+							os.chdir(os.pardir)
+							self.shell('touch installed')
+							if not package.name() in package_names: self.shell('touch installed-auto')
+					if package.name() in package_names:
+						if not os.path.exists('installed-user'):
+							if os.path.exists('installed-auto'): self.shell('rm -f installed-auto')
+							self.shell('touch installed-user')
+				except:
+					if not os.path.exists('installed-user') or not os.path.exists('installed-auto'):
+						self.shell('rm -f installed')
+					raise
+			finally: os.chdir(save)
+			
+	def remove(self, package_names):
+		for package in self.flatten_deps(package_names):
+			build = self.builddir(package)
+			if not os.path.exists(build):
+				print 'no information about: ', package.name()
+			else:
+				save = os.curdir
+				os.chdir(build)
+				try:
+					if not package.name() in package_names:
+						print 'not removing: ', package.name()
+					else:
+						self.shell('rm -f installed installed-*')
+						self.shell('for f in $(cut -d\\  -f3 < files); do rm -fv ' + self._install + '/$f; done')
+						self.shell(
+							'for d in $(cat dirs); do test -d %(install)s/$d && rmdir --ignore-fail-on-non-empty -v %(install)s/$d; done' %
+							{'install': self._install}
+						)
+				finally: os.chdir(save)
 
 class Package:
 	def __init__(self, packages, name, version = None):
@@ -89,11 +141,9 @@ class Package:
 	def http_get(self, url): self.shell('wget -c http://' + url)
 	def target(self): return self._packages.target()
 	def prefix(self): return self._packages.prefix()
+	def destdir(self): return self._packages.destdir()
 	def gmake(self): return self._packages.gmake()
-
-	def shell(self, script):
-		print script
-		return os.system(script)
+	def shell(self, script): return self._packages.shell(script)
 	
 	def name(self): return self._name
 	def version(self): return self._version
@@ -105,6 +155,7 @@ class Package:
 	def download(self): pass
 	def configure(self): pass
 	def build(self): pass
+	def continue_build(self): pass
 
 def import_package(filename):
 	path, name = os.path.split(filename)

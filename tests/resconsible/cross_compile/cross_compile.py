@@ -6,15 +6,32 @@ from packages import Packages, Package
 packages = Packages()
 
 def usage():
-	print 'usage:', sys.argv[0], '<command> [args]'
-	print 'where <command> is one of: list, build'
-	sys.exit(1)
+	sys.stderr.write('usage: ' + sys.argv[0] + ' <command> [args]\n')
+	sys.stderr.write('where <command> is one of: help, version, list, build, remove\n')
 
 if __name__ == '__main__':
-	if len(sys.argv) < 2: usage()
-				
+	if len(sys.argv) < 2:
+		usage()
+		sys.exit(1)
 	command = sys.argv[1]
 	args = sys.argv[2:]
-	if command == 'list': packages.list()
-	elif command == 'build': packages.build(args)
-	else: usage()
+	if command == 'version' or command == '--version' or command == '-v': sys.stdout.write('0.1\n')
+	elif command == 'help' or command == '--help' or command == '-h' or command == '-?': usage()
+	elif command == 'list': packages.list()
+	elif command == 'build':
+		targets = []
+		continue_build = False
+		for arg in args:
+			if arg.startswith('-'):
+				if arg == '--continue': continue_build = True
+				else:
+					sys.stderr.write(sys.argv[0] + ': unrecognised option: ' + arg + '\n')
+					sys.stderr.write('usage: build [--continue] <target...>\n')
+					sys.exit(2)
+			else: targets.append(arg)
+		packages.build(targets, continue_build)
+	elif command == 'remove': packages.remove(args)
+	else:
+		sys.stderr.write(sys.argv[0] + ': unrecognised command: ' + command + '\n')
+		usage()
+		sys.exit(1)
