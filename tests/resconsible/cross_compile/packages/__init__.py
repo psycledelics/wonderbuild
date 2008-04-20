@@ -56,6 +56,7 @@ class Packages:
 				#sys.exit(1)
 
 	def list(self):
+		flag_width = 3
 		name_width = 35
 		version_width = 27
 		description_width = 40
@@ -63,19 +64,46 @@ class Packages:
 		print '| Installed=Auto/User'
 		print '|/ ' + 'Name'.ljust(name_width) + 'Version'.ljust(version_width) + 'Description'
 		print '++-' + '=' * (name_width - 1) + '-' + '=' * (version_width - 1) + '-' + '=' * description_width
+
+		for dir in os.listdir(self._state_dir):
+			state_dir = os.path.join(self._state_dir, dir)
+			def state_file_exists(f): return os.path.exists(os.path.join(state_dir, f))
+			def read_state_file(f): return file(os.path.join(state_dir, f)).readline().rstrip()
+			
+			if not state_file_exists('installed'): installed = 'n '
+			elif state_file_exists('installed-user'): installed = 'iu'
+			elif state_file_exists('installed-auto'): installed = 'ia'
+			else: installed = 'i?'
+
+			if state_file_exists('name'): version = read_state_file('name')
+			else: name = dir + ' (dir)'
+
+			if state_file_exists('version'): version = read_state_file('version')
+			else: version = '(unknown)'
+			
+			if state_file_exists('description'): description = read_state_file('description')
+			else: description = '(no description available)'
+
+			print installed.ljust(flag_width) + \
+				name.ljust(name_width) + \
+				version.ljust(version_width) + \
+				description.ljust(description_width)
+
 		for path in __path__:
-			for file in os.listdir(path):
-				if fnmatch.fnmatch(file, '*.py') and file != '__init__.py' and not fnmatch.fnmatch(file, '.*'):
-					mod = import_package(file)
+			for f in os.listdir(path):
+				if fnmatch.fnmatch(f, '*.py') and f != '__init__.py' and not fnmatch.fnmatch(f, '.*'):
+					mod = import_package(f)
 					package = mod.package(self)
 					
 					state_dir = self.state_dir(package)
-					if not os.path.exists(os.path.join(state_dir, 'installed')): installed = 'n '
-					elif os.path.exists(os.path.join(state_dir, 'installed-user')): installed = 'iu'
-					elif os.path.exists(os.path.join(state_dir, 'installed-auto')): installed = 'ia'
+					def state_file_exists(f): return os.path.exists(os.path.join(state_dir, f))
+					
+					if not state_file_exists('installed'): installed = 'n '
+					elif state_file_exists('installed-user'): installed = 'iu'
+					elif state_file_exists('installed-auto'): installed = 'ia'
 					else: installed = 'i?'
 					
-					print installed.ljust(3) + \
+					print installed.ljust(flag_width) + \
 						package.name().ljust(name_width) + \
 						package.version().ljust(version_width) + \
 						package.description().ljust(description_width)
@@ -117,6 +145,7 @@ class Packages:
 							self.shell('find . -mindepth 1 -type d | sort -r > ' + os.path.join(state_dir, 'dirs'))
 							self.shell('cp -R * ' + self._install_dir)
 							os.chdir(state_dir)
+							self.shell('echo ' + package.version() + ' > version')
 							self.shell('rm -f rdeps && touch rdeps')
 							for d in self.flatten_deps(package.deps()): self.shell('echo ' + d.name() + ' > rdeps')
 							self.shell('touch installed')
