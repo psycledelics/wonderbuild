@@ -1,4 +1,5 @@
-#! /usr/bin/env python
+# MinGW cross compiling package handling tool
+# copyright 2008-2008 Johan Boule <bohan@jabber.org>
 
 import sys, os, imp, fnmatch
 
@@ -127,7 +128,13 @@ class Packages:
 	def build_dir(self, package): return os.path.join(self._build_dir, package.name() + '-' + package.version())
 	def state_dir(self, package): return os.path.join(self._state_dir, package.name() + '-' + package.version())
 		
-	def build(self, package_names, continue_build = False, rebuild = False):
+	def install_no_act(self, package_names):
+		for package in self.flatten_deps(package_names):
+			state_dir = self.state_dir(package)
+			if os.path.exists(os.path.join(state_dir, 'installed')): print 'already install:', package.name(), package.version()
+			else: print 'to be installed:', package.name(), package.version()
+
+	def install(self, package_names, continue_build = False, rebuild = False):
 		for package in self.flatten_deps(package_names):
 			build_dir = self.build_dir(package)
 			if not os.path.exists(build_dir): os.mkdir(build_dir)

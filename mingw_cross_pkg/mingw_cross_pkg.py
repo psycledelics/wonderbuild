@@ -22,16 +22,19 @@ if __name__ == '__main__':
 		targets = []
 		continue_build = False
 		rebuild = False
+		no_act = False
 		for arg in args:
 			if arg.startswith('-'):
 				if arg == '--continue': continue_build = True
 				elif arg == '--rebuild': rebuild = True
+				elif arg == '--no-act': no_act = True
 				else:
 					sys.stderr.write(sys.argv[0] + ': unrecognised option: ' + arg + '\n')
-					sys.stderr.write('usage: install [--continue | --rebuild] <target...>\n')
+					sys.stderr.write('usage: install [--continue | --rebuild | --no-act] <target...>\n')
 					sys.exit(2)
 			else: targets.append(arg)
-		packages.build(targets, continue_build = continue_build, rebuild = rebuild)
+		if no_act: packages.install_no_act(targets)
+		else: packages.install(targets, continue_build = continue_build, rebuild = rebuild)
 	elif command == 'remove': packages.remove(args)
 	else:
 		sys.stderr.write(sys.argv[0] + ': unrecognised command: ' + command + '\n')
