@@ -131,7 +131,7 @@ class Packages:
 	def install_no_act(self, package_names):
 		for package in self.flatten_deps(package_names):
 			state_dir = self.state_dir(package)
-			if os.path.exists(os.path.join(state_dir, 'installed')): print 'already install:', package.name(), package.version()
+			if os.path.exists(os.path.join(state_dir, 'installed')): print 'already installed:', package.name(), package.version()
 			else: print 'to be installed:', package.name(), package.version()
 
 	def install(self, package_names, continue_build = False, rebuild = False):
@@ -159,7 +159,7 @@ class Packages:
 					if not os.path.exists(self._dest_dir): raise Exception('no dest dir after building package: ' + package.name())
 					if not os.path.exists(state_dir): os.mkdir(state_dir)
 					os.chdir(self._dest_dir + self._prefix)
-					self.shell('find . -type f -exec md5sum {} \\; > ' + os.path.join(state_dir, 'files'))
+					self.shell('find . ! -type d -exec md5sum {} \\; > ' + os.path.join(state_dir, 'files'))
 					self.shell('find . -mindepth 1 -type d | sort -r > ' + os.path.join(state_dir, 'dirs'))
 					self.shell('cp -R * ' + self._prefix)
 					write_state_file('name', package.name())

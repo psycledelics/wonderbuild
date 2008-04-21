@@ -28,8 +28,8 @@ class PkgConfig(Package):
 
 	def continue_build(self):
 		self.shell(self.gmake() + ' -C ' + self._dir() + ' install DESTDIR=' + self.dest_dir())
-		self.shell('install -d ' + os.path.join(self.prefix(), 'bin'))
-		f = os.path.join(self.prefix(), 'bin', self.target() + '-pkg-config')
+		self.shell('install -d ' + os.path.join(self.dest_dir() + self.prefix(), 'bin'))
+		f = os.path.join(self.dest_dir() + self.prefix(), 'bin', self.target() + '-pkg-config')
 		if os.path.exists(f): os.unlink(f)
 		self.shell('ln -s ' + os.path.join(os.pardir, self.target(), 'bin', 'pkg-config') + ' ' + f)
 	
