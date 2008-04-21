@@ -11,16 +11,17 @@ class BinUtils(Package):
 	
 	def description(self): return 'The GNU assembler, linker and binary utilities'
 
-	def _tarball(self): return 'binutils-' + self.version() + '-src.tar.gz'
+	def _tarball(self): return self.name() + '-' + self.version() + '-src.tar.gz'
+	def _dir(self): return self.name() + '-' + self._version_short()
 	
 	def download(self): self.http_get(self.mirror('sourceforge') + '/mingw/' + self._tarball())
 
-	def clean_download(self): self.shell('rm -f ' + self._tarball())
+	def clean_download(self): os.unlink(self._tarball())
 	
 	def build(self):
-		self.shell('tar fzx ' + self._tarball())
+		self.shell('tar xzf ' + self._tarball())
 		self.shell(
-			'cd binutils-' + self._version_short() + ' && \n'
+			'cd ' + self._dir() + ' && \n'
 			'./configure \\\n'
 				'--target=' + self.target() + ' \\\n'
 				'--prefix=' + self.prefix() + ' \\\n'
@@ -33,8 +34,8 @@ class BinUtils(Package):
 		self.continue_build()
 
 	def continue_build(self):
-		self.shell(self.gmake() + ' -C binutils-' + self._version_short() + ' all install DESTDIR=' + self.destdir())
+		self.shell(self.gmake() + ' -C ' + self._dir() + ' all install DESTDIR=' + self.dest_dir())
 	
 	def clean_build(self):
-		self.shell('rm -Rf binutils-' + self._version_short())
+		self.shell('rm -Rf ' + self._dir())
 
