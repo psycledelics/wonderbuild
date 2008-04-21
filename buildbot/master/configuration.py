@@ -80,10 +80,10 @@ class PolicyCheck(step.Test):
 	description = ['checking policy']
 	descriptionDone = ['policy']
 	command = ['./tools/check-policy']
-
 	def evaluateCommand(self, cmd):
 		if cmd.rc != 0: return WARNINGS
 		return SUCCESS
+	warnOnWarnings = True
 
 class LintCheck(step.Test):
 	name = 'lint-check'
