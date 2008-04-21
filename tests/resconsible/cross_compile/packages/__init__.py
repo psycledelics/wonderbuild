@@ -151,10 +151,10 @@ class Packages:
 					else: package.continue_build()
 					if not os.path.exists(self._dest_dir): raise Exception('no dest dir after building package: ' + package.name())
 					if not os.path.exists(state_dir): os.mkdir(state_dir)
-					os.chdir(self._dest_dir)
+					os.chdir(self._dest_dir + self._prefix)
 					self.shell('find . -type f -exec md5sum {} \\; > ' + os.path.join(state_dir, 'files'))
 					self.shell('find . -mindepth 1 -type d | sort -r > ' + os.path.join(state_dir, 'dirs'))
-					self.shell('cp -R ' + os.path.join(self._dest_dir + self._prefix, '*') + ' ' + self._prefix)
+					self.shell('cp -R * ' + self._prefix)
 					write_state_file('name', package.name())
 					write_state_file('version', package.version())
 					write_state_file('description', package.description())
@@ -180,7 +180,7 @@ class Packages:
 						self.shell('for f in $(cut -d\\  -f3 < files); do rm -fv ' + self._install_dir + '/$f; done')
 						self.shell(
 							'for d in $(cat dirs); do test -d %(install)s/$d && rmdir --ignore-fail-on-non-empty -v %(install)s/$d; done' %
-							{'install': self._install_dir}
+							{'install': self._prefix}
 						)
 						self.shell('rm -Rf ' + state_dir)
 				finally: os.chdir(save)
