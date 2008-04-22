@@ -175,7 +175,7 @@ class Packages:
 			for r in deps:
 				if type(r) == str: print '\t' * t + r
 				else: recurse(r, t + 1)
-		recurse(self.reverse_deps(package_name))
+		recurse([package_name, self.reverse_deps(package_name)])
 	
 	def build_dir(self, package): return os.path.join(self._build_dir, package.name() + '-' + package.version())
 	def state_dir(self, package): return os.path.join(self._state_dir, package.name() + '-' + package.version())
