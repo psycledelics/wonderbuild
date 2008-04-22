@@ -38,7 +38,7 @@ def usage(out = sys.stderr, command = None):
 		out.write('\n')
 	if command is None or command == 'remove':
 		out.write('usage: remove [--verbose | --no-act] <package...>\n')
-		out.write('  removes the packages and dependent packages.\n')
+		out.write('  removes the packages, dependent packages, and packages marked auto that become no longer needed.\n')
 		out.write('  --no-act   do not really remove, just show what would be done.\n')
 		out.write('  --verbose  show what files and dirs are removed.\n')
 		out.write('\n')
@@ -48,11 +48,11 @@ def usage(out = sys.stderr, command = None):
 		out.write('  --installed-only  only show installed packages.\n')
 		out.write('\n')
 	if command is None or command == 'clean-build':
-		out.write('usage: clean-build [--download] <package...>\n')
+		out.write('usage: clean-build [--download | --destdir | --all] <package...>\n')
 		out.write('  cleans the build dirs of packages.\n')
 		out.write('  --dest-dir  also clean the dest dir.\n')
 		out.write('  --download  also clean the downloaded files.\n')
-		out.write('  --all       wipe out the whole build dir altogether.\n')
+		out.write('  --all       wipe out the whole build dir altogether (same effect as --dest-dir --download).\n')
 		out.write('\n')
 
 if __name__ == '__main__':
