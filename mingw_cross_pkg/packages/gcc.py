@@ -1,4 +1,4 @@
-import os
+import os, shutil
 from packages import Package
 
 def package(packages): return Gcc(packages)
@@ -17,8 +17,6 @@ class Gcc(Package):
 
 	def download(self): self.http_get(self.mirror('sourceforge') + '/mingw/' + self._tarball())
 
-	def clean_download(self): os.unlink(self._tarball())
-	
 	def build(self):
 		self.shell('tar xzf ' + self._tarball())
 		self.shell(
@@ -44,5 +42,5 @@ class Gcc(Package):
 		self.shell(self.gmake() + ' -C ' + self._dir() + ' all install DESTDIR=' + self.dest_dir())
 	
 	def clean_build(self):
-		self.shell('rm -Rf ' + self._dir())
+		if os.path.exists(self._dir()): shutil.rmtree(self._dir())
 

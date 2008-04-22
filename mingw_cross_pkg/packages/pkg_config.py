@@ -1,4 +1,4 @@
-import os
+import os, shutil
 from packages import Package
 
 def package(packages): return PkgConfig(packages)
@@ -15,8 +15,6 @@ class PkgConfig(Package):
 
 	def download(self): self.http_get('pkgconfig.freedesktop.org/releases/' + self._tarball())
 
-	def clean_download(self): os.unlink(self._tarball())
-	
 	def build(self):
 		self.shell('tar xzf ' + self._tarball())
 		self.shell(
@@ -34,5 +32,5 @@ class PkgConfig(Package):
 		self.shell('ln -s ' + os.path.join(os.pardir, self.target(), 'bin', 'pkg-config') + ' ' + f)
 	
 	def clean_build(self):
-		self.shell('rm -Rf ' + self._dir())
+		if os.path.exists(self._dir()): shutil.rmtree(self._dir())
 

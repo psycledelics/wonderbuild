@@ -1,4 +1,4 @@
-import os
+import os, shutil
 from packages import Package
 
 def package(packages): return ZLib(packages)
@@ -15,8 +15,6 @@ class ZLib(Package):
 	
 	def download(self): self.http_get(self.mirror('sourceforge') + '/libpng/' + self._tarball())
 
-	def clean_download(self): os.unlink(self._tarball())
-	
 	def build(self):
 		self.shell('tar xjf ' + self._tarball())
 		self.shell(
@@ -34,5 +32,5 @@ class ZLib(Package):
 		self.shell(self.gmake() + ' -C ' + self._dir() + ' install')
 	
 	def clean_build(self):
-		self.shell('rm -Rf ' + self._dir())
+		if os.path.exists(self._dir()): shutil.rmtree(self._dir())
 

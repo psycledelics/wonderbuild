@@ -290,7 +290,8 @@ class Packages:
 				for dep_name in self.flatten_reverse_deps(package.name(), installed_only = True):
 					if not dep_name in result: result.append(dep_name)
 			return result
-		print 'would remove:', ', '.join(recurse(package_names))
+		would_remove = recurse(package_names)
+		print 'would remove:', ', '.join(would_remove)
 				
 	def remove(self, package_names, verbose = False):
 		to_remove = package_names
@@ -334,6 +335,33 @@ class Packages:
 				shutil.rmtree(state_dir)
 			finally: os.chdir(save)
 
+	def clean_build(self, package_names, all, dest_dir, download):
+		for package in [self.find(name) for name in package_names]:
+			build_dir = self.build_dir(package)
+			if all:
+				if os.path.exists(build_dir):
+					print 'removing', build_dir
+					shutil.rmtree(build_dir)
+			else:
+				built = os.path.join(build_dir, 'built')
+				if os.path.exists(built):
+					print 'removing', built
+					os.unlink(built)
+				build_dir_build = os.path.join(build_dir, 'build')
+				if os.path.exists(build_dir_build):
+					if download:
+						print 'removing', build_dir_build
+						shutil.rmtree(build_dir_build)
+					else:
+						print 'cleaning', build_dir_build
+						os.chdir(build_dir_build)
+						package.clean_build()
+				if dest_dir:
+					dest = os.path.join(build_dir, 'dest')
+					if os.path.exists(dest):
+						print 'removing', dest
+						shutil.rmtree(dest)
+
 class Package:
 	def __init__(self, packages, name, version = None):
 		self._name = name
@@ -360,7 +388,6 @@ class Package:
 
 	def description(self): return '(no description)'
 	def download(self): pass
-	def clean_download(self): pass
 	def build(self): pass
 	def continue_build(self):
 		self.download()

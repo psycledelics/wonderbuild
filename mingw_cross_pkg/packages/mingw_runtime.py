@@ -1,4 +1,4 @@
-import os
+import os, shutil
 from packages import Package
 
 def package(packages): return MingwRuntime(packages)
