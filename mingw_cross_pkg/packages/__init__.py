@@ -234,6 +234,12 @@ class Packages:
 			
 	def remove(self, package_names, verbose = False):
 		for package in [self.find(name) for name in package_names]:
+			for d in self.reverse_deps(package.name()):
+				if type(d) == str:
+					state_dir = self.state_dir(self.find(d))
+					if os.path.exists(state_dir):
+						print 'package is used by:', d
+						return
 			state_dir = self.state_dir(package)
 			if not os.path.exists(state_dir):
 				print 'package is not installed:', package.name()
