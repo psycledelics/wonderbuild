@@ -29,11 +29,12 @@ def usage(out = sys.stderr, command = None):
 		out.write('  shows the details of the packages.\n')
 		out.write('\n')
 	if command is None or command == 'install':
-		out.write('usage: install [--continue | --rebuild | --no-act] <package...>\n')
+		out.write('usage: install [--continue | --rebuild | --no-download | --no-act] <package...>\n')
 		out.write('  installs the packages, and their dependencies.\n')
-		out.write('  --no-act    do not really install, just show what would be done.\n')
-		out.write('  --rebuild   rebuilds the packages given as arguments.\n')
-		out.write('  --continue  continue after a build failure.\n')
+		out.write('  --no-act         do not really install, just show what would be done.\n')
+		out.write('  --skip-download  skip the download step.\n')
+		out.write('  --rebuild        rebuild the packages given as arguments.\n')
+		out.write('  --continue       continue after a build failure.\n')
 		out.write('\n')
 	if command is None or command == 'remove':
 		out.write('usage: remove [--verbose | --no-act] <package...>\n')
@@ -77,11 +78,13 @@ if __name__ == '__main__':
 		package_names = []
 		continue_build = False
 		rebuild = False
+		skip_download = False
 		no_act = False
 		for arg in args:
 			if arg.startswith('-'):
 				if arg == '--continue': continue_build = True
 				elif arg == '--rebuild': rebuild = True
+				elif arg == '--skip-download': skip_download = True
 				elif arg == '--no-act': no_act = True
 				else:
 					sys.stderr.write(sys.argv[0] + ': unrecognised option: ' + arg + '\n')
@@ -89,7 +92,7 @@ if __name__ == '__main__':
 					sys.exit(2)
 			else: package_names.append(arg)
 		if no_act: packages.install_no_act(package_names)
-		else: packages.install(package_names, continue_build = continue_build, rebuild = rebuild)
+		else: packages.install(package_names, continue_build = continue_build, rebuild = rebuild, skip_download = skip_download)
 	elif command == 'remove':
 		package_names = []
 		verbose = False

@@ -20,7 +20,7 @@ class ZLib(Package):
 		self.shell(
 			'cd ' + self._dir() + ' && \n'
 			# zlib doesn't use autotools and its makefile doesn't support destdir.
-			# We cheat by setting prefix to destdir (it's ok since there's no rpath).
+			# We cheat by setting prefix to destdir (it's ok since there's no rpath nor abs symlinks).
 			'CC=' + self.target() + '-gcc \\\n'
 			'RANLIB=' + self.target() + '-ranlib \\\n'
 			'./configure \\\n'

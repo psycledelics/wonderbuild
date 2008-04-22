@@ -221,7 +221,7 @@ class Packages:
 		print 'would install:', ', '.join([package.name() for package in todo])
 		print 'already installed:', ', '.join([package.name() for package in done])
 
-	def install(self, package_names, continue_build = False, rebuild = False):
+	def install(self, package_names, continue_build = False, rebuild = False, skip_download = False):
 		for package in self.flatten_deps(package_names):
 			build_dir = self.build_dir(package)
 			if not os.path.exists(build_dir): os.mkdir(build_dir)
@@ -249,7 +249,7 @@ class Packages:
 						if built: os.unlink('built')
 						os.chdir('build')
 						if not continue_build:
-							package.download()
+							if not skip_download: package.download()
 							package.build()
 						else: 
 							package.continue_build()
