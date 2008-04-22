@@ -71,8 +71,8 @@ class Packages:
 		def state_file_exists(f): return os.path.exists(os.path.join(state_dir, f))
 		def read_state_file(f):
 			f = file(os.path.join(state_dir, f))
-			result = f.readline().rstrip()
-			f.close()
+			try: result = f.readline().rstrip()
+			finally: f.close()
 			return result
 
 		for dir in os.listdir(self._state_dir):
@@ -100,9 +100,9 @@ class Packages:
 				description.ljust(description_width)
 
 		for path in __path__:
-			for f in os.listdir(path):
-				if fnmatch.fnmatch(f, '*.py') and f != '__init__.py' and not fnmatch.fnmatch(f, '.*'):
-					mod = import_package(f)
+			for p in os.listdir(path):
+				if fnmatch.fnmatch(p, '*.py') and p != '__init__.py' and not fnmatch.fnmatch(p, '.*'):
+					mod = import_package(p)
 					package = mod.package(self)
 					
 					state_dir = self.state_dir(package)
@@ -124,6 +124,58 @@ class Packages:
 					if not dep_package_recurse in result: result.append(dep_package_recurse)
 			if not package in result: result.append(package)
 		return result
+		
+	def reverse_deps(self, package_name):
+		result = []
+		
+		def state_file_exists(f): return os.path.exists(os.path.join(state_dir, f))
+		def read_state_file(f):
+			f = file(os.path.join(state_dir, f))
+			try:
+				r = []
+				while True:
+					l = f.readline().rstrip()
+					if not l: break
+					r.append(l)
+			finally: f.close()
+			return r
+
+		for dir in os.listdir(self._state_dir):
+			state_dir = os.path.join(self._state_dir, dir)
+			
+			if state_file_exists('direct-dependencies'):
+				for d in [dep.split(' ') for dep in read_state_file('direct-dependencies')]:
+					name = d[0]
+					version = d[1]
+					if name == package_name and state_file_exists('name'):
+						name = read_state_file('name')[0]
+						result.append(name)
+						recurse = self.reverse_deps(name)
+						if len(recurse): result.append(recurse)
+
+		for path in __path__:
+			for p in os.listdir(path):
+				if fnmatch.fnmatch(p, '*.py') and p != '__init__.py' and not fnmatch.fnmatch(p, '.*'):
+					mod = import_package(p)
+					package = mod.package(self)
+
+					if package.name() in result: continue # already listed
+
+					for d in package.deps():
+						name = d[0]
+						version = d[1]
+						if name == package_name:
+							result.append(package.name())
+							recurse = self.reverse_deps(package.name())
+							if len(recurse): result.append(recurse)
+		return result
+
+	def print_reverse_deps(self, package_name):
+		def recurse(deps, t = 0):
+			for r in deps:
+				if type(r) == str: print '\t' * t + r
+				else: recurse(r, t + 1)
+		recurse(self.reverse_deps(package_name))
 	
 	def build_dir(self, package): return os.path.join(self._build_dir, package.name() + '-' + package.version())
 	def state_dir(self, package): return os.path.join(self._state_dir, package.name() + '-' + package.version())
@@ -144,9 +196,10 @@ class Packages:
 				state_dir = self.state_dir(package)
 				def write_state_file(f, text):
 					f = file(os.path.join(state_dir, f), 'w')
-					f.write(text)
-					f.write('\n')
-					f.close()
+					try:
+						f.write(text)
+						f.write('\n')
+					finally: f.close()
 				rebuild_this_package = rebuild and package.name() in package_names
 				if rebuild_this_package or not os.path.exists(os.path.join(state_dir, 'installed')):
 					self._dest_dir = os.path.join(os.getcwd(), 'dest')
@@ -171,7 +224,8 @@ class Packages:
 					write_state_file('name', package.name())
 					write_state_file('version', package.version())
 					write_state_file('description', package.description())
-					write_state_file('dependencies', '\n'.join([d.name() + ' ' + d.version() for d in self.flatten_deps([n[0] for n in package.deps()])]))
+					write_state_file('direct-dependencies', '\n'.join([d.name() + ' ' + d.version() for d in [self.find(n[0]) for n in package.deps()]]))
+					write_state_file('flat-dependencies', '\n'.join([d.name() + ' ' + d.version() for d in self.flatten_deps([n[0] for n in package.deps()])]))
 					if package.name() in package_names: installed = 'user'
 					else: installed = 'auto'
 					write_state_file('installed', installed)
@@ -183,31 +237,31 @@ class Packages:
 			state_dir = self.state_dir(package)
 			if not os.path.exists(state_dir):
 				print 'package is not installed:', package.name()
-			else:
-				save = os.getcwd()
-				os.chdir(state_dir)
+				continue
+			save = os.getcwd()
+			os.chdir(state_dir)
+			try:
+				f = file('files')
 				try:
-					f = file('files')
-					try:
-						while True:
-							l = f.readline().rstrip()
-							if not l: break
-							l = l.split('  ')[1] # md5sum precedes the file name
+					while True:
+						l = f.readline().rstrip()
+						if not l: break
+						l = l.split('  ')[1] # md5sum precedes the file name
+						if verbose: print l
+						os.unlink(os.path.join(self._prefix, l))
+				finally: f.close()
+				f = file('dirs')
+				try:
+					while True:
+						l = f.readline().rstrip()
+						if not l: break
+						try: os.rmdir(os.path.join(self._prefix, l))
+						except OSError: pass # directory not empty
+						else:
 							if verbose: print l
-							os.unlink(os.path.join(self._prefix, l))
-					finally: f.close()
-					f = file('dirs')
-					try:
-						while True:
-							l = f.readline().rstrip()
-							if not l: break
-							try: os.rmdir(os.path.join(self._prefix, l))
-							except OSError: pass # directory not empty
-							else:
-								if verbose: print l
-					finally: f.close()
-					shutil.rmtree(state_dir)
-				finally: os.chdir(save)
+				finally: f.close()
+				shutil.rmtree(state_dir)
+			finally: os.chdir(save)
 
 class Package:
 	def __init__(self, packages, name, version = None):

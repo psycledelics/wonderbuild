@@ -47,6 +47,9 @@ if __name__ == '__main__':
 					sys.exit(2)
 			else: package_names.append(arg)
 		packages.remove(package_names, verbose)
+	elif command == 'reverse-depends':
+		package_name = args[0]
+		packages.print_reverse_deps(package_name)
 	else:
 		sys.stderr.write(sys.argv[0] + ': unrecognised command: ' + command + '\n')
 		usage()
