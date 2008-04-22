@@ -127,7 +127,7 @@ class Packages:
 			if not package in result: result.append(package)
 		return result
 		
-	def reverse_deps(self, package_name, installed_only = False):
+	def reverse_deps(self, package_name, recursive, installed_only):
 		result = []
 		
 		def state_file_exists(f): return os.path.exists(os.path.join(state_dir, f))
@@ -150,8 +150,9 @@ class Packages:
 					if dep_name == package_name and state_file_exists('name'):
 						name = read_state_file('name')[0]
 						result.append(name)
-						recurse = self.reverse_deps(name, installed_only)
-						if len(recurse): result.append(recurse)
+						if recursive:
+							recurse = self.reverse_deps(name, recursive, installed_only)
+							if len(recurse): result.append(recurse)
 
 		if not installed_only:
 			for path in __path__:
@@ -165,19 +166,20 @@ class Packages:
 						for dep_name in package.deps():
 							if dep_name == package_name:
 								result.append(package.name())
-								recurse = self.reverse_deps(package.name())
-								if len(recurse): result.append(recurse)
+								if recursive:
+									recurse = self.reverse_deps(package.name(), recursive, installed_only)
+									if len(recurse): result.append(recurse)
 		return result
 
-	def print_reverse_deps(self, package_names, installed_only = False):
+	def print_reverse_deps(self, package_names, installed_only):
 		for package_name in package_names:
 			def recurse(deps, t = 0):
 				for r in deps:
 					if type(r) == str: print '\t' * t + r
 					else: recurse(r, t + 1)
-			recurse([package_name, self.reverse_deps(package_name, installed_only)])
+			recurse([package_name, self.reverse_deps(package_name, recursive = True, installed_only = installed_only)])
 			
-	def flatten_reverse_deps(self, package_name):
+	def flatten_reverse_deps(self, package_name, installed_only):
 		def recurse(package_names):
 			result = []
 			for r in package_names:
@@ -187,7 +189,7 @@ class Packages:
 					for r in recurse(r):
 						if not r in result: result.append(r)
 			return result
-		return recurse(self.reverse_deps(package_name, installed_only = True))
+		return recurse(self.reverse_deps(package_name, recursive = True, installed_only = installed_only))
 	
 	def show(self, package_names):
 		for package in [self.find(name) for name in package_names]:
@@ -205,11 +207,8 @@ class Packages:
 			print 'Status:', installed
 			print 'Direct-depends:', ', '.join(package.deps())
 			print 'Recursed-depends:', ', '.join([dep.name() for dep in self.flatten_deps(package.deps())])
-			r = []
-			for dep_name in self.reverse_deps(package.name(), installed_only = True):
-				if type(dep_name) == str: r.append(dep_name)
-			print 'Installed-direct-reverse-depends:', ', '.join(r)
-			print 'Installed-recursed-reverse-depends:', ', '.join(self.flatten_reverse_deps(package.name()))
+			print 'Installed-direct-reverse-depends:', ', '.join(self.reverse_deps(package.name(), recursive = False, installed_only = True))
+			print 'Installed-recursed-reverse-depends:', ', '.join(self.flatten_reverse_deps(package.name(), installed_only = True))
 			print
 	
 	def install_no_act(self, package_names):
@@ -288,24 +287,20 @@ class Packages:
 					print 'package is not installed:', package.name()
 					#continue # comment out to detect broken dependencies
 				elif not package.name() in result: result.append(package.name())
-				for dep_name in self.reverse_deps(package.name(), installed_only = True):
-					if type(dep_name) == str:
-						if os.path.exists(self.state_dir(self.find(dep_name))):
-							if not dep_name in result: result.append(dep_name)
-					else:
-						for dep_name in recurse(dep_name):
-							if not dep_name in result: result.append(dep_name)
+				for dep_name in self.flatten_reverse_deps(package.name(), installed_only = True):
+					if not dep_name in result: result.append(dep_name)
 			return result
 		print 'would remove:', ', '.join(recurse(package_names))
 				
 	def remove(self, package_names, verbose = False):
-		for package in [self.find(name) for name in package_names]:
-
-			for dep_name in self.reverse_deps(package.name(), installed_only = True):
-				if type(dep_name) == str:
-					if os.path.exists(self.state_dir(self.find(dep_name))): self.remove([dep_name], verbose)
-
+		to_remove = package_names
+		for package_name in package_names:
+			for dep_name in self.reverse_deps(package_name, recursive = True, installed_only = True):
+				if not dep_name in to_remove: to_remove.append(dep_name)
+				
+		for package in [self.find(name) for name in to_remove]:
 			state_dir = self.state_dir(package)
+
 			if not os.path.exists(state_dir):
 				print 'package is not installed:', package.name()
 				continue
