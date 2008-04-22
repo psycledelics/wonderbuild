@@ -343,10 +343,6 @@ class Packages:
 					print 'removing', build_dir
 					shutil.rmtree(build_dir)
 			else:
-				built = os.path.join(build_dir, 'built')
-				if os.path.exists(built):
-					print 'removing', built
-					os.unlink(built)
 				build_dir_build = os.path.join(build_dir, 'build')
 				if os.path.exists(build_dir_build):
 					if download:
@@ -357,10 +353,17 @@ class Packages:
 						os.chdir(build_dir_build)
 						package.clean_build()
 				if dest_dir:
+					built = os.path.join(build_dir, 'built')
+					if os.path.exists(built):
+						print 'removing', built
+						os.unlink(built)
 					dest = os.path.join(build_dir, 'dest')
 					if os.path.exists(dest):
 						print 'removing', dest
 						shutil.rmtree(dest)
+				try: os.rmdir(build_dir)
+				except: pass
+				else: print 'removed ', build_dir
 
 class Package:
 	def __init__(self, packages, name, version = None):
