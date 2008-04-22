@@ -158,8 +158,9 @@ class Packages:
 						if not continue_build:
 							package.download()
 							package.build()
+						else: 
+							package.continue_build()
 							continue_build = False
-						else: package.continue_build()
 					file(os.path.join(build_dir, 'built'), 'w').close()
 					if not os.path.exists(self._dest_dir): raise Exception('no dest dir after building package: ' + package.name())
 					if not os.path.exists(state_dir): os.mkdir(state_dir)
