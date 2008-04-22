@@ -290,14 +290,42 @@ class Packages:
 				for dep_name in self.flatten_reverse_deps(package.name(), installed_only = True):
 					if not dep_name in result: result.append(dep_name)
 			return result
-		would_remove = recurse(package_names)
-		print 'would remove:', ', '.join(would_remove)
-				
+		to_remove = recurse(package_names)
+		print 'would remove:', ', '.join(to_remove)
+		print 'would remove no-more used:', ', '.join(self.remove_unneeded_deps(to_remove))
+
+	def remove_unneeded_deps(self, to_remove):
+		unneeded = []
+		for package in [self.find(package_name) for package_name in to_remove]:
+			for dep_name in package.deps():
+				if dep_name in to_remove: continue
+				dep = self.find(dep_name)
+				state_dir = self.state_dir(dep)
+				f = file(os.path.join(state_dir, 'installed'))
+				try:
+					auto = f.readline().rstrip() == 'auto'
+				finally: f.close
+				if auto:
+					needed = False
+					for reverse_dep_name in self.reverse_deps(dep_name, recursive = False, installed_only = True):
+						if not reverse_dep_name in to_remove:
+							needed = True
+							break
+					if not needed and not dep_name in unneeded: unneeded.append(dep_name)
+		if len(unneeded):
+			recurse = to_remove[:]
+			recurse.extend(unneeded)
+			for r in self.remove_unneeded_deps(recurse):
+				if not r in unneeded: unneeded.append(r)
+		return unneeded
+
 	def remove(self, package_names, verbose = False):
-		to_remove = package_names
+		to_remove = package_names[:]
 		for package_name in package_names:
 			for dep_name in self.reverse_deps(package_name, recursive = True, installed_only = True):
 				if not dep_name in to_remove: to_remove.append(dep_name)
+
+		to_remove.extend(self.remove_unneeded_deps(to_remove))
 				
 		for package in [self.find(name) for name in to_remove]:
 			state_dir = self.state_dir(package)
