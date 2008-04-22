@@ -19,7 +19,7 @@ if __name__ == '__main__':
 	elif command == 'help' or command == '--help' or command == '-h' or command == '-?': usage()
 	elif command == 'list': packages.list()
 	elif command == 'install':
-		targets = []
+		package_names = []
 		continue_build = False
 		rebuild = False
 		no_act = False
@@ -30,12 +30,23 @@ if __name__ == '__main__':
 				elif arg == '--no-act': no_act = True
 				else:
 					sys.stderr.write(sys.argv[0] + ': unrecognised option: ' + arg + '\n')
-					sys.stderr.write('usage: install [--continue | --rebuild | --no-act] <target...>\n')
+					sys.stderr.write('usage: install [--continue | --rebuild | --no-act] <package...>\n')
 					sys.exit(2)
-			else: targets.append(arg)
-		if no_act: packages.install_no_act(targets)
-		else: packages.install(targets, continue_build = continue_build, rebuild = rebuild)
-	elif command == 'remove': packages.remove(args)
+			else: package_names.append(arg)
+		if no_act: packages.install_no_act(package_names)
+		else: packages.install(package_names, continue_build = continue_build, rebuild = rebuild)
+	elif command == 'remove':
+		package_names = []
+		verbose = False
+		for arg in args:
+			if arg.startswith('-'):
+				if arg == '--verbose': verbose = True
+				else:
+					sys.stderr.write(sys.argv[0] + ': unrecognised option: ' + arg + '\n')
+					sys.stderr.write('usage: remove [--verbose] <package...>\n')
+					sys.exit(2)
+			else: package_names.append(arg)
+		packages.remove(package_names, verbose)
 	else:
 		sys.stderr.write(sys.argv[0] + ': unrecognised command: ' + command + '\n')
 		usage()

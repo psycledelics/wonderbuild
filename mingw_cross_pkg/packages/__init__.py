@@ -1,7 +1,7 @@
 # MinGW cross compiling package handling tool
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
 
-import sys, os, imp, fnmatch
+import sys, os, shutil, imp, fnmatch
 
 class Packages:
 	def __init__(self):
@@ -147,15 +147,20 @@ class Packages:
 					f.write(text)
 					f.write('\n')
 					f.close()
-				if rebuild or not os.path.exists(os.path.join(state_dir, 'installed')):
+				rebuild_this_package = rebuild and package.name() in package_names
+				if rebuild_this_package or not os.path.exists(os.path.join(state_dir, 'installed')):
 					self._dest_dir = os.path.join(os.getcwd(), 'dest')
 					if not os.path.exists('build'): os.mkdir('build')
-					os.chdir('build')
-					if not continue_build:
-						package.download()
-						package.build()
-						continue_build = False
-					else: package.continue_build()
+					built = os.path.exists('built')
+					if not built or rebuild_this_package:
+						if built: os.unlink('built')
+						os.chdir('build')
+						if not continue_build:
+							package.download()
+							package.build()
+							continue_build = False
+						else: package.continue_build()
+					file(os.path.join(build_dir, 'built'), 'w').close()
 					if not os.path.exists(self._dest_dir): raise Exception('no dest dir after building package: ' + package.name())
 					if not os.path.exists(state_dir): os.mkdir(state_dir)
 					os.chdir(self._dest_dir + self._prefix)
@@ -172,24 +177,35 @@ class Packages:
 				if package.name() in package_names: write_state_file('installed', 'user')
 			finally: os.chdir(save)
 			
-	def remove(self, package_names):
-		for package in self.flatten_deps(package_names):
+	def remove(self, package_names, verbose = False):
+		for package in [self.find(name) for name in package_names]:
 			state_dir = self.state_dir(package)
 			if not os.path.exists(state_dir):
-				print 'no information about package:', package.name()
+				print 'package is not installed:', package.name()
 			else:
 				save = os.getcwd()
 				os.chdir(state_dir)
 				try:
-					if not package.name() in package_names:
-						print 'not removing package:', package.name()
-					else:
-						self.shell('for f in $(cut -d\\  -f3 < files); do rm -fv ' + self._install_dir + '/$f; done')
-						self.shell(
-							'for d in $(cat dirs); do test -d %(install)s/$d && rmdir --ignore-fail-on-non-empty -v %(install)s/$d; done' %
-							{'install': self._prefix}
-						)
-						self.shell('rm -Rf ' + state_dir)
+					f = file('files')
+					try:
+						while True:
+							l = f.readline().rstrip()
+							if not l: break
+							l = l.split('  ')[1] # md5sum precedes the file name
+							if verbose: print l
+							os.unlink(os.path.join(self._prefix, l))
+					finally: f.close()
+					f = file('dirs')
+					try:
+						while True:
+							l = f.readline().rstrip()
+							if not l: break
+							try: os.rmdir(os.path.join(self._prefix, l))
+							except OSError: pass # directory not empty
+							else:
+								if verbose: print l
+					finally: f.close()
+					shutil.rmtree(state_dir)
 				finally: os.chdir(save)
 
 class Package:
