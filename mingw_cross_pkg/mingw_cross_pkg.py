@@ -7,7 +7,7 @@ packages = Packages()
 
 def usage():
 	sys.stderr.write('usage: ' + sys.argv[0] + ' <command> [args]\n')
-	sys.stderr.write('where <command> is one of: help, version, list, install, remove, reverse-depends\n')
+	sys.stderr.write('where <command> is one of: help, version, list, show, install, remove, reverse-depends\n')
 
 if __name__ == '__main__':
 	if len(sys.argv) < 2:
@@ -17,7 +17,11 @@ if __name__ == '__main__':
 	args = sys.argv[2:]
 	if command == 'version' or command == '--version' or command == '-v': sys.stdout.write('0.1\n')
 	elif command == 'help' or command == '--help' or command == '-h' or command == '-?': usage()
-	elif command == 'list': packages.list()
+	elif command == 'list':
+		if len(args):
+			sys.stderr.write('usage: list\n')
+			sys.exit(2)
+		packages.list()
 	elif command == 'install':
 		package_names = []
 		continue_build = False
@@ -62,6 +66,15 @@ if __name__ == '__main__':
 					sys.exit(2)
 			else: package_names.append(arg)
 		packages.print_reverse_deps(package_names, installed_only)
+	elif command == 'show':
+		package_names = []
+		for arg in args:
+			if arg.startswith('-'):
+				sys.stderr.write(sys.argv[0] + ': unrecognised option: ' + arg + '\n')
+				sys.stderr.write('usage: show <package...>\n')
+				sys.exit(2)
+			else: package_names.append(arg)
+		packages.show(package_names)
 	else:
 		sys.stderr.write(sys.argv[0] + ': unrecognised command: ' + command + '\n')
 		usage()

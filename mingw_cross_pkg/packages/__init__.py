@@ -35,6 +35,9 @@ class Packages:
 			try: del os.environ[e]
 			except KeyError: pass
 		
+	def state_dir(self, package): return os.path.join(self._state_dir, package.name() + '-' + package.version())
+	def build_dir(self, package): return os.path.join(self._build_dir, package.name() + '-' + package.version())
+
 	def mirror(self, name): return self._mirrors[name]
 	def target(self): return self._target
 	def prefix(self): return self._prefix
@@ -173,10 +176,42 @@ class Packages:
 					if type(r) == str: print '\t' * t + r
 					else: recurse(r, t + 1)
 			recurse([package_name, self.reverse_deps(package_name, installed_only)])
+			
+	def flatten_reverse_deps(self, package_name):
+		def recurse(package_names):
+			result = []
+			for r in package_names:
+				if type(r) == str:
+					if not r in result: result.append(r)
+				else:
+					for r in recurse(r):
+						if not r in result: result.append(r)
+			return result
+		return recurse(self.reverse_deps(package_name, installed_only = True))
 	
-	def build_dir(self, package): return os.path.join(self._build_dir, package.name() + '-' + package.version())
-	def state_dir(self, package): return os.path.join(self._state_dir, package.name() + '-' + package.version())
-		
+	def show(self, package_names):
+		for package in [self.find(name) for name in package_names]:
+			print 'Name:', package.name()
+			print 'Version:', package.version()
+			print 'Description:', package.description()
+			
+			state_dir = self.state_dir(package)
+			if os.path.exists(os.path.join(state_dir, 'installed')):
+				f = file(os.path.join(state_dir, 'installed'))
+				try: installed = f.readline().rstrip()
+				finally: f.close
+				installed = 'installed (' + installed + ')'
+			else: installed = 'not installed'
+			print 'Status:', installed
+			print 'Direct-depends:', ', '.join(package.deps())
+			print 'Recursed-depends:', ', '.join([dep.name() for dep in self.flatten_deps(package.deps())])
+			r = []
+			for dep_name in self.reverse_deps(package.name(), installed_only = True):
+				if type(dep_name) == str: r.append(dep_name)
+			print 'Installed-direct-reverse-depends:', ', '.join(r)
+			print 'Installed-recursed-reverse-depends:', ', '.join(self.flatten_reverse_deps(package.name()))
+			print
+	
 	def install_no_act(self, package_names):
 		done = []
 		todo = []
@@ -184,8 +219,8 @@ class Packages:
 			state_dir = self.state_dir(package)
 			if os.path.exists(os.path.join(state_dir, 'installed')): done.append(package)
 			else: todo.append(package)
-		print 'would install:', ' '.join([package.name() for package in todo])
-		print 'already installed:', ' '.join([package.name() for package in done])
+		print 'would install:', ', '.join([package.name() for package in todo])
+		print 'already installed:', ', '.join([package.name() for package in done])
 
 	def install(self, package_names, continue_build = False, rebuild = False):
 		for package in self.flatten_deps(package_names):
@@ -261,7 +296,7 @@ class Packages:
 						for dep_name in recurse(dep_name):
 							if not dep_name in result: result.append(dep_name)
 			return result
-		print 'would remove:', ' '.join(recurse(package_names))
+		print 'would remove:', ', '.join(recurse(package_names))
 				
 	def remove(self, package_names, verbose = False):
 		for package in [self.find(name) for name in package_names]:
