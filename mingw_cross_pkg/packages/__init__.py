@@ -322,7 +322,7 @@ class Packages:
 	def remove(self, package_names, verbose = False):
 		to_remove = package_names[:]
 		for package_name in package_names:
-			for dep_name in self.reverse_deps(package_name, recursive = True, installed_only = True):
+			for dep_name in self.flatten_reverse_deps(package_name, installed_only = True):
 				if not dep_name in to_remove: to_remove.append(dep_name)
 
 		to_remove.extend(self.remove_unneeded_deps(to_remove))
