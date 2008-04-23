@@ -263,7 +263,7 @@ class Packages:
 
 				elif package.name() in package_names: print 'already installed:', package.name()
 				
-				if package.name() in package_names: write_state_file('installed', 'user')
+				if not rebuild and package.name() in package_names: write_state_file('installed', 'user')
 			finally: os.chdir(save)
 
 	def remove_unneeded_deps(self, to_remove):

@@ -7,48 +7,53 @@ version = '0.1'
 
 packages = Packages()
 
+commands = ['help', 'version', 'list', 'show', 'install', 'remove', 'reverse-depends', 'clean-build']
+
 def usage(out = sys.stderr, command = None):
 	if command is None:
-		out.write('usage: ' + sys.argv[0] + ' <command> [args]\n')
-		out.write('  where <command> is one of: help, version, list, show, install, remove, reverse-depends, clean-build.\n')
+		out.write('Usage: ' + sys.argv[0] + ' <command> [args]\n')
+		out.write('  where <command> is one of: ' + ', '.join(commands) + '.\n')
 		out.write('\n')
 	if command is None or command == 'help':
-		out.write('usage: <help | --help> [command]\n')
+		out.write('Usage: <help | --help> [command]\n')
+		out.write('or   : <command> --help\n')
 		out.write('  gives help on command, or on all commands.\n')
+		if command == 'help': out.write('  where [command] is one of: ' + ', '.join(commands) + '.\n')
 		out.write('\n')
 	if command is None or command == 'version':
-		out.write('usage: <version | --version>\n')
+		out.write('Usage: <version | --version>\n')
 		out.write('  prints the version of this tool.\n')
 		out.write('\n')
 	if command is None or command == 'list':
-		out.write('usage: list\n')
+		out.write('Usage: list\n')
 		out.write('  gives a list of all packages, with state information.\n')
 		out.write('\n')
 	if command is None or command == 'show':
-		out.write('usage: show <package...>\n')
+		out.write('Usage: show <package...>\n')
 		out.write('  shows the details of the packages.\n')
 		out.write('\n')
 	if command is None or command == 'install':
-		out.write('usage: install [--continue | --rebuild | --no-download | --no-act] <package...>\n')
+		out.write('Usage: install [--continue | --rebuild | --no-download | --no-act] <package...>\n')
 		out.write('  installs the packages, and their dependencies.\n')
+		out.write('  Packages given as arguments will be marked as user, unless the --rebuild option is present.\n')
 		out.write('  --no-act         do not really install, just show what would be done.\n')
 		out.write('  --skip-download  skip the download step.\n')
 		out.write('  --rebuild        rebuild the packages given as arguments.\n')
 		out.write('  --continue       continue after a build failure.\n')
 		out.write('\n')
 	if command is None or command == 'remove':
-		out.write('usage: remove [--verbose | --no-act] <package...>\n')
+		out.write('Usage: remove [--verbose | --no-act] <package...>\n')
 		out.write('  removes the packages, dependent packages, and packages marked auto that become no longer needed.\n')
 		out.write('  --no-act   do not really remove, just show what would be done.\n')
 		out.write('  --verbose  show what files and dirs are removed.\n')
 		out.write('\n')
 	if command is None or command == 'reverse-depends':
-		out.write('usage: reverse-depends [--installed-only] <package...>\n')
+		out.write('Usage: reverse-depends [--installed-only] <package...>\n')
 		out.write('  shows the reverse dependencies of the packages.\n')
 		out.write('  --installed-only  only show installed packages.\n')
 		out.write('\n')
 	if command is None or command == 'clean-build':
-		out.write('usage: clean-build [--download | --destdir | --all] <package...>\n')
+		out.write('Usage: clean-build [--download | --destdir | --all] <package...>\n')
 		out.write('  cleans the build dirs of packages.\n')
 		out.write('  --dest-dir  also clean the dest dir.\n')
 		out.write('  --download  also clean the downloaded files.\n')
@@ -61,12 +66,19 @@ if __name__ == '__main__':
 		sys.exit(1)
 	command = sys.argv[1]
 	args = sys.argv[2:]
-	if command == 'version' or command == '--version':
+	if '--help' in args and command in commands:
+		usage(command = command)
+	elif command == 'version' or command == '--version' or '--version' in args:
 		sys.stdout.write(version)
 		sys.stdout.write('\n')
 	elif command == 'help' or command == '--help':
 		command = None
-		if len(args): command = args[0]
+		if len(args):
+			command = args[0]
+			if not command in commands:
+				sys.stderr.write(sys.argv[0] + ': unrecognised command: ' + command + '\n')
+				usage(command = 'help')
+				sys.exit(2)
 		else: command = None
 		usage(sys.stdout, command)
 	elif command == 'list':
