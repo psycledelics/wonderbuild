@@ -5,7 +5,7 @@ def package(packages): return PkgConfig(packages)
 
 class PkgConfig(PackageRecipee):
 	def __init__(self, packages):
-		PackageRecipee.__init__(self, packages, 'pkg_config', '0.22')
+		PackageRecipee.__init__(self, packages, 'pkg_config', '0.23')
 		self.add_dep('gcc')
 
 	def description(self): return 'manage compile and link flags for libraries'

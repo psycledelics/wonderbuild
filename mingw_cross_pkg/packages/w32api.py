@@ -27,7 +27,7 @@ class W32api(PackageRecipee):
 	def __init__(self, packages):
 		PackageRecipee.__init__(self, packages, 'w32api', '3.11')
 
-	def _tarball(self): return self.name() + '-' + self.version() + '.tar.gz'
+	def _tarball(self): return self.name() + '-' + self.version() + '.tar.gz' # todo use src?
 
 	def download(self): self.http_get(self.mirror('sourceforge') + '/mingw/' + self._tarball())
 

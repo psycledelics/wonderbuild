@@ -7,7 +7,7 @@ class MingwRuntime(PackageRecipee):
 	def __init__(self, packages):
 		PackageRecipee.__init__(self, packages, 'mingw_runtime', '3.14')
 		
-	def _tarball(self): return 'mingw-runtime-' + self.version() + '.tar.gz'
+	def _tarball(self): return 'mingw-runtime-' + self.version() + '.tar.gz' # todo use src?
 
 	def download(self): self.http_get(self.mirror('sourceforge') + '/mingw/' + self._tarball())
 

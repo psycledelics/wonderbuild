@@ -5,7 +5,7 @@ def package(packages): return BinUtils(packages)
 
 class BinUtils(PackageRecipee):
 	def __init__(self, packages):
-		PackageRecipee.__init__(self, packages, 'binutils', self._version_short() + '-20080109')
+		PackageRecipee.__init__(self, packages, 'binutils', self._version_short() + '-20080109-2')
 	
 	def _version_short(self): return '2.18.50'
 	

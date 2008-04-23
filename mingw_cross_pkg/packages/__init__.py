@@ -394,7 +394,7 @@ class Packages:
 			except AttributeError: pass
 	
 	def clean_build(self, package_names, all, dest_dir, download):
-		for package in [self.find(package_name) for package_name in package_names]:
+		for package in [self.find_recipee(package_name) for package_name in package_names]:
 			build_dir = self.build_dir(package)
 			if all:
 				if os.path.exists(build_dir):
