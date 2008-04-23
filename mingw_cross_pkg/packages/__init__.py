@@ -283,6 +283,17 @@ class Packages:
 				if not r in unneeded: unneeded.append(r)
 		return unneeded
 
+	def remove_unneeded(self):
+		all_unneeded = []
+		for package in self.installed_packages():
+			if package.auto():
+				unneeded = self.remove_unneeded_deps([package])
+				if len(unneeded):
+					all_unneeded.append(package)
+					for unneeded in self.remove_unneeded_deps([package]):
+						if not unneeded in all_unneeded: all_unneeded.append(unneeded)
+		return all_unneeded
+
 	def remove_no_act(self, package_names):
 		to_remove = []
 		for package in [self.find(package_name) for package_name in package_names]:
@@ -292,7 +303,12 @@ class Packages:
 			for reverse_dep in self.flatten_reverse_deps(package_name):
 				if not reverse_dep in to_remove: to_remove.append(reverse_dep)
 		print 'would remove:', ', '.join([p.name() for p in to_remove])
-		print 'would remove no-more used:', ', '.join([p.name() for p in self.remove_unneeded_deps(to_remove)])
+		unneeded = []
+		for package in self.remove_unneeded_deps(to_remove):
+			if not package in unneeded: unneeded.append(package)
+		for package in self.remove_unneeded():
+			if not package in unneeded: unneeded.append(package)
+		print 'would remove no-more used:', ', '.join([p.name() for p in unneeded])
 
 	def remove(self, package_names, verbose = False):
 		to_remove = []
@@ -303,6 +319,8 @@ class Packages:
 			for reverse_dep in self.flatten_reverse_deps(package_name):
 				if not reverse_dep in to_remove: to_remove.append(reverse_dep)
 		to_remove.extend(self.remove_unneeded_deps(to_remove))
+		for package in self.remove_unneeded():
+			if not package in to_remove: to_remove.append(package)
 		for package in to_remove:
 			print 'removing', package.name(), package.version()
 			state_dir = self.state_dir(package)
