@@ -254,7 +254,7 @@ class Packages:
 					if not os.path.exists('build'): os.mkdir('build')
 					new_build = rebuild and package.name() in package_names
 					if not new_build: new_build = not os.path.exists('built')
-					if not new_build and rebuild:
+					if not new_build:
 						# compare build-time versions with installed ones
 						f = file('built')
 						try:
@@ -290,6 +290,8 @@ class Packages:
 						self.shell('find . ! -type d -exec md5sum {} \\; > ' + os.path.join(state_dir, 'files'), verbose = False)
 						self.shell('find . -mindepth 1 -type d | sort -r > ' + os.path.join(state_dir, 'dirs'), verbose = False)
 						self.shell('cp -R * ' + self._prefix, verbose = False)
+						# To allow for reinstallation of old builds, we should store these infos in the build dir and copy them to the state dir.
+						# Currently, it's okay since we automatically rebuild, but automatic rebuilds can be annoying.
 						write_state_file('version', package.version())
 						write_state_file('description', package.description())
 						write_state_file('direct-dependencies', '\n'.join([d.name() + ' ' + d.version() for d in [self.find_installed(n) for n in package.deps()]]))
