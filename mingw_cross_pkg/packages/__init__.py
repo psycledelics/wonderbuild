@@ -157,7 +157,7 @@ class Packages:
 				for package in packages:
 					print '\t' * t + package[0].name()
 					recurse(package[1], t + 1)
-			recurse([(self.find(package_name), self.recursive_reverse_deps(package_name, installed_only = installed_only))])
+			recurse([(self.find(package_name), self.recursive_reverse_deps(package_name, installed_only))])
 			
 	def flatten_reverse_deps(self, package_name, installed_only = True):
 		result = []
@@ -165,7 +165,7 @@ class Packages:
 			for package in packages:
 				if not package[0] in result: result.append(package[0])
 				recurse(package[1])
-		recurse(self.recursive_reverse_deps(package_name, installed_only = installed_only))
+		recurse(self.recursive_reverse_deps(package_name, installed_only))
 		return result
 	
 	def flatten_deps(self, package_names):
@@ -192,7 +192,7 @@ class Packages:
 			print
 		for package in [self.find(package_name) for package_name in package_names]:
 			show_package(package)
-			if not package.installed():
+			if package.installed():
 				try: recipee = self.find_recipee(package.name())
 				except: pass # the recipee of an installed package may not exist anymore
 				else:
