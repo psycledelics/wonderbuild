@@ -19,13 +19,13 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import os, shutil
-from packages import Package
+from packages import PackageRecipee
 
 def package(packages): return W32api(packages)
 
-class W32api(Package):
+class W32api(PackageRecipee):
 	def __init__(self, packages):
-		Package.__init__(self, packages, 'w32api', '3.11')
+		PackageRecipee.__init__(self, packages, 'w32api', '3.11')
 
 	def _tarball(self): return self.name() + '-' + self.version() + '.tar.gz'
 

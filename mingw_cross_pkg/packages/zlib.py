@@ -1,11 +1,11 @@
 import os, shutil
-from packages import Package
+from packages import PackageRecipee
 
 def package(packages): return ZLib(packages)
 
-class ZLib(Package):
+class ZLib(PackageRecipee):
 	def __init__(self, packages):
-		Package.__init__(self, packages, 'zlib', '1.2.3')
+		PackageRecipee.__init__(self, packages, 'zlib', '1.2.3')
 		self.add_dep('gcc')
 
 	def description(self): return 'compression library'

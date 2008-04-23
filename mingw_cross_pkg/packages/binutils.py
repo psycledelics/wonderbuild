@@ -1,11 +1,11 @@
 import os, shutil
-from packages import Package
+from packages import PackageRecipee
 
 def package(packages): return BinUtils(packages)
 
-class BinUtils(Package):
+class BinUtils(PackageRecipee):
 	def __init__(self, packages):
-		Package.__init__(self, packages, 'binutils', self._version_short() + '-20080109')
+		PackageRecipee.__init__(self, packages, 'binutils', self._version_short() + '-20080109')
 	
 	def _version_short(self): return '2.18.50'
 	

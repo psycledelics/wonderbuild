@@ -6,6 +6,8 @@ import sys, os, shutil, imp, fnmatch
 class Packages:
 	def __init__(self):
 		self._packages = {}
+		self._installed_packages = {}
+		self._package_recipees = {}
 
 		self._mirrors = {
 			'sourceforge': 'kent.dl.sourceforge.net'
@@ -35,8 +37,8 @@ class Packages:
 			try: del os.environ[e]
 			except KeyError: pass
 		
-	def state_dir(self, package): return os.path.join(self._state_dir, package.name() + '-' + package.version())
-	def build_dir(self, package): return os.path.join(self._build_dir, package.name() + '-' + package.version())
+	def state_dir(self, package): return os.path.join(self._state_dir, package.name())
+	def build_dir(self, package): return os.path.join(self._build_dir, package.name())
 
 	def mirror(self, name): return self._mirrors[name]
 	def target(self): return self._target
@@ -47,176 +49,159 @@ class Packages:
 	
 	def shell(self, script, verbose = True): shell(script, verbose)
 
-	def add(self, package):
-		self._packages[package.name()] = package
+	def state_file_exists(self, package_name, file_name):
+		return os.path.exists(os.path.join(self._state_dir, package_name, file_name))
 		
-	def find(self, name):
-		try: return self._packages[name]
+	def read_state_file(self, package_name, file_name):
+		f = file(os.path.join(self._state_dir, package_name, file_name))
+		try:
+			result = []
+			while True:
+				l = f.readline().rstrip()
+				if not l: break
+				result.append(l)
+		finally: f.close()
+		return result
+	
+	def find(self, package_name):
+		try: return self._packages[package_name]
 		except KeyError:
-			try:
-				mod = import_package(name)
-				return mod.package(self)
-			except:
-				print 'package not found:', name
-				raise
-				#sys.exit(1)
+			if os.path.exists(os.path.join(self._state_dir, package_name)): package = self.find_installed(package_name)
+			else: package = self.find_recipee(package_name)
+			self._packages[package_name] = package
+			return package
+	
+	def find_installed(self, package_name):
+		try: return self._installed_packages[package_name]
+		except KeyError:
+			package = InstalledPackage(self, package_name)
+			self._installed_packages[package_name] = package
+			return package
+		
+	def find_recipee(self, package_name):
+		try: return self._package_recipees[package_name]
+		except KeyError:
+			package = import_package(package_name).package(self)
+			self._package_recipees[package_name] = package
+			return package
+
+	def installed_packages(self):
+		try: return self._all_installed_packages
+		except AttributeError:
+			self._all_installed_packages = []
+			for package_name in os.listdir(self._state_dir): self._all_installed_packages.append(self.find_installed(package_name))
+			return self._all_installed_packages
+
+	def package_recipees(self):
+		try: return self._all_package_recipees
+		except AttributeError:
+			self._all_package_recipees = []
+			for path in __path__:
+				for p in os.listdir(path):
+					if fnmatch.fnmatch(p, '*.py') and p != '__init__.py' and not fnmatch.fnmatch(p, '.*'):
+						self._all_package_recipees.append(self.find_recipee(p[:-2])) # name without .py extension
+			return self._all_package_recipees
 
 	def list(self):
-		flag_width = 3
-		name_width = 35
-		version_width = 27
-		description_width = 40
+		flag_width = 3; name_width = 35; version_width = 27; description_width = 40
 		print 'Status=Not/Installed'
 		print '| Installed=Auto/User'
 		print '|/ ' + 'Name'.ljust(name_width) + 'Version'.ljust(version_width) + 'Description'
 		print '++-' + '=' * (name_width - 1) + '-' + '=' * (version_width - 1) + '-' + '=' * description_width
-
-		def state_file_exists(f): return os.path.exists(os.path.join(state_dir, f))
-		def read_state_file(f):
-			f = file(os.path.join(state_dir, f))
-			try: result = f.readline().rstrip()
-			finally: f.close()
-			return result
-
-		for dir in os.listdir(self._state_dir):
-			state_dir = os.path.join(self._state_dir, dir)
-			
-			if not state_file_exists('installed'): installed = 'n '
+		package_names = {} # {name: [installed, recipee]}
+		for package in self.installed_packages(): package_names[package.name()] = [package]
+		for package in self.package_recipees():
+			try: packages = package_names[package.name()]
+			except KeyError: package_names[package.name()] = [package]
 			else:
-				installed = read_state_file('installed')
-				if installed == 'user': installed = 'iu'
-				elif installed == 'auto': installed = 'ia'
-				else: installed = 'i?'
-
-			if state_file_exists('name'): name = read_state_file('name')
-			else: name = dir + ' (dir)'
-
-			if state_file_exists('version'): version = read_state_file('version')
-			else: version = '(unknown)'
-			
-			if state_file_exists('description'): description = read_state_file('description')
-			else: description = '(no description available)'
-
-			print installed.ljust(flag_width) + \
-				name.ljust(name_width) + \
-				version.ljust(version_width) + \
-				description.ljust(description_width)
-
-		for path in __path__:
-			for p in os.listdir(path):
-				if fnmatch.fnmatch(p, '*.py') and p != '__init__.py' and not fnmatch.fnmatch(p, '.*'):
-					mod = import_package(p)
-					package = mod.package(self)
-					
-					state_dir = self.state_dir(package)
-					if state_file_exists('version') and read_state_file('version') == package.version(): continue # already listed
-
-					installed = 'n '
-					print installed.ljust(flag_width) + \
-						package.name().ljust(name_width) + \
-						package.version().ljust(version_width) + \
-						package.description().ljust(description_width)
+				if packages[0].version() != package.version(): packages.append(package) # don't list if same version is installed
+		sorted = package_names.items()
+		sorted.sort()
+		for packages in [items[1] for items in sorted]:
+			for package in packages:
+				if not package.installed(): installed = 'n '
+				elif package.auto(): installed = 'ia'
+				else: installed = 'iu'
+				print installed.ljust(flag_width) + \
+					package.name().ljust(name_width) + \
+					package.version().ljust(version_width) + \
+					package.description().ljust(description_width)
 				
-	def flatten_deps(self, package_names):
+	def direct_reverse_deps(self, package_name, installed_only = True):
 		result = []
-		for package_name in package_names:
-			package = self.find(package_name)
+		for package in self.installed_packages():
 			for dep_name in package.deps():
-				for dep_package_recurse in self.flatten_deps([dep_name]):
-					if not dep_package_recurse in result: result.append(dep_package_recurse)
-			if not package in result: result.append(package)
-		return result
-		
-	def reverse_deps(self, package_name, recursive, installed_only):
-		result = []
-		
-		def state_file_exists(f): return os.path.exists(os.path.join(state_dir, f))
-		def read_state_file(f):
-			f = file(os.path.join(state_dir, f))
-			try:
-				r = []
-				while True:
-					l = f.readline().rstrip()
-					if not l: break
-					r.append(l)
-			finally: f.close()
-			return r
-
-		for dir in os.listdir(self._state_dir):
-			state_dir = os.path.join(self._state_dir, dir)
-			
-			if state_file_exists('direct-dependencies'):
-				for dep_name in [dep.split(' ')[0] for dep in read_state_file('direct-dependencies')]:
-					if dep_name == package_name and state_file_exists('name'):
-						name = read_state_file('name')[0]
-						result.append(name)
-						if recursive:
-							recurse = self.reverse_deps(name, recursive, installed_only)
-							if len(recurse): result.append(recurse)
-
+				if dep_name == package_name: result.append(package)
 		if not installed_only:
-			for path in __path__:
-				for p in os.listdir(path):
-					if fnmatch.fnmatch(p, '*.py') and p != '__init__.py' and not fnmatch.fnmatch(p, '.*'):
-						mod = import_package(p)
-						package = mod.package(self)
+			for package in self.recipees():
+				if package.name() in [p.name() for p in result]: continue # already listed as installed package
+				for dep_name in package.deps():
+					if dep_name == package_name: result.append(package)
+		return result
 
-						if package.name() in result: continue # already listed
-
-						for dep_name in package.deps():
-							if dep_name == package_name:
-								result.append(package.name())
-								if recursive:
-									recurse = self.reverse_deps(package.name(), recursive, installed_only)
-									if len(recurse): result.append(recurse)
+	def recursive_reverse_deps(self, package_name, installed_only):
+		result = []
+		for package in self.installed_packages():
+			for dep_name in package.deps():
+				if dep_name == package_name: result.append((package, self.recursive_reverse_deps(package.name(), installed_only)))
+		if not installed_only:
+			for package in self.package_recipees():
+				if package.name() in [p[0].name() for p in result]: continue # already listed as installed package
+				for dep_name in package.deps():
+					if dep_name == package_name: result.append((package, self.recursive_reverse_deps(package.name(), installed_only)))
 		return result
 
 	def print_reverse_deps(self, package_names, installed_only):
 		for package_name in package_names:
-			def recurse(deps, t = 0):
-				for r in deps:
-					if type(r) == str: print '\t' * t + r
-					else: recurse(r, t + 1)
-			recurse([package_name, self.reverse_deps(package_name, recursive = True, installed_only = installed_only)])
+			def recurse(packages, t = 0):
+				for package in packages:
+					print '\t' * t + package[0].name()
+					recurse(package[1], t + 1)
+			recurse([(self.find(package_name), self.recursive_reverse_deps(package_name, installed_only = installed_only))])
 			
-	def flatten_reverse_deps(self, package_name, installed_only):
-		def recurse(package_names):
-			result = []
-			for r in package_names:
-				if type(r) == str:
-					if not r in result: result.append(r)
-				else:
-					for r in recurse(r):
-						if not r in result: result.append(r)
-			return result
-		return recurse(self.reverse_deps(package_name, recursive = True, installed_only = installed_only))
+	def flatten_reverse_deps(self, package_name, installed_only = True):
+		result = []
+		def recurse(packages):
+			for package in packages:
+				if not package[0] in result: result.append(package[0])
+				recurse(package[1])
+		recurse(self.recursive_reverse_deps(package_name, installed_only = installed_only))
+		return result
 	
+	def flatten_deps(self, package_names):
+		result = []
+		for package in [self.find(package_name) for package_name in package_names]:
+			for package_dep_recursed in self.flatten_deps(package.deps()):
+				if not package_dep_recursed in result: result.append(package_dep_recursed)
+			if not package in result: result.append(package)
+		return result
+		
 	def show(self, package_names):
-		for package in [self.find(name) for name in package_names]:
+		def show_package(package):
 			print 'Name:', package.name()
 			print 'Version:', package.version()
 			print 'Description:', package.description()
-			
-			state_dir = self.state_dir(package)
-			if os.path.exists(os.path.join(state_dir, 'installed')):
-				f = file(os.path.join(state_dir, 'installed'))
-				try: installed = f.readline().rstrip()
-				finally: f.close
-				installed = 'installed (' + installed + ')'
-			else: installed = 'not installed'
+			if not package.installed(): installed = 'not installed'
+			elif package.auto(): installed = 'installed (auto)'
+			else: installed = 'installed (user)'
 			print 'Status:', installed
 			print 'Direct-depends:', ', '.join(package.deps())
 			print 'Recursed-depends:', ', '.join([dep.name() for dep in self.flatten_deps(package.deps())])
-			print 'Installed-direct-reverse-depends:', ', '.join(self.reverse_deps(package.name(), recursive = False, installed_only = True))
-			print 'Installed-recursed-reverse-depends:', ', '.join(self.flatten_reverse_deps(package.name(), installed_only = True))
+			print 'Installed-direct-reverse-depends:', ', '.join([p.name() for p in self.direct_reverse_deps(package.name())])
+			print 'Installed-recursed-reverse-depends:', ', '.join([p.name() for p in self.flatten_reverse_deps(package.name())])
 			print
+		for package in [self.find(package_name) for package_name in package_names]:
+			show_package(package)
+			if not package.installed():
+				try: recipee = self.find_recipee(package.name())
+				except: pass # the recipee of an installed package may not exist anymore
+				else:
+					if recipee.version() != package.version(): show_package(recipee)
 	
 	def install_no_act(self, package_names):
-		done = []
-		todo = []
+		done = []; todo = []
 		for package in self.flatten_deps(package_names):
-			state_dir = self.state_dir(package)
-			if os.path.exists(os.path.join(state_dir, 'installed')): done.append(package)
+			if package.installed(): done.append(package)
 			else: todo.append(package)
 		print 'would install:', ', '.join([package.name() for package in todo])
 		print 'already installed:', ', '.join([package.name() for package in done])
@@ -244,7 +229,7 @@ class Packages:
 					built = os.path.exists('built')
 					if not built or rebuild_this_package:
 
-						print 'building ', package.name()
+						print 'building ', package.name(), package.version()
 						
 						if built: os.unlink('built')
 						os.chdir('build')
@@ -257,7 +242,7 @@ class Packages:
 					file(os.path.join(build_dir, 'built'), 'w').close()
 					if not os.path.exists(self._dest_dir): raise Exception('no dest dir after building package: ' + package.name())
 
-					print 'installing', package.name()
+					print 'installing', package.name(), package.version()
 
 					if not os.path.exists(state_dir): os.mkdir(state_dir)
 					os.chdir(self._dest_dir + self._prefix)
@@ -268,74 +253,59 @@ class Packages:
 					write_state_file('name', package.name())
 					write_state_file('version', package.version())
 					write_state_file('description', package.description())
-					write_state_file('direct-dependencies', '\n'.join([d.name() + ' ' + d.version() for d in [self.find(n) for n in package.deps()]]))
+					write_state_file('direct-dependencies', '\n'.join([d.name() + ' ' + d.version() for d in [self.find_installed(n) for n in package.deps()]]))
 					write_state_file('recursed-dependencies', '\n'.join([d.name() + ' ' + d.version() for d in self.flatten_deps(package.deps())]))
 					if package.name() in package_names: installed = 'user'
 					else: installed = 'auto'
 					write_state_file('installed', installed)
+					try: del self._packages[package.name()]
+					except KeyError: pass
 
 				elif package.name() in package_names: print 'already installed:', package.name()
 				
 				if package.name() in package_names: write_state_file('installed', 'user')
 			finally: os.chdir(save)
 
-	def remove_no_act(self, package_names):
-		def recurse(package_names):
-			result = []
-			for package in [self.find(name) for name in package_names]:
-				if not os.path.exists(self.state_dir(package)):
-					print 'package is not installed:', package.name()
-					#continue # comment out to detect broken dependencies
-				elif not package.name() in result: result.append(package.name())
-				for dep_name in self.flatten_reverse_deps(package.name(), installed_only = True):
-					if not dep_name in result: result.append(dep_name)
-			return result
-		to_remove = recurse(package_names)
-		print 'would remove:', ', '.join(to_remove)
-		print 'would remove no-more used:', ', '.join(self.remove_unneeded_deps(to_remove))
-
 	def remove_unneeded_deps(self, to_remove):
 		unneeded = []
-		for package in [self.find(package_name) for package_name in to_remove]:
+		for package in to_remove:
 			for dep_name in package.deps():
-				if dep_name in to_remove: continue
-				dep = self.find(dep_name)
-				state_dir = self.state_dir(dep)
-				f = file(os.path.join(state_dir, 'installed'))
-				try:
-					auto = f.readline().rstrip() == 'auto'
-				finally: f.close
-				if auto:
+				dep = self.find_installed(dep_name)
+				if dep in to_remove: continue
+				if dep.auto():
 					needed = False
-					for reverse_dep_name in self.reverse_deps(dep_name, recursive = False, installed_only = True):
-						if not reverse_dep_name in to_remove:
-							needed = True
-							break
-					if not needed and not dep_name in unneeded: unneeded.append(dep_name)
+					for reverse_dep in self.direct_reverse_deps(dep_name):
+						if not reverse_dep in to_remove: needed = True; break
+					if not needed and not dep in unneeded: unneeded.append(dep)
 		if len(unneeded):
-			recurse = to_remove[:]
-			recurse.extend(unneeded)
+			recurse = to_remove[:]; recurse.extend(unneeded)
 			for r in self.remove_unneeded_deps(recurse):
 				if not r in unneeded: unneeded.append(r)
 		return unneeded
 
-	def remove(self, package_names, verbose = False):
-		to_remove = package_names[:]
+	def remove_no_act(self, package_names):
+		to_remove = []
+		for package in [self.find(package_name) for package_name in package_names]:
+			if not package.installed(): print 'package is not installed:', package.name()
+			else: to_remove.append(package)
 		for package_name in package_names:
-			for dep_name in self.flatten_reverse_deps(package_name, installed_only = True):
-				if not dep_name in to_remove: to_remove.append(dep_name)
+			for reverse_dep in self.flatten_reverse_deps(package_name):
+				if not reverse_dep in to_remove: to_remove.append(reverse_dep)
+		print 'would remove:', ', '.join([p.name() for p in to_remove])
+		print 'would remove no-more used:', ', '.join([p.name() for p in self.remove_unneeded_deps(to_remove)])
 
+	def remove(self, package_names, verbose = False):
+		to_remove = []
+		for package in [self.find(package_name) for package_name in package_names]:
+			if not package.installed(): print 'package is not installed:', package.name()
+			else: to_remove.append(package)
+		for package in to_remove:
+			for reverse_dep in self.flatten_reverse_deps(package_name):
+				if not reverse_dep in to_remove: to_remove.append(reverse_dep)
 		to_remove.extend(self.remove_unneeded_deps(to_remove))
-				
-		for package in [self.find(name) for name in to_remove]:
+		for package in to_remove:
+			print 'removing', package.name(), package.version()
 			state_dir = self.state_dir(package)
-
-			if not os.path.exists(state_dir):
-				print 'package is not installed:', package.name()
-				continue
-
-			print 'removing', package.name()
-
 			save = os.getcwd()
 			os.chdir(state_dir)
 			try:
@@ -362,9 +332,15 @@ class Packages:
 				finally: f.close()
 				shutil.rmtree(state_dir)
 			finally: os.chdir(save)
+			try:
+				del self._packages[package.name()]
+				del self._installed_packages[package.name()]
+			except KeyError: pass
+			try: del self._all_installed_packages
+			except AttributeError: pass
 
 	def clean_build(self, package_names, all, dest_dir, download):
-		for package in [self.find(name) for name in package_names]:
+		for package in [self.find(package_name) for package_name in package_names]:
 			build_dir = self.build_dir(package)
 			if all:
 				if os.path.exists(build_dir):
@@ -390,19 +366,57 @@ class Packages:
 						print 'removing', dest
 						shutil.rmtree(dest)
 				try: os.rmdir(build_dir)
-				except: pass
+				except OSError: pass # directory not empty
 				else: print 'removed ', build_dir
 
 class Package:
-	def __init__(self, packages, name, version = None):
+	def __init__(self, packages, name):
+		self._packages = packages
 		self._name = name
+	def packages(self): return self._packages
+	def name(self): return self._name
+	def version(self): pass
+	def description(self): pass
+	def deps(self): pass
+
+class InstalledPackage(Package):
+	def installed(self): return True
+	def read_state_file(self, f): return self._packages.read_state_file(self.name(), f)
+	def version(self):
+		try: return self._version
+		except AttributeError: self._version = self.read_state_file('version')[0]
+		return self._version
+	def description(self):
+		try: return self._description
+		except AttributeError: self._description = self.read_state_file('description')[0]
+		return self._description
+	def auto(self):
+		try: return self._auto
+		except AttributeError: self._auto = self.read_state_file('installed')[0] == 'auto'
+		return self._auto
+	def deps(self):
+		try: return self._deps
+		except AttributeError:
+			self._deps = []
+			for dep in self.read_state_file('direct-dependencies'): self._deps.append(dep.split(' ')[0])
+			return self._deps
+
+class PackageRecipee(Package):
+	def installed(self): return False
+	def __init__(self, packages, name, version = None):
+		Package.__init__(self, packages, name)
 		self._version = version
 		self._deps = []
-		self._packages = packages
-		packages.add(self)
-		
-	def packages(self): return self._packages
-	
+
+	def version(self): return self._version
+	def description(self): return '(no description)'
+	def deps(self): return self._deps
+	def add_dep(self, package_name): self._deps.append(package_name)
+	def download(self): pass
+	def build(self): pass
+	def continue_build(self): self.build()
+	def clean_build(self): pass
+
 	def mirror(self, name): return self._packages.mirror(name)
 	def http_get(self, url): self.shell('wget -c http://' + url)
 	def target(self): return self._packages.target()
@@ -412,19 +426,6 @@ class Package:
 	def gsed(self): return self._packages.gsed()
 	def shell(self, script): return self._packages.shell(script)
 	
-	def name(self): return self._name
-	def version(self): return self._version
-	def deps(self): return self._deps
-	def add_dep(self, name): self._deps.append(name)
-
-	def description(self): return '(no description)'
-	def download(self): pass
-	def build(self): pass
-	def continue_build(self):
-		self.download()
-		self.build()
-	def clean_build(self): pass
-
 def import_package(filename):
 	path, name = os.path.split(filename)
 	name, ext  = os.path.splitext(name)

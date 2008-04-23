@@ -1,11 +1,11 @@
 import os, shutil
-from packages import Package
+from packages import PackageRecipee
 
 def package(packages): return MingwRuntime(packages)
 
-class MingwRuntime(Package):
+class MingwRuntime(PackageRecipee):
 	def __init__(self, packages):
-		Package.__init__(self, packages, 'mingw_runtime', '3.14')
+		PackageRecipee.__init__(self, packages, 'mingw_runtime', '3.14')
 		
 	def _tarball(self): return 'mingw-runtime-' + self.version() + '.tar.gz'
 

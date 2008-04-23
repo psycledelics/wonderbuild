@@ -1,11 +1,11 @@
 import os, shutil
-from packages import Package
+from packages import PackageRecipee
 
 def package(packages): return PkgConfig(packages)
 
-class PkgConfig(Package):
+class PkgConfig(PackageRecipee):
 	def __init__(self, packages):
-		Package.__init__(self, packages, 'pkg_config', '0.22')
+		PackageRecipee.__init__(self, packages, 'pkg_config', '0.22')
 		self.add_dep('gcc')
 
 	def description(self): return 'manage compile and link flags for libraries'

@@ -1,11 +1,11 @@
 import os, shutil
-from packages import Package
+from packages import PackageRecipee
 
 def package(packages): return Gcc(packages)
 
-class Gcc(Package):
+class Gcc(PackageRecipee):
 	def __init__(self, packages):
-		Package.__init__(self, packages, 'gcc', '4.2.1-2')
+		PackageRecipee.__init__(self, packages, 'gcc', '4.2.1-2')
 		self.add_dep('binutils')
 		self.add_dep('mingw_runtime')
 		self.add_dep('w32api')
