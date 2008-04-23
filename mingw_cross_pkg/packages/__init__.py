@@ -108,17 +108,18 @@ class Packages:
 		print '| Installed=Auto/User'
 		print '|/ ' + 'Name'.ljust(name_width) + 'Version'.ljust(version_width) + 'Description'
 		print '++-' + '=' * (name_width - 1) + '-' + '=' * (version_width - 1) + '-' + '=' * description_width
-		package_names = {} # {name: [installed, recipee]}
-		for package in self.installed_packages(): package_names[package.name()] = [package]
+		package_names = {} # {name: (installed, recipee)}
+		for package in self.installed_packages(): package_names[package.name()] = (package, None)
 		for package in self.package_recipees():
 			try: packages = package_names[package.name()]
-			except KeyError: package_names[package.name()] = [package]
+			except KeyError: package_names[package.name()] = (None, package)
 			else:
-				if packages[0].version() != package.version(): packages.append(package) # don't list if same version is installed
+				if packages[0].version() != package.version(): packages[1] = package # don't list if same version is installed
 		sorted = package_names.items()
 		sorted.sort()
 		for packages in [items[1] for items in sorted]:
-			for package in packages:
+			for package in packages: # (installed, recipee)
+				if package is None: continue
 				if not package.installed(): installed = 'n '
 				elif package.auto(): installed = 'ia'
 				else: installed = 'iu'
@@ -127,6 +128,21 @@ class Packages:
 					package.version().ljust(version_width) + \
 					package.description().ljust(description_width)
 				
+	def need_rebuild(self):
+		name_width = 35; version_width = 27
+		print 'Package'.ljust(name_width) + 'Depends on'.ljust(name_width) + 'Version when built'.ljust(version_width) + 'Version installed'.ljust(version_width)
+		print ('=' * (name_width - 1) + '-') * 2 + '=' * (version_width - 1) + '-' + '=' * (version_width - 1)
+		for package in self.installed_packages():
+			for built_dep in self.read_state_file(package.name(), 'recursed-dependencies'):
+				built_dep = built_dep.split(' ')
+				installed_dep = self.find_installed(built_dep[0])
+				if installed_dep.version() != built_dep[1]:
+					print \
+						package.name().ljust(name_width) + \
+						built_dep[0].ljust(name_width) + \
+						built_dep[1].ljust(version_width) + \
+						installed_dep.version().ljust(version_width)
+
 	def direct_reverse_deps(self, package_name, installed_only = True):
 		result = []
 		for package in self.installed_packages():
