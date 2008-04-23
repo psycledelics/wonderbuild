@@ -41,7 +41,9 @@ def usage(out = sys.stderr, command = None):
 		out.write(
 			'Usage: install [--continue | --rebuild | --no-download | --no-act] <package...>\n'
 			'  installs the packages, and their dependencies.\n'
-			'  Packages given as arguments will be marked as user, unless the --rebuild option is present.\n'
+			'  Packages given as arguments will be marked as user,\n'
+			'  unless the --rebuild option is present and the package was already installed.\n'
+			'\n'
 			'  --no-act         do not really install, just show what would be done.\n'
 			'  --skip-download  skip the download step.\n'
 			'  --rebuild        rebuild the packages given as arguments.\n'
@@ -51,6 +53,7 @@ def usage(out = sys.stderr, command = None):
 		out.write(
 			'Usage: remove [--verbose | --no-act] <package...>\n'
 			'  removes the packages, dependent packages, and packages marked auto that become no longer needed.\n'
+			'\n'
 			'  --no-act   do not really remove, just show what would be done.\n'
 			'  --verbose  show what files and dirs are removed.\n'
 			'\n')
@@ -65,12 +68,14 @@ def usage(out = sys.stderr, command = None):
 		out.write(
 			'Usage: reverse-depends [--installed-only] <package...>\n'
 			'  shows the reverse dependencies of the packages.\n'
+			'\n'
 			'  --installed-only  only show installed packages.\n'
 			'\n')
 	if command is None or command == 'clean-build':
 		out.write(
 			'Usage: clean-build [--download | --destdir | --all] <package...>\n'
 			'  cleans the build dirs of packages.\n'
+			'\n'
 			'  --dest-dir  also clean the dest dir.\n'
 			'  --download  also clean the downloaded files.\n'
 			'  --all       wipe out the whole build dir altogether (same effect as --dest-dir --download).\n'

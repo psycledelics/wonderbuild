@@ -103,23 +103,22 @@ class Packages:
 			return self._all_package_recipees
 
 	def list(self):
-		flag_width = 3; name_width = 35; version_width = 27; description_width = 40
+		flag_width = 3; name_width = 35; version_width = 27; description_width = 50
 		print 'Status=Not/Installed'
 		print '| Installed=Auto/User'
 		print '|/ ' + 'Name'.ljust(name_width) + 'Version'.ljust(version_width) + 'Description'
 		print '++-' + '=' * (name_width - 1) + '-' + '=' * (version_width - 1) + '-' + '=' * description_width
-		package_names = {} # {name: (installed, recipee)}
-		for package in self.installed_packages(): package_names[package.name()] = (package, None)
+		package_names = {} # {name: [installed, recipee]}
+		for package in self.installed_packages(): package_names[package.name()] = [package]
 		for package in self.package_recipees():
 			try: packages = package_names[package.name()]
-			except KeyError: package_names[package.name()] = (None, package)
+			except KeyError: package_names[package.name()] = [package]
 			else:
-				if packages[0].version() != package.version(): packages[1] = package # don't list if same version is installed
+				if packages[0].version() != package.version(): packages.append(package) # don't list if same version is installed
 		sorted = package_names.items()
 		sorted.sort()
 		for packages in [items[1] for items in sorted]:
-			for package in packages: # (installed, recipee)
-				if package is None: continue
+			for package in packages: # [installed, recipee]
 				if not package.installed(): installed = 'n '
 				elif package.auto(): installed = 'ia'
 				else: installed = 'iu'
@@ -232,23 +231,43 @@ class Packages:
 				state_dir = self.state_dir(package)
 				def write_state_file(f, text):
 					f = file(os.path.join(state_dir, f), 'w')
-					try:
-						f.write(text)
-						f.write('\n')
+					try: f.write(text); f.write('\n')
 					finally: f.close()
 
-				rebuild_this_package = rebuild and package.name() in package_names
-				if rebuild_this_package or not os.path.exists(os.path.join(state_dir, 'installed')):
-					package = self.find_recipee(package.name())
+				if package.name() in package_names:
+					if not rebuild: installed = 'user'
+					elif package.installed():
+						if package.auto(): installed = 'auto'
+						else: installed = 'user'
+					else: installed = 'user'
+				elif package.installed():
+					if package.auto(): installed = 'auto'
+					else: installed = 'user'
+				else: installed = 'auto'
 
+				if package.installed() and not rebuild:
+					if package.name() in package_names: print 'already installed:', package.name()
+				else:
+					was_installed = package.installed()
+					if was_installed: package = self.find_recipee(package.name())
 					self._dest_dir = os.path.join(os.getcwd(), 'dest')
 					if not os.path.exists('build'): os.mkdir('build')
-					built = os.path.exists('built')
-					if not built or rebuild_this_package:
-
+					new_build = rebuild and package.name() in package_names
+					if not new_build: new_build = not os.path.exists('built')
+					if not new_build:
+						# compare build-time versions with installed ones
+						f = file('built')
+						try:
+							while True:
+								l = f.readline().rstrip()
+								if not l: break
+								built_dep = l.split(' ')
+								installed_dep = self.find_installed(built_dep[0])
+								if installed_dep.version() != built_dep[1]: new_build = True; break
+						finally: f.close()
+					if new_build:
 						print 'building', package.name(), package.version()
-						
-						if built: os.unlink('built')
+						if os.path.exists('built'): os.unlink('built')
 						os.chdir('build')
 						if not continue_build:
 							if not skip_download: package.download()
@@ -256,31 +275,28 @@ class Packages:
 						else: 
 							package.continue_build()
 							continue_build = False
-					file(os.path.join(build_dir, 'built'), 'w').close()
+						f = file(os.path.join(build_dir, 'built'), 'w')
+						try:
+							for dep in [d.name() + ' ' + d.version() for d in self.flatten_deps(package.deps())]:
+								f.write(dep); f.write('\n')
+						finally: f.close()
 					if not os.path.exists(self._dest_dir): raise Exception('no dest dir after building package: ' + package.name())
 
-					print 'installing', package.name(), package.version()
-
-					if not os.path.exists(state_dir): os.mkdir(state_dir)
-					os.chdir(self._dest_dir + self._prefix)
-					verbose = False
-					self.shell('find . ! -type d -exec md5sum {} \\; > ' + os.path.join(state_dir, 'files'), verbose)
-					self.shell('find . -mindepth 1 -type d | sort -r > ' + os.path.join(state_dir, 'dirs'), verbose)
-					self.shell('cp -R * ' + self._prefix, verbose)
-					write_state_file('name', package.name())
-					write_state_file('version', package.version())
-					write_state_file('description', package.description())
-					write_state_file('direct-dependencies', '\n'.join([d.name() + ' ' + d.version() for d in [self.find_installed(n) for n in package.deps()]]))
-					write_state_file('recursed-dependencies', '\n'.join([d.name() + ' ' + d.version() for d in self.flatten_deps(package.deps())]))
-					if package.name() in package_names: installed = 'user'
-					else: installed = 'auto'
-					write_state_file('installed', installed)
-					try: del self._packages[package.name()]
-					except KeyError: pass
-
-				elif package.name() in package_names: print 'already installed:', package.name()
-				
-				if not rebuild and package.name() in package_names: write_state_file('installed', 'user')
+					if not was_installed or new_build:
+						print 'installing', package.name(), package.version()
+						if was_installed: self.remove_one(package)
+						os.mkdir(state_dir)
+						os.chdir(self._dest_dir + self._prefix)
+						self.shell('find . ! -type d -exec md5sum {} \\; > ' + os.path.join(state_dir, 'files'), verbose = False)
+						self.shell('find . -mindepth 1 -type d | sort -r > ' + os.path.join(state_dir, 'dirs'), verbose = False)
+						self.shell('cp -R * ' + self._prefix, verbose = False)
+						write_state_file('version', package.version())
+						write_state_file('description', package.description())
+						write_state_file('direct-dependencies', '\n'.join([d.name() + ' ' + d.version() for d in [self.find_installed(n) for n in package.deps()]]))
+						write_state_file('recursed-dependencies', '\n'.join([d.name() + ' ' + d.version() for d in self.flatten_deps(package.deps())]))
+						try: del self._packages[package.name()]
+						except KeyError: pass
+				write_state_file('installed', installed)
 			finally: os.chdir(save)
 
 	def remove_unneeded_deps(self, to_remove):
@@ -340,6 +356,9 @@ class Packages:
 			if not package in to_remove: to_remove.append(package)
 		for package in to_remove:
 			print 'removing', package.name(), package.version()
+			self.remove_one(package)
+
+	def remove_one(self, package, verbose = False):
 			state_dir = self.state_dir(package)
 			save = os.getcwd()
 			os.chdir(state_dir)
@@ -373,7 +392,7 @@ class Packages:
 			except KeyError: pass
 			try: del self._all_installed_packages
 			except AttributeError: pass
-
+	
 	def clean_build(self, package_names, all, dest_dir, download):
 		for package in [self.find(package_name) for package_name in package_names]:
 			build_dir = self.build_dir(package)
