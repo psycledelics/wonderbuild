@@ -254,7 +254,7 @@ class Packages:
 					if not os.path.exists('build'): os.mkdir('build')
 					new_build = rebuild and package.name() in package_names
 					if not new_build: new_build = not os.path.exists('built')
-					if not new_build:
+					if not new_build and rebuild:
 						# compare build-time versions with installed ones
 						f = file('built')
 						try:
