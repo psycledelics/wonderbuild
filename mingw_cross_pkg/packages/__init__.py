@@ -239,13 +239,14 @@ class Packages:
 
 				rebuild_this_package = rebuild and package.name() in package_names
 				if rebuild_this_package or not os.path.exists(os.path.join(state_dir, 'installed')):
+					package = self.find_recipee(package.name())
 
 					self._dest_dir = os.path.join(os.getcwd(), 'dest')
 					if not os.path.exists('build'): os.mkdir('build')
 					built = os.path.exists('built')
 					if not built or rebuild_this_package:
 
-						print 'building ', package.name(), package.version()
+						print 'building', package.name(), package.version()
 						
 						if built: os.unlink('built')
 						os.chdir('build')
