@@ -97,7 +97,6 @@ SOURCES += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/mixer.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/nativehost.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternevent.cpp \
-	$$PSYCLE_CORE_DIR/src/psycle/core/patternpool.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternline.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternpool.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternsequence.cpp \
