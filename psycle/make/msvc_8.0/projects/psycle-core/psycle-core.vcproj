@@ -300,11 +300,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\internal_host.cpp"
+					RelativePath="..\..\..\..\src\psycle\core\internalhost.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\internal_host.hpp"
+					RelativePath="..\..\..\..\src\psycle\core\internalhost.hpp"
 					>
 				</File>
 				<File
