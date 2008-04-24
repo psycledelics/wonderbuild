@@ -219,8 +219,7 @@ class Packages:
 	def install(self, package_names, continue_build = False, rebuild = False, skip_download = False):
 		for package in self.install_recursed_deps([self.find_package(package_name) for package_name in package_names]):
 			built_package = BuiltPackage(self, package.name())
-			if package.installed():
-				installed_package = package
+			if package.installed(): installed_package = package
 			else: installed_package = InstalledPackage(self, built_package.name())
 			built_package.make_state_dir()
 			save = os.getcwd()
