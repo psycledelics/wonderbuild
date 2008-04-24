@@ -240,8 +240,7 @@ class Packages:
 				if package.installed() and not rebuild:
 					if package.name() in package_names: print 'already installed:', package.name(), package.version()
 				else:
-					was_installed = package.installed()
-					if was_installed: package_recipee = self.find_package_recipee(package.name())
+					if package.installed(): package_recipee = self.find_package_recipee(package.name())
 					else: package_recipee = package
 					new_build = rebuild and package_recipee.name() in package_names
 					if not new_build: new_build = not built_package.state_exists('built') or not built_package.state_exists('dest')
@@ -264,9 +263,9 @@ class Packages:
 						built_package.write_state('recursed-dependencies', '\n'.join([d.name() + ' ' + d.version() for d in package_recipee.recursed_deps()]))
 						built_package.write_state('built', None)
 
-					if not was_installed or new_build:
+					if not package.installed() or new_build:
 						print 'installing', built_package.name(), built_package.version()
-						if was_installed: self.remove_one(installed_package)
+						if package.installed(): self.remove_one(installed_package)
 						installed_package.make_state_dir()
 						os.chdir(built_package.state_dir('dest') + self._prefix)
 						self.shell('find . ! -type d -exec md5sum {} \\; > ' + installed_package.state_dir('files'), verbose = False)
