@@ -384,6 +384,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\core\nativehost.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\core\nativehostr.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\core\patternevent.cpp"
 					>
 				</File>

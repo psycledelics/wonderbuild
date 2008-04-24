@@ -38,6 +38,7 @@ HEADERS += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/machinekey.hpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/mersennetwister.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/mixer.h \
+	$$PSYCLE_CORE_DIR/src/psycle/core/nativehost.hpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternevent.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternline.h \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternpool.h \
@@ -96,6 +97,7 @@ SOURCES += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/mixer.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/nativehost.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternevent.cpp \
+	$$PSYCLE_CORE_DIR/src/psycle/core/patternpool.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternline.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternpool.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternsequence.cpp \
