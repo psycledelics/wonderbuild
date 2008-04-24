@@ -225,17 +225,6 @@ class Packages:
 			save = os.getcwd()
 			os.chdir(built_package.state_dir())
 			try:
-				if package.name() in package_names:
-					if not rebuild: installed = 'user'
-					elif package.installed():
-						if package.auto(): installed = 'auto'
-						else: installed = 'user'
-					else: installed = 'user'
-				elif package.installed():
-					if package.auto(): installed = 'auto'
-					else: installed = 'user'
-				else: installed = 'auto'
-
 				if package.installed() and not rebuild:
 					if package.name() in package_names: print 'already installed:', package.name(), package.version()
 				else:
@@ -276,6 +265,17 @@ class Packages:
 							shutil.copy(built_package.state_dir(state_name), installed_package.state_dir())
 						try: del self._packages[package.name()]
 						except KeyError: pass
+
+				if package.name() in package_names:
+					if not rebuild: installed = 'user'
+					elif package.installed():
+						if package.auto(): installed = 'auto'
+						else: installed = 'user'
+					else: installed = 'user'
+				elif package.installed():
+					if package.auto(): installed = 'auto'
+					else: installed = 'user'
+				else: installed = 'auto'
 				installed_package.write_state('installed', installed)
 			finally: os.chdir(save)
 
