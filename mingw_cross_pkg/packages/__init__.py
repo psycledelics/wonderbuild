@@ -249,7 +249,7 @@ class Packages:
 						print 'building', package_recipee.name(), package_recipee.version()
 						built_package.remove_state('built')
 						built_package.make_state_dir('build')
-						os.chdir('build')
+						os.chdir(built_package.state_dir('build'))
 						self._dest_dir = built_package.state_dir('dest') # transmit dest dir to package
 						if not continue_build:
 							if not skip_download: package_recipee.download()
