@@ -272,7 +272,7 @@ class Packages:
 						if False: shutil.copytree(os.curdir, self._prefix, symlinks = True)
 							# note: shutil.copytree is not as good (rated "example code" in the documentation)
 						else: self.shell('cp -R * ' + self._prefix, verbose = False)
-						for state_name in ['version', 'description', 'direct-dependencies', 'recursed-dependencies']:
+						for state_name in ('version', 'description', 'direct-dependencies', 'recursed-dependencies'):
 							shutil.copy(built_package.state_dir(state_name), installed_package.state_dir())
 						try: del self._packages[package.name()]
 						except KeyError: pass

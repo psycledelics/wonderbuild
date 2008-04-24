@@ -7,7 +7,7 @@ version = '0.1'
 
 packages = Packages()
 
-commands = ['help', 'version', 'list', 'show', 'install', 'remove', 'need-rebuild', 'reverse-depends', 'clean-build']
+commands = ('help', 'version', 'list', 'show', 'install', 'remove', 'need-rebuild', 'reverse-depends', 'clean-build')
 
 def usage(out = sys.stderr, command = None):
 	if command is None:
