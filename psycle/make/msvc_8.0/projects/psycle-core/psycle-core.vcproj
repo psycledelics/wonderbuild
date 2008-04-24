@@ -268,6 +268,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\core\filterhelper.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\core\fwd.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\core\helpers.cpp"
 					>
 				</File>
@@ -292,6 +300,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\core\internal_host.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\core\internal_host.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\core\internal_machines.cpp"
 					>
 				</File>
@@ -301,6 +317,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\core\ladspa.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\core\ladspahost.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\core\ladspahost.hpp"
 					>
 				</File>
 				<File
@@ -320,6 +344,30 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\core\machinehost.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\core\machinehost.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\core\machinefactory.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\core\machinefactory.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\core\machinekey.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\core\machinekey.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\core\mersennetwister.cpp"
 					>
 				</File>
@@ -328,15 +376,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\pattern.h"
+					RelativePath="..\..\..\..\src\psycle\core\mixer.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\patterndata.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\core\patterndata.h"
+					RelativePath="..\..\..\..\src\psycle\core\mixer.h"
 					>
 				</File>
 				<File
@@ -353,6 +397,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\core\patternline.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\core\patternpool.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\core\patternpool.h"
 					>
 				</File>
 				<File
@@ -392,11 +444,27 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\core\plugincatcher.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\core\plugincatcher.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\core\pluginfinder.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\core\pluginfinder.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\core\plugininfo.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\core\plugininfo.h"
 					>
 				</File>
 				<File
@@ -440,11 +508,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\core\psyfilter.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\core\psyfilter.h"
+					RelativePath="..\..\..\..\src\psycle\core\psyfilterbase.h"
 					>
 				</File>
 				<File
@@ -477,6 +541,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\core\singlepattern.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\core\songserializer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\core\songserializer.h"
 					>
 				</File>
 				<File
