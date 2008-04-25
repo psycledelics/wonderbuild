@@ -72,7 +72,6 @@ HEADERS += \
 	$$PSYCLE_CORE_DIR/src/psycle/core/helpers/xml.h
 	
 SOURCES += \
-	$$PSYCLE_CORE_DIR/src/psycle/core/psycleCorePch.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/binread.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/convert_internal_machines.cpp \
 	$$PSYCLE_CORE_DIR/src/psycle/core/datacompression.cpp \
