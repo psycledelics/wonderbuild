@@ -5,4 +5,4 @@ win32-g++{
 	
 	LIBS *= -ljdkmidi
 	}
-# supposing that under unix we have /usr/lib and usr/include
+#	 supposing that under unix we have /usr/lib and usr/include
