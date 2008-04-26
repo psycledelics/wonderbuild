@@ -103,7 +103,7 @@ if False:
 			'name': 'dummy',
 			'category': None,
 			'slavenames': slaves + microsoft_slaves,
-			'builddir': svn_dir + 'dummy',
+			'builddir': 'dummy',
 			'factory': factory.BuildFactory(
 				[
 					factory.s(step.ShellCommand, command='echo dummy', locks = [])
@@ -119,6 +119,29 @@ if False:
 			builderNames = ['dummy']
 		)
 	)
+
+BuildmasterConfig['builders'].append(
+	{
+		'name': 'clean',
+		'category': None,
+		'slavenames': slaves + microsoft_slaves,
+		'builddir': 'clean',
+		'factory': factory.BuildFactory(
+			[
+				factory.s(step.ShellCommand, command="find .. -name '++*' -exec rm -Rf {} ';'", locks = [svn_lock, compile_lock])
+			]
+		)
+	}
+)
+from buildbot.scheduler import Periodic as PeriodicScheduler
+BuildmasterConfig['schedulers'].append(
+	PeriodicScheduler(
+		name = 'clean',
+		branch = None,
+		periodicBuildTimer = 60 * 60 * 24 * 30, # 30 days
+		builderNames = ['clean']
+	)
+)
 
 BuildmasterConfig['builders'].append(
 	{
