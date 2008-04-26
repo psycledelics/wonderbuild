@@ -1,3 +1,5 @@
+set MAKEFLAGS=-j8
+rem set SCONSFLAGS=-j8
 set LIB=
 set INCLUDE=
 

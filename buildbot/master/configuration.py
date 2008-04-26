@@ -99,30 +99,6 @@ class Upload(step.ShellCommand):
 
 BuildmasterConfig['builders'].append(
 	{
-		'name': 'clean',
-		'category': None,
-		'slavenames': slaves + microsoft_slaves,
-		'builddir': 'clean',
-		'factory': factory.BuildFactory(
-			[
-				factory.s(step.ShellCommand, command='test -d build || mkdir build), 
-				factory.s(step.ShellCommand, command="find ../.. -name '++*' -exec rm -Rf {} ';'", locks = [svn_lock, compile_lock])
-			]
-		)
-	}
-)
-from buildbot.scheduler import Periodic as PeriodicScheduler
-BuildmasterConfig['schedulers'].append(
-	PeriodicScheduler(
-		name = 'clean',
-		branch = None,
-		periodicBuildTimer = 60 * 60 * 24 * 30, # 30 days
-		builderNames = ['clean']
-	)
-)
-
-BuildmasterConfig['builders'].append(
-	{
 		'name': 'universalis',
 		'category': 'psycle',
 		'slavenames': slaves,
@@ -757,3 +733,76 @@ if True:
 			)
 		)
 	)
+
+##################################### clean builders ######################################
+
+class Clean(step.ShellCommand):
+	def __init__(self, *args, **kwargs):
+		kwargs['workdir'] = '..'
+		kwargs['locks'] = [svn_lock, compile_lock]
+		step.ShellCommand.__init__(self, *args, **kwargs)
+	name = 'clean'
+	description = ['cleaning']
+	descriptionDone = ['cleaned']
+
+clean_factory = factory.BuildFactory(
+	[
+		factory.s(Clean, command='find . -ignore_readdir_race -name ++\\* -exec rm -Rf {} \\;')
+	]
+)
+
+clean_factory_microsoft = factory.BuildFactory(
+	[
+		factory.s(Clean, command="del /s /q ++*")
+	]
+)
+
+BuildmasterConfig['builders'].append(
+	{
+		'name': 'clean.factoid',
+		'category': None,
+		'slavenames': ['factoid'],
+		'builddir': 'clean.factoid',
+		'factory': clean_factory
+	}
+)
+
+BuildmasterConfig['builders'].append(
+	{
+		'name': 'clean.anechoid',
+		'category': None,
+		'slavenames': ['anechoid'],
+		'builddir': 'clean.anechoid',
+		'factory': clean_factory
+	}
+)
+
+BuildmasterConfig['builders'].append(
+	{
+		'name': 'clean.winux',
+		'category': None,
+		'slavenames': ['winux'],
+		'builddir': 'clean.winux',
+		'factory': clean_factory_microsoft
+	}
+)
+
+BuildmasterConfig['builders'].append(
+	{
+		'name': 'clean.alk',
+		'category': None,
+		'slavenames': ['alk'],
+		'builddir': 'clean.alk',
+		'factory': clean_factory_microsoft
+	}
+)
+
+from buildbot.scheduler import Periodic as PeriodicScheduler
+BuildmasterConfig['schedulers'].append(
+	PeriodicScheduler(
+		name = 'clean',
+		branch = None,
+		periodicBuildTimer = 60 * 60 * 24 * 30, # 30 days
+		builderNames = ['clean.factoid', 'clean.anechoid', 'clean.winux', 'clean.alk']
+	)
+)
