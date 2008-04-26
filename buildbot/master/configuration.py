@@ -49,6 +49,8 @@ BuildmasterConfig['bots'] = [
 	('alk', 'alk')
 ]
 
+BuildmasterConfig['debugPassword'] = 'debugpassword'
+
 BuildmasterConfig['builders'] = []
 BuildmasterConfig['schedulers'] = []
 
@@ -75,6 +77,8 @@ compile_lock = locks.SlaveLock('compile')
 from buildbot.process import factory, step
 from buildbot.status.builder import SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION
 
+##################################### custom build steps ######################################
+
 class PolicyCheck(step.Test):
 	name = 'policy-check'
 	description = ['checking policy']
@@ -85,17 +89,13 @@ class PolicyCheck(step.Test):
 		return SUCCESS
 	warnOnWarnings = True
 
-class LintCheck(step.Test):
-	name = 'lint-check'
-	description = ['checking lint']
-	descriptionDone = ['lint']
-	command = ['true']
-
 class Upload(step.ShellCommand):
 	name = 'upload'
 	description = ['uploading']
 	descriptionDone = ['uploaded']
 	command = ['echo download the package at http://psycle.sourceforge.net/packages']
+
+##################################### universalis builders ######################################
 
 BuildmasterConfig['builders'].append(
 	{
@@ -107,7 +107,7 @@ BuildmasterConfig['builders'].append(
 			[
 				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'scons --directory=universalis packageneric__debug=1', locks = [compile_lock]),
+				factory.s(step.Compile, command = 'scons --directory=universalis', locks = [compile_lock]),
 				factory.s(step.Test, command = './++packageneric/variants/default/stage-install/usr/local/bin/universalis_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
 			]
 		)
@@ -133,7 +133,7 @@ BuildmasterConfig['builders'].append(
 			[
 				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy diversalis universalis', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=universalis packageneric__debug=1', locks = [compile_lock]),
+				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=universalis', locks = [compile_lock]),
 				factory.s(step.Test, command = 'call ..\\..\\..\\dev-pack && .\\++packageneric\\variants\\default\\stage-install\\usr\\local\\bin\\universalis_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
 			]
 		)
@@ -149,6 +149,8 @@ BuildmasterConfig['schedulers'].append(
 	)
 )
 
+##################################### freepsycle builders ######################################
+
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'freepsycle',
@@ -160,7 +162,7 @@ BuildmasterConfig['builders'].append(
 				#factory.s(step.SVN, retry = (600, 3), mode = 'update', baseURL = svn_url, defaultBranch = 'trunk', locks = [svn_lock]),
 				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis freepsycle', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'scons --directory=freepsycle packageneric__debug=1', locks = [compile_lock])
+				factory.s(step.Compile, command = 'scons --directory=freepsycle', locks = [compile_lock])
 			]
 		)
 	}
@@ -185,7 +187,7 @@ BuildmasterConfig['builders'].append(
 			[
 				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy diversalis universalis freepsycle', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=freepsycle packageneric__debug=1', locks = [compile_lock])
+				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=freepsycle', locks = [compile_lock])
 			]
 		)
 	}
@@ -215,6 +217,8 @@ BuildmasterConfig['builders'].append(
 		)
 	}
 )
+
+##################################### psycle-core builders ######################################
 
 BuildmasterConfig['builders'].append(
 	{
@@ -266,6 +270,8 @@ BuildmasterConfig['schedulers'].append(
 	)
 )
 
+##################################### psycle-player builders ######################################
+
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'psycle-player',
@@ -315,6 +321,8 @@ BuildmasterConfig['schedulers'].append(
 		fileIsImportant = lambda change: filter(change, ['psycle-player/', 'psycle-core/', 'psycle-audiodrivers/'])
 	)
 )
+
+##################################### qpsycle builders ######################################
 
 BuildmasterConfig['builders'].append(
 	{
@@ -382,6 +390,8 @@ BuildmasterConfig['builders'].append(
 	}
 )
 
+##################################### psycle-plugins builders ######################################
+
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'psycle-plugins',
@@ -391,7 +401,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(step.Compile, command = 'scons --directory=psycle-plugins packageneric__debug=1', locks = [compile_lock])
+				factory.s(step.Compile, command = 'scons --directory=psycle-plugins', locks = [compile_lock])
 			]
 		)
 	}
@@ -415,7 +425,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=psycle-plugins packageneric__debug=1', locks = [compile_lock])
+				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=psycle-plugins', locks = [compile_lock])
 			]
 		)
 	}
@@ -446,6 +456,8 @@ BuildmasterConfig['builders'].append(
 	}
 )
 
+##################################### psycle-helpers builders ######################################
+
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'psycle-helpers',
@@ -456,7 +468,7 @@ BuildmasterConfig['builders'].append(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis psycle-helpers', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'scons --directory=psycle-helpers packageneric__debug=0 packageneric__test=1', locks = [compile_lock]),
+				factory.s(step.Compile, command = 'scons --directory=psycle-helpers', locks = [compile_lock]),
 				factory.s(step.Test, command = './++packageneric/variants/default/stage-install/usr/local/bin/psycle-helpers_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
 			]
 		)
@@ -482,7 +494,7 @@ BuildmasterConfig['builders'].append(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy diversalis universalis psycle-helpers', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=psycle-helpers packageneric__debug=0 packageneric__test=1', locks = [compile_lock]),
+				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=psycle-helpers', locks = [compile_lock]),
 				factory.s(step.Test, command = 'call ..\\..\\..\\dev-pack && .\\++packageneric\\variants\\default\\stage-install\\usr\\local\\bin\\psycle-helpers_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
 			]
 		)
@@ -498,6 +510,8 @@ BuildmasterConfig['schedulers'].append(
 	)
 )
 
+##################################### psycle.msvc builder ######################################
+
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'psycle.msvc',
@@ -507,7 +521,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack _ msvc-solution && call .\\psycle\\make\\msvc_8.0\\build debug', locks = [compile_lock])
+				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack _ msvc-solution && call .\\psycle\\make\\msvc_8.0\\build release', locks = [compile_lock])
 			]
 		)
 	}
@@ -522,12 +536,18 @@ BuildmasterConfig['schedulers'].append(
 	)
 )
 
+##################################### statuses ######################################
+
 BuildmasterConfig['status'] = []
 
 categories = None #['psycle', 'zzub']
 
+##################################### waterfall http status ######################################
+
 from buildbot.status.html import Waterfall
 BuildmasterConfig['status'].append(Waterfall(http_port = 8010, css = 'waterfall.css', robots_txt = 'robots.txt', categories = categories))
+
+##################################### irc status ######################################
 
 from buildbot.status.words import IRC as BaseIRC, IrcStatusBot as BaseIrcStatusBot, IrcStatusFactory
 
@@ -638,9 +658,7 @@ decent_efnet_irc_server = 'irc.efnet.net'
 BuildmasterConfig['status'].append(IRC(host = decent_efnet_irc_server, nick = 'buildborg', channels = ['#psycle'], categories = categories))
 BuildmasterConfig['status'].append(IRC(host = 'irc.freenode.net', nick = 'buildborg', channels = ['#psycle', '#aldrin'], categories = categories))
 
-BuildmasterConfig['debugPassword'] = 'debugpassword'
-
-##################################### non-psycle stuff below ######################################
+##################################### non-psycle stuff ######################################
 if True:
 
 	microsoft_slaves_zzub = ['winux']
@@ -757,52 +775,28 @@ clean_factory_microsoft = factory.BuildFactory(
 	]
 )
 
-BuildmasterConfig['builders'].append(
-	{
-		'name': 'clean.factoid',
-		'category': None,
-		'slavenames': ['factoid'],
-		'builddir': 'clean.factoid',
-		'factory': clean_factory
-	}
-)
-
-BuildmasterConfig['builders'].append(
-	{
-		'name': 'clean.anechoid',
-		'category': None,
-		'slavenames': ['anechoid'],
-		'builddir': 'clean.anechoid',
-		'factory': clean_factory
-	}
-)
-
-BuildmasterConfig['builders'].append(
-	{
-		'name': 'clean.winux',
-		'category': None,
-		'slavenames': ['winux'],
-		'builddir': 'clean.winux',
-		'factory': clean_factory_microsoft
-	}
-)
-
-BuildmasterConfig['builders'].append(
-	{
-		'name': 'clean.alk',
-		'category': None,
-		'slavenames': ['alk'],
-		'builddir': 'clean.alk',
-		'factory': clean_factory_microsoft
-	}
-)
-
+def append_clean_builder(slave_name, microsoft = False):
+	if microsoft: factory = clean_factory_microsoft
+	else: factory = clean_factory
+	BuildmasterConfig['builders'].append(
+		{
+			'name': 'clean.' + slave_name,
+			'category': None,
+			'slavenames': [slave_name],
+			'builddir': 'clean.' + slave_name,
+			'factory': factory
+		}
+	)
+	
+for slave in slaves: append_clean_builder(slave)
+for slave in microsoft_slaves: append_clean_builder(slave, microsoft = True)
 from buildbot.scheduler import Periodic as PeriodicScheduler
 BuildmasterConfig['schedulers'].append(
 	PeriodicScheduler(
 		name = 'clean',
 		branch = None,
 		periodicBuildTimer = 60 * 60 * 24 * 30, # 30 days
-		builderNames = ['clean.factoid', 'clean.anechoid', 'clean.winux', 'clean.alk']
+		builderNames = ['clean' + slave for slave in slaves + microsoft_slaves
 	)
 )
+
