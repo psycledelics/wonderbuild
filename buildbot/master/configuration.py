@@ -97,29 +97,6 @@ class Upload(step.ShellCommand):
 	descriptionDone = ['uploaded']
 	command = ['echo download the package at http://psycle.sourceforge.net/packages']
 
-if False:
-	BuildmasterConfig['builders'].append(
-		{
-			'name': 'dummy',
-			'category': None,
-			'slavenames': slaves + microsoft_slaves,
-			'builddir': 'dummy',
-			'factory': factory.BuildFactory(
-				[
-					factory.s(step.ShellCommand, command='echo dummy', locks = [])
-				]
-			)
-		}
-	)
-	BuildmasterConfig['schedulers'].append(
-		Scheduler(
-			name = 'dummy',
-			branch = None,
-			treeStableTimer = bunch_timer,
-			builderNames = ['dummy']
-		)
-	)
-
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'clean',
@@ -128,7 +105,8 @@ BuildmasterConfig['builders'].append(
 		'builddir': 'clean',
 		'factory': factory.BuildFactory(
 			[
-				factory.s(step.ShellCommand, command="find .. -name '++*' -exec rm -Rf {} ';'", locks = [svn_lock, compile_lock])
+				factory.s(step.ShellCommand, command='test -d build || mkdir build), 
+				factory.s(step.ShellCommand, command="find ../.. -name '++*' -exec rm -Rf {} ';'", locks = [svn_lock, compile_lock])
 			]
 		)
 	}
