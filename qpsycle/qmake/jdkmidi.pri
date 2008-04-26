@@ -1,8 +1,10 @@
-win32-g++{ 
-	message(Adding libjdkmidi)
-	LIBPATH *= $$EXTERNAL_PKG_DIR/libjdkmidi/lib
-	INCLUDEPATH *= $$EXTERNAL_PKG_DIR/libjdkmidi/include
-	
+message(Adding libjdkmidi)
+unix {
+	# supposing that under unix we have it in /usr/lib and usr/include
 	LIBS *= -ljdkmidi
-	}
-#	 supposing that under unix we have /usr/lib and usr/include
+} else:win32 { 
+	INCLUDEPATH *= $$EXTERNAL_PKG_DIR/libjdkmidi/include
+	LIBPATH *= $$EXTERNAL_PKG_DIR/libjdkmidi/lib
+	win32-g++: LIBS *= -ljdkmidi
+	else:win32-msvc*: LIBS *= jdkmidi.lib
+}
