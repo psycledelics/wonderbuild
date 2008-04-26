@@ -6,7 +6,7 @@ unix | win32-g++ {
 		PKGCONFIG += libxml++-2.6
 		DEFINES += PSYCLE__LIBXMLPP_AVAILABLE # This is used in the source to determine when to include libxml++-specific things.
 	} else {
-	  error( "Couldn't find libxml++-2.6." )
+		error( "Couldn't find libxml++-2.6." )
 	}
 }
 else {
