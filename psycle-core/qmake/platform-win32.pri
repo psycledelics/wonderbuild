@@ -39,4 +39,11 @@ win32 {
 	} else {
 		warning("Untested compiler")
 	}
+	
+	# On win32, qmake decides to feed the 'ar' command from script files (ar -M < script)
+	# whenever there are more than QMAKE_LINK_OBJECT_MAX files to put in the archive.
+	# The idea is probably to avoid reaching the command line length limit of that platform (which is?).
+	# Unfortunatly, these scripts don't allow '+' characters in paths.
+	# A quick workaround is to disable the use of scripts by setting a high-enough limit that's unlikely to be reached.
+	QMAKE_LINK_OBJECT_MAX = 10000
 }
