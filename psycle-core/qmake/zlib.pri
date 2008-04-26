@@ -3,8 +3,6 @@ else:win32 {
 	win32-g++: LIBS *= -lz
 	else: win32-msvc*: LIBS *= zlib.lib
 
-	EXTERNAL_PKG_DIR = $$TOP_SRC_DIR/external-packages
-	
 	exists($(ZLIB_DIR)) {
 		message("Existing ZLIB_DIR is $(ZLIB_DIR)")
 		ZLIB_DIR = $(ZLIB_DIR)

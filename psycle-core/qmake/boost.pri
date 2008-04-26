@@ -6,8 +6,6 @@ unix {
 	else: win32-msvc2005: LIBS *= boost_signals-vc80-mt-1_33_1.lib boost_thread-vc80-mt-1_33_1.lib
 	else: win32-msvc*: LIBS *= boost_signals-vc71-mt-1_33_1.lib boost_thread-vc71-mt-1_33_1.lib
 
-	EXTERNAL_PKG_DIR = $$TOP_SRC_DIR/external-packages
-	
 	exists($(BOOST_DIR)) {
 		message("Existing BOOST_DIR is $(BOOST_DIR)")
 		BOOST_DIR = $(BOOST_DIR)
