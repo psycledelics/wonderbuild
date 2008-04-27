@@ -14,6 +14,7 @@ isEmpty(psycle_core_included) {
 
 	PSYCLE_CORE_DIR = $$TOP_SRC_DIR/psycle-core
 
+	LIBPATH     *= $$PSYCLE_CORE_DIR/++build
 	INCLUDEPATH *= $$PSYCLE_CORE_DIR/src
 	DEPENDPATH  *= $$PSYCLE_CORE_DIR/src
 
