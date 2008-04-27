@@ -205,7 +205,14 @@ $0 =~ m%.*/(.*)$%;
 $progName = $ENV{"PACKAGENERIC__GCC"} || $1 || $0;
 
 # See if the user asked for a specific compiler.
-if($progName eq "colorgcc")
+if($progName eq $0)
+{
+	# <bohan>
+	# This happens on windows, which uses those nasty backslashes in paths,
+	# preventing all our regular expressions from working.
+	$compiler = "gcc";
+}
+elsif("$progName" eq "colorgcc")
 {
 	$compiler = "/usr/bin/gcc";
 }
@@ -248,13 +255,26 @@ if(-l $compiler and (stat $compiler)[1] == (stat $0)[1])
 $terminal = $ENV{"TERM"} || "dumb";
 
 # If it's in the list of terminal types not to color, or if
-# we're writing to something that's not a tty, don't do color.
+# we're writing to something that's not a tty terminal, don't do color.
 # <bohan>
 if(!($terminal eq "packageneric--color-pipe") && (! -t STDOUT || $nocolor{$terminal}))
 {
-	print "no colorization\n";
+	print "(no gcc colorization";
+	if(! -t STDOUT)
+	{
+		print " (stdout not a tty terminal)";
+	}
+	elsif($nocolor{$terminal})
+	{
+		print " (dumb tty terminal)";
+	}
+	print ")\n";
+	if($compiler eq $0)
+	{
+		die("executing myself would cause infinite recursion");
+	}
 	exec $compiler, @ARGV
-	or die("Couldn't exec");
+	or die("Couldn't exec " . $compiler);
 }
 
 # <bohan>
