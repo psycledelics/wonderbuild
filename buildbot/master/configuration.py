@@ -796,7 +796,6 @@ BuildmasterConfig['schedulers'].append(
 		name = 'clean',
 		branch = None,
 		periodicBuildTimer = 60 * 60 * 24 * 30, # 30 days
-		builderNames = ['clean' + slave for slave in slaves] + microsoft_slaves
+		builderNames = ['clean.' + slave for slave in slaves] + microsoft_slaves
 	)
 )
-
