@@ -210,7 +210,7 @@ if($progName eq $0)
 	# <bohan>
 	# This happens on windows, which uses those nasty backslashes in paths,
 	# preventing all our regular expressions from working.
-	$compiler = "gcc";
+	$compiler = "g++"; # g++ and not gcc!
 }
 elsif("$progName" eq "colorgcc")
 {
