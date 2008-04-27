@@ -23,81 +23,48 @@ sources_or_headers = \
 	$$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/wavefileout
 
 unix {
-	CONFIG *= link_pkgconfig # adds support for pkg-config via the PKG_CONFIG var
-
-	system(pkg-config --exists alsa) {
-		message( "pkg-config thinks alsa libs are available..." )
+	contains(DEFINES, PSYCLE__ALSA_AVAILABLE) {
 		PKGCONFIG *= alsa 
-		DEFINES *= PSYCLE__ALSA_AVAILABLE # This is used in the source to determine when to include alsa-specific things.
 		sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/alsaout
 	}
 
-	system(pkg-config --exists jack) {
-		message( "pkg-config thinks jack libs are available..." )
+	contains(DEFINES, PSYCLE__JACK_AVAILABLE) {
 		PKGCONFIG *= jack 
-		DEFINES *= PSYCLE__JACK_AVAILABLE # This is used in the source to determine when to include jack-specific things.
 		sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/jackout
 	}
 
-	system(pkg-config --exists esound) {
-		message( "pkg-config thinks esound libs are available..." )
+	contains(DEFINES, PSYCLE__ESOUND_AVAILABLE) {
 		PKGCONFIG *= esound
-		DEFINES *= PSYCLE__ESOUND_AVAILABLE # This is used in the source to determine when to include esound-specific things.
 		sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/esoundout
 	}
 
 	false { # gstreamer output is unfinished (we could rip the code from freepsycle, which has it complete)
-		system(pkg-config --exists gstreamer) {
-			message( "pkg-config thinks gstreamer libs are available..." )
+		contains(DEFINES, PSYCLE__GSTREAMER_AVAILABLE) {
 			PKGCONFIG *= gstreamer
-			DEFINES *= PSYCLE__GSTREAMER_AVAILABLE # This is used in the source to determine when to include gstreamer-specific things.
 			sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/gstreamerout
 		}
 	}
 
 	false { # note: the net audio output driver is probably not (well) polished/tested anyway. esound is a good alternative.
 		# FIXME: not sure how to test for netaudio...
-		exists(/usr/include/audio/audiolib.h) {
+		contains(DEFINES, PSYCLE__NET_AUDIO_AVAILABLE) {
 			LIBS *= $$linkLibs(audio)
-			DEFINES *= PSYCLE__NET_AUDIO_AVAILABLE # This is used in the source to determine when to include net-audio-specific things.
 			sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/netaudioout
 		}
 	}
 } else: win32 {
-	exists($(DXSDK_DIR)) {
-		message("Existing DXSDK_DIR is $(DXSDK_DIR)")
-		INCLUDEPATH *= $(DXSDK_DIR)/include
-		LIBPATH     *= $(DXSDK_DIR)/lib
-		CONFIG *= dsound
-	} else {
-		DSOUND_DIR = $$EXTERNAL_PKG_DIR/dsound-9
-		!exists($$DSOUND_DIR) {
-			warning("The local dsound dir does not exist: $${DSOUND_DIR}. Make sure you have the dsound lib installed.")
-			!CONFIG(dsound): message("Assuming you do not have dsound lib. Call qmake CONFIG+=dsound to enable dsound support.")
-		} else {
-			CONFIG += dsound
-			INCLUDEPATH *= $$DSOUND_DIR/include
-			win32-g++:        LIBPATH *= $$DSOUND_DIR/lib-mswindows-mingw-cxxabi-1002
-			else:win32-msvc*: LIBPATH *= $$DSOUND_DIR/lib-mswindows-msvc-cxxabi
-		}
-	}
-	CONFIG(dsound) {
+	contains(DEFINES, PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE) {
 		LIBS *= $$linkLibs(dsound uuid winmm) # is this last one needed?
-		DEFINES *= PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE # This is used in the source to determine when to include direct-sound-specific things.
 		sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/microsoftdirectsoundout
 	}
 
-	true { # FIXME: not sure how to test for mme...
-		message("Assuming you have microsoft mme.")
+	contains(DEFINES, PSYCLE__MICROSOFT_MME_AVAILABLE) {
 		LIBS *= $$linkLibs(winmm uuid) # is this last one needed?
-		DEFINES *= PSYCLE__MICROSOFT_MME_AVAILABLE # This is used in the source to determine when to include mme-specific things.
 		sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/microsoftmmewaveout
 	}
 
-	false { # FIXME: asio needs to be built as a lib, which is rather cubersome, or embeeded into qpsycle itself, which sucks...
-		message("Blergh... steinberg asio.")
+	contains(DEFINES, PSYCLE__MICROSOFT_ASIO_AVAILABLE) {
 		LIBS *= $$linkLibs(asio)
-		DEFINES *= PSYCLE__STEINBERG_ASIO_AVAILABLE # This is used in the source to determine when to include asio-specific things.
 		sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/steinbergasioout
 	}
 }
