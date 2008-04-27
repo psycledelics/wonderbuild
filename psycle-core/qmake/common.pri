@@ -31,7 +31,7 @@ isEmpty(common_included) {
 	message("===================== $$TARGET =====================")
 
 	# simple way to sort out the mess
-	CONFIG(debug):CONFIG(release): CONFIG -= debug
+	CONFIG(debug):CONFIG(release):CONFIG(debug_and_release): CONFIG -= debug release
 
 	# Check to see what build mode has been specified.
 	CONFIG(debug):CONFIG(release) {
