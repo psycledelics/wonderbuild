@@ -6,6 +6,8 @@ isEmpty(psycle_audiodrivers_included) {
 	DEPENDPATH  *= $$TOP_SRC_DIR/diversalis/src
 	INCLUDEPATH *= $$TOP_SRC_DIR/universalis/src
 	DEPENDPATH  *= $$TOP_SRC_DIR/universalis/src
+	INCLUDEPATH *= $$TOP_SRC_DIR/psycle-helpers/src
+	DEPENDPATH  *= $$TOP_SRC_DIR/psycle-helpers/src
 
 	PSYCLE_AUDIODRIVERS_DIR = $$TOP_SRC_DIR/psycle-audiodrivers
 	PSYCLE_AUDIODRIVERS_BUILD_DIR = $$PSYCLE_AUDIODRIVERS_DIR/++build
