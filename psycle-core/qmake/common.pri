@@ -11,9 +11,9 @@ isEmpty(common_included) {
 			you want to build debug and release versions concurrently, or CONFIG-=release \
 			or CONFIG-=debug if you want just one mode.")
 	}
-	verbose: CONFIG(release): message("Configured to make a release mode Makefile.")
-	verbose: CONFIG(debug): message("Configured to make a debug mode Makefile.")
-	verbose: CONFIG(debug_and_release): message("Configured to make both Makefile.Debug and Makefile.Release.")
+	CONFIG(release): message("Configured to make a release mode Makefile.")
+	CONFIG(debug): message("Configured to make a debug mode Makefile.")
+	CONFIG(debug_and_release): message("Configured to make both Makefile.Debug and Makefile.Release.")
 	CONFIG(debug):CONFIG(release):!CONFIG(debug_and_release): warning("Debug overrides release.")
 
 	# we use these c++ language features
@@ -30,4 +30,9 @@ isEmpty(common_included) {
 	include(platform.pri)
 
 	COMMON_DIR = $$TOP_SRC_DIR/psycle-core/qmake
+	
+	definelinkLib(libname) {
+		unix | win3-g++:   return(-l$${libname})
+		else: win32-msvc*: return($${libname}.lib)
+	}
 }
