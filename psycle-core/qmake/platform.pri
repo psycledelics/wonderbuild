@@ -6,7 +6,7 @@ isEmpty(platform_included) {
 		list = $$1
 		result =
 		for(element, list) {
-			unix | win3-g++:   result += -l$${element}
+			unix | win32-g++:  result += -l$${element}
 			else: win32-msvc*: result += $${element}.lib
 		}
 		return($$result)
