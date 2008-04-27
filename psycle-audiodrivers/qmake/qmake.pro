@@ -1,16 +1,16 @@
-include(../../psycle-core/qmake/common.pri)
+TARGET = psycle-audiodrivers
 
+include(../../psycle-core/qmake/common.pri)
 include(psycle-audiodrivers.pri)
 
 TEMPLATE = lib # This project builds a library.
-TARGET = psycle-audiodrivers
 !CONFIG(dll): CONFIG *= staticlib # make it a static archive bt default
 CONFIG *= create_prl
 
 # remove default qmake/qt stuff we don't use
 CONFIG -= qt uic lex yacc
 
-BUILD_DIR = $$PSYCLE_AUDIODRIVERS_DIR/++build
+BUILD_DIR = $$PSYCLE_AUDIODRIVERS_BUILD_DIR
 OBJECTS_DIR = $$BUILD_DIR # Where the .o files go.
 MOC_DIR = $$BUILD_DIR # Where intermediate moc files go.
 DESTDIR = $$BUILD_DIR # Where the final executable goes.

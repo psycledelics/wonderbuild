@@ -36,11 +36,12 @@ isEmpty(display_vars_included) {
 			message("QMAKE_LDFLAGS_WINDOWS_DLL are $$QMAKE_WINDOWS_DLL")
 		}
 	}
-	
-	message("CONFIG is $$CONFIG")
-	message("PKGCONFIG is $$PKGCONFIG")
-	message("DEFINES are $$DEFINES")
-	message("INCLUDEPATH is $$INCLUDEPATH")
-	message("LIBS are $$LIBS")
-	
+
+	verbose {	
+		message("CONFIG is $$CONFIG")
+		message("PKGCONFIG is $$PKGCONFIG")
+		message("DEFINES are $$DEFINES")
+		message("INCLUDEPATH is $$INCLUDEPATH")
+		message("LIBS are $$LIBS")
+	}	
 }

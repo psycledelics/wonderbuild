@@ -3,9 +3,9 @@ isEmpty(platform_win32_included) {
 	verbose: message("platform-win32 included")
 
 	win32 {
-		message("System is win32")
+		verbose: message("System is win32")
 		TOP_SRC_DIR = $$system(cd ..\.. && cd)
-		message("Top src dir is $$TOP_SRC_DIR")
+		verbose: message("Top src dir is $$TOP_SRC_DIR")
 		
 		EXTERNAL_PKG_DIR = $$TOP_SRC_DIR/external-packages
 		

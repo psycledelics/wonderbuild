@@ -1,12 +1,10 @@
+TARGET = psycle-player
+
 include(../../psycle-core/qmake/common.pri)
 
 TEMPLATE = app # This project builds an executable program.
-TARGET = psycle-player
 
-CONFIG *= link_prl
 include($$TOP_SRC_DIR/psycle-core/qmake/psycle-core.pri)
-unix | win32-g++:  LIBS *= -lpsycle-core
-else: win32-msvc*: LIBS *=   psycle-core.lib
 
 PSYCLE_PLAYER_DIR = $$TOP_SRC_DIR/psycle-player
 

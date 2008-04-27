@@ -1,15 +1,12 @@
+TARGET = qpsycle
+
 include(../../psycle-core/qmake/common.pri)
 
 TEMPLATE = app # This project builds an executable program.
-TARGET = qpsycle
-
-CONFIG *= link_prl
-include($$TOP_SRC_DIR/psycle-core/qmake/psycle-core.pri)
-unix | win32-g++:  LIBS *= -lpsycle-core
-else: win32-msvc*: LIBS *=   psycle-core.lib
 
 include(qt-xml.pri)
 #include(jdkmidi.pri) no need for this now
+include($$TOP_SRC_DIR/psycle-core/qmake/psycle-core.pri)
 
 QPSYCLE_DIR = $$TOP_SRC_DIR/qpsycle
 

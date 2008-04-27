@@ -1,16 +1,16 @@
-include(common.pri)
+TARGET = psycle-core
 
+include(common.pri)
 include(psycle-core.pri)
 
 TEMPLATE = lib # This project builds a library.
-TARGET = psycle-core
 !CONFIG(dll): CONFIG *= staticlib # make it a static archive bt default
 CONFIG *= create_prl
 
 # remove default qmake/qt stuff we don't use
 CONFIG -= qt uic lex yacc
 
-BUILD_DIR = $$PSYCLE_CORE_DIR/++build
+BUILD_DIR = $$PSYCLE_CORE_BUILD_DIR
 OBJECTS_DIR = $$BUILD_DIR # Where the .o files go.
 MOC_DIR = $$BUILD_DIR # Where intermediate moc files go.
 DESTDIR = $$BUILD_DIR # Where the final executable goes.

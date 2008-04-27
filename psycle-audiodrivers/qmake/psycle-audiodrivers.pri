@@ -8,8 +8,15 @@ isEmpty(psycle_audiodrivers_included) {
 	DEPENDPATH  *= $$TOP_SRC_DIR/universalis/src
 
 	PSYCLE_AUDIODRIVERS_DIR = $$TOP_SRC_DIR/psycle-audiodrivers
-
-	LIBPATH     *= $$PSYCLE_AUDIODRIVERS_DIR/++build
+	PSYCLE_AUDIODRIVERS_BUILD_DIR = $$PSYCLE_AUDIODRIVERS_DIR/++build
+	
 	INCLUDEPATH *= $$PSYCLE_AUDIODRIVERS_DIR/src
 	DEPENDPATH  *= $$PSYCLE_AUDIODRIVERS_DIR/src
+
+	!contains(TARGET, psycle-audiodrivers) {
+		CONFIG *= link_prl
+		LIBPATH *= $$PSYCLE_AUDIODRIVERS_BUILD_DIR
+		unix | win32-g++:  LIBS *= -lpsycle-audiodrivers
+		else: win32-msvc*: LIBS *=   psycle-audiodrivers.lib
+	}
 }

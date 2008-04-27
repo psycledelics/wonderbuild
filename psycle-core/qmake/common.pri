@@ -2,17 +2,18 @@ isEmpty(common_included) {
 	common_included = 1
 	verbose: message("common included")
 	
-	message("====================================")
+	message("===================== $$TARGET =====================")
 	# Check to see what build mode has been specified.
+	CONFIG(debug):CONFIG(release): CONFIG -= debug
 	CONFIG(debug):CONFIG(release) {
 		warning("debug and release are both specified, separately, in CONFIG. \
 			This is possibly not what you want.  Consider using CONFIG+=debug_and_release if \
 			you want to build debug and release versions concurrently, or CONFIG-=release \
 			or CONFIG-=debug if you want just one mode.")
 	}
-	CONFIG(release): message("Configured to make a release mode Makefile.")
-	CONFIG(debug): message("Configured to make a debug mode Makefile.")
-	CONFIG(debug_and_release): message("Configured to make both Makefile.Debug and Makefile.Release.")
+	verbose: CONFIG(release): message("Configured to make a release mode Makefile.")
+	verbose: CONFIG(debug): message("Configured to make a debug mode Makefile.")
+	verbose: CONFIG(debug_and_release): message("Configured to make both Makefile.Debug and Makefile.Release.")
 	CONFIG(debug):CONFIG(release):!CONFIG(debug_and_release): warning("Debug overrides release.")
 
 	# we use these c++ language features

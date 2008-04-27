@@ -3,9 +3,9 @@ isEmpty(platform_unix_included) {
 	verbose: message("platform-unix included")
 
 	unix {
-		message("System is unix")
+		verbose: message("System is unix")
 		TOP_SRC_DIR = $$system(cd ../.. && pwd)
-		message("Top src dir is $$TOP_SRC_DIR")
+		verbose: message("Top src dir is $$TOP_SRC_DIR")
 
 		# math and dynamic loader
 		LIBS *= -lm -ldl
