@@ -34,7 +34,7 @@ isEmpty(psycle_audiodrivers_included) {
 			}
 		}
 
-		false { # note: the net audio output driver is probably not (well) polished/tested anyway. esound is a good alternative.
+		false { # note: the net audio output driver is probably not (well) polished/tested anyway. pulse through alsa is a good alternative.
 			# FIXME: not sure how to test for netaudio...
 			exists(/usr/include/audio/audiolib.h) {
 				DEFINES *= PSYCLE__NET_AUDIO_AVAILABLE # This is used in the source to determine when to include net-audio-specific things.
