@@ -16,7 +16,7 @@ isEmpty(platform_win32_included) {
 			message("Compiler is MS Visual C++")
 			QMAKE_CXXFLAGS *= /Zi
 			QMAKE_LFLAGS *= /debug
-			LIBS *= advapi32.lib user32.lib
+			LIBS *= $$linkLibs(advapi32 user32)
 			DEFINES *= NOMINMAX # This stops windows headers from creating min & max as defines (not needed on mingw)
 
 			win32-msvc2005 {

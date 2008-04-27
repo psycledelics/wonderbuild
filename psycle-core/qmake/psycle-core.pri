@@ -16,7 +16,6 @@ isEmpty(psycle_core_included) {
 	!contains(TARGET, psycle-core) {
 		CONFIG *= link_prl
 		LIBPATH *= $$PSYCLE_CORE_BUILD_DIR
-		unix | win32-g++:  LIBS *= -lpsycle-core
-		else: win32-msvc*: LIBS *=   psycle-core.lib
+		LIBS *= $$linkLibs(psycle-core)
 	}
 }

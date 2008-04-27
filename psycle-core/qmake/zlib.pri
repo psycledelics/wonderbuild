@@ -2,8 +2,9 @@ isEmpty(zlib_included) {
 	zlib_included = 1
 	verbose: message("zlib included")
 
-	unix | win32-g++: LIBS *= -lz
-	else: win32-msvc*: LIBS *= zlib.lib
+	unix | win32-g++: LIBS *= $$linkLibs(z)
+	else: win32-msvc*: LIBS *= LIBS *= $$linkLibs(zlib)
+
 	win32 {
 		exists($(ZLIB_DIR)) {
 			message("Existing ZLIB_DIR is $(ZLIB_DIR)")

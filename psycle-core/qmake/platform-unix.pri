@@ -8,7 +8,7 @@ isEmpty(platform_unix_included) {
 		verbose: message("Top src dir is $$TOP_SRC_DIR")
 
 		# math and dynamic loader
-		LIBS *= -lm -ldl
+		LIBS *= $$linkLibs(m dl)
 
 		macx {
 			#CONFIG *= x86 ppc # make universal binaries on mac

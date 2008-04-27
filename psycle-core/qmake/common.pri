@@ -2,9 +2,38 @@ isEmpty(common_included) {
 	common_included = 1
 	verbose: message("common included")
 	
+	defineReplace(sources) {
+		variable = $$1
+		list = $$eval($$variable)
+		result =
+		for(element, list): {
+			filename = $${element}.cpp
+			exists($$filename): result += $$filename
+		}
+		return($$result)
+	}
+	
+	defineReplace(headers) {
+		variable = $$1
+		list = $$eval($$variable)
+		result =
+		for(element, list): {
+			filename = $${element}.hpp
+			exists($$filename): result += $$filename
+			else {
+				filename = $${element}.h
+				exists($$filename): result += $$filename
+			}
+		}
+		return($$result)
+	}
+
 	message("===================== $$TARGET =====================")
-	# Check to see what build mode has been specified.
+
+	# simple way to sort out the mess
 	CONFIG(debug):CONFIG(release): CONFIG -= debug
+
+	# Check to see what build mode has been specified.
 	CONFIG(debug):CONFIG(release) {
 		warning("debug and release are both specified, separately, in CONFIG. \
 			This is possibly not what you want.  Consider using CONFIG+=debug_and_release if \
@@ -30,9 +59,4 @@ isEmpty(common_included) {
 	include(platform.pri)
 
 	COMMON_DIR = $$TOP_SRC_DIR/psycle-core/qmake
-	
-	definelinkLib(libname) {
-		unix | win3-g++:   return(-l$${libname})
-		else: win32-msvc*: return($${libname}.lib)
-	}
 }

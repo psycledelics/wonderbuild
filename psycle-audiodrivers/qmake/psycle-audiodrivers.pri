@@ -16,7 +16,6 @@ isEmpty(psycle_audiodrivers_included) {
 	!contains(TARGET, psycle-audiodrivers) {
 		CONFIG *= link_prl
 		LIBPATH *= $$PSYCLE_AUDIODRIVERS_BUILD_DIR
-		unix | win32-g++:  LIBS *= -lpsycle-audiodrivers
-		else: win32-msvc*: LIBS *=   psycle-audiodrivers.lib
+		LIBS *= $$linkLibs(psycle-audiodrivers)
 	}
 }

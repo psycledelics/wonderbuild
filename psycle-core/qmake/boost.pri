@@ -3,12 +3,12 @@ isEmpty(boost_included) {
 	verbose: message("boost included")
 
 	unix {
-		macx: LIBS *= -lboost_signals-1_33_1 -lboost_thread-1_33_1
-		else: LIBS *= -lboost_signals -lboost_thread
+		macx: LIBS *= $$linkLibs(lboost_signals-1_33_1 boost_thread-1_33_1)
+		else: LIBS *= $$linkLibs(boost_signals boost_thread)
 	} else: win32 {
-		win32-g++: LIBS *= -lboost_signals-mgw-mt-1_33_1 -lboost_thread-mgw-mt-1_33_1
-		else: win32-msvc2005: LIBS *= boost_signals-vc80-mt-1_33_1.lib boost_thread-vc80-mt-1_33_1.lib
-		else: win32-msvc*:    LIBS *= boost_signals-vc71-mt-1_33_1.lib boost_thread-vc71-mt-1_33_1.lib
+		win32-g++: LIBS *= $$linkLibs(boost_signals-mgw-mt-1_33_1 boost_thread-mgw-mt-1_33_1)
+		else: win32-msvc2005: LIBS *= $$linkLibs(boost_signals-vc80-mt-1_33_1 boost_thread-vc80-mt-1_33_1)
+		else: win32-msvc*:    LIBS *= $$linkLibs(boost_signals-vc71-mt-1_33_1 boost_thread-vc71-mt-1_33_1)
 
 		exists($(BOOST_DIR)) {
 			message("Existing BOOST_DIR is $(BOOST_DIR)")
