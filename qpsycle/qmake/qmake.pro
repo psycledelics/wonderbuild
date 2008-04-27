@@ -50,7 +50,6 @@ sources_or_headers = \
 	$$QPSYCLE_DIR/src/gui/machineview/machineview \
 	$$QPSYCLE_DIR/src/gui/machineview/mastergui \
 	$$QPSYCLE_DIR/src/gui/machineview/mixertweakdlg \
-	$$QPSYCLE_DIR/src/gui/machineview/mixertweakdlg \ 
 	$$QPSYCLE_DIR/src/gui/machineview/newmachinedlg \
 	$$QPSYCLE_DIR/src/gui/machineview/wiredlg \
 	$$QPSYCLE_DIR/src/gui/machineview/wiregui \
