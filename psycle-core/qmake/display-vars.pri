@@ -37,11 +37,11 @@ isEmpty(display_vars_included) {
 		}
 	}
 
-	verbose {	
+	verbose {
 		message("CONFIG is $$CONFIG")
 		message("PKGCONFIG is $$PKGCONFIG")
 		message("DEFINES are $$DEFINES")
 		message("INCLUDEPATH is $$INCLUDEPATH")
 		message("LIBS are $$LIBS")
-	}	
+	}
 }
