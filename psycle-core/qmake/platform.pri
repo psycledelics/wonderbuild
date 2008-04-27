@@ -1,5 +1,7 @@
-# we use these c++ language features
-CONFIG *= rtti exceptions threads
+isEmpty(platform_included) {
+	platform_included = 1
+	verbose: message("platform included")
 
-unix: include(platform-unix.pri)
-else:win32: include(platform-win32.pri)
+	unix: include(platform-unix.pri)
+	else: win32: include(platform-win32.pri)
+}
