@@ -3,6 +3,7 @@ include(common.pri)
 include(psycle-core.pri)
 
 TEMPLATE = lib # This project builds a library.
+TARGET = psycle-core
 !CONFIG(dll): CONFIG *= staticlib # make it a static archive bt default
 CONFIG *= create_prl
 
