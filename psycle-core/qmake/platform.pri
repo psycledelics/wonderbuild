@@ -14,4 +14,12 @@ isEmpty(platform_included) {
 
 	unix: include(platform-unix.pri)
 	else: win32: include(platform-win32.pri)
+	
+	!CONFIG(nocolor):contains(QMAKE_CXX, g++):contains(QMAKE_LINK, g++) {
+		colorgcc = $$TOP_SRC_DIR/packageneric/generic/scons/colorgcc
+		exists($$colorgcc) {
+			QMAKE_CXX =  $$colorgcc
+			QMAKE_LINK = $$colorgcc
+		}
+	}
 }
