@@ -9,6 +9,7 @@ isEmpty(psycle_audiodrivers_included) {
 
 	PSYCLE_AUDIODRIVERS_DIR = $$TOP_SRC_DIR/psycle-audiodrivers
 
+	LIBPATH     *= $$PSYCLE_AUDIODRIVERS_DIR/++build
 	INCLUDEPATH *= $$PSYCLE_AUDIODRIVERS_DIR/src
 	DEPENDPATH  *= $$PSYCLE_AUDIODRIVERS_DIR/src
 }

@@ -5,7 +5,11 @@ isEmpty(psycle_core_included) {
 	include($$COMMON_DIR/boost.pri)
 	include($$COMMON_DIR/libxml++.pri)
 	include($$COMMON_DIR/zlib.pri)
+	
 	include($$TOP_SRC_DIR/psycle-audiodrivers/qmake/psycle-audiodrivers.pri)
+	CONFIG *= link_prl
+	unix | win32-g++:  LIBS *= -lpsycle-audiodrivers
+	else: win32-msvc*: LIBS *=   psycle-audiodrivers.lib
 
 	INCLUDEPATH *= $$TOP_SRC_DIR/diversalis/src
 	DEPENDPATH  *= $$TOP_SRC_DIR/diversalis/src

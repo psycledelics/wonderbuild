@@ -15,7 +15,7 @@ OBJECTS_DIR = $$BUILD_DIR # Where the .o files go.
 MOC_DIR = $$BUILD_DIR # Where intermediate moc files go.
 DESTDIR = $$BUILD_DIR # Where the final executable goes.
 
-CONFIG *= precompiled_headers
+CONFIG *= precompile_headers
 PRECOMPILED_HEADER = $$PSYCLE_CORE_DIR/src/psycle/core/psycleCorePch.hpp
 
 HEADERS += \
