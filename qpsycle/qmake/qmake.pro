@@ -71,8 +71,8 @@ sources_or_headers = \
 	$$QPSYCLE_DIR/src/gui/waveview/waveamp \
 	$$QPSYCLE_DIR/src/gui/waveview/wavedisplay \
 	$$QPSYCLE_DIR/src/gui/waveview/waveview \
-	$$QPSYCLE_DIR/src/model/instrumentsmodel
-	$$QPSYCLE_DIR/src/qpsycle \
+	$$QPSYCLE_DIR/src/model/instrumentsmodel \
+	$$QPSYCLE_DIR/src/qpsycle
 
 SOURCES += $$sources(sources_or_headers)
 HEADERS += $$headers(sources_or_headers)
