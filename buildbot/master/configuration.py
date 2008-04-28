@@ -230,7 +230,7 @@ BuildmasterConfig['builders'].append(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = './tools/check-policy psycle-core', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'cd psycle-core && qmake -recursive CONFIG-=debug && make release', locks = [compile_lock]),
+				factory.s(step.Compile, command = 'cd psycle-core && qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && make', locks = [compile_lock]),
 			]
 		)
 	}
@@ -255,7 +255,7 @@ BuildmasterConfig['builders'].append(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy psycle-core', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && cd psycle-core && qmake -recursive CONFIG-=debug && mingw32-make release', locks = [compile_lock])
+				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && cd psycle-core && qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && mingw32-make', locks = [compile_lock])
 			]
 		)
 	}
@@ -282,7 +282,7 @@ BuildmasterConfig['builders'].append(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = './tools/check-policy psycle-player', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'cd psycle-player && qmake -recursive CONFIG-=debug && make release', locks = [compile_lock])
+				factory.s(step.Compile, command = 'cd psycle-player && qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && make', locks = [compile_lock])
 			]
 		)
 	}
@@ -307,7 +307,7 @@ BuildmasterConfig['builders'].append(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy psycle-player', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && cd psycle-player && qmake -recursive CONFIG-=debug && mingw32-make release', locks = [compile_lock])
+				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && cd psycle-player && qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && mingw32-make', locks = [compile_lock])
 			]
 		)
 	}
@@ -334,7 +334,7 @@ BuildmasterConfig['builders'].append(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = './tools/check-policy qpsycle', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'cd qpsycle && qmake -recursive CONFIG-=debug && make release', locks = [compile_lock])
+				factory.s(step.Compile, command = 'cd qpsycle && qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && make', locks = [compile_lock])
 			]
 		)
 	}
@@ -359,7 +359,7 @@ BuildmasterConfig['builders'].append(
 			[
 				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy qpsycle', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && cd qpsycle && qmake -recursive CONFIG-=debug && mingw32-make release', locks = [compile_lock])
+				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && cd qpsycle && qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && mingw32-make', locks = [compile_lock])
 			]
 		)
 	}
