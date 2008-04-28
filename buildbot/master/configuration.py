@@ -235,7 +235,7 @@ BuildmasterConfig['builders'].append(
 		)
 	}
 )
-BuildmasterConfig['schedulers'].append(
+if False: BuildmasterConfig['schedulers'].append(
 	Scheduler(
 		name = 'psycle-core',
 		branch = None,
@@ -260,7 +260,7 @@ BuildmasterConfig['builders'].append(
 		)
 	}
 )
-BuildmasterConfig['schedulers'].append(
+if False: BuildmasterConfig['schedulers'].append(
 	Scheduler(
 		name = 'psycle-core.mingw',
 		branch = None,
