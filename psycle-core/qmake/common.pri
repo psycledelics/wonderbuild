@@ -28,10 +28,9 @@ isEmpty(common_included) {
 		return($$result)
 	}
 	
-	message("===================== $$TARGET =====================")
 
-	# simple way to sort out the mess
-	CONFIG(debug):CONFIG(release):CONFIG(debug_and_release): CONFIG -= debug release
+
+	message("===================== $$TARGET =====================")
 
 	# Check to see what build mode has been specified.
 	CONFIG(debug):CONFIG(release) {
@@ -40,10 +39,28 @@ isEmpty(common_included) {
 			you want to build debug and release versions concurrently, or CONFIG-=release \
 			or CONFIG-=debug if you want just one mode.")
 	}
-	CONFIG(release): message("Configured to make a release mode Makefile.")
-	CONFIG(debug): message("Configured to make a debug mode Makefile.")
+
+	# Note: qmake has different default settings on unix and win32 platforms!
+	# Default on unix:  debug, release are set, but not debug_and_release.
+	# Default on win32: debug, release, debug_and_release are all set.
+	# Both default settings, however, lead to a release build when
+	# invoking "make" without specifying any target.
+	# The difference is, by default, you can't invoke "make release" nor "make debug" on unix,
+	# while you can do so on win32.
+
+	# Print messages or warnings
+	!CONFIG(debug):!CONFIG(release):!CONFIG(debug_and_release): {
+		warning("None of debug, release nor debug_and_release were specified in CONFIG.")
+		message("Release is the default.")
+	}
 	CONFIG(debug_and_release): message("Configured to make both Makefile.Debug and Makefile.Release.")
-	CONFIG(debug):CONFIG(release):!CONFIG(debug_and_release): warning("Debug overrides release.")
+	CONFIG(debug):!CONFIG(release): message("Configured to make a debug mode Makefile.")
+	!CONFIG(debug):CONFIG(release): message("Configured to make a release mode Makefile.")
+	CONFIG(debug):CONFIG(release):!CONFIG(debug_and_release): warning("Release overrides debug.")
+	CONFIG(debug):CONFIG(release):CONFIG(debug_and_release): warning("Check above which is the default, debug or release.")
+	!CONFIG(debug):!CONFIG(release):CONFIG(debug_and_release): message("Release is the default.")
+
+
 
 	# we use these c++ language features
 	CONFIG *= rtti exceptions thread
