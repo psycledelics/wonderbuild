@@ -214,7 +214,7 @@ if($progName eq $0)
 }
 elsif("$progName" eq "colorgcc")
 {
-	$compiler = "/usr/bin/gcc";
+	$compiler = "g++"; # <bohan> g++ and not gcc!
 }
 elsif(!defined($compiler = $compilerPaths{$progName}))
 {

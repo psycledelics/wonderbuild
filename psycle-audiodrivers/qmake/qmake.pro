@@ -4,7 +4,7 @@ include(../../psycle-core/qmake/common.pri)
 include(psycle-audiodrivers.pri)
 
 TEMPLATE = lib # This project builds a library.
-!CONFIG(dll): CONFIG *= staticlib # make it a static archive bt default
+!CONFIG(shared): CONFIG *= staticlib # make it a static archive bt default
 CONFIG *= create_prl
 
 # remove default qmake/qt stuff we don't use

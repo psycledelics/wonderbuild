@@ -2,7 +2,6 @@ isEmpty(psycle_core_included) {
 	psycle_core_included = 1
 	verbose: message("psycle-core included")
 
-	include($$COMMON_DIR/boost.pri)
 	include($$COMMON_DIR/libxml++.pri)
 	include($$COMMON_DIR/zlib.pri)
 	include($$TOP_SRC_DIR/psycle-audiodrivers/qmake/psycle-audiodrivers.pri)

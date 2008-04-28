@@ -29,8 +29,8 @@ isEmpty(common_included) {
 	}
 	
 
-
-	message("===================== $$TARGET =====================")
+	!build_pass: message("===================== $$TARGET ==================================")
+	else:        message("===================== $$TARGET (build pass) =====================")
 
 	# Check to see what build mode has been specified.
 	CONFIG(debug):CONFIG(release) {
@@ -59,7 +59,6 @@ isEmpty(common_included) {
 	CONFIG(debug):CONFIG(release):!CONFIG(debug_and_release): warning("Release overrides debug.")
 	CONFIG(debug):CONFIG(release):CONFIG(debug_and_release): warning("Check above which is the default, debug or release.")
 	!CONFIG(debug):!CONFIG(release):CONFIG(debug_and_release): message("Release is the default.")
-
 
 
 	# we use these c++ language features

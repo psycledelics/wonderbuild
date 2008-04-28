@@ -2,6 +2,7 @@ isEmpty(psycle_audiodrivers_included) {
 	psycle_audiodrivers_included = 1
 	verbose: message("psycle-audiodrivers included")
 	
+	include($$COMMON_DIR/boost.pri)
 	INCLUDEPATH *= $$TOP_SRC_DIR/diversalis/src
 	DEPENDPATH  *= $$TOP_SRC_DIR/diversalis/src
 	INCLUDEPATH *= $$TOP_SRC_DIR/universalis/src
