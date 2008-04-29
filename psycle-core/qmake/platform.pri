@@ -31,8 +31,8 @@ isEmpty(platform_included) {
 	!CONFIG(nocolor) {
 		colorgcc = $$TOP_SRC_DIR/packageneric/generic/scons/colorgcc
 		exists($$colorgcc) {
-			contains(QMAKE_CXX,  g++): QMAKE_CXX  = perl $$colorgcc
-			contains(QMAKE_LINK, g++): QMAKE_LINK = perl $$colorgcc
+			contains(QMAKE_CXX,  g++): QMAKE_CXX  = $$colorgcc
+			contains(QMAKE_LINK, g++): QMAKE_LINK = $$colorgcc
 		}
 	}
 }
