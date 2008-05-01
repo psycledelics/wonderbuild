@@ -265,7 +265,7 @@ If the build exists and is complete (++build/foo/built exists), the tool will no
 files to the ++install tree.
 
 If the build does not exist or is incomplete (++build/foo/built does not exist), the tool will create (if needed) the build directory,
-remove the ++build/foo/built file, enter ++build/foo/build subdirectory, and call the package recipee's download and build methods.
+remove the ++build/foo/built file, enter the ++build/foo/build subdirectory, and call the package recipee's download and build methods.
 
 After a successful build, the tool will write the information files in the package's build
 directory: ++build/foo/{built,version,direct-dependencies,recursed-dependencies}.
