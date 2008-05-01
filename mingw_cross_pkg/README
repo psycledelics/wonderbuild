@@ -281,8 +281,7 @@ Before installing a package, the tool first checks whether it needs to install t
 
 The tool first checks whether the package is already installed.
 Install information for a package named "foo", is stored in the ++install/package-states/foo/ directory.
-If such a directory exists, the tool will not do anything for this package (but it will still
-check that all packages needed by the installed package "foo" are installed too).
+If such a directory exists, the tool will not do anything for this package.
 
 If no ++install/package-states/foo/ directory exists, the tool checks whether it already has
 a build directory for the "foo" package, and builds it if not.
