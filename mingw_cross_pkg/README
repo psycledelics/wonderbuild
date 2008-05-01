@@ -284,7 +284,7 @@ Install information for a package named "foo", is stored in the ++install/packag
 If such a directory exists, the tool will not do anything for this package.
 
 If no ++install/package-states/foo/ directory exists, the tool checks whether it already has
-a build directory for the "foo" package, and builds it if not.
+a built directory for the "foo" package, and builds it if not.
 
 The tool lists the content of the ++build/foo/dest/ directory,
 and stores the list in ++install/package-states/foo/files.
