@@ -288,7 +288,7 @@ a built directory for the "foo" package, and builds it if not.
 
 Before installing a package that was already installed, the tool first removes the installed package.
 
-The tool lists the content of the ++build/foo/dest/ directory,
+Then, the tool lists the content of the ++build/foo/dest/ directory,
 and stores the list in ++install/package-states/foo/files.
 It then copies these files from ++build/foo/dest/ to ++install/prefix/,
 
