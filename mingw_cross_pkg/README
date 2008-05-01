@@ -1,0 +1,318 @@
+MinGW cross pkg is a simple package management tool to manage cross-compiled mingw packages from a unix system.
+
+This packaging tool makes it easy to install and remove packages at will in an install tree,
+It handles the building and downloading of package sources, and also the dependencies between packages.
+
+The tool uses three directories to manage the packages:
+	- a directory of package recipees,
+	- a directory where packages are built,
+	- a directory where packages are installed.
+	
+By default, the build directory and the install directory are created as
+subdirectories of the directory where the mingw_cross_pkg command is invoked,
+and are name respectively ++build and ++install.
+
+Following the Usage chapter below, are some explanations of the directory structures,
+and on how to write package recipees.
+Using the tool does not require you read all of this.
+
+========
+0. Usage
+========
+
+The tool is self documented, by using the --help option.
+
+Usage: ./mingw_cross_pkg.py <command> [args]
+  where <command> is one of: help, version, list, show, install, remove, need-rebuild, reverse-depends, clean-build.
+
+Usage: <help | --help> [command]
+or   : <command> --help
+  gives help on command, or on all commands.
+
+Usage: <version | --version>
+  prints the version of this tool.
+
+Usage: list
+  gives a list of all packages, with state information.
+
+Usage: show <package...>
+  shows the details of the packages.
+
+Usage: install [--continue | --rebuild | --no-download | --no-act] <package...>
+  installs the packages, and their dependencies.
+  Packages given as arguments will be marked as user,
+  unless the --rebuild option is present and the package was already installed.
+
+  --no-act         do not really install, just show what would be done.
+  --skip-download  skip the download step.
+  --rebuild        rebuild the packages given as arguments.
+  --continue       continue after a build failure.
+
+Usage: remove [--verbose | --no-act] <package...>
+  removes the packages, dependent packages, and packages marked auto that become no longer needed.
+
+  --no-act   do not really remove, just show what would be done.
+  --verbose  show what files and dirs are removed.
+
+Usage: need-rebuild
+  gives a list of all packages that may need to be rebuilt.
+  This lists the packages for which the installed versions of the packages they depend on (recursively)
+  are no longer the same as the ones they were built with.
+
+Usage: reverse-depends [--installed-only] <package...>
+  shows the reverse dependencies of the packages.
+
+  --installed-only  only show installed packages.
+
+Usage: clean-build [--download | --destdir | --all] <package...>
+  cleans the build dirs of packages.
+
+  --dest-dir  also clean the dest dir.
+  --download  also clean the downloaded files.
+  --all       wipe out the whole build dir altogether (same effect as --dest-dir --download).
+
+===================
+1. Package recipees
+===================
+
+Each package recipee is a python module that contains instructions to download and build a package,
+and also defines the dependencies of a package.
+
+Package recipees are python files stored under the "packages" directory in the same directory where
+the mingw_cross_pkg command is. So, the package recipee for package "foo" is looked for in packages/foo.py.
+
+A recipee should define a class derived from the base PackageRecipee class, and
+should override/define several methods.
+
+----------------------------------------------------
+1.1 Declaring the recipee class, and the constructor
+----------------------------------------------------
+
+A recipee module should define a recipee class derived from the base PackageRecipee class.
+
+In a recipee module, import the base class with:
+
+	from packages import PackageRecipee
+
+The base recipee class has the following constructor:
+
+	def __init__(self, packages, name, version = None)
+
+A derived recipee class must have the following constructor:
+
+	def __init__(self, packages)
+	
+For example, to define a recipee class for package "foo", version "1.0", which depends on "gcc",
+you would write:
+
+	from packages import PackageRecipee
+	class Foo(PackageRecipee):
+		def __init__(self, packages)
+			PackageRecipee.__init__(self, packages, 'foo', '1.0')
+			self.add_dep('gcc')
+			
+-------------------------
+1.2 Module-level function
+-------------------------
+
+A package recipee module must define one function:
+
+	def package(packages) -> PackageRecipee
+	
+This function should return a new instance of the recipee class you defined.
+
+For example:
+	def package(packages): return Foo(packages)
+
+--------------------------------------------------------
+1.3 Methods inherited from the PackageRecipee base class
+--------------------------------------------------------
+
+The base recipee class provide the following method for use in recipees.
+Recipees should not override these methods, just use them.
+
+- def name(self) -> string
+	returns the name you passed to the base PackageRecipee constructor.
+	
+- def version(self) -> string
+	returns the version you passed to the base PackageRecipee constructor,
+	or None if you didn't pass any.
+
+- def target(self) -> string:
+	This method returns the target triplet used for cross compilation.
+	For example: self.target() may return 'i386-mingw32msvc'.
+	For autoconf-based packages, you would pass this path to the configure's --target option.
+
+- def prefix(self) -> path
+	This method returns the absolute path to the final installation tree, xxx/++install/prefix.
+	For autoconf-based packages, you would pass either
+	self.prefix() or self.prefix() + self.target() to the configure's --prefix option,
+	depending on whether you're building a cross-build tool or a normal software.
+
+- def dest_dir(self) -> path:
+	This method returns the path were the package should be put all the files to install.
+	For automake-based packages, you would pass this path to the "make install DESTDIR=" command.
+	For a package "foo", self.dest_dir() would return an absolute path to xxx/++build/foo/dest/.
+
+- def mirror(self, name) -> string:
+	This method returns what host or url is to be used for various download sites.
+	This avoids hardcoding urls in every recipee.
+	For example: self.mirror('sourceforge') may return 'kent.dl.sourceforge.net'.
+
+- def http_get(self, url):
+	This is a convenience method to download a tarball file via http.
+	
+- def shell(self, script):
+	This method passes arbitrary code contained in the "script" argument to system shell for execution.
+	An exception OSError is raised when the return code of the shell subprocess is non-zero.
+	
+- def def gmake(self):
+	returns the the name or path to the GNU make command ('gmake' instead of 'make' on *bsd systems).
+
+- def def gsed(self):
+	returns the the name or path to the GNU sed ('gsed' instead of 'sed' on *bsd systems)
+
+----------------------------------------------------
+1.4 Methods to define/override in each recipee class
+----------------------------------------------------
+
+1.4.1 The description method
+-----------------------------
+
+def description(self) -> string
+
+This method should return a one-line description of the package
+If not overridden, the description will be the one of the base PackageRecipee class, which is '(no description)'.
+
+-------------------------
+1.4.2 The download method
+-------------------------
+
+def download(self)
+
+This method is responsible for downloading the source code.
+Source code can be obtained is whatever way the recipee wants.
+It can be a tarball obtained via wget, or a checkout/update from a source code repository.
+
+This method should avoid downloading the files again if there are already there.
+
+----------------------
+1.4.3 The build method
+----------------------
+
+def build(self)
+
+If the source code was obtained as a tarball, this method should first unpack it.
+Then the method should perform all the build steps needed to configure, build, and install the package.
+The package must be installed in the stage-install directory (DESTDIR in automake).
+This installation destination directory is obtained with the dest_dir method inherited from the base class.
+
+-------------------------------
+1.4.4 The continue_build method
+-------------------------------
+
+def continue_build(self)
+
+This method can optionally be defined to allow the user to continue building a package,
+instead of redoing the build from scratch.
+
+For packages that follow the usual configure/make process, this means performing only the make step.
+
+If the method is not defined, it inherits the default implementation,
+which performs both the download and build steps again, effectively redoing a full rebuild.
+
+----------------------------
+1.4.5 The clean_build method
+----------------------------
+
+def clean_build(self)
+
+This method should remove the files that were built, but keep the downloaded files.
+For example, in the case of a package obtained by downloading a source tarball,
+you would delete the unpacked directory of the tarball, but leave the tarball itself.
+
+========================
+2. Building of a package
+========================
+
+Building a package is implicitely done with the install command.
+
+Before building a package, the tool first checks whether it needs to build and/or install dependent packages.
+
+Each package is built in its own directory. For package "foo", the build directory is ++build/foo/.
+A build directory ++build/foo/ contains the following files and subdirectories:
+
+	++build/foo/build/:
+		where source files are downloaded, and the build takes place.
+
+	++build/foo/dest/:
+		stage-installation directory.
+
+	++build/foo/built:
+		empty file whose existence indicates the package was successfully built.
+
+	++build/foo/version:
+		version of the built package.
+		
+	++build/foo/description:
+		description of the built package.
+
+	++build/foo/direct-dependencies:
+		direct dependencies of the built package.
+		Each dependency also contains the version that was installed at the time of the build.
+		
+	++build/foo/recursive-dependencies:
+		direct dependencies of the built package.
+		Each dependency also contains the version that was installed at the time of the build.
+
+If the build exists and is complete (++build/foo/built exists), the tool will not rebuild it, and will simply copy the existing built
+files to the ++install tree.
+
+If the build does not exist or is incomplete (++build/foo/built does not exist), the tool will create (if needed) the build directory,
+remove the ++build/foo/built file, enter ++build/foo/build subdirectory, and call the package recipee's download and build methods.
+
+After a successful build, the tool will write the information files in the package's build
+directory: ++build/foo/{built,version,direct-dependencies,recursive-dependencies}.
+
+============================
+3. Installation of a package
+============================
+
+Installing a package named "foo", is done by invoking the command:
+	mingw_cross_pkg install foo
+
+Before installing package, the tool first checks whether it needs to build and/or install dependent packages.
+
+The tool first checks whether the package is already installed.
+Install information for a package named "foo", is stored in the ++install/package-states/foo/ directory.
+If such a directory exists, the tool will not do anything for this package (but it will still
+check that all packages needed by the installed package "foo" are installed too).
+
+If no ++install/package-states/foo/ directory exists, the tool checks whether it already has
+a build directory for the "foo" package, and builds it if not.
+
+The tool lists the content of the ++build/foo/dest/ directory,
+and stores the list in ++install/package-states/foo/files.
+It then copies these files from ++build/foo/dest/ to ++install/prefix/,
+
+Then, package information ++build/foo/{version,direct-dependencies,recursive-dependencies}
+is copied to ++install/package-states/foo/,
+
+Finally, the tool writes whether the package is marked "auto" or "user" (as debian's aptitude does)
+in ++install/package-states/foo/installed.
+
+=======================
+3. Removal of a package
+=======================
+
+Removing (deinstalling) a package named "foo", is done by invoking the command:
+	mingw_cross_pkg remove foo
+
+Before removing a package, the tool first removes all packages that depend on it.
+
+The tool removes all files listed in ++install/package-states/foo/files,
+and then removes the directory ++install/package-states/foo/ itself.
+
+The tool is also able to remove all packages that are marked "auto" and no longer-needed after
+the removal of a package (as debian's aptitude does).
+
