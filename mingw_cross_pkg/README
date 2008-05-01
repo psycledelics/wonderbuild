@@ -184,7 +184,6 @@ def description(self) -> string
 This method should return a one-line description of the package
 If not overridden, the description will be the one of the base PackageRecipee class, which is '(no description)'.
 
--------------------------
 1.4.2 The download method
 -------------------------
 
@@ -196,7 +195,6 @@ It can be a tarball obtained via wget, or a checkout/update from a source code r
 
 This method should avoid downloading the files again if there are already there.
 
-----------------------
 1.4.3 The build method
 ----------------------
 
@@ -207,7 +205,6 @@ Then the method should perform all the build steps needed to configure, build, a
 The package must be installed in the stage-install directory (DESTDIR in automake).
 This installation destination directory is obtained with the dest_dir method inherited from the base class.
 
--------------------------------
 1.4.4 The continue_build method
 -------------------------------
 
@@ -221,7 +218,6 @@ For packages that follow the usual configure/make process, this means performing
 If the method is not defined, it inherits the default implementation,
 which performs both the download and build steps again, effectively redoing a full rebuild.
 
-----------------------------
 1.4.5 The clean_build method
 ----------------------------
 
