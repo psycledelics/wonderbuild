@@ -1,10 +1,11 @@
 # MinGW cross compiling package handling tool
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
 
 import sys, os, shutil, imp, fnmatch
 
 class Packages:
-	def __init__(self):
+	def __init__(self, build_state_dir = None, install_dir = None, target = 'i386-mingw32msvc'):
 		self._packages = {}
 		self._installed_packages = {}
 		self._package_recipees = {}
@@ -13,12 +14,13 @@ class Packages:
 			'sourceforge': 'kent.dl.sourceforge.net'
 		}
 
-		self._target = 'i386-mingw32msvc'
+		self._target = target
 
-		self._build_state_dir = os.path.join(os.getcwd(), '++build')
+		if build_state_dir is not None: self._build_state_dir = build_state_dir
+		else: self._build_state_dir = os.path.join(os.getcwd(), '++build')
 		if not os.path.exists(self._build_state_dir): os.makedirs(self._build_state_dir)
 
-		install_dir = os.path.join(os.getcwd(), '++install')
+		if install_dir is None: install_dir = os.path.join(os.getcwd(), '++install')
 		if not os.path.exists(install_dir): os.makedirs(install_dir)
 		
 		self._install_state_dir = os.path.join(install_dir, 'package-states')

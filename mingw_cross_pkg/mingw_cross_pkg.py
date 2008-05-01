@@ -1,4 +1,7 @@
 #! /usr/bin/env python
+# MinGW cross compiling package handling tool
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# copyright 2008-2008 Johan Boule <bohan@jabber.org>
 
 import sys
 from packages import Packages, Package

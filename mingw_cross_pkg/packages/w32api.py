@@ -1,7 +1,8 @@
-# w32api package for MinGW cross pkg tool.
+# w32api package recipee for MinGW cross pkg tool.
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
 #
-# Based on MinGW cross compiling environment (1.4)
+# Based on MinGW cross compiling environment, version 1.4
 # copyright 2007-2008 Volker Grabsch <vog@notjusthosting.com>
 # copyright 2007-2008 Rocco Rutte <pdmef@gmx.net>
 # copyright 2007-2008 Andreas Roever <roever@users.sf.net>
