@@ -150,7 +150,7 @@ Recipees should not override these methods, just use them.
 	depending on whether you're building a cross-build tool or a normal software.
 
 - def dest_dir(self) -> path:
-	This method returns the path were the package should be put all the files to install.
+	This method returns the path were the package should put all the files to install.
 	For automake-based packages, you would pass this path to the "make install DESTDIR=" command.
 	For a package "foo", self.dest_dir() would return an absolute path to xxx/++build/foo/dest/.
 
