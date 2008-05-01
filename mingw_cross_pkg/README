@@ -258,7 +258,7 @@ A build directory ++build/foo/ contains the following files and subdirectories:
 		Each dependency also contains the version that was installed at the time of the build.
 		
 	++build/foo/recursed-dependencies:
-		direct dependencies of the built package.
+		deep dependencies of the built package.
 		Each dependency also contains the version that was installed at the time of the build.
 
 If the build exists and is complete (++build/foo/built exists), the tool will not rebuild it, and will simply copy the existing built
