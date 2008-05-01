@@ -4,11 +4,8 @@
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
 
 import sys
-from packages import Packages, Package
 
 version = '0.1'
-
-packages = Packages()
 
 commands = ('help', 'version', 'list', 'show', 'install', 'remove', 'need-rebuild', 'reverse-depends', 'clean-build')
 
@@ -84,6 +81,16 @@ def usage(out = sys.stderr, command = None):
 			'  --all       wipe out the whole build dir altogether (same effect as --dest-dir --download).\n'
 			'\n')
 
+
+_packages = None
+
+def packages():
+	global _packages
+	if _packages is None:
+		from packages import Packages
+		_packages = Packages()
+	return _packages
+
 if __name__ == '__main__':
 	if len(sys.argv) < 2:
 		usage()
@@ -109,7 +116,7 @@ if __name__ == '__main__':
 		if len(args):
 			usage(command = 'list')
 			sys.exit(2)
-		packages.list()
+		packages().list()
 	elif command == 'install':
 		package_names = []
 		continue_build = False
@@ -127,8 +134,8 @@ if __name__ == '__main__':
 					usage(command = 'install')
 					sys.exit(2)
 			else: package_names.append(arg)
-		if no_act: packages.install_no_act(package_names)
-		else: packages.install(package_names, continue_build = continue_build, rebuild = rebuild, skip_download = skip_download)
+		if no_act: packages().install_no_act(package_names)
+		else: packages().install(package_names, continue_build = continue_build, rebuild = rebuild, skip_download = skip_download)
 	elif command == 'remove':
 		package_names = []
 		verbose = False
@@ -142,8 +149,8 @@ if __name__ == '__main__':
 					usage(command = 'remove')
 					sys.exit(2)
 			else: package_names.append(arg)
-		if no_act: packages.remove_no_act(package_names)
-		else: packages.remove(package_names, verbose)
+		if no_act: packages().remove_no_act(package_names)
+		else: packages().remove(package_names, verbose)
 	elif command == 'reverse-depends':
 		package_names = []
 		installed_only = False
@@ -155,7 +162,7 @@ if __name__ == '__main__':
 					usage(command = 'reverse-depends')
 					sys.exit(2)
 			else: package_names.append(arg)
-		packages.print_reverse_deps(package_names, installed_only)
+		packages().print_reverse_deps(package_names, installed_only)
 	elif command == 'show':
 		package_names = []
 		for arg in args:
@@ -164,7 +171,7 @@ if __name__ == '__main__':
 				usage(command = 'show')
 				sys.exit(2)
 			else: package_names.append(arg)
-		packages.show(package_names)
+		packages().show(package_names)
 	elif command == 'clean-build':
 		package_names = []
 		all = False
@@ -180,12 +187,12 @@ if __name__ == '__main__':
 					usage(command = 'clean-build')
 					sys.exit(2)
 			else: package_names.append(arg)
-		packages.clean_build(package_names, all = all, dest_dir = dest_dir, download = download)
+		packages().clean_build(package_names, all = all, dest_dir = dest_dir, download = download)
 	elif command == 'need-rebuild':
 		if len(args):
 			usage(command = 'need-rebuild')
 			sys.exit(2)
-		packages.need_rebuild()
+		packages().need_rebuild()
 	else:
 		sys.stderr.write(sys.argv[0] + ': unrecognised command: ' + command + '\n')
 		usage()
