@@ -277,7 +277,7 @@ directory: ++build/foo/{built,version,direct-dependencies,recursed-dependencies}
 Installing a package named "foo", is done by invoking the command:
 	mingw_cross_pkg install foo
 
-Before installing package, the tool first checks whether it needs to build and/or install the package's dependencies.
+Before installing a package, the tool first checks whether it needs to build and/or install the package's dependencies.
 
 The tool first checks whether the package is already installed.
 Install information for a package named "foo", is stored in the ++install/package-states/foo/ directory.
