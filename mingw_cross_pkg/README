@@ -261,7 +261,7 @@ A build directory ++build/foo/ contains the following files and subdirectories:
 		direct dependencies of the built package.
 		Each dependency also contains the version that was installed at the time of the build.
 		
-	++build/foo/recursive-dependencies:
+	++build/foo/recursed-dependencies:
 		direct dependencies of the built package.
 		Each dependency also contains the version that was installed at the time of the build.
 
@@ -272,7 +272,7 @@ If the build does not exist or is incomplete (++build/foo/built does not exist),
 remove the ++build/foo/built file, enter ++build/foo/build subdirectory, and call the package recipee's download and build methods.
 
 After a successful build, the tool will write the information files in the package's build
-directory: ++build/foo/{built,version,direct-dependencies,recursive-dependencies}.
+directory: ++build/foo/{built,version,direct-dependencies,recursed-dependencies}.
 
 ============================
 3. Installation of a package
@@ -295,7 +295,7 @@ The tool lists the content of the ++build/foo/dest/ directory,
 and stores the list in ++install/package-states/foo/files.
 It then copies these files from ++build/foo/dest/ to ++install/prefix/,
 
-Then, package information ++build/foo/{version,direct-dependencies,recursive-dependencies}
+Then, package information ++build/foo/{version,direct-dependencies,recursed-dependencies}
 is copied to ++install/package-states/foo/,
 
 Finally, the tool writes whether the package is marked "auto" or "user" (as debian's aptitude does)
