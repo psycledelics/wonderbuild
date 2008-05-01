@@ -233,7 +233,7 @@ you would delete the unpacked directory of the tarball, but leave the tarball it
 
 Building a package is implicitely done with the install command.
 
-Before building a package, the tool first checks whether it needs to build and/or install dependent packages.
+Before building a package, the tool first checks whether it needs to build and/or install the package's dependencies.
 
 Each package is built in its own directory. For package "foo", the build directory is ++build/foo/.
 A build directory ++build/foo/ contains the following files and subdirectories:
