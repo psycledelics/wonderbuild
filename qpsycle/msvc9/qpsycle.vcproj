@@ -1,0 +1,1116 @@
+<?xml version="1.0" encoding = "Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="9,00"
+	Name="qpsycle"
+	ProjectGUID="{AA883250-7A60-3838-ACA1-246AC3035BEE}"
+	Keyword="Qt4VSv1.0">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory="."
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			ConfigurationType="1"
+			IntermediateDirectory="..\++build\"
+			UseOfMfc="0">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot;,&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot;,&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot;,&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot;,&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot;,&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot;,&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot;,&quot;$(QTDIR)\include&quot;,&quot;$(QTDIR)\include\Qt&quot;,&quot;$(QTDIR)\include\QtCore&quot;,&quot;$(QTDIR)\src\3rdparty\zlib&quot;,&quot;$(QTDIR)\include\QtXml&quot;,&quot;..\..\external-packages\zlib-1.2.3\include&quot;,&quot;..\..\external-packages\boost-1.33.1\include&quot;,&quot;..\..\diversalis\src&quot;,&quot;..\..\universalis\src&quot;,&quot;..\..\psycle-helpers\src&quot;,&quot;$(DXSDK_DIR)\include&quot;,&quot;..\..\psycle-audiodrivers\src&quot;,&quot;..\..\psycle-core\src&quot;,&quot;..\src&quot;,&quot;..\src\mididrivers&quot;,&quot;..\src\model&quot;,&quot;..\src\gui&quot;,&quot;..\src\gui\machineview&quot;,&quot;..\src\gui\patternview&quot;,&quot;..\src\gui\waveview&quot;,&quot;..\src\gui\sequencer&quot;,&quot;..\src\gui\configdlg&quot;,&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot;,&quot;..\++build&quot;,&quot;.&quot;,..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005"
+				AdditionalOptions="-Zm200 -w34100 -w34189 -Zm200 -w34100 -w34189 -w34100 -w34189"
+				AssemblerListingLocation="..\++build\"
+				BufferSecurityCheck="false"
+				DebugInformationFormat="3"
+				ExceptionHandling="1"
+				ForcedIncludeFiles="..\src\qpsyclePch.hpp"
+				GeneratePreprocessedFile="0"
+				ObjectFile="..\++build\"
+				Optimization ="4"
+				PrecompiledHeaderFile="$(IntDir)\qpsycle.pch"
+				PrecompiledHeaderThrough="..\src\qpsyclePch.hpp"
+				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,NOMINMAX,PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE,PSYCLE__MICROSOFT_MME_AVAILABLE,QT_THREAD_SUPPORT,QT_DLL,QT_XML_LIB,QT_GUI_LIB,QT_CORE_LIB"
+				ProgramDataBaseFileName=".\"
+				RuntimeLibrary="3"
+				RuntimeTypeInfo="true"
+				SuppressStartupBanner="true"
+				TreatWChar_tAsBuiltInType="false"
+				UsePrecompiledHeader="2"
+				WarningLevel="3"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="c:\Qt\4.4.0-rc1-msvc\lib\qtmaind.lib advapi32.lib user32.lib LIBS *= zlib.lib boost_signals-vc80-mt-1_33_1.lib boost_thread-vc80-mt-1_33_1.lib psycle-audiodrivers.lib psycle-core.lib c:\Qt\4.4.0-rc1-msvc\lib\QtXmld4.lib c:\Qt\4.4.0-rc1-msvc\lib\QtGuid4.lib c:\Qt\4.4.0-rc1-msvc\lib\QtCored4.lib"
+				AdditionalLibraryDirectories="c:\psycle-trunk\external-packages\zlib-1.2.3\lib-mswindows-cabi,c:\psycle-trunk\external-packages\boost-1.33.1\lib-mswindows-msvc-8.0-cxxabi-1400,$(DXSDK_DIR)\lib,c:\psycle-trunk\psycle-audiodrivers\++build,c:\psycle-trunk\psycle-core\++build,c:\Qt\4.4.0-rc1-msvc\lib"
+				AdditionalOptions="/debug &quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; &quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot;"
+				GenerateDebugInformation="true"
+				IgnoreImportLibrary="true"
+				OutputFile="..\++build\qpsycle.exe"
+				ProgramDatabaseFile=""
+				SubSystem="2"
+				SuppressStartupBanner="true"/>
+			<Tool
+				Name="VCMIDLTool"
+				DefaultCharType="0"
+				EnableErrorChecks="1"
+				WarningLevel="0"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,NOMINMAX,PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE,PSYCLE__MICROSOFT_MME_AVAILABLE,QT_THREAD_SUPPORT,QT_DLL,QT_XML_LIB,QT_GUI_LIB,QT_CORE_LIB,_DEBUG"/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="."
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			ConfigurationType="1"
+			IntermediateDirectory="..\++build\"
+			UseOfMfc="0">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot;,&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot;,&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot;,&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot;,&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot;,&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot;,&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot;,&quot;$(QTDIR)\include&quot;,&quot;$(QTDIR)\include\Qt&quot;,&quot;$(QTDIR)\include\QtCore&quot;,&quot;$(QTDIR)\src\3rdparty\zlib&quot;,&quot;$(QTDIR)\include\QtXml&quot;,&quot;..\..\external-packages\zlib-1.2.3\include&quot;,&quot;..\..\external-packages\boost-1.33.1\include&quot;,&quot;..\..\diversalis\src&quot;,&quot;..\..\universalis\src&quot;,&quot;..\..\psycle-helpers\src&quot;,&quot;$(DXSDK_DIR)\include&quot;,&quot;..\..\psycle-audiodrivers\src&quot;,&quot;..\..\psycle-core\src&quot;,&quot;..\src&quot;,&quot;..\src\mididrivers&quot;,&quot;..\src\model&quot;,&quot;..\src\gui&quot;,&quot;..\src\gui\machineview&quot;,&quot;..\src\gui\patternview&quot;,&quot;..\src\gui\waveview&quot;,&quot;..\src\gui\sequencer&quot;,&quot;..\src\gui\configdlg&quot;,&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot;,&quot;..\++build&quot;,&quot;.&quot;,..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005"
+				AdditionalOptions="-Zm200 -w34100 -w34189 -Zm200 -w34100 -w34189 -w34100 -w34189"
+				AssemblerListingLocation="..\++build\"
+				BufferSecurityCheck="false"
+				DebugInformationFormat="3"
+				ExceptionHandling="1"
+				ForcedIncludeFiles="..\src\qpsyclePch.hpp"
+				GeneratePreprocessedFile="0"
+				ObjectFile="..\++build\"
+				Optimization ="2"
+				PrecompiledHeaderFile="$(IntDir)\qpsycle.pch"
+				PrecompiledHeaderThrough="..\src\qpsyclePch.hpp"
+				PreprocessorDefinitions="QT_NO_DEBUG,NDEBUG,_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,NOMINMAX,PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE,PSYCLE__MICROSOFT_MME_AVAILABLE,QT_THREAD_SUPPORT,QT_DLL,QT_NO_DEBUG,QT_XML_LIB,QT_GUI_LIB,QT_CORE_LIB,NDEBUG"
+				ProgramDataBaseFileName=".\"
+				RuntimeLibrary="2"
+				RuntimeTypeInfo="true"
+				SuppressStartupBanner="true"
+				TreatWChar_tAsBuiltInType="false"
+				UsePrecompiledHeader="2"
+				WarningLevel="3"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="c:\Qt\4.4.0-rc1-msvc\lib\qtmain.lib advapi32.lib user32.lib LIBS *= zlib.lib boost_signals-vc80-mt-1_33_1.lib boost_thread-vc80-mt-1_33_1.lib psycle-audiodrivers.lib psycle-core.lib c:\Qt\4.4.0-rc1-msvc\lib\QtXml4.lib c:\Qt\4.4.0-rc1-msvc\lib\QtGui4.lib c:\Qt\4.4.0-rc1-msvc\lib\QtCore4.lib"
+				AdditionalLibraryDirectories="c:\psycle-trunk\external-packages\zlib-1.2.3\lib-mswindows-cabi,c:\psycle-trunk\external-packages\boost-1.33.1\lib-mswindows-msvc-8.0-cxxabi-1400,$(DXSDK_DIR)\lib,c:\psycle-trunk\psycle-audiodrivers\++build,c:\psycle-trunk\psycle-core\++build,c:\Qt\4.4.0-rc1-msvc\lib"
+				AdditionalOptions="/debug &quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot; &quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot;"
+				GenerateDebugInformation="false"
+				IgnoreImportLibrary="true"
+				LinkIncremental="1"
+				OutputFile="..\++build\qpsycle.exe"
+				ProgramDatabaseFile=""
+				SubSystem="2"
+				SuppressStartupBanner="true"/>
+			<Tool
+				Name="VCMIDLTool"
+				DefaultCharType="0"
+				EnableErrorChecks="1"
+				WarningLevel="0"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="QT_NO_DEBUG,NDEBUG,_WINDOWS,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,NOMINMAX,PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE,PSYCLE__MICROSOFT_MME_AVAILABLE,QT_THREAD_SUPPORT,QT_DLL,QT_NO_DEBUG,QT_XML_LIB,QT_GUI_LIB,QT_CORE_LIB"/>
+		</Configuration>
+	</Configurations>
+	<Files>
+		<Filter
+			Name="Source Files"
+			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
+			<File
+				RelativePath="..\src\gui\configdlg\audiopage.cpp"/>
+			<File
+				RelativePath="..\src\gui\sequencer\beatruler.cpp"/>
+			<File
+				RelativePath="..\src\gui\configdlg\behaviourpage.cpp"/>
+			<File
+				RelativePath="..\src\gui\configdlg\configdlg.cpp"/>
+			<File
+				RelativePath="..\src\gui\configuration.cpp"/>
+			<File
+				RelativePath="..\src\gui\configdlg\dirspage.cpp"/>
+			<File
+				RelativePath="..\src\gui\machineview\effectgui.cpp"/>
+			<File
+				RelativePath="..\src\gui\machineview\generatorgui.cpp"/>
+			<File
+				RelativePath="..\src\gui\global.cpp"/>
+			<File
+				RelativePath="..\src\gui\inputhandler.cpp"/>
+			<File
+				RelativePath="..\src\model\instrumentsmodel.cpp"/>
+			<File
+				RelativePath="..\src\gui\patternview\linenumbercolumn.cpp"/>
+			<File
+				RelativePath="..\src\gui\logconsole.cpp"/>
+			<File
+				RelativePath="..\src\gui\configdlg\lookspage.cpp"/>
+			<File
+				RelativePath="..\src\gui\machineview\machinegui.cpp"/>
+			<File
+				RelativePath="..\src\gui\machineview\machinetweakdlg.cpp"/>
+			<File
+				RelativePath="..\src\gui\machineview\machineview.cpp"/>
+			<File
+				RelativePath="..\src\gui\mainwindow.cpp"/>
+			<File
+				RelativePath="..\src\gui\machineview\mastergui.cpp"/>
+			<File
+				RelativePath="..\src\gui\machineview\mixertweakdlg.cpp"/>
+			<File
+				RelativePath="..\src\gui\machineview\newmachinedlg.cpp"/>
+			<File
+				RelativePath="..\src\gui\patternbox.cpp"/>
+			<File
+				RelativePath="..\src\gui\patternview\patterndraw.cpp"/>
+			<File
+				RelativePath="..\src\gui\patternview\patterngrid.cpp"/>
+			<File
+				RelativePath="..\src\gui\patternview\patternview.cpp"/>
+			<File
+				RelativePath="..\src\qpsycle.cpp"/>
+			<File
+				RelativePath="..\src\gui\samplebrowser.cpp"/>
+			<File
+				RelativePath="..\src\gui\sequencer\sequencerarea.cpp"/>
+			<File
+				RelativePath="..\src\gui\sequencer\sequencerdraw.cpp"/>
+			<File
+				RelativePath="..\src\gui\sequencer\sequenceritem.cpp"/>
+			<File
+				RelativePath="..\src\gui\sequencer\sequencerline.cpp"/>
+			<File
+				RelativePath="..\src\gui\sequencer\sequencerview.cpp"/>
+			<File
+				RelativePath="..\src\gui\patternview\trackheader.cpp"/>
+			<File
+				RelativePath="..\src\gui\waveview\waveamp.cpp"/>
+			<File
+				RelativePath="..\src\gui\waveview\wavedisplay.cpp"/>
+			<File
+				RelativePath="..\src\gui\waveview\waveview.cpp"/>
+			<File
+				RelativePath="..\src\gui\machineview\wiredlg.cpp"/>
+			<File
+				RelativePath="..\src\gui\machineview\wiregui.cpp"/>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+			<File
+				RelativePath="..\src\gui\configdlg\audiopage.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\configdlg\audiopage.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\configdlg\audiopage.hpp -o c:\psycle-trunk\qpsycle\++build\moc_audiopage.cpp"
+						Description="MOC ..\src\gui\configdlg\audiopage.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_audiopage.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\configdlg\audiopage.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\configdlg\audiopage.hpp -o c:\psycle-trunk\qpsycle\++build\moc_audiopage.cpp"
+						Description="MOC ..\src\gui\configdlg\audiopage.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_audiopage.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\sequencer\beatruler.hpp"/>
+			<File
+				RelativePath="..\src\gui\configdlg\behaviourpage.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\configdlg\behaviourpage.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\configdlg\behaviourpage.hpp -o c:\psycle-trunk\qpsycle\++build\moc_behaviourpage.cpp"
+						Description="MOC ..\src\gui\configdlg\behaviourpage.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_behaviourpage.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\configdlg\behaviourpage.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\configdlg\behaviourpage.hpp -o c:\psycle-trunk\qpsycle\++build\moc_behaviourpage.cpp"
+						Description="MOC ..\src\gui\configdlg\behaviourpage.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_behaviourpage.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\configdlg\configdlg.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\configdlg\configdlg.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\configdlg\configdlg.hpp -o c:\psycle-trunk\qpsycle\++build\moc_configdlg.cpp"
+						Description="MOC ..\src\gui\configdlg\configdlg.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_configdlg.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\configdlg\configdlg.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\configdlg\configdlg.hpp -o c:\psycle-trunk\qpsycle\++build\moc_configdlg.cpp"
+						Description="MOC ..\src\gui\configdlg\configdlg.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_configdlg.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\configuration.hpp"/>
+			<File
+				RelativePath="..\src\gui\configdlg\dirspage.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\configdlg\dirspage.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\configdlg\dirspage.hpp -o c:\psycle-trunk\qpsycle\++build\moc_dirspage.cpp"
+						Description="MOC ..\src\gui\configdlg\dirspage.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_dirspage.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\configdlg\dirspage.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\configdlg\dirspage.hpp -o c:\psycle-trunk\qpsycle\++build\moc_dirspage.cpp"
+						Description="MOC ..\src\gui\configdlg\dirspage.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_dirspage.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\machineview\effectgui.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\machineview\effectgui.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\machineview\effectgui.hpp -o c:\psycle-trunk\qpsycle\++build\moc_effectgui.cpp"
+						Description="MOC ..\src\gui\machineview\effectgui.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_effectgui.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\machineview\effectgui.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\machineview\effectgui.hpp -o c:\psycle-trunk\qpsycle\++build\moc_effectgui.cpp"
+						Description="MOC ..\src\gui\machineview\effectgui.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_effectgui.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\machineview\generatorgui.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\machineview\generatorgui.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\machineview\generatorgui.hpp -o c:\psycle-trunk\qpsycle\++build\moc_generatorgui.cpp"
+						Description="MOC ..\src\gui\machineview\generatorgui.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_generatorgui.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\machineview\generatorgui.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\machineview\generatorgui.hpp -o c:\psycle-trunk\qpsycle\++build\moc_generatorgui.cpp"
+						Description="MOC ..\src\gui\machineview\generatorgui.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_generatorgui.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\global.hpp"/>
+			<File
+				RelativePath="..\src\gui\inputhandler.hpp"/>
+			<File
+				RelativePath="..\src\model\instrumentsmodel.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\model\instrumentsmodel.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\model\instrumentsmodel.hpp -o c:\psycle-trunk\qpsycle\++build\moc_instrumentsmodel.cpp"
+						Description="MOC ..\src\model\instrumentsmodel.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_instrumentsmodel.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\model\instrumentsmodel.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\model\instrumentsmodel.hpp -o c:\psycle-trunk\qpsycle\++build\moc_instrumentsmodel.cpp"
+						Description="MOC ..\src\model\instrumentsmodel.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_instrumentsmodel.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\patternview\linenumbercolumn.hpp"/>
+			<File
+				RelativePath="..\src\gui\logconsole.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\logconsole.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\logconsole.hpp -o c:\psycle-trunk\qpsycle\++build\moc_logconsole.cpp"
+						Description="MOC ..\src\gui\logconsole.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_logconsole.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\logconsole.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\logconsole.hpp -o c:\psycle-trunk\qpsycle\++build\moc_logconsole.cpp"
+						Description="MOC ..\src\gui\logconsole.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_logconsole.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\configdlg\lookspage.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\configdlg\lookspage.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\configdlg\lookspage.hpp -o c:\psycle-trunk\qpsycle\++build\moc_lookspage.cpp"
+						Description="MOC ..\src\gui\configdlg\lookspage.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_lookspage.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\configdlg\lookspage.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\configdlg\lookspage.hpp -o c:\psycle-trunk\qpsycle\++build\moc_lookspage.cpp"
+						Description="MOC ..\src\gui\configdlg\lookspage.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_lookspage.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\machineview\machinegui.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\machineview\machinegui.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\machineview\machinegui.hpp -o c:\psycle-trunk\qpsycle\++build\moc_machinegui.cpp"
+						Description="MOC ..\src\gui\machineview\machinegui.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_machinegui.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\machineview\machinegui.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\machineview\machinegui.hpp -o c:\psycle-trunk\qpsycle\++build\moc_machinegui.cpp"
+						Description="MOC ..\src\gui\machineview\machinegui.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_machinegui.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\machineview\machinetweakdlg.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\machineview\machinetweakdlg.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\machineview\machinetweakdlg.hpp -o c:\psycle-trunk\qpsycle\++build\moc_machinetweakdlg.cpp"
+						Description="MOC ..\src\gui\machineview\machinetweakdlg.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_machinetweakdlg.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\machineview\machinetweakdlg.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\machineview\machinetweakdlg.hpp -o c:\psycle-trunk\qpsycle\++build\moc_machinetweakdlg.cpp"
+						Description="MOC ..\src\gui\machineview\machinetweakdlg.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_machinetweakdlg.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\machineview\machineview.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\machineview\machineview.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\machineview\machineview.hpp -o c:\psycle-trunk\qpsycle\++build\moc_machineview.cpp"
+						Description="MOC ..\src\gui\machineview\machineview.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_machineview.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\machineview\machineview.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\machineview\machineview.hpp -o c:\psycle-trunk\qpsycle\++build\moc_machineview.cpp"
+						Description="MOC ..\src\gui\machineview\machineview.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_machineview.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\mainwindow.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\mainwindow.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\mainwindow.hpp -o c:\psycle-trunk\qpsycle\++build\moc_mainwindow.cpp"
+						Description="MOC ..\src\gui\mainwindow.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_mainwindow.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\mainwindow.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\mainwindow.hpp -o c:\psycle-trunk\qpsycle\++build\moc_mainwindow.cpp"
+						Description="MOC ..\src\gui\mainwindow.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_mainwindow.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\machineview\mastergui.hpp"/>
+			<File
+				RelativePath="..\src\gui\machineview\mixertweakdlg.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\machineview\mixertweakdlg.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\machineview\mixertweakdlg.hpp -o c:\psycle-trunk\qpsycle\++build\moc_mixertweakdlg.cpp"
+						Description="MOC ..\src\gui\machineview\mixertweakdlg.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_mixertweakdlg.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\machineview\mixertweakdlg.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\machineview\mixertweakdlg.hpp -o c:\psycle-trunk\qpsycle\++build\moc_mixertweakdlg.cpp"
+						Description="MOC ..\src\gui\machineview\mixertweakdlg.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_mixertweakdlg.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\machineview\newmachinedlg.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\machineview\newmachinedlg.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\machineview\newmachinedlg.hpp -o c:\psycle-trunk\qpsycle\++build\moc_newmachinedlg.cpp"
+						Description="MOC ..\src\gui\machineview\newmachinedlg.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_newmachinedlg.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\machineview\newmachinedlg.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\machineview\newmachinedlg.hpp -o c:\psycle-trunk\qpsycle\++build\moc_newmachinedlg.cpp"
+						Description="MOC ..\src\gui\machineview\newmachinedlg.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_newmachinedlg.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\patternbox.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\patternbox.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\patternbox.hpp -o c:\psycle-trunk\qpsycle\++build\moc_patternbox.cpp"
+						Description="MOC ..\src\gui\patternbox.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_patternbox.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\patternbox.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\patternbox.hpp -o c:\psycle-trunk\qpsycle\++build\moc_patternbox.cpp"
+						Description="MOC ..\src\gui\patternbox.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_patternbox.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\patternview\patterndraw.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\patternview\patterndraw.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\patternview\patterndraw.hpp -o c:\psycle-trunk\qpsycle\++build\moc_patterndraw.cpp"
+						Description="MOC ..\src\gui\patternview\patterndraw.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_patterndraw.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\patternview\patterndraw.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\patternview\patterndraw.hpp -o c:\psycle-trunk\qpsycle\++build\moc_patterndraw.cpp"
+						Description="MOC ..\src\gui\patternview\patterndraw.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_patterndraw.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\patternview\patterngrid.hpp"/>
+			<File
+				RelativePath="..\src\gui\patternview\patternview.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\patternview\patternview.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\patternview\patternview.hpp -o c:\psycle-trunk\qpsycle\++build\moc_patternview.cpp"
+						Description="MOC ..\src\gui\patternview\patternview.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_patternview.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\patternview\patternview.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\patternview\patternview.hpp -o c:\psycle-trunk\qpsycle\++build\moc_patternview.cpp"
+						Description="MOC ..\src\gui\patternview\patternview.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_patternview.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\qpsyclePch.hpp"/>
+			<File
+				RelativePath="..\src\gui\samplebrowser.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\samplebrowser.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\samplebrowser.hpp -o c:\psycle-trunk\qpsycle\++build\moc_samplebrowser.cpp"
+						Description="MOC ..\src\gui\samplebrowser.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_samplebrowser.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\samplebrowser.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\samplebrowser.hpp -o c:\psycle-trunk\qpsycle\++build\moc_samplebrowser.cpp"
+						Description="MOC ..\src\gui\samplebrowser.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_samplebrowser.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\sequencer\sequencerarea.hpp"/>
+			<File
+				RelativePath="..\src\gui\sequencer\sequencerdraw.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\sequencer\sequencerdraw.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\sequencer\sequencerdraw.hpp -o c:\psycle-trunk\qpsycle\++build\moc_sequencerdraw.cpp"
+						Description="MOC ..\src\gui\sequencer\sequencerdraw.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_sequencerdraw.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\sequencer\sequencerdraw.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\sequencer\sequencerdraw.hpp -o c:\psycle-trunk\qpsycle\++build\moc_sequencerdraw.cpp"
+						Description="MOC ..\src\gui\sequencer\sequencerdraw.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_sequencerdraw.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\sequencer\sequenceritem.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\sequencer\sequenceritem.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\sequencer\sequenceritem.hpp -o c:\psycle-trunk\qpsycle\++build\moc_sequenceritem.cpp"
+						Description="MOC ..\src\gui\sequencer\sequenceritem.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_sequenceritem.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\sequencer\sequenceritem.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\sequencer\sequenceritem.hpp -o c:\psycle-trunk\qpsycle\++build\moc_sequenceritem.cpp"
+						Description="MOC ..\src\gui\sequencer\sequenceritem.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_sequenceritem.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\sequencer\sequencerline.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\sequencer\sequencerline.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\sequencer\sequencerline.hpp -o c:\psycle-trunk\qpsycle\++build\moc_sequencerline.cpp"
+						Description="MOC ..\src\gui\sequencer\sequencerline.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_sequencerline.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\sequencer\sequencerline.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\sequencer\sequencerline.hpp -o c:\psycle-trunk\qpsycle\++build\moc_sequencerline.cpp"
+						Description="MOC ..\src\gui\sequencer\sequencerline.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_sequencerline.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\sequencer\sequencerview.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\sequencer\sequencerview.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\sequencer\sequencerview.hpp -o c:\psycle-trunk\qpsycle\++build\moc_sequencerview.cpp"
+						Description="MOC ..\src\gui\sequencer\sequencerview.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_sequencerview.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\sequencer\sequencerview.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\sequencer\sequencerview.hpp -o c:\psycle-trunk\qpsycle\++build\moc_sequencerview.cpp"
+						Description="MOC ..\src\gui\sequencer\sequencerview.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_sequencerview.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\patternview\trackheader.hpp"/>
+			<File
+				RelativePath="..\src\gui\waveview\waveamp.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\waveview\waveamp.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\waveview\waveamp.hpp -o c:\psycle-trunk\qpsycle\++build\moc_waveamp.cpp"
+						Description="MOC ..\src\gui\waveview\waveamp.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_waveamp.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\waveview\waveamp.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\waveview\waveamp.hpp -o c:\psycle-trunk\qpsycle\++build\moc_waveamp.cpp"
+						Description="MOC ..\src\gui\waveview\waveamp.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_waveamp.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\waveview\wavedisplay.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\waveview\wavedisplay.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\waveview\wavedisplay.hpp -o c:\psycle-trunk\qpsycle\++build\moc_wavedisplay.cpp"
+						Description="MOC ..\src\gui\waveview\wavedisplay.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_wavedisplay.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\waveview\wavedisplay.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\waveview\wavedisplay.hpp -o c:\psycle-trunk\qpsycle\++build\moc_wavedisplay.cpp"
+						Description="MOC ..\src\gui\waveview\wavedisplay.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_wavedisplay.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\waveview\waveview.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\waveview\waveview.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\waveview\waveview.hpp -o c:\psycle-trunk\qpsycle\++build\moc_waveview.cpp"
+						Description="MOC ..\src\gui\waveview\waveview.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_waveview.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\waveview\waveview.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\waveview\waveview.hpp -o c:\psycle-trunk\qpsycle\++build\moc_waveview.cpp"
+						Description="MOC ..\src\gui\waveview\waveview.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_waveview.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\machineview\wiredlg.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\machineview\wiredlg.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\machineview\wiredlg.hpp -o c:\psycle-trunk\qpsycle\++build\moc_wiredlg.cpp"
+						Description="MOC ..\src\gui\machineview\wiredlg.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_wiredlg.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\machineview\wiredlg.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\machineview\wiredlg.hpp -o c:\psycle-trunk\qpsycle\++build\moc_wiredlg.cpp"
+						Description="MOC ..\src\gui\machineview\wiredlg.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_wiredlg.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\gui\machineview\wiregui.hpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\machineview\wiregui.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\machineview\wiregui.hpp -o c:\psycle-trunk\qpsycle\++build\moc_wiregui.cpp"
+						Description="MOC ..\src\gui\machineview\wiregui.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_wiregui.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\src\gui\machineview\wiregui.hpp;C:\Qt\4.4.0-rc1-msvc\bin\moc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\moc.exe  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DNOMINMAX -DPSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE -DPSYCLE__MICROSOFT_MME_AVAILABLE -DQT_THREAD_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtCore&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtGui&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include\QtXml&quot; -I&quot;..\..\..\Qt\4.4.0-rc1-msvc\include&quot; -I&quot;$(QTDIR)\include&quot; -I&quot;$(QTDIR)\include\Qt&quot; -I&quot;$(QTDIR)\include\QtCore&quot; -I&quot;$(QTDIR)\src\3rdparty\zlib&quot; -I&quot;$(QTDIR)\include\QtXml&quot; -I&quot;..\..\external-packages\zlib-1.2.3\include&quot; -I&quot;..\..\external-packages\boost-1.33.1\include&quot; -I&quot;..\..\diversalis\src&quot; -I&quot;..\..\universalis\src&quot; -I&quot;..\..\psycle-helpers\src&quot; -I&quot;$(DXSDK_DIR)\include&quot; -I&quot;..\..\psycle-audiodrivers\src&quot; -I&quot;..\..\psycle-core\src&quot; -I&quot;..\src&quot; -I&quot;..\src\mididrivers&quot; -I&quot;..\src\model&quot; -I&quot;..\src\gui&quot; -I&quot;..\src\gui\machineview&quot; -I&quot;..\src\gui\patternview&quot; -I&quot;..\src\gui\waveview&quot; -I&quot;..\src\gui\sequencer&quot; -I&quot;..\src\gui\configdlg&quot; -I&quot;c:\Qt\4.4.0-rc1-msvc\include\ActiveQt&quot; -I&quot;..\++build&quot; -I&quot;.&quot; -I..\..\..\Qt\4.4.0-rc1-msvc\mkspecs\win32-msvc2005 -D_MSC_VER=1400 -DWIN32 ..\src\gui\machineview\wiregui.hpp -o c:\psycle-trunk\qpsycle\++build\moc_wiregui.cpp"
+						Description="MOC ..\src\gui\machineview\wiregui.hpp"
+						Outputs="c:\psycle-trunk\qpsycle\++build\moc_wiregui.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="Generated Files"
+			Filter="cpp;c;cxx;moc;h;def;odl;idl;res;"
+			UniqueIdentifier="{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}">
+			<File
+				RelativePath="..\++build\moc_audiopage.cpp"/>
+			<File
+				RelativePath="..\++build\moc_behaviourpage.cpp"/>
+			<File
+				RelativePath="..\++build\moc_configdlg.cpp"/>
+			<File
+				RelativePath="..\++build\moc_dirspage.cpp"/>
+			<File
+				RelativePath="..\++build\moc_effectgui.cpp"/>
+			<File
+				RelativePath="..\++build\moc_generatorgui.cpp"/>
+			<File
+				RelativePath="..\++build\moc_instrumentsmodel.cpp"/>
+			<File
+				RelativePath="..\++build\moc_logconsole.cpp"/>
+			<File
+				RelativePath="..\++build\moc_lookspage.cpp"/>
+			<File
+				RelativePath="..\++build\moc_machinegui.cpp"/>
+			<File
+				RelativePath="..\++build\moc_machinetweakdlg.cpp"/>
+			<File
+				RelativePath="..\++build\moc_machineview.cpp"/>
+			<File
+				RelativePath="..\++build\moc_mainwindow.cpp"/>
+			<File
+				RelativePath="..\++build\moc_mixertweakdlg.cpp"/>
+			<File
+				RelativePath="..\++build\moc_newmachinedlg.cpp"/>
+			<File
+				RelativePath="..\++build\moc_patternbox.cpp"/>
+			<File
+				RelativePath="..\++build\moc_patterndraw.cpp"/>
+			<File
+				RelativePath="..\++build\moc_patternview.cpp"/>
+			<File
+				RelativePath="..\++build\moc_samplebrowser.cpp"/>
+			<File
+				RelativePath="..\++build\moc_sequencerdraw.cpp"/>
+			<File
+				RelativePath="..\++build\moc_sequenceritem.cpp"/>
+			<File
+				RelativePath="..\++build\moc_sequencerline.cpp"/>
+			<File
+				RelativePath="..\++build\moc_sequencerview.cpp"/>
+			<File
+				RelativePath="..\++build\moc_waveamp.cpp"/>
+			<File
+				RelativePath="..\++build\moc_wavedisplay.cpp"/>
+			<File
+				RelativePath="..\++build\moc_waveview.cpp"/>
+			<File
+				RelativePath="..\++build\moc_wiredlg.cpp"/>
+			<File
+				RelativePath="..\++build\moc_wiregui.cpp"/>
+			<File
+				RelativePath="c:\psycle-trunk\qpsycle\++build\qpsycle.res"/>
+			<File
+				RelativePath="..\src\qpsyclePch.hpp.cpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ForcedIncludeFiles="$(NOINHERIT)"
+						PrecompiledHeaderThrough="$(INHERIT)"
+						UsePrecompiledHeader="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ForcedIncludeFiles="$(NOINHERIT)"
+						PrecompiledHeaderThrough="$(INHERIT)"
+						UsePrecompiledHeader="1"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\++build\qrc_qpsycle.cpp"/>
+		</Filter>
+		<Filter
+			Name="Resource Files"
+			Filter="qrc;*"
+			UniqueIdentifier="{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}"
+			ParseFiles="false">
+			<File
+				RelativePath="..\src\images\TbMainKnob.png"/>
+			<File
+				RelativePath="..\src\images\conf-audio.png"/>
+			<File
+				RelativePath="..\src\images\conf-folders.png"/>
+			<File
+				RelativePath="..\src\images\conf-general.png"/>
+			<File
+				RelativePath="..\src\images\conf-keyboard.png"/>
+			<File
+				RelativePath="..\src\images\conf-visual.png"/>
+			<File
+				RelativePath="..\src\images\def-background.png"/>
+			<File
+				RelativePath="..\colorschemes\default.qss"/>
+			<File
+				RelativePath="..\src\images\efx-internal.png"/>
+			<File
+				RelativePath="..\src\images\efx-native.png"/>
+			<File
+				RelativePath="..\src\images\gen-internal.png"/>
+			<File
+				RelativePath="..\src\images\gen-native.png"/>
+			<File
+				RelativePath="..\src\images\ladspa.png"/>
+			<File
+				RelativePath="..\src\images\machines.png"/>
+			<File
+				RelativePath="..\src\images\minus.png"/>
+			<File
+				RelativePath="..\colorschemes\mupsycle.qss"/>
+			<File
+				RelativePath="..\src\images\new.png"/>
+			<File
+				RelativePath="..\src\images\open.png"/>
+			<File
+				RelativePath="..\src\images\pat_addbar.png"/>
+			<File
+				RelativePath="..\src\images\pat_delbar.png"/>
+			<File
+				RelativePath="..\src\images\pattern-editor.png"/>
+			<File
+				RelativePath="..\src\images\pb_addpattoseq.png"/>
+			<File
+				RelativePath="..\src\images\pb_clnpat.png"/>
+			<File
+				RelativePath="..\src\images\pb_delpat.png"/>
+			<File
+				RelativePath="..\src\images\pb_newcat.png"/>
+			<File
+				RelativePath="..\src\images\pb_newpat.png"/>
+			<File
+				RelativePath="..\src\images\play.png"/>
+			<File
+				RelativePath="..\src\images\playselpattern.png"/>
+			<File
+				RelativePath="..\src\images\playstart.png"/>
+			<File
+				RelativePath="..\src\images\plugin.png"/>
+			<File
+				RelativePath="..\src\images\plus.png"/>
+			<File
+				RelativePath="..\src\images\psycle.png"/>
+			<File
+				RelativePath="..\src\images\qpsycle.png"/>
+			<File
+				RelativePath="..\src\qpsycle.qrc">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\colorschemes\default.qss;..\colorschemes\mupsycle.qss;..\colorschemes\zeropsycle.qss;..\src\images\TbMainKnob.png;..\src\images\conf-audio.png;..\src\images\conf-folders.png;..\src\images\conf-general.png;..\src\images\conf-keyboard.png;..\src\images\conf-visual.png;..\src\images\def-background.png;..\src\images\efx-internal.png;..\src\images\efx-native.png;..\src\images\gen-internal.png;..\src\images\gen-native.png;..\src\images\ladspa.png;..\src\images\machines.png;..\src\images\minus.png;..\src\images\new.png;..\src\images\open.png;..\src\images\pat_addbar.png;..\src\images\pat_delbar.png;..\src\images\pattern-editor.png;..\src\images\pb_addpattoseq.png;..\src\images\pb_clnpat.png;..\src\images\pb_delpat.png;..\src\images\pb_newcat.png;..\src\images\pb_newpat.png;..\src\images\play.png;..\src\images\playselpattern.png;..\src\images\playstart.png;..\src\images\plugin.png;..\src\images\plus.png;..\src\images\psycle.png;..\src\images\qpsycle.png;..\src\images\recordnotes.png;..\src\images\redo.png;..\src\images\sample-browser.png;..\src\images\save.png;..\src\images\selector.png;..\src\images\seq-add-track.png;..\src\images\seq-collapse.png;..\src\images\seq-del-track.png;..\src\images\seq-down-track.png;..\src\images\seq-expand.png;..\src\images\seq-up-track.png;..\src\images\sequencer.png;..\src\images\stop.png;..\src\images\undo.png;..\src\images\wave-copy.png;..\src\images\wave-cut.png;..\src\images\wave-open.png;..\src\images\wave-paste.png;..\src\images\wave-save.png;..\src\images\wave_play.png;..\src\images\wave_playstart.png;..\src\images\wave_stop.png;..\src\images\waveed.png;..\src\images\zoom-in.png;..\src\images\zoom-out.png;..\src\qpsycle.qrc;C:\Qt\4.4.0-rc1-msvc\bin\rcc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\rcc.exe -name qpsycle ..\src\qpsycle.qrc -o c:\psycle-trunk\qpsycle\++build\qrc_qpsycle.cpp"
+						Description="RCC ..\src\qpsycle.qrc"
+						Outputs="c:\psycle-trunk\qpsycle\++build\qrc_qpsycle.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						AdditionalDependencies="..\colorschemes\default.qss;..\colorschemes\mupsycle.qss;..\colorschemes\zeropsycle.qss;..\src\images\TbMainKnob.png;..\src\images\conf-audio.png;..\src\images\conf-folders.png;..\src\images\conf-general.png;..\src\images\conf-keyboard.png;..\src\images\conf-visual.png;..\src\images\def-background.png;..\src\images\efx-internal.png;..\src\images\efx-native.png;..\src\images\gen-internal.png;..\src\images\gen-native.png;..\src\images\ladspa.png;..\src\images\machines.png;..\src\images\minus.png;..\src\images\new.png;..\src\images\open.png;..\src\images\pat_addbar.png;..\src\images\pat_delbar.png;..\src\images\pattern-editor.png;..\src\images\pb_addpattoseq.png;..\src\images\pb_clnpat.png;..\src\images\pb_delpat.png;..\src\images\pb_newcat.png;..\src\images\pb_newpat.png;..\src\images\play.png;..\src\images\playselpattern.png;..\src\images\playstart.png;..\src\images\plugin.png;..\src\images\plus.png;..\src\images\psycle.png;..\src\images\qpsycle.png;..\src\images\recordnotes.png;..\src\images\redo.png;..\src\images\sample-browser.png;..\src\images\save.png;..\src\images\selector.png;..\src\images\seq-add-track.png;..\src\images\seq-collapse.png;..\src\images\seq-del-track.png;..\src\images\seq-down-track.png;..\src\images\seq-expand.png;..\src\images\seq-up-track.png;..\src\images\sequencer.png;..\src\images\stop.png;..\src\images\undo.png;..\src\images\wave-copy.png;..\src\images\wave-cut.png;..\src\images\wave-open.png;..\src\images\wave-paste.png;..\src\images\wave-save.png;..\src\images\wave_play.png;..\src\images\wave_playstart.png;..\src\images\wave_stop.png;..\src\images\waveed.png;..\src\images\zoom-in.png;..\src\images\zoom-out.png;..\src\qpsycle.qrc;C:\Qt\4.4.0-rc1-msvc\bin\rcc.exe"
+						CommandLine="C:\Qt\4.4.0-rc1-msvc\bin\rcc.exe -name qpsycle ..\src\qpsycle.qrc -o c:\psycle-trunk\qpsycle\++build\qrc_qpsycle.cpp"
+						Description="RCC ..\src\qpsycle.qrc"
+						Outputs="c:\psycle-trunk\qpsycle\++build\qrc_qpsycle.cpp"
+						Path="c:\Qt\4.4.0-rc1-msvc\bin"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\images\recordnotes.png"/>
+			<File
+				RelativePath="..\src\images\redo.png"/>
+			<File
+				RelativePath="..\src\images\sample-browser.png"/>
+			<File
+				RelativePath="..\src\images\save.png"/>
+			<File
+				RelativePath="..\src\images\selector.png"/>
+			<File
+				RelativePath="..\src\images\seq-add-track.png"/>
+			<File
+				RelativePath="..\src\images\seq-collapse.png"/>
+			<File
+				RelativePath="..\src\images\seq-del-track.png"/>
+			<File
+				RelativePath="..\src\images\seq-down-track.png"/>
+			<File
+				RelativePath="..\src\images\seq-expand.png"/>
+			<File
+				RelativePath="..\src\images\seq-up-track.png"/>
+			<File
+				RelativePath="..\src\images\sequencer.png"/>
+			<File
+				RelativePath="..\src\images\stop.png"/>
+			<File
+				RelativePath="..\src\images\undo.png"/>
+			<File
+				RelativePath="..\src\images\wave-copy.png"/>
+			<File
+				RelativePath="..\src\images\wave-cut.png"/>
+			<File
+				RelativePath="..\src\images\wave-open.png"/>
+			<File
+				RelativePath="..\src\images\wave-paste.png"/>
+			<File
+				RelativePath="..\src\images\wave-save.png"/>
+			<File
+				RelativePath="..\src\images\wave_play.png"/>
+			<File
+				RelativePath="..\src\images\wave_playstart.png"/>
+			<File
+				RelativePath="..\src\images\wave_stop.png"/>
+			<File
+				RelativePath="..\src\images\waveed.png"/>
+			<File
+				RelativePath="..\colorschemes\zeropsycle.qss"/>
+			<File
+				RelativePath="..\src\images\zoom-in.png"/>
+			<File
+				RelativePath="..\src\images\zoom-out.png"/>
+		</Filter>
+		<File
+			RelativePath="c:\psycle-trunk\qpsycle\src\qpsycle.rc"/>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>
