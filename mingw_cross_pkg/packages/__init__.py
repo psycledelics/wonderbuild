@@ -90,6 +90,7 @@ class Packages:
 		except AttributeError:
 			self._all_package_recipes = []
 			for p in os.listdir(self._package_recipe_dir):
+				if fnmatch.fnmatch(p, '*~'): continue
 				if fnmatch.fnmatch(p, '*.py*'):
 					if not fnmatch.fnmatch(p, '*.py') or fnmatch.fnmatch(p, '__init__.*'): continue
 					self._all_package_recipes.append(self.find_package_recipe(p[:-3])) # name without .py extension
@@ -411,7 +412,7 @@ class Package:
 		self._name = name
 	def packages(self): return self._packages
 	def name(self): return self._name
-	def version(self): return None
+	def version(self): return '(no version)'
 	def description(self): return '(no description)'
 	def deps(self): pass
 	def recursed_deps(self): pass
@@ -451,7 +452,8 @@ class BasePackageRecipe(Package):
 class PackageRecipe(BasePackageRecipe):
 	def __init__(self, packages, name, version = None):
 		BasePackageRecipe.__init__(self, packages, name)
-		self._version = version
+		if version is None: self._version = BasePackageRecipe.version(self)
+		else: self._version = version
 		self._deps = []
 		
 	def version(self): return self._version
@@ -463,23 +465,29 @@ class CommandPackageRecipe(BasePackageRecipe):
 		BasePackageRecipe.__init__(self, packages, name)
 		self._dir = dir
 
+	def version(self):
+		try: return self._version
+		except AttributeError:
+			self._version = self._piped_execute('version').rstrip()
+			if len(self._version) == 0: self._version = BasePackageRecipe.version(self)
+		return self._version
+
+	def description(self):		
+		try: return self._description
+		except AttributeError:
+			self._description = self._piped_execute('description').rstrip()
+			if len(self._description) == 0: self._description = BasePackageRecipe.description(self)
+		return self._description
+
 	def deps(self):
 		try: return self._deps
 		except AttributeError:
 			deps = self._piped_execute('deps')
 			self._deps = []
 			if len(deps) != 0:
-				for package_name in deps.split(' '): self._deps.append(self.packages().find_package(package_name))
+				for package_name in deps.rstrip().split(' '): self._deps.append(self.packages().find_package(package_name))
 		return self._deps
 	
-	def version(self):
-		try: return self._version
-		except AttributeError:
-			self._version = self._piped_execute('version')
-			if len(self._version) == 0: self._version = None
-			else: self._version = self._version.rstrip()
-		return self._version
-		
 	def download(self): self._execute('download')
 	def unpack(self): self._execute('unpack')
 	def build(self): self._execute('build')
@@ -544,11 +552,17 @@ class BuiltPackage(Package):
 
 	def version(self):
 		try: return self._version
-		except AttributeError: self._version = self.read_state('version')[0]
+		except AttributeError:
+			self._version = self.read_state('version')
+			if len(self._version) != 0: self._version = self._version[0]
+			else: self._version = Package.version(self)
 		return self._version
 	def description(self):
 		try: return self._description
-		except AttributeError: self._description = self.read_state('description')[0]
+		except AttributeError:
+			self._description = self.read_state('description')
+			if len(self._description) != 0: self._description = self._description[0]
+			else: self._description = Package.description(self)
 		return self._description
 	def deps(self):
 		try: return self._deps
@@ -600,8 +614,8 @@ def piped_shell(script, verbose = True, raise_on_error = True, env = None):
 		print script
 	p = subprocess.Popen(args = script, stdout = subprocess.PIPE, stderr = subprocess.PIPE, shell = True, env = env)
 	if raise_on_error:
-		out = p.communicate()[0]
-		if p.returncode != 0: raise OSError(p.returncode)
+		out, err = p.communicate()
+		if p.returncode != 0: raise OSError(str(p.returncode) + '\n' + err)
 		return out
 	else:
 		out, err = p.communicate()

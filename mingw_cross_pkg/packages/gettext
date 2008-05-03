@@ -34,9 +34,9 @@ VERSION_gettext=0.17
 case "$1" in
 
 version)
-    echo "$VERSION_gettext"
+    echo $VERSION_gettext
     ;;
-    
+
 new-version)
     VERSION=`
         wget -q -O- 'ftp://ftp.gnu.org/pub/gnu/gettext/' |
@@ -46,8 +46,12 @@ new-version)
     $SED "s,^VERSION_gettext=.*,VERSION_gettext=$VERSION," -i "$0"
     ;;
 
-dep)
-    #todo echo foo bar
+description)
+    echo GNU Internationalization utilities
+    ;;
+
+deps)
+    echo gcc
     ;;
     
 download)
@@ -58,7 +62,7 @@ download)
 unpack)
     tar xfvz "gettext-$VERSION_gettext.tar.gz"
     ;;
-    
+
 build)
     cd "gettext-$VERSION_gettext"
     cd gettext-runtime
