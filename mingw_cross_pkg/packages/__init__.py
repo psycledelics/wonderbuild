@@ -242,6 +242,7 @@ class Packages:
 						self._dest_dir = built_package.state_dir('dest') # transmit dest dir to package
 						if not continue_build:
 							if not skip_download: package_recipee.download()
+							package_recipee.unpack()
 							package_recipee.build()
 						else: 
 							package_recipee.continue_build()
@@ -430,6 +431,7 @@ class PackageRecipee(Package):
 	
 	def add_dep(self, package_name): self._deps.append(self.packages().find_package(package_name))
 	def download(self): pass
+	def unpack(self): pass
 	def build(self): pass
 	def continue_build(self): self.build()
 	def clean_build(self): pass
@@ -443,6 +445,30 @@ class PackageRecipee(Package):
 	def gsed(self): return self._packages.gsed()
 	def shell(self, script): return self._packages.shell(script)
 
+class CommandPackageRecipee(PackageRecipee):
+	def __init__(self, packages, name)
+		version = self._execute('version')
+		if len(version) == 0: version = None
+		PackageRecipee.__init__(self, packages, name, version)
+		for dep in self._execute('deps').split(' '): self.add_dep(dep)
+
+	def download(self): self._execute('download')
+	def unpack(self): self._execute('unpack')
+	def build(self): self._execute('build')
+	def clean_build(self): self._execute('clean-build')
+
+	def _execute(self, args):
+		os.environ['TARGET'] = self.target()
+		os.environ['DESTDIR'] = self.dest_dir()
+		os.environ['PREFIX'] = self.prefix()
+		os.environ['GSED'] = self.gsed()
+		os.environ['SED'] = self.gsed()
+		os.environ['GMAKE'] = self.gmake()
+		os.environ['MAKE'] = self.gmake()
+		try: return self.shellxxx(self._cmd + ' ' + args)
+		finally:
+			for name in ['TARGET', 'DESTDIR', 'PREFIX', 'GSED', 'SED', 'GMAKE', 'MAKE']: del os.environ[name]
+	
 class BuiltPackage(Package):
 	def installed(self): return False
 	def state_dir(self, state_name = None):
