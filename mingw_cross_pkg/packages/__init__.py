@@ -36,6 +36,14 @@ class Packages:
 		for e in ['AR', 'CC', 'CFLAGS', 'CROSS', 'CXX', 'CXXFLAGS', 'EXEEXT', 'LD', 'LIBS', 'NM', 'PKG_CONFIG', 'RANLIB']:
 			try: del os.environ[e]
 			except KeyError: pass
+
+		os.environ['TARGET'] = self.target()
+		os.environ['DESTDIR'] = self.dest_dir()
+		os.environ['PREFIX'] = self.prefix()
+		os.environ['GSED'] = self.gsed()
+		os.environ['SED'] = self.gsed()
+		os.environ['GMAKE'] = self.gmake()
+		os.environ['MAKE'] = self.gmake()
 		
 	def mirror(self, name): return self._mirrors[name]
 	def target(self): return self._target
@@ -230,9 +238,20 @@ class Packages:
 
 	def install(self, package_names, continue_build = False, rebuild = False, skip_download = False):
 		for package in self.install_recursed_deps([self.find_package(package_name) for package_name in package_names]):
-			built_package = BuiltPackage(self, package.name())
 			if package.installed(): installed_package = package
-			else: installed_package = InstalledPackage(self, built_package.name())
+			else: installed_package = InstalledPackage(self, package.name())
+			if package.name() in package_names:
+				if not rebuild: installed = 'user'
+				elif package.installed():
+					if package.auto(): installed = 'auto'
+					else: installed = 'user'
+				else: installed = 'user'
+			elif package.installed():
+				if package.auto(): installed = 'auto'
+				else: installed = 'user'
+			else: installed = 'auto'
+
+			built_package = BuiltPackage(self, package.name())
 			built_package.make_state_dir()
 			save = os.getcwd()
 			os.chdir(built_package.state_dir())
@@ -248,13 +267,17 @@ class Packages:
 						print 'building', package_recipe.name(), package_recipe.version()
 						built_package.remove_state('built')
 						built_package.make_state_dir('build')
-						os.chdir(built_package.state_dir('build'))
 						self._dest_dir = built_package.state_dir('dest') # transmit dest dir to package
 						if not continue_build:
-							if not skip_download: package_recipe.download()
+							if not skip_download:
+								os.chdir(built_package.state_dir('build'))
+								package_recipe.download()
+							os.chdir(built_package.state_dir('build'))
 							package_recipe.unpack()
+							os.chdir(built_package.state_dir('build'))
 							package_recipe.build()
 						else: 
+							os.chdir(built_package.state_dir('build'))
 							package_recipe.continue_build()
 							continue_build = False
 						if not built_package.state_exists('dest'): raise Exception('no dest dir after building package: ' + package_recipe.name())
@@ -278,19 +301,8 @@ class Packages:
 							shutil.copy(built_package.state_dir(state_name), installed_package.state_dir())
 						try: del self._packages[package.name()]
 						except KeyError: pass
-
-				if package.name() in package_names:
-					if not rebuild: installed = 'user'
-					elif package.installed():
-						if package.auto(): installed = 'auto'
-						else: installed = 'user'
-					else: installed = 'user'
-				elif package.installed():
-					if package.auto(): installed = 'auto'
-					else: installed = 'user'
-				else: installed = 'auto'
-				installed_package.write_state('installed', installed)
 			finally: os.chdir(save)
+			installed_package.write_state('installed', installed)
 
 	def remove_unneeded_deps(self, to_remove):
 		unneeded = []
@@ -496,28 +508,12 @@ class CommandPackageRecipe(BasePackageRecipe):
 	def _cmd(self): return os.path.join(self._dir, self.name())
 	
 	def _piped_execute(self, args):
-		os.environ['TARGET'] = self.target()
 		os.environ['DESTDIR'] = self.dest_dir()
-		os.environ['PREFIX'] = self.prefix()
-		os.environ['GSED'] = self.gsed()
-		os.environ['SED'] = self.gsed()
-		os.environ['GMAKE'] = self.gmake()
-		os.environ['MAKE'] = self.gmake()
-		try: return piped_shell(self._cmd() + ' ' + args, verbose = False)
-		finally:
-			for name in ['TARGET', 'DESTDIR', 'PREFIX', 'GSED', 'SED', 'GMAKE', 'MAKE']: del os.environ[name]
+		return piped_shell(self._cmd() + ' ' + args, verbose = False)
 	
 	def _execute(self, args):
-		os.environ['TARGET'] = self.target()
 		os.environ['DESTDIR'] = self.dest_dir()
-		os.environ['PREFIX'] = self.prefix()
-		os.environ['GSED'] = self.gsed()
-		os.environ['SED'] = self.gsed()
-		os.environ['GMAKE'] = self.gmake()
-		os.environ['MAKE'] = self.gmake()
-		try: return self.shell(self._cmd() + ' ' + args)
-		finally:
-			for name in ['TARGET', 'DESTDIR', 'PREFIX', 'GSED', 'SED', 'GMAKE', 'MAKE']: del os.environ[name]
+		return self.shell(self._cmd() + ' ' + args)
 	
 class BuiltPackage(Package):
 	def installed(self): return False

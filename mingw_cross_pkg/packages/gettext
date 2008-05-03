@@ -60,7 +60,7 @@ download)
     ;;
 
 unpack)
-    tar xfvz "gettext-$VERSION_gettext.tar.gz"
+    tar xfz "gettext-$VERSION_gettext.tar.gz"
     ;;
 
 build)
