@@ -269,7 +269,7 @@ class Packages:
 						built_package.make_state_dir('build')
 						self._dest_dir = built_package.state_dir('dest') # transmit dest dir to package
 						if not continue_build:
-							if os.path.exists(self._dest_dir): shutil.rmtree(self._dest_dir)
+							if os.path.exists(built_package.state_dir('dest')): shutil.rmtree(built_package.state_dir('dest'))
 							if not skip_download:
 								os.chdir(built_package.state_dir('build'))
 								package_recipe.download()
