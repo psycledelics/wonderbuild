@@ -40,22 +40,6 @@ class FSTree:
 	def __init__(self):
 		self._nodes = []
 
-import sys, subprocess
-
-def exec_subprocess(args):
-	p = subprocess.Popen(args = args, stdout = subprocess.PIPE, stderr = subprocess.PIPE, bufsize = -1)
-	out_eof = err_eof = False
-	while not(out_eof and err_eof):
-		if not out_eof:
-			r = p.stdout.read()
-			if not r: out_eof = True
-			else: sys.stdout.write(r)
-		if not err_eof:
-			r = p.stderr.read()
-			if not r: err_eof = True
-			else: sys.stderr.write(r)
-	return p.wait()
-
 class Sig:
 	pass
 
@@ -82,9 +66,66 @@ class TaskMaster:
 		self._ready_tasks = []
 		self._done_tasks = []
 
+import sys, subprocess
+
+def exec_subprocess(args): return exec_subprocess_3(args)
+
+def exec_subprocess_1(args):
+	p = subprocess.Popen(
+		args = args,
+		stdout = subprocess.PIPE,
+		stderr = subprocess.PIPE,
+		bufsize = 0,
+		shell = False,
+		env = {}
+	)
+	out_eof = err_eof = False
+	while not(out_eof and err_eof):
+		if not out_eof:
+			r = p.stdout.read()
+			if not r: out_eof = True
+			else: sys.stdout.write(r)
+		if not err_eof:
+			r = p.stderr.read()
+			if not r: err_eof = True
+			else: sys.stderr.write(r)
+	return p.wait()
+
+def exec_subprocess_2(args):
+	p = subprocess.Popen(
+		args = args,
+		stdout = subprocess.PIPE,
+		stderr = subprocess.PIPE,
+		bufsize = 0,
+		shell = False,
+		env = {}
+	)
+	while p.poll() is None:
+		r = p.stdout.readline()
+		if len(r) != 0: sys.stdout.write(r)
+		r = p.stderr.readline()
+		if len(r) != 0: sys.stderr.write(r)
+	return p.returncode
+
+def exec_subprocess_3(args):
+	p = subprocess.Popen(
+		args = args,
+		stdout = subprocess.PIPE,
+		stderr = subprocess.PIPE,
+		bufsize = 0,
+		shell = False,
+		env = {}
+	)
+	out, err = p.communicate()
+	sys.stdout.write(out)
+	sys.stderr.write(err)
+	return p.returncode
+
 if __name__ == '__main__':
-	args = ['ls', '-1']
+	args = ['find', '.']
 	print args, '\n', exec_subprocess(args)
+	#args = ['./x']
+	#print args, '\n', exec_subprocess(args)
 
 if False:
 	have_cxx_compiler = have_prog('c++')
