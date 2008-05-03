@@ -1,3 +1,5 @@
+#! /usr/bin/env bash
+
 # mingw-runtime package recipe for MinGW cross pkg tool.
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
@@ -19,23 +21,53 @@
 # CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import os, shutil
-from packages import PackageRecipe
+#---
+#   MinGW Windows API
+#
+#   http://mingw.sourceforge.net/
+#---
 
-def package(packages): return MingwRuntime(packages)
+set -ex
 
-class MingwRuntime(PackageRecipe):
-	def __init__(self, packages):
-		PackageRecipe.__init__(self, packages, 'mingw_runtime', '3.14')
-		
-	def _tarball(self): return 'mingw-runtime-' + self.version() + '.tar.gz' # todo use src?
+VERSION_mingw_runtime=3.14
 
-	def download(self): self.http_get(self.mirror('sourceforge') + '/mingw/' + self._tarball())
+case "$1" in
 
-	def build(self):
-		tar_dir = os.getcwd()
-		dir = os.path.join(self.dest_dir() + self.prefix(), self.target())
-		if not os.path.exists(dir): os.makedirs(dir)
-		os.chdir(dir)
-		self.shell('tar xzf ' + os.path.join(tar_dir, self._tarball()))
+version)
+    echo $VERSION_mingw_runtime
+    ;;
 
+new-version)
+    VERSION=`
+        wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435' |
+        $SED -n 's,.*mingw-runtime-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
+        head -1`
+    test -n "$VERSION"
+    $SED "s,^VERSION_mingw_runtime=.*,VERSION_mingw_runtime=$VERSION," -i "$0"
+    ;;
+
+description)
+    #echo ...
+    ;;
+
+deps)
+	# none
+    ;;
+    
+download)
+    tar tfz "mingw-runtime-$VERSION_mingw_runtime.tar.gz" &>/dev/null ||
+    wget -c "http://$(cat $RECIPES/mirrors/sourceforge)/mingw/mingw-runtime-$VERSION_mingw_runtime.tar.gz"
+    ;;
+
+unpack)
+    build=$(pwd)
+    install -d "$DESTDIR/$PREFIX/$TARGET"
+    cd "$DESTDIR/$PREFIX/$TARGET"
+    tar xfz "$build/mingw-runtime-$VERSION_mingw_runtime.tar.gz"
+    ;;
+
+build | continue-build | clean-build)
+	# not realy built
+	;;
+
+esac

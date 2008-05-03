@@ -57,7 +57,7 @@ deps)
     
 download)
     tar tfz "binutils-$VERSION_binutils-src.tar.gz" &>/dev/null ||
-    wget -c "http://$SOURCEFORGE_MIRROR/mingw/binutils-$VERSION_binutils-src.tar.gz"
+    wget -c "http://$(cat $RECIPES/mirrors/sourceforge)/mingw/binutils-$VERSION_binutils-src.tar.gz"
     ;;
 
 unpack)
