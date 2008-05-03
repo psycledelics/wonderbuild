@@ -269,6 +269,7 @@ class Packages:
 						built_package.make_state_dir('build')
 						self._dest_dir = built_package.state_dir('dest') # transmit dest dir to package
 						if not continue_build:
+							if os.path.exists(self._dest_dir): shutil.rmtree(self._dest_dir)
 							if not skip_download:
 								os.chdir(built_package.state_dir('build'))
 								package_recipe.download()
@@ -304,6 +305,7 @@ class Packages:
 						try: del self._packages[package.name()]
 						except KeyError: pass
 			finally: os.chdir(save)
+
 			installed_package.write_state('installed', installed)
 
 	def remove_unneeded_deps(self, to_remove):
