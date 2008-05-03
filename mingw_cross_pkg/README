@@ -4,7 +4,7 @@ This packaging tool makes it easy to install and remove packages at will in an i
 It handles the building and downloading of package sources, and also the dependencies between packages.
 
 The tool uses three directories to manage the packages:
-	- a directory of package recipees,
+	- a directory of package recipes,
 	- a directory where packages are built,
 	- a directory where packages are installed.
 	
@@ -13,7 +13,7 @@ subdirectories of the directory where the mingw_cross_pkg command is invoked,
 and are name respectively ++build and ++install.
 
 Following the Usage chapter below, are some explanations of the directory structures,
-and on how to write package recipees.
+and on how to write package recipes.
 Using the tool does not require you read all of this.
 
 ========
@@ -72,70 +72,70 @@ Usage: clean-build [--download | --destdir | --all] <package...>
   --all       wipe out the whole build dir altogether (same effect as --dest-dir --download).
 
 ===================
-1. Package recipees
+1. Package recipes
 ===================
 
-Each package recipee is a python module that contains instructions to download and build a package,
+Each package recipe is a python module that contains instructions to download and build a package,
 and also defines the dependencies of a package.
 
-Package recipees are python files stored under the "packages" directory in the same directory where
-the mingw_cross_pkg command is. So, the package recipee for package "foo" is looked for in packages/foo.py.
+Package recipes are python files stored under the "packages" directory in the same directory where
+the mingw_cross_pkg command is. So, the package recipe for package "foo" is looked for in packages/foo.py.
 
-A recipee should define a class derived from the base PackageRecipee class, and
+A recipe should define a class derived from the base PackageRecipe class, and
 should override/define several methods.
 
 ----------------------------------------------------
-1.1 Declaring the recipee class, and the constructor
+1.1 Declaring the recipe class, and the constructor
 ----------------------------------------------------
 
-A recipee module should define a recipee class derived from the base PackageRecipee class.
+A recipe module should define a recipe class derived from the base PackageRecipe class.
 
-In a recipee module, import the base class with:
+In a recipe module, import the base class with:
 
-	from packages import PackageRecipee
+	from packages import PackageRecipe
 
-The base recipee class has the following constructor:
+The base recipe class has the following constructor:
 
 	def __init__(self, packages, name, version = None)
 
-A derived recipee class must have the following constructor:
+A derived recipe class must have the following constructor:
 
 	def __init__(self, packages)
 	
-For example, to define a recipee class for package "foo", version "1.0", which depends on "gcc",
+For example, to define a recipe class for package "foo", version "1.0", which depends on "gcc",
 you would write:
 
-	from packages import PackageRecipee
-	class Foo(PackageRecipee):
+	from packages import PackageRecipe
+	class Foo(PackageRecipe):
 		def __init__(self, packages)
-			PackageRecipee.__init__(self, packages, 'foo', '1.0')
+			PackageRecipe.__init__(self, packages, 'foo', '1.0')
 			self.add_dep('gcc')
 			
 -------------------------
 1.2 Module-level function
 -------------------------
 
-A package recipee module must define one function:
+A package recipe module must define one function:
 
-	def package(packages) -> PackageRecipee
+	def package(packages) -> PackageRecipe
 	
-This function should return a new instance of the recipee class you defined.
+This function should return a new instance of the recipe class you defined.
 
 For example:
 	def package(packages): return Foo(packages)
 
 --------------------------------------------------------
-1.3 Methods inherited from the PackageRecipee base class
+1.3 Methods inherited from the PackageRecipe base class
 --------------------------------------------------------
 
-The base recipee class provide the following method for use in recipees.
-Recipees should not override these methods, just use them.
+The base recipe class provide the following method for use in recipes.
+Recipes should not override these methods, just use them.
 
 - def name(self) -> string
-	returns the name you passed to the base PackageRecipee constructor.
+	returns the name you passed to the base PackageRecipe constructor.
 	
 - def version(self) -> string
-	returns the version you passed to the base PackageRecipee constructor,
+	returns the version you passed to the base PackageRecipe constructor,
 	or None if you didn't pass any.
 
 - def target(self) -> string:
@@ -156,7 +156,7 @@ Recipees should not override these methods, just use them.
 
 - def mirror(self, name) -> string:
 	This method returns what host or url is to be used for various download sites.
-	This avoids hardcoding urls in every recipee.
+	This avoids hardcoding urls in every recipe.
 	For example: self.mirror('sourceforge') may return 'kent.dl.sourceforge.net'.
 
 - def http_get(self, url):
@@ -173,7 +173,7 @@ Recipees should not override these methods, just use them.
 	returns the the name or path to the GNU sed ('gsed' instead of 'sed' on *bsd systems)
 
 ----------------------------------------------------
-1.4 Methods to define/override in each recipee class
+1.4 Methods to define/override in each recipe class
 ----------------------------------------------------
 
 1.4.1 The description method
@@ -182,7 +182,7 @@ Recipees should not override these methods, just use them.
 def description(self) -> string
 
 This method should return a one-line description of the package
-If not overridden, the description will be the one of the base PackageRecipee class, which is '(no description)'.
+If not overridden, the description will be the one of the base PackageRecipe class, which is '(no description)'.
 
 1.4.2 The download method
 -------------------------
@@ -190,7 +190,7 @@ If not overridden, the description will be the one of the base PackageRecipee cl
 def download(self)
 
 This method is responsible for downloading the source code.
-Source code can be obtained is whatever way the recipee wants.
+Source code can be obtained is whatever way the recipe wants.
 It can be a tarball obtained via wget, or a checkout/update from a source code repository.
 
 This method should avoid downloading the files again if there are already there.
@@ -265,7 +265,7 @@ If the build exists and is complete (++build/foo/built exists), the tool will no
 files to the ++install tree.
 
 If the build does not exist or is incomplete (++build/foo/built does not exist), the tool will create (if needed) the build directory,
-remove the ++build/foo/built file, enter the ++build/foo/build subdirectory, and call the package recipee's download and build methods.
+remove the ++build/foo/built file, enter the ++build/foo/build subdirectory, and call the package recipe's download and build methods.
 
 After a successful build, the tool will write the information files in the package's build
 directory: ++build/foo/{built,version,direct-dependencies,recursed-dependencies}.

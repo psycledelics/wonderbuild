@@ -8,7 +8,7 @@ class Packages:
 	def __init__(self, build_state_dir = None, install_dir = None, target = 'i386-mingw32msvc'):
 		self._packages = {}
 		self._installed_packages = {}
-		self._package_recipees = {}
+		self._package_recipes = {}
 
 		self._mirrors = {
 			'sourceforge': 'kent.dl.sourceforge.net'
@@ -54,7 +54,7 @@ class Packages:
 		try: return self._packages[package_name]
 		except KeyError:
 			if os.path.exists(os.path.join(self._install_state_dir, package_name)): package = self.find_installed_package(package_name)
-			else: package = self.find_package_recipee(package_name)
+			else: package = self.find_package_recipe(package_name)
 			self._packages[package_name] = package
 			return package
 	
@@ -65,11 +65,11 @@ class Packages:
 			self._installed_packages[package_name] = package
 			return package
 		
-	def find_package_recipee(self, package_name):
-		try: return self._package_recipees[package_name]
+	def find_package_recipe(self, package_name):
+		try: return self._package_recipes[package_name]
 		except KeyError:
 			package = import_package(package_name).package(self)
-			self._package_recipees[package_name] = package
+			self._package_recipes[package_name] = package
 			return package
 
 	def installed_packages(self):
@@ -79,15 +79,15 @@ class Packages:
 			for package_name in os.listdir(self._install_state_dir): self._all_installed_packages.append(self.find_installed_package(package_name))
 			return self._all_installed_packages
 
-	def package_recipees(self):
-		try: return self._all_package_recipees
+	def package_recipes(self):
+		try: return self._all_package_recipes
 		except AttributeError:
-			self._all_package_recipees = []
+			self._all_package_recipes = []
 			for path in __path__:
 				for p in os.listdir(path):
 					if fnmatch.fnmatch(p, '*.py') and p != '__init__.py' and not fnmatch.fnmatch(p, '.*'):
-						self._all_package_recipees.append(self.find_package_recipee(p[:-2])) # name without .py extension
-			return self._all_package_recipees
+						self._all_package_recipes.append(self.find_package_recipe(p[:-2])) # name without .py extension
+			return self._all_package_recipes
 
 	def list(self):
 		flag_width = 3; name_width = 35; version_width = 27; description_width = 50
@@ -95,9 +95,9 @@ class Packages:
 		print '| Installed=Auto/User'
 		print '|/ ' + 'Name'.ljust(name_width) + 'Version'.ljust(version_width) + 'Description'
 		print '++-' + '=' * (name_width - 1) + '-' + '=' * (version_width - 1) + '-' + '=' * description_width
-		package_names = {} # {name: [installed, recipee]}
+		package_names = {} # {name: [installed, recipe]}
 		for package in self.installed_packages(): package_names[package.name()] = [package]
-		for package in self.package_recipees():
+		for package in self.package_recipes():
 			try: packages = package_names[package.name()]
 			except KeyError: package_names[package.name()] = [package]
 			else:
@@ -105,7 +105,7 @@ class Packages:
 		sorted = package_names.items()
 		sorted.sort()
 		for packages in [items[1] for items in sorted]:
-			for package in packages: # [installed, recipee]
+			for package in packages: # [installed, recipe]
 				if not package.installed(): installed = 'n '
 				elif package.auto(): installed = 'ia'
 				else: installed = 'iu'
@@ -134,7 +134,7 @@ class Packages:
 			for dep in i.deps():
 				if dep.name() == package.name(): result.append(i)
 		if not installed_only:
-			for r in self.package_recipees():
+			for r in self.package_recipes():
 				if r.name() in [p.name() for p in result]: continue # already listed as installed package
 				for dep in r.deps():
 					if dep.name() == package.name(): result.append(r)
@@ -146,7 +146,7 @@ class Packages:
 			for dep in i.deps():
 				if dep.name() == package.name(): result.append((i, self.recursive_reverse_deps(i, installed_only)))
 		if not installed_only:
-			for r in self.package_recipees():
+			for r in self.package_recipes():
 				if r.name() in [p[0].name() for p in result]: continue # already listed as installed package
 				for dep in r.deps():
 					if dep.name() == package.name(): result.append((r, self.recursive_reverse_deps(r, installed_only)))
@@ -197,10 +197,10 @@ class Packages:
 		for package in [self.find_package(package_name) for package_name in package_names]:
 			show_package(package)
 			if package.installed():
-				try: package_recipee = self.find_package_recipee(package.name())
-				except: pass # the recipee of an installed package may not exist anymore
+				try: package_recipe = self.find_package_recipe(package.name())
+				except: pass # the recipe of an installed package may not exist anymore
 				else:
-					if package_recipee.version() != package.version(): show_package(package_recipee)
+					if package_recipe.version() != package.version(): show_package(package_recipe)
 	
 	def install_recursed_deps(self, packages):
 		result = []
@@ -230,28 +230,28 @@ class Packages:
 				if package.installed() and not rebuild:
 					if package.name() in package_names: print 'already installed:', package.name(), package.version()
 				else:
-					if package.installed(): package_recipee = self.find_package_recipee(package.name())
-					else: package_recipee = package
-					new_build = rebuild and package_recipee.name() in package_names
+					if package.installed(): package_recipe = self.find_package_recipe(package.name())
+					else: package_recipe = package
+					new_build = rebuild and package_recipe.name() in package_names
 					if not new_build: new_build = not built_package.state_exists('built') or not built_package.state_exists('dest')
 					if new_build:
-						print 'building', package_recipee.name(), package_recipee.version()
+						print 'building', package_recipe.name(), package_recipe.version()
 						built_package.remove_state('built')
 						built_package.make_state_dir('build')
 						os.chdir(built_package.state_dir('build'))
 						self._dest_dir = built_package.state_dir('dest') # transmit dest dir to package
 						if not continue_build:
-							if not skip_download: package_recipee.download()
-							package_recipee.unpack()
-							package_recipee.build()
+							if not skip_download: package_recipe.download()
+							package_recipe.unpack()
+							package_recipe.build()
 						else: 
-							package_recipee.continue_build()
+							package_recipe.continue_build()
 							continue_build = False
-						if not built_package.state_exists('dest'): raise Exception('no dest dir after building package: ' + package_recipee.name())
-						built_package.write_state('version', package_recipee.version())
-						built_package.write_state('description', package_recipee.description())
-						built_package.write_state('direct-dependencies', '\n'.join([d.name() + ' ' + d.version() for d in package_recipee.deps()]))
-						built_package.write_state('recursed-dependencies', '\n'.join([d.name() + ' ' + d.version() for d in package_recipee.recursed_deps()]))
+						if not built_package.state_exists('dest'): raise Exception('no dest dir after building package: ' + package_recipe.name())
+						built_package.write_state('version', package_recipe.version())
+						built_package.write_state('description', package_recipe.description())
+						built_package.write_state('direct-dependencies', '\n'.join([d.name() + ' ' + d.version() for d in package_recipe.deps()]))
+						built_package.write_state('recursed-dependencies', '\n'.join([d.name() + ' ' + d.version() for d in package_recipe.recursed_deps()]))
 						built_package.write_state('built', None)
 
 					if not package.installed() or new_build:
@@ -375,15 +375,15 @@ class Packages:
 			except AttributeError: pass
 	
 	def clean_build(self, package_names, all, dest_dir, download):
-		for package_recipee in [self.find_package_recipee(package_name) for package_name in package_names]:
-			built_package = BuiltPackage(self, package_recipee.name())
+		for package_recipe in [self.find_package_recipe(package_name) for package_name in package_names]:
+			built_package = BuiltPackage(self, package_recipe.name())
 			if all: built_package.remove_state(verbose = True)
 			else:
 				if download: built_package.remove_state('build', verbose = True)
 				elif built_package.state_exists('build'):
 					print 'cleaning', built_package.state_dir('build')
 					os.chdir(built_package.state_dir('build'))
-					package_recipee.clean_build()
+					package_recipe.clean_build()
 				if dest_dir:
 					built_package.remove_state('built', verbose = True)
 					built_package.remove_state('dest', verbose = True)
@@ -408,7 +408,7 @@ class Package:
 	def recursed_deps(self): pass
 	def installed(self): pass
 
-class PackageRecipee(Package):
+class PackageRecipe(Package):
 	def __init__(self, packages, name, version = None):
 		Package.__init__(self, packages, name)
 		self._version = version
@@ -445,11 +445,11 @@ class PackageRecipee(Package):
 	def gsed(self): return self._packages.gsed()
 	def shell(self, script): return self._packages.shell(script)
 
-class CommandPackageRecipee(PackageRecipee):
+class CommandPackageRecipe(PackageRecipe):
 	def __init__(self, packages, name)
 		version = self._execute('version')
 		if len(version) == 0: version = None
-		PackageRecipee.__init__(self, packages, name, version)
+		PackageRecipe.__init__(self, packages, name, version)
 		for dep in self._execute('deps').split(' '): self.add_dep(dep)
 
 	def download(self): self._execute('download')

@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-# gettext package recipee for MinGW cross pkg tool.
+# gettext package recipe for MinGW cross pkg tool.
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
 #

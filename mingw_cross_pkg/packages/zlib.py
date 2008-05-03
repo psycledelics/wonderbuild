@@ -1,4 +1,4 @@
-# zlib package recipee for MinGW cross pkg tool.
+# zlib package recipe for MinGW cross pkg tool.
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
 #
@@ -20,13 +20,13 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import os, shutil
-from packages import PackageRecipee
+from packages import PackageRecipe
 
 def package(packages): return ZLib(packages)
 
-class ZLib(PackageRecipee):
+class ZLib(PackageRecipe):
 	def __init__(self, packages):
-		PackageRecipee.__init__(self, packages, 'zlib', '1.2.3')
+		PackageRecipe.__init__(self, packages, 'zlib', '1.2.3')
 		self.add_dep('gcc')
 
 	def description(self): return 'compression library'

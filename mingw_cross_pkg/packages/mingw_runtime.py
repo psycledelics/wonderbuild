@@ -1,4 +1,4 @@
-# mingw-runtime package recipee for MinGW cross pkg tool.
+# mingw-runtime package recipe for MinGW cross pkg tool.
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
 #
@@ -20,13 +20,13 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import os, shutil
-from packages import PackageRecipee
+from packages import PackageRecipe
 
 def package(packages): return MingwRuntime(packages)
 
-class MingwRuntime(PackageRecipee):
+class MingwRuntime(PackageRecipe):
 	def __init__(self, packages):
-		PackageRecipee.__init__(self, packages, 'mingw_runtime', '3.14')
+		PackageRecipe.__init__(self, packages, 'mingw_runtime', '3.14')
 		
 	def _tarball(self): return 'mingw-runtime-' + self.version() + '.tar.gz' # todo use src?
 

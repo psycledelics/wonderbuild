@@ -1,4 +1,4 @@
-# w32api package recipee for MinGW cross pkg tool.
+# w32api package recipe for MinGW cross pkg tool.
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
 #
@@ -20,13 +20,13 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import os, shutil
-from packages import PackageRecipee
+from packages import PackageRecipe
 
 def package(packages): return W32api(packages)
 
-class W32api(PackageRecipee):
+class W32api(PackageRecipe):
 	def __init__(self, packages):
-		PackageRecipee.__init__(self, packages, 'w32api', '3.11')
+		PackageRecipe.__init__(self, packages, 'w32api', '3.11')
 
 	def _tarball(self): return self.name() + '-' + self.version() + '.tar.gz' # todo use src?
 
