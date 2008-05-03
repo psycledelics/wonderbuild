@@ -1,3 +1,5 @@
+#! /usr/bin/env bash
+
 # binutils package recipe for MinGW cross pkg tool.
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
@@ -19,42 +21,68 @@
 # CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import os, shutil
-from packages import PackageRecipe
+#---
+#   MinGW binutils
+#
+#   http://mingw.sourceforge.net/
+#---
 
-def package(packages): return BinUtils(packages)
+set -ex
 
-class BinUtils(PackageRecipe):
-	def __init__(self, packages):
-		PackageRecipe.__init__(self, packages, 'binutils', self._version_short() + '-20080109-2')
-	
-	def _version_short(self): return '2.18.50'
-	
-	def description(self): return 'The GNU assembler, linker and binary utilities'
+VERSION_binutils=2.18.50-20080109-2
+VERSION_DIRNAME_binutils=`echo "$VERSION_binutils" | sed 's,-.*,,'`
 
-	def _tarball(self): return self.name() + '-' + self.version() + '-src.tar.gz'
-	def _dir(self): return self.name() + '-' + self._version_short()
-	
-	def download(self): self.http_get(self.mirror('sourceforge') + '/mingw/' + self._tarball())
+case "$1" in
 
-	def build(self):
-		self.shell('tar xzf ' + self._tarball())
-		self.shell(
-			'cd ' + self._dir() + ' && \n'
-			'./configure \\\n'
-				'--target=' + self.target() + ' \\\n'
-				'--prefix=' + self.prefix() + ' \\\n'
-				'--with-gcc \\\n'
-				'--with-gnu-ld \\\n'
-				'--with-gnu-as \\\n'
-				'--disable-nls \\\n'
-				'--disable-shared'
-		)
-		self.continue_build()
+version)
+    echo $VERSION_binutils
+    ;;
 
-	def continue_build(self):
-		self.shell(self.gmake() + ' -C ' + self._dir() + ' all install DESTDIR=' + self.dest_dir())
-	
-	def clean_build(self):
-		if os.path.exists(self._dir()): shutil.rmtree(self._dir())
+new-version)
+    VERSION=`
+        wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435' |
+        $SED -n 's,.*binutils-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
+        head -1`
+    test -n "$VERSION"
+    $SED "s,^VERSION_binutils=.*,VERSION_binutils=$VERSION," -i "$0"
+    ;;
 
+description)
+    echo The GNU assembler, linker and binary utilities
+    ;;
+
+deps)
+	# none
+    ;;
+    
+download)
+    tar tfz "binutils-$VERSION_binutils-src.tar.gz" &>/dev/null ||
+    wget -c "http://$SOURCEFORGE_MIRROR/mingw/binutils-$VERSION_binutils-src.tar.gz"
+    ;;
+
+unpack)
+    tar xfz "binutils-$VERSION_binutils-src.tar.gz"
+    ;;
+
+build | continue-build)
+	case "$1" in
+		build)
+			cd "binutils-$VERSION_DIRNAME_binutils"
+			./configure \
+				--target="$TARGET" \
+				--prefix="$PREFIX" \
+				--with-gcc \
+				--with-gnu-ld \
+				--with-gnu-as \
+				--disable-nls \
+				--disable-shared
+			;;
+	esac
+	$MAKE all install DESTDIR=$DESTDIR
+	;;
+
+clean-build)
+    rm -Rf "binutils-$VERSION_DIRNAME_binutils"
+    ;;
+
+esac

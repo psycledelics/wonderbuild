@@ -37,6 +37,7 @@ class Packages:
 			try: del os.environ[e]
 			except KeyError: pass
 
+		os.environ['RECIPES'] = self._package_recipe_dir
 		os.environ['TARGET'] = self.target()
 		os.environ['DESTDIR'] = self.dest_dir()
 		os.environ['PREFIX'] = self.prefix()

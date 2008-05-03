@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-# gettext package recipe for MinGW cross pkg tool.
+# w32api package recipe for MinGW cross pkg tool.
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
 #
@@ -22,64 +22,61 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #---
-#   gettext
+#   MinGW Windows API
 #
-#   http://www.gnu.org/software/gettext/
+#   http://mingw.sourceforge.net/
 #---
 
 set -ex
 
-VERSION_gettext=0.17
+VERSION_w32api=3.11
 
 case "$1" in
 
 version)
-    echo $VERSION_gettext
+    echo $VERSION_w32api
     ;;
 
 new-version)
     VERSION=`
-        wget -q -O- 'ftp://ftp.gnu.org/pub/gnu/gettext/' |
-        $SED -n 's,.*gettext-\([0-9][^>]*\)\.tar.*,\1,p' |
-        sort | tail -1`
+        wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435' |
+        $SED -n 's,.*w32api-\([0-9][^>]*\)-src\.tar.*,\1,p' | 
+        head -1`
     test -n "$VERSION"
-    $SED "s,^VERSION_gettext=.*,VERSION_gettext=$VERSION," -i "$0"
+    $SED "s,^VERSION_w32api=.*,VERSION_w32api=$VERSION," -i "$0"
     ;;
 
 description)
-    echo GNU Internationalization utilities
+    #echo ...
     ;;
 
 deps)
-    echo gcc
+	# none
     ;;
     
 download)
-    tar tfz "gettext-$VERSION_gettext.tar.gz" &>/dev/null ||
-    wget -c "ftp://ftp.gnu.org/pub/gnu/gettext/gettext-$VERSION_gettext.tar.gz"
+    tar tfz "w32api-$VERSION_w32api.tar.gz" &>/dev/null ||
+    wget -c "http://$(cat $RECIPES/mirrors/sourceforge)/mingw/w32api-$VERSION_w32api.tar.gz"
     ;;
 
 unpack)
-    tar xfz "gettext-$VERSION_gettext.tar.gz"
+    build=$(pwd)
+    install -d "$DESTDIR/$PREFIX/$TARGET"
+    cd "$DESTDIR/$PREFIX/$TARGET"
+    tar xfz "$build/w32api-$VERSION_w32api.tar.gz"
+    # fix incompatibilities with gettext
+    $SED 's,\(SUBLANG_BENGALI_INDIA\t\)0x01,\10x00,'    -i "$DESTDIR/$PREFIX/$TARGET/include/winnt.h"
+    $SED 's,\(SUBLANG_PUNJABI_INDIA\t\)0x01,\10x00,'    -i "$DESTDIR/$PREFIX/$TARGET/include/winnt.h"
+    $SED 's,\(SUBLANG_ROMANIAN_ROMANIA\t\)0x01,\10x00,' -i "$DESTDIR/$PREFIX/$TARGET/include/winnt.h"
+    # fix incompatibilities with jpeg
+    $SED 's,typedef unsigned char boolean;,,'           -i "$DESTDIR/$PREFIX/$TARGET/include/rpcndr.h"
+    # fix missing definitions for WinPcap and libdnet
+    $SED '1i\#include <wtypes.h>'                       -i "$DESTDIR/$PREFIX/$TARGET/include/iphlpapi.h"
+    $SED '1i\#include <wtypes.h>'                       -i "$DESTDIR/$PREFIX/$TARGET/include/wincrypt.h"
     ;;
 
-build | continue-build)
-	case "$1" in
-		build)
-			cd "gettext-$VERSION_gettext"
-			cd gettext-runtime
-			SHELL=bash ./configure \
-				--host="$TARGET" \
-				--disable-shared \
-				--prefix="$PREFIX/$TARGET" \
-				--enable-threads=win32
-			;;
-	esac
-	$MAKE install -C intl SHELL=bash DESTDIR=$DESTDIR
+build | continue-build | clean-build)
+	# not realy built
 	;;
-
-clean-build)
-    rm -Rf "gettext-$VERSION_gettext"
-    ;;
 
 esac
