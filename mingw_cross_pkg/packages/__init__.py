@@ -273,6 +273,8 @@ class Packages:
 								os.chdir(built_package.state_dir('build'))
 								package_recipe.download()
 							os.chdir(built_package.state_dir('build'))
+							package_recipe.clean_build()
+							os.chdir(built_package.state_dir('build'))
 							package_recipe.unpack()
 							os.chdir(built_package.state_dir('build'))
 							package_recipe.build()
