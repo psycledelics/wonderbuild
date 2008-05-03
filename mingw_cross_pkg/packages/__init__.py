@@ -2,18 +2,17 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
 
-import sys, os, shutil, imp, fnmatch
+import sys, os, subprocess, shutil, imp, fnmatch
 
 class Packages:
 	def __init__(self, build_state_dir = None, install_dir = None, target = 'i386-mingw32msvc'):
 		self._packages = {}
 		self._installed_packages = {}
 		self._package_recipes = {}
-
 		self._mirrors = {
 			'sourceforge': 'kent.dl.sourceforge.net'
 		}
-
+		self._package_recipe_dir = __path__[0]
 		self._target = target
 
 		if build_state_dir is not None: self._build_state_dir = build_state_dir
@@ -30,11 +29,10 @@ class Packages:
 		if not os.path.exists(self._prefix): os.makedirs(self._prefix)
 		os.environ['PATH'] = os.path.join(self.prefix(), 'bin') + os.pathsep + os.environ['PATH']
 
-		sys.path.append(os.getcwd())
-
+		self._dest_dir = ''
 		self._gmake = 'make' # or gmake
 		self._gsed = 'sed' # or gsed
-
+		
 		for e in ['AR', 'CC', 'CFLAGS', 'CROSS', 'CXX', 'CXXFLAGS', 'EXEEXT', 'LD', 'LIBS', 'NM', 'PKG_CONFIG', 'RANLIB']:
 			try: del os.environ[e]
 			except KeyError: pass
@@ -46,6 +44,8 @@ class Packages:
 	def gmake(self): return self._gmake
 	def gsed(self): return self._gsed
 	def shell(self, script, verbose = True): shell(script, verbose)
+	
+	def package_recipe_dir(self): return self._package_recipe_dir
 
 	def install_state_dir(self, package): return os.path.join(self._install_state_dir, package.name())
 	def build_state_dir(self, package): return os.path.join(self._build_state_dir, package.name())
@@ -68,8 +68,14 @@ class Packages:
 	def find_package_recipe(self, package_name):
 		try: return self._package_recipes[package_name]
 		except KeyError:
-			package = import_package(package_name).package(self)
-			self._package_recipes[package_name] = package
+			try:
+				package = import_package(package_name).package(self)
+				self._package_recipes[package_name] = package
+			except ImportError:
+				path = os.path.join(self._package_recipe_dir, package_name)
+				if not os.path.exists(path): raise
+				if os.stat(path)[0] & 1 == 0: raise Exception(package_name + ' found but not executable')
+				package = CommandPackageRecipe(self, self._package_recipe_dir, package_name)
 			return package
 
 	def installed_packages(self):
@@ -83,10 +89,13 @@ class Packages:
 		try: return self._all_package_recipes
 		except AttributeError:
 			self._all_package_recipes = []
-			for path in __path__:
-				for p in os.listdir(path):
-					if fnmatch.fnmatch(p, '*.py') and p != '__init__.py' and not fnmatch.fnmatch(p, '.*'):
-						self._all_package_recipes.append(self.find_package_recipe(p[:-2])) # name without .py extension
+			for p in os.listdir(self._package_recipe_dir):
+				if fnmatch.fnmatch(p, '*.py*'):
+					if not fnmatch.fnmatch(p, '*.py') or fnmatch.fnmatch(p, '__init__.*'): continue
+					self._all_package_recipes.append(self.find_package_recipe(p[:-3])) # name without .py extension
+				else:
+					path = os.path.join(self._package_recipe_dir, p)
+					if not os.path.isdir(path): self._all_package_recipes.append(self.find_package_recipe(p))
 			return self._all_package_recipes
 
 	def list(self):
@@ -402,23 +411,18 @@ class Package:
 		self._name = name
 	def packages(self): return self._packages
 	def name(self): return self._name
-	def version(self): pass
-	def description(self): pass
+	def version(self): return None
+	def description(self): return '(no description)'
 	def deps(self): pass
 	def recursed_deps(self): pass
 	def installed(self): pass
 
-class PackageRecipe(Package):
-	def __init__(self, packages, name, version = None):
+class BasePackageRecipe(Package):
+	def __init__(self, packages, name):
 		Package.__init__(self, packages, name)
-		self._version = version
-		self._deps = []
-		
-	def version(self): return self._version
-	def description(self): return '(no description)'
+
 	def installed(self): return False
 
-	def deps(self): return self._deps
 	def recursed_deps(self):
 		try: return self._recursed_deps
 		except AttributeError:
@@ -428,8 +432,7 @@ class PackageRecipe(Package):
 					if not recursed_dep in self._recursed_deps: self._recursed_deps.append(recursed_dep)
 				if not dep in self._recursed_deps: self._recursed_deps.append(dep)
 			return self._recursed_deps
-	
-	def add_dep(self, package_name): self._deps.append(self.packages().find_package(package_name))
+
 	def download(self): pass
 	def unpack(self): pass
 	def build(self): pass
@@ -438,25 +441,64 @@ class PackageRecipe(Package):
 
 	def mirror(self, name): return self._packages.mirror(name)
 	def http_get(self, url): self.shell('wget -c http://' + url)
-	def target(self): return self._packages.target()
-	def prefix(self): return self._packages.prefix()
-	def dest_dir(self): return self._packages.dest_dir()
-	def gmake(self): return self._packages.gmake()
-	def gsed(self): return self._packages.gsed()
-	def shell(self, script): return self._packages.shell(script)
+	def target(self): return self.packages().target()
+	def prefix(self): return self.packages().prefix()
+	def dest_dir(self): return self.packages().dest_dir()
+	def gmake(self): return self.packages().gmake()
+	def gsed(self): return self.packages().gsed()
+	def shell(self, script): return self.packages().shell(script)
 
-class CommandPackageRecipe(PackageRecipe):
-	def __init__(self, packages, name)
-		version = self._execute('version')
-		if len(version) == 0: version = None
-		PackageRecipe.__init__(self, packages, name, version)
-		for dep in self._execute('deps').split(' '): self.add_dep(dep)
+class PackageRecipe(BasePackageRecipe):
+	def __init__(self, packages, name, version = None):
+		BasePackageRecipe.__init__(self, packages, name)
+		self._version = version
+		self._deps = []
+		
+	def version(self): return self._version
+	def deps(self): return self._deps
+	def add_dep(self, package_name): self._deps.append(self.packages().find_package(package_name))
 
+class CommandPackageRecipe(BasePackageRecipe):
+	def __init__(self, packages, dir, name):
+		BasePackageRecipe.__init__(self, packages, name)
+		self._dir = dir
+
+	def deps(self):
+		try: return self._deps
+		except AttributeError:
+			deps = self._piped_execute('deps')
+			self._deps = []
+			if len(deps) != 0:
+				for package_name in deps.split(' '): self._deps.append(self.packages().find_package(package_name))
+		return self._deps
+	
+	def version(self):
+		try: return self._version
+		except AttributeError:
+			self._version = self._piped_execute('version')
+			if len(self._version) == 0: self._version = None
+			else: self._version = self._version.rstrip()
+		return self._version
+		
 	def download(self): self._execute('download')
 	def unpack(self): self._execute('unpack')
 	def build(self): self._execute('build')
 	def clean_build(self): self._execute('clean-build')
 
+	def _cmd(self): return os.path.join(self._dir, self.name())
+	
+	def _piped_execute(self, args):
+		os.environ['TARGET'] = self.target()
+		os.environ['DESTDIR'] = self.dest_dir()
+		os.environ['PREFIX'] = self.prefix()
+		os.environ['GSED'] = self.gsed()
+		os.environ['SED'] = self.gsed()
+		os.environ['GMAKE'] = self.gmake()
+		os.environ['MAKE'] = self.gmake()
+		try: return piped_shell(self._cmd() + ' ' + args, verbose = False)
+		finally:
+			for name in ['TARGET', 'DESTDIR', 'PREFIX', 'GSED', 'SED', 'GMAKE', 'MAKE']: del os.environ[name]
+	
 	def _execute(self, args):
 		os.environ['TARGET'] = self.target()
 		os.environ['DESTDIR'] = self.dest_dir()
@@ -465,7 +507,7 @@ class CommandPackageRecipe(PackageRecipe):
 		os.environ['SED'] = self.gsed()
 		os.environ['GMAKE'] = self.gmake()
 		os.environ['MAKE'] = self.gmake()
-		try: return self.shellxxx(self._cmd + ' ' + args)
+		try: return self.shell(self._cmd() + ' ' + args)
 		finally:
 			for name in ['TARGET', 'DESTDIR', 'PREFIX', 'GSED', 'SED', 'GMAKE', 'MAKE']: del os.environ[name]
 	
@@ -550,6 +592,20 @@ def shell(script, verbose = True):
 		print script
 	result = os.system(script)
 	if result != 0: raise OSError(result)
+	
+def piped_shell(script, verbose = True, raise_on_error = True, env = None):
+	if verbose:
+		print '# in dir', os.getcwd()
+		print '# (piped)'
+		print script
+	p = subprocess.Popen(args = script, stdout = subprocess.PIPE, stderr = subprocess.PIPE, shell = True, env = env)
+	if raise_on_error:
+		out = p.communicate()[0]
+		if p.returncode != 0: raise OSError(p.returncode)
+		return out
+	else:
+		out, err = p.communicate()
+		return out, err, p.returncode
 
 def write_file(file_name, text):
 	f = file(file_name, 'w')
