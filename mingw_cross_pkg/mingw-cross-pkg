@@ -82,14 +82,6 @@ def usage(out = sys.stderr, command = None):
 			'\n')
 
 
-_packages = None
-
-def packages():
-	global _packages
-	if _packages is None:
-		_packages = Packages()
-	return _packages
-
 def main():
 	if len(sys.argv) < 2:
 		usage()
@@ -197,6 +189,14 @@ def main():
 		usage()
 		sys.exit(1)
 		
+_packages = None
+
+def packages():
+	global _packages
+	if _packages is None:
+		_packages = Packages()
+	return _packages
+
 class Packages:
 	def __init__(self, package_recipe_dir = None, build_state_dir = None, install_dir = None, target = 'i386-mingw32msvc'):
 		self._packages = {}
