@@ -51,7 +51,7 @@ description)
     ;;
 
 deps)
-	echo binutils mingw_runtime w32api
+	echo binutils mingw-runtime w32api
     ;;
     
 download)
