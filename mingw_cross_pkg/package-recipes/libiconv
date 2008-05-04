@@ -75,7 +75,7 @@ download)
     ;;
 
 unpack)
-    tar xfz "$DOWNLOAD/libiconv-$VERSION_libiconv.tar.gz"
+    tar xfz "libiconv-$VERSION_libiconv.tar.gz"
     ;;
 
 build | continue-build)
