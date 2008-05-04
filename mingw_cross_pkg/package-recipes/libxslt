@@ -51,7 +51,8 @@ description)
     ;;
 
 deps)
-	# libxslt's configure script by default checks the availablily of libgcrypt and use it if found.
+	# libxslt's configure script by default checks the availability of libgcrypt and use it if found.
+	# libxslt's configure script checks the availability of libxml2 using xml2-config despite libxml2 having a pkg-config file.
     echo gcc libxml2 libgcrypt
     ;;
     

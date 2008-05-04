@@ -51,7 +51,7 @@ description)
     ;;
 
 deps)
-	# libxml2's configure script by default checks the availablily of libiconv and use it if found.
+	# libxml2's configure script by default checks the availability of libiconv and use it if found.
     echo gcc zlib libiconv
     ;;
     
