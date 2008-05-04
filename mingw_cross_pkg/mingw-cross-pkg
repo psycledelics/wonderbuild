@@ -48,6 +48,7 @@ def usage(out = sys.stderr, command = None):
 			'  --skip-download  skip the download step.\n'
 			'  --rebuild        rebuild the packages given as arguments.\n'
 			'  --continue       continue after a build failure.\n'
+			'  --verbose        show what files and dirs are installed.\n'
 			'\n')
 	if command is None or command == 'remove':
 		out.write(
@@ -113,12 +114,14 @@ def main():
 		continue_build = False
 		rebuild = False
 		skip_download = False
+		verbose = False
 		no_act = False
 		for arg in args:
 			if arg.startswith('-'):
 				if arg == '--continue': continue_build = True
 				elif arg == '--rebuild': rebuild = True
 				elif arg == '--skip-download': skip_download = True
+				elif arg == '--verbose': verbose = True
 				elif arg == '--no-act': no_act = True
 				else:
 					sys.stderr.write(sys.argv[0] + ': unrecognised option: ' + arg + '\n')
@@ -126,7 +129,7 @@ def main():
 					sys.exit(2)
 			else: package_names.append(arg)
 		if no_act: packages().install_no_act(package_names)
-		else: packages().install(package_names, continue_build = continue_build, rebuild = rebuild, skip_download = skip_download)
+		else: packages().install(package_names, continue_build = continue_build, rebuild = rebuild, skip_download = skip_download, verbose = verbose)
 	elif command == 'remove':
 		package_names = []
 		verbose = False
@@ -427,7 +430,7 @@ class Packages:
 		print 'would install:', ', '.join([package.name() + ' ' + package.version() for package in todo])
 		print 'already installed:', ', '.join([package.name() + ' ' + package.version() for package in done])
 
-	def install(self, package_names, continue_build = False, rebuild = False, skip_download = False):
+	def install(self, package_names, continue_build = False, rebuild = False, skip_download = False, verbose = False):
 		for package in self.install_recursed_deps([self.find_package(package_name) for package_name in package_names]):
 			if package.installed(): installed_package = package
 			else: installed_package = InstalledPackage(self, package.name())
@@ -488,6 +491,7 @@ class Packages:
 						os.chdir(built_package.state_dir('dest') + self._prefix)
 						shell('find . ! -type d -exec md5sum {} \\; > ' + installed_package.state_dir('files'), verbose = False)
 						shell('find . -mindepth 1 -type d | sort -r > ' + installed_package.state_dir('dirs'), verbose = False)
+						if verbose: shell('cat ' + installed_package.state_dir('files') + ' ' + installed_package.state_dir('dirs'), verbose = False)
 						if False: shutil.copytree(os.curdir, self._prefix, symlinks = True)
 							# note: shutil.copytree is not as good (rated "example code" in the documentation)
 						else: shell('cp -R * ' + self._prefix, verbose = False)
@@ -554,7 +558,7 @@ class Packages:
 			if not package in to_remove: to_remove.append(package)
 		for package in to_remove:
 			print 'removing', package.name(), package.version()
-			self.remove_one(package)
+			self.remove_one(package, verbose)
 
 	def remove_one(self, package, verbose = False):
 			if not package.installed(): raise Exception('package ' + package.name() + 'not an installed one')
@@ -565,10 +569,12 @@ class Packages:
 				try:
 					while True:
 						l = f.readline().rstrip()
-						if not l: break
+						if len(l) == 0: break
 						l = l.split('  ')[1] # md5sum precedes the file name
-						try: os.unlink(os.path.join(self._prefix, l))
-						except OSError: sys.stderr.write('file ' + l + ' was already removed while removing package ' + package.name() + '\n')
+						p = os.path.join(self._prefix, l)
+						try: os.unlink(p)
+						except OSError:
+							if not os.path.exists(p): sys.stderr.write('file ' + l + ' was already removed while removing package ' + package.name() + '\n')
 						else:
 							if verbose: print l
 				finally: f.close()
@@ -576,11 +582,11 @@ class Packages:
 				try:
 					while True:
 						l = f.readline().rstrip()
-						if not l: break
+						if len(l) == 0: break
 						try: os.rmdir(os.path.join(self._prefix, l))
 						except OSError: pass # directory not empty
 						else:
-							if verbose: print l
+							if verbose: print l + os.sep
 				finally: f.close()
 				package.remove_state()
 			finally: os.chdir(save)
@@ -802,7 +808,7 @@ def piped_shell(script, verbose = True, raise_on_error = True, env = None):
 def write_file(file_name, text):
 	f = file(file_name, 'w')
 	try:
-		if(not text is None): f.write(text); f.write('\n')
+		if text is not None: f.write(text); f.write('\n')
 	finally: f.close()
 
 def read_file(file_name):
@@ -811,7 +817,7 @@ def read_file(file_name):
 	try:
 		while True:
 			l = f.readline().rstrip()
-			if not l: break
+			if len(l) == 0: break
 			result.append(l)
 	finally: f.close()
 	return result
