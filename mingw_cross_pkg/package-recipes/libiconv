@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-# gettext package recipe for MinGW cross pkg tool.
+# libiconv package recipe for MinGW cross pkg tool.
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
 #
@@ -22,32 +22,32 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #---
-#   gettext
+#   libiconv
 #
-#   http://www.gnu.org/software/gettext/
+#   http://www.gnu.org/software/libiconv/
 #---
 
 set -eux
 
-VERSION_gettext=0.17
+VERSION_libiconv=1.9.2
 
 case "$1" in
 
 version)
-    echo $VERSION_gettext
+    echo $VERSION_libiconv
     ;;
 
 new-version)
     VERSION=`
-        wget -q -O- 'ftp://ftp.gnu.org/pub/gnu/gettext/' |
-        $SED -n 's,.*gettext-\([0-9][^>]*\)\.tar.*,\1,p' |
+        wget -q -O- 'http://ftp.gnu.org/pub/gnu/libiconv/' |
+        $SED -n 's,.*libiconv-\([0-9]*\)\.\([0-9]*\)\(\.[0-9]*\)\.tar.*,\1.\2\3,p' |
         sort | tail -1`
     test -n "$VERSION"
-    $SED "s,^VERSION_gettext=.*,VERSION_gettext=$VERSION," -i "$0"
+    $SED "s,^VERSION_libiconv=.*,VERSION_libiconv=$VERSION," -i "$0"
     ;;
 
 description)
-    echo GNU Internationalization utilities
+    echo GNU character encoding conversion library
     ;;
 
 deps)
@@ -65,36 +65,35 @@ deps)
 	# or (on systems supporting shared libraries, excluding AIX)
 	# * first gettext, then libiconv, then gettext again.
 	#
-	#echo gcc libiconv
-	echo gcc
-	;;
+    #echo gcc gettext
+    echo gcc
+    ;;
     
 download)
-    tar tfz "gettext-$VERSION_gettext.tar.gz" &>/dev/null ||
-    wget -c "ftp://ftp.gnu.org/pub/gnu/gettext/gettext-$VERSION_gettext.tar.gz"
+    tar tfz "libiconv-$VERSION_libiconv.tar.gz" &>/dev/null ||
+    wget -c "http://ftp.gnu.org/pub/gnu/libiconv/libiconv-$VERSION_libiconv.tar.gz"
     ;;
 
 unpack)
-    tar xfz "gettext-$VERSION_gettext.tar.gz"
+    tar xfz "$DOWNLOAD/libiconv-$VERSION_libiconv.tar.gz"
     ;;
 
 build | continue-build)
-	cd "gettext-$VERSION_gettext"
-	cd gettext-runtime
+	cd "libiconv-$VERSION_libiconv"
 	case "$1" in
 		build)
 			./configure \
 				--host="$TARGET" \
-				--disable-shared \
 				--prefix="$PREFIX/$TARGET" \
-				--enable-threads=win32
+				--disable-shared \
+				--disable-nls
 			;;
 	esac
-	$MAKE install -C intl SHELL=bash DESTDIR=$DESTDIR
+	$MAKE install DESTDIR=$DESTDIR
 	;;
 
 clean-build)
-    rm -Rf "gettext-$VERSION_gettext"
+    rm -Rf "libiconv-$VERSION_libiconv"
     ;;
 
 esac
