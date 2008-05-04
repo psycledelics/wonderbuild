@@ -60,7 +60,7 @@ download)
     ;;
 
 unpack)
-    tar xfz "$DOWNLOAD/libxml2-$VERSION_libxml2.tar.gz"
+    tar xfz "libxml2-$VERSION_libxml2.tar.gz"
     ;;
 
 build | continue-build)
