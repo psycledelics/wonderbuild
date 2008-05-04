@@ -1,0 +1,90 @@
+#! /usr/bin/env bash
+
+# libgcrypt package recipe for MinGW cross pkg tool.
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# copyright 2008-2008 Johan Boule <bohan@jabber.org>
+#
+# Based on MinGW cross compiling environment, version 1.4
+# copyright 2007-2008 Volker Grabsch <vog@notjusthosting.com>
+# copyright 2007-2008 Rocco Rutte <pdmef@gmx.net>
+# copyright 2007-2008 Andreas Roever <roever@users.sf.net>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject
+# to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+# CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+#---
+#   libgcrypt
+#
+#   ftp://ftp.gnupg.org/gcrypt/libgcrypt/
+#---
+
+set -eux
+
+VERSION_libgcrypt=1.4.1
+
+case "$1" in
+
+version)
+    echo $VERSION_libgcrypt
+    ;;
+
+new-version)
+    VERSION=`
+        wget -q -O- 'ftp://ftp.gnupg.org/gcrypt/libgcrypt/' |
+        $SED -n 's,.*libgcrypt-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        tail -1`
+    test -n "$VERSION"
+    $SED "s,^VERSION_libgcrypt=.*,VERSION_libgcrypt=$VERSION," -i "$0"
+    ;;
+
+description)
+    echo LGPL Crypto library
+    ;;
+
+deps)
+    # Note: ligcrypt's configure script checks for the availability of libpth (GNU Pth library)
+    echo gcc libgpg-error
+    ;;
+    
+download)
+    tar tfj "libgcrypt-$VERSION_libgcrypt.tar.bz2" &>/dev/null ||
+    wget -c "ftp://ftp.gnupg.org/gcrypt/libgcrypt/libgcrypt-$VERSION_libgcrypt.tar.bz2"
+    ;;
+
+unpack)
+    tar xfj "libgcrypt-$VERSION_libgcrypt.tar.bz2"
+    ;;
+
+build | continue-build)
+    cd "libgcrypt-$VERSION_libgcrypt"
+	case "$1" in
+		build)
+			$SED '26i\#include <ws2tcpip.h>' -i src/gcrypt.h.in
+			$SED '26i\#include <ws2tcpip.h>' -i src/ath.h
+			$SED 's,sys/times.h,sys/time.h,' -i cipher/random.c
+			# wine confuses the cross-compiling detection, so set it explicitly
+			$SED 's,cross_compiling=no,cross_compiling=yes,' -i configure
+			./configure \
+				--host="$TARGET" \
+				--disable-shared \
+				--prefix="$PREFIX/$TARGET" \
+				--with-gpg-error-prefix="$PREFIX/$TARGET"
+			;;
+	esac
+	$MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= DESTDIR=$DESTDIR
+	;;
+
+clean-build)
+    rm -Rf "libgcrypt-$VERSION_libgcrypt"
+    ;;
+
+esac
