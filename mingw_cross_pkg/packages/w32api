@@ -76,7 +76,7 @@ unpack)
     ;;
 
 build | continue-build | clean-build)
-	# not realy built
+	# not really built
 	;;
 
 esac

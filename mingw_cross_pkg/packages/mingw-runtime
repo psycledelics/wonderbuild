@@ -22,7 +22,7 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #---
-#   MinGW Windows API
+#   MinGW Runtime
 #
 #   http://mingw.sourceforge.net/
 #---
@@ -67,7 +67,7 @@ unpack)
     ;;
 
 build | continue-build | clean-build)
-	# not realy built
+	# not really built
 	;;
 
 esac

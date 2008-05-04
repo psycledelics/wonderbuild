@@ -22,7 +22,7 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #---
-#   MinGW binutils
+#   MinGW GCC
 #
 #   http://mingw.sourceforge.net/
 #---
@@ -64,7 +64,7 @@ unpack)
     ;;
 
 build | continue-build)
-    cd "gcc-$VERSION_gcc-src"
+	cd "gcc-$VERSION_gcc-src"
 	case "$1" in
 		build)
 			./configure \
