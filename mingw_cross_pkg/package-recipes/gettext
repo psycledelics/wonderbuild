@@ -27,7 +27,7 @@
 #   http://www.gnu.org/software/gettext/
 #---
 
-set -ex
+set -eux
 
 VERSION_gettext=0.17
 

@@ -27,7 +27,7 @@
 #   http://mingw.sourceforge.net/
 #---
 
-set -ex
+set -eux
 
 VERSION_binutils=2.18.50-20080109-2
 

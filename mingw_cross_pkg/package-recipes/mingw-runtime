@@ -27,7 +27,7 @@
 #   http://mingw.sourceforge.net/
 #---
 
-set -ex
+set -eux
 
 VERSION_mingw_runtime=3.14
 

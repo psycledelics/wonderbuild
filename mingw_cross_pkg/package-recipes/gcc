@@ -27,7 +27,7 @@
 #   http://mingw.sourceforge.net/
 #---
 
-set -ex
+set -eux
 
 VERSION_gcc=4.2.1-2
 

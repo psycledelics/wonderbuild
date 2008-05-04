@@ -27,7 +27,7 @@
 #   http://www.zlib.net/
 #---
 
-set -ex
+set -eux
 
 VERSION_zlib=1.2.3
 

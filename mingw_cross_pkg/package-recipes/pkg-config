@@ -27,7 +27,7 @@
 #   http://pkg-config.freedesktop.org/
 #---
 
-set -ex
+set -eux
 
 VERSION_pkg_config=0.23
 

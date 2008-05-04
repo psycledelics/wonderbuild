@@ -27,7 +27,7 @@
 #   http://mingw.sourceforge.net/
 #---
 
-set -ex
+set -eux
 
 VERSION_w32api=3.11
 
