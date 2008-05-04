@@ -5,7 +5,7 @@
 
 import sys, os, subprocess, shutil, imp, fnmatch
 
-version = '0.1'
+version = '0.2'
 
 commands = ('help', 'version', 'list', 'show', 'install', 'remove', 'need-rebuild', 'reverse-depends', 'clean-build')
 
