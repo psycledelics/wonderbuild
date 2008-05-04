@@ -204,7 +204,7 @@ class Packages:
 		self._package_recipes = {}
 		
 		if package_recipe_dir is not None: self._package_recipe_dir = package_recipe_dir
-		else: self._package_recipe_dir = os.path.join(os.getcwd(), 'packages')
+		else: self._package_recipe_dir = os.path.join(os.getcwd(), 'package-recipes')
 
 		self._target = target
 
