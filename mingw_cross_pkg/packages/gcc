@@ -1,3 +1,5 @@
+#! /usr/bin/env bash
+
 # gcc package recipe for MinGW cross pkg tool.
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
@@ -19,49 +21,74 @@
 # CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import os, shutil
-from packages import PackageRecipe
+#---
+#   MinGW binutils
+#
+#   http://mingw.sourceforge.net/
+#---
 
-def package(packages): return Gcc(packages)
+set -ex
 
-class Gcc(PackageRecipe):
-	def __init__(self, packages):
-		PackageRecipe.__init__(self, packages, 'gcc', '4.2.1-2')
-		self.add_dep('binutils')
-		self.add_dep('mingw_runtime')
-		self.add_dep('w32api')
+VERSION_gcc=4.2.1-2
 
-	def description(self): return 'The GNU Compiler Collection'
+case "$1" in
 
-	def _tarball(self): return self._dir() + '.tar.gz'
-	def _dir(self): return self.name() + '-' + self.version() + '-src'
+version)
+    echo $VERSION_gcc
+    ;;
 
-	def download(self): self.http_get(self.mirror('sourceforge') + '/mingw/' + self._tarball())
+new-version)
+    VERSION=`
+        wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435' |
+        $SED -n 's,.*gcc-\([4-9][^>]*\)-src\.tar.*,\1,p' | 
+        head -1`
+    test -n "$VERSION"
+    $SED "s,^VERSION_gcc=.*,VERSION_gcc=$VERSION," -i "$0"
+    ;;
 
-	def build(self):
-		self.shell('tar xzf ' + self._tarball())
-		self.shell(
-			'cd ' + self._dir() + ' && \n'
-			'./configure \\\n'
-				'--target=' + self.target() + ' \\\n'
-				'--prefix=' + self.prefix() + ' \\\n'
-		        '--enable-languages="c,c++" \\\n'
-		        '--enable-version-specific-runtime-libs \\\n'
-		        '--with-gcc \\\n'
-		        '--with-gnu-ld \\\n'
-		        '--with-gnu-as \\\n'
-		        '--disable-nls \\\n'
-		        '--disable-shared \\\n'
-		        '--without-x \\\n'
-		        '--enable-threads=win32 \\\n'
-		        '--disable-win32-registry \\\n'
-		        '--enable-sjlj-exceptions'
-		)
-		self.continue_build()
+description)
+    echo The GNU Compiler Collection
+    ;;
 
-	def continue_build(self):
-		self.shell(self.gmake() + ' -C ' + self._dir() + ' all install DESTDIR=' + self.dest_dir())
-	
-	def clean_build(self):
-		if os.path.exists(self._dir()): shutil.rmtree(self._dir())
+deps)
+	echo binutils mingw_runtime w32api
+    ;;
+    
+download)
+    tar tfz "gcc-$VERSION_gcc-src.tar.gz" &>/dev/null ||
+    wget -c "http://$(cat $RECIPES/mirrors/sourceforge)/mingw/gcc-$VERSION_gcc-src.tar.gz"
+    ;;
+
+unpack)
+    tar xfz "gcc-$VERSION_gcc-src.tar.gz"
+    ;;
+
+build | continue-build)
+    cd "gcc-$VERSION_gcc-src"
+	case "$1" in
+		build)
+			./configure \
+				--target="$TARGET" \
+				--prefix="$PREFIX" \
+				--enable-languages="c,c++" \
+				--enable-version-specific-runtime-libs \
+				--with-gcc \
+				--with-gnu-ld \
+				--with-gnu-as \
+				--disable-nls \
+				--disable-shared \
+				--without-x \
+				--enable-threads=win32 \
+				--disable-win32-registry \
+				--enable-sjlj-exceptions
+		;;
+	esac
+	$MAKE all install DESTDIR=$DESTDIR
+	;;
+
+clean-build)
+	rm -Rf "gcc-$VERSION_gcc-src"
+	;;
+
+esac
 

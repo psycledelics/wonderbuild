@@ -64,10 +64,10 @@ unpack)
     ;;
 
 build | continue-build)
+	cd "gettext-$VERSION_gettext"
+	cd gettext-runtime
 	case "$1" in
 		build)
-			cd "gettext-$VERSION_gettext"
-			cd gettext-runtime
 			SHELL=bash ./configure \
 				--host="$TARGET" \
 				--disable-shared \

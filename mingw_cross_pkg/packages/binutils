@@ -30,7 +30,6 @@
 set -ex
 
 VERSION_binutils=2.18.50-20080109-2
-VERSION_DIRNAME_binutils=`echo "$VERSION_binutils" | sed 's,-.*,,'`
 
 case "$1" in
 
@@ -64,25 +63,30 @@ unpack)
     tar xfz "binutils-$VERSION_binutils-src.tar.gz"
     ;;
 
-build | continue-build)
+build | continue-build | clean-build)
+	VERSION_DIRNAME_binutils=`echo "$VERSION_binutils" | sed 's,-.*,,'`
 	case "$1" in
-		build)
+		build | continue-build)
 			cd "binutils-$VERSION_DIRNAME_binutils"
-			./configure \
-				--target="$TARGET" \
-				--prefix="$PREFIX" \
-				--with-gcc \
-				--with-gnu-ld \
-				--with-gnu-as \
-				--disable-nls \
-				--disable-shared
+			case "$1" in
+				build)
+					./configure \
+						--target="$TARGET" \
+						--prefix="$PREFIX" \
+						--with-gcc \
+						--with-gnu-ld \
+						--with-gnu-as \
+						--disable-nls \
+						--disable-shared
+					;;
+			esac
+			$MAKE all install DESTDIR=$DESTDIR
+			;;
+
+		clean-build)
+			rm -Rf "binutils-$VERSION_DIRNAME_binutils"
 			;;
 	esac
-	$MAKE all install DESTDIR=$DESTDIR
 	;;
-
-clean-build)
-    rm -Rf "binutils-$VERSION_DIRNAME_binutils"
-    ;;
 
 esac

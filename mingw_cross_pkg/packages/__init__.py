@@ -37,7 +37,7 @@ class Packages:
 			try: del os.environ[e]
 			except KeyError: pass
 
-		os.environ['RECIPES'] = self._package_recipe_dir
+		os.environ['RECIPES'] = self.package_recipe_dir()
 		os.environ['TARGET'] = self.target()
 		os.environ['DESTDIR'] = self.dest_dir()
 		os.environ['PREFIX'] = self.prefix()
@@ -55,7 +55,6 @@ class Packages:
 	def shell(self, script, verbose = True): shell(script, verbose)
 	
 	def package_recipe_dir(self): return self._package_recipe_dir
-
 	def install_state_dir(self, package): return os.path.join(self._install_state_dir, package.name())
 	def build_state_dir(self, package): return os.path.join(self._build_state_dir, package.name())
 		
@@ -508,6 +507,7 @@ class CommandPackageRecipe(BasePackageRecipe):
 	def download(self): self._execute('download')
 	def unpack(self): self._execute('unpack')
 	def build(self): self._execute('build')
+	def continue_build(self): self._execute('continue-build')
 	def clean_build(self): self._execute('clean-build')
 
 	def _cmd(self): return os.path.join(self._dir, self.name())
