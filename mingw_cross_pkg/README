@@ -9,7 +9,7 @@ The tool uses three directories to manage the packages:
 	- a directory where packages are installed.
 	
 By default, the build directory and the install directory are created as
-subdirectories of the directory where the mingw_cross_pkg command is invoked,
+subdirectories of the directory where the mingw-cross-pkg command is invoked,
 and are name respectively ++build and ++install.
 
 Following the Usage chapter below, are some explanations of the directory structures,
@@ -22,7 +22,7 @@ Using the tool does not require you read all of this.
 
 The tool is self documented, by using the --help option.
 
-Usage: ./mingw_cross_pkg.py <command> [args]
+Usage: ./mingw-cross-pkg <command> [args]
   where <command> is one of: help, version, list, show, install, remove, need-rebuild, reverse-depends, clean-build.
 
 Usage: <help | --help> [command]
@@ -75,116 +75,70 @@ Usage: clean-build [--download | --destdir | --all] <package...>
 1. Package recipes
 ==================
 
-Each package recipe is a python module that contains instructions to download and build a package,
-and also defines the dependencies of a package.
+Each package recipe is an arbitrary executable file (shell script, makefile, whatever), or a python module,
+that contains instructions to download and build a package, and also defines the dependencies of a package.
 
-Package recipes are python files stored under the "packages" directory in the same directory where
-the mingw_cross_pkg command is. So, the package recipe for package "foo" is looked for in packages/foo.py.
+Package recipes are files stored under the "package-recipes" directory in the same directory where
+the mingw-cross-pkg command is. So, the package recipe for package "foo" is looked for in package-recipes/foo.
 
-A recipe should define a class derived from the base PackageRecipe class, and
-should override/define several methods.
+------------------------------------------
+1.3 Methods/Variables available in recipes
+------------------------------------------
 
-----------------------------------------------------
-1.1 Declaring the recipe class, and the constructor
-----------------------------------------------------
-
-A recipe module should define a recipe class derived from the base PackageRecipe class.
-
-In a recipe module, import the base class with:
-
-	from packages import PackageRecipe
-
-The base recipe class has the following constructor:
-
-	def __init__(self, packages, name, version = None)
-
-A derived recipe class must have the following constructor:
-
-	def __init__(self, packages)
-	
-For example, to define a recipe class for package "foo", version "1.0", which depends on "gcc",
-you would write:
-
-	from packages import PackageRecipe
-	class Foo(PackageRecipe):
-		def __init__(self, packages)
-			PackageRecipe.__init__(self, packages, 'foo', '1.0')
-			self.add_dep('gcc')
-			
--------------------------
-1.2 Module-level function
--------------------------
-
-A package recipe module must define one function:
-
-	def package(packages) -> PackageRecipe
-	
-This function should return a new instance of the recipe class you defined.
-
-For example:
-	def package(packages): return Foo(packages)
-
--------------------------------------------------------
-1.3 Methods inherited from the PackageRecipe base class
--------------------------------------------------------
-
-The base recipe class provide the following method for use in recipes.
+The base recipe class provide the following methods (and environment variables) for use in recipes.
 Recipes should not override these methods, just use them.
 
-- def name(self) -> string
-	returns the name you passed to the base PackageRecipe constructor.
-	
-- def version(self) -> string
-	returns the version you passed to the base PackageRecipe constructor,
-	or None if you didn't pass any.
-
-- def target(self) -> string:
-	This method returns the target triplet used for cross compilation.
-	For example: self.target() may return 'i386-mingw32msvc'.
+- TARGET / def target(self) -> string:
+	This method/variable returns the target triplet used for cross compilation.
+	For example: i386-mingw32msvc.
 	For autoconf-based packages, you would pass this path to the configure's --target option.
 
-- def prefix(self) -> path
-	This method returns the absolute path to the final installation tree, xxx/++install/prefix.
+- PREFIX / def prefix(self) -> path
+	This method/variable returns the absolute path to the final installation tree, xxx/++install/prefix.
 	For autoconf-based packages, you would pass either
 	self.prefix() or self.prefix() + self.target() to the configure's --prefix option,
 	depending on whether you're building a cross-build tool or a normal software.
 
-- def dest_dir(self) -> path:
-	This method returns the path were the package should put all the files to install.
+- DESTDIR / def dest_dir(self) -> path:
+	This method/variable returns the path were the package should put all the files to install.
 	For automake-based packages, you would pass this path to the "make install DESTDIR=" command.
-	For a package "foo", self.dest_dir() would return an absolute path to xxx/++build/foo/dest/.
+	For a package "foo", dest dir would would be an absolute path to xxx/++build/foo/dest/.
 
-- def mirror(self, name) -> string:
-	This method returns what host or url is to be used for various download sites.
-	This avoids hardcoding urls in every recipe.
-	For example: self.mirror('sourceforge') may return 'kent.dl.sourceforge.net'.
+- GMAKE, MAKE / def gmake(self):
+	returns the the name or path to the GNU make command ('gmake' instead of 'make' on *bsd systems)
 
-- def http_get(self, url):
-	This is a convenience method to download a tarball file via http.
-	
-- def shell(self, script):
-	This method passes arbitrary code contained in the "script" argument to system shell for execution.
-	An exception OSError is raised when the return code of the shell subprocess is non-zero.
-	
-- def def gmake(self):
-	returns the the name or path to the GNU make command ('gmake' instead of 'make' on *bsd systems).
-
-- def def gsed(self):
+- GSED, SED / def gsed(self):
 	returns the the name or path to the GNU sed ('gsed' instead of 'sed' on *bsd systems)
+
+- RECIPES:
+	returns the the path to the directory where recipees are stored
 
 ---------------------------------------------------
 1.4 Methods to define/override in each recipe class
 ---------------------------------------------------
 
-1.4.1 The description method
+1.4.1 The version method
+------------------------
+
+def version(self) -> string
+
+This method should return the version of the package.
+
+1.4.2 The description method
 -----------------------------
 
 def description(self) -> string
 
-This method should return a one-line description of the package
-If not overridden, the description will be the one of the base PackageRecipe class, which is '(no description)'.
+This method should return a one-line description of the package.
 
-1.4.2 The download method
+1.4.3 The deps method
+---------------------
+
+def deps(self) -> list
+
+This method should return list of packages this package depends on.
+
+1.4.4 The download method
 -------------------------
 
 def download(self)
@@ -195,17 +149,23 @@ It can be a tarball obtained via wget, or a checkout/update from a source code r
 
 This method should avoid downloading the files again if there are already there.
 
-1.4.3 The build method
+1.4.5 The unpack method
+-----------------------
+
+def unpack(self)
+
+This method is responsible for unpacking the downloaded source code.
+
+1.4.6 The build method
 ----------------------
 
 def build(self)
 
-If the source code was obtained as a tarball, this method should first unpack it.
 Then the method should perform all the build steps needed to configure, build, and install the package.
 The package must be installed in the stage-install directory (DESTDIR in automake).
-This installation destination directory is obtained with the dest_dir method inherited from the base class.
+This installation destination directory is obtained with the dest dir method inherited from the base class.
 
-1.4.4 The continue_build method
+1.4.7 The continue_build method
 -------------------------------
 
 def continue_build(self)
@@ -218,7 +178,7 @@ For packages that follow the usual configure/make process, this means performing
 If the method is not defined, it inherits the default implementation,
 which performs both the download and build steps again, effectively redoing a full rebuild.
 
-1.4.5 The clean_build method
+1.4.8 The clean_build method
 ----------------------------
 
 def clean_build(self)
@@ -275,7 +235,7 @@ directory: ++build/foo/{built,version,direct-dependencies,recursed-dependencies}
 ============================
 
 Installing a package named "foo", is done by invoking the command:
-	mingw_cross_pkg install foo
+	mingw-cross-pkg install foo
 
 Before installing a package, the tool first checks whether it needs to install the package's dependencies.
 
@@ -303,7 +263,7 @@ in ++install/package-states/foo/installed.
 =======================
 
 Removing (deinstalling) a package named "foo", is done by invoking the command:
-	mingw_cross_pkg remove foo
+	mingw-cross-pkg remove foo
 
 Before removing a package, the tool first removes all packages that depend on it.
 
