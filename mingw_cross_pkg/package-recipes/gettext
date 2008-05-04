@@ -68,7 +68,7 @@ build | continue-build)
 	cd gettext-runtime
 	case "$1" in
 		build)
-			SHELL=bash ./configure \
+			./configure \
 				--host="$TARGET" \
 				--disable-shared \
 				--prefix="$PREFIX/$TARGET" \
