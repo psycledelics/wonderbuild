@@ -51,7 +51,7 @@ description)
     ;;
 
 deps)
-	# none
+    # none
     ;;
     
 download)
@@ -67,7 +67,7 @@ unpack)
     ;;
 
 build | continue-build | clean-build)
-	# not really built
-	;;
+    # not really built
+    ;;
 
 esac
