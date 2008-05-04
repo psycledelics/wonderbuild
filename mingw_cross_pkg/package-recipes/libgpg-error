@@ -64,7 +64,7 @@ unpack)
     ;;
 
 build | continue-build)
-    cd "libgpg-error-$VERSION_libgpg_error"
+	cd "libgpg-error-$VERSION_libgpg_error"
 	case "$1" in
 		build)
 			# wine confuses the cross-compiling detection, so set it explicitly

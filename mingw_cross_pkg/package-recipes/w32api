@@ -47,7 +47,7 @@ new-version)
     ;;
 
 description)
-    #echo ...
+    echo headers and import libraries to support the Win32 API
     ;;
 
 deps)

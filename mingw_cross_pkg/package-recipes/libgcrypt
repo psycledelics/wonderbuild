@@ -65,7 +65,7 @@ unpack)
     ;;
 
 build | continue-build)
-    cd "libgcrypt-$VERSION_libgcrypt"
+	cd "libgcrypt-$VERSION_libgcrypt"
 	case "$1" in
 		build)
 			$SED '26i\#include <ws2tcpip.h>' -i src/gcrypt.h.in

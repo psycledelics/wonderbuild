@@ -47,7 +47,7 @@ new-version)
     ;;
 
 description)
-    #echo ...
+    echo MinGW headers, libraries, and import libraries for CRTDLL/MSVCRT
     ;;
 
 deps)
