@@ -51,7 +51,7 @@ description)
     ;;
 
 deps)
-    echo gcc zlib
+    echo gcc zlib libiconv
     ;;
     
 download)
