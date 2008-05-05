@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-# pkg-config package recipe for MinGW cross pkg tool.
+# jpeg package recipe for MinGW cross pkg tool.
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
 #
@@ -22,32 +22,33 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #---
-#   pkg-config
+#   jpeg
 #
-#   http://pkg-config.freedesktop.org/
+#   http://www.ijg.org/
+#   http://packages.debian.org/unstable/source/libjpeg6b
 #---
 
 set -eux
 
-VERSION_pkg_config=0.23
+VERSION_jpeg=6b
 
 case "$1" in
 
 version)
-    echo $VERSION_pkg_config
+    echo $VERSION_jpeg
     ;;
 
 new-version)
     VERSION=`
-        wget -q -O- 'http://pkgconfig.freedesktop.org/' |
-        $SED -n 's,.*current release of pkg-config is version \([0-9][^ ]*\) and.*,\1,p' | 
-        head -1`
+        wget -q -O- 'http://packages.debian.org/unstable/source/libjpeg6b' |
+        $SED -n 's,.*libjpeg6b_\([0-9][^>]*\)\.orig\.tar.*,\1,p' | 
+        tail -1`
     test -n "$VERSION"
-    $SED "s,^VERSION_pkg_config=.*,VERSION_pkg_config=$VERSION," -i "$0"
+    $SED "s,^VERSION_jpeg=.*,VERSION_jpeg=$VERSION," -i "$0"
     ;;
 
 description)
-    echo manage compile and link flags for libraries
+    echo "The Independent JPEG Group's JPEG library"
     ;;
 
 deps)
@@ -55,29 +56,35 @@ deps)
     ;;
     
 download)
-    tar tfz "pkg-config-$VERSION_pkg_config.tar.gz" &>/dev/null ||
-    wget -c "http://pkgconfig.freedesktop.org/releases/pkg-config-$VERSION_pkg_config.tar.gz"
+    tar tfz "libjpeg6b_$VERSION_jpeg.orig.tar.gz" &>/dev/null ||
+    wget -c "http://ftp.debian.org/debian/pool/main/libj/libjpeg6b/libjpeg6b_$VERSION_jpeg.orig.tar.gz"
     ;;
 
 unpack)
-    tar xfz "pkg-config-$VERSION_pkg_config.tar.gz"
+    tar xfz "libjpeg6b_$VERSION_jpeg.orig.tar.gz"
     ;;
 
 build | continue-build)
-	cd "pkg-config-$VERSION_pkg_config"
+    cd "jpeg-$VERSION_jpeg"
 	case "$1" in
 		build)
-			./configure --prefix="$PREFIX/$TARGET"
-		;;
+			./configure \
+				CC="$TARGET-gcc" RANLIB="$TARGET-ranlib" \
+				--disable-shared \
+				--prefix="$PREFIX/$TARGET"
+			# jpeg doesn't use automake and its makefile doesn't support destdir.
+			# We fix the install rules in the makefile.
+			sed 's,\(\$(INSTALL_[^)]*) [^ ]* \)\(.*\),\1 \$\$DESTDIR/\2,' -i Makefile
+			;;
 	esac
-	$MAKE install DESTDIR=$DESTDIR
-    install -d "$DESTDIR/$PREFIX/bin"
-    rm -f "$DESTDIR/$PREFIX/bin/$TARGET-pkg-config"
-    ln -s "../$TARGET/bin/pkg-config" "$DESTDIR/$PREFIX/bin/$TARGET-pkg-config"
+	$MAKE
+	# create the dest dirs since the makefile doesn't do it.
+	install -d $DESTDIR/$PREFIX/$TARGET/{include,lib}
+	$MAKE install-lib DESTDIR=$DESTDIR
 	;;
 
 clean-build)
-	rm -Rf "pkg-config-$VERSION_pkg_config"
-	;;
+    rm -Rf "jpeg-$VERSION_jpeg"
+    ;;
 
 esac

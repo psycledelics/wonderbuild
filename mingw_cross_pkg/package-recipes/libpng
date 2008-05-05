@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-# pkg-config package recipe for MinGW cross pkg tool.
+# libpng package recipe for MinGW cross pkg tool.
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
 #
@@ -22,62 +22,62 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #---
-#   pkg-config
+#   libpng
 #
-#   http://pkg-config.freedesktop.org/
+#   http://www.libpng.org/
 #---
 
 set -eux
 
-VERSION_pkg_config=0.23
+VERSION_libpng=1.2.26
 
 case "$1" in
 
 version)
-    echo $VERSION_pkg_config
+    echo $VERSION_libpng
     ;;
 
 new-version)
     VERSION=`
-        wget -q -O- 'http://pkgconfig.freedesktop.org/' |
-        $SED -n 's,.*current release of pkg-config is version \([0-9][^ ]*\) and.*,\1,p' | 
+        wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=5624' |
+        $SED -n 's,.*libpng-\([0-9][^>]*\)-no-config\.tar.*,\1,p' | 
         head -1`
     test -n "$VERSION"
-    $SED "s,^VERSION_pkg_config=.*,VERSION_pkg_config=$VERSION," -i "$0"
+    $SED "s,^VERSION_libpng=.*,VERSION_libpng=$VERSION," -i "$0"
     ;;
 
 description)
-    echo manage compile and link flags for libraries
+    echo PNG library
     ;;
 
 deps)
-    echo gcc
+    echo gcc zlib
     ;;
     
 download)
-    tar tfz "pkg-config-$VERSION_pkg_config.tar.gz" &>/dev/null ||
-    wget -c "http://pkgconfig.freedesktop.org/releases/pkg-config-$VERSION_pkg_config.tar.gz"
+    tar tfj "libpng-$VERSION_libpng.tar.bz2" &>/dev/null ||
+    wget -c "http://$(cat $RECIPES/mirrors/sourceforge)/libpng/libpng-$VERSION_libpng.tar.bz2"
     ;;
 
 unpack)
-    tar xfz "pkg-config-$VERSION_pkg_config.tar.gz"
+    tar xfj "libpng-$VERSION_libpng.tar.bz2"
     ;;
 
 build | continue-build)
-	cd "pkg-config-$VERSION_pkg_config"
+	cd "libpng-$VERSION_libpng"
 	case "$1" in
 		build)
-			./configure --prefix="$PREFIX/$TARGET"
-		;;
+			./configure \
+				--host="$TARGET" \
+				--disable-shared \
+				--prefix="$PREFIX/$TARGET"
+			;;
 	esac
-	$MAKE install DESTDIR=$DESTDIR
-    install -d "$DESTDIR/$PREFIX/bin"
-    rm -f "$DESTDIR/$PREFIX/bin/$TARGET-pkg-config"
-    ln -s "../$TARGET/bin/pkg-config" "$DESTDIR/$PREFIX/bin/$TARGET-pkg-config"
+	$MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= DESTDIR=$DESTDIR
 	;;
 
 clean-build)
-	rm -Rf "pkg-config-$VERSION_pkg_config"
-	;;
+    rm -Rf "libpng-$VERSION_libpng"
+    ;;
 
 esac
