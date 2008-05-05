@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-# pthreads-w32 package recipe for MinGW cross pkg tool.
+# freetype package recipe for MinGW cross pkg tool.
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
 #
@@ -22,64 +22,63 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #---
-#   pthreads-w32
+#   freetype
 #
-#   http://sourceware.org/pthreads-win32/
+#   http://freetype.sourceforge.net/
 #---
 
 set -eux
 
-VERSION_pthreads=2-8-0
+VERSION_freetype=2.3.5
 
 case "$1" in
 
 version)
-    echo $VERSION_pthreads
+    echo $VERSION_freetype
     ;;
 
 new-version)
     VERSION=`
-        wget -q -O- 'ftp://sourceware.org/pub/pthreads-win32/Release_notes' |
-        $SED -n 's,^RELEASE \([0-9][^[:space:]]*\).*,\1,p' | 
-        tr '.' '-' |
+        wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=3157' |
+        $SED -n 's,.*freetype-\([2-9][^>]*\)\.tar.*,\1,p' | 
         head -1`
     test -n "$VERSION"
-    $SED "s,^VERSION_pthreads=.*,VERSION_pthreads=$VERSION," -i "$0"
+    $SED "s,^VERSION_freetype=.*,VERSION_freetype=$VERSION," -i "$0"
     ;;
 
 description)
-    echo library implementing the POSIX threads API on win32
+    echo FreeType 2 font engine
     ;;
 
 deps)
-    echo gcc
+    echo gcc zlib
     ;;
     
 download)
-    tar tfz "pthreads-w32-$VERSION_pthreads-release.tar.gz" &>/dev/null ||
-    wget -c "ftp://sourceware.org/pub/pthreads-win32/pthreads-w32-$VERSION_pthreads-release.tar.gz"
+    tar tfj "freetype-$VERSION_freetype.tar.bz2" &>/dev/null ||
+    wget -c "http://$(cat $RECIPES/mirrors/sourceforge)/freetype/freetype-$VERSION_freetype.tar.bz2"
     ;;
 
 unpack)
-    tar xfz "pthreads-w32-$VERSION_pthreads-release.tar.gz"
+    tar xfj "freetype-$VERSION_freetype.tar.bz2"
     ;;
 
 build | continue-build)
-    cd "pthreads-w32-$VERSION_pthreads-release"
+    cd "freetype-$VERSION_freetype"
 	case "$1" in
 		build)
-    		$SED '35i\#define PTW32_STATIC_LIB' -i pthread.h
+			GNUMAKE=$MAKE \
+			./configure \
+				--host="$TARGET" \
+				--disable-shared \
+				--prefix="$PREFIX/$TARGET"
 			;;
 	esac
-    $MAKE GC-static CROSS="$TARGET-"
-    install -d "$DESTDIR/$PREFIX/$TARGET/lib"
-    install -m664 libpthreadGC2.a "$DESTDIR/$PREFIX/$TARGET/lib/libpthread.a"
-    install -d "$DESTDIR/$PREFIX/$TARGET/include"
-    install -m664 pthread.h sched.h semaphore.h "$DESTDIR/$PREFIX/$TARGET/include/"
+    $MAKE install DESTDIR=$DESTDIR
 	;;
 
 clean-build)
-    rm -Rf "pthreads-w32-$VERSION_pthreads-release"
+    rm -Rf "freetype-$VERSION_freetype"
     ;;
 
 esac

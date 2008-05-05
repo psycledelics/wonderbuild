@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-# pthreads-w32 package recipe for MinGW cross pkg tool.
+# fontconfig package recipe for MinGW cross pkg tool.
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
 #
@@ -22,64 +22,71 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #---
-#   pthreads-w32
+#   fontconfig
 #
-#   http://sourceware.org/pthreads-win32/
+#   http://fontconfig.org/
 #---
 
 set -eux
 
-VERSION_pthreads=2-8-0
+VERSION_fontconfig=2.5.91
 
 case "$1" in
 
 version)
-    echo $VERSION_pthreads
+    echo $VERSION_fontconfig
     ;;
 
 new-version)
     VERSION=`
-        wget -q -O- 'ftp://sourceware.org/pub/pthreads-win32/Release_notes' |
-        $SED -n 's,^RELEASE \([0-9][^[:space:]]*\).*,\1,p' | 
-        tr '.' '-' |
-        head -1`
+        wget -q -O- 'http://fontconfig.org/release/' |
+        $SED -n 's,.*fontconfig-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        tail -1`
     test -n "$VERSION"
-    $SED "s,^VERSION_pthreads=.*,VERSION_pthreads=$VERSION," -i "$0"
+    $SED "s,^VERSION_fontconfig=.*,VERSION_fontconfig=$VERSION," -i "$0"
     ;;
 
 description)
-    echo library implementing the POSIX threads API on win32
+    echo generic font configuration library
     ;;
 
 deps)
-    echo gcc
+    # Note: either expat or libxml2, expat takes precedence in the configure script.
+    echo gcc libiconv freetype freetype zlib pkg-config libxml2 
     ;;
     
 download)
-    tar tfz "pthreads-w32-$VERSION_pthreads-release.tar.gz" &>/dev/null ||
-    wget -c "ftp://sourceware.org/pub/pthreads-win32/pthreads-w32-$VERSION_pthreads-release.tar.gz"
+    tar tfz "fontconfig-$VERSION_fontconfig.tar.gz" &>/dev/null ||
+    wget -c "http://fontconfig.org/release/fontconfig-$VERSION_fontconfig.tar.gz"
     ;;
 
 unpack)
-    tar xfz "pthreads-w32-$VERSION_pthreads-release.tar.gz"
+    tar xfz "fontconfig-$VERSION_fontconfig.tar.gz"
     ;;
 
 build | continue-build)
-    cd "pthreads-w32-$VERSION_pthreads-release"
+    cd "fontconfig-$VERSION_fontconfig"
 	case "$1" in
 		build)
-    		$SED '35i\#define PTW32_STATIC_LIB' -i pthread.h
+			# ensure there is no (buggy) attempt to install the *.dll.a file
+			# (remove this line of you want to link dynamically)
+			$SED 's,^install-data-local:.*,install-data-local:,' -i src/Makefile.in
+			# wine confuses the cross-compiling detection, so set it explicitly
+			$SED 's,cross_compiling=no,cross_compiling=yes,' -i configure
+			./configure \
+				--host="$TARGET" \
+				--disable-shared \
+				--prefix="$PREFIX/$TARGET" \
+				--with-arch="$TARGET" \
+				--with-freetype-config="$PREFIX/$TARGET/bin/freetype-config" \
+				--enable-libxml2
 			;;
 	esac
-    $MAKE GC-static CROSS="$TARGET-"
-    install -d "$DESTDIR/$PREFIX/$TARGET/lib"
-    install -m664 libpthreadGC2.a "$DESTDIR/$PREFIX/$TARGET/lib/libpthread.a"
-    install -d "$DESTDIR/$PREFIX/$TARGET/include"
-    install -m664 pthread.h sched.h semaphore.h "$DESTDIR/$PREFIX/$TARGET/include/"
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= DESTDIR=$DESTDIR
 	;;
 
 clean-build)
-    rm -Rf "pthreads-w32-$VERSION_pthreads-release"
+    rm -Rf "fontconfig-$VERSION_fontconfig"
     ;;
 
 esac
