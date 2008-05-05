@@ -79,7 +79,9 @@ build | continue-build)
 				--prefix="$PREFIX/$TARGET" \
 				--with-arch="$TARGET" \
 				--with-freetype-config="$PREFIX/$TARGET/bin/freetype-config" \
-				--enable-libxml2
+				--enable-libxml2 \
+				LIBXML2_CFLAGS="`$PREFIX/$TARGET/bin/xml2-config --cflags`" \
+				LIBXML2_LIBS="`$PREFIX/$TARGET/bin/xml2-config --libs`"
 			;;
 	esac
     $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= DESTDIR=$DESTDIR
