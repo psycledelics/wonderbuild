@@ -522,11 +522,14 @@ class Packages:
 		all_unneeded = []
 		for package in self.installed_packages():
 			if package.auto():
-				unneeded = self.remove_unneeded_deps([package])
-				if len(unneeded):
-					all_unneeded.append(package)
-					for unneeded in self.remove_unneeded_deps([package]):
-						if not unneeded in all_unneeded: all_unneeded.append(unneeded)
+				needed = False
+				for reverse_dep in self.recursed_reverse_deps(package):
+					if not reverse_dep.auto(): needed = True; break
+				if not needed:
+					if not package in all_unneeded: all_unneeded.append(package)
+					unneeded = self.remove_unneeded_deps([package])
+					for p in unneeded:
+						if not p in all_unneeded: all_unneeded.append(p)
 		return all_unneeded
 
 	def remove_reverse_deps(self, packages):
