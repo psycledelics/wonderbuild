@@ -52,7 +52,7 @@ description)
 
 deps)
     # Note: either expat or libxml2, expat takes precedence in the configure script.
-    echo gcc libiconv freetype freetype zlib pkg-config libxml2 
+    echo gcc libiconv freetype zlib pkg-config libxml2 
     ;;
     
 download)
