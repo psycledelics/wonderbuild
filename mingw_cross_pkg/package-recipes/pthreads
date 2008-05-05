@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-# jpeg package recipe for MinGW cross pkg tool.
+# pthreads-w32 package recipe for MinGW cross pkg tool.
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
 #
@@ -22,33 +22,33 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #---
-#   jpeg
+#   pthreads-w32
 #
-#   http://www.ijg.org/
-#   http://packages.debian.org/unstable/source/libjpeg6b
+#   http://sourceware.org/pthreads-win32/
 #---
 
 set -eux
 
-VERSION_jpeg=6b
+VERSION_pthreads=2-8-0
 
 case "$1" in
 
 version)
-    echo $VERSION_jpeg
+    echo $VERSION_pthreads
     ;;
 
 new-version)
     VERSION=`
-        wget -q -O- 'http://packages.debian.org/unstable/source/libjpeg6b' |
-        $SED -n 's,.*libjpeg6b_\([0-9][^>]*\)\.orig\.tar.*,\1,p' | 
-        tail -1`
+        wget -q -O- 'ftp://sourceware.org/pub/pthreads-win32/Release_notes' |
+        $SED -n 's,^RELEASE \([0-9][^[:space:]]*\).*,\1,p' | 
+        tr '.' '-' |
+        head -1`
     test -n "$VERSION"
-    $SED "s,^VERSION_jpeg=.*,VERSION_jpeg=$VERSION," -i "$0"
+    $SED "s,^VERSION_pthreads=.*,VERSION_pthreads=$VERSION," -i "$0"
     ;;
 
 description)
-    echo "The Independent JPEG Group's JPEG library"
+    echo "library implementing the POSIX threads API on win32"
     ;;
 
 deps)
@@ -56,35 +56,30 @@ deps)
     ;;
     
 download)
-    tar tfz "libjpeg6b_$VERSION_jpeg.orig.tar.gz" &>/dev/null ||
-    wget -c "http://ftp.debian.org/debian/pool/main/libj/libjpeg6b/libjpeg6b_$VERSION_jpeg.orig.tar.gz"
+    tar tfz "pthreads-w32-$VERSION_pthreads-release.tar.gz" &>/dev/null ||
+    wget -c "ftp://sourceware.org/pub/pthreads-win32/pthreads-w32-$VERSION_pthreads-release.tar.gz"
     ;;
 
 unpack)
-    tar xfz "libjpeg6b_$VERSION_jpeg.orig.tar.gz"
+    tar xfz "pthreads-w32-$VERSION_pthreads-release.tar.gz"
     ;;
 
 build | continue-build)
-	cd "jpeg-$VERSION_jpeg"
+    cd "pthreads-w32-$VERSION_pthreads-release"
 	case "$1" in
 		build)
-			./configure \
-				CC="$TARGET-gcc" RANLIB="$TARGET-ranlib" \
-				--disable-shared \
-				--prefix="$PREFIX/$TARGET"
-			# jpeg doesn't use automake and its makefile doesn't support destdir.
-			# We fix the install rules in the makefile.
-			sed 's,\(\$(INSTALL_[^)]*) [^ ]* \)\(.*\),\1 \$\$DESTDIR/\2,' -i Makefile
+    		$SED '35i\#define PTW32_STATIC_LIB' -i pthread.h
 			;;
 	esac
-	$MAKE
-	# create the dest dirs since the makefile doesn't do it.
-	install -d $DESTDIR/$PREFIX/$TARGET/{include,lib}
-	$MAKE install-lib DESTDIR=$DESTDIR
+    $MAKE GC-static CROSS="$TARGET-"
+    install -d "$DESTDIR/$PREFIX/$TARGET/lib"
+    install -m664 libpthreadGC2.a "$DESTDIR/$PREFIX/$TARGET/lib/libpthread.a"
+    install -d "$DESTDIR/$PREFIX/$TARGET/include"
+    install -m664 pthread.h sched.h semaphore.h "$DESTDIR/$PREFIX/$TARGET/include/"
 	;;
 
 clean-build)
-    rm -Rf "jpeg-$VERSION_jpeg"
+    rm -Rf "pthreads-w32-$VERSION_pthreads-release"
     ;;
 
 esac

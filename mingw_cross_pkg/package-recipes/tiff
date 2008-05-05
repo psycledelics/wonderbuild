@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-# jpeg package recipe for MinGW cross pkg tool.
+# tiff package recipe for MinGW cross pkg tool.
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
 #
@@ -22,69 +22,65 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #---
-#   jpeg
+#   LibTIFF
 #
-#   http://www.ijg.org/
-#   http://packages.debian.org/unstable/source/libjpeg6b
+#   http://www.remotesensing.org/libtiff/
 #---
 
 set -eux
 
-VERSION_jpeg=6b
+VERSION_tiff=3.8.2
 
 case "$1" in
 
 version)
-    echo $VERSION_jpeg
+    echo $VERSION_tiff
     ;;
 
 new-version)
     VERSION=`
-        wget -q -O- 'http://packages.debian.org/unstable/source/libjpeg6b' |
-        $SED -n 's,.*libjpeg6b_\([0-9][^>]*\)\.orig\.tar.*,\1,p' | 
-        tail -1`
+        wget -q -O- 'http://www.remotesensing.org/libtiff/' |
+        $SED -n 's,.*>v\([0-9][^<]*\)<.*,\1,p' | 
+        head -1`
     test -n "$VERSION"
-    $SED "s,^VERSION_jpeg=.*,VERSION_jpeg=$VERSION," -i "$0"
+    $SED "s,^VERSION_tiff=.*,VERSION_tiff=$VERSION," -i "$0"
     ;;
 
 description)
-    echo "The Independent JPEG Group's JPEG library"
+    echo "Tag Image File Format library (TIFF)"
     ;;
 
 deps)
-    echo gcc
+    echo gcc zlib jpeg pthreads
     ;;
     
 download)
-    tar tfz "libjpeg6b_$VERSION_jpeg.orig.tar.gz" &>/dev/null ||
-    wget -c "http://ftp.debian.org/debian/pool/main/libj/libjpeg6b/libjpeg6b_$VERSION_jpeg.orig.tar.gz"
+    tar tfz "tiff-$VERSION_tiff.tar.gz" &>/dev/null ||
+    wget -t 3 -c "ftp://ftp.remotesensing.org/pub/libtiff/tiff-$VERSION_tiff.tar.gz" ||
+    wget -c "http://dl.maptools.org/dl/libtiff/tiff-$VERSION_tiff.tar.gz"
     ;;
 
 unpack)
-    tar xfz "libjpeg6b_$VERSION_jpeg.orig.tar.gz"
+    tar xfz "tiff-$VERSION_tiff.tar.gz"
     ;;
 
 build | continue-build)
-	cd "jpeg-$VERSION_jpeg"
+    cd "tiff-$VERSION_tiff"
 	case "$1" in
 		build)
-			./configure \
-				CC="$TARGET-gcc" RANLIB="$TARGET-ranlib" \
-				--disable-shared \
-				--prefix="$PREFIX/$TARGET"
-			# jpeg doesn't use automake and its makefile doesn't support destdir.
-			# We fix the install rules in the makefile.
-			sed 's,\(\$(INSTALL_[^)]*) [^ ]* \)\(.*\),\1 \$\$DESTDIR/\2,' -i Makefile
+		./configure \
+			--host="$TARGET" \
+			--disable-shared \
+			--prefix="$PREFIX/$TARGET" \
+			PTHREAD_LIBS="-lpthread -lws2_32" \
+			--without-x
 			;;
 	esac
-	$MAKE
-	# create the dest dirs since the makefile doesn't do it.
-	install -d $DESTDIR/$PREFIX/$TARGET/{include,lib}
-	$MAKE install-lib DESTDIR=$DESTDIR
+	$MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= DESTDIR=$DESTDIR
 	;;
 
 clean-build)
-    rm -Rf "jpeg-$VERSION_jpeg"
+    rm -Rf "tiff-$VERSION_tiff"
     ;;
 
 esac
