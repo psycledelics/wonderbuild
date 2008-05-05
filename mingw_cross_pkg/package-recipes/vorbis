@@ -1,0 +1,85 @@
+#! /usr/bin/env bash
+
+# vorbis package recipe for MinGW cross pkg tool.
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# copyright 2008-2008 Johan Boule <bohan@jabber.org>
+#
+# Based on MinGW cross compiling environment, version 1.4
+# copyright 2007-2008 Volker Grabsch <vog@notjusthosting.com>
+# copyright 2007-2008 Rocco Rutte <pdmef@gmx.net>
+# copyright 2007-2008 Andreas Roever <roever@users.sf.net>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject
+# to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+# CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+#---
+#   Vorbis
+#
+#   http://www.vorbis.com/
+#---
+
+set -eux
+
+VERSION_vorbis=1.2.0
+
+case "$1" in
+
+version)
+    echo $VERSION_vorbis
+    ;;
+
+new-version)
+    VERSION=`
+        wget -q -O- 'http://www.xiph.org/downloads/' |
+        $SED -n 's,.*libvorbis-\([0-9][^>]*\)\.tar.*,\1,p' | 
+        head -1`
+    test -n "$VERSION"
+    $SED "s,^VERSION_vorbis=.*,VERSION_vorbis=$VERSION," -i "$0"
+    ;;
+
+description)
+    echo The Vorbis General Audio Compression Codec
+    ;;
+
+deps)
+    echo gcc pkg-config ogg
+    ;;
+    
+download)
+    tar tfz "libvorbis-$VERSION_vorbis.tar.gz" &>/dev/null ||
+    wget -c "http://downloads.xiph.org/releases/vorbis/libvorbis-$VERSION_vorbis.tar.gz"
+    ;;
+
+unpack)
+    tar xfz "libvorbis-$VERSION_vorbis.tar.gz"
+    ;;
+
+build | continue-build)
+    cd "libvorbis-$VERSION_vorbis"
+	case "$1" in
+		build)
+			./configure \
+				--host="$TARGET" \
+				--disable-shared \
+				--prefix="$PREFIX/$TARGET" \
+				PKG_CONFIG="$TARGET-pkg-config" \
+				LIBS="-lws2_32"
+			;;
+	esac
+    $MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= DESTDIR=$DESTDIR
+	;;
+
+clean-build)
+    rm -Rf "libvorbis-$VERSION_vorbis"
+    ;;
+
+esac
