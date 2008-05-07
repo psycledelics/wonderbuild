@@ -19,7 +19,11 @@ isEmpty(platform_win32_included) {
 			LIBS *= $$linkLibs(advapi32 user32)
 			DEFINES *= NOMINMAX # This stops windows headers from creating min & max as defines (not needed on mingw)
 
-			win32-msvc2005 {
+			win32-msvc2008 {
+				VC_VERSION = 9.0
+				message("Compiler is MS Visual C++ version 15 (2008)")
+			}
+			else:win32-msvc2005 {
 				VC_VERSION = 8.0
 				message("Compiler is MS Visual C++ version 14 (2005)")
 			} else {
@@ -38,7 +42,8 @@ isEmpty(platform_win32_included) {
 				#VC_DIR -= Directory of
 				message("Existing VC_DIR is $$VC_DIR")
 				LIBPATH *= "$${VC_DIR}/lib"
-				LIBPATH *= "$${VC_DIR}/PlatformSDK/lib"
+				win32-msvc2005: LIBPATH *= "$${VC_DIR}/PlatformSDK/lib"
+				# todo: include Windows SDK Dirs (aren't they automatically included When Using Vc Command Prompt?
 				# todo: what about INCLUDEPATH?
 			}
 		} else {
