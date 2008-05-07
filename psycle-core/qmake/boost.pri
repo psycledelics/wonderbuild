@@ -6,7 +6,7 @@ isEmpty(boost_included) {
 		macx: LIBS *= $$linkLibs(lboost_signals-1_33_1 boost_thread-1_33_1)
 		else: LIBS *= $$linkLibs(boost_signals boost_thread)
 	} else: win32 {
-		win32-g++:	LIBS *= $$linkLibs(boost_signals-mgw34-mt-1_35 boost_thread-mgw34-mt-1_35)
+		win32-g++: LIBS *= $$linkLibs(boost_signals-mgw34-mt-1_35 boost_thread-mgw34-mt-1_35)
 		else: win32-msvc2005: LIBS *= $$linkLibs(boost_signals-vc80-mt-1_33_1 boost_thread-vc80-mt-1_33_1)
 		else: win32-msvc*:    LIBS *= $$linkLibs(boost_signals-vc71-mt-1_33_1 boost_thread-vc71-mt-1_33_1)
 		else: win32-msvc2008: LIBS *= $$linkLibs(boost_signals-vc90-mt-1_35 boost_thread-vc90-mt-1_35)
