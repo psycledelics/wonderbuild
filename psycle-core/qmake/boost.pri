@@ -30,15 +30,18 @@ isEmpty(boost_included) {
 						message("Unpacking boost headers $$BOOST_DIR/include")
 						system("cd $$BOOST_DIR && tar xjf include.tar.bz2")
 					}
+					!exists($$BOOST_DIR/lib-mswindows-mingw-cxxabi-1002) {
+						message("Unpacking boost libraries $$BOOST_DIR/lib-mswindows-mingw-cxxabi-1002")
+						system("cd $$BOOST_DIR && tar xjf lib-mswindows-mingw-cxxabi-1002.tar.bz2")
+					}
 				}
+
 				!exists($$BOOST_DIR/include) {
 					warning("The boost headers are not unpacked. See the dir $$BOOST_DIR")
 				} else {
 					win32-g++ {
 						!exists($$BOOST_DIR/lib-mswindows-mingw-cxxabi-1002) {
-							#warning("The boost libraries are not unpacked. See the dir $$BOOST_DIR")
-							message("Unpacking boost libraries $$BOOST_DIR/lib-mswindows-mingw-cxxabi-1002")
-							system("cd $$BOOST_DIR && tar xjf lib-mswindows-mingw-cxxabi-1002.tar.bz2")
+							warning("The boost libraries are not unpacked. See the dir $$BOOST_DIR")
 						} else {
 							INCLUDEPATH *= $$BOOST_DIR/include
 							LIBPATH *= $$BOOST_DIR/lib-mswindows-mingw-cxxabi-1002
