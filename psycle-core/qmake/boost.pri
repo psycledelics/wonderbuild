@@ -28,7 +28,7 @@ isEmpty(boost_included) {
 				} else: win32-msvc2008 {
 					!exists($$BOOST_DIR/lib-mswindows-msvc-9.0-cxxabi-1500) {
 						warning("The boost libraries are not unpacked. See the dir $$BOOST_DIR")
-						} else {
+					} else {
 						INCLUDEPATH *= $$BOOST_DIR/include
 						LIBPATH *= $$BOOST_DIR/lib-mswindows-msvc-9.0-cxxabi-1500
 						LIBS *= $$linkLibs(boost_signals-vc90-mt-1_35 boost_thread-vc90-mt-1_35)
