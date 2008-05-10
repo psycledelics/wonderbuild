@@ -712,18 +712,18 @@ if True:
 			)
 		}
 	)
-	BuildmasterConfig['schedulers'].append(
-		Scheduler(
-			name = 'libzzub.mingw',
-			branch = None,
-			treeStableTimer = bunch_timer,
-			builderNames = ['libzzub.mingw'],
-			fileIsImportant = lambda change: filter(change,
-				include_prefixes = [''],
-				exclude_prefixes = zzub_exclude_prefixes
-			)
-		)
-	)
+	#BuildmasterConfig['schedulers'].append(
+	#	Scheduler(
+	#		name = 'libzzub.mingw',
+	#		branch = None,
+	#		treeStableTimer = bunch_timer,
+	#		builderNames = ['libzzub.mingw'],
+	#		fileIsImportant = lambda change: filter(change,
+	#			include_prefixes = [''],
+	#			exclude_prefixes = zzub_exclude_prefixes
+	#		)
+	#	)
+	#)
 
 	BuildmasterConfig['builders'].append(
 		{
@@ -739,18 +739,18 @@ if True:
 			)
 		}
 	)
-	BuildmasterConfig['schedulers'].append(
-		Scheduler(
-			name = 'libzzub.msvc',
-			branch = None,
-			treeStableTimer = bunch_timer,
-			builderNames = ['libzzub.msvc'],
-			fileIsImportant = lambda change: filter(change,
-				include_prefixes = [''],
-				exclude_prefixes = zzub_exclude_prefixes
-			)
-		)
-	)
+	#BuildmasterConfig['schedulers'].append(
+	#	Scheduler(
+	#		name = 'libzzub.msvc',
+	#		branch = None,
+	#		treeStableTimer = bunch_timer,
+	#		builderNames = ['libzzub.msvc'],
+	#		fileIsImportant = lambda change: filter(change,
+	#			include_prefixes = [''],
+	#			exclude_prefixes = zzub_exclude_prefixes
+	#		)
+	#	)
+	#)
 
 ##################################### clean builders ######################################
 
