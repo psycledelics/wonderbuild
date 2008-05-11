@@ -6,6 +6,9 @@ TEMPLATE = app # This project builds an executable program.
 
 include($$TOP_SRC_DIR/psycle-core/qmake/psycle-core.pri)
 
+# remove default qmake/qt stuff we don't use
+CONFIG -= qt uic lex yacc
+
 PSYCLE_PLAYER_DIR = $$TOP_SRC_DIR/psycle-player
 
 BUILD_DIR = $$PSYCLE_PLAYER_DIR/++build
