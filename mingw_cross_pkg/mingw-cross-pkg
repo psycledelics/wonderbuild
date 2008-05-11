@@ -7,7 +7,7 @@ import sys, os, subprocess, shutil, imp, fnmatch
 
 version = '0.2'
 
-commands = ('help', 'version', 'list', 'show', 'install', 'remove', 'need-rebuild', 'reverse-depends', 'clean-build')
+commands = ('help', 'version', 'list', 'show', 'install', 'remove', 'need-rebuild', 'reverse-depends', 'clean-build', 'list-file-conflicts')
 
 def usage(out = sys.stderr, command = None):
 	if command is None:
@@ -80,6 +80,11 @@ def usage(out = sys.stderr, command = None):
 			'  --dest-dir  also clean the dest dir.\n'
 			'  --download  also clean the downloaded files.\n'
 			'  --all       wipe out the whole build dir altogether (same effect as --dest-dir --download).\n'
+			'\n')
+	if command is None or command == 'list-file-conflicts':
+		out.write(
+			'Usage: list-file-conflicts\n'
+			'  gives a list of files that are owned by several packages.\n'
 			'\n')
 
 
@@ -187,6 +192,11 @@ def main():
 			usage(command = 'need-rebuild')
 			sys.exit(2)
 		packages().need_rebuild()
+	elif command == 'list-file-conflicts':
+		if len(args):
+			usage(command = 'list-file-conflicts')
+			sys.exit(2)
+		packages().list_file_conflicts()
 	else:
 		sys.stderr.write(sys.argv[0] + ': unrecognised command: ' + command + '\n')
 		usage()
@@ -326,6 +336,17 @@ class Packages:
 					package.version().ljust(version_width) + \
 					package.description().ljust(description_width)
 				
+	def list_file_conflicts(self):
+		files = {} # {file : [package1, package2, ...]}
+		for package in self.installed_packages():
+			for file in package.read_state('files'):
+				file = file.split('  ')[1]
+				try: packages = files[file]
+				except KeyError: files[file] = [package]
+				else: files[file].append(package)
+		for item in files.items():
+			if len(item[1]) > 1: print item[0] + ': ' + ' '.join([package.name() for package in item[1]])
+	
 	def need_rebuild(self):
 		name_width = 35; version_width = 27
 		print 'Package'.ljust(name_width) + 'Depends on'.ljust(name_width) + 'Version when built'.ljust(version_width) + 'Version installed'.ljust(version_width)
