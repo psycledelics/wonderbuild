@@ -23,8 +23,8 @@ def generate(env, **kw):
 		"""
 		try:
 			f = open(source_file_name, 'rb')
-			contents = f.read()
-			f.close()
+			try: contents = f.read()
+			finally: f.close()
 		except:
 			import SCons.Errors
 			raise SCons.Errors.UserError, 'packagneric: cannot read source file %s' % source_file_name
@@ -33,8 +33,8 @@ def generate(env, **kw):
 			contents = re.sub(k, v, contents)
 		try:
 			f = open(target_file_name, 'wb')
-			f.write(contents)
-			f.close()
+			try: f.write(contents)
+			finally: f.close()
 		except:
 			import SCons.Errors
 			raise SCons.Errors.UserError, 'packageneric: cannot write target file %s' % target_file_name

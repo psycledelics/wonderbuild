@@ -9,8 +9,8 @@ def generate(env, **kw):
 	def do(file_name, contents):
 		try:
 			f = open(file_name, 'wb')
-			f.write(contents)
-			f.close()
+			try: f.write(contents)
+			finally: f.close()
 		except:
 			import SCons.Errors
 			raise SCons.Errors.UserError, 'packageneric: cannot write to target file %s' % file_name
