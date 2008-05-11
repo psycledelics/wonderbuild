@@ -15,7 +15,7 @@ OBJECTS_DIR = $$BUILD_DIR # Where the .o files go.
 MOC_DIR = $$BUILD_DIR # Where intermediate moc files go.
 DESTDIR = $$BUILD_DIR # Where the final executable goes.
 
-#CONFIG *= precompile_headers
+#CONFIG *= precompile_header
 #PRECOMPILED_HEADER = $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audio-drivers/psycleAudioDriversPch.hpp
 
 sources_or_headers = \
