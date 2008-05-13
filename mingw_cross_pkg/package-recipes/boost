@@ -32,7 +32,7 @@ case $1 in
 				tar xjf boost_$version_.tar.bz2 >/dev/null
 				cd boost_$version_
 				# -fPIC (Position-Independent Code) is the default on mingw, a warning is emitted if the option is given.
-				$GSED 's|\(flags gcc.compile OPTIONS <link>shared : -fPIC ;\)|#\1|'           -i tools/build/v2/tools/gcc.jam
+				$GSED 's|\(flags gcc\.compile OPTIONS <link>shared : -fPIC ;\)|#\1|'           -i tools/build/v2/tools/gcc.jam
 				# for <threading>multi, use -mthreads instead of -pthread
 				$GSED 's|\(flags gcc OPTIONS <threading>multi :\) -pthread ;|\1 -mthreads ;|' -i tools/build/v2/tools/gcc.jam
 				# don't link against rt lib
