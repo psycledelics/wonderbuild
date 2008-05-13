@@ -1,0 +1,63 @@
+#! /usr/bin/env bash
+
+# boost package recipe for MinGW cross pkg tool.
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# copyright 2008-2008 Johan Boule <bohan@jabber.org>
+
+# http://boost.org
+
+set -eux
+
+version=1.35.0
+
+case $1 in
+	version)
+	    echo $version
+	    ;;
+	description)
+	    echo Boost C++ Libraries
+	    ;;
+	deps)
+	    echo gcc
+	    ;;
+	download | unpack | build | continue-build | clean-build)
+		version_=$(echo $version | sed 's:\.:\_:g')
+		
+		case $1 in
+			download)
+				tar tjf boost_$version_.tar.bz2 &>/dev/null ||
+				wget -c http://$(cat $RECIPES/mirrors/sourceforge)/boost/boost_$version_.tar.bz2
+			;;
+			unpack)
+				tar xjf boost_$version_.tar.bz2 >/dev/null
+				cd boost_$version_
+				# -fPIC (Position-Independent Code) is the default on mingw, a warning is emitted if the option is given.
+				$GSED 's|\(flags gcc.compile OPTIONS <link>shared : -fPIC ;\)|#\1|'           -i tools/build/v2/tools/gcc.jam
+				# for <threading>multi, use -mthreads instead of -pthread
+				$GSED 's|\(flags gcc OPTIONS <threading>multi :\) -pthread ;|\1 -mthreads ;|' -i tools/build/v2/tools/gcc.jam
+				# don't link against rt lib
+				$GSED 's|\(flags gcc FINDLIBS-SA <threading>multi : rt ;\)|#\1|'              -i tools/build/v2/tools/gcc.jam
+				# suffix shared libs with .dll instead of .so
+				$GSED 's|\(type SHARED_LIB :\) so \(: LIB ;\)|\1 dll \2|' -i tools/build/v2/tools/types/lib.jam
+			;;
+			build | continue-build)
+				cd boost_$version_
+				case $1 in
+					build)
+						./configure --prefix=$DESTDIR/$PREFIX/$TARGET
+						echo "using gcc : : $TARGET-g++ ;" > user-config.jam
+					;;
+				esac
+				$GMAKE \
+					BJAM_CONFIG='target-os=windows threadapi=win32 threading=multi release' \
+					LIBS='date_time filesystem program_options regex serialization signals system thread wave' \
+					all install
+				# TODO the makefile doesn't fail if a lib failed to build
+				#LIBS=iostreams python
+				#LIBS=function_types graph test mpi
+			;;
+			clean-build)
+				rm -Rf boost_$version_
+			;;
+		esac
+esac
