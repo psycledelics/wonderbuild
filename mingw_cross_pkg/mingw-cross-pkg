@@ -696,6 +696,7 @@ class CommandPackageRecipe(BasePackageRecipe):
 		except AttributeError:
 			self._description = self._piped_execute('description').rstrip()
 			if len(self._description) == 0: self._description = BasePackageRecipe.description(self)
+			self._description = self._description.split('\n')[0]
 		return self._description
 
 	def deps(self):
