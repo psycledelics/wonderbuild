@@ -38,7 +38,9 @@ case $1 in
 				# don't link against rt lib
 				$GSED 's|\(flags gcc FINDLIBS-SA <threading>multi : rt ;\)|#\1|'              -i tools/build/v2/tools/gcc.jam
 				# suffix shared libs with .dll instead of .so
-				$GSED 's|\(type SHARED_LIB :\) so \(: LIB ;\)|\1 dll \2|' -i tools/build/v2/tools/types/lib.jam
+				$GSED 's|\(type SHARED_LIB :\) so \(: LIB ;\)|\1 dll \2|'             -i tools/build/v2/tools/types/lib.jam
+				# don't prefix shared libs with 'lib'
+				$GSED 's|\(type.set-generated-target-prefix LIB : :\) "lib";|\1 "";|' -i tools/build/v2/tools/types/lib.jam
 			;;
 			build | continue-build)
 				cd boost_$version_
