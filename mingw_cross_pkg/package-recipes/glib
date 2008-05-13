@@ -11,48 +11,40 @@ set -eux
 version_short=2.16
 version=$version_short.3
 
-case "$1" in
-
-version)
-    echo $version
-    ;;
-
-description)
-    echo The GLib library of C routines
-    ;;
-
-deps)
-    echo gcc gettext libiconv pkg-config
-    ;;
-    
-download)
-	tar tfj "glib-$version.tar.bz2" &>/dev/null ||
-    wget -c "http://ftp.gnome.org/pub/GNOME/sources/glib/$version_short/glib-$version.tar.bz2"
-    ;;
-
-unpack)
-    tar xfj "glib-$version.tar.bz2"
-    ;;
-
-build | continue-build)
-    cd "glib-$version"
-	case "$1" in
-		build)
-			echo glib_cv_long_long_format=I64 > win32.cache
-			echo glib_cv_stack_grows=no >> win32.cache
-			chmod a-w win32.cache # prevent configure from changing it
-			./configure \
-				--host="$TARGET" \
-				--disable-shared \
-				--prefix="$PREFIX/$TARGET" \
-				--cache-file=win32.cache
-			;;
-	esac
-    $MAKE install DESTDIR=$DESTDIR
+case $1 in
+	version)
+		echo $version
 	;;
-
-clean-build)
-    rm -Rf "glib-$version"
-    ;;
-
+	description)
+		echo The GLib library of C routines
+	;;
+	deps)
+		echo gcc gettext libiconv pkg-config
+	;;
+	download)
+		tar tfj glib-$version.tar.bz2 &>/dev/null ||
+		wget -c http://ftp.gnome.org/pub/GNOME/sources/glib/$version_short/glib-$version.tar.bz2
+	;;
+	unpack)
+		tar xfj glib-$version.tar.bz2
+	;;
+	build | continue-build)
+		cd glib-$version
+		case $1 in
+			build)
+				echo glib_cv_long_long_format=I64 > win32.cache
+				echo glib_cv_stack_grows=no      >> win32.cache
+				chmod a-w win32.cache # prevent configure from changing it
+				./configure \
+					--host=$TARGET \
+					--disable-shared \
+					--prefix=$PREFIX/$TARGET \
+					--cache-file=win32.cache
+			;;
+		esac
+		$GMAKE install DESTDIR=$DESTDIR
+	;;
+	clean-build)
+		rm -Rf glib-$version
+	;;
 esac
