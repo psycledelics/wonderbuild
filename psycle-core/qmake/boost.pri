@@ -9,7 +9,7 @@ isEmpty(boost_included) {
 		win32-g++:      BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.35.0
 		win32-msvc2008: BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.35.0
 		win32-msvc2005: BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.33.1
-		win32-msvc*:    BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.32
+		#win32-msvc:    	BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.32
 		!exists($$BOOST_DIR) {
 			warning("The local boost dir does not exist: $${BOOST_DIR}. Make sure you have boost libs installed.")
 		} else {
