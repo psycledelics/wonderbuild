@@ -6,10 +6,10 @@ isEmpty(boost_included) {
 		macx: LIBS *= $$linkLibs(boost_signals-1_33_1 boost_thread-1_33_1)
 		else: LIBS *= $$linkLibs(boost_signals boost_thread)
 	} else: win32 {
-		win32-g++:      BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.35.0
-		win32-msvc2008: BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.35.0
-		win32-msvc2005: BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.33.1
-		#win32-msvc:    	BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.32
+		win32-g++:            BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.35.0
+		else: win32-msvc2008: BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.35.0
+		else: win32-msvc2005: BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.33.1
+		else: win32-msvc*:    BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.32
 		!exists($$BOOST_DIR) {
 			warning("The local boost dir does not exist: $${BOOST_DIR}. Make sure you have boost libs installed.")
 		} else {
