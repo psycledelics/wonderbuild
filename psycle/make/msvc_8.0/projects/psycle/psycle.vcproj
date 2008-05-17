@@ -162,11 +162,11 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{C6292BF4-9E87-4176-9101-A3D29D163B35}"
-			RelativePathToProject=".\projects\psycle-helpers\psycle-helpers-test.vcproj"
+			RelativePathToProject=".\projects\psycle-helpers\psycle-helpers.unit-tests.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{15447E72-E8B4-4545-AC7B-091E68221C41}"
-			RelativePathToProject=".\projects\universalis\universalis-test.vcproj"
+			RelativePathToProject=".\projects\universalis\universalis.unit-tests.vcproj"
 		/>
 	</References>
 	<Files>
@@ -1074,6 +1074,10 @@
 					>
 				</File>
 				<File
+					RelativePath="$(SolutionDir)\..\..\src\psycle\host\Song.hpp"
+					>
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\src\psycle\host\SongStructs.hpp"
 					>
 				</File>
@@ -1102,10 +1106,6 @@
 					</File>
 					<File
 						RelativePath="$(SolutionDir)\..\..\src\psycle\host\Plugin.hpp"
-						>
-					</File>
-					<File
-						RelativePath="$(SolutionDir)\..\..\src\psycle\host\Song.hpp"
 						>
 					</File>
 					<File
