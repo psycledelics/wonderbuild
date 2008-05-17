@@ -157,13 +157,18 @@ def detect(chain):
 				'-Wl,--subsystem=console',
 				#'-Wl,--subsystem=xbox',
 			])
-			# -lxxx searches, in order:
+			# With -Bdynamic (the default), -lxxx searches, in order:
 			# 1) libxxx.dll.a
 			# 2) xxx.dll.a
 			# 3) libxxx.a (warning: this is the static lib)
 			# 4) <prefix>xxx.dll (e.g. cygxxx.dll on cygwin)
 			# 5) libxxx.dll
 			# 6) xxx.dll
+			#
+			# With -Bstatic, -lxxx searches, in order:
+			# 1) libxxx.a
+			# 2) xxx.lib
+			#
 			# There is no standard location for libraries on mswindows, so we get paths from the os env:
 			# already done above in all case: chain.os_env().paths().add_inherited(chain_os_env_paths_vars)
 
