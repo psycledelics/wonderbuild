@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?fileVersion 4.0.0?>
+
+<cproject>
+<storageModule moduleId="org.eclipse.cdt.core.settings">
+<cconfiguration id="org.eclipse.cdt.core.default.config.1757300309">
+<storageModule buildSystemId="org.eclipse.cdt.core.defaultConfigDataProvider" id="org.eclipse.cdt.core.default.config.1757300309" moduleId="org.eclipse.cdt.core.settings" name="Configuration">
+<externalSettings/>
+<extensions>
+<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
+</extensions>
+</storageModule>
+<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+<buildTargets>
+<target name="Qt Release Build" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>mingw32-make</buildCommand>
+<buildArguments></buildArguments>
+<buildTarget>release</buildTarget>
+<stopOnError>false</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+<target name="Qt Debug Build" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>mingw32-make</buildCommand>
+<buildArguments></buildArguments>
+<buildTarget>debug</buildTarget>
+<stopOnError>false</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+</buildTargets>
+</storageModule>
+<storageModule moduleId="scannerConfiguration"/>
+<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
+<storageModule moduleId="org.eclipse.cdt.core.pathentry">
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/gtk/include/libxml++-2.6" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/gtk/lib/libxml++-2.6/include" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/gtk/include/libxml2" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/gtk/include/glibmm-2.4" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/gtk/lib/glibmm-2.4/include" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/gtk/include/sigc++-2.0" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/gtk/lib/sigc++-2.0/include" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/gtk/include/glib-2.0" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/gtk/lib/glib-2.0/include" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/programacio/psycleSVN/external-packages/zlib-1.2.3/include" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/programacio/psycleSVN/external-packages/boost-1.35.0/include" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/programacio/psycleSVN/diversalis/src" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/programacio/psycleSVN/universalis/src" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/programacio/psycleSVN/psycle-helpers/src" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/programacio/psycleSVN/external-packages/dsound-9/include" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/programacio/psycleSVN/psycle-audiodrivers/src" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/programacio/psycleSVN/psycle-core/src" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/programacio/psycleSVN/psycle-player/src" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="C:/Qt/4.4.0/mkspecs/win32-g++" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/fftw/include" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/samplerate/include" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/sndfile/include" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/boost/include" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/python/include" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/mingw/include/c++/3.4.2" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/mingw/include/c++/3.4.2/mingw32" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/mingw/include/c++/3.4.2/backward" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/mingw/include" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/mingw/lib/gcc/mingw32/3.4.2/include" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="PSYCLE__MICROSOFT_MME_AVAILABLE" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__cdecl" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__LDBL_MIN__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__FLT_MIN_10_EXP__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__FLT_HAS_QUIET_NAN__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__WIN32" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__LDBL_DIG__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__STDC_HOSTED__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__MSVCRT__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__declspec(x)" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__LDBL_DENORM_MIN__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="WIN32" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__NO_INLINE__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__LDBL_HAS_QUIET_NAN__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__LDBL_MANT_DIG__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__DBL_MIN_10_EXP__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__FLT_MAX_10_EXP__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="_fastcall" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__INT_MAX__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__REGISTER_PREFIX__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__LDBL_MAX__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__LONG_LONG_MAX__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="QT_NEEDS_QMAIN" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="_WIN32" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__DBL_MAX_EXP__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__FLT_EPSILON__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__DBL_MIN_EXP__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__WINT_TYPE__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__WINNT" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__LDBL_MIN_10_EXP__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__VERSION__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__GXX_WEAK__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__LDBL_HAS_INFINITY__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="UNICODE" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__FLT_DIG__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="QT_LARGEFILE_SUPPORT" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__cplusplus" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__WIN32__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__WCHAR_MAX__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__FLT_MAX__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__LDBL_EPSILON__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__FLT_RADIX__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="i386" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__EXCEPTIONS" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__FLT_DENORM_MIN__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__SHRT_MAX__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__fastcall" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__FLT_MAX_EXP__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__DECIMAL_DIG__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__LONG_MAX__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__DBL_DIG__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__USER_LABEL_PREFIX__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__stdcall" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__FLT_MIN_EXP__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__i386" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__LDBL_MAX_EXP__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__DBL_HAS_INFINITY__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__PTRDIFF_TYPE__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__DEPRECATED" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="PSYCLE__LIBXMLPP_AVAILABLE" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="_X86_" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__GXX_ABI_VERSION" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__SIZE_TYPE__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__FLT_EVAL_METHOD__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__DBL_MAX_10_EXP__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__LDBL_MAX_10_EXP__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__DBL_MIN__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__GNUC__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__DBL_MANT_DIG__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__MINGW32__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__SCHAR_MAX__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__FINITE_MATH_ONLY__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__tune_pentiumpro__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="_MT" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__WCHAR_UNSIGNED__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__GNUG__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__GNUC_MINOR__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__FLT_MIN__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__tune_i686__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__i386__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__WINNT__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__GNUC_PATCHLEVEL__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__DBL_MAX__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="_stdcall" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="WINNT" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__LDBL_MIN_EXP__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__DBL_EPSILON__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="_cdecl" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__DBL_HAS_QUIET_NAN__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__USING_SJLJ_EXCEPTIONS__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__FLT_MANT_DIG__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__DBL_DENORM_MIN__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__CHAR_BIT__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__FLT_HAS_INFINITY__" path="" value=""/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__WCHAR_TYPE__" path="" value=""/>
+<pathentry kind="src" path="src/psycle/player"/>
+<pathentry kind="out" path=""/>
+</storageModule>
+</cconfiguration>
+</storageModule>
+</cproject>
