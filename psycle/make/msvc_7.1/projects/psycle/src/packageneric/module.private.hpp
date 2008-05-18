@@ -1,6 +1,6 @@
 // -*- mode:c++; indent-tabs-mode:t -*-
 ///\file
-///\brief packageneric configuration for module psycoal
+///\brief packageneric configuration for module psycle
 #pragma once
 #include <packageneric/configuration.private.hpp>
 
