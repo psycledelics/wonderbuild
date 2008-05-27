@@ -11,9 +11,10 @@ include($$TOP_SRC_DIR/psycle-core/qmake/psycle-core.pri)
 QPSYCLE_DIR = $$TOP_SRC_DIR/qpsycle
 
 BUILD_DIR = $$QPSYCLE_DIR/++build
-OBJECTS_DIR = $$BUILD_DIR # Where the .o files go.
-MOC_DIR = $$BUILD_DIR # Where intermediate moc files go.
-RCC_DIR = $$BUILD_DIR # Where intermediate resource files go.
+OBJECTS_DIR = $$BUILD_DIR/objects # Where the .o files go.
+MOC_DIR = $$BUILD_DIR/moc # Where intermediate moc files go.
+RCC_DIR = $$BUILD_DIR/rcc # Where intermediate resource files go.
+UI_DIR = $$BUILD_DIR/uic # Where compiled uic files go.
 DESTDIR = $$BUILD_DIR # Where the final executable goes.
 
 FORMS = $$QPSYCLE_DIR/src/gui/configdlg/behaviourpage.ui
