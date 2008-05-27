@@ -17,7 +17,9 @@ RCC_DIR = $$BUILD_DIR/rcc # Where intermediate resource files go.
 UI_DIR = $$BUILD_DIR/uic # Where compiled uic files go.
 DESTDIR = $$BUILD_DIR # Where the final executable goes.
 
-FORMS = $$QPSYCLE_DIR/src/gui/configdlg/behaviourpage.ui
+FORMS = $$QPSYCLE_DIR/src/gui/configdlg/behaviourpage.ui \
+        $$QPSYCLE_DIR/src/gui/configdlg/dirspage.ui
+   
 
 CONFIG *= precompile_header
 PRECOMPILED_HEADER = $$QPSYCLE_DIR/src/qpsyclePch.hpp
