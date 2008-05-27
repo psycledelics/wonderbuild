@@ -16,6 +16,8 @@ MOC_DIR = $$BUILD_DIR # Where intermediate moc files go.
 RCC_DIR = $$BUILD_DIR # Where intermediate resource files go.
 DESTDIR = $$BUILD_DIR # Where the final executable goes.
 
+FORMS = $$QPSYCLE_DIR/src/gui/configdlg/behaviourpage.ui
+
 CONFIG *= precompile_header
 PRECOMPILED_HEADER = $$QPSYCLE_DIR/src/qpsyclePch.hpp
 
