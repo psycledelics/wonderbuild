@@ -470,11 +470,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\XMSongExport.cpp"
+					RelativePath="$(SolutionDir)\..\..\src\psycle\host\XMSongExport.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\XMSongExport.hpp"
+					RelativePath="$(SolutionDir)\..\..\src\psycle\host\XMSongExport.hpp"
 					>
 				</File>
 				<File
