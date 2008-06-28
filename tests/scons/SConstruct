@@ -2,12 +2,14 @@ env0 = Environment()
 if env0['PLATFORM'] == 'win32':
 	env0 = Environment(tools=['mingw'], no_import_lib=1)
 	shared_lib_install_dir = '#/++build/install/shared/bin/'
+	env00 = env0
 else:
 	shared_lib_install_dir = '#/++build/install/shared/lib/'
-	#env0.Append(RPATH = '\\$$ORIGIN/../lib')
-	env0.Append(LINKFLAGS = '-Wl,--rpath=\\$$ORIGIN/../lib')
+	env00 = env0.Clone()
+	#env00.Append(RPATH = '\\$$ORIGIN/../lib')
+	env00.Append(LINKFLAGS = '-Wl,--rpath=\\$$ORIGIN/../lib')
 
-env1 = env0.Clone()
+env1 = env00.Clone()
 env1.BuildDir('#/++build/intermediate/shared', '#', duplicate = 0)
 env1.Append(CPPDEFINES = [('FOO', 1)])
 shared_lib = env1.SharedLibrary('#/++build/intermediate/shared/foo', '#/++build/intermediate/shared/foo.cpp')
@@ -15,7 +17,7 @@ env1.Install(shared_lib_install_dir, shared_lib[0])
 if len(shared_lib) > 1: env1.Install('#/++build/install/shared/lib/', shared_lib[1:])
 env1.Install('#/++build/install/shared/include/', '#/++build/intermediate/shared/foo.hpp')
 
-env4 = env0.Clone()
+env4 = env00.Clone()
 env4.BuildDir('#/++build/intermediate/shared', '#', duplicate = 0)
 env4.Append(LIBPATH = '#/++build/intermediate/shared')
 env4.Append(LIBS = 'foo')
@@ -38,9 +40,8 @@ static_lib = env3.StaticLibrary('#/++build/intermediate/static/foo', '#/++build/
 env3.Install('#/++build/install/static/lib/', static_lib)
 env3.Install('#/++build/install/static/include/', '#/++build/intermediate/static/foo.hpp')
 
-env5 = env0.Clone()
-static_runtime = env5.Alias('install-static-runtime', '#/++build/install/static/bin/')
-static_dev = env5.Alias('install-static-dev', [static_runtime, '#/++build/install/static/lib/', '#/++build/install/static/include/'])
-shared_runtime = env5.Alias('install-shared-runtime', '#/++build/install/shared/bin')
-shared_dev = env5.Alias('install-shared-dev', [shared_runtime, '#/++build/install/shared/lib/', '#/++build/install/shared/include/'])
-env5.Default(shared_dev, static_dev)
+static_runtime = env0.Alias('install-static-runtime', '#/++build/install/static/bin/')
+static_dev = env0.Alias('install-static-dev', [static_runtime, '#/++build/install/static/lib/', '#/++build/install/static/include/'])
+shared_runtime = env0.Alias('install-shared-runtime', ['#/++build/install/shared/bin', '#++build/install/shared/lib'])
+shared_dev = env0.Alias('install-shared-dev', [shared_runtime, '#/++build/install/shared/include/'])
+env0.Default(shared_dev, static_dev)
