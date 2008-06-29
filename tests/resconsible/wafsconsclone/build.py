@@ -1,5 +1,62 @@
 #! /usr/bin/env python
 
+class RootProject: pass
+class Project : pass
+
+class Contexes:
+	def check_and_build(self):
+		'when performing build checks, or building the sources'
+		pass
+		
+	def build(self):
+		'when building the sources'
+		pass
+		
+	def source(self):
+		'when building a tarball of the sources'
+		pass
+	
+	class client:
+		'when used as a dependency'
+		
+		def uninstalled(self):
+			'when not yet installed'
+			pass
+		
+		def installed(self):
+			'when installed'
+			pass
+	
+
+class Cmd: pass
+	def cmd(self): pass
+	def message(self): pass
+
+class Cxx(Cmd): pass
+class GnuCxx(Cxx): pass
+class MingwGnuCxx(GnuCxx): pass
+class MsCxx(Cxx): pass
+
+class Archiver(Cmd): pass
+class GnuArchiver(Archiver): pass
+class MsArchiver(Archiver): pass
+
+class ArchiveIndexer(Cmd): pass
+class GnuArchiveIndexer(ArchiveIndexer): pass
+class MsArchiveIndexer(ArchiveIndexer): pass
+
+class Linker(Cmd): pass
+class GnuLinker: pass
+class MingwGnuLinker(GnuLinker): pass
+class MsLinker(Linker): pass
+
+class Chain:
+	def __init(self, compilers, archiver, archive_indexer, linker):
+		self._compilers = compilers
+		self._archiver = archiver
+		self._archive_indexer = archive_indexer
+		self._linker = linker
+
 class Node:
 	def __init__(self, name):
 		self._name = name
@@ -158,4 +215,3 @@ if False:
 	tm = TaskMaster()
 	tm.add_task(t)
 	tm.run()
-	
