@@ -4,7 +4,7 @@
 
 _template = {}
 
-def template(mixin):
+def template(mixin): # projected, attachable
 	try: return _template[mixin]
 	except KeyError:
 		import compiler
