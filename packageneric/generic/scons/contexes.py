@@ -15,6 +15,7 @@ def template(base):
 				self._kw = kw
 				
 			def check_and_build(self):
+				'when performing build checks, or building the sources'
 				try: return self._check_and_build
 				except AttributeError:
 					self._check_and_build = base(*self._args, **self._kw)
@@ -24,6 +25,7 @@ def template(base):
 					return self._check_and_build
 
 			def build(self):
+				'when building the sources'
 				try: return self._build
 				except AttributeError:
 					self._build = base(*self._args, **self._kw)
@@ -34,6 +36,7 @@ def template(base):
 					return self._build
 
 			def source(self):
+				'when building a tarball of the sources'
 				try: return self._source
 				except AttributeError:
 					self._source = base(*self._args, **self._kw)
@@ -43,11 +46,13 @@ def template(base):
 					return self._source
 
 			class _client(base):
+				'when used as a dependency'
 				def __init__(self, enclosing):
 					base.__init__(self, *enclosing._args, **enclosing._kw)
 					self._enclosing = enclosing
 				
 				def uninstalled(self):
+					'when not yet installed'
 					try: return self._uninstalled
 					except AttributeError:
 						self._uninstalled = base(*self._enclosing._args, **self._enclosing._kw)
@@ -58,6 +63,7 @@ def template(base):
 						return self._uninstalled
 						
 				def installed(self):
+					'when installed'
 					try: return self._installed
 					except AttributeError:
 						self._installed = base(*self._enclosing._args, **self._enclosing._kw)
@@ -78,6 +84,7 @@ def template(base):
 						else: installed.attach(source.installed())
 
 			def client(self):
+				'when used as a dependency'
 				try: return self._client_
 				except AttributeError:
 					self._client_ = self._client(self)

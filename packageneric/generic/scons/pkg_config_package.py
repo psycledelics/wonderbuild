@@ -15,7 +15,6 @@ class pkg_config_package(projected, builder):
 	):
 		projected.__init__(self, project)
 		builder.__init__(self, name)
-		self._project = project
 		self._version = version
 		self._description = description
 		if modules is None: self._modules = []
