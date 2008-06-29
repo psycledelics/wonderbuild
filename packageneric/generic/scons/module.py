@@ -152,7 +152,7 @@ class module(projected, builder): # todo decide whether this can be derived from
 			if not self.project()._scons().Clone is None:
 				scons = self.project()._scons().Clone()
 			else:
-				self.project()._scons().Copy()
+				scons = self.project()._scons().Copy()
 				
 			self.contexes().build()._scons(scons)
 			
