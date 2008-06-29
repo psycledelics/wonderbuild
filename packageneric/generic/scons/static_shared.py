@@ -4,7 +4,7 @@
 
 _template = {}
 
-def template(base):
+def template(base): # attachable
 	try: return _template[base]
 	except KeyError:
 		

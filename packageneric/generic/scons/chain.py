@@ -4,7 +4,7 @@
 
 _template = {}
 
-def template(base): # env
+def template(base): # projected, attachable, env
 	try: return _template[base]
 	except KeyError:
 
