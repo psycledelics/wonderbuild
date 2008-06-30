@@ -434,11 +434,27 @@
 				Name="file"
 				>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\abstractiff.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\abstractiff.hpp"
+					>
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\src\psycle\host\DataCompression.cpp"
 					>
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\src\psycle\host\DataCompression.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\eaiff.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\eaiff.hpp"
 					>
 				</File>
 				<File
@@ -463,6 +479,14 @@
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\src\psycle\host\Riff.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\WaveFile.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\WaveFile.hpp"
 					>
 				</File>
 				<File

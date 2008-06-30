@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="universalis"
 	ProjectGUID="{B78DFE59-051A-43FD-B489-775A4982581C}"
+	RootNamespace="universalis"
 	>
 	<Platforms>
 		<Platform
@@ -148,6 +149,10 @@
 			Name="universalis"
 			>
 			<File
+				RelativePath="..\..\..\..\src\universalis\compiler.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\src\universalis\exception.cpp"
 				>
 				<FileConfiguration
@@ -167,6 +172,22 @@
 						ObjectFile="$(IntDir)/$(ParentName)/"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\universalis\exception.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\universalis\operating_system.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\universalis\processor.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\universalis\standard_library.hpp"
+				>
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\universalis\universalis.hpp"
@@ -200,11 +221,19 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\universalis\compiler\template_constructors.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\universalis\compiler\token.hpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\universalis\compiler\typenameof.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\universalis\compiler\virtual_factory.hpp"
 					>
 				</File>
 				<Filter
@@ -293,6 +322,10 @@
 					RelativePath="..\..\..\..\src\universalis\detail\project.private.hpp"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\..\src\universalis\detail\quaquaversalis.hpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="universalis/operating_system"
@@ -319,6 +352,14 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\universalis\operating_system\clocks.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\universalis\operating_system\cpu_affinity.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\universalis\operating_system\exception.cpp"
 					>
 					<FileConfiguration
@@ -340,6 +381,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\universalis\operating_system\exception.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\universalis\operating_system\loggers.cpp"
 					>
 					<FileConfiguration
@@ -359,6 +404,10 @@
 							ObjectFile="$(IntDir)/$(ParentName)/"
 						/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\universalis\operating_system\loggers.hpp"
+					>
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\universalis\operating_system\operating_system.hpp"
@@ -386,6 +435,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\universalis\operating_system\paths.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\universalis\operating_system\terminal.cpp"
 					>
 					<FileConfiguration
@@ -405,6 +458,10 @@
 							ObjectFile="$(IntDir)/$(ParentName)/"
 						/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\universalis\operating_system\terminal.hpp"
+					>
 				</File>
 				<Filter
 					Name="universalis/operating_system/detail"
@@ -430,10 +487,26 @@
 							/>
 						</FileConfiguration>
 					</File>
+					<File
+						RelativePath="..\..\..\..\src\universalis\operating_system\detail\check_version.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\universalis\operating_system\detail\microsoft\max_path.hpp"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="universalis/operating_system/dynamic_link"
 					>
+					<File
+						RelativePath="..\..\..\..\src\universalis\operating_system\dynamic_link\main.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\universalis\operating_system\dynamic_link\main.private.hpp"
+						>
+					</File>
 					<File
 						RelativePath="..\..\..\..\src\universalis\operating_system\dynamic_link\resolver.cpp"
 						>
@@ -454,6 +527,10 @@
 								ObjectFile="$(IntDir)/$(ParentName)/"
 							/>
 						</FileConfiguration>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\universalis\operating_system\dynamic_link\resolver.hpp"
+						>
 					</File>
 				</Filter>
 				<Filter
@@ -480,6 +557,34 @@
 							/>
 						</FileConfiguration>
 					</File>
+					<File
+						RelativePath="..\..\..\..\src\universalis\operating_system\exceptions\code_description.hpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="universalis/operating_system/paths"
+					>
+					<File
+						RelativePath="..\..\..\..\src\universalis\operating_system\paths\implementation.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\universalis\operating_system\paths\interface.hpp"
+						>
+					</File>
+					<Filter
+						Name="universalis/operating_system/paths/injection"
+						>
+						<File
+							RelativePath="..\..\..\..\src\universalis\operating_system\paths\injection\implementation.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\src\universalis\operating_system\paths\injection\interface.hpp"
+							>
+						</File>
+					</Filter>
 				</Filter>
 			</Filter>
 			<Filter
@@ -505,6 +610,10 @@
 							ObjectFile="$(IntDir)/$(ParentName)/"
 						/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\universalis\processor\exception.hpp"
+					>
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\universalis\processor\processor.hpp"
@@ -647,6 +756,10 @@
 								ObjectFile="$(IntDir)/$(ParentName)/"
 							/>
 						</FileConfiguration>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\universalis\standard_library\exceptions\code_description.hpp"
+						>
 					</File>
 				</Filter>
 			</Filter>
