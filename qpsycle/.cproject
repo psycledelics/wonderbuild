@@ -102,8 +102,37 @@
 </storageModule>
 
 
+
+<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+<buildTargets>
+<target name="Qt Release Build" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>mingw32-make</buildCommand>
+<buildArguments/>
+<buildTarget>release</buildTarget>
+<stopOnError>false</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+<target name="Qt Debug Build" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>mingw32-make</buildCommand>
+<buildArguments/>
+<buildTarget>debug</buildTarget>
+<stopOnError>false</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+<target name="clean" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>mingw32-make</buildCommand>
+<buildArguments/>
+<buildTarget>clean</buildTarget>
+<stopOnError>false</stopOnError>
+<useDefaultCommand>true</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+</buildTargets>
+</storageModule>
+<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 <storageModule moduleId="org.eclipse.cdt.core.pathentry">
-<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/gtk/include/libxml++-2.6" kind="inc" path="" system="true"/>
 <pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/gtk/lib/libxml++-2.6/include" kind="inc" path="" system="true"/>
 <pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/gtk/include/libxml2" kind="inc" path="" system="true"/>
 <pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/gtk/include/glibmm-2.4" kind="inc" path="" system="true"/>
@@ -141,11 +170,11 @@
 <pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/sndfile/include" kind="inc" path="" system="true"/>
 <pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/boost/include" kind="inc" path="" system="true"/>
 <pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/python/include" kind="inc" path="" system="true"/>
-<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/mingw/include/c++/3.4.2" kind="inc" path="" system="true"/>
-<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/mingw/include/c++/3.4.2/mingw32" kind="inc" path="" system="true"/>
-<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/mingw/include/c++/3.4.2/backward" kind="inc" path="" system="true"/>
 <pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/mingw/include" kind="inc" path="" system="true"/>
-<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/mingw/lib/gcc/mingw32/3.4.2/include" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/mingw/include/c++/3.4.5" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/mingw/include/c++/3.4.5/mingw32" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/mingw/include/c++/3.4.5/backward" kind="inc" path="" system="true"/>
+<pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/mingw/lib/gcc/mingw32/3.4.5/include" kind="inc" path="" system="true"/>
 <pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="PSYCLE__MICROSOFT_MME_AVAILABLE" path="" value=""/>
 <pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__FLT_MIN_10_EXP__" path="" value=""/>
 <pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" kind="mac" name="__LDBL_MIN__" path="" value=""/>
@@ -261,34 +290,6 @@
 <pathentry kind="lib" library="D:/programacio/psycleSVN/psycle-core/++build/psycle-core.dll" path=""/>
 <pathentry kind="lib" library="D:/programacio/psycleSVN/psycle-audiodrivers/++build/psycle-audiodrivers.dll" path=""/>
 <pathentry kind="prj" path="/psycle-audiodrivers"/>
-</storageModule>
-<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
-<buildTargets>
-<target name="Qt Release Build" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
-<buildCommand>mingw32-make</buildCommand>
-<buildArguments></buildArguments>
-<buildTarget>release</buildTarget>
-<stopOnError>false</stopOnError>
-<useDefaultCommand>false</useDefaultCommand>
-<runAllBuilders>true</runAllBuilders>
-</target>
-<target name="Qt Debug Build" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
-<buildCommand>mingw32-make</buildCommand>
-<buildArguments></buildArguments>
-<buildTarget>debug</buildTarget>
-<stopOnError>false</stopOnError>
-<useDefaultCommand>false</useDefaultCommand>
-<runAllBuilders>true</runAllBuilders>
-</target>
-<target name="clean" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
-<buildCommand>mingw32-make</buildCommand>
-<buildArguments></buildArguments>
-<buildTarget>clean</buildTarget>
-<stopOnError>false</stopOnError>
-<useDefaultCommand>true</useDefaultCommand>
-<runAllBuilders>true</runAllBuilders>
-</target>
-</buildTargets>
 </storageModule>
 </cconfiguration>
 </storageModule>

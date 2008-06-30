@@ -15,26 +15,7 @@
 
 
 <storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
-<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
-<buildTargets>
-<target name="Qt Release Build" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
-<buildCommand>mingw32-make</buildCommand>
-<buildArguments/>
-<buildTarget>release</buildTarget>
-<stopOnError>false</stopOnError>
-<useDefaultCommand>false</useDefaultCommand>
-<runAllBuilders>true</runAllBuilders>
-</target>
-<target name="Qt Debug Build" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
-<buildCommand>mingw32-make</buildCommand>
-<buildArguments/>
-<buildTarget>debug</buildTarget>
-<stopOnError>false</stopOnError>
-<useDefaultCommand>false</useDefaultCommand>
-<runAllBuilders>true</runAllBuilders>
-</target>
-</buildTargets>
-</storageModule>
+
 
 <storageModule moduleId="scannerConfiguration">
 <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile"/>
@@ -120,6 +101,28 @@
 </profile>
 </storageModule>
 
+
+
+<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+<buildTargets>
+<target name="Qt Release Build" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>mingw32-make</buildCommand>
+<buildArguments/>
+<buildTarget>release</buildTarget>
+<stopOnError>false</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+<target name="Qt Debug Build" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>mingw32-make</buildCommand>
+<buildArguments/>
+<buildTarget>debug</buildTarget>
+<stopOnError>false</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+<runAllBuilders>true</runAllBuilders>
+</target>
+</buildTargets>
+</storageModule>
 <storageModule moduleId="org.eclipse.cdt.core.pathentry">
 <pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/fftw/include" kind="inc" path="" system="true"/>
 <pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/samplerate/include" kind="inc" path="" system="true"/>

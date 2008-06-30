@@ -12,6 +12,11 @@
 </extensions>
 </storageModule>
 <storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+
+<storageModule moduleId="scannerConfiguration"/>
+<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
+
+
 <storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
 <buildTargets>
 <target name="Qt Release Build" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
@@ -32,8 +37,6 @@
 </target>
 </buildTargets>
 </storageModule>
-<storageModule moduleId="scannerConfiguration"/>
-<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 <storageModule moduleId="org.eclipse.cdt.core.pathentry">
 <pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/gtk/include/libxml++-2.6" kind="inc" path="" system="true"/>
 <pathentry base-ref="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO" include="D:/psycle-dp-27/opt/gtk/lib/libxml++-2.6/include" kind="inc" path="" system="true"/>
