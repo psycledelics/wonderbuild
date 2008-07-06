@@ -131,38 +131,14 @@ def template(base): # projected, attachable, env
 				if isinstance(source, result):
 					for self_compiler in self.compilers():
 						for source_compiler in source.compilers(): self_compiler.attach(source_compiler)
-					
-					try: archiver = self._archiver
-					except AttributeError: pass
-					else: archiver.attach(source.archiver())
-
-					try: linker = self._linker
-					except AttributeError: pass
-					else: linker.attach(source.linker())
-
-					try: implementation = self._implementation_
-					except AttributeError: pass
-					else: implementation.attach(source._implementation())
-
-					try: debug = self._debug
-					except AttributeError: pass
-					else: debug.attach(source.debug())
-					
-					try: multi_threading = self._multi_threading
-					except AttributeError: pass
-					else: multi_threading.attach(source.multi_threading())
-					
-					try: pre_compile = self._pre_compile
-					except AttributeError: pass
-					else: pre_compile.attach(source.pre_compile())
-					
-					try: link_library = self._link_library
-					except AttributeError: pass
-					else: link_library.attach(source.link_library())
-					
-					try: link_with_static_libraries = self._link_with_static_libraries
-					except AttributeError: pass
-					else: link_with_static_libraries.attach(source.link_with_static_libraries())
+					self.archiver().attach(source.archiver())
+					self.linker().attach(source.linker())
+					self._implementation().attach(source._implementation())
+					self.debug().attach(source.debug())
+					self.multi_threading().attach(source.multi_threading())
+					self.pre_compile().attach(source.pre_compile())
+					self.link_library().attach(source.link_library())
+					self.link_with_static_libraries().attach(source.link_with_static_libraries())
 					
 			def _scons(self, scons):
 				implementation = self._implementation().get()

@@ -28,9 +28,7 @@ def template(mixin):
 				value = self.message().get()
 				if value is not None: scons['RANLIBCOMSTR'] = value
 
-				scons.Append(
-					RANLIBFLAGS = self.flags().get()
-				)
+				scons.Append(RANLIBFLAGS = self.flags().get())
 
 		_template[mixin] = result
 		return result
