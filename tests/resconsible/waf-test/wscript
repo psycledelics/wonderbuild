@@ -1,0 +1,24 @@
+#! /usr/bin/env waf
+
+APPNAME = 'waf-test'
+VERSION = '0.0.1'
+
+srcdir = '.'
+
+blddir = '++build'
+
+def init():
+	pass
+
+def set_options(opt):
+	pass
+
+def configure(conf):
+	pass
+	
+def build(bld):
+	#bld.add_subdirs('../diversalis')
+	pass
+
+def shutdown():
+	pass
