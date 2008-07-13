@@ -12,6 +12,7 @@ class pkg_config_package(projected, builder):
 		version,
 		description,
 		modules = None,
+		dependencies = None
 	):
 		projected.__init__(self, project)
 		builder.__init__(self, name)
@@ -20,6 +21,8 @@ class pkg_config_package(projected, builder):
 		if modules is None: self._modules = []
 		else: self._modules = modules
 		self.project().add_builder(self)
+		if dependencies is None: self._dependencies = []
+		else: self._dependencies = dependencies
 		
 	def version(self): return self._version
 	
@@ -67,7 +70,7 @@ class pkg_config_package(projected, builder):
 			' '.join([flag for flag in env.linker().flags()]) + '\n'
 		string += 'Libs.private: ' + \
 			' '.join([l(library) for library in env.linker().libraries()]) + '\n' # to support for fully static builds
-		string += 'Requires: ' + ' '.join(env.pkg_config().get())
+		string += 'Requires: ' + ' '.join(env.pkg_config().get()) # todo add self._dependencies
 		string += '\n'
 		return string
 	
