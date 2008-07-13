@@ -242,7 +242,7 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\helpers\math\sinus_sequence.hpp"
+						RelativePath="..\..\..\..\src\psycle\helpers\math\sine_sequence.hpp"
 						>
 					</File>
 					<File
