@@ -26,7 +26,7 @@ def check_changes(repo, master, verbose=False, old_revision = -1):
 	template="'" + '<logentry revision="{rev}"><author>{author|user}</author>\\n<msg>\\n{desc}\\n</msg>\\n<paths>{files}<paths></logentry>\\n' + "'"
 	if old_revision >= 0: revision_range = str(old_revision + 1) + ':tip'
 	else: revision_range = 'tip'
-	cmd = 'hg log --noninteractive --template ' + template + ' --rev ' + revision_range + ' ' + repo
+	cmd = 'hg incoming --noninteractive --template ' + template + ' --rev ' + revision_range + ' ' + repo
 	if verbose: print "Getting last revision of repository: " + repo
 	if sys.platform == 'win32':
 		f = win32pipe.popen(cmd)
