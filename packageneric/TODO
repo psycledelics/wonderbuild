@@ -1,3 +1,5 @@
+*	if 'g++' doesn't exist but 'g++-x.x' does, configure checks don't work.
+
 *	problem reported by magnus:
 	after a scons --clean, when trying to build again:
 	/tmp/++packageneric/variants/default/intermediate/freepsycle/modules/freepsycle-gui/src/packageneric/module.private.hpp:1:51 error: packageneric/source-package.private.hpp: No such file or directory
