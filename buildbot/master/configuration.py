@@ -656,10 +656,11 @@ class IRC(BaseIRC):
 decent_efnet_irc_server = 'irc.efnet.net'
 #decent_efnet_irc_server = 'irc.choopa.ca'
 BuildmasterConfig['status'].append(IRC(host = decent_efnet_irc_server, nick = 'buildborg', channels = ['#psycle'], categories = categories))
-BuildmasterConfig['status'].append(IRC(host = 'irc.freenode.net', nick = 'buildborg', channels = ['#psycle', '#aldrin'], categories = categories))
+#BuildmasterConfig['status'].append(IRC(host = 'irc.freenode.net', nick = 'buildborg', channels = ['#psycle', '#aldrin'], categories = categories))
+BuildmasterConfig['status'].append(IRC(host = 'irc.freenode.net', nick = 'buildborg', channels = ['#psycle'], categories = categories))
 
 ##################################### non-psycle stuff ######################################
-if True:
+if False:
 
 	microsoft_slaves_zzub = ['winux']
 
