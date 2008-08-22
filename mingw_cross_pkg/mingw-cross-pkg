@@ -502,7 +502,10 @@ class Packages:
 						built_package.write_state('version', package_recipe.version())
 						built_package.write_state('description', package_recipe.description())
 						built_package.write_state('direct-dependencies', '\n'.join([d.name() + ' ' + d.version() for d in package_recipe.deps()]))
-						built_package.write_state('recursed-dependencies', '\n'.join([d.name() + ' ' + d.version() for d in package_recipe.recursed_deps()]))
+						rd = []
+						for d in package_recipe.recursed_deps():
+							if not d in rd: rd.append(d)
+						built_package.write_state('recursed-dependencies', '\n'.join([d.name() + ' ' + d.version() for d in rd]))
 						built_package.write_state('built', None)
 
 					if not package.installed() or new_build:
