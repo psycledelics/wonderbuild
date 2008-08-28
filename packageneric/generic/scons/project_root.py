@@ -24,12 +24,12 @@ class project_root:
 			key = self._scons().File(path).get_abspath()
 			try: result = results[key]
 			except KeyError:
-				self.information('=============================================')
-				self.information('script stack push: ' + ' -> '.join([project.name() for project in self._subscript_stack()]) + ' -> ' + path)
+				#self.information('=============================================')
+				#self.information('script stack push: ' + ' -> '.join([project.name() for project in self._subscript_stack()]) + ' -> ' + path)
 				result = results[key] = self._scons().SConscript(path) # SConscriptChDir(False) ; SConscript(path, src_dir, build_dir) ; SConscriptChDir(True)
-				self.information('=============================================')
-				self.information('script stack pop: ' + ' -> '.join([project.name() for project in self._subscript_stack()]))
-				self.information('=============================================')
+				#self.information('=============================================')
+				#self.information('script stack pop: ' + ' -> '.join([project.name() for project in self._subscript_stack()]))
+				#self.information('=============================================')
 		finally: self._subscript_stack().pop()
 		return result
 

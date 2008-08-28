@@ -31,7 +31,7 @@ def template(base):
 				return result
 			
 			def _execute_(self, scons_sconf_context):
-				scons_sconf_context.Message(self.project().message('packageneric: ', 'checking for ' + self.name() + ' ... ', font = '1;34'))
+				scons_sconf_context.Message(self.project().root().message('packageneric: ', 'checking for ' + self.name() + ' ... ', font = '1;34'))
 				result, output = self._scons_sconf_execute(scons_sconf_context)
 				if result:
 					if not output: output = 'yes'

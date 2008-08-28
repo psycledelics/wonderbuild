@@ -55,8 +55,7 @@ class module(projected, builder): # todo decide whether this can be derived from
 			self._sources = []
 		return self._sources
 	def add_source(self, source): self.sources().append(source)
-	def add_sources(self, sources):
-		for x in sources: self.add_source(x)
+	def add_sources(self, sources): self.sources().extend(sources)
 		
 	def headers(self):
 		try: return self._headers
@@ -64,8 +63,7 @@ class module(projected, builder): # todo decide whether this can be derived from
 			self._headers = []
 			return self._headers
 	def add_header(self, header): self.headers().append(header)
-	def add_headers(self, headers):
-		for x in headers: self.add_header(x)
+	def add_headers(self, headers): self.headers().extend(headers)
 
 	def build_immediate_dependencies(self): return self._build_dependencies
 	
@@ -77,8 +75,7 @@ class module(projected, builder): # todo decide whether this can be derived from
 				if not package in packages: packages.append(package)
 		return packages
 	def add_build_dependency(self, build_dependency): self._build_dependencies.append(build_dependency)
-	def add_build_dependencies(self, build_dependencies):
-		for package in build_dependencies: self.add_build_dependency(package)
+	def add_build_dependencies(self, build_dependencies): self._build_dependencies.extend(build_dependencies)
 	
 	def immediate_dependencies(self): return self._dependencies
 	
@@ -90,8 +87,7 @@ class module(projected, builder): # todo decide whether this can be derived from
 				if not package in packages: packages.append(package)
 		return packages
 	def add_dependency(self, dependency): self._dependencies.append(dependency)
-	def add_dependencies(self, dependencies):
-		for package in dependencies: self.add_dependency(package)
+	def add_dependencies(self, dependencies): self._dependencies.extend(dependencies)
 	
 	def dynamic_dependencies(self): pass # todo this is also a method of the node class
 	
@@ -218,4 +214,4 @@ class module(projected, builder): # todo decide whether this can be derived from
 		if target_type == self.target_types.static: return self.name() # scons.subst('$LIBPREFIX') + self.name() + scons.subst('$LIBSUFFIX')
 		if self.target_type() == self.target_types.program: return self.name() + scons.subst('$PROGSUFFIX') # scons.subst('$PROGPREFIX') + self.name() + scons.subst('$PROGSUFFIX')
 		else: self.project().abort("unknown binary type for module '%s'" % self.name())
-	
+
