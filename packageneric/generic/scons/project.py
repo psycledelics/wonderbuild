@@ -10,10 +10,11 @@ class project:
 	def __init__(self, name, default_build_dir = None):
 		self.root()
 		self._name = name
-		self.information('=============================================')
-		self.information('  project name is ' + self.name())
+		#self.information('=============================================')
+		#self.information('  project name is ' + self.name())
 		self._scons()
-		self.information('=============================================')
+		self.information('project ' + self.name())
+		#self.information('=============================================')
 
 	def name(self): return self._name
 
@@ -105,7 +106,8 @@ class project:
 		try: return self._scons_
 		except AttributeError:
 			scons = self._scons_ = self.root()._scons()
-			self.information('    source dir is ' + self.source_dir())
+			#self.information('    source dir is ' + self.source_dir())
+			self.information('entering source dir ' + self.source_dir())
 			scons.SourceCode(self.source_dir(), None) # we don't use the default source code fetchers (RCS, SCCS ...), so we disable them to avoid uneeded processing
 			scons.BuildDir(self.intermediate_target_dir(), self.source_dir(), duplicate = False) # This allows source files to referenced as is they where in the build dir.
 			return self._scons_
