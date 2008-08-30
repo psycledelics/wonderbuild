@@ -28,7 +28,7 @@ class Contexes:
 			pass
 	
 
-class Cmd: pass
+class Cmd:
 	def cmd(self): pass
 	def message(self): pass
 
@@ -181,37 +181,37 @@ def exec_subprocess_3(args):
 if __name__ == '__main__':
 	args = ['find', '.']
 	print args, '\n', exec_subprocess(args)
-	#args = ['./x']
-	#print args, '\n', exec_subprocess(args)
 
 if False:
-	have_cxx_compiler = have_prog('c++')
-	if not have_cxx_compiler: have_cxx_compiler = have_prog('g++')
-	if not have_cxx_compiler: have_cxx_compiler = have_prog('cl')
-	cxx = ValueNode(have_cxx_compiler)
-	class M(Module):
-		def __init__(self, project):
-			Module.__init__(self, project)
-			
-		def dyn_dep(self):
-			cxx = self.project().check_tool('cxx')
-			if not cxx: return False
-			if not cxx.build_check(
-				defines = [],
-				includes = [],
-				libpath = [],
-				libs = ['m'],
-				src = '''
-					#include <cmath>
-					float f() { return std::sin(0); }
-				'''
-			): return False
-			return True
-		
-	s = Node('src/foo.hpp.in')
-	o = Node('++build/src/foo.hpp')
-	d = Dependency(o, Dependency.CONTENT, s)
-	t = Task([s], ['cp', s.name(), o.name()], [o])
+	fs = FS(src = '.', bld = './++build')
+	
 	tm = TaskMaster()
+	tm.start()
+	
+	i = fs.file('src/foo.hpp.in')
+	o = fs.file('++build/src/foo.hpp')
+	d = Dependency(o, Dependency.CONTENT, i)
+	tm.add_dep(d)
+	t = Task([i], ['cp -L', i.path(), o.path()], [o])
 	tm.add_task(t)
-	tm.run()
+	
+	for i in fs.find('src', include_pattern = '*.cpp'):
+		#i = fs.file('src/foo.cpp')
+		o = fs.file(fs.ch_ext(fs.twin_path(i), '.cpp', '.o'))
+		d = Dependency(o, Dependency.CONTENT, i)
+		tm.add_dep(d)
+		t = Task([i], ['c++', '-c', i.path(), '-o', o.path()], [o])
+		tm.add_task(t)
+
+	s = Scanner()
+	s.append_path('src')
+	s.append_path('++build/src')
+	d = s.deps([i])
+	tm.add_dep(d)
+
+	i = Node('++build/src/foo.o')
+	o = Node('++build/libfoo.so')
+	t = Task([i], ['c++', '-shared', i.path(), '-o', o.path()], [o])
+	tm.add_task(t)
+
+	tm.end()
