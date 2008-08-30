@@ -64,6 +64,11 @@ def detect(chain):
 					'-Wunsafe-loop-optimizations',
 					'-Wvolatile-register-var'
 				])
+				if True or gnug.version().minor() >= 2: # seen on 4.2.3 (not really determined since when it works)
+					chain.compilers().cxx().flags().add([
+						'-Werror=pointer-to-int-cast',
+						'-Werror=int-to-pointer-cast'
+					])
 		if False: # for c
 			chain.compilers().cxx().flags().add([
 				'-Wbad-function-cast',
