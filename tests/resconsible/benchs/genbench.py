@@ -181,6 +181,9 @@ def CreateLibrary(lib_number, classes, internal_includes, external_includes):
 def CreateSConstruct(libs):
     handle = file("SConstruct", "w");
     handle.write("""env = Environment(CPPFLAGS=['-Wall'], CPPDEFINES=['LINUX'], CPPPATH=[Dir('#')])\n""")
+    handle.write("""env.Decider('timestamp-newer')\n""")
+    handle.write("""env.SetOption('implicit_cache', True)\n""")
+    handle.write("""env.SourceCode('.', None)\n""")
 
     for i in xrange(libs):
         handle.write("""env.SConscript("lib_%s/SConscript", exports=['env'])\n""" % str(i))
@@ -219,8 +222,7 @@ def CreateFullJamfile(libs):
 def CreateW(lib_number, classes):
     handle = file("wscript", "w");
     handle.write("def build(bld):\n")
-    handle.write('    import Params\n');
-    handle.write("    obj = bld.create_obj('cpp', 'staticlib')\n")
+    handle.write("    obj = bld.new_task_gen('cxx', 'staticlib')\n")
     handle.write("    obj.includes='. ..'\n")
     handle.write("    obj.source='''\n")
 
