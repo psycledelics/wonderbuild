@@ -157,16 +157,11 @@ class project_root:
 			toolpath = [os.path.join(self.packageneric_dir(), 'generic', 'scons', 'tools')]
 			SCons.Tool.Tool('file_from_value', toolpath = toolpath)(scons)
 			SCons.Tool.Tool('substituted_file', toolpath = toolpath)(scons)
+
 			scons.SetOption('implicit_cache', True)
 
-			if False:
-				 # scons 0.96.92.0002 bugs with timestamps of symlinks, or even, always ignores all changes!
-				 # it's ok with 0.97.0.r2680
-				scons.SourceSignatures('timestamp')
-			else: scons.SourceSignatures('MD5')
-			
-			#scons.TargetSignatures('build')
-			#scons.TargetSignatures('content')
+			try: scons.Decider('timestamp')
+			except: scons.SourceSignatures('timestamp')
 
 			self._options()
 			# Below are settings which depend on self._options(), that we just called above
