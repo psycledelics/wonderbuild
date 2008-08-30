@@ -105,8 +105,9 @@ def detect(chain):
 					])
 			# linker: one --rpath dir and/or --rpath-link dir for each -L dir
 			chain.linker().flags().add([ # todo send to scons RPATH env var (chain.linker().rpaths())
+				# $ORIGIN works on gnu, sun and irix linkers.
 				'-Wl,--rpath=\\$$ORIGIN', # makes it more easy for plugins to use helper libs 
-				'-Wl,--rpath=\\$$ORIGIN/../lib', # todo this is elf-specific (or even linux-specific? ... maybe you can tell, sartorius.)
+				'-Wl,--rpath=\\$$ORIGIN/../lib',
 				'-Wl,--rpath=$packageneric__install__lib'
 			])
 			if gnug.version().major() >= 4:
