@@ -160,7 +160,7 @@ class project_root:
 
 			scons.SetOption('implicit_cache', True)
 
-			try: scons.Decider('timestamp')
+			try: scons.Decider('timestamp-newer')
 			except: scons.SourceSignatures('timestamp')
 
 			self._options()
