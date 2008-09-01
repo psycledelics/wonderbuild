@@ -161,7 +161,7 @@ class project_root:
 			scons.SetOption('implicit_cache', True)
 
 			try: scons.Decider('timestamp-newer')
-			except: scons.SourceSignatures('timestamp')
+			except: pass # timestamp are bogus on some pre-1.0 versions of scons: scons.SourceSignatures('timestamp')
 
 			self._options()
 			# Below are settings which depend on self._options(), that we just called above
