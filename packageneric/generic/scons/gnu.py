@@ -3,7 +3,7 @@
 # copyright 2006-2007 psycledelics http://psycle.pastnotecut.org
 
 def detect(chain):
-	from packageneric.pool.gnug import gnug
+	from packageneric.std_checks.gnug import gnug
 	gnug = gnug(chain.project())
 	if gnug.result():
 		chain_os_env_paths_vars = [
@@ -196,7 +196,7 @@ def detect(chain):
 				'-mthreads' # links with -lmingwthrd for thread-safe exception handling
 			])
 		else:			
-			from packageneric.pool.pthread import pthread
+			from packageneric.std_checks.pthread import pthread
 			pthread = pthread(chain.project())
 			if pthread.result():
 				if chain.project().platform() == 'cygwin':

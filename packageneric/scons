@@ -1,4 +1,0 @@
-#! /usr/bin/env python
-try: import SCons.Script
-except ImportError: print "Please install SCons." ; import sys ; sys.exit(1)
-else: SCons.Script.main()
