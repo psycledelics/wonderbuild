@@ -2,9 +2,9 @@
 # copyright 2006-2007 johan boule <bohan@jabber.org>
 # copyright 2006-2007 psycledelics http://psycle.pastnotecut.org
 
-from packageneric.generic.scons.projected import projected
-from packageneric.generic.scons.node import node
-from packageneric.generic.scons.named import named
+from packageneric.scons.projected import projected
+from packageneric.scons.node import node
+from packageneric.scons.named import named
 
 class check(projected, node, named):
 	def __init__(self, project, name, dependencies = None, auto_add = True, *environment_args, **environment_kw):

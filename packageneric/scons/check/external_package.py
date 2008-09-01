@@ -2,7 +2,7 @@
 # copyright 2006-2007 johan boule <bohan@jabber.org>
 # copyright 2006-2007 psycledelics http://psycle.pastnotecut.org
 
-from packageneric.generic.scons.check import check
+from packageneric.scons.check import check
 
 class external_package(check):
 	def __init__(self, project, name, dependencies, distribution_packages, url):
@@ -44,7 +44,7 @@ class external_package(check):
 			string += bar + ' -> '
 			if self.distribution_packages(): string += 'otherwise, '
 			string += 'the source of this package can be downloaded from ' + self.url()
-			from packageneric.generic.scons.tty_font import tty_font
+			from packageneric.scons.tty_font import tty_font
 			external_packages = filter(lambda x: isinstance(x, external_package) and not x.result(), self.dependencies())
 			if len(external_packages):
 				string += separator

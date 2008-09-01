@@ -9,8 +9,8 @@ class project_root:
 
 	def __init__(self, project, default_build_dir = None):
 		self._check_scons_and_python_versions()
-		import packageneric.generic.scons
-		self.information('version of packageneric is ' + str(packageneric.generic.scons.version()))
+		import packageneric.scons
+		self.information('version of packageneric is ' + str(packageneric.scons.version()))
 		self._project = project
 		self._scons()
 
@@ -154,7 +154,7 @@ class project_root:
 			# don't use msvc as the default tool on mswindows!
 			if self.platform_executable_format() == 'pe': scons = self._scons_ = self.__class__._root_scons = SCons.Environment.Environment(tools = ['mingw']) # todo allow tools='msvc' too via command line
 			import SCons.Tool
-			toolpath = [os.path.join(self.packageneric_dir(), 'generic', 'scons', 'tools')]
+			toolpath = [os.path.join(self.packageneric_dir(), 'scons', 'tools')]
 			SCons.Tool.Tool('file_from_value', toolpath = toolpath)(scons)
 			SCons.Tool.Tool('substituted_file', toolpath = toolpath)(scons)
 

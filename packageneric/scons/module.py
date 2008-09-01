@@ -134,7 +134,7 @@ class module(projected, builder): # todo decide whether this can be derived from
 				for dependency_list in dependency_lists: dependencies.extend(dependency_list)
 
 			# add include path for pre-compiled headers of std lib
-			self.contexes().build().compilers().cxx().paths().add([os.path.join(self.project().packageneric_dir(), 'generic', 'scons', 'src')])
+			self.contexes().build().compilers().cxx().paths().add([os.path.join(self.project().packageneric_dir(), 'scons', 'src')])
 
 			# for each include path, we add the same path in the build dir
 			# note that we could just use build dir paths only since scons makes the src path a vpath like make

@@ -29,7 +29,7 @@ isEmpty(platform_included) {
 	# so you will need to use "colormake TERM=packageneric--color-pipe" to enable colorisation of gcc's output.
 	#
 	!CONFIG(nocolor): exists(/usr/bin/env) { # /usr/bin/env is a good indication we have a posix system and shell (as opposed to microsoft's cmd.exe shell). A better test would be to test the SHELL env var.
-		colorgcc = $$TOP_SRC_DIR/packageneric/generic/scons/colorgcc
+		colorgcc = $$TOP_SRC_DIR/packageneric/colorgcc
 		exists($$colorgcc) {
 			contains(QMAKE_CXX,  g++): QMAKE_CXX  = $$colorgcc
 			contains(QMAKE_LINK, g++): QMAKE_LINK = $$colorgcc

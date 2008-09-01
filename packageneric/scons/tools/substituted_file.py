@@ -45,7 +45,7 @@ def generate(env, **kw):
 
 	def string(target, source, env):
 		"""This is what gets printed on the console."""
-		from packageneric.generic.scons.tty_font import tty_font
+		from packageneric.scons.tty_font import tty_font
 		return tty_font(font = '33', text = 'packageneric: substituting ' + str(source[0]))
 
 	def emitter(target, source, env):

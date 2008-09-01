@@ -225,7 +225,7 @@ def detect(chain):
 			chain.os_env().add({'PACKAGENERIC__GCC': gcc})
 			chain.os_env().add_inherited(['HOME']) # colorgcc reads a config file in home dir.
 			import os
-			colorgcc = os.path.join(chain.project().packageneric_dir(), 'generic', 'scons', 'colorgcc')
+			colorgcc = os.path.join(chain.project().packageneric_dir(), 'colorgcc')
 			chain.compilers().cxx().command().set(colorgcc)
 			chain.linker().command().set(colorgcc)
 

@@ -13,8 +13,8 @@ class find:
 		include_patterns = None,
 		exclude_patterns = None
 	):
-		import packageneric.generic.scons.project
-		assert isinstance(project, packageneric.generic.scons.project.project)
+		import packageneric.scons.project
+		assert isinstance(project, packageneric.scons.project.project)
 		self._project = project
 		self._strip_path = strip_path
 		if include_patterns is None: self._include_patterns = ['*']

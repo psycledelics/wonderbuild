@@ -20,7 +20,7 @@ def generate(env, **kw):
 
 	def string(target, source, env):
 		"""This is what gets printed on the console."""
-		from packageneric.generic.scons.tty_font import tty_font
+		from packageneric.scons.tty_font import tty_font
 		return tty_font(font = '32', text = 'packageneric: writing ' + str(target[0]))
 
 	import SCons.Builder, SCons.Action

@@ -39,7 +39,7 @@ def template(base):
 				else:
 					if not output: output = 'no'
 					font = '1;31'
-				from packageneric.generic.scons.tty_font import tty_font
+				from packageneric.scons.tty_font import tty_font
 				scons_sconf_context.Result(tty_font(font, output))
 				return result
 				
