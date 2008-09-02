@@ -11,6 +11,15 @@ isEmpty(platform_included) {
 		}
 		return($$result)
 	}
+	
+	# Treat 64-bit to 32-bit integer casts as errors
+	*-g++ {
+		QMAKE_CXXFLAGS *= -Werror=pointer-to-int-cast
+		QMAKE_CXXFLAGS *= -Werror=int-to-pointer-cast 
+		#QMAKE_CXXFLAGS *= -fdiagnostics-show-option
+	} else:*-msvc {
+		QMAKE_CXXFLAGS *= -Wp64
+	}
 
 	unix: include(platform-unix.pri)
 	else: win32: include(platform-win32.pri)

@@ -84,5 +84,6 @@ isEmpty(psycle_audiodrivers_included) {
 		CONFIG *= link_prl
 		LIBPATH *= $$PSYCLE_AUDIODRIVERS_BUILD_DIR
 		LIBS *= $$linkLibs(psycle-audiodrivers)
+		PRE_TARGETDEPS *= $$PSYCLE_AUDIODRIVERS_BUILD_DIR
 	}
 }

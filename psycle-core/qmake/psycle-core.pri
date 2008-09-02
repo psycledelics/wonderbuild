@@ -16,5 +16,6 @@ isEmpty(psycle_core_included) {
 		CONFIG *= link_prl
 		LIBPATH *= $$PSYCLE_CORE_BUILD_DIR
 		LIBS *= $$linkLibs(psycle-core)
+		PRE_TARGETDEPS += $$PSYCLE_CORE_BUILD_DIR
 	}
 }
