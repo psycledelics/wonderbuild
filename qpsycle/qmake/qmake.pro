@@ -1,12 +1,18 @@
 TARGET = qpsycle
 
+# first include the suff shared amongst all qmake projects
 include(../../psycle-core/qmake/common.pri)
 
-TEMPLATE = app # This project builds an executable program.
-
+# this include defines a dependency on the qt-xml lib.
 include(qt-xml.pri)
+
+# this include defines a dependency on the jdkmidi lib.
 #include(jdkmidi.pri) no need for this now
+
+# this include defines a dependency on the psycle-core lib.
 include($$TOP_SRC_DIR/psycle-core/qmake/psycle-core.pri)
+
+TEMPLATE = app # This project builds an executable program.
 
 QPSYCLE_DIR = $$TOP_SRC_DIR/qpsycle
 

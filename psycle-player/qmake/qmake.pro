@@ -1,10 +1,12 @@
 TARGET = psycle-player
 
+# first include the base stuff shared amongst all qmake projects.
 include(../../psycle-core/qmake/common.pri)
 
-TEMPLATE = app # This project builds an executable program.
-
+# this include defines a dependency on the psycle-core lib.
 include($$TOP_SRC_DIR/psycle-core/qmake/psycle-core.pri)
+
+TEMPLATE = app # This project builds an executable program.
 
 # remove default qmake/qt stuff we don't use
 CONFIG -= qt uic lex yacc

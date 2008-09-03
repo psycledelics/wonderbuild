@@ -1,6 +1,9 @@
 TARGET = psycle-core
 
+# first include the stuff shared amongst all qmake projects.
 include(common.pri)
+
+# this include defines a dependency on the psycle-core lib.
 include(psycle-core.pri)
 
 TEMPLATE = lib # This project builds a library.
