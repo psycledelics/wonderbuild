@@ -5,11 +5,13 @@ isEmpty(boost_included) {
 	unix {
 		macx: LIBS *= $$linkLibs(boost_signals-1_33_1 boost_thread-1_33_1)
 		else {
-			LIBS *= $$linkLibs(boost_signals)
-			# it seems only debian-based distributions provide symlinks that makes "-mt" optional
+			# The stable debian version 4.0 ("etch") doesn't have libs with the "-mt" suffix yet,
+			# so we need to use the backward compatible symlinks until a new stable debian version is released.
 			system(test -f /etc/debian_version) { # test if running debian-based distribution...
+				LIBS *= $$linkLibs(boost_signals)
 				LIBS *= $$linkLibs(boost_thread)
-			} else { #system(test -f /etc/fedora-release) # test if running fedora...
+			} else {
+				LIBS *= $$linkLibs(boost_signals-mt)
          	         	LIBS *= $$linkLibs(boost_thread-mt)
 			}
 		}
