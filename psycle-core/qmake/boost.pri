@@ -12,7 +12,7 @@ isEmpty(boost_included) {
 				LIBS *= $$linkLibs(boost_thread)
 			} else {
 				LIBS *= $$linkLibs(boost_signals-mt)
-        			LIBS *= $$linkLibs(boost_thread-mt)
+				LIBS *= $$linkLibs(boost_thread-mt)
 			}
 		}
 	} else: win32 {
