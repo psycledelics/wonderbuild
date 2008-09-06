@@ -5,12 +5,13 @@ isEmpty(boost_included) {
 	unix {
 		macx: LIBS *= $$linkLibs(boost_signals-1_33_1 boost_thread-1_33_1)
 		else {
-		     LIBS *= $$linkLibs(boost_signals)
-		     system( test -f /etc/fedora-release ) { # test if running fedora...
-         	         LIBS *= $$linkLibs(boost_thread-mt)
-		     } else {
-         	         LIBS *= $$linkLibs(boost_thread)
-                     }
+			LIBS *= $$linkLibs(boost_signals)
+			# it seems only debian-based distributions provide symlinks that makes "-mt" optional
+			system(test -f /etc/debian_version) { # test if running debian-based distribution...
+				LIBS *= $$linkLibs(boost_thread)
+			} else { #system(test -f /etc/fedora-release) # test if running fedora...
+         	         	LIBS *= $$linkLibs(boost_thread-mt)
+			}
 		}
 	} else: win32 {
 		win32-g++:            BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.35.0
