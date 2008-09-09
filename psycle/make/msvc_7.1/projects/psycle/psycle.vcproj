@@ -487,6 +487,12 @@
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\XMFile.hpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\XMSongExport.cpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\XMSongExport.hpp">
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\..\src\psycle\host\XMSongLoader.cpp">
 				</File>
 				<File
@@ -1077,6 +1083,6 @@
 	<Globals>
 		<Global
 			Name="RESOURCE_FILE"
-			Value="\Documents and Settings\All Users\Documentos\Visual C++\psycleSVN\psycle\src\psycle\host\resources\resources.rc"/>
+			Value="\Programacio\psycleSVN\psycle\src\psycle\host\resources\resources.rc"/>
 	</Globals>
 </VisualStudioProject>
