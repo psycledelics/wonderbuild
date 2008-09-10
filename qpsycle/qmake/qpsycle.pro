@@ -1,7 +1,7 @@
 TARGET = qpsycle
 
 # first include the suff shared amongst all qmake projects
-include(../../psycle-core/qmake/common.pri)
+include(../../universalis/qmake/common.pri)
 
 # this include defines a dependency on the qt-xml lib.
 include(qt-xml.pri)
