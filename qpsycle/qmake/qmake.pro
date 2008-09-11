@@ -83,7 +83,7 @@ sources_or_headers = \
 	$$QPSYCLE_DIR/src/model/instrumentsmodel \
 	$$QPSYCLE_DIR/src/qpsycle
 
-SOURCES += $$sources(sources_or_headers)
+SOURCES_PRESERVE_PATH += $$sources(sources_or_headers)
 HEADERS += $$headers(sources_or_headers)
 
 RESOURCES += $$QPSYCLE_DIR/src/qpsycle.qrc

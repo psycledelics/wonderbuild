@@ -1,7 +1,24 @@
 isEmpty(common_included) {
 	common_included = 1
 	verbose: message("common included")
-	
+
+	# Define a new compiler that compiles ../src/foo/bar.cpp to $$OBJECTS_DIR/src/foo/bar.o instead of $$OBJECTS_DIR/bar.o
+	# To use it, add the .cpp to the SOURCES_PRESERVE_PATH var instead of the SOURCES var.
+	# TODO: add -include $(PRECOMPILED_HEADER) to the command line
+	{
+		cxx_to_object_preserve_path.input = SOURCES_PRESERVE_PATH
+		cxx_to_object_preserve_path.dependency_type = TYPE_C
+		defineReplace(removeDotDot) {
+			variable = $$1
+			return($$OBJECTS_DIR/$$replace(variable, \.\., ).o)
+		}
+		cxx_to_object_preserve_path.output_function = removeDotDot
+		win32-msvc*: cxx_to_object_preserve_path.commands = $(CXX) -c $(CXXFLAGS) $(INCPATH) -Fo ${QMAKE_FILE_OUT} ${QMAKE_FILE_NAME}
+		else:        cxx_to_object_preserve_path.commands = $(CXX) -c $(CXXFLAGS) $(INCPATH) -o ${QMAKE_FILE_OUT} ${QMAKE_FILE_NAME}
+		QMAKE_EXTRA_COMPILERS = cxx_to_object_preserve_path
+	}
+
+
 	defineReplace(sources) {
 		variable = $$1
 		list = $$eval($$variable)
@@ -74,5 +91,5 @@ isEmpty(common_included) {
 
 	include(platform.pri)
 
-	COMMON_DIR = $$TOP_SRC_DIR/psycle-core/qmake
+	COMMON_DIR = $$TOP_SRC_DIR/universalis/qmake
 }

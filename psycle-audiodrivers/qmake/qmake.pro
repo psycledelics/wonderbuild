@@ -61,7 +61,7 @@ unix {
 	}
 }
 
-SOURCES += $$sources(sources_or_headers)
+SOURCES_PRESERVE_PATH += $$sources(sources_or_headers)
 HEADERS += $$headers(sources_or_headers)
 
 include($$COMMON_DIR/display-vars.pri)

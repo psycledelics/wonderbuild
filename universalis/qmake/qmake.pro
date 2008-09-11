@@ -3,6 +3,9 @@ TARGET = universalis
 # first include the stuff shared amongst all qmake projects.
 include(../../universalis/qmake/common.pri)
 
+# this include defines a dependency on the universalis lib.
+include(universalis.pri)
+
 TEMPLATE = lib # This project builds a library.
 !CONFIG(shared): CONFIG *= staticlib # Note: Since shared is in CONFIG by default, you will need to pass CONFIG-=shared on qmake's command line to build a static archive.
 CONFIG *= create_prl
@@ -12,7 +15,6 @@ CONFIG -= qt uic lex yacc
 
 BUILD_DIR = $$UNIVERSALIS_BUILD_DIR
 OBJECTS_DIR = $$BUILD_DIR # Where the .o files go.
-MOC_DIR = $$BUILD_DIR # Where intermediate moc files go.
 DESTDIR = $$BUILD_DIR # Where the final executable goes.
 
 #CONFIG *= precompile_header
@@ -105,7 +107,7 @@ sources_or_headers = \
 	$$UNIVERSALIS_DIR/src/universalis/standard_library/thread \
 	$$UNIVERSALIS_DIR/src/universalis/universalis
 
-SOURCES += $$sources(sources_or_headers)
+SOURCES_PRESERVE_PATH += $$sources(sources_or_headers)
 HEADERS += $$headers(sources_or_headers) \
 	$$UNIVERSALIS_DIR/src/condition \
 	$$UNIVERSALIS_DIR/src/date_time \

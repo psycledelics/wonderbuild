@@ -29,7 +29,7 @@ sources_or_headers = \
 	$$PSYCLE_PLAYER_DIR/src/psycle/player/configuration \
 	$$PSYCLE_PLAYER_DIR/src/psycle/player/main
 	
-SOURCES += $$sources(sources_or_headers)
+SOURCES_PRESERVE_PATH += $$sources(sources_or_headers)
 HEADERS += $$headers(sources_or_headers)
 
 false: win32 {

@@ -3,6 +3,9 @@ TARGET = psycle-core
 # first include the stuff shared amongst all qmake projects.
 include(../../universalis/qmake/common.pri)
 
+# this include defines a dependency on the universalis lib.
+include($$TOP_SRC_DIR/universalis/qmake/universalis.pri)
+
 # this include defines a dependency on the psycle-core lib.
 include(psycle-core.pri)
 
@@ -84,7 +87,7 @@ sources_or_headers = \
 	$$PSYCLE_CORE_DIR/src/psycle/core/zipwriter \
 	$$PSYCLE_CORE_DIR/src/psycle/core/zipwriterstream
 
-SOURCES += $$sources(sources_or_headers)
+SOURCES_PRESERVE_PATH += $$sources(sources_or_headers)
 HEADERS += $$headers(sources_or_headers)
 
 include($$COMMON_DIR/display-vars.pri)
