@@ -1,6 +1,6 @@
 TARGET = psycle-player
 
-# first include the base stuff shared amongst all qmake projects.
+# include the base stuff shared amongst all qmake projects.
 include(../../universalis/qmake/common.pri)
 
 # this include defines a dependency on the psycle-core lib.
@@ -23,7 +23,7 @@ INCLUDEPATH *= $$PSYCLE_PLAYER_DIR/src
 DEPENDPATH  *= $$PSYCLE_PLAYER_DIR/src
 
 #CONFIG *= precompile_header
-#PRECOMPILED_HEADER = $$QPSYCLE_DIR/src/psycle/player/psyclePlayerPch.hpp
+#PRECOMPILED_HEADER = $$PSYCLE_PLAYER_DIR/src/psycle/player/psyclePlayerPch.hpp
 
 sources_or_headers = \
 	$$PSYCLE_PLAYER_DIR/src/psycle/player/configuration \

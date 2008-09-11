@@ -4,7 +4,6 @@ isEmpty(common_included) {
 
 	# Define a new compiler that compiles ../src/foo/bar.cpp to $$OBJECTS_DIR/src/foo/bar.o instead of $$OBJECTS_DIR/bar.o
 	# To use it, add the .cpp to the SOURCES_PRESERVE_PATH var instead of the SOURCES var.
-	# TODO: add -include $(PRECOMPILED_HEADER) to the command line
 	{
 		cxx_to_object_preserve_path.input = SOURCES_PRESERVE_PATH
 		cxx_to_object_preserve_path.dependency_type = TYPE_C
@@ -13,8 +12,19 @@ isEmpty(common_included) {
 			return($$OBJECTS_DIR/$$replace(variable, \.\., ).o)
 		}
 		cxx_to_object_preserve_path.output_function = removeDotDot
-		win32-msvc*: cxx_to_object_preserve_path.commands = $(CXX) -c $(CXXFLAGS) $(INCPATH) -Fo ${QMAKE_FILE_OUT} ${QMAKE_FILE_NAME}
-		else:        cxx_to_object_preserve_path.commands = $(CXX) -c $(CXXFLAGS) $(INCPATH) -o ${QMAKE_FILE_OUT} ${QMAKE_FILE_NAME}
+		*-msvc* {
+			CONFIG(precompile_header) {
+				cxx_to_object_preserve_path.commands = $(CXX) -c $$QMAKE_USE_PRECOMPILE $(CXXFLAGS) $(INCPATH) -Fo ${QMAKE_FILE_OUT} ${QMAKE_FILE_NAME}
+			} else {
+				cxx_to_object_preserve_path.commands = $(CXX) -c $(CXXFLAGS) $(INCPATH) -Fo ${QMAKE_FILE_OUT} ${QMAKE_FILE_NAME}
+			}
+		} else {
+			CONFIG(precompile_header) {
+				cxx_to_object_preserve_path.commands = $(CXX) -c $$QMAKE_USE_PRECOMPILE $(CXXFLAGS) $(INCPATH) -o ${QMAKE_FILE_OUT} ${QMAKE_FILE_NAME}
+			} else {
+				cxx_to_object_preserve_path.commands = $(CXX) -c $(CXXFLAGS) $(INCPATH) -o ${QMAKE_FILE_OUT} ${QMAKE_FILE_NAME}
+			}
+		}
 		QMAKE_EXTRA_COMPILERS = cxx_to_object_preserve_path
 	}
 

@@ -2,7 +2,7 @@ isEmpty(libxmlpp_included) {
 	libxmlpp_included = 1
 	verbose: message("libxml++ included")
 	
-	unix | win32-g++ {
+	unix | *-g++ {
 		CONFIG *= link_pkgconfig # adds support for pkg-config via the PKG_CONFIG var
 
 		system(pkg-config --exists libxml++-2.6) {
@@ -12,8 +12,7 @@ isEmpty(libxmlpp_included) {
 		} else {
 			error( "Couldn't find libxml++-2.6." )
 		}
-	}
-	else {
+	} else {
 		# TODO for win32-msvc*
 	}
 }

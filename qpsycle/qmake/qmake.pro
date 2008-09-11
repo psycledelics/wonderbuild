@@ -1,6 +1,6 @@
 TARGET = qpsycle
 
-# first include the suff shared amongst all qmake projects
+# include the base stuff shared amongst all qmake projects.
 include(../../universalis/qmake/common.pri)
 
 # this include defines a dependency on the qt-xml lib.
@@ -26,9 +26,6 @@ DESTDIR = $$BUILD_DIR # Where the final executable goes.
 FORMS = $$QPSYCLE_DIR/src/gui/configdlg/behaviourpage.ui \
 	$$QPSYCLE_DIR/src/gui/configdlg/dirspage.ui
 
-CONFIG *= precompile_header
-PRECOMPILED_HEADER = $$QPSYCLE_DIR/src/qpsyclePch.hpp
-
 local_includepath = \
 	$$QPSYCLE_DIR/src \
 	$$QPSYCLE_DIR/src/mididrivers \
@@ -42,6 +39,9 @@ local_includepath = \
 
 DEPENDPATH  += $$local_includepath
 INCLUDEPATH += $$local_includepath
+
+CONFIG *= precompile_header
+PRECOMPILED_HEADER = $$QPSYCLE_DIR/src/qpsyclePch.hpp
 
 sources_or_headers = \
 	$$QPSYCLE_DIR/src/gui/configdlg/audiopage \
@@ -83,7 +83,8 @@ sources_or_headers = \
 	$$QPSYCLE_DIR/src/model/instrumentsmodel \
 	$$QPSYCLE_DIR/src/qpsycle
 
-SOURCES_PRESERVE_PATH += $$sources(sources_or_headers)
+SOURCES += $$sources(sources_or_headers)
+#SOURCES_PRESERVE_PATH += $$sources(sources_or_headers)
 HEADERS += $$headers(sources_or_headers)
 
 RESOURCES += $$QPSYCLE_DIR/src/qpsycle.qrc

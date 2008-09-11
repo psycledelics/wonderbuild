@@ -6,8 +6,8 @@ isEmpty(platform_included) {
 		list = $$1
 		result =
 		for(element, list) {
-			unix | win32-g++:  result += -l$${element}
-			else: win32-msvc*: result += $${element}.lib
+			unix | *-g++:  result += -l$${element}
+			else: *-msvc*: result += $${element}.lib
 		}
 		return($$result)
 	}
@@ -17,7 +17,7 @@ isEmpty(platform_included) {
 		#QMAKE_CXXFLAGS *= -Werror=pointer-to-int-cast # gcc 4.3
 		#QMAKE_CXXFLAGS *= -Werror=int-to-pointer-cast # gcc 4.3 
 		#QMAKE_CXXFLAGS *= -fdiagnostics-show-option
-	} else:*-msvc {
+	} else: *-msvc* {
 		QMAKE_CXXFLAGS *= -Wp64
 	}
 

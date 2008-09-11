@@ -6,11 +6,7 @@ isEmpty(jdkmidi_included) {
 	
 	win32 {
 		INCLUDEPATH *= $$EXTERNAL_PKG_DIR/libjdkmidi/include
-		win32-g++{
-			LIBPATH     *= $$EXTERNAL_PKG_DIR/libjdkmidi/lib
-			}
-		win32-msvc*{
-			LIBPATH     *= $$EXTERNAL_PKG_DIR/libjdkmidi/lib-msvc
-			}
+		win32-g++:         LIBPATH *= $$EXTERNAL_PKG_DIR/libjdkmidi/lib
+		else: win32-msvc*: LIBPATH *= $$EXTERNAL_PKG_DIR/libjdkmidi/lib-msvc
 	}
 }
