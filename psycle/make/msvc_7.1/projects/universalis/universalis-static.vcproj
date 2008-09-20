@@ -374,6 +374,27 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\universalis\operating_system\thread_name.cpp">
+					<FileConfiguration
+						Name="debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release.g7|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release.g6|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\universalis\operating_system\loggers.cpp">
 					<FileConfiguration
 						Name="debug|Win32">
