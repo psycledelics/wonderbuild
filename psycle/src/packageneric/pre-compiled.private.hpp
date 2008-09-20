@@ -56,7 +56,7 @@
 
 
 
-#if defined DIVERSALIS__COMPILER__MICROSOFT && DIVERSALIS__COMPILER__VERSION__MAJOR < 7
+#if defined DIVERSALIS__COMPILER__MICROSOFT && DIVERSALIS__COMPILER__VERSION < 1300
 	#pragma warning(push, 3) // msvc6's standard libraries generate level-4 warnings... hmm, no comment
 #endif
 
@@ -273,13 +273,13 @@
 //	#include <boost/archive/text_oarchive.hpp>
 	#include <boost/archive/xml_iarchive.hpp>
 	#include <boost/archive/xml_oarchive.hpp>
-	#if defined DIVERSALIS__COMPILER__MICROSOFT && DIVERSALIS__COMPILER__VERSION__MAJOR >= 8
+	#if defined DIVERSALIS__COMPILER__MICROSOFT && DIVERSALIS__COMPILER__VERSION >= 1400
 		#pragma warning(push)
 		#pragma warning(disable:4267) // 'argument' : conversion from 'size_t' to 'std::streamsize', possible loss of data
 	#endif
 //	#include <boost/archive/binary_iarchive.hpp>
 //	#include <boost/archive/binary_oarchive.hpp>
-	#if defined DIVERSALIS__COMPILER__MICROSOFT && DIVERSALIS__COMPILER__VERSION__MAJOR >= 8
+	#if defined DIVERSALIS__COMPILER__MICROSOFT && DIVERSALIS__COMPILER__VERSION >= 1400
 		#pragma warning(pop)
 	#endif
 //	#include <boost/serialization/level.hpp>
@@ -301,7 +301,7 @@
 
 
 
-#if defined DIVERSALIS__COMPILER__MICROSOFT && DIVERSALIS__COMPILER__VERSION__MAJOR < 7
+#if defined DIVERSALIS__COMPILER__MICROSOFT && DIVERSALIS__COMPILER__VERSION < 1300
 	#pragma warning(pop)
 #endif
 

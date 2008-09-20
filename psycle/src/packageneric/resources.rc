@@ -56,15 +56,9 @@ VS_VERSION_INFO VERSIONINFO
 					"compiler build tool chain:\r\n" PACKAGENERIC__CONFIGURATION__COMPILER__BUILD
 					"\r\n\r\n"
 					"compiler host tool chain:\r\n"  PACKAGENERIC__CONFIGURATION__COMPILER__HOST
-					#ifdef DIVERSALIS__COMPILER__VERSION__MAJOR // [bohan] #ifdef and not #if defined ; see bug http://lab.msdn.microsoft.com/ProductFeedback/viewFeedback.aspx?FeedbackID=FDBK45638
+					#ifdef DIVERSALIS__COMPILER__VERSION // [bohan] #ifdef and not #if defined ; see bug http://lab.msdn.microsoft.com/ProductFeedback/viewFeedback.aspx?FeedbackID=FDBK45638
 						"\r\n\r\n"
-						"compiler version:\r\n" PACKAGENERIC__STRINGIZED(DIVERSALIS__COMPILER__VERSION__MAJOR)
-						#if defined DIVERSALIS__COMPILER__VERSION__MINOR
-						    "."                 PACKAGENERIC__STRINGIZED(DIVERSALIS__COMPILER__VERSION__MINOR)
-						    #if defined DIVERSALIS__COMPILER__VERSION__PATCH
-						        "."             PACKAGENERIC__STRINGIZED(DIVERSALIS__COMPILER__VERSION__PATCH)
-						    #endif
-						#endif
+						"compiler version:\r\n" PACKAGENERIC__STRINGIZED(DIVERSALIS__COMPILER__VERSION)
 					#endif
 					"" // o_O`
 					#if defined DIVERSALIS__COMPILER__GNU
