@@ -1,6 +1,5 @@
 // -*- mode:c++; indent-tabs-mode:t -*-
-///\file
-///\brief packageneric configuration for the universalis module 
+///\file \brief packageneric configuration for the universalis module 
 #pragma once
 #include <packageneric/configuration.private.hpp>
 
@@ -19,6 +18,7 @@
 #define PACKAGENERIC__MODULE__SOURCE__UNIVERSALIS__OPERATING_SYSTEM__LOGGERS 1
 #define PACKAGENERIC__MODULE__SOURCE__UNIVERSALIS__OPERATING_SYSTEM__TERMINAL 1
 #define PACKAGENERIC__MODULE__SOURCE__UNIVERSALIS__OPERATING_SYSTEM__CLOCKS 1
+#define PACKAGENERIC__MODULE__SOURCE__UNIVERSALIS__OPERATING_SYSTEM__THREAD_NAME 1
 #define PACKAGENERIC__MODULE__SOURCE__UNIVERSALIS__PROCESSOR__EXCEPTION 1
 #define PACKAGENERIC__MODULE__SOURCE__UNIVERSALIS__PROCESSOR__EXCEPTIONS__CODE_DESCRIPTION 1
 #define PACKAGENERIC__MODULE__SOURCE__UNIVERSALIS__STANDARD_LIBRARY__DETAIL__ALLOCATORS 1
