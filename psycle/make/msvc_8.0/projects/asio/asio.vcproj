@@ -35,7 +35,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../src/asio/common&quot;;&quot;$(SolutionDir)/../../src/asio/host&quot;;&quot;$(SolutionDir)/../../src/asio/host/pc&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../../external-packages/asio-2.1/common&quot;;&quot;$(SolutionDir)/../../../external-packages/asio-2.1/host&quot;;&quot;$(SolutionDir)/../../../external-packages/asio-2.1/host/pc&quot;"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -88,7 +88,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../src/asio/common&quot;;&quot;$(SolutionDir)/../../src/asio/host&quot;;&quot;$(SolutionDir)/../../src/asio/host/pc&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)/../../../external-packages/asio-2.1/common&quot;;&quot;$(SolutionDir)/../../../external-packages/asio-2.1/host&quot;;&quot;$(SolutionDir)/../../../external-packages/asio-2.1/host/pc&quot;"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
