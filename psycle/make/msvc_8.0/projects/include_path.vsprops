@@ -15,7 +15,7 @@
 	/>
 	<UserMacro
 		Name="IncludePath"
-		Value="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../msvc_common/src&quot;;&quot;$(TopSrcDir)/src&quot;;&quot;$(TopSrcDir)/src/asio/common&quot;;&quot;$(TopSrcDir)/src/asio/host&quot;;&quot;$(TopSrcDir)/src/asio/host/pc&quot;;&quot;$(TopSrcDir)/include&quot;"
+		Value="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../msvc_common/src&quot;;&quot;$(TopSrcDir)/diversalis/src&quot;;&quot;$(TopSrcDir)/universalis/src&quot;;&quot;$(TopSrcDir)/psycle-helpers/src&quot;;&quot;$(TopSrcDir)/psycle-audiodrivers/src&quot;;&quot;$(TopSrcDir)/psycle-core/src&quot;;&quot;$(TopSrcDir)/psycle-plugins/src&quot;;&quot;$(TopSrcDir)/psycle/src&quot;;&quot;$(TopSrcDir)/psycle/src/asio/common&quot;;&quot;$(TopSrcDir)/psycle/src/asio/host&quot;;&quot;$(TopSrcDir)/psycle/src/asio/host/pc&quot;;&quot;$(TopSrcDir)/psycle/include&quot;"
 		InheritsFromParent="true"
 		Delimiter=";"
 	/>

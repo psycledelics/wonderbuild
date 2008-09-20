@@ -6,6 +6,6 @@
 	>
 	<UserMacro
 		Name="TopSrcDir"
-		Value="$(SolutionDir)/../.."
+		Value="$(SolutionDir)/../../.."
 	/>
 </VisualStudioPropertySheet>

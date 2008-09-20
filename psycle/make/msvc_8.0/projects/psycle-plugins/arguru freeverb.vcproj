@@ -143,27 +143,27 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\yezar_freeverb\AllPass.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\yezar_freeverb\AllPass.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\yezar_freeverb\comb.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\yezar_freeverb\comb.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\yezar_freeverb\CombFilter.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\yezar_freeverb\CombFilter.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\yezar_freeverb\LowPass.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\yezar_freeverb\LowPass.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\yezar_freeverb\RevModel.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\yezar_freeverb\RevModel.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\yezar_freeverb\yezar_freeverb.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\yezar_freeverb\yezar_freeverb.cpp"
 			>
 		</File>
 	</Files>

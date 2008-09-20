@@ -143,23 +143,23 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\gverb\gverb.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\gverb\gverb.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\gverb\gverb.h"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\gverb\gverb.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\gverb\gverbdsp.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\gverb\gverbdsp.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\gverb\gverbdsp.h"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\gverb\gverbdsp.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\gverb\ladspa_gverb.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\gverb\ladspa_gverb.cpp"
 			>
 		</File>
 	</Files>

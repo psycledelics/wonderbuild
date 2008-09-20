@@ -143,15 +143,15 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\pooplog_filter\filter.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\pooplog_filter\filter.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\pooplog_filter\filter.h"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\pooplog_filter\filter.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\pooplog_filter\pooplog_filter.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\pooplog_filter\pooplog_filter.cpp"
 			>
 		</File>
 	</Files>

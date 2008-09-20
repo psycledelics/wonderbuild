@@ -163,90 +163,90 @@
 				Name="helpers"
 				>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\dither.cpp"
+					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\dither.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\dither.hpp"
+					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\dither.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\dsp.cpp"
+					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\dsp.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\dsp.hpp"
+					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\dsp.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\fft.cpp"
+					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\fft.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\fft.hpp"
+					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\fft.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\helpers.cpp"
+					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\helpers.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\helpers.hpp"
+					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\helpers.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\math.hpp"
+					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\mersennetwister.cpp"
+					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\mersennetwister.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\mersennetwister.hpp"
+					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\mersennetwister.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\helpers\scale.hpp"
+					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\scale.hpp"
 					>
 				</File>
 				<Filter
 					Name="math"
 					>
 					<File
-						RelativePath="..\..\..\..\src\psycle\helpers\math\clip.hpp"
+						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\clip.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\helpers\math\erase_all_nans_infinities_and_denormals.hpp"
+						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\erase_all_nans_infinities_and_denormals.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\helpers\math\log.hpp"
+						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\log.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\helpers\math\math.hpp"
+						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\math.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\helpers\math\pi.hpp"
+						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\pi.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\helpers\math\remainder.hpp"
+						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\remainder.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\helpers\math\round.hpp"
+						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\round.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\helpers\math\sine_sequence.hpp"
+						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\sine_sequence.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\helpers\math\truncate.hpp"
+						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\truncate.hpp"
 						>
 					</File>
 				</Filter>

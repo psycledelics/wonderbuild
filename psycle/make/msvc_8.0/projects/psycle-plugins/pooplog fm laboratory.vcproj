@@ -143,23 +143,23 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\pooplog_synth\filter.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\pooplog_synth\filter.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\pooplog_synth\filter.h"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\pooplog_synth\filter.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\pooplog_synth\pooplog_synth.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\pooplog_synth\pooplog_synth.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\pooplog_synth\SynthTrack.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\pooplog_synth\SynthTrack.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\pooplog_synth\SynthTrack.h"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\pooplog_synth\SynthTrack.h"
 			>
 		</File>
 	</Files>

@@ -149,7 +149,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\fluid_synth_sf2_player\FS_sf2_player.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\fluid_synth_sf2_player\FS_sf2_player.cpp"
 			>
 		</File>
 	</Files>

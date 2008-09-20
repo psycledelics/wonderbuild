@@ -143,7 +143,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\vincenzo_demasi\vdAllPass\vdAllPass.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\vincenzo_demasi\vdAllPass\vdAllPass.cpp"
 			>
 		</File>
 	</Files>

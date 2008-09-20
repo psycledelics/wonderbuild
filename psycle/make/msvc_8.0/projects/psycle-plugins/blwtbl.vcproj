@@ -144,11 +144,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\druttis\blwtbl\blwtbl.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\blwtbl\blwtbl.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\druttis\blwtbl\blwtbl.h"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\blwtbl\blwtbl.h"
 			>
 		</File>
 	</Files>

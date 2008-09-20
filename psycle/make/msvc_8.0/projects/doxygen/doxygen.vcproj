@@ -75,24 +75,8 @@
 				>
 			</File>
 		</Filter>
-		<Filter
-			Name="pages"
-			>
-			<File
-				RelativePath="..\..\..\..\src\main_page.doxygen"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\src\psycle\namespaces.doxygen"
-				>
-			</File>
-		</Filter>
 		<File
 			RelativePath="$(SolutionDir)\..\..\doxygen\doxygen.configuration"
-			>
-		</File>
-		<File
-			RelativePath="..\..\output\release\bin\psycle.plugin-scan.log.txt"
 			>
 		</File>
 	</Files>

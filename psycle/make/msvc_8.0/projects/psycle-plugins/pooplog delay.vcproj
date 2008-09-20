@@ -143,15 +143,15 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\pooplog_delay\filter.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\pooplog_delay\filter.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\pooplog_delay\filter.h"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\pooplog_delay\filter.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\pooplog_delay\pooplog_delay.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\pooplog_delay\pooplog_delay.cpp"
 			>
 		</File>
 	</Files>

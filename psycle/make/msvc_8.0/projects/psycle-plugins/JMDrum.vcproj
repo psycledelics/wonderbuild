@@ -143,15 +143,15 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\jm_drums\drum.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\jm_drums\drum.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\jm_drums\jm_drums.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\jm_drums\jm_drums.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\jm_drums\oscillator.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\jm_drums\oscillator.cpp"
 			>
 		</File>
 	</Files>

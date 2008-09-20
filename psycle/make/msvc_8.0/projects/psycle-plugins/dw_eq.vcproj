@@ -143,11 +143,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\dw\eq\dw_eq.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\dw\eq\dw_eq.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\dw\dw_filter.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\dw\dw_filter.cpp"
 			>
 		</File>
 	</Files>

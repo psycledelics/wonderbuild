@@ -151,7 +151,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\druttis\slicit\Slicit.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\slicit\Slicit.cpp"
 			>
 		</File>
 	</Files>

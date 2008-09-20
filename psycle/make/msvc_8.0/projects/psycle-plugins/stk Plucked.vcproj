@@ -203,7 +203,7 @@
 			</File>
 		</Filter>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\stk\stk.plucked.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\stk\stk.plucked.cpp"
 			>
 		</File>
 	</Files>

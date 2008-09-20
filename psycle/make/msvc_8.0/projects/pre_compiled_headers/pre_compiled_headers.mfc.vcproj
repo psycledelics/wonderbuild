@@ -145,7 +145,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\src\packageneric\pre-compiled.private.hpp"
+			RelativePath="..\..\..\msvc_common\src\packageneric\pre-compiled.private.hpp"
 			>
 		</File>
 		<File

@@ -143,15 +143,15 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\audacity\audacity_compressor.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\audacity\audacity_compressor.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\audacity\Compressor.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\audacity\Compressor.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\audacity\Compressor.h"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\audacity\Compressor.h"
 			>
 		</File>
 	</Files>

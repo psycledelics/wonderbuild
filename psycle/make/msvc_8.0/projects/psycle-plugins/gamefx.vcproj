@@ -143,19 +143,19 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\voskomo\gamefx\filter.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\voskomo\gamefx\filter.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\voskomo\gamefx\gamefx.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\voskomo\gamefx\gamefx.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\voskomo\gamefx\license.txt"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\voskomo\gamefx\license.txt"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\voskomo\gamefx\voice.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\voskomo\gamefx\voice.cpp"
 			>
 		</File>
 	</Files>

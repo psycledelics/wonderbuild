@@ -151,7 +151,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\druttis\eq3\eq3.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\eq3\eq3.cpp"
 			>
 		</File>
 	</Files>

@@ -143,59 +143,59 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\druttis\DspLib\afloat.h"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\DspLib\afloat.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\druttis\DspLib\AllPass.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\DspLib\AllPass.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\druttis\DspLib\AllPass.h"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\DspLib\AllPass.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\druttis\CDsp.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\CDsp.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\druttis\CDsp.h"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\CDsp.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\druttis\CEnvelope.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\CEnvelope.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\druttis\CEnvelope.h"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\CEnvelope.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\druttis\DspLib\Chorus.h"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\DspLib\Chorus.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\druttis\Phantom\Chorus.h"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\Phantom\Chorus.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\druttis\Phantom\CVoice.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\Phantom\CVoice.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\druttis\Phantom\CVoice.h"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\Phantom\CVoice.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\druttis\DspLib\DspAlgs.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\DspLib\DspAlgs.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\druttis\Phantom\Phantom.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\Phantom\Phantom.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\druttis\DspLib\Phaser.h"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\DspLib\Phaser.h"
 			>
 		</File>
 	</Files>

@@ -149,11 +149,11 @@
 			Name="universalis"
 			>
 			<File
-				RelativePath="..\..\..\..\src\universalis\compiler.hpp"
+				RelativePath="..\..\..\..\..\universalis\src\universalis\compiler.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\universalis\exception.cpp"
+				RelativePath="..\..\..\..\..\universalis\src\universalis\exception.cpp"
 				>
 				<FileConfiguration
 					Name="debug|Win32"
@@ -174,77 +174,77 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\universalis\exception.hpp"
+				RelativePath="..\..\..\..\..\universalis\src\universalis\exception.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\universalis\operating_system.hpp"
+				RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\universalis\processor.hpp"
+				RelativePath="..\..\..\..\..\universalis\src\universalis\processor.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\universalis\standard_library.hpp"
+				RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\universalis\universalis.hpp"
+				RelativePath="..\..\..\..\..\universalis\src\universalis\universalis.hpp"
 				>
 			</File>
 			<Filter
 				Name="universalis/compiler"
 				>
 				<File
-					RelativePath="..\..\..\..\src\universalis\compiler\cast.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\cast.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\compiler\compiler.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\compiler.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\compiler\concatenated.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\concatenated.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\compiler\location.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\location.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\compiler\numeric.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\numeric.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\compiler\stringized.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\stringized.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\compiler\template_constructors.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\template_constructors.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\compiler\token.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\token.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\compiler\typenameof.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\typenameof.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\compiler\virtual_factory.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\virtual_factory.hpp"
 					>
 				</File>
 				<Filter
 					Name="universalis/compiler/dynamic_link"
 					>
 					<File
-						RelativePath="..\..\..\..\src\universalis\compiler\dynamic_link\begin.hpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\dynamic_link\begin.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\universalis\compiler\dynamic_link\end.hpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\dynamic_link\end.hpp"
 						>
 					</File>
 				</Filter>
@@ -252,7 +252,7 @@
 					Name="universalis/compiler/exceptions"
 					>
 					<File
-						RelativePath="..\..\..\..\src\universalis\compiler\exceptions\ellipsis.cpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\exceptions\ellipsis.cpp"
 						>
 						<FileConfiguration
 							Name="debug|Win32"
@@ -280,7 +280,7 @@
 						Name="universalis/compiler/detail/pragmatic"
 						>
 						<File
-							RelativePath="..\..\..\..\src\universalis\compiler\detail\pragmatic\demangle.cpp"
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\demangle.cpp"
 							>
 							<FileConfiguration
 								Name="debug|Win32"
@@ -315,11 +315,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\detail\project.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\detail\project.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\detail\project.private.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\detail\project.private.hpp"
 					>
 				</File>
 			</Filter>
@@ -327,7 +327,7 @@
 				Name="universalis/operating_system"
 				>
 				<File
-					RelativePath="..\..\..\..\src\universalis\operating_system\clocks.cpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\clocks.cpp"
 					>
 					<FileConfiguration
 						Name="debug|Win32"
@@ -348,40 +348,15 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\operating_system\clocks.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\clocks.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\operating_system\cpu_affinity.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\cpu_affinity.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\operating_system\thread_name.cpp"
-					>
-					<FileConfiguration
-						Name="debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(ParentName)/"
-							BrowseInformationFile="$(IntDir)/$(ParentName)/"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(ParentName)/"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\universalis\operating_system\thread_name.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\universalis\operating_system\exception.cpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\thread_name.cpp"
 					>
 					<FileConfiguration
 						Name="debug|Win32"
@@ -402,40 +377,11 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\operating_system\exception.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\thread_name.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\operating_system\loggers.cpp"
-					>
-					<FileConfiguration
-						Name="debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(ParentName)/"
-							BrowseInformationFile="$(IntDir)/$(ParentName)/"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(ParentName)/"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\universalis\operating_system\loggers.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\universalis\operating_system\operating_system.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\universalis\operating_system\paths.cpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\exception.cpp"
 					>
 					<FileConfiguration
 						Name="debug|Win32"
@@ -456,11 +402,11 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\operating_system\paths.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\exception.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\operating_system\terminal.cpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\loggers.cpp"
 					>
 					<FileConfiguration
 						Name="debug|Win32"
@@ -481,14 +427,68 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\operating_system\terminal.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\loggers.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\operating_system.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\paths.cpp"
+					>
+					<FileConfiguration
+						Name="debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"
+							BrowseInformationFile="$(IntDir)/$(ParentName)/"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\paths.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\terminal.cpp"
+					>
+					<FileConfiguration
+						Name="debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"
+							BrowseInformationFile="$(IntDir)/$(ParentName)/"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\terminal.hpp"
 					>
 				</File>
 				<Filter
 					Name="universalis/operating_system/detail"
 					>
 					<File
-						RelativePath="..\..\..\..\src\universalis\operating_system\detail\check_version.cpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\detail\check_version.cpp"
 						>
 						<FileConfiguration
 							Name="debug|Win32"
@@ -509,11 +509,11 @@
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\universalis\operating_system\detail\check_version.hpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\detail\check_version.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\universalis\operating_system\detail\microsoft\max_path.hpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\detail\microsoft\max_path.hpp"
 						>
 					</File>
 				</Filter>
@@ -521,15 +521,15 @@
 					Name="universalis/operating_system/dynamic_link"
 					>
 					<File
-						RelativePath="..\..\..\..\src\universalis\operating_system\dynamic_link\main.hpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\dynamic_link\main.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\universalis\operating_system\dynamic_link\main.private.hpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\dynamic_link\main.private.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\universalis\operating_system\dynamic_link\resolver.cpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\dynamic_link\resolver.cpp"
 						>
 						<FileConfiguration
 							Name="debug|Win32"
@@ -550,7 +550,7 @@
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\universalis\operating_system\dynamic_link\resolver.hpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\dynamic_link\resolver.hpp"
 						>
 					</File>
 				</Filter>
@@ -558,7 +558,7 @@
 					Name="universalis/operating_system/exceptions"
 					>
 					<File
-						RelativePath="..\..\..\..\src\universalis\operating_system\exceptions\code_description.cpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\exceptions\code_description.cpp"
 						>
 						<FileConfiguration
 							Name="debug|Win32"
@@ -579,7 +579,7 @@
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\universalis\operating_system\exceptions\code_description.hpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\exceptions\code_description.hpp"
 						>
 					</File>
 				</Filter>
@@ -587,22 +587,22 @@
 					Name="universalis/operating_system/paths"
 					>
 					<File
-						RelativePath="..\..\..\..\src\universalis\operating_system\paths\implementation.hpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\paths\implementation.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\universalis\operating_system\paths\interface.hpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\paths\interface.hpp"
 						>
 					</File>
 					<Filter
 						Name="universalis/operating_system/paths/injection"
 						>
 						<File
-							RelativePath="..\..\..\..\src\universalis\operating_system\paths\injection\implementation.hpp"
+							RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\paths\injection\implementation.hpp"
 							>
 						</File>
 						<File
-							RelativePath="..\..\..\..\src\universalis\operating_system\paths\injection\interface.hpp"
+							RelativePath="..\..\..\..\..\universalis\src\universalis\operating_system\paths\injection\interface.hpp"
 							>
 						</File>
 					</Filter>
@@ -612,7 +612,7 @@
 				Name="universalis/processor"
 				>
 				<File
-					RelativePath="..\..\..\..\src\universalis\processor\exception.cpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\processor\exception.cpp"
 					>
 					<FileConfiguration
 						Name="debug|Win32"
@@ -633,18 +633,18 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\processor\exception.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\processor\exception.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\processor\processor.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\processor\processor.hpp"
 					>
 				</File>
 				<Filter
 					Name="universalis/processor/exceptions"
 					>
 					<File
-						RelativePath="..\..\..\..\src\universalis\processor\exceptions\code_description.cpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\processor\exceptions\code_description.cpp"
 						>
 						<FileConfiguration
 							Name="debug|Win32"
@@ -670,46 +670,46 @@
 				Name="universalis/standard_library"
 				>
 				<File
-					RelativePath="..\..\..\..\src\universalis\standard_library\allocators.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\allocators.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\standard_library\condition.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\condition.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\standard_library\date_time.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\date_time.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\standard_library\mutex.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\mutex.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\standard_library\ndebug.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\ndebug.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\standard_library\standard_library.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\standard_library.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\standard_library\stdc_secure_lib.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\stdc_secure_lib.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\standard_library\stdint.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\stdint.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\universalis\standard_library\thread.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\thread.hpp"
 					>
 				</File>
 				<Filter
 					Name="universalis/standard_library/detail"
 					>
 					<File
-						RelativePath="..\..\..\..\src\universalis\standard_library\detail\allocators.cpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\detail\allocators.cpp"
 						>
 						<FileConfiguration
 							Name="debug|Win32"
@@ -730,27 +730,27 @@
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\universalis\standard_library\detail\allocators.hpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\detail\allocators.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\universalis\standard_library\detail\boost_xtime.hpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\detail\boost_xtime.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\universalis\standard_library\detail\duration.hpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\detail\duration.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\universalis\standard_library\detail\hiresolution_clock.hpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\detail\hiresolution_clock.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\universalis\standard_library\detail\iso646.hpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\detail\iso646.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\universalis\standard_library\detail\utc_time.hpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\detail\utc_time.hpp"
 						>
 					</File>
 				</Filter>
@@ -758,7 +758,7 @@
 					Name="universalis/standard_library/exceptions"
 					>
 					<File
-						RelativePath="..\..\..\..\src\universalis\standard_library\exceptions\code_description.cpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\exceptions\code_description.cpp"
 						>
 						<FileConfiguration
 							Name="debug|Win32"
@@ -779,7 +779,7 @@
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\universalis\standard_library\exceptions\code_description.hpp"
+						RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\exceptions\code_description.hpp"
 						>
 					</File>
 				</Filter>
@@ -793,15 +793,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\msvc_common\src\universalis\detail\configuration.private.hpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\packageneric\module.private.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\packageneric\package.private.hpp"
+				RelativePath="..\..\..\msvc_common\src\packageneric\package.private.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\packageneric\resources.rc"
+				RelativePath="..\..\..\msvc_common\src\packageneric\resources.rc"
 				>
 			</File>
 		</Filter>
@@ -809,23 +813,23 @@
 			Name="diversalis"
 			>
 			<File
-				RelativePath="..\..\..\..\src\diversalis\compiler.hpp"
+				RelativePath="..\..\..\..\..\diversalis\src\diversalis\compiler.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\diversalis\diversalis.hpp"
+				RelativePath="..\..\..\..\..\diversalis\src\diversalis\diversalis.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\diversalis\operating_system.hpp"
+				RelativePath="..\..\..\..\..\diversalis\src\diversalis\operating_system.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\diversalis\processor.hpp"
+				RelativePath="..\..\..\..\..\diversalis\src\diversalis\processor.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\diversalis\standard_library.hpp"
+				RelativePath="..\..\..\..\..\diversalis\src\diversalis\standard_library.hpp"
 				>
 			</File>
 			<Filter
@@ -836,35 +840,35 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\msvc_common\src\universalis\detail\configuration.private.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\diversalis\detail\project.hpp"
+					RelativePath="..\..\..\..\..\diversalis\src\diversalis\detail\project.hpp"
 					>
 				</File>
 			</Filter>
 		</Filter>
-		<File
-			RelativePath="..\..\..\..\src\condition"
+		<Filter
+			Name="standard headers"
 			>
-		</File>
-		<File
-			RelativePath="..\..\..\..\src\cstdint"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\..\src\date_time"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\..\src\mutex"
-			>
-		</File>
-		<File
-			RelativePath="..\..\..\..\src\thread"
-			>
-		</File>
+			<File
+				RelativePath="..\..\..\..\..\universalis\src\condition"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\universalis\src\cstdint"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\universalis\src\date_time"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\universalis\src\mutex"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\universalis\src\thread"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

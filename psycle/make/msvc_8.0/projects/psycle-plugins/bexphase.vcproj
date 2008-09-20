@@ -143,7 +143,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\bexphase\bexphase.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\bexphase\bexphase.cpp"
 			>
 		</File>
 	</Files>

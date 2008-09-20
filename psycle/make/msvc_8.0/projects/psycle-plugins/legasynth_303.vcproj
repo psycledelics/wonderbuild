@@ -146,19 +146,19 @@
 			Name="lib"
 			>
 			<File
-				RelativePath="..\..\..\..\src\psycle\plugins\legasynth\lib\chorus.cpp"
+				RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\legasynth\lib\chorus.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\plugins\legasynth\lib\chorus.h"
+				RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\legasynth\lib\chorus.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\plugins\legasynth\lib\voice.cpp"
+				RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\legasynth\lib\voice.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\plugins\legasynth\lib\voice.h"
+				RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\legasynth\lib\voice.h"
 				>
 			</File>
 		</Filter>
@@ -166,16 +166,16 @@
 			Name="303"
 			>
 			<File
-				RelativePath="..\..\..\..\src\psycle\plugins\legasynth\303\303_voice.cpp"
+				RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\legasynth\303\303_voice.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\plugins\legasynth\303\303_voice.h"
+				RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\legasynth\303\303_voice.h"
 				>
 			</File>
 		</Filter>
 		<File
-			RelativePath="..\..\..\..\src\psycle\plugins\legasynth\legasynth_303.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\legasynth\legasynth_303.cpp"
 			>
 		</File>
 	</Files>
