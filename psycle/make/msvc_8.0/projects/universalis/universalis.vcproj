@@ -322,10 +322,6 @@
 					RelativePath="..\..\..\..\src\universalis\detail\project.private.hpp"
 					>
 				</File>
-				<File
-					RelativePath="..\..\..\..\src\universalis\detail\quaquaversalis.hpp"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="universalis/operating_system"
