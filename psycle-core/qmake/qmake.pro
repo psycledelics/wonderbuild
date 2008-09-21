@@ -43,7 +43,6 @@ sources_or_headers = \
 	$$PSYCLE_CORE_DIR/src/psycle/core/helpers \
 	$$PSYCLE_CORE_DIR/src/psycle/core/helpers/math/pi \
 	$$PSYCLE_CORE_DIR/src/psycle/core/helpers/scale \
-	$$PSYCLE_CORE_DIR/src/psycle/core/helpers/xml \
 	$$PSYCLE_CORE_DIR/src/psycle/core/instpreview \
 	$$PSYCLE_CORE_DIR/src/psycle/core/instrument \
 	$$PSYCLE_CORE_DIR/src/psycle/core/internal_machines \
@@ -82,6 +81,7 @@ sources_or_headers = \
 	$$PSYCLE_CORE_DIR/src/psycle/core/songserializer \
 	$$PSYCLE_CORE_DIR/src/psycle/core/timesignature \
 	$$PSYCLE_CORE_DIR/src/psycle/core/xminstrument \
+	$$PSYCLE_CORE_DIR/src/psycle/core/xml \
 	$$PSYCLE_CORE_DIR/src/psycle/core/xmsampler \
 	$$PSYCLE_CORE_DIR/src/psycle/core/zipreader \
 	$$PSYCLE_CORE_DIR/src/psycle/core/zipwriter \

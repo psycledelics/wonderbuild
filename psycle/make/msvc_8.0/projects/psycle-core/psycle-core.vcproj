@@ -607,26 +607,26 @@
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\zipwriterstream.h"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\xml.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\xml.h"
+					>
+				</File>
 				<Filter
 					Name="helpers"
 					>
 					<File
-						RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\helpers\scale.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\helpers\xml.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\helpers\xml.h"
+						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\scale.hpp"
 						>
 					</File>
 					<Filter
 						Name="math"
 						>
 						<File
-							RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\helpers\math\pi.hpp"
+							RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\pi.hpp"
 							>
 						</File>
 					</Filter>
