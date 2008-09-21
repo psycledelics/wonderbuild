@@ -146,59 +146,59 @@
 			Name="stk"
 			>
 			<File
-				RelativePath="..\..\..\..\src\stk\ADSR.cpp"
+				RelativePath="..\..\..\..\..\external-packages\stk\ADSR.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\stk\BiQuad.cpp"
+				RelativePath="..\..\..\..\..\external-packages\stk\BiQuad.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\stk\Delay.cpp"
+				RelativePath="..\..\..\..\..\external-packages\stk\Delay.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\stk\DelayA.cpp"
+				RelativePath="..\..\..\..\..\external-packages\stk\DelayA.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\stk\DelayL.cpp"
+				RelativePath="..\..\..\..\..\external-packages\stk\DelayL.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\stk\Envelope.cpp"
+				RelativePath="..\..\..\..\..\external-packages\stk\Envelope.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\stk\Filter.cpp"
+				RelativePath="..\..\..\..\..\external-packages\stk\Filter.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\stk\Generator.cpp"
+				RelativePath="..\..\..\..\..\external-packages\stk\Generator.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\stk\Instrmnt.cpp"
+				RelativePath="..\..\..\..\..\external-packages\stk\Instrmnt.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\stk\Noise.cpp"
+				RelativePath="..\..\..\..\..\external-packages\stk\Noise.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\stk\OnePole.cpp"
+				RelativePath="..\..\..\..\..\external-packages\stk\OnePole.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\stk\OneZero.cpp"
+				RelativePath="..\..\..\..\..\external-packages\stk\OneZero.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\stk\Plucked.cpp"
+				RelativePath="..\..\..\..\..\external-packages\stk\Plucked.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\stk\stk.cpp"
+				RelativePath="..\..\..\..\..\external-packages\stk\stk.cpp"
 				>
 			</File>
 		</Filter>

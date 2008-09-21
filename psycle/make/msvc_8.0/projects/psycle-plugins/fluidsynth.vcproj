@@ -4,7 +4,7 @@
 	Version="8.00"
 	Name="psycle.plugins.fluidsynth (dynamic library)"
 	ProjectGUID="{923A9CFD-C2B2-4A53-952B-EC9CD8413704}"
-	RootNamespace="psycle.plugins.fluidsynth (dynanic dll)"
+	RootNamespace="psycle.plugins.fluidsynth (dynamic library)"
 	>
 	<Platforms>
 		<Platform

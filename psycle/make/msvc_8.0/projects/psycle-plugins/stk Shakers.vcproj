@@ -146,15 +146,15 @@
 			Name="stk"
 			>
 			<File
-				RelativePath="..\..\..\..\src\stk\Instrmnt.cpp"
+				RelativePath="..\..\..\..\..\external-packages\stk\Instrmnt.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\stk\Shakers.cpp"
+				RelativePath="..\..\..\..\..\external-packages\stk\Shakers.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\stk\stk.cpp"
+				RelativePath="..\..\..\..\..\external-packages\stk\stk.cpp"
 				>
 			</File>
 		</Filter>
