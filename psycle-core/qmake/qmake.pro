@@ -40,9 +40,6 @@ sources_or_headers = \
 	$$PSYCLE_CORE_DIR/src/psycle/core/filter \
 	$$PSYCLE_CORE_DIR/src/psycle/core/filterhelper \
 	$$PSYCLE_CORE_DIR/src/psycle/core/fwd \
-	$$PSYCLE_CORE_DIR/src/psycle/core/helpers \
-	$$PSYCLE_CORE_DIR/src/psycle/core/helpers/math/pi \
-	$$PSYCLE_CORE_DIR/src/psycle/core/helpers/scale \
 	$$PSYCLE_CORE_DIR/src/psycle/core/instpreview \
 	$$PSYCLE_CORE_DIR/src/psycle/core/instrument \
 	$$PSYCLE_CORE_DIR/src/psycle/core/internal_machines \
@@ -55,6 +52,7 @@ sources_or_headers = \
 	$$PSYCLE_CORE_DIR/src/psycle/core/machinehost \
 	$$PSYCLE_CORE_DIR/src/psycle/core/machinekey \
 	$$PSYCLE_CORE_DIR/src/psycle/core/mersennetwister \
+	$$PSYCLE_CORE_DIR/src/psycle/core/misc \
 	$$PSYCLE_CORE_DIR/src/psycle/core/mixer \
 	$$PSYCLE_CORE_DIR/src/psycle/core/nativehost \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternevent \

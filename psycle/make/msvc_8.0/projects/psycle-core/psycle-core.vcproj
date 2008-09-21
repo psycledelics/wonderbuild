@@ -276,11 +276,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\helpers.cpp"
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\misc.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\helpers.h"
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\misc.h"
 					>
 				</File>
 				<File
