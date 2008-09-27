@@ -75,7 +75,7 @@ sources_or_headers = \
 	$$UNIVERSALIS_DIR/src/universalis/operating_system \
 	$$UNIVERSALIS_DIR/src/universalis/operating_system/loggers \
 	$$UNIVERSALIS_DIR/src/universalis/operating_system/operating_system \
-	$$UNIVERSALIS_DIR/src/universalis/operating_system/paths \	
+	$$UNIVERSALIS_DIR/src/universalis/operating_system/paths \
 	$$UNIVERSALIS_DIR/src/universalis/operating_system/paths/implementation \
 	$$UNIVERSALIS_DIR/src/universalis/operating_system/paths/injection/implementation \
 	$$UNIVERSALIS_DIR/src/universalis/operating_system/paths/injection/interface \
