@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.voskomo.gamefx"
+	Name="psycle.plugins.gamefx"
 	ProjectGUID="{485B9E85-CBC7-4B27-8AD2-5DD97234FBED}"
 	>
 	<Platforms>
@@ -143,19 +143,19 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\voskomo\gamefx\filter.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\jme\gamefx\filter.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\voskomo\gamefx\gamefx.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\jme\gamefx\gamefx.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\voskomo\gamefx\license.txt"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\jme\gamefx\license.txt"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\voskomo\gamefx\voice.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\jme\gamefx\voice.cpp"
 			>
 		</File>
 	</Files>

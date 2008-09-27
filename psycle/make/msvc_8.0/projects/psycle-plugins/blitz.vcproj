@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.voskomo.blitz"
+	Name="psycle.plugins.blitz"
 	ProjectGUID="{C55834ED-9038-4D48-AE49-122834E68B25}"
 	>
 	<Platforms>
@@ -143,27 +143,27 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\voskomo\blitz\blitz.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\jme\blitz\blitz.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\voskomo\blitz\filter.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\jme\blitz\filter.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\voskomo\blitz\lfo.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\jme\blitz\lfo.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\voskomo\blitz\license.txt"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\jme\blitz\license.txt"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\voskomo\blitz\pwm.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\jme\blitz\pwm.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\voskomo\blitz\voice.cpp"
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\jme\blitz\voice.cpp"
 			>
 		</File>
 	</Files>
