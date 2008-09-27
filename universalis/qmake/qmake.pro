@@ -63,7 +63,6 @@ sources_or_headers = \
 	$$UNIVERSALIS_DIR/src/universalis/compiler/virtual_factory \
 	$$UNIVERSALIS_DIR/src/universalis/detail/configuration \
 	$$UNIVERSALIS_DIR/src/universalis/detail/project \
-	$$UNIVERSALIS_DIR/src/universalis/detail/quaquaversalis \
 	$$UNIVERSALIS_DIR/src/universalis/exception \
 	$$UNIVERSALIS_DIR/src/universalis/operating_system/clocks \
 	$$UNIVERSALIS_DIR/src/universalis/operating_system/cpu_affinity \
@@ -76,12 +75,13 @@ sources_or_headers = \
 	$$UNIVERSALIS_DIR/src/universalis/operating_system \
 	$$UNIVERSALIS_DIR/src/universalis/operating_system/loggers \
 	$$UNIVERSALIS_DIR/src/universalis/operating_system/operating_system \
-	$$UNIVERSALIS_DIR/src/universalis/operating_system/paths \
+	$$UNIVERSALIS_DIR/src/universalis/operating_system/paths \	
 	$$UNIVERSALIS_DIR/src/universalis/operating_system/paths/implementation \
 	$$UNIVERSALIS_DIR/src/universalis/operating_system/paths/injection/implementation \
 	$$UNIVERSALIS_DIR/src/universalis/operating_system/paths/injection/interface \
 	$$UNIVERSALIS_DIR/src/universalis/operating_system/paths/interface \
 	$$UNIVERSALIS_DIR/src/universalis/operating_system/terminal \
+	$$UNIVERSALIS_DIR/src/universalis/operating_system/thread_name \
 	$$UNIVERSALIS_DIR/src/universalis/processor/atomic/compare_and_swap \
 	$$UNIVERSALIS_DIR/src/universalis/processor/exception \
 	$$UNIVERSALIS_DIR/src/universalis/processor/exceptions/code_description \
