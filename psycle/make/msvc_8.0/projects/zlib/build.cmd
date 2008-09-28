@@ -6,12 +6,6 @@ cd %~p0
 set pkgdir=..\..\..\..\..\external-packages\zlib-1.2.3
 set libdir=lib-mswindows-cabi
 
-if not exist ..\..\..\..\include\zlib.h (
-	if not exist ..\..\..\..\include (
-		mkdir ..\..\..\..\include || exit /b 1
-	)
-	xcopy/f/i %pkgdir%\include\*.h ..\..\..\..\include\ || exit /b 1
-)
 
 if not exist ..\..\output\zlib_stamp (
 

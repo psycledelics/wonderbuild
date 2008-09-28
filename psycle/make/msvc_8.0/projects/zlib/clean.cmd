@@ -24,14 +24,4 @@ pushd ..\..\output && (
 			popd
 		)
 	)
-) && (
-	pushd ..\..\..\..\include\ && (
-		if exist zlib.h (
-			del/s/q zlib.h || exit /b 1
-		)
-		if exist zconf.h (
-			del/s/q zconf.h || exit /b 1
-		)
-		popd
-	)
 )
