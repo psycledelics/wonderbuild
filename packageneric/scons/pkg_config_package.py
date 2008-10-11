@@ -109,7 +109,7 @@ class pkg_config_package(projected, builder):
 	def targets(self):
 		try: return self._targets
 		except AttributeError:
-			uninstalled_file_name = os.path.join(self.project().build_variant_intermediate_dir(), 'pkgconfig', self.name() + '-uninstalled.pc')
+			#uninstalled_file_name = os.path.join(self.project().build_variant_intermediate_dir(), 'pkgconfig', self.name() + '-uninstalled.pc')
 			installed_file_name = os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib', 'pkgconfig', self.name() + '.pc')
 
 			# todo: when the dependency is a shared lib, we can avoid unneeded relinking of
@@ -138,7 +138,7 @@ class pkg_config_package(projected, builder):
 
 			scons = self.project()._scons()
 			self._targets = [
-				scons.Alias(uninstalled_file_name, [scons.FileFromValue(uninstalled_file_name, self.string(uninstalled = True))] + dependencies),
+				#scons.Alias(uninstalled_file_name, [scons.FileFromValue(uninstalled_file_name, self.string(uninstalled = True))] + dependencies),
 				scons.Alias(installed_file_name, [scons.FileFromValue(installed_file_name, self.string(uninstalled = False))] + dependencies),
 			]
 			return self._targets
