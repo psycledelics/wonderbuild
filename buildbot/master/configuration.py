@@ -540,7 +540,7 @@ BuildmasterConfig['schedulers'].append(
 
 BuildmasterConfig['status'] = []
 
-categories = None #['psycle', 'zzub']
+categories = None #['psycle', 'armstrong']
 
 ##################################### waterfall http status ######################################
 
@@ -650,7 +650,7 @@ class IRC(BaseIRC):
 			if url: msg('Build details are at %s' % url)
 
 	def channelMap(self, builderName):
-		if builderName.startswith('libzzub'): return self.irc().channels
+		if builderName.startswith('armstrong'): return self.irc().channels
 		else: return ['#psycle']
 
 decent_efnet_irc_server = 'irc.efnet.net'
@@ -660,11 +660,58 @@ BuildmasterConfig['status'].append(IRC(host = decent_efnet_irc_server, nick = 'b
 BuildmasterConfig['status'].append(IRC(host = 'irc.freenode.net', nick = 'buildborg', channels = ['#psycle'], categories = categories))
 
 ##################################### non-psycle stuff ######################################
+
+if True:
+	##################################### sondar builders ######################################
+	microsoft_slaves_sondar = ['winux']
+	
+	svn_sondar = 'https://sondar.svn.sourceforge.net/svnroot/sondar/trunk'
+	
+	class CompileSondar(step.Compile):
+		name = 'compile-sondar'
+		description = ['compiling-sondar']
+		descriptionDone = ['compile-sondar']
+		command = ['cd sondar && sh autogen.sh --prefix=$(cd .. && pwd)/install && make install']
+
+	class CompileSondarGUI(step.Compile):
+		name = 'compile-gui'
+		description = ['compiling-gui']
+		descriptionDone = ['compile-gui']
+		command = ['cd host_gtk && sh autogen.sh --prefix=$(cd .. && pwd)/install && make install']
+
+	BuildmasterConfig['builders'].append(
+		{
+			'name': 'sondar',
+			'category': 'sondar',
+			'slavenames': slaves,
+			'builddir': 'sondar-trunk',
+			'factory': factory.BuildFactory(
+				[
+					factory.s(step.SVN, mode = 'update', svnurl = svn_sondar, locks = [svn_lock]),
+					factory.s(CompileSondar, locks = [compile_lock])
+					factory.s(CompileSondarGUI, locks = [compile_lock])
+				]
+			)
+		}
+	)
+	BuildmasterConfig['schedulers'].append(
+		Scheduler(
+			name = 'sondar',
+			branch = None,
+			treeStableTimer = bunch_timer,
+			builderNames = ['sondar'],
+			fileIsImportant = lambda change: filter(change, ['sondar/', 'host_gtk/'])
+		)
+	)
+
 if False:
+	##################################### armstrong builders ######################################
+	
+	# Note: These builders had to be disabled because the project is too much an unstable moving target.
 
-	microsoft_slaves_zzub = ['winux']
+	microsoft_slaves_armstrong = ['winux']
 
-	zzub_exclude_prefixes = [
+	armstrong_exclude_prefixes = [
 		'branches/', 'tags/',
 		'/trunk/dependencies.dot', '/trunk/dependencies.png', '/README', 'tools/', 'freepsycle/', 'qpsycle/', 'psycle-core/',
 		'psycle-player/', 'psycle-helpers', 'psycle-audiodrivers/', 'psycle-plugins/', 'psycle/',
@@ -673,13 +720,13 @@ if False:
 
 	BuildmasterConfig['builders'].append(
 		{
-			'name': 'libzzub',
-			'category': 'zzub',
+			'name': 'armstrong',
+			'category': 'armstrong',
 			'slavenames': slaves,
-			'builddir': os.path.join('zzub-trunk', 'libzzub'),
+			'builddir': os.path.join('armstrong-trunk', 'armstrong'),
 			'factory': factory.BuildFactory(
 				[
-					factory.s(step.SVN, mode = 'update', svnurl = 'http://svn.zeitherrschaft.org/zzub/trunk', locks = [svn_lock]),
+					factory.s(step.SVN, mode = 'update', svnurl = 'http://svn.zeitherrschaft.org/armstrong/trunk', locks = [svn_lock]),
 					factory.s(step.Compile, command = 'scons configure && scons', locks = [compile_lock])
 				]
 			)
@@ -687,13 +734,13 @@ if False:
 	)
 	BuildmasterConfig['schedulers'].append(
 		Scheduler(
-			name = 'libzzub',
+			name = 'armstrong',
 			branch = None,
 			treeStableTimer = bunch_timer,
-			builderNames = ['libzzub'],
+			builderNames = ['armstrong'],
 			fileIsImportant = lambda change: filter(change,
 				include_prefixes = [''],
-				exclude_prefixes = zzub_exclude_prefixes
+				exclude_prefixes = armstrong_exclude_prefixes
 			)
 		)
 	)
@@ -701,13 +748,13 @@ if False:
 
 	BuildmasterConfig['builders'].append(
 		{
-			'name': 'libzzub.mingw',
-			'category': 'zzub',
-			'slavenames': microsoft_slaves_zzub,
-			'builddir': os.path.join('zzub-trunk', 'libzzub.mingw'),
+			'name': 'armstrong.mingw',
+			'category': 'armstrong',
+			'slavenames': microsoft_slaves_armstrong,
+			'builddir': os.path.join('armstrong-trunk', 'armstrong.mingw'),
 			'factory': factory.BuildFactory(
 				[
-					factory.s(step.SVN, mode = 'update', svnurl = 'http://svn.zeitherrschaft.org/zzub/trunk', locks = [svn_lock]),
+					factory.s(step.SVN, mode = 'update', svnurl = 'http://svn.zeitherrschaft.org/armstrong/trunk', locks = [svn_lock]),
 					factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons TOOLS=mingw configure && scons', locks = [compile_lock])
 				]
 			)
@@ -715,26 +762,26 @@ if False:
 	)
 	#BuildmasterConfig['schedulers'].append(
 	#	Scheduler(
-	#		name = 'libzzub.mingw',
+	#		name = 'armstrong.mingw',
 	#		branch = None,
 	#		treeStableTimer = bunch_timer,
-	#		builderNames = ['libzzub.mingw'],
+	#		builderNames = ['armstrong.mingw'],
 	#		fileIsImportant = lambda change: filter(change,
 	#			include_prefixes = [''],
-	#			exclude_prefixes = zzub_exclude_prefixes
+	#			exclude_prefixes = armstrong_exclude_prefixes
 	#		)
 	#	)
 	#)
 
 	BuildmasterConfig['builders'].append(
 		{
-			'name': 'libzzub.msvc',
-			'category': 'zzub',
-			'slavenames': microsoft_slaves_zzub,
-			'builddir': os.path.join('zzub-trunk', 'libzzub.msvc'),
+			'name': 'armstrong.msvc',
+			'category': 'armstrong',
+			'slavenames': microsoft_slaves_armstrong,
+			'builddir': os.path.join('armstrong-trunk', 'armstrong.msvc'),
 			'factory': factory.BuildFactory(
 				[
-					factory.s(step.SVN, mode = 'update', svnurl = 'http://svn.zeitherrschaft.org/zzub/trunk', locks = [svn_lock]),
+					factory.s(step.SVN, mode = 'update', svnurl = 'http://svn.zeitherrschaft.org/armstrong/trunk', locks = [svn_lock]),
 					factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons configure && scons', locks = [compile_lock])
 				]
 			)
@@ -742,13 +789,13 @@ if False:
 	)
 	#BuildmasterConfig['schedulers'].append(
 	#	Scheduler(
-	#		name = 'libzzub.msvc',
+	#		name = 'armstrong.msvc',
 	#		branch = None,
 	#		treeStableTimer = bunch_timer,
-	#		builderNames = ['libzzub.msvc'],
+	#		builderNames = ['armstrong.msvc'],
 	#		fileIsImportant = lambda change: filter(change,
 	#			include_prefixes = [''],
-	#			exclude_prefixes = zzub_exclude_prefixes
+	#			exclude_prefixes = armstrong_exclude_prefixes
 	#		)
 	#	)
 	#)
