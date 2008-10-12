@@ -1,0 +1,2 @@
+#! /usr/bin/env sh
+exec $(dirname $0)/svn_watcher.py https://psycle.svn.sourceforge.net/svnroot/psycle/trunk localhost:9989 watch
