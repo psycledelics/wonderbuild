@@ -1,0 +1,2 @@
+#! /usr/bin/env sh
+exec $(dirname $0)/svn_watcher.py https://sondar.svn.sourceforge.net/svnroot/sondar/trunk localhost:9989 watch
