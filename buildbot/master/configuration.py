@@ -549,7 +549,7 @@ BuildmasterConfig['status'].append(Waterfall(http_port = 8010, css = 'waterfall.
 ##################################### mail status ######################################
 
 from buildbot.status.mail import MailNotifier
-BuildmasterConfig['status'].append(MailNotifier(fromaddr = email, mode = 'problem', categories = ['psycle', 'sondar']))
+BuildmasterConfig['status'].append(MailNotifier(fromaddr = email, mode = 'problem', categories = ['psycle', 'sondar'], lookup = 'users.sourceforge.net'))
 
 ##################################### irc status ######################################
 

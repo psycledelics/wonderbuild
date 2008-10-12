@@ -37,7 +37,7 @@ def check_changes(repo, master, verbose=False, old_revision = -1):
 	if els:
 		for el in els:
 			revision = int(el.getAttribute("revision"))
-			author = "".join([t.data for t in el.getElementsByTagName("author")[0].childNodes]) + '@users.sourceforge.net' # BEWARE, HARDCODED DOMAIN NAME!
+			author = "".join([t.data for t in el.getElementsByTagName("author")[0].childNodes])
 			comments = "".join([t.data for t in el.getElementsByTagName("msg")[0].childNodes])
 			pathlist = el.getElementsByTagName("paths")[0]
 			paths = []
