@@ -37,13 +37,13 @@ def check_changes(repo, master, verbose=False, old_revision = -1):
 	if els:
 		for el in els:
 			revision = int(el.getAttribute("revision"))
-			author = "".join([t.data for t in el.getElementsByTagName("author")[0].childNodes])
+			author = "".join([t.data for t in el.getElementsByTagName("author")[0].childNodes]) + '@users.sourceforge.net' # BEWARE, HARDCODED DOMAIN NAME!
 			comments = "".join([t.data for t in el.getElementsByTagName("msg")[0].childNodes])
 			pathlist = el.getElementsByTagName("paths")[0]
 			paths = []
 			for p in pathlist.getElementsByTagName("path"): paths.append("".join([t.data for t in p.childNodes]))
 			if verbose: print "PATHS" ; print paths
-			cmd = 'buildbot sendchange --master=' + master + ' --revision="' + str(revision) + '" --username="' + author + '" --comments="' + comments + '" ' + ' '.join(paths)
+			cmd = 'buildbot sendchange --master=' + master + ' --revision=' + str(revision) + ' --username=' + author + ' --comments=\'' + comments.replace("'", "'\"'\"'") + "' " + ' '.join(paths)
 			if True or verbose: print time.strftime("%H.%M.%S ") + cmd
 			if sys.platform == 'win32':
 				f = win32pipe.popen(cmd)
@@ -62,5 +62,5 @@ if __name__ == '__main__':
 			try: old_revision = check_changes(sys.argv[1], sys.argv[2], False, old_revision)
 			except: pass
 			time.sleep(5*60)
-	elif len(sys.argv) == 3: check_changes(sys.argv[1], sys.argv[2], True )
+	elif len(sys.argv) == 3: check_changes(sys.argv[1], sys.argv[2], True)
 	else: print os.path.basename(sys.argv[0]) + ":  http://host/path/to/repo master:port [watch]"

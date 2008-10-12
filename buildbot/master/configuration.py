@@ -9,14 +9,13 @@ project_name = 'psycle'
 BuildmasterConfig['projectName'] = project_name
 BuildmasterConfig['projectURL'] = 'http://' + project_name + '.sourceforge.net'
 
-domain = 'retropaganda.info'
 master_port = 8010
 from socket import getfqdn
 master_host_fqdn = getfqdn()
-if not master_host_fqdn.endswith(domain):
-	from socket import gethostname
-	host = gethostname()
-	if host in ('factoid', 'anechoid'): master_host_fqdn = host + '.' + domain
+try: domain = master_host_fqdn[master_host_fqdn.index('.') + 1:]
+except: domain = ''
+username = 'buildbot' # or use getent to get the effective username
+email = username + '@' + domain
 BuildmasterConfig['buildbotURL'] = 'http://' + master_host_fqdn + ':' + str(master_port) + '/'
 
 BuildmasterConfig['sources'] = []
@@ -546,6 +545,11 @@ categories = None #['psycle', 'armstrong']
 
 from buildbot.status.html import Waterfall
 BuildmasterConfig['status'].append(Waterfall(http_port = 8010, css = 'waterfall.css', robots_txt = 'robots.txt', categories = categories))
+
+##################################### mail status ######################################
+
+from buildbot.status.mail import MailNotifier
+BuildmasterConfig['status'].append(MailNotifier(fromaddr = email, mode = 'problem', categories = ['psycle', 'sondar']))
 
 ##################################### irc status ######################################
 
