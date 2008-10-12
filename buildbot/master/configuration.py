@@ -688,7 +688,7 @@ if True:
 			'factory': factory.BuildFactory(
 				[
 					factory.s(step.SVN, mode = 'update', svnurl = svn_sondar, locks = [svn_lock]),
-					factory.s(CompileSondar, locks = [compile_lock])
+					factory.s(CompileSondar, locks = [compile_lock]),
 					factory.s(CompileSondarGUI, locks = [compile_lock])
 				]
 			)
