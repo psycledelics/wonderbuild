@@ -671,13 +671,13 @@ if True:
 		name = 'compile-sondar'
 		description = ['compiling-sondar']
 		descriptionDone = ['compile-sondar']
-		command = ['cd sondar && sh autogen.sh --prefix=$(cd .. && pwd)/install && make install']
+		command = 'cd sondar && sh autogen.sh --prefix=$(cd .. && pwd)/install && make install'
 
 	class CompileSondarGUI(step.Compile):
 		name = 'compile-gui'
 		description = ['compiling-gui']
 		descriptionDone = ['compile-gui']
-		command = ['cd host_gtk && sh autogen.sh --prefix=$(cd .. && pwd)/install && make install']
+		command = 'cd host_gtk && sh autogen.sh --prefix=$(cd .. && pwd)/install && make install'
 
 	BuildmasterConfig['builders'].append(
 		{
