@@ -654,14 +654,13 @@ class IRC(BaseIRC):
 			if url: msg('Build details are at %s' % url)
 
 	def channelMap(self, builderName):
-		if builderName.startswith('armstrong'): return self.irc().channels
+		#return self.irc().channels
+		if builderName.startswith('armstrong'): return ['#aldrin'] # do not disturb the autarcy
+		elif builderName.startswith('sondar'): return ['#psycle', '#sondar']
 		else: return ['#psycle']
 
-decent_efnet_irc_server = 'irc.efnet.net'
-#decent_efnet_irc_server = 'irc.choopa.ca'
-BuildmasterConfig['status'].append(IRC(host = decent_efnet_irc_server, nick = 'buildborg', channels = ['#psycle'], categories = categories))
-#BuildmasterConfig['status'].append(IRC(host = 'irc.freenode.net', nick = 'buildborg', channels = ['#psycle', '#aldrin'], categories = categories))
-BuildmasterConfig['status'].append(IRC(host = 'irc.freenode.net', nick = 'buildborg', channels = ['#psycle'], categories = categories))
+BuildmasterConfig['status'].append(IRC(host = 'irc.efnet.net'   , nick = 'buildborg', channels = ['#psycle']                      , categories = categories))
+BuildmasterConfig['status'].append(IRC(host = 'irc.freenode.net', nick = 'buildborg', channels = ['#psycle', '#sondar', '#aldrin'], categories = categories))
 
 ##################################### non-psycle stuff ######################################
 
