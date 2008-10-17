@@ -539,7 +539,7 @@ BuildmasterConfig['schedulers'].append(
 
 BuildmasterConfig['status'] = []
 
-categories = None #['psycle', 'armstrong']
+categories = None #['psycle', 'sondar', 'armstrong']
 
 ##################################### waterfall http status ######################################
 
