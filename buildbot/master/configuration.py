@@ -544,7 +544,7 @@ categories = None #['psycle', 'armstrong']
 ##################################### waterfall http status ######################################
 
 from buildbot.status.html import Waterfall
-BuildmasterConfig['status'].append(Waterfall(http_port = 8010, css = 'waterfall.css', robots_txt = 'robots.txt', categories = categories))
+BuildmasterConfig['status'].append(Waterfall(http_port = 8010, css = 'waterfall.css', robots_txt = 'robots.txt', allowForce=False, categories = categories))
 
 ##################################### mail status ######################################
 
