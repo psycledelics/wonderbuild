@@ -43,7 +43,7 @@ def check_changes(repo, master, verbose=False, old_revision = -1):
 			paths = []
 			for p in pathlist.getElementsByTagName("path"): paths.append("".join([t.data for t in p.childNodes]))
 			if verbose: print "PATHS" ; print paths
-			cmd = 'buildbot sendchange --master=' + master + ' --revision=' + str(revision) + ' --username=' + author + ' --comments=\'' + comments.replace("'", "'\"'\"'") + "' " + ' '.join(paths)
+			cmd = 'buildbot sendchange --master=' + master + ' --revision_number=' + str(revision) + ' --username=' + author + ' --comments=\'' + comments.replace("'", "'\"'\"'") + "' " + ' '.join(paths)
 			if True or verbose: print time.strftime("%H.%M.%S ") + cmd
 			if sys.platform == 'win32':
 				f = win32pipe.popen(cmd)
