@@ -654,10 +654,12 @@ class IRC(BaseIRC):
 			if url: msg('Build details are at %s' % url)
 
 	def channelMap(self, builderName):
-		#return self.irc().channels
-		if builderName.startswith('armstrong'): return ['#aldrin'] # do not disturb the autarcy
-		elif builderName.startswith('sondar'): return ['#psycle', '#sondar']
-		else: return ['#psycle']
+		result = []
+		joined = self.irc().channels
+		if '#psycle' in joined: result.append('#psycle') # we're able to see everything there
+		if builderName.startswith('sondar') and 'sondar' in joined: result.append('#sondar')
+		elif builderName.startswith('armstrong') and 'aldrin' in joined: result.append('#aldrin')
+		return result
 
 BuildmasterConfig['status'].append(IRC(host = 'irc.efnet.net'   , nick = 'buildborg', channels = ['#psycle']                      , categories = categories))
 BuildmasterConfig['status'].append(IRC(host = 'irc.freenode.net', nick = 'buildborg', channels = ['#psycle', '#sondar', '#aldrin'], categories = categories))
