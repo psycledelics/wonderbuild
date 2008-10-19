@@ -103,6 +103,9 @@ isEmpty(common_included) {
 
 	COMMON_DIR = $$TOP_SRC_DIR/packageneric/qmake
 	
+	INCLUDEPATH *= $$TOP_SRC_DIR/packageneric/qmake/src
+	DEPENDPATH  *= $$TOP_SRC_DIR/packageneric/qmake/src
+
 	INCLUDEPATH *= $$TOP_SRC_DIR/packageneric/src
 	DEPENDPATH  *= $$TOP_SRC_DIR/packageneric/src
 }
