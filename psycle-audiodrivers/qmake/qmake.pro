@@ -1,7 +1,7 @@
 TARGET = psycle-audiodrivers
 
 # include the base stuff shared amongst all qmake projects.
-include(../../universalis/qmake/common.pri)
+include(../../packageneric/qmake/common.pri)
 
 # this include defines a dependency on the psycle-audiodrivers lib.
 include(psycle-audiodrivers.pri)
