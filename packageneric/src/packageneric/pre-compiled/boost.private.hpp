@@ -29,7 +29,7 @@
 
 	// huge include! #include <boost/spirit.hpp>
 
-	#if BOOST_VERSION >= 103301
+	#if 0 && BOOST_VERSION >= 103301
 		//#include <boost/archive/text_iarchive.hpp>
 		//#include <boost/archive/text_oarchive.hpp>
 		#include <boost/archive/xml_iarchive.hpp>
