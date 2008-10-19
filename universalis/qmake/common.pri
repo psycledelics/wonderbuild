@@ -102,4 +102,7 @@ isEmpty(common_included) {
 	include(platform.pri)
 
 	COMMON_DIR = $$TOP_SRC_DIR/universalis/qmake
+	
+	INCLUDEPATH *= $$TOP_SRC_DIR/packageneric/src
+	DEPENDPATH  *= $$TOP_SRC_DIR/packageneric/src
 }
