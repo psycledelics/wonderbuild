@@ -40,8 +40,8 @@ local_includepath = \
 DEPENDPATH  += $$local_includepath
 INCLUDEPATH += $$local_includepath
 
-CONFIG *= precompile_header
-PRECOMPILED_HEADER = $$QPSYCLE_DIR/src/qpsyclePch.hpp
+#CONFIG *= precompile_header
+#PRECOMPILED_HEADER = $$QPSYCLE_DIR/src/qpsyclePch.hpp
 
 sources_or_headers = \
 	$$QPSYCLE_DIR/src/gui/configdlg/audiopage \
