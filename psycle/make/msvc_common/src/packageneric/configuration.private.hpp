@@ -27,8 +27,3 @@
 	#define PACKAGENERIC__CONFIGURATION__INSTALL_PATH__BIN_TO_ETC     "../etc"
 ///\}
 
-///\name stage paths (to be able to execute from the build dir without installing)
-///\{
-	/// relative path from the build dir to the source dir
-	#define PACKAGENERIC__CONFIGURATION__STAGE_PATH__BUILD_TO_SOURCE "../../../../.."
-///\}

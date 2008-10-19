@@ -10,7 +10,7 @@
 #include <winver.h>
 #include <packageneric/module.private.hpp>
 #if defined PACKAGENERIC__MODULE__LOGO && defined DIVERSALIS__COMPILER__GNU // only enabled with mingw because microsoft's rc.exe's preprocessor doesn't expand the what we put after 1 ICON DISCARDABLE
-	1 ICON DISCARDABLE "../" PACKAGENERIC__CONFIGURATION__STAGE_PATH__BUILD_TO_SOURCE "/pixmaps/" PACKAGENERIC__MODULE__LOGO ".ico"
+	1 ICON DISCARDABLE PACKAGENERIC__MODULE__LOGO ".ico"
 #endif
 // http://msdn.microsoft.com/library/default.asp?url=/library/en-us/tools/tools/versioninfo_resource.asp
 VS_VERSION_INFO VERSIONINFO
@@ -48,7 +48,7 @@ VS_VERSION_INFO VERSIONINFO
 				VALUE "ProductVersion"    , PACKAGENERIC__PACKAGE__VERSION " " PACKAGENERIC__PACKAGE__ARCHIVE
 
 				VALUE "FileDescription"   , PACKAGENERIC__MODULE__DESCRIPTION
-				VALUE "OriginalFilename"  , PACKAGENERIC__MODULE__NAME
+				VALUE "OriginalFilename"  , PACKAGENERIC__MODULE__NAME ///\todo ".exe" or ".dll"
 				VALUE "FileVersion"       , PACKAGENERIC__MODULE__VERSION ", " PACKAGENERIC__COMPILER__RESOURCE__DEBUG
 
 				VALUE "SpecialBuild",
@@ -73,18 +73,11 @@ VS_VERSION_INFO VERSIONINFO
 					#endif
 					"" // o_O` avoid bug with mingw 3.3 resource compiler
 					#if defined DIVERSALIS__COMPILER__GNU
+						// [bohan] separate #if to avoid bug with microsoft's resource compiler: #ifdef and not #if defined ; see bug http://lab.msdn.microsoft.com/ProductFeedback/viewFeedback.aspx?FeedbackID=FDBK45638
 						#if defined DIVERSALIS__COMPILER__GNU__ABI__VERSION
 							"\r\n\r\n"
 							"compiler abi version:\r\n" PACKAGENERIC__STRINGIZED(DIVERSALIS__COMPILER__GNU__ABI__VERSION)
 						#endif
-					#endif
-					#ifdef PACKAGENERIC__CONFIGURATION__COMPILER__CXXFLAGS
-						"\r\n\r\n"
-						"compiler options:\r\n" PACKAGENERIC__CONFIGURATION__COMPILER__CXXFLAGS
-					#endif
-					#ifdef PACKAGENERIC__CONFIGURATION__COMPILER__LDFLAGS
-						"\r\n\r\n"
-						"linker options:\r\n"   PACKAGENERIC__CONFIGURATION__COMPILER__LDFLAGS
 					#endif
 
 				VALUE "PrivateBuild",
