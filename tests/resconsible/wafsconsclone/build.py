@@ -127,7 +127,7 @@ import sys, subprocess
 
 def exec_subprocess(args): return exec_subprocess_3(args)
 
-def exec_subprocess_1(args):
+def exec_subprocess_1(args): # not sure
 	p = subprocess.Popen(
 		args = args,
 		stdout = subprocess.PIPE,
@@ -148,7 +148,7 @@ def exec_subprocess_1(args):
 			else: sys.stderr.write(r)
 	return p.wait()
 
-def exec_subprocess_2(args):
+def exec_subprocess_2(args): # broken! doesn't not wait for completion!
 	p = subprocess.Popen(
 		args = args,
 		stdout = subprocess.PIPE,
@@ -164,7 +164,7 @@ def exec_subprocess_2(args):
 		if len(r) != 0: sys.stderr.write(r)
 	return p.returncode
 
-def exec_subprocess_3(args):
+def exec_subprocess_3(args): # ok
 	p = subprocess.Popen(
 		args = args,
 		stdout = subprocess.PIPE,
