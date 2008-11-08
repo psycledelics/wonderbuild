@@ -2,7 +2,9 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2006-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-class Task:
+from signature import Signed
+
+class Task(Signed):
 	def __init__(self, in_nodes, cmd_args, out_nodes):
 		self._in_nodes = in_nodes
 		self._cmd_args = cmd_args
@@ -13,15 +15,8 @@ class Task:
 		r = exec_subprocess(cmd_args)
 		if r != 0: raise r
 
-	def sig(self):
-		try: return self._sig
-		except AttributeError:
-			self._sig = self.compute_sig()
-			return self._sig
-
-	def compute_sig(self):
-		s = Sig()
-		s.update(self._cmd_args)
-		for n in self._in_nodes: s.update(n.sig())
-		return s.digest()
+	def update_sig(self, sig):
+		'implements Signed.update_sig'
+		sig.update(self._cmd_args)
+		for n in self._in_nodes: n.update_sig(sig)
 

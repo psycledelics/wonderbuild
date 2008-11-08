@@ -2,38 +2,16 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2006-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-try:
-	from hashlib import md5
-except ImportError:
-	from md5 import md5
+from import signature import Signed, file_sig
 
-class Sig:
-	def __init__(self):
-		self._impl = md5()
-	def update(self, s): self._impl.update(s)
-	def digest(self): return self._impl.digest()
-
-class Node:
+class Node(Signed):
 	def __init__(self, name):
 		self._name = name
 		self._dep_nodes = []
 
-	def compute_sig(self):
-		s = Sig()
-		s.update(self._cmd_args)
-		for n in self._in_nodes: s.update(n.sig())
-		return s.digest()
-		
-	def sig(self):
-		try: return self._sig
-		except AttributeError:
-			self._sig = self.compute_sig()
-			return self._sig
-
-	def compute_sig(self):
-		s = Sig()
-		s.update(hash_file(self.abspath()))
-		for n in self._dep_nodes: s.update(n.sig())
+	def update_sig(self, sig):
+		'implements Signed.update_sig'
+		for n in self._dep_nodes: n.update_sign(sig)
 		return s.digest()
 	
 class AliasNode(Node):
@@ -46,19 +24,30 @@ class ValueNode(Node):
 		Node.__init__(self, parent_node, name = None)
 		self._value = value
 
-	def compute_sig(self):
-		self._sig = Sig(self._value)
+	def update_sig(self, sig):
+		Node.update_sig(self, sig)
+		sig.update(self._value)
 
 class FSNode(Node):
 	def __init__(self, parent_node, name):
 		Node.__init__(self, name)
 		self._parent = parent_node
+		
+	def abspath(self): pass
+
+	def update_sig(self, sig):
+		Node.update_sig(self, sig)
+		file_sig(sig, self.abspath())
 	
 class DirFSNode(FSNode):
-	"""A dir is up-to-date if all of its children nodes are up-to-date"""
+	'A dir is up-to-date if all of its children nodes are up-to-date'
 	def __init__(self, parent_node, name):
 		FSNode.__init__(self, parent_node, name)
 		self._children = []
+
+	def update_sig(self, sig):
+		FSNode.update_sig(self, sig)
+		for n in self._children: n.update_sig(sig)
 
 class FileFSNode(FSNode):
 	def __init__(self, parent_node, name):

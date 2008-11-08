@@ -8,14 +8,29 @@ try:
 except ImportError:
 	from md5 import md5
 
-def hash_file(filename):
+class Sig:
+	def __init__(self):
+		self._impl = md5()
+	def update(self, s): self._impl.update(s)
+	def digest(self): return self._impl.digest()
+
+class Signed:
+	def sig(self):
+		try: return self._sig
+		except AttributeError:
+			self._sig = Sig()
+			self.update_sig(self._sig)
+			return self._sig
+
+	def update_sig(self, sig): pass
+
+def file_sig(sig, filename):
 	'computes an md5 hash from a filename based its stat'
 	st = os.stat(filename)
 	if stat.S_ISDIR(st.st_mode): raise IOError, 'not a file'
-	m = md5()
-	m.update(str(st.st_mtime))
-	#m.update(str(st.st_size))
-	return m.digest() # or m.hexdigest()
+	sig.update(str(st.st_mtime))
+	#sig.update(str(st.st_size))
+	return sig.digest() # or sig.hexdigest()
 
 if __name__ == '__main__':
 	def four_bits_to_hexchar(b):
@@ -31,5 +46,11 @@ if __name__ == '__main__':
 		return r
 
 	import sys
-	for f in sys.argv[1:]: print raw_to_hexstring(hash_file(f)), f
-
+	sig = Sig()
+	for f in sys.argv[1:]:
+		sig1 = Sig()
+		file_sig(sig1, f)
+		digest = sig1.digest()
+		print raw_to_hexstring(digest), f
+		sig.update(digest)
+	print 'all:', raw_to_hexstring(sig.digest())
