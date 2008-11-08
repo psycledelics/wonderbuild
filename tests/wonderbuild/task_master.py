@@ -6,6 +6,38 @@ class TaskMaster:
 	def __init__(self):
 		self._tasks = []
 		self._leaf_tasks = []
-		self._ready_tasks = []
-		self._done_tasks = []
+		self._queue = []
 
+	def start(self):
+		self._queue = self._leaf_tasks[:]
+		self._stop_requested = False
+		for t in self._threads: t.start()
+	
+	def stop(self):
+		self._stop_requested = True
+		for t in self._threads: t.join()
+	
+	def thread_function(self):
+		while True:
+			while not self._stop_requested and self._queue.empty: self._cond.wait()
+			if self._stop_requested: return
+			task = self._queue.pop
+			self.process(task)
+			self.lock()
+			try:
+				for o in task.out_nodes():
+					for task in o.tasks():
+						ready = True
+						for i in task.in_nodes():
+							for task in i.tasks():
+								if not task.processed():
+									ready = False
+									break
+						if ready:
+							self._queue.push(task)
+							self._cond.notify_all()
+			finally:
+				self.unlock()
+	
+	def process(self, task):
+		task.process()

@@ -3,20 +3,45 @@
 # copyright 2006-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 from signature import Signed
+from cmd import exec_subprocess
 
 class Task(Signed):
-	def __init__(self, in_nodes, cmd_args, out_nodes):
+	def __init__(self, in_nodes, out_nodes):
 		self._in_nodes = in_nodes
-		self._cmd_args = cmd_args
 		self._out_nodes = out_nodes
-		self._sig = None
 		
-	def execute(self):
-		r = exec_subprocess(cmd_args)
-		if r != 0: raise r
+	def process(self): pass
 
 	def update_sig(self, sig):
 		'implements Signed.update_sig'
-		sig.update(self._cmd_args)
 		for n in self._in_nodes: n.update_sig(sig)
+		
+class FuncTask(Task):
+	def __init__(self, in_nodes, func, out_nodes):
+		Task.__init__(self, in_nodes, out_nodes)
+		self._func = func
+		
+	def process(self):
+		self._func()
+
+	def update_sig(self, sig):
+		Task.update_sig(self, sig)
+		sig.update(self._func.code)
+
+class CmdTask(Task):
+	def __init__(self, in_nodes, env, cmd_args, out_nodes):
+		Task.__init__(self, in_nodes, out_nodes)
+		self._env = env
+		self._cmd_args = cmd_args
+		
+	def process(self):
+		r = exec_subprocess(self._env, self._cmd_args)
+		if r != 0: raise r
+
+	def update_sig(self, sig):
+		Task.update_sig(self, sig)
+		for (k,v) in self._env:
+			sig.update(k)
+			sig.update(v)
+		sig.update(self._cmd_args)
 

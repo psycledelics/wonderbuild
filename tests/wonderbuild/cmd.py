@@ -10,16 +10,16 @@ class Cmd:
 
 import sys, subprocess
 
-def exec_subprocess(args): return exec_subprocess_3(args)
+def exec_subprocess(env, args): return exec_subprocess_3(env, args)
 
-def exec_subprocess_1(args): # not sure
+def exec_subprocess_1(env, args): # not sure
 	p = subprocess.Popen(
 		args = args,
 		stdout = subprocess.PIPE,
 		stderr = subprocess.PIPE,
 		bufsize = 0,
 		shell = False,
-		env = {}
+		env = env
 	)
 	out_eof = err_eof = False
 	while not(out_eof and err_eof):
@@ -33,14 +33,14 @@ def exec_subprocess_1(args): # not sure
 			else: sys.stderr.write(r)
 	return p.wait()
 
-def exec_subprocess_2(args): # broken! doesn't not wait for completion!
+def exec_subprocess_2(env, args): # broken! doesn't not wait for completion!
 	p = subprocess.Popen(
 		args = args,
 		stdout = subprocess.PIPE,
 		stderr = subprocess.PIPE,
 		bufsize = 0,
 		shell = False,
-		env = {}
+		env = env
 	)
 	while p.poll() is None:
 		r = p.stdout.readline()
@@ -49,14 +49,14 @@ def exec_subprocess_2(args): # broken! doesn't not wait for completion!
 		if len(r) != 0: sys.stderr.write(r)
 	return p.returncode
 
-def exec_subprocess_3(args): # ok
+def exec_subprocess_3(env, args): # ok
 	p = subprocess.Popen(
 		args = args,
 		stdout = subprocess.PIPE,
 		stderr = subprocess.PIPE,
 		bufsize = 0,
 		shell = False,
-		env = {}
+		env = env
 	)
 	out, err = p.communicate()
 	sys.stdout.write(out)
@@ -69,5 +69,5 @@ if __name__ == '__main__':
 		sys.exit(1)
 	args = sys.argv[1:]
 	print 'args:', args
-	print 'return code: ' + str(exec_subprocess(args))
+	print 'return code: ' + str(exec_subprocess(None, args))
 
