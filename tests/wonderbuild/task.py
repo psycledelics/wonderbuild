@@ -13,8 +13,15 @@ class Task:
 		r = exec_subprocess(cmd_args)
 		if r != 0: raise r
 
+	def sig(self):
+		try: return self._sig
+		except AttributeError:
+			self._sig = self.compute_sig()
+			return self._sig
+
 	def compute_sig(self):
-		s = Sig(self._cmd_args)
-		for n in self._in_nodes: s.add(n.sig())
-		self._sig = s
+		s = Sig()
+		s.update(self._cmd_args)
+		for n in self._in_nodes: s.update(n.sig())
+		return s.digest()
 
