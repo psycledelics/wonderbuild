@@ -1,4 +1,6 @@
 #! /usr/bin/env python
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# copyright 2006-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import os, stat
 try:
@@ -7,7 +9,7 @@ except ImportError:
 	from md5 import md5
 
 def hash_file(filename):
-	'computes an md5 hash from a filename based on modtime and size'
+	'computes an md5 hash from a filename based its stat'
 	st = os.stat(filename)
 	if stat.S_ISDIR(st.st_mode): raise IOError, 'not a file'
 	m = md5()
@@ -23,12 +25,11 @@ if __name__ == '__main__':
 	def byte_to_hexstring(b):
 		b = ord(b)
 		return four_bits_to_hexchar(b >> 4) + four_bits_to_hexchar(b & 0xf)
-	def hex(s):
+	def raw_to_hexstring(s):
 		r = ''
 		for b in s: r += byte_to_hexstring(b)
 		return r
 
 	import sys
-	f = sys.argv[0]
-	print hex(hash_file(f)), f
+	for f in sys.argv[1:]: print raw_to_hexstring(hash_file(f)), f
 
