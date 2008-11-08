@@ -9,7 +9,9 @@ class Task(Signed):
 	def __init__(self, in_nodes, out_nodes):
 		self._in_nodes = in_nodes
 		self._out_nodes = out_nodes
-		
+
+	def dyn_deps(self): pass
+			
 	def process(self): pass
 
 	def update_sig(self, sig):

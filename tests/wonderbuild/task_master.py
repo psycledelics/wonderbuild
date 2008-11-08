@@ -2,42 +2,83 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2006-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-class TaskMaster:
-	def __init__(self):
-		self._tasks = []
-		self._leaf_tasks = []
-		self._queue = []
+import threading, Queue
+#python 2.5.0a1 from __future__ import with_statement
 
+class Scheduler():
+	def __init__(self):
+		self._nodes = []
+		self._thread_count = 1
+		self._timeout = 3600.0
+
+	def get_thread_count(self): return self._thread_count
+	def set_thread_count(self, count): self._thread_count = count
+	thread_count = property(get_thread_count, set_thread_count)
+
+	def get_timeout(self): return self._timeout
+	def set_timeout(self, timeout): self._timeout = timeout
+	timeout = property(get_timeout, set_timeout)
+	
 	def start(self):
-		self._queue = self._leaf_tasks[:]
+		self._nodes_queue = Queue.Queue(0)
+		for n in self._nodes:
+			if len(n.in_nodes()) == 0: self._nodes_queue.put(n)
+		self._condition = threading.Condition(threading.Lock())
 		self._stop_requested = False
-		for t in self._threads: t.start()
+		self._threads = []
+		for i in xrange(self._thread_count):
+			t = threading.Thread(target = thread_function, args = (self,), name = 'scheduler-thread-' + str(i))
+			t.setDaemon(True)
+			t.start()
+			self._threads.append(t)
 	
 	def stop(self):
-		self._stop_requested = True
-		for t in self._threads: t.join()
+		self._condition.acquire()
+		try: self._stop_requested = True
+		finally: self._condition.release()
+		self._condition.notifyAll()
+		for t in self._threads: t.join(timeout = self._timeout)
+		del self._threads
+		del self._condition
+		del self._nodes_queue
 	
 	def thread_function(self):
 		while True:
-			while not self._stop_requested and self._queue.empty: self._cond.wait()
-			if self._stop_requested: return
-			task = self._queue.pop
-			self.process(task)
-			self.lock()
+			self._condition.acquire()
 			try:
-				for o in task.out_nodes():
-					for task in o.tasks():
+				while not self._stop_requested and self._nodes_queue.empty(): self._condition.wait(timeout = self._timeout)
+			finally: self._condition.release()
+
+			if self._stop_requested: return
+
+			node = self._nodes_queue.get()
+			if node is None: continue
+
+			dyn_deps = node.process()
+
+			notify = 0
+			self._condition.acquire()
+			try:
+				if dyn_deps:
+					for dyn_dep_node in dyn_deps:
 						ready = True
-						for i in task.in_nodes():
-							for task in i.tasks():
-								if not task.processed():
-									ready = False
-									break
+						for node in dyn_dep_node.in_nodes():
+							if not node.processed():
+								ready = False
+								break
 						if ready:
-							self._queue.push(task)
-							self._cond.notify_all()
-			finally:
-				self.unlock()
-	
-	def process(self, task):
-		task.process()
+							self._nodes_queue.push(dyn_dep_node)
+							++notify
+				else:
+					for out_node in node.out_nodes():
+						ready = True
+						for node in out_node.in_nodes():
+							if not node.processed():
+								ready = False
+								break
+						if ready:
+							self._nodes_queue.put(out_node)
+							++notify
+			finally: self._condition.release()
+			if notify > 2: self._condition.notifyAll()
+			elif notify > 1: self._condition.notify()

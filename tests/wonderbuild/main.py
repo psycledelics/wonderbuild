@@ -26,11 +26,16 @@ if False and __name__ == '__main__':
 	s = Scanner()
 	s.append_path('src')
 	s.append_path('++build/src')
-	d = s.deps([i])
-	tm.add_dep(d)
 
-	i = Node('++build/src/foo.o')
-	o = Node('++build/libfoo.so')
+	i = FileFSNode('src/foo.cpp')
+	d = s.deps([i])
+	ii = [i] + d
+	o = FileFSNode('++build/src/foo.o')
+	t = Task(ii, ['c++', '-c', i.path(), '-o', o.path()], [o])
+	tm.add_task(t)
+
+	i = FileFSNode('++build/src/foo.o')
+	o = FileFSNode('++build/libfoo.so')
 	t = Task([i], ['c++', '-shared', i.path(), '-o', o.path()], [o])
 	tm.add_task(t)
 
