@@ -804,10 +804,6 @@
 				RelativePath="..\..\..\msvc_common\src\packageneric\package.private.hpp"
 				>
 			</File>
-			<File
-				RelativePath="..\..\..\msvc_common\src\packageneric\resources.rc"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="diversalis"
