@@ -33,22 +33,21 @@ class CppDumbIncludeScanner:
 		absolute_includes = []
 		for c in s:
 			if c == '\r': continue
+			if c == '\n' and prev == '\\': continue
 			if c == '\t': c = ' '
 
 			new_state = state
 
 			if state == single_line_comment:
-				if c == '\n' and prev != '\\': new_state = normal
+				if c == '\n': new_state = normal
 			elif state == multi_line_comment:
 				if prev == '*' and c == '/': new_state = prev_state
 			elif state == single_quoted_string:
-				if prev != '\\':
-					if c == "'" : new_state = prev_state
-					elif c == '\n': new_state = normal
+				if c == "'" and prev != '\\': new_state = prev_state
+				elif c == '\n': new_state = normal
 			elif state == double_quoted_string:
-				if prev != '\\':
-					if c == '"' : new_state = prev_state
-					elif c == '\n': new_state = normal
+				if c == '"' and prev != '\\': new_state = prev_state
+				elif c == '\n': new_state = normal
 			elif state == normal or state == other:
 				if prev == '/' and c == '/': new_state = single_line_comment
 				elif prev == '/' and c == '*': new_state = multi_line_comment
@@ -61,7 +60,7 @@ class CppDumbIncludeScanner:
 						token_quote = False
 					elif c != ' ' and c != '\n' and c != '/': new_state = other
 				elif state == other:
-					if c == '\n' and prev != '\\': new_state = normal
+					if c == '\n': new_state = normal
 			elif state == token:
 				token_end = False
 				if c == '\\':
@@ -70,9 +69,7 @@ class CppDumbIncludeScanner:
 					new_state = single_line_comment
 					token_end = True
 				elif prev == '/' and c == '*': new_state = multi_line_comment
-				elif c == '\n':
-					if prev != '\\':
-						token_end = True
+				elif c == '\n': token_end = True
 				elif c == '"':
 					token_quote = not token_quote
 					token_string += c
