@@ -38,15 +38,17 @@ class CppDumbIncludeScanner:
 			new_state = state
 
 			if state == single_line_comment:
-				if c == '\n' and prev != '\\':
-					if prev_state == other: new_state = normal
-					else: new_state = prev_state
+				if c == '\n' and prev != '\\': new_state = normal
 			elif state == multi_line_comment:
 				if prev == '*' and c == '/': new_state = prev_state
 			elif state == single_quoted_string:
-				if c == "'" and prev != '\\': new_state = prev_state
+				if prev != '\\':
+					if c == "'" : new_state = prev_state
+					elif c == '\n': new_state = normal
 			elif state == double_quoted_string:
-				if c == '"' and prev != '\\': new_state = prev_state
+				if prev != '\\':
+					if c == '"' : new_state = prev_state
+					elif c == '\n': new_state = normal
 			elif state == normal or state == other:
 				if prev == '/' and c == '/': new_state = single_line_comment
 				elif prev == '/' and c == '*': new_state = multi_line_comment
@@ -61,19 +63,16 @@ class CppDumbIncludeScanner:
 				elif state == other:
 					if c == '\n' and prev != '\\': new_state = normal
 			elif state == token:
+				token_end = False
 				if c == '\\':
 					if token_quote: token_string += c
-				elif prev == '/' and c == '/': new_state = single_line_comment
+				elif prev == '/' and c == '/':
+					new_state = single_line_comment
+					token_end = True
 				elif prev == '/' and c == '*': new_state = multi_line_comment
 				elif c == '\n':
 					if prev != '\\':
-						search = '#include '
-						if token_string.startswith(search):
-							l = len(search)
-							kind = token_string[l]
-							if kind == '"': relative_includes.append(token_string[l + 1 : token_string.rfind('"')])
-							elif kind == '<': absolute_includes.append(token_string[l + 1 : token_string.rfind('>')])
-						new_state = normal
+						token_end = True
 				elif c == '"':
 					token_quote = not token_quote
 					token_string += c
@@ -86,6 +85,15 @@ class CppDumbIncludeScanner:
 				elif c == '/':
 					if token_quote or prev_state == multi_line_comment: token_string += '/'
 				elif c != ' ' or token_string[-1] != ' ': token_string += c
+
+				if token_end:
+					search = '#include '
+					if token_string.startswith(search):
+						l = len(search)
+						kind = token_string[l]
+						if kind == '"': relative_includes.append(token_string[l + 1 : token_string.rfind('"')])
+						elif kind == '<': absolute_includes.append(token_string[l + 1 : token_string.rfind('>')])
+					new_state = normal
 
 			if new_state != state:
 				prev_state = state

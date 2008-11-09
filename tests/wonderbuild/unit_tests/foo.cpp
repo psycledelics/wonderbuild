@@ -8,15 +8,11 @@
 #include FOO_(FOO)
 
 #include "foo\"
-
 #include "fo\\o"
 
-#include "fo/o"
-
-#include <fo/o>
-
+#include "fo/o" /**///
+#include <fo/o> /**/
 #include   "yes-a" //
-
 #include	"yes-b"
 
 \/*
