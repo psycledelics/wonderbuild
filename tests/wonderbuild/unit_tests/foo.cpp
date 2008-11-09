@@ -1,3 +1,5 @@
+#include
+
 # include "yes"
 #	include "yes"
 
@@ -9,8 +11,13 @@
 #define FOO "yes-foo"
 #include FOO
 
-#define FOO_(x) x "/bar"
-#include FOO_(FOO)
+#define INCLUDE(x) INCLUDE_(x)
+#define INCLUDE_(x) #x
+
+#define BAR yes-bar
+#include INCLUDE(BAR)
+
+#include INCLUDE(BAR/bong)
 
 #include "yes-foo\"
 #include "yes-fo\\o"
