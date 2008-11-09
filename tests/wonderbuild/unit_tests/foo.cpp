@@ -1,20 +1,21 @@
-# include "hmmm1"
-#	include "hmmm2"
+# include "yes"
+#	include "yes"
 
-#include <absolute>
+#include <yes>
+#include </tmp/yes>
 
-//#include "relative" "foo"
+//#include "no" "/foo" "/bar"
 
-#define FOO "relative" "foo"
+#define FOO "yes" "/foo" "/bar"
 #define FOO_(x) FOO__(x)
 #define FOO__(x) #x
 #include FOO_(FOO)
 
-#include "foo\"
-#include "fo\\o"
+#include "yes-foo\"
+#include "yes-fo\\o"
 
-#include "fo/*o" /**///
-#include <fo//o> /**/
+#include "yes-fo/*o" /**///
+#include <yes-fo//o> /**/
 #include   "yes-a" //
 #include	"yes-b"
 
