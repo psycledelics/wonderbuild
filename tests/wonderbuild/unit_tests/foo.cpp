@@ -6,9 +6,10 @@
 
 //#include "no" "/foo" "/bar"
 
-#define FOO "yes" "/foo" "/bar"
-#define FOO_(x) FOO__(x)
-#define FOO__(x) #x
+#define FOO "yes-foo"
+#include FOO
+
+#define FOO_(x) x "/bar"
 #include FOO_(FOO)
 
 #include "yes-foo\"
