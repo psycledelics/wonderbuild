@@ -30,9 +30,9 @@ def stat_sig(sig, st):
 	sig.update(str(st.st_mtime))
 	#sig.update(str(st.st_size))
 
-def file_sig(sig, filename):
+def file_sig(sig, file_name):
 	'computes an md5 hash from a filename based on its stat'
-	st = os.stat(filename)
+	st = os.stat(file_name)
 	stat_sig(sig, st)
 
 if __name__ == '__main__':
