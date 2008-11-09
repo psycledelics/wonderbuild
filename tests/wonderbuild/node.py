@@ -14,7 +14,7 @@ class Node(Signed):
 
 	def update_sig(self, sig):
 		'implements Signed.update_sig'
-		for n in self._dep_nodes: n.update_sign(sig)
+		for n in self._dep_nodes: sig.update(n.sig())
 		return s.digest()
 	
 class AliasNode(Node):

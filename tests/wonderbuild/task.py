@@ -16,7 +16,7 @@ class Task(Signed):
 
 	def update_sig(self, sig):
 		'implements Signed.update_sig'
-		for n in self._in_nodes: n.update_sig(sig)
+		for n in self._in_nodes: sig.update(n.sig())
 		
 class FuncTask(Task):
 	def __init__(self, in_nodes, func, out_nodes):
