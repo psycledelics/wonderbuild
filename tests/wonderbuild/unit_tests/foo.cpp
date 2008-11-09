@@ -17,6 +17,7 @@
 #define BAR yes-bar
 #include INCLUDE(BAR)
 #include INCLUDE(BAR/bong)
+#include INCLUDE_(BAR/bong)
 
 #include "yes-foo\"
 #include "yes-fo\\o"
