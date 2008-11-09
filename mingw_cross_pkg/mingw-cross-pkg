@@ -344,8 +344,8 @@ class Packages:
 				try: packages = files[file]
 				except KeyError: files[file] = [package]
 				else: files[file].append(package)
-		for item in files.items():
-			if len(item[1]) > 1: print item[0] + ': ' + ' '.join([package.name() for package in item[1]])
+		for file, packages in files.iteritems():
+			if len(packages) > 1: print file + ': ' + ' '.join([package.name() for package in packages])
 	
 	def need_rebuild(self):
 		name_width = 35; version_width = 27
