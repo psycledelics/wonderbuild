@@ -50,7 +50,7 @@ class CppDumbIncludeScanner:
 				elif c == "'": new_state = single_quoted_string
 				elif c == '"': new_state = double_quoted_string
 				elif state == normal:
-					if c == '#':
+					if c == '#' and prev != '/':
 						new_state = token
 						token_string = '#'
 					elif c != ' ' and c != '\n' and c != '/': new_state = other
