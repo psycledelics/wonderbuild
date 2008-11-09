@@ -1,3 +1,20 @@
+#include <absolute>
+
+//#include "relative" "foo"
+
+#define FOO "relative" "foo"
+#define FOO_(x) FOO__(x)
+#define FOO__(x) #x
+#include FOO_(FOO)
+
+#include "foo\"
+
+#include "fo\\o"
+
+#include "fo/o"
+
+#include <fo/o>
+
 #include   "yes-a" //
 
 #include	"yes-b"

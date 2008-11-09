@@ -24,10 +24,13 @@ class CppDumbIncludeScanner:
 		single_quoted_string = 3
 		double_quoted_string = 4
 		token = 5
-		other = 6
+		token_quote = 6
+		other = 7
 		
 		prev_state = state = normal; prev = '\0'
 		
+		relative_includes = []
+		absolute_includes = []
 		for c in s:
 			if c == '\r': continue
 			if c == '\t': c = ' '
@@ -52,29 +55,48 @@ class CppDumbIncludeScanner:
 				elif state == normal:
 					if c == '#' and prev != '/':
 						new_state = token
-						token_string = '#'
+						token_string = c
+						token_quote = False
 					elif c != ' ' and c != '\n' and c != '/': new_state = other
 				elif state == other:
 					if c == '\n' and prev != '\\': new_state = normal
 			elif state == token:
-				if prev == '/' and c == '/': new_state = single_line_comment
+				if c == '\\':
+					if token_quote: token_string += c
+				elif prev == '/' and c == '/': new_state = single_line_comment
 				elif prev == '/' and c == '*': new_state = multi_line_comment
-				elif c != '\\':
-					if c == '\n':
-						if prev != '\\':
-							print token_string
-							new_state = normal
-					elif c != ' ' or token_string[-1] != ' ':
-						if c != '/': token_string += c
-						elif prev_state == multi_line_comment: token_string += '/'
+				elif c == '\n':
+					if prev != '\\':
+						search = '#include '
+						if token_string.startswith(search):
+							l = len(search)
+							kind = token_string[l]
+							if kind == '"': relative_includes.append(token_string[l + 1 : token_string.rfind('"')])
+							elif kind == '<': absolute_includes.append(token_string[l + 1 : token_string.rfind('>')])
+						new_state = normal
+				elif c == '"':
+					token_quote = not token_quote
+					token_string += c
+				elif c == '<':
+					token_quote = True
+					token_string += c
+				elif c == '>':
+					token_quote = False
+					token_string += c
+				elif c == '/':
+					if token_quote or prev_state == multi_line_comment: token_string += '/'
+				elif c != ' ' or token_string[-1] != ' ': token_string += c
 
 			if new_state != state:
 				prev_state = state
 				state = new_state
 			prev = c;
+		return relative_includes, absolute_includes
 
 if __name__ == '__main__':
 	import sys
 	
 	scanner = CppDumbIncludeScanner()
-	for f in sys.argv[1:]: scanner.scan(f)
+	for f in sys.argv[1:]:
+		includes = scanner.scan(f)
+		print f, includes
