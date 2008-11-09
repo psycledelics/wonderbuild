@@ -2,12 +2,16 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import os.path
+import os.path, re
 
 def unique_path(file_name): return os.path.abspath(file_name)
 
 _cache = {} # { unique_path: (rel_includes, abs_includes) }
 _not_found_cache = set()
+
+_line_continuations = re.compile(r'\\\r*\n', re.MULTILINE)
+_cpp = re.compile(r'''(/\*[^*]*\*+([^/*][^*]*\*+)*/)|//[^\n]*|("(\\.|[^"\\])*"|'(\\.|[^'\\])*'|.[^/"'\\]*)''', re.MULTILINE)
+_include = re.compile(r'^[ \t]*#[ \t]*include[ \t]*(["<])([^">]*)[">].*$', re.MULTILINE)
 
 class CppDumbIncludeScanner:
 	'C/C++ scanner for #include statements, and nothing else (dumb)'
@@ -22,13 +26,15 @@ class CppDumbIncludeScanner:
 		path = unique_path(file_name)
 
 		global _cache
-		if path in _cache: return
+		if path in _cache:
+			#print 'cached:', path
+			return
 
 		f = file(file_name)
 		try: s = f.read()
 		finally: f.close()
 
-		r = self.scan_string_slow(s)
+		r = self.scan_string_fast(s)
 		_cache[path] = r
 		rel_includes, abs_includes = r
 		
@@ -68,7 +74,27 @@ class CppDumbIncludeScanner:
 		return None
 
 	def scan_string_fast(self, s):
-		'^[ \t]*#[ \t]*(?:include|import)[ \t]*(<|")([^>"]+)(>|")'
+
+		s = _line_continuations.sub('', s)
+
+		def repl(m):
+			s = m.group(1)
+			if s is not None: return ' '
+			s = m.group(3)
+			if s is None: return ''
+			return s
+		s = _cpp.sub(repl, s)
+
+		#for l in s.split('\n'): print '[' + l + ']'
+		#return
+
+		rel_includes = []
+		abs_includes = []
+		for m in _include.finditer(s):
+			kind = m.group(1)
+			if kind == '"':   rel_includes.append(m.group(2))
+			elif kind == '<': abs_includes.append(m.group(2))
+		return rel_includes, abs_includes
 	
 	def scan_string_slow(self, s):
 		normal = 0
@@ -134,7 +160,7 @@ class CppDumbIncludeScanner:
 					token_string += c
 				elif c == '/':
 					if token_quote or prev_state == multi_line_comment: token_string += '/'
-				elif c != ' ' or token_string[-1] != ' ': token_string += c
+				elif c != ' ' or (token_string[-1] != ' ' and token_string[-1] != '#'): token_string += c
 
 				if token_end:
 					search = '#include '

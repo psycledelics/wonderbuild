@@ -1,3 +1,6 @@
+# include "hmmm1"
+#	include "hmmm2"
+
 #include <absolute>
 
 //#include "relative" "foo"
@@ -28,7 +31,7 @@
 #include "yes-e"
 // */
 
-/* */ #include "yes-f"
+/* // */ #include "yes-f"
 
 #include /* */ "yes-g"
 
