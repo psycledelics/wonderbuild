@@ -30,7 +30,7 @@ class env_paths(dictionary):
 			else: self[key] = value
 
 	def add_unique(self, dictionary_):
-		for key, value in dictionary_.items():
+		for key, value in dictionary_.iteritems():
 			try: current_value = self[key]
 			except KeyError: current_value = ''
 			from SCons.Util import AppendPath as append_path_unique
@@ -67,8 +67,8 @@ def template(base):
 				base._scons(self, scons)
 				scons_env = scons['ENV']
 				env = {}
-				for key, value in self.os_env().get().items(): env[key] = scons.subst(value)
-				for key, value in self.os_env().paths().get().items():
+				for key, value in self.os_env().get().iteritems(): env[key] = scons.subst(value)
+				for key, value in self.os_env().paths().get().iteritems():
 					if key in scons_env:
 						from SCons.Util import AppendPath as append_path_unique
 						env[key] = append_path_unique(scons_env[key], scons.subst(value))

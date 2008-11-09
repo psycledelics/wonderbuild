@@ -38,7 +38,7 @@ class external_package(check):
 		provided = separator + bar + ' provided by external package: ' + self.name() + bar
 		if self.distribution_packages():
 			string += provided
-			for (k, v) in self.distribution_packages().items(): string += bar + ' -> on ' + k + ' distributions, the package names are ' + v
+			for (k, v) in self.distribution_packages().iteritems(): string += bar + ' -> on ' + k + ' distributions, the package names are ' + v
 		if self.url() is not None:
 			if not self.distribution_packages(): string += provided
 			string += bar + ' -> '

@@ -73,7 +73,7 @@ def template(mixin):
 					scons.Append(
 						CXXFLAGS = \
 							self.flags().get() + \
-							[D(name, value) for name, value in self.defines().get().items()]
+							[D(name, value) for name, value in self.defines().get().iteritems()]
 					)
 				
 				scons.AppendUnique(CPPPATH = self.paths().get())

@@ -28,7 +28,7 @@ def generate(env, **kw):
 		except:
 			import SCons.Errors
 			raise SCons.Errors.UserError, 'packagneric: cannot read source file %s' % source_file_name
-		for (k,v) in dictionary.items():
+		for (k,v) in dictionary.iteritems():
 			import re
 			contents = re.sub(k, v, contents)
 		try:
@@ -57,7 +57,7 @@ def generate(env, **kw):
 		except KeyError:
 			import SCons.Errors
 			raise SCons.Errors.UserError, 'packageneric: ' + name + ' requires ' + dictionary_name + ' to be set in environment.'
-		for (k,v) in d.items():
+		for (k,v) in d.iteritems():
 			if callable(v): d[k] = env.subst(v())
 			else:
 				import SCons.Util

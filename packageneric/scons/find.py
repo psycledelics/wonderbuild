@@ -29,7 +29,7 @@ class find:
 			try: dir_dict[head].append(include_pattern)
 			except KeyError: dir_dict[head] = [include_pattern]
 		self._stack = []
-		for dir, include_patterns in dir_dict.items(): self._stack.append(self._stack_element(dir, include_patterns))
+		for dir, include_patterns in dir_dict.iteritems(): self._stack.append(self._stack_element(dir, include_patterns))
 		# Note that the stack may contain foo and foo/bar, and in this case we list the foo/bar dir twice!
 		# This is why we have per-dir include patterns so that files aren't found multiple times.
 		# todo: This could be optimised by finding common dirs and then only listing the same dir once.

@@ -61,7 +61,7 @@ class pkg_config_package(projected, builder):
 		def l(library): return l_prefix + scons.subst(library) + l_suffix
 
 		string += 'CFlags: ' + \
-			' '.join([D(name, value) for name, value in env.compilers().cxx().defines().get().items()]) + ' ' + \
+			' '.join([D(name, value) for name, value in env.compilers().cxx().defines().get().iteritems()]) + ' ' + \
 			' '.join([I(path) for path in env.compilers().cxx().paths()]) + ' ' + \
 			' '.join([flag for flag in env.compilers().cxx().flags()]) + '\n'
 		string += 'Libs: ' + \
