@@ -33,7 +33,7 @@ class CppDumbIncludeScanner:
 		absolute_includes = []
 		for c in s:
 			if c == '\r': continue
-			if c == '\n' and prev == '\\': continue
+			if prev == '\\' and c == '\n': continue
 			if c == '\t': c = ' '
 
 			new_state = state
