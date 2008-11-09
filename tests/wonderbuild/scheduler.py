@@ -2,7 +2,7 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2007-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import threading, Queue
+import threading
 #python 2.5.0a1 from __future__ import with_statement
 
 class Scheduler():
@@ -20,9 +20,9 @@ class Scheduler():
 	timeout = property(get_timeout, set_timeout)
 	
 	def start(self):
-		self._nodes_queue = Queue.Queue(0)
+		self._nodes_queue = []
 		for n in self._nodes:
-			if len(n.in_nodes()) == 0: self._nodes_queue.put(n)
+			if not n.in_nodes(): self._nodes_queue.append(n)
 		self._condition = threading.Condition(threading.Lock())
 		self._stop_requested = False
 		self._threads = []
@@ -46,13 +46,13 @@ class Scheduler():
 		while True:
 			self._condition.acquire()
 			try:
-				while not self._stop_requested and self._nodes_queue.empty(): self._condition.wait(timeout = self._timeout)
+				while not self._stop_requested and not self._nodes_queue: self._condition.wait(timeout = self._timeout)
 			finally: self._condition.release()
 
 			if self._stop_requested: return
 			
-			node = self._nodes_queue.get()
-			if node is None: continue
+			node = self._nodes_queue.pop()
+			if not node: continue
 
 			dyn_deps = node.process()
 
@@ -67,7 +67,7 @@ class Scheduler():
 								ready = False
 								break
 						if ready:
-							self._nodes_queue.push(dyn_dep_node)
+							self._nodes_queue.append(dyn_dep_node)
 							++notify
 				else:
 					for out_node in node.out_nodes():
@@ -77,7 +77,7 @@ class Scheduler():
 								ready = False
 								break
 						if ready:
-							self._nodes_queue.put(out_node)
+							self._nodes_queue.append(out_node)
 							++notify
 			finally: self._condition.release()
 			if notify > 2: self._condition.notifyAll()
