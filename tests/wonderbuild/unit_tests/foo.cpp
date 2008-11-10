@@ -37,9 +37,9 @@
 
 #define BONG_BANG_0(f) yes-bong-bang-0/f
 #define BONG_BANG_1(f) yes-bong-bang-1/f
-#define BONG_BANG_X(x, f) TOKENIZED(BONG_BANG_, x)(f)
-#include STRINGIZED(BONG_BANG_X(0, ping))
-#include STRINGIZED(BONG_BANG_X(1, pong))
+#define BONG_BANG(x, f) TOKENIZED(BONG_BANG_, x)(f)
+#include STRINGIZED(BONG_BANG(0, ping))
+#include STRINGIZED(BONG_BANG(1, pong))
 
 #include "yes-foo\"
 #include "yes-fo\\o"
