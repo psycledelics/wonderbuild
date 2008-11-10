@@ -6,40 +6,41 @@ import os.path, re, cPickle, signature #, dircache
 
 class Cache:
 	def __init__(self, cache_path):
-		self._cache_path = cache_path
 		self._not_found = set() # of unique_path
-		if os.path.exists(cache_path): self.load()
-		else:
-			self._deps = {} # { unique_path: (rel_includes, abs_includes) }
+		self._cache_path = cache_path
+		self.load()
 		
 	def deps(self): return self._deps
 	def not_found(self): return self._not_found
 	
 	def load(self):
-		if not os.path.exists(self._cache_path): return
-		f = file(self._cache_path)
 		try:
-			self._deps = cPickle.load(f)
-			sigs = cPickle.load(f)
-		finally: f.close()
-		for path in self._deps.keys(): # copy because we remove some elements in the loop
-			sig = signature.Sig()
-			try: signature.file_sig(sig, path)
-			except: self._not_found.add(path)
-			else:
-				if sig.digest() != sigs[path]: del self._deps[path]
+			f = file(self._cache_path)
+			try:
+				p = cPickle.Unpickler(f)
+				self._deps = p.load()
+				sigs = p.load()
+			finally: f.close()
+		except: self._deps = {} # { unique_path: (rel_includes, abs_includes) }
+		else:
+			for path in self._deps.keys(): # copy because we remove some elements in the loop
+				sig = signature.Sig()
+				try: signature.file_sig(sig, path)
+				except: self._not_found.add(path)
+				else:
+					if sig.digest() != sigs[path]: del self._deps[path]
 
 	def save(self):
 		f = file(self._cache_path, 'wb')
 		try:
-			p = cPickle.HIGHEST_PROTOCOL
-			cPickle.dump(self._deps, f, p)
+			p = cPickle.Pickler(f, cPickle.HIGHEST_PROTOCOL)
+			p.dump(self._deps)
 			sigs = {}
 			for path in self._deps:
 				sig = signature.Sig()
 				signature.file_sig(sig, path)
 				sigs[path] = sig.digest()
-			cPickle.dump(sigs, f, p)
+			p.dump(sigs)
 		finally: f.close()
 
 _cache = Cache('/tmp/scanner-deps.cache')
@@ -66,39 +67,44 @@ class CppDumbIncludeScanner:
 
 	def add_path(self, path): self._paths.append(path)
 	
-	def scan(self, file_name):
+	def scan_deps(self, file_name, already_seen = None):
 		u = self._unique_path(file_name)
 
-		if u in self._cache().deps():
-			#print 'cached:', u
-			return
+		if already_seen is not None:
+			if u in already_seen: return
+ 			already_seen.add(u)
+		else: already_seen = set()
+	
+		try: r = self._cache().deps()[u]
+		except AttributeError:
+			print 'scanning:', u
 
-		print 'scanning:', u
+			try: f = file(file_name)
+			except:
+				self._cache().not_found().add(u)
+				return deps
+			try: s = f.read()
+			finally: f.close()
 
-		try: f = file(file_name)
-		except:
-			self._cache().not_found().add(u)
-			return
-		try: s = f.read()
-		finally: f.close()
-
-		r = self.parse_string_fast(s)
-		self._cache().deps()[u] = r
+			r = self.parse_string(s)
+			self._cache().deps()[u] = r
 		rel_includes, abs_includes = r
-		
+
 		if rel_includes:
 			dir = os.path.dirname(file_name)
 			for include in rel_includes:
 				sub_file_name = self.search_rel(dir, include)
-				if sub_file_name: self.scan(sub_file_name)
+				if sub_file_name: self.scan_deps(sub_file_name, already_seen)
 				#else: print >> sys.stderr, 'not found:', file_name + ': #include "' + include + '"'
 
 		if abs_includes:
 			for include in abs_includes:
 				sub_file_name = self.search_abs(include)
-				if sub_file_name: self.scan(sub_file_name)
+				if sub_file_name: self.scan_deps(sub_file_name, already_seen)
 				#else: print >> sys.stderr, 'not found:', file_name + ': #include <' + include + '>'
-
+	
+		return already_seen
+	
 	def search_rel(self, dir, include):
 		if os.path.isabs(include):
 			u = self._unique_path(include)
@@ -127,6 +133,8 @@ class CppDumbIncludeScanner:
 		#print >> sys.stderr, 'not found:', '#include <' + include + '>'
 		self._cache().not_found().add(include)
 		return None
+
+	def parse_string(self, s): return self.parse_string_fast(s)
 
 	def parse_string_fast(self, s):
 
@@ -243,7 +251,10 @@ if __name__ == '__main__':
 		else: files.append(arg)
 
 	scanner = CppDumbIncludeScanner(dirs)
-	for f in files: scanner.scan(f)
+	for f in files:
+		deps = scanner.scan_deps(f)
+		print f
+		for dep in deps: print '\t', dep
 	scanner._cache().save()
 	
 	#for path, includes in scanner._cache().deps().iteritems():
