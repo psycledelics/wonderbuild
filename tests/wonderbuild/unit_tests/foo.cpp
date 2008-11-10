@@ -15,7 +15,7 @@
 #include <yes-normal> // subsequent times not reported by gcc
 
 #include </tmp/>
-#include <tmp/yes>
+#include </tmp/yes>
 
 //#include "no" "/foo" "/bar"
 
