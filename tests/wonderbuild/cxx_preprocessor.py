@@ -2,12 +2,47 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import os.path, re
+import os.path, re, cPickle, signature #, dircache
 
-def unique_path(file_name): return os.path.abspath(file_name)
+class Cache:
+	def __init__(self, cache_path):
+		self._cache_path = cache_path
+		self._not_found = set() # of unique_path
+		if os.path.exists(cache_path): self.load()
+		else:
+			self._deps = {} # { unique_path: (rel_includes, abs_includes) }
+		
+	def deps(self): return self._deps
+	def not_found(self): return self._not_found
+	
+	def load(self):
+		if not os.path.exists(self._cache_path): return
+		f = file(self._cache_path)
+		try:
+			self._deps = cPickle.load(f)
+			sigs = cPickle.load(f)
+		finally: f.close()
+		for path in self._deps.keys(): # copy because we remove some elements in the loop
+			sig = signature.Sig()
+			try: signature.file_sig(sig, path)
+			except: self._not_found.add(path)
+			else:
+				if sig.digest() != sigs[path]: del self._deps[path]
 
-_cache = {} # { unique_path: (rel_includes, abs_includes) }
-_not_found_cache = set()
+	def save(self):
+		f = file(self._cache_path, 'wb')
+		try:
+			p = cPickle.HIGHEST_PROTOCOL
+			cPickle.dump(self._deps, f, p)
+			sigs = {}
+			for path in self._deps:
+				sig = signature.Sig()
+				signature.file_sig(sig, path)
+				sigs[path] = sig.digest()
+			cPickle.dump(sigs, f, p)
+		finally: f.close()
+
+_cache = Cache('/tmp/scanner-deps.cache')
 
 _line_continuations = re.compile(r'\\\r*\n', re.MULTILINE)
 _cpp = re.compile(r'''(/\*[^*]*\*+([^/*][^*]*\*+)*/)|//[^\n]*|("(\\.|[^"\\])*"|'(\\.|[^'\\])*'|.[^/"'\\]*)''', re.MULTILINE)
@@ -20,22 +55,35 @@ class CppDumbIncludeScanner:
 		if paths is not None: self._paths = paths
 		else: self._paths = []
 	
+	def _cache(self):
+		global _cache
+		return _cache
+	
+	def _unique_path(self, file_name):
+		return os.path.abspath(file_name)
+		#try: return os.path.realpath(file_name)
+		#except: return os.path.abspath(file_name)
+
 	def add_path(self, path): self._paths.append(path)
 	
 	def scan(self, file_name):
-		path = unique_path(file_name)
+		u = self._unique_path(file_name)
 
-		global _cache
-		if path in _cache:
-			#print 'cached:', path
+		if u in self._cache().deps():
+			#print 'cached:', u
 			return
 
-		f = file(file_name)
+		print 'scanning:', u
+
+		try: f = file(file_name)
+		except:
+			self._cache().not_found().add(u)
+			return
 		try: s = f.read()
 		finally: f.close()
 
-		r = self.scan_string_fast(s)
-		_cache[path] = r
+		r = self.parse_string_fast(s)
+		self._cache().deps()[u] = r
 		rel_includes, abs_includes = r
 		
 		if rel_includes:
@@ -52,28 +100,35 @@ class CppDumbIncludeScanner:
 				#else: print >> sys.stderr, 'not found:', file_name + ': #include <' + include + '>'
 
 	def search_rel(self, dir, include):
-		f = os.path.join(dir, include)
-		u = unique_path(f)
-		if u in _not_found_cache: return None
-		if os.path.exists(f): return f
-		else: print >> sys.stderr, 'not found:', '#include "' + u + '"'
-		if not include.startswith(os.pardir + os.sep) and not include.startswith(os.curdir + os.sep):
-			abs = self.search_abs(include)
-			if abs: return abs
-		_not_found_cache.add(u)
+		if os.path.isabs(include):
+			u = self._unique_path(include)
+			if u in self._cache().not_found(): return None
+			if os.path.exists(f): return f
+			#else: print >> sys.stderr, 'not found:', '#include "' + u + '"'
+		else:
+			f = os.path.join(dir, include)
+			u = self._unique_path(f)
+			if u in self._cache().not_found(): return None
+			if os.path.exists(f): return f
+			#else: print >> sys.stderr, 'not found:', '#include "' + u + '"'
+			if  not include.startswith(os.pardir + os.sep) \
+			and not include.startswith(os.curdir + os.sep):
+				abs = self.search_abs(include)
+				if abs: return abs
+		self._cache().not_found().add(u)
 		return None
 		
 	def search_abs(self, include):
 		global _not_found_cache
-		if include in _not_found_cache: return None
+		if include in self._cache().not_found(): return None
 		for dir in self._paths:
 			f = os.path.join(dir, include)
 			if os.path.exists(f): return f
-		print >> sys.stderr, 'not found:', '#include <' + include + '>'
-		_not_found_cache.add(include)
+		#print >> sys.stderr, 'not found:', '#include <' + include + '>'
+		self._cache().not_found().add(include)
 		return None
 
-	def scan_string_fast(self, s):
+	def parse_string_fast(self, s):
 
 		s = _line_continuations.sub('', s)
 
@@ -96,7 +151,7 @@ class CppDumbIncludeScanner:
 			elif kind == '<': abs_includes.append(m.group(2))
 		return rel_includes, abs_includes
 	
-	def scan_string_slow(self, s):
+	def parse_string_slow(self, s):
 		normal = 0
 		single_line_comment = 1
 		multi_line_comment = 2
@@ -179,7 +234,8 @@ class CppDumbIncludeScanner:
 
 if __name__ == '__main__':
 	import sys
-	
+	#sys.path.insert(0, os.path.dirname(__file__))
+
 	dirs = []
 	files = []
 	for arg in sys.argv[1:]:
@@ -188,6 +244,7 @@ if __name__ == '__main__':
 
 	scanner = CppDumbIncludeScanner(dirs)
 	for f in files: scanner.scan(f)
+	scanner._cache().save()
 	
-	for path, includes in _cache.iteritems():
-		print path, includes
+	#for path, includes in scanner._cache().deps().iteritems():
+	#	print path, includes
