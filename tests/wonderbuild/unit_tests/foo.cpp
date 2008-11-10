@@ -1,23 +1,45 @@
 #include
 
-# include "yes"
-#	include "yes"
+#include 0
 
-#include <yes>
-#include </tmp/yes>
+#include no
+
+#include ""
+
+#include <>
+
+# include "yes-space"
+#	include "yes-tab"
+
+#include <yes-normal>
+#include <yes-normal> // subsequent times not reported by gcc
+
+#include </tmp/>
+#include <tmp/yes>
 
 //#include "no" "/foo" "/bar"
 
 #define FOO "yes-foo"
 #include FOO
 
-#define INCLUDE(x) INCLUDE_(x)
-#define INCLUDE_(x) #x
+#define STRINGIZED(x) STRINGIZED_(x)
+#define STRINGIZED_(x) #x
 
 #define BAR yes-bar
-#include INCLUDE(BAR)
-#include INCLUDE(BAR/bong)
-#include INCLUDE_(BAR/bong)
+#include STRINGIZED(BAR)
+#include STRINGIZED(BAR/bong)
+#include STRINGIZED_(BAR/bong)
+
+#define TOKEN(x) TOKEN_(x)
+#define TOKEN_(x) x
+#define TOKENIZED(a, b) TOKENIZED_(a, b)
+#define TOKENIZED_(a, b) a##b
+
+#define BONG_BANG_0(f) yes-bong-bang-0/f
+#define BONG_BANG_1(f) yes-bong-bang-1/f
+#define BONG_BANG_X(x, f) TOKENIZED(BONG_BANG_, x)(f)
+#include STRINGIZED(BONG_BANG_X(0, ping))
+#include STRINGIZED(BONG_BANG_X(1, pong))
 
 #include "yes-foo\"
 #include "yes-fo\\o"
