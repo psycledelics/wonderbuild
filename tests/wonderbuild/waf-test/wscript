@@ -4,7 +4,6 @@ APPNAME = 'waf-test'
 VERSION = '0.0.1'
 
 srcdir = '.'
-
 blddir = '++build'
 
 def init():
@@ -19,13 +18,28 @@ def configure(conf):
 def build(bld):
 	#bld.add_subdirs('../diversalis')
 
-	p = bld.new_task_gen('cxx', 'program')
-	p.target = 'main'
-	p.source = ['main.cpp']
-
 	foo = bld.new_task_gen('cxx', 'shlib')
+	foo.name = 'foo-sh'
 	foo.target = 'foo'
 	foo.source = ['foo.cpp']
+
+	foo = bld.new_task_gen('cxx', 'staticlib')
+	foo.name = 'foo-st'
+	foo.target = 'foo'
+	foo.source = ['foo.cpp']
+
+	p = bld.new_task_gen('cxx', 'program')
+	p.target = 'main-st'
+	p.source = ['main.cpp']
+	p.uselib_local = ['foo-st']
+
+	p = bld.new_task_gen('cxx', 'program')
+	p.target = 'main-sh'
+	p.source = ['main.cpp']
+	p.uselib_local = ['foo-sh']
+
+	bld.install_files('${PREFIX}/include', ['foo.hpp', 'bar.hpp'])
+	#bld.install_as('${PREFIX}/include/foo/foo.hpp', 'foo.hpp')
 
 def shutdown():
 	pass
