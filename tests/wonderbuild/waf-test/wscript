@@ -14,7 +14,6 @@ def set_options(opt):
 
 def configure(conf):
 	conf.check_tool('compiler_cxx')
-	conf.env['CPPPATH'].append('src')
 
 def _program(bld, target, types, sources, includes, uselib_local = None):
 	if 'static' in types:
@@ -28,6 +27,7 @@ def _program(bld, target, types, sources, includes, uselib_local = None):
 		sh.target = target + '-shared'
 		sh.source = sources
 		sh.includes = includes
+		sh.rpath = '\\$ORIGIN/../lib'
 		if uselib_local: sh.uselib_local = [u + '-shared' for u in uselib_local]
 
 def _lib(bld, target, types, sources, includes, headers, uselib_local = None):
@@ -44,15 +44,22 @@ def _lib(bld, target, types, sources, includes, headers, uselib_local = None):
 		sh.target = target
 		sh.source = sources
 		sh.includes = includes
+		sh.rpath = '\\$ORIGIN/../lib'
 		if uselib_local: p.uselib_local = [u + '-shared' for u in uselib_local]
+	_headers(bld, includes, headers)
+
+def _headers(bld, includes, headers):
 	global APPNAME, VERSION
-	bld.install_files('${PREFIX}/include/' + APPNAME + '-' + VERSION, headers)
+	for i in includes:
+		for h in headers:
+			if h.startswith(i):
+				bld.install_as('${PREFIX}/include/' + APPNAME + '-' + VERSION + '/' + h[(len(i)):], h)
 
 def build(bld):
 	#bld.add_subdirs('../diversalis')
-	foo = _lib(bld, 'foo', ['static', 'shared'], ['src/foo/foo.cpp'], ['src'], ['src/foo/foo.hpp'])
-	main = _program(bld, 'main', ['static', 'shared'], ['src/main/main.cpp'], ['src'], ['foo'])
-	bld.install_as('${PREFIX}/include/bar/bar.hpp', 'src/bar/bar.hpp')
+	_lib(bld, 'foo', ['static', 'shared'], ['src/foo/foo.cpp'], ['src'], ['src/foo/foo.hpp'])
+	_program(bld, 'main', ['static', 'shared'], ['src/main/main.cpp'], ['src'], ['foo'])
+	_headers(bld, ['src'], ['src/bar/bar.hpp'])
 
 def shutdown():
 	pass
