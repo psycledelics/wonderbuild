@@ -3,7 +3,8 @@
 # copyright 2006-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 if False and __name__ == '__main__':
-	fs = FS(src = '.', bld = './++build')
+	from filesystem import FileSystem
+	fs = FileSystem()
 
 	tm = TaskMaster()
 	tm.start()

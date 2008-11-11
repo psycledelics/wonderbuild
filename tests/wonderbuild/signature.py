@@ -44,6 +44,7 @@ if __name__ == '__main__':
 		b = ord(b)
 		return four_bits_to_hexchar(b >> 4) + four_bits_to_hexchar(b & 0xf)
 	def raw_to_hexstring(s):
+		# note python has an hex() builtin function ...
 		r = ''
 		for b in s: r += byte_to_hexstring(b)
 		return r

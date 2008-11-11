@@ -40,6 +40,9 @@ static_lib = env3.StaticLibrary('#/++build/intermediate/static/foo', '#/++build/
 env3.Install('#/++build/install/static/lib/', static_lib)
 env3.Install('#/++build/install/static/include/', '#/++build/intermediate/static/foo.hpp')
 
+env0.Install('#/++build/install/shared/include/', 'bar.hpp')
+env0.Install('#/++build/install/static/include/', 'bar.hpp')
+
 static_runtime = env0.Alias('install-static-runtime', '#/++build/install/static/bin/')
 static_dev = env0.Alias('install-static-dev', [static_runtime, '#/++build/install/static/lib/', '#/++build/install/static/include/'])
 shared_runtime = env0.Alias('install-shared-runtime', ['#/++build/install/shared/bin', '#++build/install/shared/lib'])

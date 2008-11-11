@@ -11,14 +11,21 @@ def init():
 	pass
 
 def set_options(opt):
-	pass
+	opt.tool_options('compiler_cxx')
 
 def configure(conf):
-	pass
+	conf.check_tool('compiler_cxx')
 	
 def build(bld):
 	#bld.add_subdirs('../diversalis')
-	pass
+
+	p = bld.new_task_gen('cxx', 'program')
+	p.target = 'main'
+	p.source = ['main.cpp']
+
+	foo = bld.new_task_gen('cxx', 'shlib')
+	foo.target = 'foo'
+	foo.source = ['foo.cpp']
 
 def shutdown():
 	pass

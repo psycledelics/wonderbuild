@@ -1,4 +1,4 @@
-#if !defined _WIN32 || FOO == -1
+#if !defined _WIN32 || FOO < 0
 	#define FOO_LINK
 #elif FOO
 	#define FOO_LINK __declspec(dllexport)
@@ -6,4 +6,4 @@
 	#define FOO_LINK __declspec(dllimport)
 #endif
 
-FOO_LINK void f();
+FOO_LINK void foo();
