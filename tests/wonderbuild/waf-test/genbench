@@ -1,0 +1,13 @@
+#! /bin/sh
+
+set -x &&
+
+cd $(dirname $0) &&
+rm -Rf ++* src-* &&
+i=0 &&
+while test $i -lt ${1:-0}
+do
+	cp -RL src src-$i &&
+	i=$(expr $i + 1) ||
+	break
+done
