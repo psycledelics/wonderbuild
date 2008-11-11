@@ -1,5 +1,7 @@
 #! /usr/bin/env waf
 
+import os, os.path
+
 APPNAME = 'waf-test'
 VERSION = '0.0.1'
 
@@ -15,51 +17,89 @@ def set_options(opt):
 def configure(conf):
 	conf.check_tool('compiler_cxx')
 
-def _program(bld, target, types, sources, includes, uselib_local = None):
-	if 'static' in types:
-		st = bld.new_task_gen('cxx', 'program')
-		st.target = target + '-static'
-		st.source = sources
-		st.includes = includes
-		if uselib_local: st.uselib_local = [u + '-static' for u in uselib_local]
-	if 'shared' in types:
-		sh = bld.new_task_gen('cxx', 'program')
-		sh.target = target + '-shared'
-		sh.source = sources
-		sh.includes = includes
-		sh.rpath = '\\$ORIGIN/../lib'
-		if uselib_local: sh.uselib_local = [u + '-shared' for u in uselib_local]
+def _deep_dirs(bld, dirs):
+	deep_dirs = []
+	for dir in [bld.path.find_dir(d) for d in dirs]: deep_dirs += _deep_dir_nodes(bld, dir.dirs())
+	return dirs + deep_dirs
 
-def _lib(bld, target, types, sources, includes, headers, uselib_local = None):
-	if 'static' in types:
-		st = bld.new_task_gen('cxx', 'staticlib')
-		st.name = target + '-static'
-		st.target = target
-		st.includes = includes
-		st.source = sources
-		if uselib_local: p.uselib_local = [u + '-static' for u in uselib_local]
-	if 'shared' in types:
-		sh = bld.new_task_gen('cxx', 'shlib')
-		sh.name = target + '-shared'
-		sh.target = target
-		sh.source = sources
-		sh.includes = includes
-		sh.rpath = '\\$ORIGIN/../lib'
-		if uselib_local: p.uselib_local = [u + '-shared' for u in uselib_local]
+def _deep_dir_nodes(bld, dir_nodes):
+	deep_dirs = []
+	for dir in dir_nodes: deep_dirs += _deep_dir_nodes(bld, dir.dirs())
+	return deep_dirs + dir_nodes
+
+def _deep_sources(bld, cxx_taks_gen, sources):
+	cxx_taks_gen.source = []
+	for s in sources:
+		print 'source search:', s
+		node = bld.path.find_resource(s) # is it a file?
+		if node: cxx_taks_gen.source.append(s)
+		else:
+			node = bld.path.find_dir(s) # is it a dir?
+			cxx_taks_gen.find_sources_in_dirs([d.relpath_gen(bld.path) for d in _deep_dir_nodes(bld, [node])])
+	print 'found source files:', cxx_taks_gen.source
+
+def _program(bld, target, types = 'shared', sources = None, includes = None, uselib_local = None):
+	for type in types:
+		obj = bld.new_task_gen('cxx', 'program')
+		obj.target = target + '-' + type
+		_deep_sources(bld, obj, sources)
+		obj.includes = includes
+		if type != 'static': obj.rpath = '\\$ORIGIN/../lib'
+		if uselib_local: obj.uselib_local = [u + '-' + type for u in uselib_local]
+
+def _lib(bld, target, types = 'shared', sources = None, includes = None, headers = None, uselib_local = None):
+	for type in types:
+		obj = bld.new_task_gen('cxx', type == 'static' and 'staticlib' or type == 'shared' and 'shlib')
+		obj.name = target + '-' + type
+		obj.target = target
+		_deep_sources(bld, obj, sources)
+		obj.includes = includes
+		if type != 'static': obj.rpath = '\\$ORIGIN/../lib'
+		if uselib_local: obj.uselib_local = [u + '-' + type for u in uselib_local]
+	if headers is None:
+		headers = []
+		# we search headers in source dirs
+		for s in sources:
+			node = bld.path.find_resource(s) # is it a file?
+			if node: node = node.parent # we add sibbling headers where the source file is
+			else: node = bld.path.find_dir(s) # is it a dir?
+			headers.append(node.relpath_gen(bld.path))
 	_headers(bld, includes, headers)
 
 def _headers(bld, includes, headers):
+	headers_filenames = []
+	for h in headers:
+		print 'header search:', h
+		node = bld.path.find_resource(h) # is it a file?
+		if node: headers_filenames.append(h)
+		else:
+			node = bld.path.find_dir(h) # is it a dir?
+			if node:
+				for dir in _deep_dir_nodes(bld, [node]):
+					bld.rescan(dir)
+					if False: # only lists .cpp files ... bug in waf?!
+						print 'dir:', dir.abspath()
+						for child in dir.childs.values(): print 'child:', child
+						for file in dir.files():
+							print file.abspath()
+							if file.name.endswith('.hpp') or file.name.endswith('.h'):
+								headers_filenames.append(file.relpath_gen(bld.path))
+					else:
+						for file in bld.cache_dir_contents[dir.id]:
+							#print file
+							if file.endswith('.hpp') or file.endswith('.h'):
+								headers_filenames.append(os.path.join(dir.relpath_gen(bld.path), file))
+	print 'found header files:', headers_filenames
 	global APPNAME, VERSION
 	for i in includes:
-		for h in headers:
+		for h in headers_filenames:
 			if h.startswith(i):
 				bld.install_as('${PREFIX}/include/' + APPNAME + '-' + VERSION + '/' + h[(len(i)):], h)
 
 def build(bld):
-	#bld.add_subdirs('../diversalis')
-	_lib(bld, 'foo', ['static', 'shared'], ['src/foo/foo.cpp'], ['src'], ['src/foo/foo.hpp'])
-	_program(bld, 'main', ['static', 'shared'], ['src/main/main.cpp'], ['src'], ['foo'])
-	_headers(bld, ['src'], ['src/bar/bar.hpp'])
+	_lib(bld, 'foo', ['static', 'shared'], ['src/foo'], ['src'])
+	_program(bld, 'main', ['static', 'shared'], ['src/main'], ['src'], ['foo'])
+	_headers(bld, ['src'], ['src/bar'])
 
 def shutdown():
 	pass
