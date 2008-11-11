@@ -17,17 +17,17 @@ def set_options(opt):
 def configure(conf):
 	conf.check_tool('compiler_cxx')
 
-def _deep_dirs(bld, dirs):
+def deep_dirs(bld, dirs):
 	deep_dirs = []
-	for dir in [bld.path.find_dir(d) for d in dirs]: deep_dirs += _deep_dir_nodes(bld, dir.dirs())
+	for dir in [bld.path.find_dir(d) for d in dirs]: deep_dirs += deep_dir_nodes(bld, dir.dirs())
 	return dirs + deep_dirs
 
-def _deep_dir_nodes(bld, dir_nodes):
+def deep_dir_nodes(bld, dir_nodes):
 	deep_dirs = []
-	for dir in dir_nodes: deep_dirs += _deep_dir_nodes(bld, dir.dirs())
+	for dir in dir_nodes: deep_dirs += deep_dir_nodes(bld, dir.dirs())
 	return deep_dirs + dir_nodes
 
-def _deep_sources(bld, cxx_taks_gen, sources):
+def deep_sources(bld, cxx_taks_gen, sources):
 	cxx_taks_gen.source = []
 	for s in sources:
 		print 'source search:', s
@@ -35,38 +35,41 @@ def _deep_sources(bld, cxx_taks_gen, sources):
 		if node: cxx_taks_gen.source.append(s)
 		else:
 			node = bld.path.find_dir(s) # is it a dir?
-			cxx_taks_gen.find_sources_in_dirs([d.relpath_gen(bld.path) for d in _deep_dir_nodes(bld, [node])])
+			cxx_taks_gen.find_sources_in_dirs([d.relpath_gen(bld.path) for d in deep_dir_nodes(bld, [node])])
 	print 'found source files:', cxx_taks_gen.source
 
-def _program(bld, target, types = 'shared', sources = None, includes = None, uselib_local = None):
+def module(bld, target, kind, types = 'shared', sources = None, includes = None, headers = None, uselib_local = None, uselib = None):
 	for type in types:
-		obj = bld.new_task_gen('cxx', 'program')
-		obj.target = target + '-' + type
-		_deep_sources(bld, obj, sources)
-		obj.includes = includes
-		if type != 'static': obj.rpath = '\\$ORIGIN/../lib'
-		if uselib_local: obj.uselib_local = [u + '-' + type for u in uselib_local]
-
-def _lib(bld, target, types = 'shared', sources = None, includes = None, headers = None, uselib_local = None):
-	for type in types:
-		obj = bld.new_task_gen('cxx', type == 'static' and 'staticlib' or type == 'shared' and 'shlib')
-		obj.name = target + '-' + type
+		if kind == 'program':
+			obj = bld.new_task_gen('cxx', 'program')
+		else:
+			obj = bld.new_task_gen('cxx', type == 'static' and 'staticlib' or type == 'shared' and 'shlib')
 		obj.target = target
-		_deep_sources(bld, obj, sources)
+		if len(types) > 1: obj.target += '-' + type
+		obj.name = target + '-' + type
+		deep_sources(bld, obj, sources)
 		obj.includes = includes
 		if type != 'static': obj.rpath = '\\$ORIGIN/../lib'
 		if uselib_local: obj.uselib_local = [u + '-' + type for u in uselib_local]
-	if headers is None:
-		headers = []
-		# we search headers in source dirs
-		for s in sources:
-			node = bld.path.find_resource(s) # is it a file?
-			if node: node = node.parent # we add sibbling headers where the source file is
-			else: node = bld.path.find_dir(s) # is it a dir?
-			headers.append(node.relpath_gen(bld.path))
-	_headers(bld, includes, headers)
+		if uselib: obj.uselib = [u + '-' + type for u in uselib]
+	if kind != 'program':
+		if headers is None:
+			headers = []
+			# we search headers in source dirs
+			for s in sources:
+				node = bld.path.find_resource(s) # is it a file?
+				if node: node = node.parent # we add headers from where the source file located
+				else: node = bld.path.find_dir(s) # is it a dir?
+				headers.append(node.relpath_gen(bld.path))
+		install_headers(bld, includes, headers)
 
-def _headers(bld, includes, headers):
+def program(bld, target, types = 'shared', sources = None, includes = None, uselib_local = None, uselib = None):
+	module(bld, target, 'program', types, sources, includes, None, uselib_local)
+
+def lib(bld, target, types = 'shared', sources = None, includes = None, headers = None, uselib_local = None, uselib = None):
+	module(bld, target, 'lib', types, sources, includes, headers, uselib_local)
+
+def install_headers(bld, includes, headers):
 	headers_filenames = []
 	for h in headers:
 		print 'header search:', h
@@ -75,7 +78,7 @@ def _headers(bld, includes, headers):
 		else:
 			node = bld.path.find_dir(h) # is it a dir?
 			if node:
-				for dir in _deep_dir_nodes(bld, [node]):
+				for dir in deep_dir_nodes(bld, [node]):
 					bld.rescan(dir)
 					if False: # only lists .cpp files ... bug in waf?!
 						print 'dir:', dir.abspath()
@@ -97,9 +100,9 @@ def _headers(bld, includes, headers):
 				bld.install_as('${PREFIX}/include/' + APPNAME + '-' + VERSION + '/' + h[(len(i)):], h)
 
 def build(bld):
-	_lib(bld, 'foo', ['static', 'shared'], ['src/foo'], ['src'])
-	_program(bld, 'main', ['static', 'shared'], ['src/main'], ['src'], ['foo'])
-	_headers(bld, ['src'], ['src/bar'])
+	lib(bld, 'foo', ['static', 'shared'], ['src/foo'], ['src'])
+	program(bld, 'main', ['static', 'shared'], ['src/main'], ['src'], ['foo'])
+	install_headers(bld, ['src'], ['src/bar'])
 
 def shutdown():
 	pass
