@@ -4,5 +4,5 @@ cd $(dirname $0) &&
 rm -Rf .lock-wscript ++* &&
 waf=../waf/waf-light &&
 $waf configure --srcdir=. --blddir=++build --prefix=/usr/local &&
-$waf --destdir=$(pwd)/++install install -v &&
-tree -AF ++*
+$waf "$@" &&
+tree -AF

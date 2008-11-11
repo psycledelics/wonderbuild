@@ -30,13 +30,13 @@ def deep_dir_nodes(bld, dir_nodes):
 def deep_sources(bld, cxx_taks_gen, sources):
 	cxx_taks_gen.source = []
 	for s in sources:
-		print 'source search:', s
+		#print 'source search:', s
 		node = bld.path.find_resource(s) # is it a file?
 		if node: cxx_taks_gen.source.append(s)
 		else:
 			node = bld.path.find_dir(s) # is it a dir?
 			cxx_taks_gen.find_sources_in_dirs([d.relpath_gen(bld.path) for d in deep_dir_nodes(bld, [node])])
-	print 'found source files:', cxx_taks_gen.source
+	#print 'found source files:', cxx_taks_gen.source
 
 def module(bld, target, kind, types = 'shared', sources = None, includes = None, headers = None, uselib_local = None, uselib = None):
 	for type in types:
@@ -50,7 +50,7 @@ def module(bld, target, kind, types = 'shared', sources = None, includes = None,
 		obj.name = target + '-' + type
 		deep_sources(bld, obj, sources)
 		obj.includes = includes
-		if type != 'static': obj.rpath = '\\$ORIGIN/../lib'
+		if type != 'static': obj.rpath = '\\$ORIGIN:\\$ORIGIN/../lib'
 		if uselib_local: obj.uselib_local = [u + '-' + type for u in uselib_local]
 		if uselib: obj.uselib = [u + '-' + type for u in uselib]
 	if kind != 'program':
@@ -73,7 +73,7 @@ def lib(bld, target, types = 'shared', sources = None, includes = None, headers 
 def install_headers(bld, includes, headers):
 	headers_filenames = []
 	for h in headers:
-		print 'header search:', h
+		#print 'header search:', h
 		node = bld.path.find_resource(h) # is it a file?
 		if node: headers_filenames.append(h)
 		else:
@@ -93,7 +93,7 @@ def install_headers(bld, includes, headers):
 							#print file
 							if file.endswith('.hpp') or file.endswith('.h'):
 								headers_filenames.append(os.path.join(dir.relpath_gen(bld.path), file))
-	print 'found header files:', headers_filenames
+	#print 'found header files:', headers_filenames
 	global APPNAME, VERSION
 	for i in includes:
 		for h in headers_filenames:
