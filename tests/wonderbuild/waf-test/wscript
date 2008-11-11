@@ -109,8 +109,8 @@ def build(bld):
 		if d.startswith('src-'): src_dirs.append(d)
 
 	for src in src_dirs:
-		lib(bld, 'foo', ['static', 'shared'], [src + '/foo'], [src])
-		program(bld, 'main', ['static', 'shared'], [src + '/main'], [src], ['foo'])
+		lib(bld, 'foo-' + src, ['static', 'shared'], [src + '/foo'], [src])
+		program(bld, 'main-' + src, ['static', 'shared'], [src + '/main'], [src], ['foo-' + src])
 		install_headers(bld, [src], [src + '/bar'])
 
 def shutdown():
