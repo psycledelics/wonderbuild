@@ -1,0 +1,8 @@
+#! /bin/sh
+
+cd $(dirname $0) &&
+rm -Rf .lock-wscript ++build &&
+waf=../waf/waf-light &&
+$waf configure &&
+$waf --destdir=$(pwd)/++build/install install -v &&
+tree

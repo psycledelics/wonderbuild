@@ -14,32 +14,45 @@ def set_options(opt):
 
 def configure(conf):
 	conf.check_tool('compiler_cxx')
-	
+	conf.env['CPPPATH'].append('src')
+
+def _program(bld, target, types, sources, includes, uselib_local = None):
+	if 'static' in types:
+		st = bld.new_task_gen('cxx', 'program')
+		st.target = target + '-static'
+		st.source = sources
+		st.includes = includes
+		if uselib_local: st.uselib_local = [u + '-static' for u in uselib_local]
+	if 'shared' in types:
+		sh = bld.new_task_gen('cxx', 'program')
+		sh.target = target + '-shared'
+		sh.source = sources
+		sh.includes = includes
+		if uselib_local: sh.uselib_local = [u + '-shared' for u in uselib_local]
+
+def _lib(bld, target, types, sources, includes, headers, uselib_local = None):
+	if 'static' in types:
+		st = bld.new_task_gen('cxx', 'staticlib')
+		st.name = target + '-static'
+		st.target = target
+		st.includes = includes
+		st.source = sources
+		if uselib_local: p.uselib_local = [u + '-static' for u in uselib_local]
+	if 'shared' in types:
+		sh = bld.new_task_gen('cxx', 'shlib')
+		sh.name = target + '-shared'
+		sh.target = target
+		sh.source = sources
+		sh.includes = includes
+		if uselib_local: p.uselib_local = [u + '-shared' for u in uselib_local]
+	global APPNAME, VERSION
+	bld.install_files('${PREFIX}/include/' + APPNAME + '-' + VERSION, headers)
+
 def build(bld):
 	#bld.add_subdirs('../diversalis')
-
-	foo = bld.new_task_gen('cxx', 'shlib')
-	foo.name = 'foo-sh'
-	foo.target = 'foo'
-	foo.source = ['foo.cpp']
-
-	foo = bld.new_task_gen('cxx', 'staticlib')
-	foo.name = 'foo-st'
-	foo.target = 'foo'
-	foo.source = ['foo.cpp']
-
-	p = bld.new_task_gen('cxx', 'program')
-	p.target = 'main-st'
-	p.source = ['main.cpp']
-	p.uselib_local = ['foo-st']
-
-	p = bld.new_task_gen('cxx', 'program')
-	p.target = 'main-sh'
-	p.source = ['main.cpp']
-	p.uselib_local = ['foo-sh']
-
-	bld.install_files('${PREFIX}/include', ['foo.hpp', 'bar.hpp'])
-	#bld.install_as('${PREFIX}/include/foo/foo.hpp', 'foo.hpp')
+	foo = _lib(bld, 'foo', ['static', 'shared'], ['src/foo/foo.cpp'], ['src'], ['src/foo/foo.hpp'])
+	main = _program(bld, 'main', ['static', 'shared'], ['src/main/main.cpp'], ['src'], ['foo'])
+	bld.install_as('${PREFIX}/include/bar/bar.hpp', 'src/bar/bar.hpp')
 
 def shutdown():
 	pass
