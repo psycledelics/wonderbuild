@@ -42,10 +42,11 @@ def module(bld, target, kind, types = 'shared', sources = None, includes = None,
 	for type in types:
 		if kind == 'program':
 			obj = bld.new_task_gen('cxx', 'program')
+			obj.target = target
+			if len(types) > 1: obj.target += '-' + type
 		else:
 			obj = bld.new_task_gen('cxx', type == 'static' and 'staticlib' or type == 'shared' and 'shlib')
-		obj.target = target
-		if len(types) > 1: obj.target += '-' + type
+			obj.target = target
 		obj.name = target + '-' + type
 		deep_sources(bld, obj, sources)
 		obj.includes = includes
