@@ -23,12 +23,31 @@ def do_lib_version_symlinks():
 	lib_version_symlinks = g.lib_version_symlinks
 	for name, version, path in lib_version_symlinks:
 		path_name = os.path.join(path, name)
-		if os.path.isfile(path_name):
+		clean = Options.commands['clean']
+		if clean or not os.path.islink(path_name):
 			name_version = name + '.' + version
-			os.rename(path_name, os.path.join(path, name_version))
-			os.symlink(name_version, path_name + '.' + version[:version.find('.')])
-			os.symlink(name_version, path_name)
-			
+			path_name_version  = path_name + '.' + version
+			path_name_version1 = path_name + '.' + version[:version.find('.')]
+			if not clean and os.path.exists(path_name):
+				os.rename(path_name, path_name_version)
+				os.symlink(name_version, path_name_version1)
+				os.symlink(name_version, path_name)
+			else:
+				os.unlink(path_name_version1)
+				os.unlink(path_name_version)
+
+		return
+		if os.path.exists(path_name):
+			if not os.path.islink(path_name):
+				name_version = name + '.' + version
+				os.rename(path_name, os.path.join(path, name_version))
+				os.symlink(name_version, path_name + '.' + version[:version.find('.')])
+				os.symlink(name_version, path_name)
+		elif 'clean' in Options.commands:
+			name_version = name + '.' + version
+			os.unlink(path_name + '.' + version[:version.find('.')])
+			os.unlink(os.path.join(path, name_version))
+
 def init():
 	pass
 

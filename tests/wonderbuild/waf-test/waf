@@ -1,0 +1,4 @@
+#! /bin/sh
+
+$(dirname $0)/../waf/waf-light "$@" &&
+tree -AF

@@ -2,7 +2,5 @@
 
 cd $(dirname $0) &&
 rm -Rf .lock-wscript ++* &&
-waf=../waf/waf-light &&
-$waf configure --srcdir=. --blddir=++build --prefix=/usr/local &&
-$waf "$@" &&
-tree -AF
+./waf configure --srcdir=. --blddir=++build --prefix=/usr/local &&
+./waf "$@"
