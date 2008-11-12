@@ -55,6 +55,11 @@ BuildmasterConfig['schedulers'] = []
 
 from buildbot.scheduler import Scheduler as BaseScheduler
 class Scheduler(BaseScheduler):
+	def __init__(self, *args, **kw):
+		kw['branch'] = None,
+		kw['treeStableTimer'] = bunch_timer
+		BaseScheduler.__init__(self, *args, **kw)
+	
 	def addUnimportantChange(self, change):
 		from twisted.python import log
 		log.msg("%s: change is not important, forgetting %s" % (self, change))
@@ -72,222 +77,217 @@ def filter(change, include_prefixes = None, exclude_prefixes = None):
 from buildbot import locks
 svn_lock = locks.SlaveLock('svn')
 compile_lock = locks.SlaveLock('compile')
+upload_lock = locks.SlaveLock('upload')
+all_locks = [svn_lock, compile_lock, upload_lock]
 
 from buildbot.process import factory, step
 from buildbot.status.builder import SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION
 
 ##################################### custom build steps ######################################
 
-class SVNUpdate(step.SVN):
-	retry = (600, 3)
-	mode = 'update'
-	svnurl = svn_url
-	locks = [svn_lock]
+def handle_microsoft_kw(kw):
+	if 'microsoft' in kw:
+		if kw['microsoft']:
+			command = 'call ../../../dev-pack '
+			if 'msvc' in kw:
+				if kw['msvc']: command += '_ msvc_solution'
+				del kw['msvc']
+			command += ' && ' + kw.get('command', '')
+			command = command.replace('/', '\\')
+			if 'no_slash_inversion_command' in kw:
+				command += ' && ' + kw['no_slash_inversion_command']
+				del kw['no_slash_inversion_command']
+			kw['command'] = command
+		del kw['microsoft']
 
-class PolicyCheck(step.Test):
+class SVNUpdate(step.SVN):
+	def __init__(self, *args, **kw):
+		kw['retry'] = (600, 3)
+		kw['mode'] = 'update'
+		kw['svnurl'] = svn_url
+		if False: kw['defaultBranch'] = 'trunk'
+		kw['locks'] = [svn_lock]
+		step.SVN.__init__(self, *args, **kw)
+
+class Test(step.Test):
+	def __init__(self, *args, **kw):
+		kw['locks'] = [compile_lock]
+		handle_microsoft_kw(kw)
+		step.Test.__init__(self, *args, **kw)
+
+class PolicyCheck(Test):
 	name = 'policy-check'
 	description = ['checking policy']
 	descriptionDone = ['policy']
-	command = ['./tools/check-policy']
+	def __init__(self, *args, **kw):
+		kw['command'] += 'python ./tools/check-policy ' + ' '.join(kw['dirs'])
+		del kw['dirs']
+		Test.__init__(self, *args, **kw)
 	def evaluateCommand(self, cmd):
 		if cmd.rc != 0: return WARNINGS
 		return SUCCESS
 	warnOnWarnings = True
 
-class Upload(step.ShellCommand):
+class Compile(step.Compile):
+	def __init__(self, *args, **kw):
+		kw['locks'] = [compile_lock]
+		handle_microsoft_kw(kw)
+		step.Compile.__init__(self, *args, **kw)
+
+class ShellCommand(step.ShellCommand):
+	def __init__(self, *args, **kw):
+		handle_microsoft_kw(kw)
+		step.ShellCommand.__init__(self, *args, **kw)
+
+class Upload(ShellCommand):
 	name = 'upload'
 	description = ['uploading']
 	descriptionDone = ['uploaded']
-	command = ['echo download the package at http://psycle.sourceforge.net/packages']
+	def __init__(self, *args, **kw):
+		kw['locks'] = []
+		kw['no_slash_inversion_command'] = 
+			('scp -F ../../../../.ssh/config ' +
+			'%(src)s/%(file)s upload.buildborg.retropaganda.info:psycle/htdocs/packages/%(dst)s/ && ' +
+			'echo download the package at http://psycle.sourceforge.net/packages/%(dst)s') \
+			% {'file': kw['file'], 'src': kw['src'], 'dst': kw['dst']}
+		def kw['file']; del kw['src']; del kw['dst']
+		ShellCommand.__init__(self, *args, **kw)
+
+unit_test_log_level = ' --log_level=test_suite --report_level=detailed'
+
+##################################### standard builder ##########################################
+
+def append_standard_builder(
+	category = 'psycle', name, trigger_dirs, update_step = factory.s(SVNUpdate), build_dir = svn_dir,
+	policy_check_dirs, compile_command, test_command, mingw = True, msvc = False
+):
+	def append(name, variant, slaves, compile_command, microsoft = False, mingw = True, msvc = False):
+		factory_steps = [update_step]
+		if policy_check_dirs: factory_steps.append(factory.s(PolicyCheck, dirs = policy_check_dirs))
+		if callable(compile_command): compile_command = compile_command(microsoft, mingw, msvc)
+		factory_steps.append(factory.s(Compile, microsoft = microsoft, mingw = mingw, msvc = msvc, command = compile_command))
+		if test_command: factory_steps.append(factory.s(Test, microsoft = microsoft, command = test_command))
+		BuildmasterConfig['builders'].append({
+			'category': category,
+			'name': name + variant,
+			'slavenames': slaves,
+			'builddir': build_dir + name + variant,
+			steps = 
+			'factory': factory.BuildFactory(factory_steps)
+		})
+		BuildmasterConfig['schedulers'].append(Scheduler(
+			name = name + variant,
+			builderNames = [name + variant],
+			fileIsImportant = lambda change: filter(change, trigger_dirs)
+		))
+	append(name, '', slaves)
+	if mingw: append(name, '.mingw', microsoft_slaves, compile_command, microsoft = True)
+	if msvc: append(name, '.msvc', microsoft_slaves, compiled_command, microsoft = True, msvc = True)
 
 ##################################### universalis builders ######################################
 
-# gnu
+class universalis_dirs = ['universalis/', 'diversalis/', 'packageneric/']
 
-BuildmasterConfig['builders'].append(
-	{
-		'name': 'universalis',
+append_standard_builder(
+	category = 'psycle',
+	name = 'universalis',
+	trigger_dirs = universalis_dirs,
+	policy_check_dirs, universalis_dirs,
+	compile_command = 'scons --directory=universalis',
+	test_command = './++packageneric/variants/default/stage-install/usr/local/bin/universalis_unit_tests' + unit_test_log_level
+)
+
+def append_universalis_builder(variant, slaves, microsoft = False):
+	name = 'universalis'
+	BuildmasterConfig['builders'].append({
 		'category': 'psycle',
+		'name': name + variant,
 		'slavenames': slaves,
-		'builddir': svn_dir + 'universalis',
-		'factory': factory.BuildFactory(
-			[
+		'builddir': svn_dir + name + variant,
+		'factory': factory.BuildFactory([
 				factory.s(SVNUpdate),
-				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'scons --directory=universalis', locks = [compile_lock]),
-				factory.s(step.Test, command = './++packageneric/variants/default/stage-install/usr/local/bin/universalis_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
-			]
-		)
-	}
-)
-BuildmasterConfig['schedulers'].append(
-	Scheduler(
-		name = 'universalis',
-		branch = None,
-		treeStableTimer = bunch_timer,
-		builderNames = ['universalis'],
-		fileIsImportant = lambda change: filter(change, ['universalis/', 'diversalis/', 'packageneric/'])
-	)
-)
+				factory.s(PolicyCheck, dirs = universalis_dirs),
+				factory.s(Compile, microsoft = microsoft, command = 'scons --directory=' + name),
+				factory.s(Test, microsoft = microsoft, command =
+					'./++packageneric/variants/default/stage-install/usr/local/bin/' + name + '_unit_tests' +
+					unit_test_log_level)
+	])})
+	BuildmasterConfig['schedulers'].append(Scheduler(
+		name = name + variant,
+		builderNames = [name + variant],
+		fileIsImportant = lambda change: filter(change, universalis_dirs)
+	))
 
-# mingw
-
-BuildmasterConfig['builders'].append(
-	{
-		'name': 'universalis.mingw',
-		'category': 'psycle',
-		'slavenames': microsoft_slaves,
-		'builddir': svn_dir + 'universalis.mingw',
-		'factory': factory.BuildFactory(
-			[
-				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy diversalis universalis', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=universalis', locks = [compile_lock]),
-				factory.s(step.Test, command = 'call ..\\..\\..\\dev-pack && .\\++packageneric\\variants\\default\\stage-install\\usr\\local\\bin\\universalis_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
-			]
-		)
-	}
-)
-BuildmasterConfig['schedulers'].append(
-	Scheduler(
-		name = 'universalis.mingw',
-		branch = None,
-		treeStableTimer = bunch_timer,
-		builderNames = ['universalis.mingw'],
-		fileIsImportant = lambda change: filter(change, ['universalis/', 'diversalis/', 'packageneric/'])
-	)
-)
+append_universalis_builder('', slaves)
+append_universalis_builder('.mingw', microsoft_slaves, microsoft = True)
 
 ##################################### freepsycle builders ######################################
 
-# gnu
+freepsycle_dirs = ['freepsycle/'] + universalis_dirs
 
-BuildmasterConfig['builders'].append(
-	{
-		'name': 'freepsycle',
-		'category': 'psycle',
-		'slavenames': slaves,
-		'builddir': svn_dir + 'freepsycle',
-		'factory': factory.BuildFactory(
-			[
-				#factory.s(step.SVN, retry = (600, 3), mode = 'update', baseURL = svn_url, defaultBranch = 'trunk', locks = [svn_lock]),
-				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis freepsycle', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'scons --directory=freepsycle', locks = [compile_lock])
-			]
-		)
-	}
-)
-BuildmasterConfig['schedulers'].append(
-	Scheduler(
-		name = 'freepsycle',
-		branch = None,
-		treeStableTimer = bunch_timer,
-		builderNames = ['freepsycle'],
-		fileIsImportant = lambda change: filter(change, ['freepsycle/', 'universalis/', 'diversalis/', 'packageneric/'])
-	)
-)
-
-# mingw
-
-BuildmasterConfig['builders'].append(
-	{
-		'name': 'freepsycle.mingw',
-		'category': 'psycle',
-		'slavenames': microsoft_slaves,
-		'builddir': svn_dir + 'freepsycle.mingw',
-		'factory': factory.BuildFactory(
-			[
-				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy diversalis universalis freepsycle', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=freepsycle', locks = [compile_lock])
-			]
-		)
-	}
-)
-BuildmasterConfig['schedulers'].append(
-	Scheduler(
-		name = 'freepsycle.mingw',
-		branch = None,
-		treeStableTimer = bunch_timer,
-		builderNames = ['freepsycle.mingw'],
-		fileIsImportant = lambda change: filter(change, ['freepsycle/', 'universalis/', 'diversalis/', 'packageneric/'])
-	)
-)
+def append_freepsycle_builder(variant, slaves, microsoft):
+	name = 'freepsycle'
+	BuildmasterConfig['builders'].append({
+	'category': 'psycle',
+	'name': name,
+	'slavenames': slaves,
+	'builddir': svn_dir + name + variant,
+	'factory': factory.BuildFactory([
+		factory.s(SVNUpdate),
+		factory.s(PolicyCheck, dirs = [name]),
+		factory.s(Compile, microsoft = microsoft, command = 'scons --directory=' + name)
+	])})
+	BuildmasterConfig['schedulers'].append(Scheduler(
+			name = name,
+			builderNames = [name],
+			fileIsImportant = lambda change: filter(change, freepsycle_dirs)
+	))
+append_freepsycle_builder('', slaves)
+append_freepsycle_builder('.mingw', microsoft_slaves, microsoft = True)
 
 # mingw raw pkg + upload
 
-BuildmasterConfig['builders'].append(
-	{
-		'name': 'freepsycle.mingw.pkg',
-		'category': 'psycle',
-		'slavenames': microsoft_slaves,
-		'builddir': svn_dir + 'freepsycle.mingw.pkg',
-		'factory': factory.BuildFactory(
-			[
-				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && cd freepsycle && sh -c ./make-microsoft-raw-package', locks = [compile_lock]),
-				factory.s(Upload, command = 'scp -F ../../../../.ssh/config freepsycle/++packageneric/variants/default/install/freepsycle.tar.bz2 upload.buildborg.retropaganda.info:psycle/htdocs/packages/microsoft/ && echo download the package at http://psycle.sourceforge.net/packages/microsoft/freepsycle.tar.bz2', locks = [svn_lock])
-			]
+BuildmasterConfig['builders'].append({
+	'category': 'psycle',
+	'name': 'freepsycle.mingw.pkg',
+	'slavenames': microsoft_slaves,
+	'builddir': svn_dir + 'freepsycle.mingw.pkg',
+	'factory': factory.BuildFactory([
+		factory.s(SVNUpdate),
+		factory.s(Compile, command = 'cd freepsycle && sh -c make-microsoft-raw-package'),
+		factory.s(Upload,
+			file = 'freepsycle.tar.bz2'
+			src = 'freepsycle/++packageneric/variants/default/install',
+			dst = 'microsoft'
 		)
-	}
-)
+])})
 
 ##################################### psycle-core builders ######################################
 
-# gnu
+psycle_core_dirs = ['psycle-core/', 'psycle-audiodrivers/']
 
-BuildmasterConfig['builders'].append(
-	{
-		'name': 'psycle-core',
+def append_psycle_core_builder(variant, slaves, microsoft):
+	name = 'psycle-core.' + variant
+	BuildmasterConfig['builders'].append({
 		'category': 'psycle',
+		'name': name,
 		'slavenames': slaves,
-		'builddir': svn_dir + 'psycle-core',
-		'factory': factory.BuildFactory(
-			[
-				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(PolicyCheck, command = './tools/check-policy psycle-core', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'cd psycle-core && qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && make', locks = [compile_lock]),
-			]
-		)
-	}
-)
-BuildmasterConfig['schedulers'].append(
-	Scheduler(
+		'builddir': svn_dir + name,
+		'factory': factory.BuildFactory([
+			factory.s(SVNUpdate),
+			factory.s(PolicyCheck, dirs = ['psycle-core']),
+			factory.s(Compile, microsoft = microsoft, command =
+				'cd psycle-core && ' +
+				'qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && ' +
+				microsoft and 'mingw32-make' or 'make', locks = [compile_lock]),
+	])})
+	BuildmasterConfig['schedulers'].append(Scheduler(
 		name = 'psycle-core',
-		branch = None,
-		treeStableTimer = bunch_timer,
 		builderNames = ['psycle-core'],
-		fileIsImportant = lambda change: filter(change, ['psycle-core/', 'psycle-audiodrivers/'])
-	)
-)
-
-# mingw
-
-BuildmasterConfig['builders'].append(
-	{
-		'name': 'psycle-core.mingw',
-		'category': 'psycle',
-		'slavenames': microsoft_slaves,
-		'builddir': svn_dir + 'psycle-core.mingw',
-		'factory': factory.BuildFactory(
-			[
-				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy psycle-core', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && cd psycle-core && qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && mingw32-make', locks = [compile_lock])
-			]
-		)
-	}
-)
-if False: BuildmasterConfig['schedulers'].append(
-	Scheduler(
-		name = 'psycle-core.mingw',
-		branch = None,
-		treeStableTimer = bunch_timer,
-		builderNames = ['psycle-core.mingw'],
-		fileIsImportant = lambda change: filter(change, ['psycle-core/', 'psycle-audiodrivers/'])
-	)
-)
+		fileIsImportant = lambda change: filter(change, psycle_core_dirs)
+	))
+append_psycle_core_builder('psycle-core', slaves)
+append_psycle_core_builder('', microsoft_slaves, microsoft = True)
 
 ##################################### psycle-player builders ######################################
 
@@ -301,9 +301,9 @@ BuildmasterConfig['builders'].append(
 		'builddir': svn_dir + 'psycle-player',
 		'factory': factory.BuildFactory(
 			[
-				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
+				factory.s(SVNUpdate),
 				factory.s(PolicyCheck, command = './tools/check-policy psycle-player', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'cd psycle-player && qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && make', locks = [compile_lock])
+				factory.s(Compile, command = 'cd psycle-player && qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && make', locks = [compile_lock])
 			]
 		)
 	}
@@ -311,8 +311,6 @@ BuildmasterConfig['builders'].append(
 BuildmasterConfig['schedulers'].append(
 	Scheduler(
 		name = 'psycle-player',
-		branch = None,
-		treeStableTimer = bunch_timer,
 		builderNames = ['psycle-player'],
 		fileIsImportant = lambda change: filter(change, ['psycle-player/', 'psycle-core/', 'psycle-audiodrivers/'])
 	)
@@ -328,9 +326,9 @@ BuildmasterConfig['builders'].append(
 		'builddir': svn_dir + 'psycle-player.mingw',
 		'factory': factory.BuildFactory(
 			[
-				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy psycle-player', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && cd psycle-player && qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && mingw32-make', locks = [compile_lock])
+				factory.s(SVNUpdate),
+				factory.s(PolicyCheck, command = microsoft_dev_pack + 'python .\\tools\\check-policy psycle-player', locks = [compile_lock]),
+				factory.s(Compile, command = microsoft_dev_pack + 'cd psycle-player && qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && mingw32-make', locks = [compile_lock])
 			]
 		)
 	}
@@ -338,8 +336,6 @@ BuildmasterConfig['builders'].append(
 BuildmasterConfig['schedulers'].append(
 	Scheduler(
 		name = 'psycle-player.mingw',
-		branch = None,
-		treeStableTimer = bunch_timer,
 		builderNames = ['psycle-player.mingw'],
 		fileIsImportant = lambda change: filter(change, ['psycle-player/', 'psycle-core/', 'psycle-audiodrivers/'])
 	)
@@ -357,9 +353,9 @@ BuildmasterConfig['builders'].append(
 		'builddir': svn_dir + 'qpsycle',
 		'factory': factory.BuildFactory(
 			[
-				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
+				factory.s(SVNUpdate),
 				factory.s(PolicyCheck, command = './tools/check-policy qpsycle', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'cd qpsycle && qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && make', locks = [compile_lock])
+				factory.s(Compile, command = 'cd qpsycle && qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && make', locks = [compile_lock])
 			]
 		)
 	}
@@ -367,8 +363,6 @@ BuildmasterConfig['builders'].append(
 BuildmasterConfig['schedulers'].append(
 	Scheduler(
 		name = 'qpsycle',
-		branch = None,
-		treeStableTimer = bunch_timer,
 		builderNames = ['qpsycle'],
 		fileIsImportant = lambda change: filter(change, ['qpsycle/', 'psycle-core/', 'psycle-audiodrivers/'])
 	)
@@ -384,9 +378,9 @@ BuildmasterConfig['builders'].append(
 		'builddir': svn_dir + 'qpsycle.mingw',
 		'factory': factory.BuildFactory(
 			[
-				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy qpsycle', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && cd qpsycle && qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && mingw32-make', locks = [compile_lock])
+				factory.s(SVNUpdate),
+				factory.s(PolicyCheck, command = microsoft_dev_pack + 'python .\\tools\\check-policy qpsycle', locks = [compile_lock]),
+				factory.s(Compile, command = microsoft_dev_pack + 'cd qpsycle && qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && mingw32-make', locks = [compile_lock])
 			]
 		)
 	}
@@ -394,8 +388,6 @@ BuildmasterConfig['builders'].append(
 BuildmasterConfig['schedulers'].append(
 	Scheduler(
 		name = 'qpsycle.mingw',
-		branch = None,
-		treeStableTimer = bunch_timer,
 		builderNames = ['qpsycle.mingw'],
 		fileIsImportant = lambda change: filter(change, ['qpsycle/', 'psycle-core/', 'psycle-audiodrivers/'])
 	)
@@ -411,9 +403,13 @@ BuildmasterConfig['builders'].append(
 		'builddir': svn_dir + 'qpsycle.mingw.pkg',
 		'factory': factory.BuildFactory(
 			[
-				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && cd qpsycle && sh -c ./make-microsoft-raw-package', locks = [compile_lock]),
-				factory.s(Upload, command = 'scp -F ../../../../.ssh/config qpsycle/++install/qpsycle.tar.bz2 upload.buildborg.retropaganda.info:psycle/htdocs/packages/microsoft/ && echo download the package at http://psycle.sourceforge.net/packages/microsoft/qpsycle.tar.bz2', locks = [svn_lock])
+				factory.s(SVNUpdate),
+				factory.s(Compile, command = microsoft_dev_pack + 'cd qpsycle && sh -c ./make-microsoft-raw-package', locks = [compile_lock]),
+				factory.s(Upload, command =
+					'scp -F ../../../../.ssh/config qpsycle/++install/qpsycle.tar.bz2 ' +
+					'upload.buildborg.retropaganda.info:psycle/htdocs/packages/microsoft/ && ' +
+					'echo download the package at http://psycle.sourceforge.net/packages/microsoft/qpsycle.tar.bz2'
+				)
 			]
 		)
 	}
@@ -431,8 +427,8 @@ BuildmasterConfig['builders'].append(
 		'builddir': svn_dir + 'psycle-plugins',
 		'factory': factory.BuildFactory(
 			[
-				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(step.Compile, command = 'scons --directory=psycle-plugins', locks = [compile_lock])
+				factory.s(SVNUpdate),
+				factory.s(Compile, command = 'scons --directory=psycle-plugins', locks = [compile_lock])
 			]
 		)
 	}
@@ -441,8 +437,6 @@ BuildmasterConfig['schedulers'].append(
 	Scheduler(
 		name = 'psycle-plugins',
 		branch = None,
-		treeStableTimer = bunch_timer,
-		builderNames = ['psycle-plugins'],
 		fileIsImportant = lambda change: filter(change, ['psycle-plugins/', 'universalis/', 'diversalis/', 'packageneric/'])
 	)
 )
@@ -457,8 +451,8 @@ BuildmasterConfig['builders'].append(
 		'builddir': svn_dir + 'psycle-plugins.mingw',
 		'factory': factory.BuildFactory(
 			[
-				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=psycle-plugins', locks = [compile_lock])
+				factory.s(SVNUpdate),
+				factory.s(Compile, command = microsoft_dev_pack + 'scons --directory=psycle-plugins', locks = [compile_lock])
 			]
 		)
 	}
@@ -466,8 +460,6 @@ BuildmasterConfig['builders'].append(
 BuildmasterConfig['schedulers'].append(
 	Scheduler(
 		name = 'psycle-plugins.mingw',
-		branch = None,
-		treeStableTimer = bunch_timer,
 		builderNames = ['psycle-plugins.mingw'],
 		fileIsImportant = lambda change: filter(change, ['psycle-plugins/', 'universalis/', 'diversalis/', 'packageneric/'])
 	)
@@ -483,9 +475,13 @@ BuildmasterConfig['builders'].append(
 		'builddir': svn_dir + 'psycle-plugins.mingw.pkg',
 		'factory': factory.BuildFactory(
 			[
-				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && cd psycle-plugins && sh -c ./make-microsoft-raw-package', locks = [compile_lock]),
-				factory.s(Upload, command = 'scp -F ../../../../.ssh/config psycle-plugins/++packageneric/variants/default/install/psycle-plugins.tar.bz2 upload.buildborg.retropaganda.info:psycle/htdocs/packages/microsoft/ && echo download the package at http://psycle.sourceforge.net/packages/microsoft/psycle-plugins.tar.bz2', locks = [svn_lock])
+				factory.s(SVNUpdate),
+				factory.s(Compile, command = microsoft_dev_pack + 'cd psycle-plugins && sh -c ./make-microsoft-raw-package', locks = [compile_lock]),
+				factory.s(Upload, command =
+					'scp -F ../../../../.ssh/config psycle-plugins/++packageneric/variants/default/install/psycle-plugins.tar.bz2 ' +
+					'upload.buildborg.retropaganda.info:psycle/htdocs/packages/microsoft/ && ' +
+					'echo download the package at http://psycle.sourceforge.net/packages/microsoft/psycle-plugins.tar.bz2'
+				)
 			]
 		)
 	}
@@ -503,10 +499,10 @@ BuildmasterConfig['builders'].append(
 		'builddir': svn_dir + 'psycle-helpers',
 		'factory': factory.BuildFactory(
 			[
-				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
+				factory.s(SVNUpdate),
 				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis psycle-helpers', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'scons --directory=psycle-helpers', locks = [compile_lock]),
-				factory.s(step.Test, command = './++packageneric/variants/default/stage-install/usr/local/bin/psycle-helpers_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
+				factory.s(Compile, command = 'scons --directory=psycle-helpers', locks = [compile_lock]),
+				factory.s(Test, command = './++packageneric/variants/default/stage-install/usr/local/bin/psycle-helpers_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
 			]
 		)
 	}
@@ -514,8 +510,6 @@ BuildmasterConfig['builders'].append(
 BuildmasterConfig['schedulers'].append(
 	Scheduler(
 		name = 'psycle-helpers',
-		branch = None,
-		treeStableTimer = bunch_timer,
 		builderNames = ['psycle-helpers'],
 		fileIsImportant = lambda change: filter(change, ['psycle-helpers/', 'universalis/', 'diversalis/', 'packageneric/'])
 	)
@@ -531,10 +525,13 @@ BuildmasterConfig['builders'].append(
 		'builddir': svn_dir + 'psycle-helpers.mingw',
 		'factory': factory.BuildFactory(
 			[
-				factory.s(step.SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy diversalis universalis psycle-helpers', locks = [compile_lock]),
-				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=psycle-helpers', locks = [compile_lock]),
-				factory.s(step.Test, command = 'call ..\\..\\..\\dev-pack && .\\++packageneric\\variants\\default\\stage-install\\usr\\local\\bin\\psycle-helpers_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
+				factory.s(SVNUpdate),
+				factory.s(PolicyCheck, command = microsoft_dev_pack + 'python .\\tools\\check-policy diversalis universalis psycle-helpers'),
+				factory.s(Compile, command = microsoft_dev_pack + 'scons --directory=psycle-helpers'),
+				factory.s(Test, command =
+					microsoft_dev_pack +
+					'.\\++packageneric\\variants\\default\\stage-install\\usr\\local\\bin\\psycle-helpers_unit_tests ' +
+					'--log_level=test_suite --report_level=detailed')
 			]
 		)
 	}
@@ -542,8 +539,6 @@ BuildmasterConfig['builders'].append(
 BuildmasterConfig['schedulers'].append(
 	Scheduler(
 		name = 'psycle-helpers.mingw',
-		branch = None,
-		treeStableTimer = bunch_timer,
 		builderNames = ['psycle-helpers.mingw'],
 		fileIsImportant = lambda change: filter(change, ['psycle-helpers/', 'universalis/', 'diversalis/', 'packageneric/'])
 	)
@@ -561,8 +556,10 @@ BuildmasterConfig['builders'].append(
 		'builddir': svn_dir + 'psycle.msvc',
 		'factory': factory.BuildFactory(
 			[
-				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack _ msvc-solution && call .\\psycle\\make\\msvc_8.0\\build release', locks = [compile_lock])
+				factory.s(SVNUpdate),
+				factory.s(Compile, command = with_microsoft_dev_pack(
+					'call .\\psycle\\make\\msvc_8.0\\build release',
+					mingw = False, msvc = True)
 			]
 		)
 	}
@@ -570,8 +567,6 @@ BuildmasterConfig['builders'].append(
 BuildmasterConfig['schedulers'].append(
 	Scheduler(
 		name = 'psycle.msvc',
-		branch = None,
-		treeStableTimer = bunch_timer,
 		builderNames = ['psycle.msvc'],
 		fileIsImportant = lambda change: filter(change, ['psycle/', 'psycle-helpers/', 'psycle-core/', 'psycle-audiodrivers/', 'universalis/', 'diversalis/', 'packageneric/'])
 	)
@@ -713,60 +708,47 @@ BuildmasterConfig['status'].append(IRC(host = 'irc.freenode.net', nick = 'buildb
 
 if True:
 	##################################### sondar builders ######################################
-	microsoft_slaves_sondar = ['winux']
 	
-	class SondarSVNUpdate(UpdateSVN):
-		svnurl = 'https://sondar.svn.sourceforge.net/svnroot/sondar/trunk'
-
-	class CompileSondar(step.Compile):
-		name = 'compile-sondar'
-		description = ['compiling sondar']
-		descriptionDone = ['compile sondar']
-		command = 'cd sondar && sh autogen.sh --prefix=$(cd .. && pwd)/install && make install'
-		locks = [compile_lock]
-
-	class CompileSondarGUI(step.Compile):
-		name = 'compile-gui'
-		description = ['compiling gui']
-		descriptionDone = ['compile gui']
-		command = 'export PKG_CONFIG_PATH=$(pwd)/install/lib/pkgconfig && cd host_gtk && sh autogen.sh --prefix=$(cd .. && pwd)/install && make install'
-		locks = [compile_lock]
-
-	sondar_factory = factory.BuildFactory(
-		[
-			factory.s(UpdateSVNSondar),
-			factory.s(CompileSondarlocks),
-			factory.s(CompileSondarGUI)
-		]
-	)
-
-	# gnu
-
-	BuildmasterConfig['builders'].append(
-		{
-			'name': 'sondar',
-			'category': 'sondar',
-			'slavenames': slaves,
-			'builddir': 'sondar-trunk',
-			'factory': sondar_factory
-		}
-	)
-	BuildmasterConfig['schedulers'].append(
-		Scheduler(
-			name = 'sondar',
-			branch = None,
-			treeStableTimer = bunch_timer,
-			builderNames = ['sondar'],
-			fileIsImportant = lambda change: filter(change, ['sondar/', 'host_gtk/'])
-		)
-	)
+	BuildmasterConfig['builders'].append({
+		'category': 'sondar',
+		'name': 'sondar',
+		'slavenames': slaves,
+		'builddir': 'sondar-trunk',
+		'factory': factory.BuildFactory([
+			factory.s(SVNUpdate, svnurl = 'https://sondar.svn.sourceforge.net/svnroot/sondar/trunk'),
+			factory.s(Compile,
+				name = 'compile-sondar',
+				description = ['compiling sondar'],
+				descriptionDone = ['compile sondar'],
+				command =
+					'cd sondar &&' +
+					'sh autogen.sh --prefix=$(dirname $(pwd))/install &&' +
+					'make install'),
+			factory.s(Compile
+				name = 'compile-gui',
+				description = ['compiling gui'],
+				descriptionDone = ['compile gui'],
+				command =
+					'export PKG_CONFIG_PATH=$(pwd)/install/lib/pkgconfig && ' +
+					'cd host_gtk && ' +
+					'sh autogen.sh --prefix=$(dirname $(pwd))/install && ' +
+					'make install')
+		])
+	})
+	BuildmasterConfig['schedulers'].append(Scheduler(
+		name = 'sondar',
+		builderNames = ['sondar'],
+		fileIsImportant = lambda change: filter(change, ['sondar/', 'host_gtk/'])
+	))
 
 if False:
 	##################################### armstrong builders ######################################
 	
 	# Note: These builders had to be disabled because the project is too much an unstable moving target.
 
-	microsoft_slaves_armstrong = ['winux']
+	class HgUpdate(step.ShellCommand):
+		name = 'update'
+		description = ['updating']
 
 	# armstrong repository lack subfolders.. we need to do crazy things to detect which repository it is
 	armstrong_exclude_prefixes = [
@@ -776,139 +758,64 @@ if False:
 		'universalis/', 'diversalis/', 'packageneric/', 'buildbot/', 'external-packages/', 'www/'
 	]
 
-	# gnu
-
-	BuildmasterConfig['builders'].append(
-		{
-			'name': 'armstrong',
-			'category': 'armstrong',
+	def append_armstrong_builder(variant, slaves, microsoft = False, mingw = True, msvc = False):
+		name = 'armstrong'
+		BuildmasterConfig['builders'].append({
+			'category': name,
+			'name': name + variant,
 			'slavenames': slaves,
-			'builddir': os.path.join('armstrong-trunk', 'armstrong'),
-			'factory': factory.BuildFactory(
-				[
-					factory.s(step.SVN, mode = 'update', svnurl = 'http://svn.zeitherrschaft.org/armstrong/trunk', locks = [svn_lock]),
-					factory.s(step.Compile, command = 'scons configure && scons', locks = [compile_lock])
-				]
-			)
-		}
-	)
-	BuildmasterConfig['schedulers'].append(
-		Scheduler(
-			name = 'armstrong',
-			branch = None,
-			treeStableTimer = bunch_timer,
-			builderNames = ['armstrong'],
-			fileIsImportant = lambda change: filter(change,
-				include_prefixes = [''],
-				exclude_prefixes = armstrong_exclude_prefixes
-			)
-		)
-	)
-
-	# mingw
-
-	BuildmasterConfig['builders'].append(
-		{
-			'name': 'armstrong.mingw',
-			'category': 'armstrong',
-			'slavenames': microsoft_slaves_armstrong,
-			'builddir': os.path.join('armstrong-trunk', 'armstrong.mingw'),
-			'factory': factory.BuildFactory(
-				[
-					factory.s(step.SVN, mode = 'update', svnurl = 'http://svn.zeitherrschaft.org/armstrong/trunk', locks = [svn_lock]),
-					factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons TOOLS=mingw configure && scons', locks = [compile_lock])
-				]
-			)
-		}
-	)
-	BuildmasterConfig['schedulers'].append(
-		Scheduler(
-			name = 'armstrong.mingw',
-			branch = None,
-			treeStableTimer = bunch_timer,
-			builderNames = ['armstrong.mingw'],
-			fileIsImportant = lambda change: filter(change,
-				include_prefixes = [''],
-				exclude_prefixes = armstrong_exclude_prefixes
-			)
-		)
-	)
-
-	# msvc
-
-	BuildmasterConfig['builders'].append(
-		{
-			'name': 'armstrong.msvc',
-			'category': 'armstrong',
-			'slavenames': microsoft_slaves_armstrong,
-			'builddir': os.path.join('armstrong-trunk', 'armstrong.msvc'),
-			'factory': factory.BuildFactory(
-				[
-					factory.s(step.SVN, mode = 'update', svnurl = 'http://svn.zeitherrschaft.org/armstrong/trunk', locks = [svn_lock]),
-					factory.s(step.Compile, command = 'call ..\\..\\..\\dev-pack && scons configure && scons', locks = [compile_lock])
-				]
-			)
-		}
-	)
-	BuildmasterConfig['schedulers'].append(
-		Scheduler(
-			name = 'armstrong.msvc',
-			branch = None,
-			treeStableTimer = bunch_timer,
-			builderNames = ['armstrong.msvc'],
-			fileIsImportant = lambda change: filter(change,
-				include_prefixes = [''],
-				exclude_prefixes = armstrong_exclude_prefixes
-			)
-		)
-	)
+			'builddir': os.path.join(name + '-trunk', name + variant),
+			'factory': factory.BuildFactory([
+				# todo factory.s(HgUpdate),
+				factory.s(step.Compile, microsoft = microsoft, mingw = mingw, msvc = msvc,
+					command = 'scons configure ' + (mingw and 'TOOLS=mingw ')+ '&& scons')
+		])})
+		BuildmasterConfig['schedulers'].append(Scheduler(
+			name = name + variant,
+			builderNames = [name + variant],
+			fileIsImportant = lambda change: filter(change, include_prefixes = [''], exclude_prefixes = armstrong_exclude_prefixes)
+		))
+	
+	append_armstrong_builder('', slaves)
+	armstrong_microsoft_slaves = ['winux']
+	append_armstrong_builder('.mingw', armstrong_microsoft_slaves, microsoft = True)
+	append_armstrong_builder('.msvc' , armstrong_microsoft_slaves, microsoft = True, msvc = True)
 
 ##################################### clean builders ######################################
 
 class Clean(step.ShellCommand):
-	def __init__(self, *args, **kwargs):
-		kwargs['workdir'] = '..'
-		kwargs['locks'] = [svn_lock, compile_lock]
-		step.ShellCommand.__init__(self, *args, **kwargs)
 	name = 'clean'
 	description = ['cleaning']
 	descriptionDone = ['cleaned']
+	def __init__(self, *args, **kwargs):
+		kwargs['workdir'] = '..'
+		kwargs['locks'] = all_locks
+		step.ShellCommand.__init__(self, *args, **kwargs)
 
-clean_factory = factory.BuildFactory(
-	[
-		factory.s(Clean, command='find . -ignore_readdir_race -name ++\\* -exec rm -Rf {} \\; || true')
-	]
-)
-
-clean_factory_microsoft = factory.BuildFactory(
-	[
-		factory.s(Clean, command="del /s /q ++*")
-	]
-)
+clean_factory = factory.BuildFactory([factory.s(Clean,
+	command = 'find . -ignore_readdir_race -name ++\\* -exec rm -Rf {} \\; ; sleep 5')]) # might be too fast!
+clean_factory_microsoft = factory.BuildFactory([factory.s(Clean,
+	command = 'del /s /q ++*')])
 
 from buildbot.scheduler import Periodic as PeriodicScheduler
 
 def append_clean_builder(slave_name, microsoft = False):
 	if microsoft: factory = clean_factory_microsoft
 	else: factory = clean_factory
-	BuildmasterConfig['builders'].append(
-		{
-			'name': 'clean.' + slave_name,
-			'category': None,
-			'slavenames': [slave_name],
-			'builddir': 'clean.' + slave_name,
-			'factory': factory
-		}
-	)
+	BuildmasterConfig['builders'].append({
+		'name': 'clean.' + slave_name,
+		'category': None,
+		'slavenames': [slave_name],
+		'builddir': 'clean.' + slave_name,
+		'factory': factory
+	})
 	if not microsoft: # don't schedule it on microsoft slaves since these aren't stable enough
-		BuildmasterConfig['schedulers'].append(
-			PeriodicScheduler(
-				name = 'clean.' + slave_name,
-				branch = None,
-				periodicBuildTimer = 60 * 60 * 24 * 30, # 30 days
-				builderNames = ['clean.' + slave_name]
-			)
-		)
+		BuildmasterConfig['schedulers'].append(PeriodicScheduler(
+			name = 'clean.' + slave_name,
+			branch = None,
+			periodicBuildTimer = 60 * 60 * 24 * 30, # 30 days
+			builderNames = ['clean.' + slave_name]
+		))
 	
 for slave in slaves: append_clean_builder(slave)
 for slave in microsoft_slaves: append_clean_builder(slave, microsoft = True)
