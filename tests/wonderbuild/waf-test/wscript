@@ -1,6 +1,6 @@
 #! /usr/bin/env waf
 
-import os, os.path
+import os, os.path, Options
 
 APPNAME = 'waf-test'
 VERSION = '0.0.1'
@@ -8,6 +8,29 @@ VERSION = '0.0.1'
 srcdir = '.'
 blddir = '++build'
 
+class G(object):
+	def __init__(self):
+		self.lib_version_symlinks = []
+g = G() # :-(
+
+def lib_version_symlinks(name, version, path):
+	global g # :-(
+	g.lib_version_symlinks.append((name, version, path))
+	print name, version, path
+
+def do_lib_version_symlinks():
+	if Options.platform.startswith('win'): return
+	global g
+	lib_version_symlinks = g.lib_version_symlinks
+	print lib_version_symlinks
+	for name, version, path in lib_version_symlinks:
+		path_name = os.path.join(path, name)
+		if os.path.isfile(path_name):
+			name_version = name + '.' + version
+			os.rename(path_name, os.path.join(path, name_version))
+			os.symlink(name_version, path_name + '.' + version[:version.find('.')])
+			os.symlink(name_version, path_name)
+			
 def init():
 	pass
 
@@ -47,6 +70,10 @@ def module(bld, target, kind, types = 'shared', sources = None, includes = None,
 		else:
 			obj = bld.new_task_gen('cxx', type == 'static' and 'staticlib' or type == 'shared' and 'shlib')
 			obj.target = target
+			if type == 'shared':
+				global VERSION
+				obj.vnum = VERSION
+				lib_version_symlinks('lib' + obj.target + '.so', obj.vnum, os.path.join(bld.bdir, obj.env.variant()))
 		obj.name = target + '-' + type
 		deep_sources(bld, obj, sources)
 		obj.includes = includes
@@ -112,6 +139,6 @@ def build(bld):
 		lib(bld, 'foo-' + src, ['static', 'shared'], [src + '/foo'], [src])
 		program(bld, 'main-' + src, ['static', 'shared'], [src + '/main'], [src], ['foo-' + src])
 		install_headers(bld, [src], [src + '/bar'])
-
+	
 def shutdown():
-	pass
+	do_lib_version_symlinks()
