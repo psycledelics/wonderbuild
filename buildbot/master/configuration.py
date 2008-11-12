@@ -78,6 +78,12 @@ from buildbot.status.builder import SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTI
 
 ##################################### custom build steps ######################################
 
+class SVNUpdate(step.SVN):
+	retry = (600, 3)
+	mode = 'update'
+	svnurl = svn_url
+	locks = [svn_lock]
+
 class PolicyCheck(step.Test):
 	name = 'policy-check'
 	description = ['checking policy']
@@ -96,6 +102,8 @@ class Upload(step.ShellCommand):
 
 ##################################### universalis builders ######################################
 
+# gnu
+
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'universalis',
@@ -104,7 +112,7 @@ BuildmasterConfig['builders'].append(
 		'builddir': svn_dir + 'universalis',
 		'factory': factory.BuildFactory(
 			[
-				factory.s(step.SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
+				factory.s(SVNUpdate),
 				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis', locks = [compile_lock]),
 				factory.s(step.Compile, command = 'scons --directory=universalis', locks = [compile_lock]),
 				factory.s(step.Test, command = './++packageneric/variants/default/stage-install/usr/local/bin/universalis_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
@@ -121,6 +129,8 @@ BuildmasterConfig['schedulers'].append(
 		fileIsImportant = lambda change: filter(change, ['universalis/', 'diversalis/', 'packageneric/'])
 	)
 )
+
+# mingw
 
 BuildmasterConfig['builders'].append(
 	{
@@ -150,6 +160,8 @@ BuildmasterConfig['schedulers'].append(
 
 ##################################### freepsycle builders ######################################
 
+# gnu
+
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'freepsycle',
@@ -176,6 +188,8 @@ BuildmasterConfig['schedulers'].append(
 	)
 )
 
+# mingw
+
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'freepsycle.mingw',
@@ -201,6 +215,8 @@ BuildmasterConfig['schedulers'].append(
 	)
 )
 
+# mingw raw pkg + upload
+
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'freepsycle.mingw.pkg',
@@ -218,6 +234,8 @@ BuildmasterConfig['builders'].append(
 )
 
 ##################################### psycle-core builders ######################################
+
+# gnu
 
 BuildmasterConfig['builders'].append(
 	{
@@ -243,6 +261,8 @@ BuildmasterConfig['schedulers'].append(
 		fileIsImportant = lambda change: filter(change, ['psycle-core/', 'psycle-audiodrivers/'])
 	)
 )
+
+# mingw
 
 BuildmasterConfig['builders'].append(
 	{
@@ -271,6 +291,8 @@ if False: BuildmasterConfig['schedulers'].append(
 
 ##################################### psycle-player builders ######################################
 
+# gnu
+
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'psycle-player',
@@ -295,6 +317,8 @@ BuildmasterConfig['schedulers'].append(
 		fileIsImportant = lambda change: filter(change, ['psycle-player/', 'psycle-core/', 'psycle-audiodrivers/'])
 	)
 )
+
+# mingw
 
 BuildmasterConfig['builders'].append(
 	{
@@ -323,6 +347,8 @@ BuildmasterConfig['schedulers'].append(
 
 ##################################### qpsycle builders ######################################
 
+# gnu
+
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'qpsycle',
@@ -347,6 +373,8 @@ BuildmasterConfig['schedulers'].append(
 		fileIsImportant = lambda change: filter(change, ['qpsycle/', 'psycle-core/', 'psycle-audiodrivers/'])
 	)
 )
+
+# mingw
 
 BuildmasterConfig['builders'].append(
 	{
@@ -373,6 +401,8 @@ BuildmasterConfig['schedulers'].append(
 	)
 )
 
+# mingw raw pkg + upload
+
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'qpsycle.mingw.pkg',
@@ -390,6 +420,8 @@ BuildmasterConfig['builders'].append(
 )
 
 ##################################### psycle-plugins builders ######################################
+
+# gnu
 
 BuildmasterConfig['builders'].append(
 	{
@@ -415,6 +447,8 @@ BuildmasterConfig['schedulers'].append(
 	)
 )
 
+# mingw
+
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'psycle-plugins.mingw',
@@ -439,6 +473,8 @@ BuildmasterConfig['schedulers'].append(
 	)
 )
 
+# mingw raw pkg + upload
+
 BuildmasterConfig['builders'].append(
 	{
 		'name': 'psycle-plugins.mingw.pkg',
@@ -456,6 +492,8 @@ BuildmasterConfig['builders'].append(
 )
 
 ##################################### psycle-helpers builders ######################################
+
+# gnu
 
 BuildmasterConfig['builders'].append(
 	{
@@ -482,6 +520,8 @@ BuildmasterConfig['schedulers'].append(
 		fileIsImportant = lambda change: filter(change, ['psycle-helpers/', 'universalis/', 'diversalis/', 'packageneric/'])
 	)
 )
+
+# mingw
 
 BuildmasterConfig['builders'].append(
 	{
@@ -510,6 +550,8 @@ BuildmasterConfig['schedulers'].append(
 )
 
 ##################################### psycle.msvc builder ######################################
+
+# msvc
 
 BuildmasterConfig['builders'].append(
 	{
@@ -545,6 +587,9 @@ categories = None #['psycle', 'sondar', 'armstrong']
 
 from buildbot.status.html import Waterfall
 BuildmasterConfig['status'].append(Waterfall(http_port = 8010, css = 'waterfall.css', robots_txt = 'robots.txt', allowForce=False, categories = categories))
+	# Note: Spam bots manage to trigger random builds with the "force build" button. It's annoying since they usually request the build of an inexistant revision
+	#       by filling the form with random garbage, and we get irc/e-mail messages about the spurious build failure.
+	#       When allowForce is set to False, the "force build" button is removed.
 
 ##################################### mail status ######################################
 
@@ -670,19 +715,32 @@ if True:
 	##################################### sondar builders ######################################
 	microsoft_slaves_sondar = ['winux']
 	
-	svn_sondar = 'https://sondar.svn.sourceforge.net/svnroot/sondar/trunk'
-	
+	class SondarSVNUpdate(UpdateSVN):
+		svnurl = 'https://sondar.svn.sourceforge.net/svnroot/sondar/trunk'
+
 	class CompileSondar(step.Compile):
 		name = 'compile-sondar'
 		description = ['compiling sondar']
 		descriptionDone = ['compile sondar']
 		command = 'cd sondar && sh autogen.sh --prefix=$(cd .. && pwd)/install && make install'
+		locks = [compile_lock]
 
 	class CompileSondarGUI(step.Compile):
 		name = 'compile-gui'
 		description = ['compiling gui']
 		descriptionDone = ['compile gui']
 		command = 'export PKG_CONFIG_PATH=$(pwd)/install/lib/pkgconfig && cd host_gtk && sh autogen.sh --prefix=$(cd .. && pwd)/install && make install'
+		locks = [compile_lock]
+
+	sondar_factory = factory.BuildFactory(
+		[
+			factory.s(UpdateSVNSondar),
+			factory.s(CompileSondarlocks),
+			factory.s(CompileSondarGUI)
+		]
+	)
+
+	# gnu
 
 	BuildmasterConfig['builders'].append(
 		{
@@ -690,13 +748,7 @@ if True:
 			'category': 'sondar',
 			'slavenames': slaves,
 			'builddir': 'sondar-trunk',
-			'factory': factory.BuildFactory(
-				[
-					factory.s(step.SVN, mode = 'update', svnurl = svn_sondar, locks = [svn_lock]),
-					factory.s(CompileSondar, locks = [compile_lock]),
-					factory.s(CompileSondarGUI, locks = [compile_lock])
-				]
-			)
+			'factory': sondar_factory
 		}
 	)
 	BuildmasterConfig['schedulers'].append(
@@ -716,12 +768,15 @@ if False:
 
 	microsoft_slaves_armstrong = ['winux']
 
+	# armstrong repository lack subfolders.. we need to do crazy things to detect which repository it is
 	armstrong_exclude_prefixes = [
 		'branches/', 'tags/',
 		'/trunk/dependencies.dot', '/trunk/dependencies.png', '/README', 'tools/', 'freepsycle/', 'qpsycle/', 'psycle-core/',
 		'psycle-player/', 'psycle-helpers', 'psycle-audiodrivers/', 'psycle-plugins/', 'psycle/',
 		'universalis/', 'diversalis/', 'packageneric/', 'buildbot/', 'external-packages/', 'www/'
 	]
+
+	# gnu
 
 	BuildmasterConfig['builders'].append(
 		{
@@ -750,6 +805,7 @@ if False:
 		)
 	)
 
+	# mingw
 
 	BuildmasterConfig['builders'].append(
 		{
@@ -765,18 +821,20 @@ if False:
 			)
 		}
 	)
-	#BuildmasterConfig['schedulers'].append(
-	#	Scheduler(
-	#		name = 'armstrong.mingw',
-	#		branch = None,
-	#		treeStableTimer = bunch_timer,
-	#		builderNames = ['armstrong.mingw'],
-	#		fileIsImportant = lambda change: filter(change,
-	#			include_prefixes = [''],
-	#			exclude_prefixes = armstrong_exclude_prefixes
-	#		)
-	#	)
-	#)
+	BuildmasterConfig['schedulers'].append(
+		Scheduler(
+			name = 'armstrong.mingw',
+			branch = None,
+			treeStableTimer = bunch_timer,
+			builderNames = ['armstrong.mingw'],
+			fileIsImportant = lambda change: filter(change,
+				include_prefixes = [''],
+				exclude_prefixes = armstrong_exclude_prefixes
+			)
+		)
+	)
+
+	# msvc
 
 	BuildmasterConfig['builders'].append(
 		{
@@ -792,18 +850,18 @@ if False:
 			)
 		}
 	)
-	#BuildmasterConfig['schedulers'].append(
-	#	Scheduler(
-	#		name = 'armstrong.msvc',
-	#		branch = None,
-	#		treeStableTimer = bunch_timer,
-	#		builderNames = ['armstrong.msvc'],
-	#		fileIsImportant = lambda change: filter(change,
-	#			include_prefixes = [''],
-	#			exclude_prefixes = armstrong_exclude_prefixes
-	#		)
-	#	)
-	#)
+	BuildmasterConfig['schedulers'].append(
+		Scheduler(
+			name = 'armstrong.msvc',
+			branch = None,
+			treeStableTimer = bunch_timer,
+			builderNames = ['armstrong.msvc'],
+			fileIsImportant = lambda change: filter(change,
+				include_prefixes = [''],
+				exclude_prefixes = armstrong_exclude_prefixes
+			)
+		)
+	)
 
 ##################################### clean builders ######################################
 
@@ -828,6 +886,8 @@ clean_factory_microsoft = factory.BuildFactory(
 	]
 )
 
+from buildbot.scheduler import Periodic as PeriodicScheduler
+
 def append_clean_builder(slave_name, microsoft = False):
 	if microsoft: factory = clean_factory_microsoft
 	else: factory = clean_factory
@@ -840,15 +900,15 @@ def append_clean_builder(slave_name, microsoft = False):
 			'factory': factory
 		}
 	)
+	if not microsoft: # don't schedule it on microsoft slaves since these aren't stable enough
+		BuildmasterConfig['schedulers'].append(
+			PeriodicScheduler(
+				name = 'clean.' + slave_name,
+				branch = None,
+				periodicBuildTimer = 60 * 60 * 24 * 30, # 30 days
+				builderNames = ['clean.' + slave_name]
+			)
+		)
 	
 for slave in slaves: append_clean_builder(slave)
 for slave in microsoft_slaves: append_clean_builder(slave, microsoft = True)
-from buildbot.scheduler import Periodic as PeriodicScheduler
-BuildmasterConfig['schedulers'].append(
-	PeriodicScheduler(
-		name = 'clean',
-		branch = None,
-		periodicBuildTimer = 60 * 60 * 24 * 30, # 30 days
-		builderNames = ['clean.' + slave for slave in slaves + microsoft_slaves]
-	)
-)
