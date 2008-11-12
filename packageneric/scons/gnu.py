@@ -22,7 +22,7 @@ def detect(chain):
 		])
 		if gnug.version().major() >= 4:
 			chain.compilers().cxx().flags().add([
-				'-fvisibility-inlines-hidden',
+				# causes relocation R_X86_64_PC32 errors: '-fvisibility-inlines-hidden',
 				'-combine',
 				'-Wfatal-errors' # aborts on first error
 			])
