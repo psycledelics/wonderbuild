@@ -818,7 +818,7 @@ class Clean(step.ShellCommand):
 
 clean_factory = factory.BuildFactory(
 	[
-		factory.s(Clean, command='find . -ignore_readdir_race -name ++\\* -exec rm -Rf {} \\;')
+		factory.s(Clean, command='find . -ignore_readdir_race -name ++\\* -exec rm -Rf {} \\; || true')
 	]
 )
 
