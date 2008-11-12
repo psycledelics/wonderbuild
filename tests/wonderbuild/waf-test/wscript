@@ -16,13 +16,11 @@ g = G() # :-(
 def lib_version_symlinks(name, version, path):
 	global g # :-(
 	g.lib_version_symlinks.append((name, version, path))
-	print name, version, path
 
 def do_lib_version_symlinks():
 	if Options.platform.startswith('win'): return
 	global g
 	lib_version_symlinks = g.lib_version_symlinks
-	print lib_version_symlinks
 	for name, version, path in lib_version_symlinks:
 		path_name = os.path.join(path, name)
 		if os.path.isfile(path_name):
