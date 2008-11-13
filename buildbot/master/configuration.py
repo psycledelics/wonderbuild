@@ -90,7 +90,6 @@ append_standard_builders(
 	trigger_dirs = psycle_helpers_deps,
 	build_system = 'scons',
 	boost_test = True
-	mingw_pkg = True
 )
 
 ##################################### freepsycle builders ######################################
