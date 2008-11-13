@@ -4,6 +4,7 @@
 	Version="8,00"
 	Name="psycle.plugins.blitz"
 	ProjectGUID="{C55834ED-9038-4D48-AE49-122834E68B25}"
+	RootNamespace="psycle.plugins.blitz"
 	>
 	<Platforms>
 		<Platform
@@ -142,6 +143,10 @@
 		/>
 	</References>
 	<Files>
+		<File
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\jme\blitz\aaf.cpp"
+			>
+		</File>
 		<File
 			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\jme\blitz\atlantisfilter.cpp"
 			>

@@ -8,6 +8,7 @@
 	<Tool
 		Name="VCCLCompilerTool"
 		UsePrecompiledHeader="2"
+		ForcedIncludeFiles="$(PreCompiledHeader)"
 		PrecompiledHeaderThrough="$(PreCompiledHeader)"
 		PrecompiledHeaderFile="$(TopOutputDir)/intermediate/pre_compiled_headers.pch"
 		ProgramDataBaseFileName="$(TopOutputDir)/intermediate/pre_compiled_headers.pdb"
