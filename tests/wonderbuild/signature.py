@@ -9,7 +9,9 @@ except ImportError:
 	from md5 import md5
 
 class Sig:
-	def __init__(self, s): self._impl = md5(s)
+	def __init__(self, s = None):
+		if s is None: self._impl = md5()
+		else: self._impl = md5(s)
 	def update(self, s): self._impl.update(s)
 	def digest(self): return self._impl.digest()
 	def hexdigest(self): return self._impl.hexdigest()
@@ -23,17 +25,6 @@ class Signed:
 			return self._sig
 
 	def update_sig(self, sig): pass
-
-def stat_sig(sig, st):
-	'computes an md5 hash from a stat'
-	if stat.S_ISDIR(st.st_mode): raise IOError, 'not a file'
-	sig.update(str(st.st_mtime))
-	#sig.update(str(st.st_size))
-
-def path_sig(sig, path):
-	'computes an md5 hash from a path based on its stat'
-	st = os.stat(path)
-	stat_sig(sig, st)
 
 def four_bits_to_hexchar(b):
 	b10 = b - 10
@@ -49,24 +40,12 @@ def raw_to_hexstring(s):
 	return r
 
 if __name__ == '__main__':
-
-	import sys
-	sig = Sig()
-	for f in sys.argv[1:]:
-		sig1 = Sig()
-		file_sig(sig1, f)
-		digest = sig1.digest()
-		print raw_to_hexstring(digest), f
-		sig.update(digest)
-	print 'all:', raw_to_hexstring(sig.digest())
-
-	if False: # both lead to the same digest
-		s = Sig()
-		s.update('a')
-		s.update('b')
-		print raw_to_hexstring(s.digest())
-	
-		s = Sig()
-		s.update('ab')
-		print raw_to_hexstring(s.digest())
-
+	# both lead to the same digest
+	s = Sig('ab')
+	print s.hexdigest()
+	print raw_to_hexstring(s.digest())
+	s = Sig()
+	s.update('a')
+	s.update('b')
+	print s.hexdigest()
+	print raw_to_hexstring(s.digest())

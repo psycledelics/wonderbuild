@@ -5,6 +5,9 @@
 import sys, os, os.path, stat, time, gc, cPickle, signature
 
 class Tree(object):
+
+	id_counter = 0
+
 	def __init__(self):
 		self.node_id = 0
 		self.nodes = {} # {id: node}
@@ -49,11 +52,9 @@ FILE = 2
 class Entry(object):
 	__slots__ = ('id', 'parent', 'name', 'kind', 'children', 'time', '_sig')
 
-	id_counter = 0
-
 	def __init__(self, parent, name, kind = UNKNOWN, time = None):
-		self.id = self.id_counter
-		self.__class__.id_counter += 1
+		self.id = Tree.id_counter
+		Tree.id_counter += 1
 		self.parent = parent
 		self.name = name
 		self.kind = kind
@@ -94,6 +95,46 @@ class Entry(object):
 			self._sig = sig
 			return sig
 	sig = property(sig)
+	
+	def sig_to_hexstring(self): return signature.raw_to_hexstring(self.sig)
+	
+	def changed(self):
+		old_time = self.time
+		if old_time is None: return self.abs_path + ' (no old time)'
+		try: self.do_stat()
+		except OSError:
+			if self.parent:
+				del self.parent._sig
+				del self.parent.children[self.name]
+			del self._sig
+			return self.abs_path + ' (removed)'
+		some_changed = None
+		if self.time != old_time:
+			del self._sig
+			some_changed = self.abs_path + ' (old time: ' + str(old_time) + ', new time: ' + str(self.time) + ')'
+		if self.kind == DIR:
+			self.maybe_list_children()
+			for e in self.children.values(): # copy because children remove themselves
+				changed = e.changed()
+				if changed:
+					del self._sig
+					if some_changed: some_changed += '\n' + changed
+					else: some_changed = changed
+			for name in os.listdir(self.abs_path):
+				if not name in self.children:
+					self.children[name] = Entry(self, name)
+					del self._sig
+					changed = self.abs_path + ' (new entry ' + name + ')'
+					if some_changed: some_changed += '\n' + changed
+					else: some_changed = changed
+		return some_changed
+
+	def maybe_list_children(self):
+		if self.children is None: self.do_list_children()
+	
+	def do_list_children(self):
+		self.children = {}
+		for name in os.listdir(self.abs_path): self.children[name] = Entry(self, name)
 
 	def find(self, path, start = 0):
 		sep = path.find(os.sep, start)
@@ -117,26 +158,16 @@ class Entry(object):
 		child.maybe_stat()
 		if child.kind == FILE: return None
 		return child.find(path, sep + 1)
-	
-	def maybe_list_children(self):
-		if self.children is None: self.do_list_children()
-	
-	def do_list_children(self):
-		path = self.abs_path
-		self.children = {}
-		for name in os.listdir(path): self.children[name] = Entry(self, name)
 
 	def display(self, tabs = 0):
-		if True: self.sig
-		else:
-			if False: path = '  |' * tabs + '- ' + (self.parent and self.name  or self.abs_path)
-			else: path = self.abs_path
-			print \
-				str(self.id).rjust(5), \
-				signature.raw_to_hexstring(self.sig), \
-				(self.time is None and ' ' or str(self.time)).rjust(12), \
-				{UNKNOWN: '', DIR: 'dir', FILE: 'file'}[self.kind].ljust(5) + \
-				path
+		if False: path = '  |' * tabs + '- ' + (self.parent and self.name  or self.abs_path)
+		else: path = self.abs_path
+		print \
+			str(self.id).rjust(5), \
+			signature.raw_to_hexstring(self.sig), \
+			(self.time is None and ' ' or str(self.time)).rjust(12), \
+			{UNKNOWN: '', DIR: 'dir', FILE: 'file'}[self.kind].rjust(4) + \
+			' ' + path
 		if not self.children: return
 		tabs += 1
 		for e in self.children.itervalues(): e.display(tabs)
@@ -158,9 +189,19 @@ if __name__ == '__main__':
 	#e.maybe_list_stat_children()
 	
 	t0 = time.time()
-	tree.display()
+	print >> sys.stderr, 'old sig:', root.sig_to_hexstring()
+	print >> sys.stderr, 'walk time:', time.time() - t0
+
+	t0 = time.time()
+	print >> sys.stderr, 'changed:\n' + root.changed()
+	print >> sys.stderr, 'sig check time:', time.time() - t0
+
+	t0 = time.time()
+	print >> sys.stderr, 'new sig:', root.sig_to_hexstring()
 	print >> sys.stderr, 'walk time:', time.time() - t0
 
 	t0 = time.time()
 	tree.dump()
 	print >> sys.stderr, 'dump time:', time.time() - t0
+	
+	tree.display()
