@@ -89,19 +89,11 @@ class Entry(object):
 			sig = signature.Sig(str(self.time))
 			if self.kind == DIR:
 				self.maybe_list_children()
-				for e in self.children.itervalues(): e.update_sig(sig)
-			sig = sig.hexdigest()
+				for e in self.children.itervalues(): sig.update(e.sig)
+			sig = sig.digest()
 			self._sig = sig
 			return sig
 	sig = property(sig)
-
-	def update_sig(self, sig):
-		self.maybe_stat()
-		assert self.time is not None
-		sig.update(str(self.time))
-		if self.kind == DIR:
-			self.maybe_list_children()
-			for e in self.children.itervalues(): e.update_sig(sig)
 
 	def find(self, path, start = 0):
 		sep = path.find(os.sep, start)
@@ -135,13 +127,13 @@ class Entry(object):
 		for name in os.listdir(path): self.children[name] = Entry(self, name)
 
 	def display(self, tabs = 0):
-		if False: self.sig;
+		if True: self.sig
 		else:
 			if False: path = '  |' * tabs + '- ' + (self.parent and self.name  or self.abs_path)
 			else: path = self.abs_path
 			print \
 				str(self.id).rjust(5), \
-				self.sig, \
+				signature.raw_to_hexstring(self.sig), \
 				(self.time is None and ' ' or str(self.time)).rjust(12), \
 				{UNKNOWN: '', DIR: 'dir', FILE: 'file'}[self.kind].ljust(5) + \
 				path

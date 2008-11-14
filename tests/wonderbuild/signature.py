@@ -35,19 +35,20 @@ def path_sig(sig, path):
 	st = os.stat(path)
 	stat_sig(sig, st)
 
+def four_bits_to_hexchar(b):
+	b10 = b - 10
+	if b10 >= 0: return chr(ord('a') + b10)
+	return chr(ord('0') + b)
+def byte_to_hexstring(b):
+	b = ord(b)
+	return four_bits_to_hexchar(b >> 4) + four_bits_to_hexchar(b & 0xf)
+def raw_to_hexstring(s):
+	# note python has an hex() builtin function but it does not accept a raw input string
+	r = ''
+	for b in s: r += byte_to_hexstring(b)
+	return r
+
 if __name__ == '__main__':
-	def four_bits_to_hexchar(b):
-		b10 = b - 10
-		if b10 >= 0: return chr(ord('a') + b10)
-		return chr(ord('0') + b)
-	def byte_to_hexstring(b):
-		b = ord(b)
-		return four_bits_to_hexchar(b >> 4) + four_bits_to_hexchar(b & 0xf)
-	def raw_to_hexstring(s):
-		# note python has an hex() builtin function ...
-		r = ''
-		for b in s: r += byte_to_hexstring(b)
-		return r
 
 	import sys
 	sig = Sig()
