@@ -100,7 +100,7 @@ class Entry(object):
 	
 	def changed(self):
 		old_time = self.time
-		if old_time is None: return self.abs_path + ' (no old time)'
+		if old_time is None: return self.abs_path + ' (new)'
 		try: self.do_stat()
 		except OSError:
 			if self.parent:
@@ -110,24 +110,18 @@ class Entry(object):
 			return self.abs_path + ' (removed)'
 		some_changed = None
 		if self.time != old_time:
-			del self._sig
-			some_changed = self.abs_path + ' (old time: ' + str(old_time) + ', new time: ' + str(self.time) + ')'
+			some_changed = self.abs_path + ' (time)'
 		if self.kind == DIR:
 			self.maybe_list_children()
+			if self.time != old_time:
+				for name in os.listdir(self.abs_path):
+					if not name in self.children: self.children[name] = Entry(self, name)
 			for e in self.children.values(): # copy because children remove themselves
 				changed = e.changed()
 				if changed:
-					del self._sig
 					if some_changed: some_changed += '\n' + changed
 					else: some_changed = changed
-			if self.time != old_time:
-				for name in os.listdir(self.abs_path):
-					if not name in self.children:
-						self.children[name] = Entry(self, name)
-						del self._sig
-						changed = self.abs_path + ' (new entry: ' + name + ')'
-						if some_changed: some_changed += '\n' + changed
-						else: some_changed = changed
+		if some_changed: del self._sig
 		return some_changed
 
 	def maybe_list_children(self):
