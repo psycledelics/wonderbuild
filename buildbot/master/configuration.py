@@ -251,8 +251,11 @@ def append_clean_builder(slave_name, microsoft = False):
 		'slavenames': [slave_name],
 		'builddir': 'clean.' + slave_name,
 		'factory': factory.BuildFactory([factory.s(Clean, command = microsoft and \
-			'del /s /q ++*' or \
-			r'find . -ignore_readdir_race -name ++\* -exec rm -Rf {} \; ; sleep 5')]) # might be too fast!
+			'del /s /q ++* && ping -n 5 127.0.0.1 > nul' or \
+			r'find . -ignore_readdir_race -name ++\* -exec rm -Rf {} \; ; sleep 5'
+			# Note: The sleep command is because buildbot looses track of the process if it finishes too fast!
+			#       Since there's no damn sleep command in standard on windows, we need to use, erm, a stupid ping :-(
+			)])
 	if not microsoft: # don't schedule it on microsoft slaves since these aren't stable enough
 		BuildmasterConfig['schedulers'].append(PeriodicScheduler(
 			name = 'clean.' + slave_name,
