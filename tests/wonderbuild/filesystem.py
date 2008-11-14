@@ -2,7 +2,7 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import os, os.path, stat, signature
+import sys, os, os.path, stat, time, gc, cPickle, signature
 
 class Tree(object):
 	def __init__(self):
@@ -12,34 +12,35 @@ class Tree(object):
 		self.dir_lists = {} # {id: [names] }
 		self.cache_path = '/tmp/filesystem.cache'
 
-	load_save = ('nodes')
+	load_dump_attributes = ('nodes',)
 
 	def load(self):
 		gc.disable()
 		try:
 			try:
-				f = file(self.cache_path)
+				f = file(self.cache_path, 'rb')
 				try: data = cPickle.load(f)
 				finally: f.close()
-			except:
+			except Exception, e:
+				print >> sys.stderr, 'could not load pickle:', e
 				self.nodes = {}
 			else:
-				for x in load_save: setattr(self, x, data[x])
+				for x in self.load_dump_attributes: setattr(self, x, data[x])
 		finally: gc.enable()
 
-	def save(self):
+	def dump(self):
 		gc.disable()
 		try:
-			f = file(self.cache_path)
+			f = file(self.cache_path, 'wb')
 			try:
 				data = {}
-				for x in load_save: data[x] = getattr(self, x)
-				cPicle.dump(data, f, cPickle.HIGHEST_PROTOCOL)
+				for x in self.load_dump_attributes: data[x] = getattr(self, x)
+				cPickle.dump(data, f, cPickle.HIGHEST_PROTOCOL)
 			finally: f.close()
 		finally: gc.enable()
 	
-	def dump(self):
-		for e in self.nodes.itervalues(): e.dump()
+	def display(self):
+		for e in self.nodes.itervalues(): e.display()
 
 UNKNOWN = 0
 DIR = 1
@@ -48,12 +49,12 @@ FILE = 2
 class Entry(object):
 	kind = UNKNOWN
 	
-	__slots__ = ('id', 'parent', 'name', 'time')
+	__slots__ = ('id', 'parent', 'name', 'time', '_sig')
 
 	id_counter = 0
 
 	def __init__(self, parent, name, time = None):
-		self.id = self.__class__.id_counter
+		self.id = self.id_counter
 		self.__class__.id_counter += 1
 		self.parent = parent
 		self.name = name
@@ -67,7 +68,10 @@ class Entry(object):
 		return self
 
 	def do_stat(self):
-		st = os.stat(self.abs_path)
+		try: st = os.stat(self.abs_path)
+		except OSError:
+			# may be a broken symlink
+			st = os.lstat(self.abs_path)
 		Kind = stat.S_ISDIR(st.st_mode) and Dir or File
 		e = Kind(self.parent, self.name, st.st_mtime)
 		if self.parent: self.parent.children[self.name] = e
@@ -75,23 +79,35 @@ class Entry(object):
 		assert e.time is not None
 		return e
 
-	def sig(self):
-		time = self.maybe_stat().time
-		assert time is not None
-		return signature.Sig(str(time))
-	sig = property(sig)
+	def get_sig(self):
+		try: return self._sig
+		except AttributeError:
+			time = self.maybe_stat().time
+			assert time is not None
+			self._sig = signature.Sig(str(time)).hexdigest()
+			return self._sig
+	sig = property(get_sig)
 		
 	def update_sig(self, sig):
-		self.maybe_stat()
-		sig.update(self.time)
+		time = self.maybe_stat().time
+		assert time is not None
+		sig.update(str(time))
 
-	def dump(self, tabs = 0):
+	def display(self, tabs = 0):
+		if False: sig = ''
+		else: sig = self.sig
+		
+		return
+		
+		if False: path = '  |' * tabs + '- ' + (self.parent and self.name  or self.abs_path)
+		else: path = self.abs_path
+		
 		print \
-			str(self.id).rjust(4), \
-			self.sig.hexdigest(), \
-			(self.time is None and ' ' or str(self.time)).rjust(13), \
-			{UNKNOWN: '', DIR: 'dir', FILE: 'file'}[self.kind].ljust(7) + \
-			'\t' * tabs, self.parent and self.name  or self.abs_path
+				str(self.id).rjust(5), \
+				sig, \
+				(self.time is None and ' ' or str(self.time)).rjust(12), \
+				{UNKNOWN: '', DIR: 'dir', FILE: 'file'}[self.kind].ljust(5) + \
+				path
 
 class File(Entry):
 	kind = FILE
@@ -127,7 +143,7 @@ class Dir(Entry):
 		if sep == len(path) - 1: return child
 		child = child.maybe_stat()
 		if child.kind == FILE: return None
-		return child.find_child(path, sep + 1)
+		return child.find(path, sep + 1)
 	
 	def maybe_list_children(self):
 		if self.children is None: self.do_list_children()
@@ -154,28 +170,44 @@ class Dir(Entry):
 		if e.kind != DIR: raise IOError, 'not a dir: ' + self.abs_path
 		return e
 
-	#def sig(self):
-	#	sig = Entry.sig
-	#	self.maybe_list_stat_children()
-	#	for e in self.children.itervalues(): e.update_sig(sig)
-	#sig = property(sig)
+	def get_sig(self):
+		sig = signature.Sig(Entry.get_sig(self))
+		self.maybe_list_stat_children()
+		for e in self.children.itervalues(): e.update_sig(sig)
+		return sig.hexdigest()
+	sig = property(get_sig)
 
 	def update_sig(self, sig):
 		Entry.update_sig(self, sig)
 		self.maybe_list_stat_children()
 		for e in self.children.itervalues(): e.update_sig(sig)
 
-	def dump(self, tabs = 0):
-		Entry.dump(self, tabs)
+	def display(self, tabs = 0):
+		Entry.display(self, tabs)
 		if not self.children: return
 		tabs += 1
-		for e in self.children.itervalues(): e.dump(tabs)
+		for e in self.children.itervalues(): e.display(tabs)
 
 if __name__ == '__main__':
-	root = Dir(None, os.curdir)
-	e = root.find('waf-test').maybe_stat()
-	e = root.find('unit_tests').maybe_stat()
-	e.maybe_list_stat_children()
 	tree = Tree()
-	tree.nodes[root.name] = root
+	t0 = time.time()
+	tree.load()
+	print >> sys.stderr, 'load time:', time.time() - t0
+	
+	root_path = sys.argv[1] or os.curdir
+	root = tree.nodes.get(root_path, None)
+	if not root:
+		root = Dir(None, root_path)
+		tree.nodes[root.name] = root
+	#e = root.find('waf-test').maybe_stat()
+	#e = root.find('unit_tests').maybe_stat()
+	#e.maybe_list_stat_children()
+	
+	t0 = time.time()
+	tree.display()
+	print >> sys.stderr, 'walk time:', time.time() -t0
+
+	t0 = time.time()
 	tree.dump()
+	print >> sys.stderr, 'dump time:', time.time() -t0
+	
