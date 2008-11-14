@@ -2,7 +2,7 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import os, os.path, stat
+import os, os.path, stat, signature
 
 class Tree(object):
 	def __init__(self):
@@ -62,25 +62,44 @@ class Entry(object):
 	def abs_path(self): return not self.parent and self.name or os.path.join(self.parent.abs_path, self.name)
 	abs_path = property(abs_path)
 	
-	def do_stat(self): return os.stat(self.abs_path())
-	
 	def maybe_stat(self):
-		if self.kind != UNKNOWN: return self
-		return self.do_stat()
+		if self.time is None: return self.do_stat()
+		return self
 
 	def do_stat(self):
 		st = os.stat(self.abs_path)
 		Kind = stat.S_ISDIR(st.st_mode) and Dir or File
 		e = Kind(self.parent, self.name, st.st_mtime)
-		self.parent.children[self.name] = e
+		if self.parent: self.parent.children[self.name] = e
+		assert e.kind != UNKNOWN
+		assert e.time is not None
 		return e
-	
+
+	def sig(self):
+		time = self.maybe_stat().time
+		assert time is not None
+		return signature.Sig(str(time))
+	sig = property(sig)
+		
+	def update_sig(self, sig):
+		self.maybe_stat()
+		sig.update(self.time)
+
 	def dump(self, tabs = 0):
 		print \
 			str(self.id).rjust(4), \
+			self.sig.hexdigest(), \
 			(self.time is None and ' ' or str(self.time)).rjust(13), \
 			{UNKNOWN: '', DIR: 'dir', FILE: 'file'}[self.kind].ljust(7) + \
 			'\t' * tabs, self.parent and self.name  or self.abs_path
+
+class File(Entry):
+	kind = FILE
+
+	def do_stat(self):
+		e = Entry.do_stat(self)
+		if e.kind != FILE: raise IOError, 'not a file: ' + self.abs_path
+		return e
 
 class Dir(Entry):
 	kind = DIR
@@ -131,31 +150,26 @@ class Dir(Entry):
 			self.children[name] = Kind(self, name, st.st_mtime)
 
 	def do_stat(self):
-		st = Entry.do_stat(self)
-		if not stat.S_ISDIR(st): raise IOError, 'not a dir'
-		return st
+		e = Entry.do_stat(self)
+		if e.kind != DIR: raise IOError, 'not a dir: ' + self.abs_path
+		return e
+
+	#def sig(self):
+	#	sig = Entry.sig
+	#	self.maybe_list_stat_children()
+	#	for e in self.children.itervalues(): e.update_sig(sig)
+	#sig = property(sig)
 
 	def update_sig(self, sig):
-		FSNode.update_sig(self, sig)
-		for n in self.children(): n.update_sig(sig)
+		Entry.update_sig(self, sig)
+		self.maybe_list_stat_children()
+		for e in self.children.itervalues(): e.update_sig(sig)
 
 	def dump(self, tabs = 0):
 		Entry.dump(self, tabs)
 		if not self.children: return
 		tabs += 1
 		for e in self.children.itervalues(): e.dump(tabs)
-
-class File(Entry):
-	kind = FILE
-
-	def do_stat(self):
-		st = Entry.do_stat(self)
-		if stat.S_ISDIR(st): raise IOError, 'not a file'
-		return st
-
-	def update_sig(self, sig):
-		FSNode.update_sig(self, sig)
-		stat_sig(sig, self.stat())
 
 if __name__ == '__main__':
 	root = Dir(None, os.curdir)

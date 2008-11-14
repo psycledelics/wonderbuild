@@ -9,7 +9,7 @@ except ImportError:
 	from md5 import md5
 
 class Sig:
-	def __init__(self): self._impl = md5()
+	def __init__(self, s): self._impl = md5(s)
 	def update(self, s): self._impl.update(s)
 	def digest(self): return self._impl.digest()
 	def hexdigest(self): return self._impl.hexdigest()
@@ -25,14 +25,14 @@ class Signed:
 	def update_sig(self, sig): pass
 
 def stat_sig(sig, st):
-	'computes an md5 hash from a file stat'
+	'computes an md5 hash from a stat'
 	if stat.S_ISDIR(st.st_mode): raise IOError, 'not a file'
 	sig.update(str(st.st_mtime))
 	#sig.update(str(st.st_size))
 
-def file_sig(sig, file_name):
-	'computes an md5 hash from a filename based on its stat'
-	st = os.stat(file_name)
+def path_sig(sig, path):
+	'computes an md5 hash from a path based on its stat'
+	st = os.stat(path)
 	stat_sig(sig, st)
 
 if __name__ == '__main__':
