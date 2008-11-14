@@ -100,17 +100,17 @@ class Entry(object):
 	
 	def changed(self):
 		old_time = self.time
-		if old_time is None: return self.abs_path + ' (new)'
+		if old_time is None: return 'A ' + self.abs_path
 		try: self.do_stat()
 		except OSError:
 			if self.parent:
 				del self.parent._sig
 				del self.parent.children[self.name]
 			del self._sig
-			return self.abs_path + ' (removed)'
+			return 'D ' + self.abs_path
 		some_changed = None
 		if self.time != old_time:
-			some_changed = self.abs_path + ' (time)'
+			some_changed = 'U ' + self.abs_path
 		if self.kind == DIR:
 			self.maybe_list_children()
 			if self.time != old_time:
@@ -173,7 +173,9 @@ if __name__ == '__main__':
 	tree.load()
 	print >> sys.stderr, 'load time:', time.time() - t0
 	
-	root_path = sys.argv[1] or os.curdir
+	if len(sys.argv) > 1: root_path = sys.argv[1]
+	else: root_path = os.curdir
+
 	root = tree.nodes.get(root_path, None)
 	if not root:
 		tree.nodes = {}
@@ -183,9 +185,9 @@ if __name__ == '__main__':
 	#e = root.find('unit_tests').maybe_stat()
 	#e.maybe_list_stat_children()
 	
-	t0 = time.time()
-	print >> sys.stderr, 'old sig:', root.sig_to_hexstring()
-	print >> sys.stderr, 'walk time:', time.time() - t0
+	#t0 = time.time()
+	#print >> sys.stderr, 'old sig:', root.sig_to_hexstring()
+	#print >> sys.stderr, 'walk time:', time.time() - t0
 
 	t0 = time.time()
 	print >> sys.stderr, 'changed:\n' + str(root.changed())
@@ -199,4 +201,4 @@ if __name__ == '__main__':
 	tree.dump()
 	print >> sys.stderr, 'dump time:', time.time() - t0
 	
-	tree.display()
+	#tree.display()
