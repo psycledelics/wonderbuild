@@ -14,7 +14,7 @@
 	/>
 	<UserMacro
 		Name="Defines"
-		Value="PACKAGENERIC=&lt;packageneric/module.private.hpp&gt;"
+		Value=""
 		InheritsFromParent="true"
 		Delimiter=";"
 	/>
