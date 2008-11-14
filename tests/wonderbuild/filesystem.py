@@ -120,13 +120,14 @@ class Entry(object):
 					del self._sig
 					if some_changed: some_changed += '\n' + changed
 					else: some_changed = changed
-			for name in os.listdir(self.abs_path):
-				if not name in self.children:
-					self.children[name] = Entry(self, name)
-					del self._sig
-					changed = self.abs_path + ' (new entry: ' + name + ')'
-					if some_changed: some_changed += '\n' + changed
-					else: some_changed = changed
+			if self.time != old_time:
+				for name in os.listdir(self.abs_path):
+					if not name in self.children:
+						self.children[name] = Entry(self, name)
+						del self._sig
+						changed = self.abs_path + ' (new entry: ' + name + ')'
+						if some_changed: some_changed += '\n' + changed
+						else: some_changed = changed
 		return some_changed
 
 	def maybe_list_children(self):
