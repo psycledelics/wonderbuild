@@ -124,7 +124,7 @@ class Entry(object):
 				if not name in self.children:
 					self.children[name] = Entry(self, name)
 					del self._sig
-					changed = self.abs_path + ' (new entry ' + name + ')'
+					changed = self.abs_path + ' (new entry: ' + name + ')'
 					if some_changed: some_changed += '\n' + changed
 					else: some_changed = changed
 		return some_changed
@@ -193,7 +193,7 @@ if __name__ == '__main__':
 	print >> sys.stderr, 'walk time:', time.time() - t0
 
 	t0 = time.time()
-	print >> sys.stderr, 'changed:\n' + root.changed()
+	print >> sys.stderr, 'changed:\n' + str(root.changed())
 	print >> sys.stderr, 'sig check time:', time.time() - t0
 
 	t0 = time.time()
