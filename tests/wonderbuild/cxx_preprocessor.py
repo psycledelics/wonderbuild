@@ -26,26 +26,24 @@ class DepScanner:
 			try:
 				p = cPickle.Unpickler(f)
 				self.deps = p.load()
-				sigs = p.load()
 			finally: f.close()
 		except Exception, e:
 			print >> sys.stderr, 'could not load pickle:', e
 			self.deps = {} # { unique_path: (rel_includes, abs_includes) }
 		else:
 			for path in self.deps.keys(): # copy because we remove some elements in the loop
-				try: sig = Sig(str(os.stat(path).st_mtime)).digest()
-				except OSError: self.not_found.add(path)
+				print 'scanner: cached:', path
+				try: changed = self.fs.declare(path, monitor = True).changed()
+				except OSError: self.not_found.add(path) ; print 'scanner: del not found:', path
 				else:
-					if sig != sigs[path]: del self.deps[path]
+					if changed: del self.deps[path] ;  print 'scanner: del changed:', changed
 
 	def dump(self):
 		f = file(self.cache_path, 'wb')
 		try:
 			p = cPickle.Pickler(f, cPickle.HIGHEST_PROTOCOL)
+			for path in self.deps: self.fs.declare(path, monitor = True)
 			p.dump(self.deps)
-			sigs = {}
-			for path in self.deps: sigs[path] = Sig(str(os.stat(path).st_mtime)).digest()
-			p.dump(sigs)
 		finally: f.close()
 	
 	def _unique_path(self, file_name):
