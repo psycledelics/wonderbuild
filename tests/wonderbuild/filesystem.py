@@ -169,7 +169,10 @@ class Node(object):
 		self.children = {}
 		for name in os.listdir(self.abs_path): self.children[name] = Node(self, name, monitor = self.monitor)
 
-	def find(self, path, monitor = False): return self._find(path, monitor)
+	def find(self, path, monitor = False):
+		r = self._find(path, monitor)
+		if monitor and r and not r.monitor: r.monitor = True
+		return r
 	def _find(self, path, monitor, start = 0):
 		sep = path.find(os.sep, start)
 		if sep > start:
