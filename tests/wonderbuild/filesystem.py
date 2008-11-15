@@ -4,15 +4,14 @@
 
 import sys, os, os.path, stat, gc, cPickle
 from hashlib import md5 as Sig
+
 from signature import raw_to_hexstring
 
-class Tree(object):
-
-	id_counter = 0
-
-	def __init__(self):
-		self.nodes = {} # {id: node}
-		self.cache_path = '/tmp/filesystem.cache'
+class FileSystem(object):
+	def __init__(self, cache_path = '/tmp/filesystem.cache'):
+		self.nodes = {}
+		self.cache_path = cache_path
+		self.load()
 
 	load_dump_attributes = ('nodes',)
 
@@ -23,11 +22,10 @@ class Tree(object):
 				f = file(self.cache_path, 'rb')
 				try: data = cPickle.load(f)
 				finally: f.close()
+				for x in self.load_dump_attributes: setattr(self, x, data[x])
 			except Exception, e:
 				print >> sys.stderr, 'could not load pickle:', e
 				self.nodes = {}
-			else:
-				for x in self.load_dump_attributes: setattr(self, x, data[x])
 		finally: gc.enable()
 
 	def dump(self):
@@ -41,21 +39,39 @@ class Tree(object):
 			finally: f.close()
 		finally: gc.enable()
 	
-	def find(self, name):
-		node = self.nodes.get(name, None)
-		if not node:
-			node = Entry(None, name)
-			self.nodes[name] = node
-		return node
+	def declare(self, name):
+		name = os.path.normpath(name)
+		try: return self.nodes[name]
+		except KeyError:
+			n = Node(None, name)
+			self.nodes[name] = n
+			return n
+
+	def changed(self):
+		some_changed = None
+		for n in self.nodes.itervalues():
+			changed = n.changed()
+			if changed:
+				if some_changed: some_changed += '\n' + changed
+				else: some_changed = changed
+		return some_changed
 	
+	def sig(self):
+		sig = Sig()
+		for n in self.nodes.itervalues(): sig.update(n.sig)
+		return sig.digest()
+	sig = property(sig)
+
+	def sig_to_hexstring(self): return raw_to_hexstring(self.sig)
+
 	def display(self):
-		for e in self.nodes.itervalues(): e.display()
+		for n in self.nodes.itervalues(): n.display()
 
 UNKNOWN = 0
 DIR = 1
 FILE = 2
 
-class Entry(object):
+class Node(object):
 	__slots__ = ('_abs_path', 'parent', 'name', 'kind', 'children', 'time', '_sig')
 
 	def __init__(self, parent, name, kind = UNKNOWN, time = None):
@@ -78,7 +94,7 @@ class Entry(object):
 		if self.time is None: self.do_stat()
 
 	def do_stat(self):
-		print >> sys.stderr, 'os.stat   :', self.abs_path
+		#print >> sys.stderr, 'os.stat   :', self.abs_path
 		
 		# try-except is a tiny bit faster
 		#st = os.lstat(self.abs_path)
@@ -94,22 +110,6 @@ class Entry(object):
 		
 		self.time = st.st_mtime
 
-	def sig(self):
-		try: return self._sig
-		except AttributeError:
-			self.maybe_stat()
-			assert self.time is not None
-			sig = Sig(str(self.time))
-			#if self.kind == DIR:
-			#	self.maybe_list_children()
-			#	for e in self.children.itervalues(): sig.update(e.sig)
-			sig = sig.digest()
-			self._sig = sig
-			return sig
-	sig = property(sig)
-	
-	def sig_to_hexstring(self): return raw_to_hexstring(self.sig)
-	
 	def changed(self, parent_path = None):
 		old_time = self.time
 		if old_time is None: return 'A ' + self.abs_path
@@ -127,27 +127,43 @@ class Entry(object):
 			self.maybe_list_children()
 			if self.time != old_time:
 				for name in os.listdir(self.abs_path):
-					if not name in self.children: self.children[name] = Entry(self, name)
-			for e in self.children.values(): # copy because children remove themselves
-				changed = e.changed()
+					if not name in self.children: self.children[name] = Node(self, name)
+			for n in self.children.values(): # copy because children remove themselves
+				changed = n.changed()
 				if changed:
 					if some_changed: some_changed += '\n' + changed
 					else: some_changed = changed
 		if some_changed: del self._sig
 		return some_changed
 
+	def sig(self):
+		try: return self._sig
+		except AttributeError:
+			self.maybe_stat()
+			assert self.time is not None
+			sig = Sig(str(self.time))
+			if self.kind == DIR:
+				self.maybe_list_children()
+				for n in self.children.itervalues(): sig.update(n.sig)
+			sig = sig.digest()
+			self._sig = sig
+			return sig
+	sig = property(sig)
+	
+	def sig_to_hexstring(self): return raw_to_hexstring(self.sig)
+	
 	def maybe_list_children(self):
 		if self.children is None: self.do_list_children()
 	
 	def do_list_children(self):
-		print >> sys.stderr, 'os.listdir:', self.abs_path
+		#print >> sys.stderr, 'os.listdir:', self.abs_path
 		self.children = {}
-		for name in os.listdir(self.abs_path): self.children[name] = Entry(self, name)
+		for name in os.listdir(self.abs_path): self.children[name] = Node(self, name)
 
 	def find(self, path): return self._find(path)
 	def _find(self, path, start = 0):
 		sep = path.find(os.sep, start)
-		if sep > 0:
+		if sep > start:
 			name = path[start:sep]
 			if name == os.pardir: return self.parent or self
 			if name == os.curdir: return self
@@ -168,11 +184,12 @@ class Entry(object):
 			if self.kind != DIR: return None
 			self.maybe_list_children()
 			return self.children.get(name, None)
-		else: # sep == 0:
+		else: # sep == start, absolute path
 			top = self
 			while top.parent: top = top.parent
 			if top.name != os.sep:
-				root = Entry(None, os.sep, DIR)
+				print >> sys.stderr, 'creating root node due to:', path
+				root = Node(None, os.sep, DIR)
 				top.parent = root.find(os.path.dirname(os.getcwd()))
 			else: root = top
 			return root._find(path, 1)
@@ -187,38 +204,41 @@ class Entry(object):
 			' ' + path
 		if not self.children: return
 		tabs += 1
-		for e in self.children.itervalues(): e.display(tabs)
+		for n in self.children.itervalues(): n.display(tabs)
 
 if __name__ == '__main__':
 	import time
 	
-	tree = Tree()
 	t0 = time.time()
-	tree.load()
+	fs = FileSystem()
 	print >> sys.stderr, 'load time:', time.time() - t0
 	
-	if len(sys.argv) > 1: root_path = sys.argv[1]
-	else: root_path = os.curdir
+	if len(sys.argv) > 1: paths = sys.argv[1:]
+	else: paths = [os.curdir]
 
-	root = tree.find(root_path)
+	paths = [os.path.abspath(p) for p in paths]
+	#top = fs.declare(os.path.commonprefix(paths))
+	for n in fs.nodes.values(): # copy because we remove
+		if n.abs_path not in paths: del fs.nodes[n.name]
+	for p in paths: fs.declare(p)
 
-	#e = root.find('waf-test')
-	#e = root.find('unit_tests')
+	#n = fs.declare('waf-test')
+	#n = fs.declare('unit_tests')
 	
 	#t0 = time.time()
-	#print >> sys.stderr, 'old sig: ' + root.sig_to_hexstring()
+	#print >> sys.stderr, 'old sig: ' + fs.sig_to_hexstring()
 	#print >> sys.stderr, 'walk time:', time.time() - t0
 
 	t0 = time.time()
-	print >> sys.stderr, 'changed:\n' + str(root.changed())
+	print >> sys.stderr, 'changed:\n' + str(fs.changed())
 	print >> sys.stderr, 'sig check time:', time.time() - t0
 
 	t0 = time.time()
-	print >> sys.stderr, 'new sig: ' + root.sig_to_hexstring()
-	print >> sys.stderr, 'walk time:', time.time() - t0
+	print >> sys.stderr, 'new sig: ' + fs.sig_to_hexstring()
+	print >> sys.stderr, 'sig time:', time.time() - t0
 
-	t0 = time.time()
-	tree.dump()
-	print >> sys.stderr, 'dump time:', time.time() - t0
+	fs.display()
 	
-	tree.display()
+	t0 = time.time()
+	fs.dump()
+	print >> sys.stderr, 'dump time:', time.time() - t0
