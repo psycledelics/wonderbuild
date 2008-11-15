@@ -2,7 +2,8 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import os.path, re, cPickle, signature #, dircache
+import sys, os.path, re, cPickle
+from hashlib import md5 as Sig
 
 class Cache:
 	def __init__(self, cache_path):
@@ -24,11 +25,10 @@ class Cache:
 		except: self._deps = {} # { unique_path: (rel_includes, abs_includes) }
 		else:
 			for path in self._deps.keys(): # copy because we remove some elements in the loop
-				sig = signature.Sig()
-				try: signature.file_sig(sig, path)
+				try: sig = Sig(str(os.stat(path).st_mtime)).digest()
 				except: self._not_found.add(path)
 				else:
-					if sig.digest() != sigs[path]: del self._deps[path]
+					if sig != sigs[path]: del self._deps[path]
 
 	def save(self):
 		f = file(self._cache_path, 'wb')
@@ -36,10 +36,7 @@ class Cache:
 			p = cPickle.Pickler(f, cPickle.HIGHEST_PROTOCOL)
 			p.dump(self._deps)
 			sigs = {}
-			for path in self._deps:
-				sig = signature.Sig()
-				signature.file_sig(sig, path)
-				sigs[path] = sig.digest()
+			for path in self._deps: sigs[path] = Sig(str(os.stat(path).st_mtime)).digest()
 			p.dump(sigs)
 		finally: f.close()
 
@@ -53,8 +50,8 @@ class CppDumbIncludeScanner:
 	'C/C++ scanner for #include statements, and nothing else (dumb)'
 	
 	def __init__(self, paths = None):
-		if paths is not None: self._paths = paths
-		else: self._paths = []
+		if paths is not None: self.paths = paths
+		else: self.paths = []
 	
 	def _cache(self):
 		global _cache
@@ -65,7 +62,7 @@ class CppDumbIncludeScanner:
 		#try: return os.path.realpath(file_name)
 		#except: return os.path.abspath(file_name)
 
-	def add_path(self, path): self._paths.append(path)
+	def add_path(self, path): self.paths.append(path)
 	
 	def scan_deps(self, file_name, already_seen = None):
 		u = self._unique_path(file_name)
@@ -76,8 +73,8 @@ class CppDumbIncludeScanner:
 		else: already_seen = set()
 	
 		try: r = self._cache().deps()[u]
-		except AttributeError:
-			print 'scanning:', u
+		except KeyError:
+			#print 'scanning:', u
 
 			try: f = file(file_name)
 			except:
@@ -127,7 +124,7 @@ class CppDumbIncludeScanner:
 	def search_abs(self, include):
 		global _not_found_cache
 		if include in self._cache().not_found(): return None
-		for dir in self._paths:
+		for dir in self.paths:
 			f = os.path.join(dir, include)
 			if os.path.exists(f): return f
 		#print >> sys.stderr, 'not found:', '#include <' + include + '>'
@@ -241,9 +238,6 @@ class CppDumbIncludeScanner:
 		return rel_includes, abs_includes
 
 if __name__ == '__main__':
-	import sys
-	#sys.path.insert(0, os.path.dirname(__file__))
-
 	dirs = []
 	files = []
 	for arg in sys.argv[1:]:
@@ -252,8 +246,8 @@ if __name__ == '__main__':
 
 	scanner = CppDumbIncludeScanner(dirs)
 	for f in files:
+		print 'scanning:', f
 		deps = scanner.scan_deps(f)
-		print f
 		for dep in deps: print '\t', dep
 	scanner._cache().save()
 	
