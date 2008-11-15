@@ -170,10 +170,10 @@ class Node(object):
 		for name in os.listdir(self.abs_path): self.children[name] = Node(self, name, monitor = self.monitor)
 
 	def find(self, path, monitor = False):
-		r = self._find(path, monitor)
+		r = self._find(path)
 		if monitor and r and not r.monitor: r.monitor = True
 		return r
-	def _find(self, path, monitor, start = 0):
+	def _find(self, path, start = 0):
 		sep = path.find(os.sep, start)
 		if sep > start:
 			name = path[start:sep]
@@ -187,7 +187,7 @@ class Node(object):
 			if sep == len(path) - 1: return child
 			child.maybe_stat()
 			if child.kind != DIR: return None
-			return child._find(path, monitor, sep + 1)
+			return child._find(path, sep + 1)
 		elif sep < 0:
 			name = path[start:]
 			if name == os.pardir: return self.parent or self
@@ -204,7 +204,7 @@ class Node(object):
 				root = Node(None, os.sep, DIR, monitor = False)
 				top.parent = root.find(os.path.dirname(os.getcwd()))
 			else: root = top
-			return root._find(path, monitor, 1)
+			return root._find(path, 1)
 
 	def display(self, tabs = 0):
 		if False: path = '  |' * tabs + '- ' + (self.parent and self.name  or self.abs_path)
