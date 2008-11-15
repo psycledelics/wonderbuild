@@ -151,16 +151,20 @@ class Node(object):
 			if not self.monitor: return ''
 			self.maybe_stat()
 			assert self.time is not None
-			sig = Sig(str(self.time))
-			if self.kind == DIR:
+			if self.kind != DIR: sig = str(self.time)
+			else:
+				sig = Sig(str(self.time))
 				self.maybe_list_children()
 				for n in self.children.itervalues(): sig.update(n.sig)
-			sig = sig.digest()
+				sig = sig.digest()
 			self._sig = sig
 			return sig
 	sig = property(sig)
 	
-	def sig_to_hexstring(self): return raw_to_hexstring(self.sig)
+	def sig_to_hexstring(self):
+		sig = self.sig
+		if self.kind != DIR: return sig
+		else: return raw_to_hexstring(sig)
 	
 	def maybe_list_children(self):
 		if self.children is None: self.do_list_children()
@@ -212,10 +216,10 @@ class Node(object):
 		else: path = self.abs_path
 
 		if self.monitor: sig = self.sig_to_hexstring()
-		else: sig = 'unmonitored'.rjust(32)
+		else: sig = 'unmonitored'
 
 		print \
-			sig, \
+			sig.rjust(32), \
 			(self.time is None and ' ' or str(self.time)).rjust(12), \
 			{UNKNOWN: '', DIR: 'dir', FILE: 'file'}[self.kind].rjust(4) + \
 			' ' + path
