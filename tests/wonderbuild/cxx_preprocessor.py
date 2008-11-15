@@ -227,6 +227,7 @@ class DepScanner:
 		return rel_includes, abs_includes
 		
 	def display(self):
+		print 'cpp dep scanner:'
 		print 'include path:', self.paths
 		for path, includes in self.deps.iteritems(): print path, includes
 		print 'not found:', self.not_found

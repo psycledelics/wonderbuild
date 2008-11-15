@@ -38,7 +38,7 @@ if __name__ == '__main__':
 				print '\tdep:', dep.abs_path
 	
 	scanner.display()
-	#fs.display()
+	fs.display()
 
 	t0 = time.time()
 	scanner.dump()

@@ -71,6 +71,7 @@ class FileSystem(object):
 	def sig_to_hexstring(self): return raw_to_hexstring(self.sig)
 
 	def display(self):
+		print 'fs:'
 		for n in self.nodes.itervalues(): n.display()
 
 UNKNOWN = 0
@@ -211,7 +212,7 @@ class Node(object):
 		else: path = self.abs_path
 
 		if self.monitor: sig = self.sig_to_hexstring()
-		else: sig = 'unmonitored'
+		else: sig = 'unmonitored'.rjust(32)
 
 		print \
 			sig, \
