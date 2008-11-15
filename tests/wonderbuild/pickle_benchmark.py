@@ -4,12 +4,7 @@
 
 if __name__ == '__main__':
 
-	import os, os.path, cPickle, time, timeit
-
-	def timed(func, *args, **kw):
-		t0 = time.time()
-		func(*args, **kw)
-		print func.__name__, time.time() - t0
+	import os, os.path, cPickle, gc, time
 
 	def load(path):
 		f = file(path, 'rb')
@@ -29,31 +24,33 @@ if __name__ == '__main__':
 		f.close()
 
 	def test(X):
+		gc.disable()
 		path = '/tmp/t'
-		count = 1000000
+		count = 500000
 		d = {}
 		for x in xrange(count): d[x] = X(x, x)
 		print X.__name__;
 		dump(d, path);
+		print 'size:', os.path.getsize(path)
 		d = load(path)
 		for x in xrange(count):
 			assert d[x].a == x
 			#assert d[x].b == x
-		print 'size:', os.path.getsize(path)
+		gc.enable()
 
 	class OneElementDict(object):
 		def __init__(self, a, b): self.a = a
 	test(OneElementDict)
 
-	class OneSlotDict(object):
+	class OneSlot(object):
 		__slots__ = ('a',)
 		def __init__(self, a, b): self.a = a
-	test(OneSlotDict)
+	test(OneSlot)
 	
-	class TwoSlotsDict(object):
+	class TwoSlots(object):
 		__slots__ = ('a', 'b')
 		def __init__(self, a, b): self.a = a; self.b = b
-	test(TwoSlotsDict)
+	test(TwoSlots)
 	
 	class TwoSlotsTuple(object):
 		__slots__ = ('a', 'b')
