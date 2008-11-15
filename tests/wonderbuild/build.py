@@ -29,12 +29,12 @@ if __name__ == '__main__':
 	for src in src_dirs:
 		src = top.find(src)
 		scanner.paths.add(src.abs_path)
-		foo = src.find('foo/foo.cpp')
-		main = src.find('main/main.cpp')
+		foo = src.find('foo/foo.cpp', monitor = True)
+		main = src.find('main/main.cpp', monitor = True)
 		for s in foo, main:
 			print 'translation unit:', s.abs_path
 			for dep in scanner.scan_deps(s.abs_path):
-				dep = fs.declare(dep)
+				dep = fs.declare(dep, monitor = True)
 				print '\tdep:', dep.abs_path
 	
 	scanner.display()

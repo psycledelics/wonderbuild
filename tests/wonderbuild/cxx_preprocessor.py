@@ -238,7 +238,7 @@ if __name__ == '__main__':
 	
 	dirs = set()
 	files = set()
-	for arg in sys.argv[1:]:
+	for arg in [x for x in sys.argv[1:] if not x.startswith('-')]:
 		if os.path.isdir(arg): dirs.add(arg)
 		else: files.add(arg)
 

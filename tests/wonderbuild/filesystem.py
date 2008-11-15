@@ -7,6 +7,11 @@ from hashlib import md5 as Sig
 
 from signature import raw_to_hexstring
 
+if '--debug' in sys.argv:
+	def debug(s): print >> sys.stderr, s
+else:
+	def debug(s): pass
+
 class FileSystem(object):
 	def __init__(self, cache_path = '/tmp/filesystem.cache'):
 		self.nodes = {}
@@ -39,11 +44,11 @@ class FileSystem(object):
 			finally: f.close()
 		finally: gc.enable()
 	
-	def declare(self, name):
+	def declare(self, name, monitor = False):
 		name = os.path.normpath(name)
 		try: return self.nodes[name]
 		except KeyError:
-			n = Node(None, name)
+			n = Node(None, name, monitor = monitor)
 			self.nodes[name] = n
 			return n
 
@@ -58,7 +63,8 @@ class FileSystem(object):
 	
 	def sig(self):
 		sig = Sig()
-		for n in self.nodes.itervalues(): sig.update(n.sig)
+		for n in self.nodes.itervalues():
+			if n.monitor: sig.update(n.sig)
 		return sig.digest()
 	sig = property(sig)
 
@@ -72,13 +78,14 @@ DIR = 1
 FILE = 2
 
 class Node(object):
-	__slots__ = ('_abs_path', 'parent', 'name', 'kind', 'children', 'time', '_sig')
+	__slots__ = ('_abs_path', 'parent', 'name', 'kind', 'children', 'monitor', 'time', '_sig')
 
-	def __init__(self, parent, name, kind = UNKNOWN, time = None):
+	def __init__(self, parent, name, kind = UNKNOWN, monitor = False, time = None):
 		self.parent = parent
 		self.name = name
 		self.kind = kind
 		self.children = None
+		self.monitor = monitor
 		self.time = time
 		
 	def abs_path(self):
@@ -94,7 +101,7 @@ class Node(object):
 		if self.time is None: self.do_stat()
 
 	def do_stat(self):
-		#print >> sys.stderr, 'os.stat   :', self.abs_path
+		debug('os.stat   : ' + self.abs_path)
 		
 		# try-except is a tiny bit faster
 		#st = os.lstat(self.abs_path)
@@ -111,6 +118,7 @@ class Node(object):
 		self.time = st.st_mtime
 
 	def changed(self, parent_path = None):
+		if not self.monitor: return None
 		old_time = self.time
 		if old_time is None: return 'A ' + self.abs_path
 		try: self.do_stat()
@@ -127,7 +135,7 @@ class Node(object):
 			self.maybe_list_children()
 			if self.time != old_time:
 				for name in os.listdir(self.abs_path):
-					if not name in self.children: self.children[name] = Node(self, name)
+					if not name in self.children: self.children[name] = Node(self, name, monitor = True)
 			for n in self.children.values(): # copy because children remove themselves
 				changed = n.changed()
 				if changed:
@@ -139,6 +147,7 @@ class Node(object):
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
+			if not self.monitor: return ''
 			self.maybe_stat()
 			assert self.time is not None
 			sig = Sig(str(self.time))
@@ -156,12 +165,12 @@ class Node(object):
 		if self.children is None: self.do_list_children()
 	
 	def do_list_children(self):
-		#print >> sys.stderr, 'os.listdir:', self.abs_path
+		debug('os.listdir: ' + self.abs_path)
 		self.children = {}
-		for name in os.listdir(self.abs_path): self.children[name] = Node(self, name)
+		for name in os.listdir(self.abs_path): self.children[name] = Node(self, name, monitor = self.monitor)
 
-	def find(self, path): return self._find(path)
-	def _find(self, path, start = 0):
+	def find(self, path, monitor = False): return self._find(path, monitor)
+	def _find(self, path, monitor, start = 0):
 		sep = path.find(os.sep, start)
 		if sep > start:
 			name = path[start:sep]
@@ -175,7 +184,7 @@ class Node(object):
 			if sep == len(path) - 1: return child
 			child.maybe_stat()
 			if child.kind != DIR: return None
-			return child._find(path, sep + 1)
+			return child._find(path, monitor, sep + 1)
 		elif sep < 0:
 			name = path[start:]
 			if name == os.pardir: return self.parent or self
@@ -189,19 +198,24 @@ class Node(object):
 			while top.parent: top = top.parent
 			if top.name != os.sep:
 				print >> sys.stderr, 'creating root node due to:', path
-				root = Node(None, os.sep, DIR)
+				root = Node(None, os.sep, DIR, monitor = False)
 				top.parent = root.find(os.path.dirname(os.getcwd()))
 			else: root = top
-			return root._find(path, 1)
+			return root._find(path, monitor, 1)
 
 	def display(self, tabs = 0):
 		if False: path = '  |' * tabs + '- ' + (self.parent and self.name  or self.abs_path)
 		else: path = self.abs_path
+
+		if self.monitor: sig = self.sig_to_hexstring()
+		else: sig = 'unmonitored'
+
 		print \
-			self.sig_to_hexstring(), \
+			sig, \
 			(self.time is None and ' ' or str(self.time)).rjust(12), \
 			{UNKNOWN: '', DIR: 'dir', FILE: 'file'}[self.kind].rjust(4) + \
 			' ' + path
+
 		if not self.children: return
 		tabs += 1
 		for n in self.children.itervalues(): n.display(tabs)
@@ -213,14 +227,15 @@ if __name__ == '__main__':
 	fs = FileSystem()
 	print >> sys.stderr, 'load time:', time.time() - t0
 	
-	if len(sys.argv) > 1: paths = sys.argv[1:]
+	args = [x for x in sys.argv[1:] if not x.startswith('-')]
+	if len(args): paths = args
 	else: paths = [os.curdir]
 
 	paths = [os.path.abspath(p) for p in paths]
 	#top = fs.declare(os.path.commonprefix(paths))
 	for n in fs.nodes.values(): # copy because we remove
 		if n.abs_path not in paths: del fs.nodes[n.name]
-	for p in paths: fs.declare(p)
+	for p in paths: fs.declare(p, monitor = True)
 
 	#n = fs.declare('waf-test')
 	#n = fs.declare('unit_tests')
