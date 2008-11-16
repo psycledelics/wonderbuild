@@ -13,6 +13,8 @@ if do_debug:
 else:
 	def debug(s): pass
 
+SIG_WITH_MAX_TIME = True
+
 class FileSystem(object):
 	def __init__(self, cache_path = '/tmp/filesystem.cache'):
 		self.cache_path = cache_path
@@ -55,14 +57,24 @@ class FileSystem(object):
 				else: some_changed = changed
 		return some_changed
 	
-	def sig(self):
-		sig = Sig()
-		for n in self.nodes.itervalues():
-			if n.monitor: sig.update(n.sig)
-		return sig.digest()
+	if SIG_WITH_MAX_TIME: # use max time
+		def sig(self):
+			time = 0
+			for n in self.nodes.itervalues():
+				if n.monitor:
+					sub_time = n.actual_time
+					if sub_time > time: time = sub_time
+			return time
+		def sig_to_string(self): return str(self.sig)
+	else: # use hash sum
+		def sig(self):
+			sig = Sig()
+			for n in self.nodes.itervalues():
+				if n.monitor: sig.update(n.sig)
+			return sig.digest()
+		def sig_to_string(self): return raw_to_hexstring(self.sig)
 	sig = property(sig)
 
-	def sig_to_hexstring(self): return raw_to_hexstring(self.sig)
 
 	def display(self):
 		print 'fs:'
@@ -72,21 +84,25 @@ DIR = 1
 FILE = 2
 
 class Node(object):
-	__slots__ = ('parent', 'name', '_kind', '_children', 'monitor', '_time', '_sig', '_abs_path')
+	__slots__ = ('parent', 'name', '_kind', '_old_children', '_actual_children', 'monitor', 'old_time', '_actual_time', '_sig', '_abs_path')
 
 	def __getstate__(self):
-		return self.parent, self.name, self._kind, self._children, self.monitor, self._time, self._sig, self._abs_path
+		return self.parent, self.name, self._kind, self._old_children, self.monitor, self.old_time, self._sig, self._abs_path
 
 	def __setstate__(self, data):
-		self.parent, self.name, self._kind, self._children, self.monitor, self._time, self._sig, self._abs_path = data
+		self.parent, self.name, self._kind, self._old_children, self.monitor, self.old_time, self._sig, self._abs_path = data
+		self._actual_children = None
+		self._actual_time = None
 
 	def __init__(self, parent, name, monitor = False):
 		self.parent = parent
 		self.name = name
 		self._kind = None
-		self._children = None
+		self._old_children = None
+		self._actual_children = None
 		self.monitor = monitor
-		self._time = None
+		self.old_time = None
+		self._actual_time = None
 		self._sig = None
 		self._abs_path = None
 	
@@ -106,72 +122,118 @@ class Node(object):
 		if stat.S_ISDIR(st.st_mode): self._kind = DIR
 		else: self._kind = FILE
 		
-		self._time = st.st_mtime
+		self._actual_time = st.st_mtime
 
 	def kind(self):
 		if self._kind is None: self.do_stat()
 		return self._kind
 	kind = property(kind)
 
-	def time(self):
-		if self._time is None: self.do_stat()
-		return self._time
-	time = property(time)
+	def is_dir(self): return self.kind == DIR
+	is_dir = property(is_dir)
 
-	def sig(self):
-		if self._sig is None:
-			if not self.monitor: return ''
-			time = self.time
-			assert time is not None
-			if self._kind != DIR: sig = str(time)
+	def actual_time(self):
+		if self._actual_time is None: self.do_stat()
+		return self._actual_time
+	actual_time = property(actual_time)
+
+	def has_changed(self):
+		if self.actual_time != self.old_time: return True
+		if self.is_dir:
+			for n in self.old_children:
+				if n.has_changed(): return True
+		return False
+		
+	def mark_read(self):
+		self.old_time = self.actual_time
+		if self.is_dir: self._old_children = self.actual_children
+
+	def actual_children(self):
+		if self._actual_children is None:
+			if self.actual_time == self.old_time: self._actual_children = self.old_children
 			else:
-				sig = Sig(str(time))
-				for n in self.children.itervalues(): sig.update(n.sig)
-				sig = sig.digest()
-			self._sig = sig
-		return self._sig
-	sig = property(sig)
-	
-	def sig_to_hexstring(self):
-		sig = self.sig
-		if self._kind != DIR: return sig
-		else: return raw_to_hexstring(sig)
-
-	def children(self):	
-		if self._children is None:
+				global do_debug
+				if do_debug: debug('os.listdir: ' + self.abs_path)
+				children = {}
+				for name in os.listdir(self.abs_path):
+					if name in self.old_children: children[name] = self.old_children[name]
+					else: children[name] = Node(self, name, monitor = self.monitor)
+				self._actual_children = children
+		return self._actual_children
+	actual_children = property(actual_children)
+		
+	def old_children(self):	
+		if self._old_children is None:
 			global do_debug
 			if do_debug: debug('os.listdir: ' + self.abs_path)
 			children = {}
 			for name in os.listdir(self.abs_path): children[name] = Node(self, name, monitor = self.monitor)
-			self._children = children
-		return self._children
-	children = property(children)
+			self._old_children = children
+		return self._old_children
+	old_children = property(old_children)
 
-	def changed(self, parent_path = None):
+	if SIG_WITH_MAX_TIME: # use max time
+		def sig(self):
+			if self._sig is None:
+				if not self.monitor: return 0
+				time = self.actual_time
+				assert time is not None
+				if self._kind == DIR:
+					for n in self.actual_children.itervalues():
+						sub_time = n.sig
+						if sub_time > time: time = sub_time
+				self._sig = time
+				self.mark_read()
+			return self._sig
+		def sig_to_string(self): return str(self.sig)
+	else: # use hash sum
+		def sig(self):
+			if self._sig is None:
+				if not self.monitor: return ''
+				time = self.actual_time
+				assert time is not None
+				if self._kind != DIR: sig = str(time)
+				else:
+					sig = Sig(str(time))
+					for n in self.actual_children.itervalues(): sig.update(n.sig)
+					sig = sig.digest()
+				self._sig = sig
+				self.mark_read()
+			return self._sig
+		def sig_to_string(self):
+			sig = self.sig
+			if self._kind != DIR: return sig
+			else: return raw_to_hexstring(sig)
+	sig = property(sig)
+	
+	def changed(self):
 		if not self.monitor: return None
-		old_time = self._time
-		if old_time is None: return 'A ' + self.abs_path
-		try: self.do_stat()
-		except OSError:
-			if self.parent:
-				del self.parent._sig
-				del self.parent.children[self.name]
-			del self._sig
-			return 'D ' + self.abs_path
 		some_changed = None
-		if self._time != old_time:
-			some_changed = 'U ' + self.abs_path
-		if self._kind == DIR:
-			children = self.children
-			if self._time != old_time:
-				for name in os.listdir(self.abs_path):
-					if not name in children: children[name] = Node(self, name, monitor = True)
-			for n in children.values(): # copy because children remove themselves
-				changed = n.changed()
-				if changed:
-					if some_changed: some_changed += '\n' + changed
-					else: some_changed = changed
-		if some_changed: del self._sig
+		if self.old_time is None: some_changed = 'A ' + self.abs_path
+		else:
+			try: self.do_stat()
+			except OSError:
+				if self.parent: del self.parent.old_children[self.name]
+				some_changed = 'D ' + self.abs_path
+			else:
+				if self._actual_time != self.old_time:
+					some_changed = 'U ' + self.abs_path
+				if self._kind == DIR:
+					children = self.old_children
+					if self._actual_time != self.old_time:
+						for name in os.listdir(self.abs_path):
+							if not name in children: children[name] = Node(self, name, monitor = True)
+					for n in children.values(): # copy because children remove themselves
+						changed = n.changed()
+						if changed:
+							if some_changed: some_changed += '\n' + changed
+							else: some_changed = changed
+		if some_changed:
+			self._sig = None
+			parent = self.parent
+			while parent is not None and parent._sig is not None:
+				parent._sig = None
+				parent = parent.parent
 		return some_changed
 
 	def find(self, path, monitor = False):
@@ -185,7 +247,7 @@ class Node(object):
 			if name == os.pardir: return self.parent or self
 			if name == os.curdir: return self
 			if self.kind != DIR: return None
-			child = self.children.get(name, None)
+			child = self.actual_children.get(name, None)
 			if child is None: return None
 			if sep == len(path) - 1: return child
 			if child.kind != DIR: return None
@@ -195,7 +257,7 @@ class Node(object):
 			if name == os.pardir: return self.parent or self
 			if name == os.curdir: return self
 			if self.kind != DIR: return None
-			return self.children.get(name, None)
+			return self.actual_children.get(name, None)
 		else: # sep == start, absolute path
 			top = self
 			while top.parent: top = top.parent
@@ -219,18 +281,21 @@ class Node(object):
 		if False: path = '  |' * tabs + '- ' + (self.parent and self.name  or self.abs_path)
 		else: path = self.abs_path
 
-		if self.monitor: sig = self.sig_to_hexstring()
+		if self.monitor: sig = self.sig_to_string()
 		else: sig = 'unmonitored'
 
+		if SIG_WITH_MAX_TIME: rjust = 12
+		else: rjust = 23
+
 		print \
-			sig.rjust(32), \
-			(self._time is None and '?' or str(self._time)).rjust(12), \
+			sig.rjust(rjust), \
+			(self.old_time is None and '?' or str(self.old_time)).rjust(12), \
 			(self._kind is None and '?' or {DIR: 'dir', FILE: 'file'}[self._kind]).rjust(4) + \
 			' ' + path
 
-		if self._children is not None:
+		if self._old_children is not None:
 			tabs += 1
-			for n in self._children.itervalues(): n.display(tabs)
+			for n in self._old_children.itervalues(): n.display(tabs)
 
 if __name__ == '__main__':
 	import time
@@ -249,19 +314,16 @@ if __name__ == '__main__':
 		if n.abs_path not in paths: del fs.nodes[n.name]
 	for p in paths: fs.declare(p, monitor = True)
 
-	#n = fs.declare('waf-test')
-	#n = fs.declare('unit_tests')
-	
-	#t0 = time.time()
-	#print >> sys.stderr, 'old sig: ' + fs.sig_to_hexstring()
-	#print >> sys.stderr, 'walk time:', time.time() - t0
+	#print >> sys.stderr, 'old sig: ' + fs.sig_to_string()
 
 	t0 = time.time()
-	print >> sys.stderr, 'changed:\n' + str(fs.changed())
-	print >> sys.stderr, 'sig check time:', time.time() - t0
+	changed = fs.changed()
+	t1 = time.time()
+	print >> sys.stderr, 'changed:\n' + str(changed)
+	print >> sys.stderr, 'sig check time:', t1 - t0
 
 	t0 = time.time()
-	print >> sys.stderr, 'new sig: ' + fs.sig_to_hexstring()
+	print >> sys.stderr, 'new sig: ' + fs.sig_to_string()
 	print >> sys.stderr, 'sig time:', time.time() - t0
 
 	fs.display()

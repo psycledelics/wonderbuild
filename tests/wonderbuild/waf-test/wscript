@@ -3,7 +3,7 @@
 import os, os.path, Options
 
 APPNAME = 'waf-test'
-VERSION = '0.0.1'
+VERSION = '1.2.3'
 
 srcdir = '.'
 blddir = '++build'
@@ -89,8 +89,8 @@ def module(bld, target, kind, types = 'shared', sources = None, includes = None,
 			obj.target = target
 			if type == 'shared':
 				global VERSION
-				obj.vnum = VERSION
-				lib_version_symlinks(os.path.join(bld.bdir, obj.env.variant()), 'lib' + obj.target + '.so', obj.vnum)
+				############obj.vnum = VERSION
+				############lib_version_symlinks(os.path.join(bld.bdir, obj.env.variant()), 'lib' + obj.target + '.so', obj.vnum)
 		obj.name = target + '-' + type
 		deep_sources(bld, obj, sources)
 		obj.includes = includes
