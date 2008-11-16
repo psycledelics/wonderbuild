@@ -7,7 +7,8 @@ from hashlib import md5 as Sig
 
 from signature import raw_to_hexstring
 
-if '--debug' in sys.argv:
+do_debug = '--debug' in sys.argv
+if do_debug:
 	def debug(s): print >> sys.stderr, s
 else:
 	def debug(s): pass
@@ -92,7 +93,8 @@ class Node(object):
 		self.monitor = monitor
 	
 	def do_stat(self):
-		debug('os.stat   : ' + self.abs_path)
+		global do_debug
+		if do_debug: debug('os.stat   : ' + self.abs_path)
 		
 		# try-except is a tiny bit faster
 		#st = os.lstat(self.abs_path)
@@ -145,7 +147,8 @@ class Node(object):
 	def children(self):	
 		try: return self._children
 		except AttributeError:
-			debug('os.listdir: ' + self.abs_path)
+			global do_debug
+			if do_debug: debug('os.listdir: ' + self.abs_path)
 			children = {}
 			for name in os.listdir(self.abs_path): children[name] = Node(self, name, monitor = self.monitor)
 			self._children = children
