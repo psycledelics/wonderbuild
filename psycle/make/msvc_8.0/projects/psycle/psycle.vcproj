@@ -39,7 +39,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PrecompiledHeaderThrough="psycle/project.private.hpp"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -105,7 +104,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PrecompiledHeaderThrough="psycle/project.private.hpp"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
