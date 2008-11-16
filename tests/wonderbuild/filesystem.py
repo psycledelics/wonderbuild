@@ -15,20 +15,16 @@ else:
 
 class FileSystem(object):
 	def __init__(self, cache_path = '/tmp/filesystem.cache'):
-		self.nodes = {}
 		self.cache_path = cache_path
 		self.load()
-
-	load_dump_attributes = ('nodes',)
 
 	def load(self):
 		gc.disable()
 		try:
 			try:
 				f = file(self.cache_path, 'rb')
-				try: data = cPickle.load(f)
+				try: self.nodes = cPickle.load(f)
 				finally: f.close()
-				for x in self.load_dump_attributes: setattr(self, x, data[x])
 			except Exception, e:
 				print >> sys.stderr, 'could not load pickle:', e
 				self.nodes = {}
@@ -38,10 +34,7 @@ class FileSystem(object):
 		gc.disable()
 		try:
 			f = file(self.cache_path, 'wb')
-			try:
-				data = {}
-				for x in self.load_dump_attributes: data[x] = getattr(self, x)
-				cPickle.dump(data, f, cPickle.HIGHEST_PROTOCOL)
+			try: cPickle.dump(self.nodes, f, cPickle.HIGHEST_PROTOCOL)
 			finally: f.close()
 		finally: gc.enable()
 	
@@ -90,7 +83,12 @@ class Node(object):
 	def __init__(self, parent, name, monitor = False):
 		self.parent = parent
 		self.name = name
+		self._kind = None
+		self._children = None
 		self.monitor = monitor
+		self._time = None
+		self._sig = None
+		self._abs_path = None
 	
 	def do_stat(self):
 		global do_debug
@@ -111,22 +109,17 @@ class Node(object):
 		self._time = st.st_mtime
 
 	def kind(self):
-		try: return self._kind
-		except AttributeError:
-			self.do_stat()
-			return self._kind
+		if self._kind is None: self.do_stat()
+		return self._kind
 	kind = property(kind)
 
 	def time(self):
-		try: return self._time
-		except AttributeError:
-			self.do_stat()
-			return self._time
+		if self._time is None: self.do_stat()
+		return self._time
 	time = property(time)
 
 	def sig(self):
-		try: return self._sig
-		except AttributeError:
+		if self._sig is None:
 			if not self.monitor: return ''
 			time = self.time
 			assert time is not None
@@ -136,7 +129,7 @@ class Node(object):
 				for n in self.children.itervalues(): sig.update(n.sig)
 				sig = sig.digest()
 			self._sig = sig
-			return sig
+		return self._sig
 	sig = property(sig)
 	
 	def sig_to_hexstring(self):
@@ -145,14 +138,13 @@ class Node(object):
 		else: return raw_to_hexstring(sig)
 
 	def children(self):	
-		try: return self._children
-		except AttributeError:
+		if self._children is None:
 			global do_debug
 			if do_debug: debug('os.listdir: ' + self.abs_path)
 			children = {}
 			for name in os.listdir(self.abs_path): children[name] = Node(self, name, monitor = self.monitor)
 			self._children = children
-			return children
+		return self._children
 	children = property(children)
 
 	def changed(self, parent_path = None):
@@ -216,12 +208,11 @@ class Node(object):
 			return root._find(path, 1)
 
 	def abs_path(self):
-		try: return self._abs_path
-		except AttributeError:
+		if self._abs_path is None:
 			if not self.parent: abs_path = self.name
 			else: abs_path = os.path.join(self.parent.abs_path, self.name)
 			self._abs_path = abs_path
-			return abs_path
+		return self._abs_path
 	abs_path = property(abs_path)
 
 	def display(self, tabs = 0):
@@ -237,9 +228,9 @@ class Node(object):
 			(self._kind is None and '?' or {DIR: 'dir', FILE: 'file'}[self._kind]).rjust(4) + \
 			' ' + path
 
-		if not self.children: return
-		tabs += 1
-		for n in self._children.itervalues(): n.display(tabs)
+		if self._children is not None:
+			tabs += 1
+			for n in self._children.itervalues(): n.display(tabs)
 
 if __name__ == '__main__':
 	import time

@@ -13,30 +13,33 @@ class DepScanner:
 	'C/C++ dependency scanner. #include statements, and nothing else, no #if, no #define (dumb)'
 	
 	def __init__(self, filesystem, paths = None, cache_path = '/tmp/dep-scanner.cache'):
+		self.fs = filesystem
 		if paths is not None: self.paths = paths
 		else: self.paths = set()
-		self.cache_path = cache_path
-		self.fs = filesystem
 		self.not_found = set() # of unique_path
+		self.cache_path = cache_path
 		self.load()
 
 	def load(self):
+		gc.disable()
 		try:
-			f = file(self.cache_path, 'rb')
 			try:
-				p = cPickle.Unpickler(f)
-				self.deps = p.load()
-			finally: f.close()
-		except Exception, e:
-			print >> sys.stderr, 'could not load pickle:', e
-			self.deps = {} # { unique_path: (rel_includes, abs_includes) }
-		else:
-			for path in self.deps.keys(): # copy because we remove some elements in the loop
-				print 'scanner: cached:', path
-				try: changed = self.fs.declare(path, monitor = True).changed()
-				except OSError: self.not_found.add(path) ; print 'scanner: del not found:', path
-				else:
-					if changed: del self.deps[path] ;  print 'scanner: del changed:', changed
+				f = file(self.cache_path, 'rb')
+				try:
+					p = cPickle.Unpickler(f)
+					self.deps = p.load()
+				finally: f.close()
+			except Exception, e:
+				print >> sys.stderr, 'could not load pickle:', e
+				self.deps = {} # { unique_path: (rel_includes, abs_includes) }
+			else:
+				for path in self.deps.keys(): # copy because we remove some elements in the loop
+					print 'scanner: cached:', path
+					try: changed = self.fs.declare(path, monitor = True).changed()
+					except OSError: self.not_found.add(path) ; print 'scanner: del not found:', path
+					else:
+						if changed: del self.deps[path] ;  print 'scanner: del changed:', changed
+		finally: gc.enable()
 
 	def dump(self):
 		f = file(self.cache_path, 'wb')
