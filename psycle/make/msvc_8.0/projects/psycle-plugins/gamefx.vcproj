@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="psycle.plugins.gamefx"
 	ProjectGUID="{485B9E85-CBC7-4B27-8AD2-5DD97234FBED}"
+	RootNamespace="psycle.plugins.gamefx"
 	>
 	<Platforms>
 		<Platform
@@ -142,6 +143,10 @@
 		/>
 	</References>
 	<Files>
+		<File
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\jme\gamefx\aaf.cpp"
+			>
+		</File>
 		<File
 			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\jme\gamefx\filter.cpp"
 			>
