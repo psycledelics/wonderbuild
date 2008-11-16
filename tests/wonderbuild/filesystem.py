@@ -74,33 +74,23 @@ class FileSystem(object):
 		print 'fs:'
 		for n in self.nodes.itervalues(): n.display()
 
-UNKNOWN = 0
 DIR = 1
 FILE = 2
 
 class Node(object):
-	__slots__ = ('_abs_path', 'parent', 'name', 'kind', 'children', 'monitor', 'time', '_sig')
+	__slots__ = ('parent', 'name', '_kind', '_children', 'monitor', '_time', '_sig', '_abs_path')
 
-	def __init__(self, parent, name, kind = UNKNOWN, monitor = False, time = None):
+	def __getstate__(self):
+		return self.parent, self.name, self._kind, self._children, self.monitor, self._time, self._sig, self._abs_path
+
+	def __setstate__(self, data):
+		self.parent, self.name, self._kind, self._children, self.monitor, self._time, self._sig, self._abs_path = data
+
+	def __init__(self, parent, name, monitor = False):
 		self.parent = parent
 		self.name = name
-		self.kind = kind
-		self.children = None
 		self.monitor = monitor
-		self.time = time
-		
-	def abs_path(self):
-		try: return self._abs_path
-		except AttributeError:
-			if not self.parent: abs_path = self.name
-			else: abs_path = os.path.join(self.parent.abs_path, self.name)
-			self._abs_path =  abs_path
-			return abs_path
-	abs_path = property(abs_path)
 	
-	def maybe_stat(self):
-		if self.time is None: self.do_stat()
-
 	def do_stat(self):
 		debug('os.stat   : ' + self.abs_path)
 		
@@ -113,14 +103,58 @@ class Node(object):
 			# may be a broken symlink
 			st = os.lstat(self.abs_path)
 
-		if stat.S_ISDIR(st.st_mode): self.kind = DIR
-		else: self.kind = FILE
+		if stat.S_ISDIR(st.st_mode): self._kind = DIR
+		else: self._kind = FILE
 		
-		self.time = st.st_mtime
+		self._time = st.st_mtime
+
+	def kind(self):
+		try: return self._kind
+		except AttributeError:
+			self.do_stat()
+			return self._kind
+	kind = property(kind)
+
+	def time(self):
+		try: return self._time
+		except AttributeError:
+			self.do_stat()
+			return self._time
+	time = property(time)
+
+	def sig(self):
+		try: return self._sig
+		except AttributeError:
+			if not self.monitor: return ''
+			time = self.time
+			assert time is not None
+			if self._kind != DIR: sig = str(time)
+			else:
+				sig = Sig(str(time))
+				for n in self.children.itervalues(): sig.update(n.sig)
+				sig = sig.digest()
+			self._sig = sig
+			return sig
+	sig = property(sig)
+	
+	def sig_to_hexstring(self):
+		sig = self.sig
+		if self._kind != DIR: return sig
+		else: return raw_to_hexstring(sig)
+
+	def children(self):	
+		try: return self._children
+		except AttributeError:
+			debug('os.listdir: ' + self.abs_path)
+			children = {}
+			for name in os.listdir(self.abs_path): children[name] = Node(self, name, monitor = self.monitor)
+			self._children = children
+			return children
+	children = property(children)
 
 	def changed(self, parent_path = None):
 		if not self.monitor: return None
-		old_time = self.time
+		old_time = self._time
 		if old_time is None: return 'A ' + self.abs_path
 		try: self.do_stat()
 		except OSError:
@@ -130,49 +164,20 @@ class Node(object):
 			del self._sig
 			return 'D ' + self.abs_path
 		some_changed = None
-		if self.time != old_time:
+		if self._time != old_time:
 			some_changed = 'U ' + self.abs_path
-		if self.kind == DIR:
-			self.maybe_list_children()
-			if self.time != old_time:
+		if self._kind == DIR:
+			children = self.children
+			if self._time != old_time:
 				for name in os.listdir(self.abs_path):
-					if not name in self.children: self.children[name] = Node(self, name, monitor = True)
-			for n in self.children.values(): # copy because children remove themselves
+					if not name in children: children[name] = Node(self, name, monitor = True)
+			for n in children.values(): # copy because children remove themselves
 				changed = n.changed()
 				if changed:
 					if some_changed: some_changed += '\n' + changed
 					else: some_changed = changed
 		if some_changed: del self._sig
 		return some_changed
-
-	def sig(self):
-		try: return self._sig
-		except AttributeError:
-			if not self.monitor: return ''
-			self.maybe_stat()
-			assert self.time is not None
-			if self.kind != DIR: sig = str(self.time)
-			else:
-				sig = Sig(str(self.time))
-				self.maybe_list_children()
-				for n in self.children.itervalues(): sig.update(n.sig)
-				sig = sig.digest()
-			self._sig = sig
-			return sig
-	sig = property(sig)
-	
-	def sig_to_hexstring(self):
-		sig = self.sig
-		if self.kind != DIR: return sig
-		else: return raw_to_hexstring(sig)
-	
-	def maybe_list_children(self):
-		if self.children is None: self.do_list_children()
-	
-	def do_list_children(self):
-		debug('os.listdir: ' + self.abs_path)
-		self.children = {}
-		for name in os.listdir(self.abs_path): self.children[name] = Node(self, name, monitor = self.monitor)
 
 	def find(self, path, monitor = False):
 		r = self._find(path)
@@ -184,32 +189,37 @@ class Node(object):
 			name = path[start:sep]
 			if name == os.pardir: return self.parent or self
 			if name == os.curdir: return self
-			self.maybe_stat()
 			if self.kind != DIR: return None
-			self.maybe_list_children()
 			child = self.children.get(name, None)
 			if child is None: return None
 			if sep == len(path) - 1: return child
-			child.maybe_stat()
 			if child.kind != DIR: return None
 			return child._find(path, sep + 1)
 		elif sep < 0:
 			name = path[start:]
 			if name == os.pardir: return self.parent or self
 			if name == os.curdir: return self
-			self.maybe_stat()
 			if self.kind != DIR: return None
-			self.maybe_list_children()
 			return self.children.get(name, None)
 		else: # sep == start, absolute path
 			top = self
 			while top.parent: top = top.parent
 			if top.name != os.sep:
 				print >> sys.stderr, 'creating root node due to:', path
-				root = Node(None, os.sep, DIR, monitor = False)
+				root = Node(None, os.sep, monitor = False)
+				root._kind = DIR
 				top.parent = root.find(os.path.dirname(os.getcwd()))
 			else: root = top
 			return root._find(path, 1)
+
+	def abs_path(self):
+		try: return self._abs_path
+		except AttributeError:
+			if not self.parent: abs_path = self.name
+			else: abs_path = os.path.join(self.parent.abs_path, self.name)
+			self._abs_path = abs_path
+			return abs_path
+	abs_path = property(abs_path)
 
 	def display(self, tabs = 0):
 		if False: path = '  |' * tabs + '- ' + (self.parent and self.name  or self.abs_path)
@@ -220,13 +230,13 @@ class Node(object):
 
 		print \
 			sig.rjust(32), \
-			(self.time is None and ' ' or str(self.time)).rjust(12), \
-			{UNKNOWN: '', DIR: 'dir', FILE: 'file'}[self.kind].rjust(4) + \
+			(self._time is None and '?' or str(self._time)).rjust(12), \
+			(self._kind is None and '?' or {DIR: 'dir', FILE: 'file'}[self._kind]).rjust(4) + \
 			' ' + path
 
 		if not self.children: return
 		tabs += 1
-		for n in self.children.itervalues(): n.display(tabs)
+		for n in self._children.itervalues(): n.display(tabs)
 
 if __name__ == '__main__':
 	import time

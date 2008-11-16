@@ -17,6 +17,7 @@ if __name__ == '__main__':
 	scanner = cxx_preprocessor.DepScanner(fs)
 	print >> sys.stderr, 'load time:', time.time() - t0
 
+	#top = fs.declare(os.path.join(os.path.dirname(__file__), 'laika'))
 	top = fs.declare(os.path.join(os.path.dirname(__file__), 'waf-test'))
 
 	src_dirs = set(['src'])
