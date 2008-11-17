@@ -36,18 +36,6 @@ def do_lib_version_symlinks():
 				os.unlink(path_name_version1)
 				os.unlink(path_name_version)
 
-		return
-		if os.path.exists(path_name):
-			if not os.path.islink(path_name):
-				name_version = name + '.' + version
-				os.rename(path_name, os.path.join(path, name_version))
-				os.symlink(name_version, path_name + '.' + version[:version.find('.')])
-				os.symlink(name_version, path_name)
-		elif 'clean' in Options.commands:
-			name_version = name + '.' + version
-			os.unlink(path_name + '.' + version[:version.find('.')])
-			os.unlink(os.path.join(path, name_version))
-
 def init():
 	pass
 
