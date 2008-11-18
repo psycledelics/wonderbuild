@@ -42,16 +42,16 @@ if __name__ == '__main__':
 
 
 	if False:
-		def find_sources(dir):
+		def find_sources_iter(dir):
 			dir = fs.node(dir)
 			sources = []
-			_find_sources(d, sources)
-			return sources
-		def _find_sources(dir, result):
-			for n in dir.list_dir():
-				if n.name.endswith('.cpp'): result.append(n)
+			yield _find_sources(d)
+		def _find_sources_iter(dir):
+			for n in dir.actual_children():
+				if n.name.endswith('.cpp'): yield n
 				elif n.is_dir:
-					for sub_dir in n.children: _find_sources(n, result)
+					for sub_dir in n.children:
+						yield _find_sources_iter(n)
 
 		modules = []
 		for m in modules:
