@@ -27,7 +27,7 @@ class Scheduler():
 		self._stop_requested = False
 		self._threads = []
 		for i in xrange(self._thread_count):
-			t = threading.Thread(target = thread_function, args = (self,), name = 'scheduler-thread-' + str(i))
+			t = threading.Thread(target = _thread_function, args = (self,), name = 'scheduler-thread-' + str(i))
 			t.setDaemon(True)
 			t.start()
 			self._threads.append(t)
@@ -42,7 +42,7 @@ class Scheduler():
 		del self._condition
 		del self._nodes_queue
 	
-	def thread_function(self):
+	def _thread_function(self):
 		while True:
 			self._condition.acquire()
 			try:
@@ -62,7 +62,7 @@ class Scheduler():
 				if dyn_deps:
 					for dyn_dep_node in dyn_deps:
 						ready = True
-						for node in dyn_dep_node.in_nodes():
+						for node in dyn_dep_node.iter_in_nodes():
 							if not node.processed():
 								ready = False
 								break
@@ -72,7 +72,7 @@ class Scheduler():
 				else:
 					for out_node in node.out_nodes():
 						ready = True
-						for node in out_node.in_nodes():
+						for node in out_node.iter_in_nodes():
 							if not node.processed():
 								ready = False
 								break

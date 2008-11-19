@@ -3,17 +3,12 @@
 # copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import sys, os, os.path, stat, gc, cPickle
-from hashlib import md5 as Sig
-
-from signature import raw_to_hexstring
 
 do_debug = '--debug' in sys.argv
 if do_debug:
 	def debug(s): print >> sys.stderr, s
 else:
 	def debug(s): pass
-
-SIG_WITH_MAX_TIME = True
 
 class FileSystem(object):
 	def __init__(self, cache_path = '/tmp/filesystem.cache'):
@@ -40,11 +35,11 @@ class FileSystem(object):
 			finally: f.close()
 		finally: gc.enable()
 	
-	def declare(self, name, monitor = False):
+	def declare(self, name):
 		name = os.path.normpath(name)
 		try: return self.nodes[name]
 		except KeyError:
-			n = Node(None, name, monitor = monitor)
+			n = Node(None, name)
 			self.nodes[name] = n
 			return n
 
@@ -57,24 +52,15 @@ class FileSystem(object):
 				else: some_changed = changed
 		return some_changed
 	
-	if SIG_WITH_MAX_TIME: # use max time
-		def sig(self):
-			time = 0
-			for n in self.nodes.itervalues():
-				if n.monitor:
-					sub_time = n.actual_time
-					if sub_time > time: time = sub_time
-			return time
-		def sig_to_string(self): return str(self.sig)
-	else: # use hash sum
-		def sig(self):
-			sig = Sig()
-			for n in self.nodes.itervalues():
-				if n.monitor: sig.update(n.sig)
-			return sig.digest()
-		def sig_to_string(self): return raw_to_hexstring(self.sig)
+	def sig(self):
+		time = 0
+		for n in self.nodes.itervalues():
+			sub_time = n.actual_time
+			if sub_time > time: time = sub_time
+		return time
 	sig = property(sig)
 
+	def sig_to_string(self): return str(self.sig)
 
 	def display(self):
 		print 'fs:'
@@ -84,23 +70,22 @@ DIR = 1
 FILE = 2
 
 class Node(object):
-	__slots__ = ('parent', 'name', '_kind', '_old_children', '_actual_children', 'monitor', 'old_time', '_actual_time', '_sig', '_abs_path')
+	__slots__ = ('parent', 'name', '_kind', '_old_children', '_actual_children', 'old_time', '_actual_time', '_sig', '_abs_path')
 
 	def __getstate__(self):
-		return self.parent, self.name, self._kind, self._old_children, self.monitor, self.old_time, self._sig, self._abs_path
+		return self.parent, self.name, self._kind, self._old_children, self.old_time, self._sig, self._abs_path
 
 	def __setstate__(self, data):
-		self.parent, self.name, self._kind, self._old_children, self.monitor, self.old_time, self._sig, self._abs_path = data
+		self.parent, self.name, self._kind, self._old_children, self.old_time, self._sig, self._abs_path = data
 		self._actual_children = None
 		self._actual_time = None
 
-	def __init__(self, parent, name, monitor = False):
+	def __init__(self, parent, name):
 		self.parent = parent
 		self.name = name
 		self._kind = None
 		self._old_children = None
 		self._actual_children = None
-		self.monitor = monitor
 		self.old_time = None
 		self._actual_time = None
 		self._sig = None
@@ -157,7 +142,7 @@ class Node(object):
 				children = {}
 				for name in os.listdir(self.abs_path):
 					if name in self.old_children: children[name] = self.old_children[name]
-					else: children[name] = Node(self, name, monitor = self.monitor)
+					else: children[name] = Node(self, name)
 				self._actual_children = children
 		return self._actual_children
 	actual_children = property(actual_children)
@@ -167,47 +152,27 @@ class Node(object):
 			global do_debug
 			if do_debug: debug('os.listdir: ' + self.abs_path)
 			children = {}
-			for name in os.listdir(self.abs_path): children[name] = Node(self, name, monitor = self.monitor)
+			for name in os.listdir(self.abs_path): children[name] = Node(self, name)
 			self._old_children = children
 		return self._old_children
 	old_children = property(old_children)
 
-	if SIG_WITH_MAX_TIME: # use max time
-		def sig(self):
-			if self._sig is None:
-				if not self.monitor: return 0
-				time = self.actual_time
-				assert time is not None
-				if self._kind == DIR:
-					for n in self.actual_children.itervalues():
-						sub_time = n.sig
-						if sub_time > time: time = sub_time
-				self._sig = time
-				self.mark_read()
-			return self._sig
-		def sig_to_string(self): return str(self.sig)
-	else: # use hash sum
-		def sig(self):
-			if self._sig is None:
-				if not self.monitor: return ''
-				time = self.actual_time
-				assert time is not None
-				if self._kind != DIR: sig = str(time)
-				else:
-					sig = Sig(str(time))
-					for n in self.actual_children.itervalues(): sig.update(n.sig)
-					sig = sig.digest()
-				self._sig = sig
-				self.mark_read()
-			return self._sig
-		def sig_to_string(self):
-			sig = self.sig
-			if self._kind != DIR: return sig
-			else: return raw_to_hexstring(sig)
+	def sig(self):
+		if self._sig is None:
+			time = self.actual_time
+			assert time is not None
+			if self._kind == DIR:
+				for n in self.actual_children.itervalues():
+					sub_time = n.sig
+					if sub_time > time: time = sub_time
+			self._sig = time
+			self.mark_read()
+		return self._sig
 	sig = property(sig)
+
+	def sig_to_string(self): return str(self.sig)
 	
 	def changed(self):
-		if not self.monitor: return None
 		some_changed = None
 		if self.old_time is None: some_changed = 'A ' + self.abs_path
 		else:
@@ -222,7 +187,7 @@ class Node(object):
 					children = self.old_children
 					if self._actual_time != self.old_time:
 						for name in os.listdir(self.abs_path):
-							if not name in children: children[name] = Node(self, name, monitor = True)
+							if not name in children: children[name] = Node(self, name)
 					for n in children.values(): # copy because children remove themselves
 						changed = n.changed()
 						if changed:
@@ -236,10 +201,7 @@ class Node(object):
 				parent = parent.parent
 		return some_changed
 
-	def find(self, path, monitor = False):
-		r = self._find(path)
-		if monitor and r and not r.monitor: r.monitor = True
-		return r
+	def find(self, path): return self._find(path)
 	def _find(self, path, start = 0):
 		sep = path.find(os.sep, start)
 		if sep > start:
@@ -263,7 +225,7 @@ class Node(object):
 			while top.parent: top = top.parent
 			if top.name != os.sep:
 				print >> sys.stderr, 'creating root node due to:', path
-				root = Node(None, os.sep, monitor = False)
+				root = Node(None, os.sep)
 				root._kind = DIR
 				top.parent = root.find(os.path.dirname(os.getcwd()))
 			else: root = top
@@ -277,25 +239,22 @@ class Node(object):
 		return self._abs_path
 	abs_path = property(abs_path)
 
+	def rel_path(self): return self.abs_path
+	rel_path = property(rel_path)
+
 	def display(self, tabs = 0):
 		if False: path = '  |' * tabs + '- ' + (self.parent and self.name  or self.abs_path)
 		else: path = self.abs_path
 
-		if self.monitor: sig = self.sig_to_string()
-		else: sig = 'unmonitored'
-
-		if SIG_WITH_MAX_TIME: rjust = 12
-		else: rjust = 23
-
 		print \
-			sig.rjust(rjust), \
+			self.sig_to_string().rjust(12), \
 			(self.old_time is None and '?' or str(self.old_time)).rjust(12), \
 			(self._kind is None and '?' or {DIR: 'dir', FILE: 'file'}[self._kind]).rjust(4) + \
 			' ' + path
 
-		if self._old_children is not None:
+		if self._actual_children is not None:
 			tabs += 1
-			for n in self._old_children.itervalues(): n.display(tabs)
+			for n in self._actual_children.itervalues(): n.display(tabs)
 
 if __name__ == '__main__':
 	import time
@@ -312,7 +271,7 @@ if __name__ == '__main__':
 	#top = fs.declare(os.path.commonprefix(paths))
 	for n in fs.nodes.values(): # copy because we remove
 		if n.abs_path not in paths: del fs.nodes[n.name]
-	for p in paths: fs.declare(p, monitor = True)
+	for p in paths: fs.declare(p)
 
 	#print >> sys.stderr, 'old sig: ' + fs.sig_to_string()
 

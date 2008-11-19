@@ -9,7 +9,7 @@ _line_continuations = re.compile(r'\\\r*\n', re.MULTILINE)
 _cpp = re.compile(r'''(/\*[^*]*\*+([^/*][^*]*\*+)*/)|//[^\n]*|("(\\.|[^"\\])*"|'(\\.|[^'\\])*'|.[^/"'\\]*)''', re.MULTILINE)
 _include = re.compile(r'^[ \t]*#[ \t]*include[ \t]*(["<])([^">]*)[">].*$', re.MULTILINE)
 
-class DepScanner:
+class DepScanner(object):
 	'C/C++ dependency scanner. #include statements, and nothing else, no #if, no #define (dumb)'
 	
 	def __init__(self, filesystem, paths = None, cache_path = '/tmp/dep-scanner.cache'):
@@ -35,7 +35,7 @@ class DepScanner:
 			else:
 				for path in self.deps.keys(): # copy because we remove some elements in the loop
 					print 'scanner: cached:', path
-					try: changed = self.fs.declare(path, monitor = True).changed()
+					try: changed = self.fs.declare(path).changed()
 					except OSError: self.not_found.add(path) ; print 'scanner: del not found:', path
 					else:
 						if changed: del self.deps[path] ;  print 'scanner: del changed:', changed
@@ -45,7 +45,7 @@ class DepScanner:
 		f = file(self.cache_path, 'wb')
 		try:
 			p = cPickle.Pickler(f, cPickle.HIGHEST_PROTOCOL)
-			for path in self.deps: self.fs.declare(path, monitor = True)
+			for path in self.deps: self.fs.declare(path)
 			p.dump(self.deps)
 		finally: f.close()
 	
