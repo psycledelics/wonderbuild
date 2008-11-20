@@ -8,36 +8,7 @@ VERSION = '1.2.3'
 srcdir = '.'
 blddir = '++build'
 
-class G(object):
-	def __init__(self):
-		self.lib_version_symlinks = []
-g = G() # :-(
-
-def lib_version_symlinks(path, name, version):
-	global g # :-(
-	g.lib_version_symlinks.append((path, name, version))
-
-def do_lib_version_symlinks():
-	if Options.platform.startswith('win'): return
-	global g
-	lib_version_symlinks = g.lib_version_symlinks
-	for path, name, version in lib_version_symlinks:
-		path_name = os.path.join(path, name)
-		clean = Options.commands['clean']
-		if clean or not os.path.islink(path_name):
-			name_version = name + '.' + version
-			path_name_version  = path_name + '.' + version
-			path_name_version1 = path_name + '.' + version[:version.find('.')]
-			if not clean and os.path.exists(path_name):
-				os.rename(path_name, path_name_version)
-				os.symlink(name_version, path_name_version1)
-				os.symlink(name_version, path_name)
-			else:
-				os.unlink(path_name_version1)
-				os.unlink(path_name_version)
-
-def init():
-	pass
+def init(): pass
 
 def set_options(opt):
 	opt.tool_options('compiler_cxx')
@@ -77,8 +48,7 @@ def module(bld, target, kind, types = 'shared', sources = None, includes = None,
 			obj.target = target
 			if type == 'shared':
 				global VERSION
-				############obj.vnum = VERSION
-				############lib_version_symlinks(os.path.join(bld.bdir, obj.env.variant()), 'lib' + obj.target + '.so', obj.vnum)
+				obj.vnum = VERSION
 		obj.name = target + '-' + type
 		deep_sources(bld, obj, sources)
 		obj.includes = includes
@@ -113,18 +83,10 @@ def install_headers(bld, includes, headers):
 			if node:
 				for dir in deep_dir_nodes(bld, [node]):
 					bld.rescan(dir)
-					if False: # only lists .cpp files ... bug in waf?!
-						print 'dir:', dir.abspath()
-						for child in dir.childs.values(): print 'child:', child
-						for file in dir.files():
-							print file.abspath()
-							if file.name.endswith('.hpp') or file.name.endswith('.h'):
-								headers_filenames.append(file.relpath_gen(bld.path))
-					else:
-						for file in bld.cache_dir_contents[dir.id]:
-							#print file
-							if file.endswith('.hpp') or file.endswith('.h'):
-								headers_filenames.append(os.path.join(dir.relpath_gen(bld.path), file))
+					for file in bld.cache_dir_contents[dir.id]:
+						#print file
+						if file.endswith('.hpp') or file.endswith('.h'):
+							headers_filenames.append(os.path.join(dir.relpath_gen(bld.path), file))
 	#print 'found header files:', headers_filenames
 	global APPNAME, VERSION
 	for i in includes:
@@ -140,10 +102,11 @@ def build(bld):
 	for d in bld.cache_dir_contents[bld.path.id]:
 		if d.startswith('src-'): src_dirs.add(d)
 
+	top_src_dir = bld.srcnode.srcpath()
+
 	for src in src_dirs:
-		lib(bld, 'foo-' + src, ['static', 'shared'], [src + '/foo'], [src])
-		program(bld, 'main-' + src, ['static', 'shared'], [src + '/main'], [src], ['foo-' + src])
-		install_headers(bld, [src], [src + '/bar'])
+		lib(bld, 'foo-' + src, ['static', 'shared'], [src + '/foo'], [top_src_dir + '/src'])
+		program(bld, 'main-' + src, ['static', 'shared'], [src + '/main'], [top_src_dir + '/src'], ['foo-' + src])
+		install_headers(bld, [src], [top_src_dir + '/bar'])
 	
-def shutdown():
-	do_lib_version_symlinks()
+def shutdown(): pass
