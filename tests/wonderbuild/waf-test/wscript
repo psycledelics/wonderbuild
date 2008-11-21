@@ -51,7 +51,8 @@ def module(bld, target, kind, types = 'shared', sources = None, includes = None,
 				obj.vnum = VERSION
 		obj.name = target + '-' + type
 		deep_sources(bld, obj, sources)
-		obj.includes = [bld.srcnode.srcpath() + '/' + i for i in includes]
+		#obj.includes = [bld.srcnode.srcpath() + '/' + i for i in includes]
+		obj.includes = includes
 		if type != 'static': obj.rpath = '\\$ORIGIN:\\$ORIGIN/../lib'
 		if uselib_local: obj.uselib_local = [u + '-' + type for u in uselib_local]
 		if uselib: obj.uselib = [u + '-' + type for u in uselib]
