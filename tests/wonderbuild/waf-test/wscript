@@ -51,7 +51,7 @@ def module(bld, target, kind, types = 'shared', sources = None, includes = None,
 				obj.vnum = VERSION
 		obj.name = target + '-' + type
 		deep_sources(bld, obj, sources)
-		obj.includes = includes
+		obj.includes = [bld.srcnode.srcpath() + '/' + i for i in includes]
 		if type != 'static': obj.rpath = '\\$ORIGIN:\\$ORIGIN/../lib'
 		if uselib_local: obj.uselib_local = [u + '-' + type for u in uselib_local]
 		if uselib: obj.uselib = [u + '-' + type for u in uselib]
@@ -102,11 +102,9 @@ def build(bld):
 	for d in bld.cache_dir_contents[bld.path.id]:
 		if d.startswith('src-'): src_dirs.add(d)
 
-	top_src_dir = bld.srcnode.srcpath()
-
 	for src in src_dirs:
-		lib(bld, 'foo-' + src, ['static', 'shared'], [src + '/foo'], [top_src_dir + '/src'])
-		program(bld, 'main-' + src, ['static', 'shared'], [src + '/main'], [top_src_dir + '/src'], ['foo-' + src])
-		install_headers(bld, [src], [top_src_dir + '/bar'])
+		lib(bld, 'foo-' + src, ['static', 'shared'], [src + '/foo'], [src])
+		program(bld, 'main-' + src, ['static', 'shared'], [src + '/main'], [src], ['foo-' + src])
+		install_headers(bld, [src], [src + '/bar'])
 	
 def shutdown(): pass
