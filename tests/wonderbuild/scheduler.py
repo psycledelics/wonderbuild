@@ -7,14 +7,11 @@ import threading
 
 class Scheduler():
 	def __init__(self):
-		self.nodes = []
 		self.thread_count = 1
 		self.timeout = 3600.0
 
 	def start(self):
-		self._nodes_queue = []
-		for n in self.nodes:
-			if not n.in_nodes(): self._nodes_queue.append(n)
+		self._task_queue = []
 		self._condition = threading.Condition(threading.Lock())
 		self._stop_requested = False
 		self._threads = []
@@ -23,6 +20,16 @@ class Scheduler():
 			t.setDaemon(True)
 			t.start()
 			self._threads.append(t)
+
+	def add_task(task):
+		if not task.in_tasks:
+			self._condition.acquire()
+			try:
+				self._task_queue.append(task)
+				self._condition.notify()
+			finally: self._condition.release()
+		else:
+			for t in task.in_tasks: self.add_task(t)
 	
 	def stop(self):
 		self._condition.acquire()
@@ -32,38 +39,38 @@ class Scheduler():
 		for t in self._threads: t.join(timeout = self.timeout)
 		del self._threads
 		del self._condition
-		del self._nodes_queue
+		del self._task_queue
 	
 	def _thread_function(self):
 		while True:
 			self._condition.acquire()
 			try:
-				while not self._stop_requested and not self._nodes_queue: self._condition.wait(timeout = self._timeout)
+				while not self._stop_requested and not self._task_queue: self._condition.wait(timeout = self._timeout)
 				if self._stop_requested: return
-				node = self._nodes_queue.pop()
+				task = self._task_queue.pop()
 			finally: self._condition.release()
 
-			dyn_prec = node.dyn_prec()
+			dyn_prec = task.dyn_prec()
 			if dyn_prec is not None:
 				self._condition.acquire()
-				try: self._nodes_queue += dyn_prec
+				try: self._task_queue += dyn_prec
 				finally: self._condition.release()
 				notify = len(dyn_prec)
 				if notify > 2: self._condition.notifyAll()
 				elif notify > 1: self._condition.notify()
 			else:
-				node.process()
+				task.process()
 				notify = 0
 				self._condition.acquire()
 				try:
-					for out_node in node.out_nodes():
+					for out_task in task.out_tasks():
 						ready = True
-						for node in out_node.iter_in_nodes():
-							if not node.processed():
+						for task in out_task.iter_in_tasks():
+							if not task.processed():
 								ready = False
 								break
 						if ready:
-							self._nodes_queue.append(out_node)
+							self._task_queue.append(out_task)
 							++notify
 				finally: self._condition.release()
 				if notify > 2: self._condition.notifyAll()

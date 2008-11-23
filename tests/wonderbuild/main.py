@@ -55,52 +55,105 @@ if __name__ == '__main__':
 if False:
 	class Project(object):
 		def __init__(self):
-			self.targets = {}
+			self.aliases = {}
+			self.tasks = {}
+			self.task_sigs = {}
+			self.fs = filesystem.FileSystem()
+			
+		def add_aliases(self, task, aliases)
+			if aliases is not None:
+				for a in aliases:
+					try: self.aliases[a].append(task)
+					except KeyError: self.aliases[a] = [task]
 
-		def build(self):
-			s = self.scheduler = Scheduler()
-			for t in self.tasks: t.prepare()
+		def build(self, tasks):
+			s = Scheduler()
 			s.start()
+			for t in tasks: s.add_task(t)
 			s.join()
 	
 	class Task(object):	
 		def __init__(self, project, aliases = None):
+			self.in_tasks = []
+			self.out_tasks = []
 			self.project = project
-			if aliases is not None: for a in aliases: project.aliases[a] = self
+			project.add_aliases(self, aliases)
 			project.tasks.append(self)
-			self.pred = []
-			self.succ = []
 
-		def prepare(self):
-			self.project.scheduler.nodes.append(self)
+		def dyn_in_tasks(self): return None
 			
 		def process(self): pass
-
+		
+		def uid(self): return None
+		
+		def old_sig(self):
+			try: return self.project.task_sigs[self.uid()]
+			except KeyError: return None
+		
+		def actual_sig(self): return None
+		
+		def update_sig(self): self.project.task_sigs[self.uid()] = self.actual_sig()
+		
 	class Obj(Task):
+		def uid(self):
+			try: return self._uid
+			except AttributeError:
+				sig = Sig(self.target.path)
+				return self._uid = sig.digest()
+
+		def actual_sig(self):
+			try: return self._actual_sig
+			except AttributeError:
+				sig = Sig(self.source.actual_sig)
+				return self._actual_sig = sig.digest()
+			
 		def process(self):
-			self.exec_subprocess(['c++', '-o', self.target.path, '-c', self.source.path])
+			if self.old_sig() != self.actual_sig()
+				self.exec_subprocess(['c++', '-o', self.target.path, '-c', self.source.path])
+				self.update_sig()
+				return True
+			else:
+				self.out_tasks = []
+				return False
 			
 	class Lib(Task):
+		def uid(self):
+			try: return self._uid
+			except AttributeError:
+				sig = Sig(self.target.path)
+				return self._uid = sig.digest()
+
+		def actual_sig(self):
+			try: return self._actual_sig
+			except AttributeError:
+				sig = Sig()
+				for s in self.sources: sig.update(s.actual_sig)
+				return self._actual_sig = sig.digest()
+
 		def process(self):
-			self.exec_subprocess(['c++', '-o', self.target.path] + [s.path for s in self.sources])
+			if self.old_sig() != self.actual_sig()
+				self.exec_subprocess(['c++', '-o', self.target.path] + [s.path for s in self.sources])
+				self.update_sig()
+				return True
+			else:
+				self.out_tasks = []
+				return False
 
 	class LibFoo(Lib):
 		def __init__(self, project):
 			Lib.__init__(self, project, aliases = ['foo'])
 			
-		def dyn_prec(self):
-			Lib.prepare(self)
+		def dyn_in_tasks(self):
+			if len(self.in_tasks): return None
 			src = self.project.fs.src_node('src')
 			foo = src.built_node('foo/foo.o')
 			self.sources = [foo]
 			obj = Obj(project)
-			obj.targets = [foo]
-			self.prec = [obj]
-			for p in self.prec:
-				p.source = p.target.src_node_ext('.cpp')
-				p.succ = [self]
-				p.prepare()
-			return self.prec
+			obj.target = foo
+			self.in_tasks = [obj]
+			for t in self.in_tasks:
+				t.source = t.target.src_node_ext('.cpp')
+				t.out_tasks = [self]
 				
 		def process(self):
 			self.target = self.project.fs.built_node('libfoo.so')
