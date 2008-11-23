@@ -6,14 +6,14 @@ from signature import Sig
 from cmd import exec_subprocess
 
 class Signed(object):
-	def __init__(self):
-		self.sig = None
+	def __init__(self): pass
 
 	def get_sig(self): return Sig()
 	sig = property(get_sig)
 
 class Task(Signed):
 	def __init__(self):
+		Signed.__init__(self)
 		self.in_tasks = []
 		self.in_nodes = []
 		self.out_nodes = []
@@ -46,25 +46,17 @@ class CmdTask(Task):
 		sig.update(self.cmd_args)
 		return sig
 
-class ObjTask(Cmd):
-	def __init__(self):
-		Cmd.__init__(self, cxx)
+class ObjTask(CmdTask):
+	def __init__(self, cxx):
+		CmdTask.__init__(self)
 		self.in_nodes = [cxx]
 		self.out_nodes = [cxx.change_ext('cpp', 'o')]
 		self.cmd_args = ['c++', '-o', self.out_nodes[0], '-c', self.in_nodes[0]]
 		
-class LibTask(Cmd):
-	def __init__(self, objs):
-		Cmd.__init__(self)
+class LibTask(CmdTask):
+	def __init__(self, target, objs):
+		CmdTask.__init__(self)
 		self.in_nodes = objs
+		self.out_nodes = [target]
+		self.cmd_args = ['c++', '-o', self.out_nodes[0]] + self.in_nodes
 
-	def dyn_deps(self):
-		for o in self.in_nodes:
-			self.
-	
-	def process(self):
-		self.cmd_args = ['c++', '-o', self.out_nodes[0], '-c', self.in_nodes[0]]
-		self.in_nodes.append(n)
-			t = ObjTask()
-			t.in_nodes = [n]
-			t.out_nodes = [
