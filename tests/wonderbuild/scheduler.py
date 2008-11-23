@@ -43,20 +43,28 @@ class Scheduler():
 				node = self._nodes_queue.pop()
 			finally: self._condition.release()
 
-			node.process()
-
-			notify = 0
-			self._condition.acquire()
-			try:
-				for out_node in node.out_nodes():
-					ready = True
-					for node in out_node.iter_in_nodes():
-						if not node.processed():
-							ready = False
-							break
-					if ready:
-						self._nodes_queue.append(out_node)
-						++notify
-			finally: self._condition.release()
-			if notify > 2: self._condition.notifyAll()
-			elif notify > 1: self._condition.notify()
+			dyn_prec = node.dyn_prec()
+			if dyn_prec is not None:
+				self._condition.acquire()
+				try: self._nodes_queue += dyn_prec
+				finally: self._condition.release()
+				notify = len(dyn_prec)
+				if notify > 2: self._condition.notifyAll()
+				elif notify > 1: self._condition.notify()
+			else:
+				node.process()
+				notify = 0
+				self._condition.acquire()
+				try:
+					for out_node in node.out_nodes():
+						ready = True
+						for node in out_node.iter_in_nodes():
+							if not node.processed():
+								ready = False
+								break
+						if ready:
+							self._nodes_queue.append(out_node)
+							++notify
+				finally: self._condition.release()
+				if notify > 2: self._condition.notifyAll()
+				elif notify > 1: self._condition.notify()

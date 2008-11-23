@@ -41,36 +41,6 @@ if __name__ == '__main__':
 					print '\tdep:', dep.abs_path
 
 
-	if False:
-		def find_sources_iter(dir):
-			dir = fs.node(dir)
-			sources = []
-			yield _find_sources(d)
-		def _find_sources_iter(dir):
-			for n in dir.actual_children():
-				if n.name.endswith('.cpp'): yield n
-				elif n.is_dir:
-					for sub_dir in n.children:
-						yield _find_sources_iter(n)
-
-		modules = []
-		for m in modules:
-			srcs = m.find_sources()
-			for s in srcs:
-				changed = s.changed()
-				if not changed:
-					deps = s.deps
-					for d in deps:
-						changed = d.changed()
-						if changed: break
-				if changed:
-					s.deps = s.scanner.scan_deps(s)
-					m.objs[s].compile()
-			for o in m.objs:
-				if o.changed:
-					m.link()
-					break;
-	
 	scanner.display()
 	fs.display()
 
@@ -81,3 +51,60 @@ if __name__ == '__main__':
 	t0 = time.time()
 	fs.dump()
 	print >> sys.stderr, 'dump time:', time.time() - t0
+
+if False:
+	class Project(object):
+		def __init__(self):
+			self.targets = {}
+
+		def build(self):
+			s = self.scheduler = Scheduler()
+			for t in self.tasks: t.prepare()
+			s.start()
+			s.join()
+	
+	class Task(object):	
+		def __init__(self, project, aliases = None):
+			self.project = project
+			if aliases is not None: for a in aliases: project.aliases[a] = self
+			project.tasks.append(self)
+			self.pred = []
+			self.succ = []
+
+		def prepare(self):
+			self.project.scheduler.nodes.append(self)
+			
+		def process(self): pass
+
+	class Obj(Task):
+		def process(self):
+			self.exec_subprocess(['c++', '-o', self.target.path, '-c', self.source.path])
+			
+	class Lib(Task):
+		def process(self):
+			self.exec_subprocess(['c++', '-o', self.target.path] + [s.path for s in self.sources])
+
+	class LibFoo(Lib):
+		def __init__(self, project):
+			Lib.__init__(self, project, aliases = ['foo'])
+			
+		def dyn_prec(self):
+			Lib.prepare(self)
+			src = self.project.fs.src_node('src')
+			foo = src.built_node('foo/foo.o')
+			self.sources = [foo]
+			obj = Obj(project)
+			obj.targets = [foo]
+			self.prec = [obj]
+			for p in self.prec:
+				p.source = p.target.src_node_ext('.cpp')
+				p.succ = [self]
+				p.prepare()
+			return self.prec
+				
+		def process(self):
+			self.target = self.project.fs.built_node('libfoo.so')
+			Lib.process(self)
+			
+	lib_foo = LibFoo(project)
+	
