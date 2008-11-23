@@ -41,6 +41,7 @@ class Cxx(Cmd):
 class GnuCxx(Cxx):
 	def __init__(self, cmd = 'g++'):
 		Cxx.__init__(self, cmd)
+		self.env_vars = ['CPATH', 'CXXFLAGS']
 
 class MsCxx(Cxx):
 	def __init__(self):
