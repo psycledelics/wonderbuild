@@ -1,6 +1,6 @@
 #! /usr/bin/env waf
 
-import os, os.path, Options
+import os, os.path, Options, Build
 
 APPNAME = 'waf-test'
 VERSION = '1.2.3'
@@ -25,20 +25,20 @@ def build(bld):
 		if d.startswith('src-'): src_dirs.add(d)
 
 	for src in src_dirs:
-		lib(bld,
+		bld.lib(
 			target = 'foo-' + src,
 			types = ['static', 'shared'],
 			sources = [src + '/foo'],
 			includes = [src]
 		)
-		program(bld,
+		bld.program(
 			target = 'main-' + src,
 			types = ['static', 'shared'],
 			sources = [src + '/main'],
 			includes = [src],
 			uselib_local = ['foo-' + src]
 		)
-		install_headers(bld,
+		bld.install_headers(
 			includes = [src],
 			headers = [src + '/bar']
 		)
@@ -47,9 +47,11 @@ def shutdown(): pass
 
 def program(bld, target, types = ['static', 'shared'], sources = None, includes = None, uselib_local = None, uselib = None):
 	module(bld, target, 'program', types, sources, includes, None, uselib_local)
+Build.BuildContext.program = program
 
 def lib(bld, target, types = ['static', 'shared'], sources = None, includes = None, headers = None, uselib_local = None, uselib = None):
 	module(bld, target, 'lib', types, sources, includes, headers, uselib_local)
+Build.BuildContext.lib = lib
 
 def module(bld, target, kind, types = ['static', 'shared'], sources = None, includes = None, headers = None, uselib_local = None, uselib = None):
 	for type in types:
@@ -79,6 +81,7 @@ def module(bld, target, kind, types = ['static', 'shared'], sources = None, incl
 				else: node = bld.path.find_dir(s) # is it a dir?
 				headers.append(node.relpath_gen(bld.path))
 		install_headers(bld, includes, headers)
+Build.BuildContext.module = module
 
 def install_headers(bld, includes, headers):
 	headers_filenames = []
@@ -101,6 +104,7 @@ def install_headers(bld, includes, headers):
 		for h in headers_filenames:
 			if h.startswith(i):
 				bld.install_as('${PREFIX}/include/' + APPNAME + '-' + VERSION + '/' + h[(len(i)):], h)
+Build.BuildContext.install_headers = install_headers
 
 def deep_dirs(bld, dirs):
 	deep_dirs = []
