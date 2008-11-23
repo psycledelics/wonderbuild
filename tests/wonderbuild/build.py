@@ -14,7 +14,7 @@ if __name__ == '__main__':
 	print >> sys.stderr, 'load time:', time.time() - t0
 
 	t0 = time.time()
-	scanner = cxx_include_scanner.DepScanner(fs)
+	scanner = cxx_include_scanner.IncludeScanner(fs)
 	print >> sys.stderr, 'load time:', time.time() - t0
 
 	#top = fs.declare(os.path.join(os.path.dirname(__file__), 'laika'))
