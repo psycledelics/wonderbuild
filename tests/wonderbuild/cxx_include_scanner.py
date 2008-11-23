@@ -9,7 +9,7 @@ _line_continuations = re.compile(r'\\\r*\n', re.MULTILINE)
 _cpp = re.compile(r'''(/\*[^*]*\*+([^/*][^*]*\*+)*/)|//[^\n]*|("(\\.|[^"\\])*"|'(\\.|[^'\\])*'|.[^/"'\\]*)''', re.MULTILINE)
 _include = re.compile(r'^[ \t]*#[ \t]*include[ \t]*(["<])([^">]*)[">].*$', re.MULTILINE)
 
-class DepScanner(object):
+class IncludeScanner(object):
 	'C/C++ dependency scanner. #include statements, and nothing else, no #if, no #define (dumb)'
 	
 	def __init__(self, filesystem, paths = None, cache_path = '/tmp/dep-scanner.cache'):
@@ -249,7 +249,7 @@ if __name__ == '__main__':
 	print >> sys.stderr, 'load time:', time.time() - t0
 
 	t0 = time.time()
-	scanner = DepScanner(fs, dirs)
+	scanner = IncludeScanner(fs, dirs)
 	print >> sys.stderr, 'load time:', time.time() - t0
 
 	for f in files:
