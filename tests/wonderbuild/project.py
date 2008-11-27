@@ -11,9 +11,10 @@ class Project(object):
 	def __init__(self):
 		self.aliases = {}
 		self.tasks = {}
-		self.task_sigs = {}
+		self.task_sigs = {} # {task.uid: task.sig}
 		self.build_dir = '++build'
-		self.cache_path = os.path.join(self.build_dir, 'wonderbuild-cache')
+		self.variant_dir = os.path.join(self.build_dir, 'default)
+		self.cache_path = os.path.join(self.variant_dir, 'wonderbuild-cache')
 		self.fs = FileSystem(os.path.join(self.cache_path, 'filesystem'))
 		
 	def add_aliases(self, task, aliases)
