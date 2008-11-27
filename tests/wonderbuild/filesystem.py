@@ -4,15 +4,13 @@
 
 import sys, os, os.path, stat, gc, cPickle
 
-do_debug = '--debug' in sys.argv
-if do_debug:
-	def debug(s): print >> sys.stderr, s
-else:
-	def debug(s): pass
+from project import Project
+from logger import debug
 
 class FileSystem(object):
-	def __init__(self, cache_path = '/tmp/filesystem.cache'):
-		self.cache_path = cache_path
+	def __init__(self, project):
+		self.project = project
+		self.cache_path = os.path.join(project.cache_path, 'filesystem')
 		self.load()
 
 	def load(self):
@@ -34,34 +32,23 @@ class FileSystem(object):
 			try: cPickle.dump(self.nodes, f, cPickle.HIGHEST_PROTOCOL)
 			finally: f.close()
 		finally: gc.enable()
-	
-	def declare(self, name):
+		
+	def src_node(self, name):
 		name = os.path.normpath(name)
 		try: return self.nodes[name]
 		except KeyError:
 			n = Node(None, name)
 			self.nodes[name] = n
 			return n
-
-	def changed(self):
-		some_changed = None
-		for n in self.nodes.itervalues():
-			changed = n.changed()
-			if changed:
-				if some_changed: some_changed += '\n' + changed
-				else: some_changed = changed
-		return some_changed
+			
+	def built_node(self, name):
+		name = os.path.join(self.project.build_dir, os.path.normpath(name))
+		try: return self.nodes[name]
+		except KeyError:
+			n = Node(None, name)
+			self.nodes[name] = n
+			return n
 	
-	def sig(self):
-		time = 0
-		for n in self.nodes.itervalues():
-			sub_time = n.actual_time
-			if sub_time > time: time = sub_time
-		return time
-	sig = property(sig)
-
-	def sig_to_string(self): return str(self.sig)
-
 	def display(self):
 		print 'fs:'
 		for n in self.nodes.itervalues(): n.display()
@@ -172,35 +159,6 @@ class Node(object):
 
 	def sig_to_string(self): return str(self.sig)
 	
-	def changed(self):
-		some_changed = None
-		if self.old_time is None: some_changed = 'A ' + self.abs_path
-		else:
-			try: self.do_stat()
-			except OSError:
-				if self.parent: del self.parent.old_children[self.name]
-				some_changed = 'D ' + self.abs_path
-			else:
-				if self._actual_time != self.old_time:
-					some_changed = 'U ' + self.abs_path
-				if self._kind == DIR:
-					children = self.old_children
-					if self._actual_time != self.old_time:
-						for name in os.listdir(self.abs_path):
-							if not name in children: children[name] = Node(self, name)
-					for n in children.values(): # copy because children remove themselves
-						changed = n.changed()
-						if changed:
-							if some_changed: some_changed += '\n' + changed
-							else: some_changed = changed
-		if some_changed:
-			self._sig = None
-			parent = self.parent
-			while parent is not None and parent._sig is not None:
-				parent._sig = None
-				parent = parent.parent
-		return some_changed
-
 	def find(self, path): return self._find(path)
 	def _find(self, path, start = 0):
 		sep = path.find(os.sep, start)
@@ -255,38 +213,3 @@ class Node(object):
 		if self._actual_children is not None:
 			tabs += 1
 			for n in self._actual_children.itervalues(): n.display(tabs)
-
-if __name__ == '__main__':
-	import time
-	
-	t0 = time.time()
-	fs = FileSystem()
-	print >> sys.stderr, 'load time:', time.time() - t0
-	
-	args = [x for x in sys.argv[1:] if not x.startswith('-')]
-	if len(args): paths = args
-	else: paths = [os.curdir]
-
-	paths = [os.path.abspath(p) for p in paths]
-	#top = fs.declare(os.path.commonprefix(paths))
-	for n in fs.nodes.values(): # copy because we remove
-		if n.abs_path not in paths: del fs.nodes[n.name]
-	for p in paths: fs.declare(p)
-
-	#print >> sys.stderr, 'old sig: ' + fs.sig_to_string()
-
-	t0 = time.time()
-	changed = fs.changed()
-	t1 = time.time()
-	print >> sys.stderr, 'changed:\n' + str(changed)
-	print >> sys.stderr, 'sig check time:', t1 - t0
-
-	t0 = time.time()
-	print >> sys.stderr, 'new sig: ' + fs.sig_to_string()
-	print >> sys.stderr, 'sig time:', time.time() - t0
-
-	fs.display()
-	
-	t0 = time.time()
-	fs.dump()
-	print >> sys.stderr, 'dump time:', time.time() - t0

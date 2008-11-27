@@ -7,7 +7,7 @@ import sys, os, os.path
 import filesystem, cxx_include_scanner
 
 if __name__ == '__main__':
-	import gc, time
+	import time
 	
 	t0 = time.time()
 	fs = filesystem.FileSystem()
@@ -17,8 +17,8 @@ if __name__ == '__main__':
 	scanner = cxx_include_scanner.IncludeScanner(fs)
 	print >> sys.stderr, 'load time:', time.time() - t0
 
-	#top = fs.declare(os.path.join(os.path.dirname(__file__), 'laika'))
-	top = fs.declare(os.path.join(os.path.dirname(__file__), 'waf-test'))
+	#top = fs.src_node(os.path.join(os.path.dirname(__file__), 'laika'))
+	top = fs.src_node(os.path.join(os.path.dirname(__file__), 'waf-test'))
 
 	src_dirs = set(['src'])
 
@@ -30,8 +30,8 @@ if __name__ == '__main__':
 		src = top.find(src)
 		scanner.paths.add(src.abs_path)
 		#foo = src.find('foo/foo.cpp')
-		foo = fs.declare(src.abs_path + '/foo/foo.cpp')
-		main = fs.declare(src.abs_path + '/main/main.cpp')
+		foo = fs.src_node(src.abs_path + '/foo/foo.cpp')
+		main = fs.src_node(src.abs_path + '/main/main.cpp')
 		for s in foo, main:
 			changed = s.changed()
 			print 'translation unit:', s.abs_path, '(changed: ' + str(changed) + ')'
@@ -53,92 +53,6 @@ if __name__ == '__main__':
 	print >> sys.stderr, 'dump time:', time.time() - t0
 
 if False:
-	class Project(object):
-		def __init__(self):
-			self.aliases = {}
-			self.tasks = {}
-			self.task_sigs = {}
-			self.fs = filesystem.FileSystem()
-			
-		def add_aliases(self, task, aliases)
-			if aliases is not None:
-				for a in aliases:
-					try: self.aliases[a].append(task)
-					except KeyError: self.aliases[a] = [task]
-
-		def build(self, tasks):
-			s = Scheduler()
-			s.start()
-			for t in tasks: s.add_task(t)
-			s.join()
-	
-	class Task(object):	
-		def __init__(self, project, aliases = None):
-			self.in_tasks = []
-			self.out_tasks = []
-			self.project = project
-			project.add_aliases(self, aliases)
-			project.tasks.append(self)
-
-		def dyn_in_tasks(self): return None
-			
-		def process(self): pass
-		
-		def uid(self): return None
-		
-		def old_sig(self):
-			try: return self.project.task_sigs[self.uid()]
-			except KeyError: return None
-		
-		def actual_sig(self): return None
-		
-		def update_sig(self): self.project.task_sigs[self.uid()] = self.actual_sig()
-		
-	class Obj(Task):
-		def uid(self):
-			try: return self._uid
-			except AttributeError:
-				sig = Sig(self.target.path)
-				return self._uid = sig.digest()
-
-		def actual_sig(self):
-			try: return self._actual_sig
-			except AttributeError:
-				sig = Sig(self.source.actual_sig)
-				return self._actual_sig = sig.digest()
-			
-		def process(self):
-			if self.old_sig() != self.actual_sig()
-				self.exec_subprocess(['c++', '-o', self.target.path, '-c', self.source.path])
-				self.update_sig()
-				return True
-			else:
-				self.out_tasks = []
-				return False
-			
-	class Lib(Task):
-		def uid(self):
-			try: return self._uid
-			except AttributeError:
-				sig = Sig(self.target.path)
-				return self._uid = sig.digest()
-
-		def actual_sig(self):
-			try: return self._actual_sig
-			except AttributeError:
-				sig = Sig()
-				for s in self.sources: sig.update(s.actual_sig)
-				return self._actual_sig = sig.digest()
-
-		def process(self):
-			if self.old_sig() != self.actual_sig()
-				self.exec_subprocess(['c++', '-o', self.target.path] + [s.path for s in self.sources])
-				self.update_sig()
-				return True
-			else:
-				self.out_tasks = []
-				return False
-
 	class LibFoo(Lib):
 		def __init__(self, project):
 			Lib.__init__(self, project, aliases = ['foo'])
@@ -159,5 +73,6 @@ if False:
 			self.target = self.project.fs.built_node('libfoo.so')
 			Lib.process(self)
 			
+	from project import Project
+	project = Project()
 	lib_foo = LibFoo(project)
-	

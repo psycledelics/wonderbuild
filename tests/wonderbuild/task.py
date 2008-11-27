@@ -5,58 +5,70 @@
 from signature import Sig
 from cmd import exec_subprocess
 
-class Signed(object):
-	def __init__(self): pass
-
-	def get_sig(self): return Sig()
-	sig = property(get_sig)
-
-class Task(Signed):
-	def __init__(self):
-		Signed.__init__(self)
+class Task(object):	
+	def __init__(self, project, aliases = None):
 		self.in_tasks = []
-		self.in_nodes = []
-		self.out_nodes = []
-		self.processed = False
+		self.out_tasks = []
+		self.project = project
+		project.add_aliases(self, aliases)
+		project.tasks.append(self)
 
-	def process(self): pass
-
-	def get_sig(self):
-		sig = Signed.Sig(self)
-		for n in self.in_nodes: sig.update(n.sig)
-		return sig
+	def dyn_in_tasks(self): return None
 		
-class CmdTask(Task):
-	def __init__(self):
-		Task.__init__(self)
-		self.env = None
-		self.cmd_args = None
+	def process(self): pass
+	
+	def uid(self): return None
+	
+	def old_sig(self):
+		try: return self.project.task_sigs[self.uid()]
+		except KeyError: return None
+	
+	def actual_sig(self): return None
+	
+	def update_sig(self): self.project.task_sigs[self.uid()] = self.actual_sig()
+	
+class Obj(Task):
+	def uid(self):
+		try: return self._uid
+		except AttributeError:
+			sig = Sig(self.target.path)
+			return self._uid = sig.digest()
+
+	def actual_sig(self):
+		try: return self._actual_sig
+		except AttributeError:
+			sig = Sig(self.source.actual_sig)
+			return self._actual_sig = sig.digest()
 		
 	def process(self):
-		r = exec_subprocess(self.env, self.cmd_args)
-		if r != 0: raise r
-
-	def get_sig(self):
-		sig = Task.get_sig(self)
-		for k, v in self.env:
-			sig.update(k)
-			sig.update('\0')
-			sig.update(v)
-			sig.update('\0')
-		sig.update(self.cmd_args)
-		return sig
-
-class ObjTask(CmdTask):
-	def __init__(self, cxx):
-		CmdTask.__init__(self)
-		self.in_nodes = [cxx]
-		self.out_nodes = [cxx.change_ext('cpp', 'o')]
-		self.cmd_args = ['c++', '-o', self.out_nodes[0], '-c', self.in_nodes[0]]
+		if self.old_sig() != self.actual_sig()
+			exec_subprocess(['c++', '-o', self.target.path, '-c', self.source.path])
+			self.update_sig()
+			return True
+		else:
+			self.out_tasks = []
+			return False
 		
-class LibTask(CmdTask):
-	def __init__(self, target, objs):
-		CmdTask.__init__(self)
-		self.in_nodes = objs
-		self.out_nodes = [target]
-		self.cmd_args = ['c++', '-o', self.out_nodes[0]] + self.in_nodes
+class Lib(Task):
+	def uid(self):
+		try: return self._uid
+		except AttributeError:
+			sig = Sig(self.target.path)
+			return self._uid = sig.digest()
+
+	def actual_sig(self):
+		try: return self._actual_sig
+		except AttributeError:
+			sig = Sig()
+			for s in self.sources: sig.update(s.actual_sig)
+			return self._actual_sig = sig.digest()
+
+	def process(self):
+		if self.old_sig() != self.actual_sig()
+			exec_subprocess(['c++', '-o', self.target.path] + [s.path for s in self.sources])
+			self.update_sig()
+			return True
+		else:
+			self.out_tasks = []
+			return False
 
