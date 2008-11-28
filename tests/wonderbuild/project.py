@@ -2,6 +2,8 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
+import os
+
 from scheduler import Scheduler
 from filesystem import FileSystem
 from options import options
@@ -9,15 +11,14 @@ from logger import debug
 
 class Project(object):
 	def __init__(self):
-		self.aliases = {}
-		self.tasks = {}
+		self.aliases = {} # {name: [tasks]}
+		self.tasks = []
 		self.task_sigs = {} # {task.uid: task.sig}
 		self.build_dir = '++build'
-		self.variant_dir = os.path.join(self.build_dir, 'default)
-		self.cache_path = os.path.join(self.variant_dir, 'wonderbuild-cache')
-		self.fs = FileSystem(os.path.join(self.cache_path, 'filesystem'))
+		self.cache_dir = os.path.join(self.build_dir, 'wonderbuild-cache')
+		self.fs = FileSystem(self)
 		
-	def add_aliases(self, task, aliases)
+	def add_aliases(self, task, aliases):
 		self.tasks.append(task)
 		if aliases is not None:
 			debug('project: ' + str(aliases))
@@ -30,4 +31,11 @@ class Project(object):
 		s.start()
 		for t in tasks: s.add_task(t)
 		s.join()
+
+	def dump(self):
+		if not os.path.exists(self.build_dir):
+			os.mkdir(self.build_dir)
+			os.mkdir(self.cache_dir)
+		if not os.path.exists(self.cache_dir): os.mkdir(self.cache_dir)
+		self.fs.dump()
 

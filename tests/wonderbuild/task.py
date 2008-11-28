@@ -31,17 +31,19 @@ class Obj(Task):
 	def uid(self):
 		try: return self._uid
 		except AttributeError:
-			sig = Sig(self.target.path)
-			return self._uid = sig.digest()
+			sig = Sig(self.target.path).digest()
+			self._uid = sig
+			return sig
 
 	def actual_sig(self):
 		try: return self._actual_sig
 		except AttributeError:
-			sig = Sig(self.source.actual_sig)
-			return self._actual_sig = sig.digest()
+			sig = Sig(self.source.actual_sig).digest()
+			self._actual_sig = sig
+			return sig
 		
 	def process(self):
-		if self.old_sig() != self.actual_sig()
+		if self.old_sig() != self.actual_sig():
 			exec_subprocess(['c++', '-o', self.target.path, '-c', self.source.path])
 			self.update_sig()
 			return True
@@ -53,18 +55,21 @@ class Lib(Task):
 	def uid(self):
 		try: return self._uid
 		except AttributeError:
-			sig = Sig(self.target.path)
-			return self._uid = sig.digest()
+			sig = Sig(self.target.path).digest()
+			self._uid = sig
+			return sig
 
 	def actual_sig(self):
 		try: return self._actual_sig
 		except AttributeError:
 			sig = Sig()
 			for s in self.sources: sig.update(s.actual_sig)
-			return self._actual_sig = sig.digest()
+			sig = sig.digest()
+			self._actual_sig = sig
+			return sig
 
 	def process(self):
-		if self.old_sig() != self.actual_sig()
+		if self.old_sig() != self.actual_sig():
 			exec_subprocess(['c++', '-o', self.target.path] + [s.path for s in self.sources])
 			self.update_sig()
 			return True

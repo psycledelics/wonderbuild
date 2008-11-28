@@ -16,12 +16,12 @@ class Scheduler():
 		self._stop_requested = False
 		self._threads = []
 		for i in xrange(self.thread_count):
-			t = threading.Thread(target = _thread_function, args = (self,), name = 'scheduler-thread-' + str(i))
+			t = threading.Thread(target = self._thread_function, name = 'scheduler-thread-' + str(i))
 			t.setDaemon(True)
 			t.start()
 			self._threads.append(t)
 
-	def add_task(task):
+	def add_task(self, task):
 		if not task.in_tasks:
 			self._condition.acquire()
 			try:
@@ -33,31 +33,39 @@ class Scheduler():
 	
 	def stop(self):
 		self._condition.acquire()
-		try: self._stop_requested = True
+		try:
+			self._stop_requested = True
+			self._condition.notifyAll()
 		finally: self._condition.release()
-		self._condition.notifyAll()
 		for t in self._threads: t.join(timeout = self.timeout)
 		del self._threads
 		del self._condition
 		del self._task_queue
+		
+	def join(self):
+		x = 0
+		for i in xrange(10000000): x += 1
+		print x
+		self.stop()
 	
 	def _thread_function(self):
 		while True:
 			self._condition.acquire()
 			try:
-				while not self._stop_requested and not self._task_queue: self._condition.wait(timeout = self._timeout)
+				while not self._stop_requested and not self._task_queue: self._condition.wait(timeout = self.timeout)
 				if self._stop_requested: return
 				task = self._task_queue.pop()
 			finally: self._condition.release()
 
-			dyn_prec = task.dyn_prec()
-			if dyn_prec is not None:
+			dyn_in_tasks = task.dyn_in_tasks()
+			if dyn_in_tasks is not None:
 				self._condition.acquire()
-				try: self._task_queue += dyn_prec
+				try:
+					self._task_queue += dyn_in_tasks
+					notify = len(dyn_in_tasks)
+					if notify > 2: self._condition.notifyAll()
+					elif notify > 1: self._condition.notify()
 				finally: self._condition.release()
-				notify = len(dyn_prec)
-				if notify > 2: self._condition.notifyAll()
-				elif notify > 1: self._condition.notify()
 			else:
 				task.process()
 				notify = 0
@@ -72,6 +80,6 @@ class Scheduler():
 						if ready:
 							self._task_queue.append(out_task)
 							++notify
+					if notify > 2: self._condition.notifyAll()
+					elif notify > 1: self._condition.notify()
 				finally: self._condition.release()
-				if notify > 2: self._condition.notifyAll()
-				elif notify > 1: self._condition.notify()

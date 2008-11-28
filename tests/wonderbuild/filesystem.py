@@ -4,13 +4,12 @@
 
 import sys, os, os.path, stat, gc, cPickle
 
-from project import Project
-from logger import debug
+from logger import do_debug, debug
 
 class FileSystem(object):
 	def __init__(self, project):
 		self.project = project
-		self.cache_path = os.path.join(project.cache_path, 'filesystem')
+		self.cache_path = os.path.join(project.cache_dir, 'filesystem')
 		self.load()
 
 	def load(self):
