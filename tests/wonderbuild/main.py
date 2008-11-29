@@ -33,12 +33,11 @@ if __name__ == '__main__':
 		lib_foo = LibFoo(project)
 		project.build([lib_foo])
 		project.dump()
-	project.fs.node('src')
-	project.fs.node('src/foo/foo.cpp')
-	project.fs.node('../wonderbuild/src/foo/foo.cpp')
-	project.fs.node(os.getcwd() + '/src/foo//foo.cpp')
-	s = project.fs.node('src')
-	s = s.rel_node('foo')
-	s = s.rel_node('foo.cpp')
-	s.rel_node('/tmp/.X0-lock')
+
+	n = project.fs.node('src')
+	s = n.search_iter(in_pat = '*.cpp')
+	#h = n.search_iter(in_pat = '*.hpp', ex_pat = '*.private.hpp')
+	for f in s: print f.rel_path
+	#for f in h: print f.rel_path
 	project.fs.display()
+	project.dump()

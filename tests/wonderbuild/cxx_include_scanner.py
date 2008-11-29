@@ -35,7 +35,7 @@ class IncludeScanner(object):
 			else:
 				for path in self.deps.keys(): # copy because we remove some elements in the loop
 					print 'scanner: cached:', path
-					try: changed = self.fs.declare(path).changed()
+					try: changed = self.fs.node(path).changed()
 					except OSError: self.not_found.add(path) ; print 'scanner: del not found:', path
 					else:
 						if changed: del self.deps[path] ;  print 'scanner: del changed:', changed
@@ -45,7 +45,7 @@ class IncludeScanner(object):
 		f = file(self.cache_path, 'wb')
 		try:
 			p = cPickle.Pickler(f, cPickle.HIGHEST_PROTOCOL)
-			for path in self.deps: self.fs.declare(path)
+			for path in self.deps: self.fs.node(path)
 			p.dump(self.deps)
 		finally: f.close()
 	
@@ -124,7 +124,6 @@ class IncludeScanner(object):
 	def parse_string(self, s): return self._parse_string_fast(s)
 
 	def _parse_string_fast(self, s):
-
 		s = _line_continuations.sub('', s)
 
 		def repl(m):
@@ -142,7 +141,7 @@ class IncludeScanner(object):
 		abs_includes = set()
 		for m in _include.finditer(s):
 			kind = m.group(1)
-			if kind == '"':   rel_includes.add(m.group(2))
+			if   kind == '"': rel_includes.add(m.group(2))
 			elif kind == '<': abs_includes.add(m.group(2))
 		return rel_includes, abs_includes
 	
@@ -217,7 +216,7 @@ class IncludeScanner(object):
 					if token_string.startswith(search):
 						l = len(search)
 						kind = token_string[l]
-						if kind == '"':   rel_includes.add(token_string[l + 1 : token_string.rfind('"')])
+						if   kind == '"': rel_includes.add(token_string[l + 1 : token_string.rfind('"')])
 						elif kind == '<': abs_includes.add(token_string[l + 1 : token_string.rfind('>')])
 					new_state = normal
 

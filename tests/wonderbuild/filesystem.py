@@ -3,6 +3,7 @@
 # copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import sys, os, os.path, stat, gc, cPickle
+from fnmatch import fnmatchcase as match
 
 from logger import is_debug, debug
 
@@ -12,6 +13,7 @@ class FileSystem(object):
 		self.cache_path = os.path.join(project.cache_dir, 'filesystem')
 		self.load()
 		self.cur = self.root.rel_node(os.getcwd())
+		self.cur._kind = DIR
 
 	def load(self):
 		gc.disable()
@@ -23,6 +25,7 @@ class FileSystem(object):
 			except Exception, e:
 				print >> sys.stderr, 'could not load pickle:', e
 				self.root = Node(None, os.sep)
+				self.root._kind = DIR
 		finally: gc.enable()
 
 	def dump(self):
@@ -46,6 +49,7 @@ class FileSystem(object):
 
 DIR = 1
 FILE = 2
+ignore = ['.svn']
 
 class Node(object):
 	__slots__ = ('parent', 'name', '_kind', '_declared_children', '_old_children', '_actual_children', 'old_time', '_actual_time', '_sig', '_abs_path')
@@ -72,6 +76,20 @@ class Node(object):
 		self._sig = None
 		self._abs_path = None
 	
+	def search_dir_or_file_iter(self, in_pat = '*', ex_pat = None):
+		if (ex_pat is None or not match(self.name, ex_pat)) and match(self.name, in_pat): yield self
+		if self.is_dir:
+			for child in self.actual_children.itervalues():
+				for node in child.search_iter(in_pat, ex_pat): yield node
+		raise StopIteration
+	
+	def search_iter(self, in_pat = '*', ex_pat = None):
+		for child in self.actual_children.itervalues():
+			if (ex_pat is None or not match(child.name, ex_pat)) and match(child.name, in_pat): yield child
+			elif child.is_dir:
+				for node in child.search_iter(in_pat, ex_pat): yield node
+		raise StopIteration
+
 	def do_stat(self):
 		global is_debug
 		if is_debug: debug('os.stat   : ' + self.abs_path)
@@ -121,12 +139,16 @@ class Node(object):
 			if self.actual_time == self.old_time: self._actual_children = self.old_children
 			else:
 				global is_debug
-				if is_debug: debug('os.listdir: ' + self.abs_path)
+				if is_debug: debug('os.listdir: ' + self.abs_path + os.sep)
 				children = {}
 				for name in os.listdir(self.abs_path):
+					if name in ignore: continue
 					if name in self.declared_children: children[name] = self.declared_children[name]
-					if name in self.old_children: children[name] = self.old_children[name]
-					else: children[name] = Node(self, name)
+					#if name in self.old_children: children[name] = self.old_children[name]
+					else:
+						child = Node(self, name)
+						children[name] = child
+						self.declared_children[name] = child
 				self._actual_children = children
 		return self._actual_children
 	actual_children = property(actual_children)
@@ -134,11 +156,13 @@ class Node(object):
 	def old_children(self):
 		if self._old_children is None:
 			global is_debug
-			if is_debug: debug('os.listdir: ' + self.abs_path)
+			if is_debug: debug('os.listdir: ' + self.abs_path + os.sep)
 			children = {}
 			for name in os.listdir(self.abs_path):
-				if name in self.declared_children: children[name] = self.declared_children[name]
-				else: children[name] = Node(self, name)
+				if name in ignore: continue
+				#if name in self.declared_children: children[name] = self.declared_children[name]
+				#else: children[name] = Node(self, name)
+				children[name] = Node(self, name)
 			self._old_children = children
 		return self._old_children
 	old_children = property(old_children)
@@ -231,24 +255,24 @@ class Node(object):
 	def rel_path(self): return self.abs_path
 	rel_path = property(rel_path)
 
-	def display(self, declared_only = True, tabs = 0):
+	def display(self, cache = False, tabs = 0):
 		if True: path = '  |' * tabs + '- ' + (self.parent and self.name or self.abs_path)
 		else: path = self.rel_path
 		
-		if declared_only: sig = '?'
-		else: sig = self.sig_to_string()
-
+		if cache: time = self.old_time is None and '?' or self.old_time
+		else: time = self._actual_time is None and '?' or self._actual_time
+		
 		print \
-			sig.rjust(12), \
-			(self.old_time is None and '?' or str(self.old_time)).rjust(12), \
+			(self._sig is None and '?' or self._sig).rjust(12), \
+			str(time).rjust(12), \
 			(self._kind is None and '?' or {DIR: 'dir', FILE: 'file'}[self._kind]).rjust(4) + \
 			' ' + path
 			
-		if declared_only:
+		if cache:
+			if self._old_children is not None:
+				tabs += 1
+				for n in self._old_children.itervalues(): n.display(cache, tabs)
+		else:
 			if self._declared_children is not None:
 				tabs += 1
-				for n in self._declared_children.itervalues(): n.display(declared_only, tabs)
-		else:
-			if self._actual_children is not None:
-				tabs += 1
-				for n in self._actual_children.itervalues(): n.display(declared_only, tabs)
+				for n in self._declared_children.itervalues(): n.display(cache, tabs)
