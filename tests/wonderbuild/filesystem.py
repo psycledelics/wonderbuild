@@ -4,7 +4,7 @@
 
 import sys, os, os.path, stat, gc, cPickle
 
-from logger import do_debug, debug
+from logger import is_debug, debug
 
 class FileSystem(object):
 	def __init__(self, project):
@@ -32,16 +32,8 @@ class FileSystem(object):
 			finally: f.close()
 		finally: gc.enable()
 		
-	def src_node(self, name):
+	def node(self, name):
 		name = os.path.normpath(name)
-		try: return self.nodes[name]
-		except KeyError:
-			n = Node(None, name)
-			self.nodes[name] = n
-			return n
-			
-	def built_node(self, name):
-		name = os.path.join(self.project.build_dir, os.path.normpath(name))
 		try: return self.nodes[name]
 		except KeyError:
 			n = Node(None, name)
@@ -78,8 +70,8 @@ class Node(object):
 		self._abs_path = None
 	
 	def do_stat(self):
-		global do_debug
-		if do_debug: debug('os.stat   : ' + self.abs_path)
+		global is_debug
+		if is_debug: debug('os.stat   : ' + self.abs_path)
 		
 		# try-except is a tiny bit faster
 		#st = os.lstat(self.abs_path)
@@ -123,8 +115,8 @@ class Node(object):
 		if self._actual_children is None:
 			if self.actual_time == self.old_time: self._actual_children = self.old_children
 			else:
-				global do_debug
-				if do_debug: debug('os.listdir: ' + self.abs_path)
+				global is_debug
+				if is_debug: debug('os.listdir: ' + self.abs_path)
 				children = {}
 				for name in os.listdir(self.abs_path):
 					if name in self.old_children: children[name] = self.old_children[name]
@@ -135,8 +127,8 @@ class Node(object):
 		
 	def old_children(self):	
 		if self._old_children is None:
-			global do_debug
-			if do_debug: debug('os.listdir: ' + self.abs_path)
+			global is_debug
+			if is_debug: debug('os.listdir: ' + self.abs_path)
 			children = {}
 			for name in os.listdir(self.abs_path): children[name] = Node(self, name)
 			self._old_children = children
@@ -158,8 +150,8 @@ class Node(object):
 
 	def sig_to_string(self): return str(self.sig)
 	
-	def find(self, path): return self._find(path)
-	def _find(self, path, start = 0):
+	def rel_node(self, path): return self._rel_node(path)
+	def _rel_node(self, path, start = 0):
 		sep = path.find(os.sep, start)
 		if sep > start:
 			name = path[start:sep]
@@ -170,7 +162,7 @@ class Node(object):
 			if child is None: return None
 			if sep == len(path) - 1: return child
 			if child.kind != DIR: return None
-			return child._find(path, sep + 1)
+			return child._rel_node(path, sep + 1)
 		elif sep < 0:
 			name = path[start:]
 			if name == os.pardir: return self.parent or self
@@ -184,9 +176,9 @@ class Node(object):
 				print >> sys.stderr, 'creating root node due to:', path
 				root = Node(None, os.sep)
 				root._kind = DIR
-				top.parent = root.find(os.path.dirname(os.getcwd()))
+				top.parent = root.rel_node(os.path.dirname(os.getcwd()))
 			else: root = top
-			return root._find(path, 1)
+			return root._rel_node(path, 1)
 
 	def abs_path(self):
 		if self._abs_path is None:
@@ -199,16 +191,21 @@ class Node(object):
 	def rel_path(self): return self.abs_path
 	rel_path = property(rel_path)
 
-	def display(self, tabs = 0):
-		if False: path = '  |' * tabs + '- ' + (self.parent and self.name  or self.abs_path)
-		else: path = self.abs_path
+	def display(self, recurse_dirs = False, tabs = 0):
+		if True: path = '  |' * tabs + '- ' + (self.parent and self.name or self.abs_path)
+		else: path = self.rel_path
 
 		print \
 			self.sig_to_string().rjust(12), \
 			(self.old_time is None and '?' or str(self.old_time)).rjust(12), \
 			(self._kind is None and '?' or {DIR: 'dir', FILE: 'file'}[self._kind]).rjust(4) + \
 			' ' + path
-
-		if self._actual_children is not None:
-			tabs += 1
-			for n in self._actual_children.itervalues(): n.display(tabs)
+			
+		if not recurse_dirs:
+			if self._old_children is not None:
+				tabs += 1
+				for n in self._old_children.itervalues(): n.display(recurse_dirs, tabs)
+		else:
+			if self._actual_children is not None:
+				tabs += 1
+				for n in self._actual_children.itervalues(): n.display(recurse_dirs, tabs)

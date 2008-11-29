@@ -14,8 +14,7 @@ if __name__ == '__main__':
 			
 		def dyn_in_tasks(self):
 			if len(self.in_tasks): return None
-			src = self.project.fs.src_node('unit_tests')
-			foo = src.built_node('foo/foo.o')
+			foo = self.project.fs.node(os.path.join(self.project.build_dir, 'modules', self.aliases[0], 'foo', 'foo.o'))
 			self.sources = [foo]
 			obj = Obj(project)
 			obj.target = foo
@@ -30,6 +29,14 @@ if __name__ == '__main__':
 			
 	from project import Project
 	project = Project()
-	lib_foo = LibFoo(project)
-	project.build(project.tasks)
-	project.dump()
+	if False:
+		lib_foo = LibFoo(project)
+		project.build([lib_foo])
+		project.dump()
+	#project.fs.node('unit_tests')
+	#project.fs.node('unit_tests/foo.cpp')
+	#project.fs.node('../wonderbuild/unit_tests/foo.cpp')
+	#project.fs.node(os.getcwd() + '/unit_tests/foo.cpp')
+	s = project.fs.node('unit_tests/foo.cpp')
+	s.rel_node('/tmp/.X0-lock')
+	project.fs.display()

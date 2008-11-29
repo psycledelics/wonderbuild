@@ -4,8 +4,8 @@
 
 from options import options
 
-do_debug = '--debug' in options
-if do_debug:
+is_debug = '--debug' in options
+if is_debug:
 	def debug(s): print >> sys.stderr, s
 else:
 	def debug(s): pass
