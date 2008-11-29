@@ -11,41 +11,37 @@ class FileSystem(object):
 		self.project = project
 		self.cache_path = os.path.join(project.cache_dir, 'filesystem')
 		self.load()
+		self.cur = self.root.rel_node(os.getcwd())
 
 	def load(self):
 		gc.disable()
 		try:
 			try:
 				f = file(self.cache_path, 'rb')
-				try: self.nodes = cPickle.load(f)
+				try: self.root = cPickle.load(f)
 				finally: f.close()
 			except Exception, e:
 				print >> sys.stderr, 'could not load pickle:', e
-				self.nodes = {}
+				self.root = Node(None, os.sep)
 		finally: gc.enable()
 
 	def dump(self):
 		gc.disable()
 		try:
 			f = file(self.cache_path, 'wb')
-			try: cPickle.dump(self.nodes, f, cPickle.HIGHEST_PROTOCOL)
+			try: cPickle.dump(self.root, f, cPickle.HIGHEST_PROTOCOL)
 			finally: f.close()
 		finally: gc.enable()
 		
-	def node(self, name):
-		name = os.path.normpath(name)
-		try: return self.nodes[name]
-		except KeyError:
-			n = Node(None, name)
-			self.nodes[name] = n
-			return n
+	def node(self, path):
+		#return self.cur.rel_node(path)
+		path = os.path.normpath(path)
+		if os.path.isabs(path): return self.root.rel_node(path)
+		else: return self.cur.rel_node(path)
 	
 	def display(self):
 		print 'fs:'
-		for n in self.nodes.itervalues():
-			print n.rel_path
-			while n.parent: n = n.parent
-			n.display()
+		self.root.display()
 
 DIR = 1
 FILE = 2
@@ -183,14 +179,9 @@ class Node(object):
 			if self.kind != DIR: return None
 			return self.actual_children.get(name, None)
 		else: # sep == start, absolute path
-			top = self
-			while top.parent: top = top.parent
-			if top.name != os.sep:
-				print >> sys.stderr, 'creating root node due to:', path
-				root = Node(None, os.sep)
-				root._kind = DIR
-				top.parent = root.find_rel_node(os.path.dirname(os.getcwd()))
-			else: root = top
+			root = self
+			while root.parent: root = root.parent
+			assert root.name == os.sep
 			return root._find_rel_node(path, 1)
 
 	def rel_node(self, path): return self._rel_node(path)
@@ -213,15 +204,9 @@ class Node(object):
 			self.declared_children[name] = child
 			return child
 		else: # sep == start, absolute path
-			top = self
-			while top.parent: top = top.parent
-			if top.name != os.sep:
-				print >> sys.stderr, 'creating root node due to:', path
-				root = Node(None, os.sep)
-				root._kind = DIR
-				top.parent = root.rel_node(os.path.dirname(os.getcwd()))
-				top.parent.declared_children[top.name] = top
-			else: root = top
+			root = self
+			while root.parent: root = root.parent
+			assert root.name == os.sep
 			return root._rel_node(path, 1)
 
 	def abs_path(self):
