@@ -14,7 +14,7 @@ if __name__ == '__main__':
 			
 		def dyn_in_tasks(self):
 			if len(self.in_tasks): return None
-			foo = self.project.fs.node(os.path.join(self.project.build_dir, 'modules', self.aliases[0], 'foo', 'foo.o'))
+			foo = self.project.build_node.rel_node(os.path.join('modules', self.aliases[0], 'foo', 'foo.o'))
 			self.sources = [foo]
 			obj = Obj(project)
 			obj.target = foo
@@ -33,10 +33,13 @@ if __name__ == '__main__':
 		lib_foo = LibFoo(project)
 		project.build([lib_foo])
 		project.dump()
-	#project.fs.node('unit_tests')
-	#project.fs.node('unit_tests/foo.cpp')
-	#project.fs.node('../wonderbuild/unit_tests/foo.cpp')
-	#project.fs.node(os.getcwd() + '/unit_tests/foo.cpp')
-	s = project.fs.node('unit_tests/foo.cpp')
+	#project.fs.node('src')
+	#project.fs.node('src/foo/foo.cpp')
+	#project.fs.node('../wonderbuild/src/foo/foo.cpp')
+	#project.fs.node(os.getcwd() + '/src/foo//foo.cpp')
+	s = project.fs.node('src/foo')
+	s = project.fs.node('src')
+	s = s.rel_node('foo')
+	s = s.rel_node('foo.cpp')
 	s.rel_node('/tmp/.X0-lock')
 	project.fs.display()

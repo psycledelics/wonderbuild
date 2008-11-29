@@ -42,19 +42,23 @@ class FileSystem(object):
 	
 	def display(self):
 		print 'fs:'
-		for n in self.nodes.itervalues(): n.display()
+		for n in self.nodes.itervalues():
+			print n.rel_path
+			while n.parent: n = n.parent
+			n.display()
 
 DIR = 1
 FILE = 2
 
 class Node(object):
-	__slots__ = ('parent', 'name', '_kind', '_old_children', '_actual_children', 'old_time', '_actual_time', '_sig', '_abs_path')
+	__slots__ = ('parent', 'name', '_kind', '_declared_children', '_old_children', '_actual_children', 'old_time', '_actual_time', '_sig', '_abs_path')
 
 	def __getstate__(self):
 		return self.parent, self.name, self._kind, self._old_children, self.old_time, self._sig, self._abs_path
 
 	def __setstate__(self, data):
 		self.parent, self.name, self._kind, self._old_children, self.old_time, self._sig, self._abs_path = data
+		self._declared_children = None
 		self._actual_children = None
 		self._actual_time = None
 
@@ -62,6 +66,7 @@ class Node(object):
 		self.parent = parent
 		self.name = name
 		self._kind = None
+		self._declared_children = None
 		self._old_children = None
 		self._actual_children = None
 		self.old_time = None
@@ -125,7 +130,7 @@ class Node(object):
 		return self._actual_children
 	actual_children = property(actual_children)
 		
-	def old_children(self):	
+	def old_children(self):
 		if self._old_children is None:
 			global is_debug
 			if is_debug: debug('os.listdir: ' + self.abs_path)
@@ -134,6 +139,14 @@ class Node(object):
 			self._old_children = children
 		return self._old_children
 	old_children = property(old_children)
+
+	def declared_children(self):
+		if self._declared_children is None:
+			if self._actual_children is not None: self._declared_children = self._actual_children
+			elif self._old_children is not None: self._declared_children = self._old_children
+			else: self._declared_children = {}
+		return self._declared_children
+	declared_children = property(declared_children)
 
 	def sig(self):
 		if self._sig is None:
@@ -150,8 +163,8 @@ class Node(object):
 
 	def sig_to_string(self): return str(self.sig)
 	
-	def rel_node(self, path): return self._rel_node(path)
-	def _rel_node(self, path, start = 0):
+	def find_rel_node(self, path): return self._find_rel_node(path)
+	def _findrel_node(self, path, start = 0):
 		sep = path.find(os.sep, start)
 		if sep > start:
 			name = path[start:sep]
@@ -162,7 +175,7 @@ class Node(object):
 			if child is None: return None
 			if sep == len(path) - 1: return child
 			if child.kind != DIR: return None
-			return child._rel_node(path, sep + 1)
+			return child._find_rel_node(path, sep + 1)
 		elif sep < 0:
 			name = path[start:]
 			if name == os.pardir: return self.parent or self
@@ -176,7 +189,38 @@ class Node(object):
 				print >> sys.stderr, 'creating root node due to:', path
 				root = Node(None, os.sep)
 				root._kind = DIR
+				top.parent = root.find_rel_node(os.path.dirname(os.getcwd()))
+			else: root = top
+			return root._find_rel_node(path, 1)
+
+	def rel_node(self, path): return self._rel_node(path)
+	def _rel_node(self, path, start = 0):
+		sep = path.find(os.sep, start)
+		if sep > start:
+			name = path[start:sep]
+			if name == os.pardir: return self.parent or self
+			if name == os.curdir: return self
+			child = Node(self, name)
+			self.declared_children[name] = child
+			if sep == len(path) - 1: return child
+			child._kind = DIR
+			return child._rel_node(path, sep + 1)
+		elif sep < 0:
+			name = path[start:]
+			if name == os.pardir: return self.parent or self
+			if name == os.curdir: return self
+			child = Node(self, name)
+			self.declared_children[name] = child
+			return child
+		else: # sep == start, absolute path
+			top = self
+			while top.parent: top = top.parent
+			if top.name != os.sep:
+				print >> sys.stderr, 'creating root node due to:', path
+				root = Node(None, os.sep)
+				root._kind = DIR
 				top.parent = root.rel_node(os.path.dirname(os.getcwd()))
+				top.parent.declared_children[top.name] = top
 			else: root = top
 			return root._rel_node(path, 1)
 
@@ -191,21 +235,24 @@ class Node(object):
 	def rel_path(self): return self.abs_path
 	rel_path = property(rel_path)
 
-	def display(self, recurse_dirs = False, tabs = 0):
+	def display(self, declared_only = True, tabs = 0):
 		if True: path = '  |' * tabs + '- ' + (self.parent and self.name or self.abs_path)
 		else: path = self.rel_path
+		
+		if declared_only: sig = '?'
+		else: sig = self.sig_to_string()
 
 		print \
-			self.sig_to_string().rjust(12), \
+			sig.rjust(12), \
 			(self.old_time is None and '?' or str(self.old_time)).rjust(12), \
 			(self._kind is None and '?' or {DIR: 'dir', FILE: 'file'}[self._kind]).rjust(4) + \
 			' ' + path
 			
-		if not recurse_dirs:
-			if self._old_children is not None:
+		if declared_only:
+			if self._declared_children is not None:
 				tabs += 1
-				for n in self._old_children.itervalues(): n.display(recurse_dirs, tabs)
+				for n in self._declared_children.itervalues(): n.display(declared_only, tabs)
 		else:
 			if self._actual_children is not None:
 				tabs += 1
-				for n in self._actual_children.itervalues(): n.display(recurse_dirs, tabs)
+				for n in self._actual_children.itervalues(): n.display(declared_only, tabs)
