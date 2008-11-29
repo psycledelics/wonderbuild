@@ -34,7 +34,8 @@ class FileSystem(object):
 		finally: gc.enable()
 		
 	def node(self, path):
-		#return self.cur.rel_node(path)
+		return self.cur.rel_node(path)
+		
 		path = os.path.normpath(path)
 		if os.path.isabs(path): return self.root.rel_node(path)
 		else: return self.cur.rel_node(path)
@@ -59,6 +60,7 @@ class Node(object):
 		self._actual_time = None
 
 	def __init__(self, parent, name):
+		assert parent is not None or name == os.sep
 		self.parent = parent
 		self.name = name
 		self._kind = None
@@ -76,7 +78,9 @@ class Node(object):
 		
 		# try-except is a tiny bit faster
 		#st = os.lstat(self.abs_path)
-		#if stat.S_ISLNK(st.st_mode): os.stat(self.abs_path)
+		#if stat.S_ISLNK(st.st_mode):
+			#try: st = os.stat(self.abs_path)
+			#except OSError: pass # may be a broken symlink
 
 		try: st = os.stat(self.abs_path)
 		except OSError:
@@ -101,11 +105,11 @@ class Node(object):
 		return self._actual_time
 	actual_time = property(actual_time)
 
-	def has_changed(self):
+	def changed(self):
 		if self.actual_time != self.old_time: return True
 		if self.is_dir:
 			for n in self.old_children:
-				if n.has_changed(): return True
+				if n.changed(): return True
 		return False
 		
 	def mark_read(self):
@@ -120,6 +124,7 @@ class Node(object):
 				if is_debug: debug('os.listdir: ' + self.abs_path)
 				children = {}
 				for name in os.listdir(self.abs_path):
+					if name in self.declared_children: children[name] = self.declared_children[name]
 					if name in self.old_children: children[name] = self.old_children[name]
 					else: children[name] = Node(self, name)
 				self._actual_children = children
@@ -131,7 +136,9 @@ class Node(object):
 			global is_debug
 			if is_debug: debug('os.listdir: ' + self.abs_path)
 			children = {}
-			for name in os.listdir(self.abs_path): children[name] = Node(self, name)
+			for name in os.listdir(self.abs_path):
+				if name in self.declared_children: children[name] = self.declared_children[name]
+				else: children[name] = Node(self, name)
 			self._old_children = children
 		return self._old_children
 	old_children = property(old_children)
@@ -171,7 +178,9 @@ class Node(object):
 			if child is None: return None
 			if sep == len(path) - 1: return child
 			if child.kind != DIR: return None
-			return child._find_rel_node(path, sep + 1)
+			sep += 1
+			while path[sep] == os.sep: sep += 1
+			return child._find_rel_node(path, sep)
 		elif sep < 0:
 			name = path[start:]
 			if name == os.pardir: return self.parent or self
@@ -195,7 +204,9 @@ class Node(object):
 			self.declared_children[name] = child
 			if sep == len(path) - 1: return child
 			child._kind = DIR
-			return child._rel_node(path, sep + 1)
+			sep += 1
+			while path[sep] == os.sep: sep += 1
+			return child._rel_node(path, sep)
 		elif sep < 0:
 			name = path[start:]
 			if name == os.pardir: return self.parent or self
