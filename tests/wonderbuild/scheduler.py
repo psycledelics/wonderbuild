@@ -65,7 +65,7 @@ class Scheduler():
 		del self._task_queue
 	
 	def _thread_function(self, i):
-		if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': running')
+		if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': started')
 		self._condition.acquire()
 		try:
 			while True:

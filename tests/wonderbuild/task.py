@@ -64,7 +64,10 @@ class Lib(Task):
 		try: return self._actual_sig
 		except AttributeError:
 			sig = Sig()
-			for s in self.sources: sig.update(s.sig_to_string())
+			for t in self.in_tasks: sig.update(t.actual_sig())
+			ts = [t.target for t in self.in_tasks]
+			for s in self.sources:
+				if not s in ts: sig.update(s.sig_to_string())
 			sig = self._actual_sig = sig.digest()
 			return sig
 
