@@ -7,7 +7,7 @@ import sys, os, gc, cPickle
 from scheduler import Scheduler
 from filesystem import FileSystem
 from options import options
-from logger import debug
+from logger import is_debug, debug
 
 class Project(object):
 	def __init__(self):

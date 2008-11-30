@@ -5,14 +5,18 @@
 import threading
 #python 2.5.0a1 from __future__ import with_statement
 
+from logger import is_debug, debug
+
 class Scheduler():
 	def __init__(self):
-		self.thread_count = 2
+		self.thread_count = 4
 		self.timeout = 3600.0
 		self._task_count = 0
 		self._todo_count = 0
 
 	def start(self):
+		if __debug__:
+			if is_debug: debug('sched: starting threads: ' + str(self.thread_count))
 		self._task_queue = []
 		self._todo_count = self._task_count
 		self._running_count = 0
@@ -42,9 +46,12 @@ class Scheduler():
 				self._todo_count += 1
 			finally: self._condition.release()
 			for t in task.in_tasks: self.add_task(t)
-		print 'add task', self._todo_count, '/', self._task_count, task
+		if __debug__:
+			if is_debug: debug('sched: add task ' + str(self._todo_count) + '/' + str(self._task_count) + ' ' + str(task.__class__))
 
 	def stop(self):
+		if __debug__:
+			if is_debug: debug('sched: stopping threads')
 		self._condition.acquire()
 		try:
 			self._stop_requested = True
@@ -53,6 +60,8 @@ class Scheduler():
 		self.join()
 		
 	def join(self):
+		if __debug__:
+			if is_debug: debug('sched: joining threads')
 		self._condition.acquire()
 		try:
 			self._joining = True
@@ -64,15 +73,18 @@ class Scheduler():
 		del self._task_queue
 	
 	def _thread_function(self, i):
-		print 'thread', i, 'running'
+		if __debug__:
+			if is_debug: debug('sched: thread: ' + str(i) + ': running')
 		while True:
 			self._condition.acquire()
 			try:
 				while (not self._joining or self._todo_count != 0) and not self._stop_requested and len(self._task_queue) == 0:
+					if __debug__:
+						if is_debug: debug('sched: thread: ' + str(i) + ': waiting')
 					self._condition.wait(timeout = self.timeout)
-				if self._joining and self._todo_count == 0 or self._stop_requested:
-					print 'thread', i, 'return'
-					return
+				if __debug__:
+					if is_debug: debug('sched: thread ' + str(i) + ': cond ' + str(self._joining) + ' ' + str(self._todo_count) + '-' + str(self._running_count) + '/' + str(self._task_count) + ' ' + str(self._stop_requested))
+				if self._joining and self._todo_count == 0 or self._stop_requested: break
 				task = self._task_queue.pop()
 				try:
 					self._condition.release()
@@ -90,7 +102,8 @@ class Scheduler():
 					if notify > 1: self._condition.notify(notify - 1)
 				else:
 					self._running_count += 1
-					print 'thread', i, 'process', self._task_count - self._todo_count + self._running_count, '/', self._task_count, task
+					if __debug__:
+						if is_debug: debug('sched: thread ' + str(i) + ': process ' + str(self._task_count - self._todo_count + self._running_count) + '/' + str(self._task_count) + ' ' + str(task.__class__))
 					try:
 						self._condition.release()
 						try: executed = task.process()
@@ -101,6 +114,9 @@ class Scheduler():
 						raise
 					self._running_count -= 1
 					self._todo_count -= 1
+					if self._todo_count == 0 and self._joining:
+						self._condition.notifyAll()
+						break
 					if executed: task.executed = True
 					task.processed = True
 					notify = 0
@@ -115,3 +131,5 @@ class Scheduler():
 							notify += 1
 					if notify > 1: self._condition.notify(notify - 1)
 			finally: self._condition.release()
+		if __debug__:
+			if is_debug: debug('sched: thread ' + str(i) + ': return')
