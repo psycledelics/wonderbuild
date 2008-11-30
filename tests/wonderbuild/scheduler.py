@@ -82,8 +82,8 @@ class Scheduler():
 					if __debug__:
 						if is_debug: debug('sched: thread: ' + str(i) + ': waiting')
 					self._condition.wait(timeout = self.timeout)
-				if __debug__:
-					if is_debug: debug('sched: thread: ' + str(i) + ': cond ' + str(self._joining) + ' ' + str(self._todo_count) + '-' + str(self._running_count) + '/' + str(self._task_count) + ' ' + str(self._stop_requested))
+					if __debug__:
+						if is_debug: debug('sched: thread: ' + str(i) + ': notified ' + str(self._joining) + ' ' + str(self._todo_count) + '-' + str(self._running_count) + '/' + str(self._task_count) + ' ' + str(self._stop_requested))
 				if self._joining and self._todo_count == 0 or self._stop_requested: break
 				task = self._task_queue.pop()
 				try:
