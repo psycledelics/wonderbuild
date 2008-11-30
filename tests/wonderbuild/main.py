@@ -36,16 +36,18 @@ if __name__ == '__main__':
 	from project import Project
 	project = Project()
 
-	if False:
-		n = project.fs.node('src')
-		s = n.find_iter(prunes = ['todo'], in_pat = '*.cpp')
-		h = n.find_iter(prunes = ['todo'], in_pat = '*.hpp', ex_pat = '*.private.hpp')
-		for f in s: print 'sssssssssssss', f.rel_path
-		for f in h: print 'hhhhhhhhhhhhh', f.rel_path
-		#project.fs.display(False)
-		#project.fs.display(True)
-		project.dump()
-	
 	lib_foo = LibFoo(project)
 	project.build([lib_foo])
+		
+	n = project.fs.node('src')
+	s = n.find_iter(prunes = ['todo'], in_pat = '*.cpp')
+	h = n.find_iter(prunes = ['todo'], in_pat = '*.hpp', ex_pat = '*.private.hpp')
+	for f in s: print 'sssssssssssss', f.rel_path
+	for f in h: print 'hhhhhhhhhhhhh', f.rel_path
+	x = project.fs.node('../atomic/')
+	project.fs.display(False)
+	project.fs.display(True)
+	print x.rel_path
+
 	project.dump()
+

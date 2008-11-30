@@ -56,19 +56,20 @@ if __debug__:
 	if is_debug: all_abs_paths = set()
 
 class Node(object):
-	__slots__ = ('parent', 'name', '_kind', '_declared_children', '_old_children', '_actual_children', '_old_time', '_actual_time', '_sig', '_abs_path')
+	__slots__ = ('parent', 'name', '_kind', '_declared_children', '_old_children', '_actual_children', '_old_time', '_actual_time', '_sig', '_rel_path', '_abs_path')
 
 	def __getstate__(self):
 		if False and __debug__:
 			if is_debug: debug('getstate: ' + self.abs_path + ' ' + str(self._actual_time or self._old_time) + ' ' + str(self._declared_children))
-		return self.parent, self.name, self._kind, self._declared_children, self._actual_time or self._old_time, self._abs_path
+		return self.parent, self.name, self._kind, self._declared_children, self._actual_time or self._old_time, self._rel_path
 
 	def __setstate__(self, data):
-		self.parent, self.name, self._kind, self._old_children, self._old_time, self._abs_path = data
+		self.parent, self.name, self._kind, self._old_children, self._old_time, self._rel_path = data
 		self._declared_children = self._old_children
 		self._actual_children = None
 		self._actual_time = None
 		self._sig = None
+		self._abs_path = None
 		if False and  __debug__:
 			if is_debug: debug('setstate: ' + self.abs_path + ' ' + str(self._old_time) + ' ' + str(self._old_children))
 
@@ -82,6 +83,7 @@ class Node(object):
 		self._old_time = None
 		self._actual_time = None
 		self._sig = None
+		self._rel_path = None
 		self._abs_path = None
 		global all_abs_paths
 		assert parent is not None or name == os.sep, (parent, name)
@@ -181,7 +183,10 @@ class Node(object):
 		sep = path.find(os.sep, start)
 		if sep > start:
 			name = path[start:sep]
-			if name == os.pardir: return self.parent or self
+			if name == os.pardir:
+				sep += 1
+				while path[sep] == os.sep: sep += 1
+				return (self.parent or self)._rel_node(path, sep)
 			if name == os.curdir: return self
 			try: child = self.declared_children[name]
 			except KeyError:
@@ -216,31 +221,44 @@ class Node(object):
 	abs_path = property(abs_path)
 
 	def rel_path(self):
-		return self.abs_path
+		if self._rel_path is None:
+			#return self.abs_path
 		
-		path = []
-		cur = self.rel_node(os.getcwd())
-		node = self
-		while node is not cur:
-			path.append(node.name)
-			node = node.parent
-			if node is None: return self.abs_path
-		path.reverse()
-		return os.path.join(path)
+			path = []
+			cur = self.rel_node(os.getcwd())
+			node = self
+			while node is not cur:
+				path.append(node.name)
+				node = node.parent
+				if node is None:
+					path = []
+					node = cur
+					cur = self
+					while node is not cur:
+						path.append(os.pardir)
+						node = node.parent
+						if node is None: return self.abs_path
+					self._rel_path = os.sep.join(path)
+					return self._rel_path
+			if len(path) == 0: self._rel_path = os.curdir					
+			else:
+				path.reverse()
+				self._rel_path = os.sep.join(path)
+		return self._rel_path
 	rel_path = property(rel_path)
 
 	def display(self, cache = False, tabs = 0):
-		if True: path = '  |' * tabs + '- ' + (self.parent and self.name or self.abs_path)
-		else: path = self.rel_path
+		if True: path = '  |' * tabs + '- ' + self.name
+		else: path = self.abs_path
 		
 		if cache: time = self._old_time is None and '?' or self._old_time
 		else: time = self._actual_time is None and '?' or self._actual_time
 		
 		print \
-			(self._sig is None and '?' or self._sig).rjust(12), \
+			(self._sig is None and '?' or str(self._sig)).rjust(12), \
 			str(time).rjust(12), \
 			(self._kind is None and '?' or {DIR: 'dir', FILE: 'file'}[self._kind]).rjust(4) + \
-			' ' + path + ' ' * 20 + str(self)
+			' ' + path
 			
 		if cache:
 			if self._old_children is not None:
