@@ -235,7 +235,7 @@ class IncludeScanner(object):
 if __name__ == '__main__':
 	import time
 	
-	import filesystem
+	from filesystem import FileSystem
 	
 	dirs = set()
 	files = set()
@@ -244,7 +244,7 @@ if __name__ == '__main__':
 		else: files.add(arg)
 
 	t0 = time.time()
-	fs = filesystem.FileSystem()
+	fs = FileSystem()
 	print >> sys.stderr, 'load time:', time.time() - t0
 
 	t0 = time.time()

@@ -10,10 +10,9 @@ from options import options
 from logger import is_debug, debug
 
 class Project(object):
-	def __init__(self):
+	def __init__(self, bld_path = '++wonderbuild'):
 		self.aliases = {} # {name: [tasks]}
 		self.tasks = []
-		bld_path = '++build'
 		cache_path = 'cache'
 		self.fs = FileSystem(os.path.join(bld_path, cache_path, 'filesystem'))
 		self.src_node = self.fs.cur
@@ -24,7 +23,7 @@ class Project(object):
 	def add_aliases(self, task, aliases):
 		self.tasks.append(task)
 		if aliases is not None:
-			debug('project aliases: ' + str(aliases) + ' ' + str(task))
+			debug('project: aliases: ' + str(aliases) + ' ' + str(task))
 			for a in aliases:
 				try: self.aliases[a].append(task)
 				except KeyError: self.aliases[a] = [task]
@@ -38,24 +37,23 @@ class Project(object):
 	def load(self):
 		gc.disable()
 		try:
-			try:
-				f = file(os.path.join(self.cache_node.abs_path, 'tasks'), 'rb')
+			try: f = file(os.path.join(self.cache_node.abs_path, 'tasks'), 'rb')
+			except IOError: raise
+			else:
 				try: self.task_sigs = cPickle.load(f)
+				except Exception, e:
+					print >> sys.stderr, 'could not load pickle:', e
+					raise
 				finally: f.close()
-			except Exception, e:
-				print >> sys.stderr, 'could not load pickle:', e
-				self.task_sigs = {} # {task.uid: task.sig}
+		except: self.task_sigs = {} # {task.uid: task.sig}
 		finally: gc.enable()
 
 	def dump(self):
-		if not os.path.exists(self.bld_node.abs_path):
-			os.mkdir(self.bld_node.abs_path)
-			os.mkdir(self.cache_node.abs_path)
-		if not os.path.exists(self.cache_node.abs_path): os.mkdir(self.cache_node.abs_path)
+		self.cache_node.make_dir()
 		self.fs.dump()
 		gc.disable()
 		try:
-			f = file(os.path.join(self.cache_node.abs_path, 'tasks'), 'wb')
+			f = file(os.path.join(self.cache_node.path, 'tasks'), 'wb')
 			try: cPickle.dump(self.task_sigs, f, cPickle.HIGHEST_PROTOCOL)
 			finally: f.close()
 		finally: gc.enable()

@@ -2,11 +2,6 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2006-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-from cmd import Cmd
-
-class RootProject(object): pass
-class Project(object) : pass
-
 class Contexes(object):
 	def check_and_build(self):
 		'when performing build checks, or building the sources'
@@ -16,24 +11,27 @@ class Contexes(object):
 		'when building the sources'
 		pass
 		
-	def source(self):
-		'when building a tarball of the sources'
-		pass
-	
 	class client:
 		'when used as a dependency'
 		pass
 
+class Cmd(object):
+	def __init__(self, cmd)
+		self.cmd = cmd
+
+	def run(self):
+		exec_subprocess(cmd)
+
 class Cxx(Cmd):
-	def __init__(self cmd = 'c++'):
+	def __init__(self, cmd = 'c++'):
 		Cmd.__init__(self, cmd)
-		self.include_path = []
+		self.paths = []
 		self.debug = False
 		self.pic = False
 
 	def run(self, source, target):
-		args = [self.cmd, '-o', source.rel_path, target.rel_path]
-		for i in self.include_path: args.extend(['-I', i.rel_path])
+		args = [self.cmd, '-o', source.path, target.path]
+		for i in self.paths: args += ['-I', i.path]
 		if self.debug: args.append('-g')
 		if self.pic: args.append('-fPIC')
 		Cxx.run(self, args)
@@ -48,7 +46,7 @@ class MsCxx(Cxx):
 		Cxx.__init__(self, 'cl')
 
 	def run(self):
-		args = [self.cmd, '-nologo', '-Fo', self.output.rel_path, self.input.rel_path]
+		args = [self.cmd, '-nologo', '-Fo', self.output.path, self.input.path]
 		Cxx.run(self, args)
 
 class Archiver(Cmd):
