@@ -104,10 +104,10 @@ class Node(object):
 	def _do_stat(self):
 		if __debug__:
 			if is_debug: debug('os.stat   : ' + self.rel_path)
-		try: st = os.stat(self.abs_path)
+		try: st = os.stat(self.rel_path)
 		except OSError:
 			# may be a broken symlink
-			st = os.lstat(self.abs_path)
+			st = os.lstat(self.rel_path)
 		if stat.S_ISDIR(st.st_mode): self._kind = DIR
 		else: self._kind = FILE
 		self._actual_time = st.st_mtime
