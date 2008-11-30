@@ -42,6 +42,12 @@ class Scheduler():
 		finally: self._condition.release()
 		if __debug__ and is_debug: debug('sched: add task ' + str(self._todo_count) + '/' + str(self._task_count) + ' ' + str(task.__class__))
 
+	def progress(self):
+		pos = self._task_count - self._todo_count + self._running_count
+		max = self._task_count
+		pct = pos == max and 100 or 100 * pos / max
+		return '[' + str(pct).rjust(3) + '%][' + str(pos) + ' / ' + str(max) + ']'
+	
 	def stop(self):
 		if __debug__:
 			if is_debug: debug('sched: stopping threads')
@@ -91,7 +97,7 @@ class Scheduler():
 					if notify > 1: self._condition.notify(notify - 1)
 				else:
 					self._running_count += 1
-					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': process ' + str(self._task_count - self._todo_count + self._running_count) + '/' + str(self._task_count) + ' ' + str(task.__class__))
+					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': process ' + self.progress() + ' ' + str(task.__class__))
 					try:
 						self._condition.release()
 						try:
@@ -112,6 +118,7 @@ class Scheduler():
 								else:
 									result = task.process()
 									if result != 0: raise Exception, result
+									if not __debug__ or not is_debug: print self.progress()
 									task.update_sig()
 									task.executed = True
 						finally: self._condition.acquire()

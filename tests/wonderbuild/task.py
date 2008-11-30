@@ -104,9 +104,9 @@ class Lib(Task):
 		return exec_subprocess(['c++', '-o', self.target.path] + [s.path for s in self.sources] + L + l + self.flags)
 
 def exec_subprocess(args, env = None, out_stream = sys.stdout, err_stream = sys.stderr):
-	print '======================================================================'
+	print '=' * 79
 	print ' '.join(args)
-	print '______________________________________________________________________'
+	print '_' * 79
 	p = subprocess.Popen(
 		args = args,
 		stdout = subprocess.PIPE,
