@@ -24,7 +24,7 @@ class Project(object):
 	def add_aliases(self, task, aliases):
 		self.tasks.append(task)
 		if aliases is not None:
-			debug('project aliases: ' + str(aliases))
+			debug('project aliases: ' + str(aliases) + ' ' + str(task))
 			for a in aliases:
 				try: self.aliases[a].append(task)
 				except KeyError: self.aliases[a] = [task]

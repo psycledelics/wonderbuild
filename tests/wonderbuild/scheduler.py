@@ -7,111 +7,103 @@ import threading
 
 class Scheduler():
 	def __init__(self):
-		self.thread_count = 1
+		self.thread_count = 2
 		self.timeout = 3600.0
+		self._task_count = 0
+		self._todo_count = 0
 
 	def start(self):
 		self._task_queue = []
-		self._condition = threading.Condition(threading.Lock())
-		self._join_condition = threading.Condition(threading.Lock())
+		self._todo_count = self._task_count
+		self._running_count = 0
 		self._stop_requested = False
-		self._running_task_count = 0
+		self._joining = False
 		self._threads = []
+		self._condition = threading.Condition(threading.Lock())
 		for i in xrange(self.thread_count):
-			t = threading.Thread(target = self._thread_function, name = 'scheduler-thread-' + str(i))
+			t = threading.Thread(target = self._thread_function, args = (i,), name = 'scheduler-thread-' + str(i))
 			t.setDaemon(True)
 			t.start()
 			self._threads.append(t)
 
 	def add_task(self, task):
-		if not task.in_tasks:
+		if len(task.in_tasks) == 0:
 			self._condition.acquire()
 			try:
+				self._task_count += 1
+				self._todo_count += 1
 				self._task_queue.append(task)
 				self._condition.notify()
 			finally: self._condition.release()
 		else:
+			self._condition.acquire()
+			try:
+				self._task_count += 1
+				self._todo_count += 1
+			finally: self._condition.release()
 			for t in task.in_tasks: self.add_task(t)
-	
+		print 'add task', self._todo_count, '/', self._task_count, task
+
 	def stop(self):
 		self._condition.acquire()
 		try:
 			self._stop_requested = True
 			self._condition.notifyAll()
 		finally: self._condition.release()
+		self.join()
+		
+	def join(self):
+		self._condition.acquire()
+		try:
+			self._joining = True
+			self._condition.notifyAll()
+		finally: self._condition.release()
 		for t in self._threads: t.join(timeout = self.timeout)
 		del self._threads
 		del self._condition
 		del self._task_queue
-		
-	def join(self):
-		self._join_condition.acquire()
-		try:
-			while self._running_task_count != 0 or self._task_queue: self._join_condition.wait(timeout = self.timeout)
-		finally: self._join_condition.release()
-		self.stop()
 	
-	def _thread_function(self):
+	def _thread_function(self, i):
+		print 'thread', i, 'running'
 		while True:
 			self._condition.acquire()
 			try:
-				while not self._stop_requested and not self._task_queue: self._condition.wait(timeout = self.timeout)
-				if self._stop_requested:
-					if self._running_task_count == 0 and not self._task_queue:
-						self._join_condition.acquire()
-						try: self._join_condition.notify()
-						finally: self._join_condition.release()
+				while (not self._joining or self._todo_count != 0) and not self._stop_requested and len(self._task_queue) == 0:
+					self._condition.wait(timeout = self.timeout)
+				if self._joining and self._todo_count == 0 or self._stop_requested:
+					print 'thread', i, 'return'
 					return
 				task = self._task_queue.pop()
-				self._running_task_count += 1
-			finally: self._condition.release()
-
-			try: dyn_in_tasks = task.dyn_in_tasks()
-			except:
-				self._condition.acquire()
 				try:
-					self._running_task_count -= 1
-					self._task_queue = []
+					self._condition.release()
+					try: dyn_in_tasks = task.dyn_in_tasks()
+					finally: self._condition.acquire()
+				except:
 					self._stop_requested = True
 					self._condition.notifyAll()
-				finally: self._condition.release()
-				if self._running_task_count == 0:
-					self._join_condition.acquire()
-					try: self._join_condition.notify()
-					finally: self._join_condition.release()
-				raise
-			if dyn_in_tasks is not None:
-				self._condition.acquire()
-				try:
-					self._running_task_count -= 1
+					raise
+				if dyn_in_tasks is not None and len(dyn_in_tasks) != 0:
 					self._task_queue += dyn_in_tasks
 					notify = len(dyn_in_tasks)
-					if notify != 0: self._condition.notify(notify)
-					elif self._running_task_count == 0 and not self._task_queue:
-						self._join_condition.acquire()
-						try: self._join_condition.notify()
-						finally: self._join_condition.release()
-				finally: self._condition.release()
-			else:
-				try: task.process()
-				except:
-					self._condition.acquire()
+					self._todo_count += notify
+					self._task_count += notify
+					if notify > 1: self._condition.notify(notify - 1)
+				else:
+					self._running_count += 1
+					print 'thread', i, 'process', self._task_count - self._todo_count + self._running_count, '/', self._task_count, task
 					try:
-						self._running_task_count -= 1
-						self._task_queue = []
+						self._condition.release()
+						try: executed = task.process()
+						finally: self._condition.acquire()
+					except:
 						self._stop_requested = True
 						self._condition.notifyAll()
-					finally: self._condition.release()
-					if self._running_task_count == 0:
-						self._join_condition.acquire()
-						try: self._join_condition.notify()
-						finally: self._join_condition.release()
-					raise
-				notify = 0
-				self._condition.acquire()
-				try:
-					self._running_task_count -= 1
+						raise
+					self._running_count -= 1
+					self._todo_count -= 1
+					if executed: task.executed = True
 					task.processed = True
+					notify = 0
 					for out_task in task.out_tasks:
 						ready = True
 						for task in out_task.in_tasks:
@@ -120,10 +112,6 @@ class Scheduler():
 								break
 						if ready:
 							self._task_queue.append(out_task)
-							++notify
-					if notify != 0: self._condition.notify(notify)
-					elif self._running_task_count == 0 and not self._task_queue:
-						self._join_condition.acquire()
-						try: self._join_condition.notify()
-						finally: self._join_condition.release()
-				finally: self._condition.release()
+							notify += 1
+					if notify > 1: self._condition.notify(notify - 1)
+			finally: self._condition.release()

@@ -163,8 +163,6 @@ class Node(object):
 	declared_children = property(declared_children)
 
 	def sig(self):
-		if __debug__:
-			if is_debug: debug('node sig: ' + self.abs_path + ' ' + str(self._sig))
 		if self._sig is None:
 			time = self.actual_time
 			assert time is not None

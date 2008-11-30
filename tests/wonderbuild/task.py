@@ -12,6 +12,7 @@ class Task(object):
 		self.in_tasks = []
 		self.out_tasks = []
 		self.processed = False
+		self.executed = False
 		self.project = project
 		project.add_aliases(self, aliases)
 		project.tasks.append(self)
@@ -44,19 +45,19 @@ class Obj(Task):
 			return sig
 		
 	def process(self):
-		print 'task sig:', self.source.rel_path, raw_to_hexstring(self.old_sig()), raw_to_hexstring(self.actual_sig())
+		#print 'task sig:', self.source.rel_path, raw_to_hexstring(self.old_sig()), raw_to_hexstring(self.actual_sig())
 		if self.old_sig() != self.actual_sig():
 			if not os.path.exists(self.target.parent.rel_path):
 				print 'mkdir:', self.target.parent.rel_path
 				os.makedirs(self.target.parent.rel_path)
 			i = []
 			for p in self.include_paths: i += ['-I', p.rel_path]
-			exec_subprocess(['c++', '-fPIC', '-o', self.target.rel_path, '-c', self.source.rel_path] + i)
-			self.update_sig()
-			return True
-		else:
-			self.out_tasks = []
-			return False
+			result = exec_subprocess(['c++', '-fPIC', '-o', self.target.rel_path, '-c', self.source.rel_path] + i)
+			if result == 0:
+				self.update_sig()
+				return True
+			else: raise Exception, result
+		else: return False
 		
 class Lib(Task):
 	def uid(self):
@@ -74,12 +75,11 @@ class Lib(Task):
 			return sig
 
 	def process(self):
-		print 'task sig:', [s.rel_path for s in self.sources], raw_to_hexstring(self.old_sig()), raw_to_hexstring(self.actual_sig())
+		#print 'task sig:', [s.rel_path for s in self.sources], raw_to_hexstring(self.old_sig()), raw_to_hexstring(self.actual_sig())
 		if self.old_sig() != self.actual_sig():
-			exec_subprocess(['c++', '-shared', '-o', self.target.rel_path] + [s.rel_path for s in self.sources])
-			self.update_sig()
-			return True
-		else:
-			self.out_tasks = []
-			return False
-
+			result = exec_subprocess(['c++', '-shared', '-o', self.target.rel_path] + [s.rel_path for s in self.sources])
+			if result == 0:
+				self.update_sig()
+				return True
+			else: raise Exception, result
+		else: return False
