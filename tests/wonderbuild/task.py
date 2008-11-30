@@ -34,8 +34,7 @@ class Obj(Task):
 	def uid(self):
 		try: return self._uid
 		except AttributeError:
-			sig = Sig(self.target.rel_path).digest()
-			self._uid = sig
+			sig = self._uid = Sig(self.target.rel_path).digest()
 			return sig
 
 	def actual_sig(self):
@@ -63,8 +62,7 @@ class Lib(Task):
 	def uid(self):
 		try: return self._uid
 		except AttributeError:
-			sig = Sig(self.target.rel_path).digest()
-			self._uid = sig
+			sig = self._uid = Sig(self.target.rel_path).digest()
 			return sig
 
 	def actual_sig(self):
@@ -72,8 +70,7 @@ class Lib(Task):
 		except AttributeError:
 			sig = Sig()
 			for s in self.sources: sig.update(s.sig_to_string())
-			sig = sig.digest()
-			self._actual_sig = sig
+			sig = self._actual_sig = sig.digest()
 			return sig
 
 	def process(self):
