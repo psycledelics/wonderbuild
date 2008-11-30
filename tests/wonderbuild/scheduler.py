@@ -94,7 +94,26 @@ class Scheduler():
 					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': process ' + str(self._task_count - self._todo_count + self._running_count) + '/' + str(self._task_count) + ' ' + str(task.__class__))
 					try:
 						self._condition.release()
-						try: executed = task.process()
+						try:
+							if len(task.in_tasks) == 0: execute = True
+							else:
+								execute = False
+								for in_task in task.in_tasks:
+									if in_task.executed:
+										execute = True
+										break
+							if not execute:
+								if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': skip task (in_tasks skipped) ' + str(task.__class__))
+								task.executed = False
+							else:
+								if task.old_sig() == task.actual_sig():
+									if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': skip task (same sig) ' + str(task.__class__))
+									task.executed = False
+								else:
+									result = task.process()
+									if result != 0: raise Exception, result
+									task.update_sig()
+									task.executed = True
 						finally: self._condition.acquire()
 					except:
 						self._stop_requested = True
@@ -105,7 +124,6 @@ class Scheduler():
 					if self._todo_count == 0 and self._joining:
 						self._condition.notifyAll()
 						break
-					if executed: task.executed = True
 					task.processed = True
 					notify = 0
 					for out_task in task.out_tasks:

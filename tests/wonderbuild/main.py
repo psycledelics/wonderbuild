@@ -30,11 +30,8 @@ if __name__ == '__main__':
 
 			self.in_tasks = [obj1, obj2]
 			self.sources = [obj1.target, obj2.target]
-			return self.in_tasks
-				
-		def process(self):
 			self.target = self.project.bld_node.rel_node(os.path.join('modules', 'libfoo', 'libfoo.so'))
-			Lib.process(self)
+			return self.in_tasks
 			
 	from project import Project
 	project = Project()

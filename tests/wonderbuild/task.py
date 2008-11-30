@@ -6,6 +6,7 @@ import os
 
 from signature import Sig, raw_to_hexstring
 from cmd import exec_subprocess
+from logger import is_debug, debug
 
 class Task(object):	
 	def __init__(self, project, aliases = None):
@@ -45,19 +46,12 @@ class Obj(Task):
 			return sig
 		
 	def process(self):
-		#print 'task sig:', self.source.rel_path, raw_to_hexstring(self.old_sig()), raw_to_hexstring(self.actual_sig())
-		if self.old_sig() != self.actual_sig():
-			if not os.path.exists(self.target.parent.rel_path):
-				print 'mkdir:', self.target.parent.rel_path
-				os.makedirs(self.target.parent.rel_path)
-			i = []
-			for p in self.include_paths: i += ['-I', p.rel_path]
-			result = exec_subprocess(['c++', '-fPIC', '-o', self.target.rel_path, '-c', self.source.rel_path] + i)
-			if result == 0:
-				self.update_sig()
-				return True
-			else: raise Exception, result
-		else: return False
+		if not os.path.exists(self.target.parent.rel_path):
+			if __debug__ and is_debug: debug('mkdir: ' + self.target.parent.rel_path)
+			os.makedirs(self.target.parent.rel_path)
+		i = []
+		for p in self.include_paths: i += ['-I', p.rel_path]
+		return exec_subprocess(['c++', '-fPIC', '-o', self.target.rel_path, '-c', self.source.rel_path] + i)
 		
 class Lib(Task):
 	def uid(self):
@@ -75,11 +69,5 @@ class Lib(Task):
 			return sig
 
 	def process(self):
-		#print 'task sig:', [s.rel_path for s in self.sources], raw_to_hexstring(self.old_sig()), raw_to_hexstring(self.actual_sig())
-		if self.old_sig() != self.actual_sig():
-			result = exec_subprocess(['c++', '-shared', '-o', self.target.rel_path] + [s.rel_path for s in self.sources])
-			if result == 0:
-				self.update_sig()
-				return True
-			else: raise Exception, result
-		else: return False
+		return exec_subprocess(['c++', '-shared', '-o', self.target.rel_path] + [s.rel_path for s in self.sources])
+
