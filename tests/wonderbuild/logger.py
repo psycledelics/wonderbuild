@@ -4,7 +4,7 @@
 
 from options import options
 
-is_debug = '--debug' in options
+is_debug = __debug__ and '--debug' in options
 if is_debug:
 	import sys
 	def debug(s): print >> sys.stderr, s

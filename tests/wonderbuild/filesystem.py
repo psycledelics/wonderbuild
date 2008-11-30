@@ -12,6 +12,8 @@ class FileSystem(object):
 		self.project = project
 		self.cache_path = os.path.join(project.cache_dir, 'filesystem')
 		self.load()
+		if  False and __debug__:
+			if is_debug: self.display(True)
 		self.cur = self.root.rel_node(os.getcwd())
 		self.cur._kind = DIR
 
@@ -43,75 +45,75 @@ class FileSystem(object):
 		if os.path.isabs(path): return self.root.rel_node(path)
 		else: return self.cur.rel_node(path)
 	
-	def display(self):
-		print 'fs:'
-		self.root.display()
+	def display(self, cache = False):
+		print 'fs:', cache and 'cached' or 'declared'
+		self.root.display(cache)
 
 DIR = 1
 FILE = 2
 ignore = ['.svn']
 
+if __debug__:
+	if is_debug: all_abs_paths = set()
+
 class Node(object):
-	__slots__ = ('parent', 'name', '_kind', '_declared_children', '_old_children', '_actual_children', 'old_time', '_actual_time', '_sig', '_abs_path')
+	__slots__ = ('parent', 'name', '_kind', '_declared_children', '_old_children', '_actual_children', '_old_time', '_actual_time', '_sig', '_abs_path')
 
 	def __getstate__(self):
-		return self.parent, self.name, self._kind, self._old_children, self.old_time, self._sig, self._abs_path
+		if False and __debug__:
+			if is_debug: debug('getstate: ' + self.abs_path + ' ' + str(self._actual_time or self._old_time) + ' ' + str(self._declared_children))
+		return self.parent, self.name, self._kind, self._declared_children, self._actual_time or self._old_time, self._sig, self._abs_path
 
 	def __setstate__(self, data):
-		self.parent, self.name, self._kind, self._old_children, self.old_time, self._sig, self._abs_path = data
-		self._declared_children = None
+		self.parent, self.name, self._kind, self._old_children, self._old_time, self._sig, self._abs_path = data
+		self._declared_children = self._old_children
 		self._actual_children = None
 		self._actual_time = None
+		if False and  __debug__:
+			if is_debug: debug('setstate: ' + self.abs_path + ' ' + str(self._old_time) + ' ' + str(self._old_children))
 
 	def __init__(self, parent, name):
-		assert parent is not None or name == os.sep
 		self.parent = parent
 		self.name = name
 		self._kind = None
 		self._declared_children = None
 		self._old_children = None
 		self._actual_children = None
-		self.old_time = None
+		self._old_time = None
 		self._actual_time = None
 		self._sig = None
 		self._abs_path = None
+		global all_abs_paths
+		assert parent is not None or name == os.sep, (parent, name)
+		assert parent is None or not os.sep in name, (parent.abs_path, name)
+		assert parent is not None or not name in all_abs_paths, (parent, name)
+		assert parent is None or not os.path.join(parent.abs_path, name) in all_abs_paths, (parent.abs_path, name)
+		if __debug__:
+			if is_debug:
+				debug('new node  : ' + self.abs_path + ' ' + str(self.parent) + ' ' + name)
+				all_abs_paths.add(self.abs_path)
 	
-	def search_dir_or_file_iter(self, in_pat = '*', ex_pat = None):
-		if (ex_pat is None or not match(self.name, ex_pat)) and match(self.name, in_pat): yield self
-		if self.is_dir:
-			for child in self.actual_children.itervalues():
-				for node in child.search_iter(in_pat, ex_pat): yield node
-		raise StopIteration
-	
-	def search_iter(self, in_pat = '*', ex_pat = None):
-		for child in self.actual_children.itervalues():
-			if (ex_pat is None or not match(child.name, ex_pat)) and match(child.name, in_pat): yield child
-			elif child.is_dir:
-				for node in child.search_iter(in_pat, ex_pat): yield node
+	def find_iter(self, in_pat = '*', ex_pat = None, prunes = None):
+		for name, node in self.actual_children.iteritems():
+			if (ex_pat is None or not match(name, ex_pat)) and match(name, in_pat): yield node
+			elif node.is_dir:
+				if prunes is not None and name in prunes: continue
+				for node in node.find_iter(in_pat, ex_pat, prunes): yield node
 		raise StopIteration
 
-	def do_stat(self):
-		global is_debug
-		if is_debug: debug('os.stat   : ' + self.abs_path)
-		
-		# try-except is a tiny bit faster
-		#st = os.lstat(self.abs_path)
-		#if stat.S_ISLNK(st.st_mode):
-			#try: st = os.stat(self.abs_path)
-			#except OSError: pass # may be a broken symlink
-
+	def _do_stat(self):
+		if __debug__:
+			if is_debug: debug('os.stat   : ' + self.rel_path)
 		try: st = os.stat(self.abs_path)
 		except OSError:
 			# may be a broken symlink
 			st = os.lstat(self.abs_path)
-
 		if stat.S_ISDIR(st.st_mode): self._kind = DIR
 		else: self._kind = FILE
-		
 		self._actual_time = st.st_mtime
 
 	def kind(self):
-		if self._kind is None: self.do_stat()
+		if self._kind is None: self._do_stat()
 		return self._kind
 	kind = property(kind)
 
@@ -119,54 +121,39 @@ class Node(object):
 	is_dir = property(is_dir)
 
 	def actual_time(self):
-		if self._actual_time is None: self.do_stat()
+		if self._actual_time is None: self._do_stat()
 		return self._actual_time
 	actual_time = property(actual_time)
 
 	def changed(self):
-		if self.actual_time != self.old_time: return True
+		if self.actual_time != self._old_time: return True
 		if self.is_dir:
-			for n in self.old_children:
+			for n in self._old_children:
 				if n.changed(): return True
 		return False
 		
-	def mark_read(self):
-		self.old_time = self.actual_time
-		if self.is_dir: self._old_children = self.actual_children
-
 	def actual_children(self):
 		if self._actual_children is None:
-			if self.actual_time == self.old_time: self._actual_children = self.old_children
+			if self.actual_time == self._old_time:
+				self._actual_children = self._old_children
+				self.declared_children
+				for name, node in self._actual_children.iteritems(): self._declared_children[name] = node
 			else:
-				global is_debug
-				if is_debug: debug('os.listdir: ' + self.abs_path + os.sep)
+				if __debug__:
+					if is_debug: debug('os.listdir: ' + self.rel_path + os.sep)
 				children = {}
-				for name in os.listdir(self.abs_path):
+				self.declared_children
+				for name in os.listdir(self.rel_path):
 					if name in ignore: continue
-					if name in self.declared_children: children[name] = self.declared_children[name]
-					#if name in self.old_children: children[name] = self.old_children[name]
+					if name in self._declared_children: children[name] = self._declared_children[name]
 					else:
 						child = Node(self, name)
 						children[name] = child
-						self.declared_children[name] = child
+						self._declared_children[name] = child
 				self._actual_children = children
 		return self._actual_children
 	actual_children = property(actual_children)
 		
-	def old_children(self):
-		if self._old_children is None:
-			global is_debug
-			if is_debug: debug('os.listdir: ' + self.abs_path + os.sep)
-			children = {}
-			for name in os.listdir(self.abs_path):
-				if name in ignore: continue
-				#if name in self.declared_children: children[name] = self.declared_children[name]
-				#else: children[name] = Node(self, name)
-				children[name] = Node(self, name)
-			self._old_children = children
-		return self._old_children
-	old_children = property(old_children)
-
 	def declared_children(self):
 		if self._declared_children is None:
 			if self._actual_children is not None: self._declared_children = self._actual_children
@@ -184,39 +171,11 @@ class Node(object):
 					sub_time = n.sig
 					if sub_time > time: time = sub_time
 			self._sig = time
-			self.mark_read()
 		return self._sig
 	sig = property(sig)
 
 	def sig_to_string(self): return str(self.sig)
 	
-	def find_rel_node(self, path): return self._find_rel_node(path)
-	def _findrel_node(self, path, start = 0):
-		sep = path.find(os.sep, start)
-		if sep > start:
-			name = path[start:sep]
-			if name == os.pardir: return self.parent or self
-			if name == os.curdir: return self
-			if self.kind != DIR: return None
-			child = self.actual_children.get(name, None)
-			if child is None: return None
-			if sep == len(path) - 1: return child
-			if child.kind != DIR: return None
-			sep += 1
-			while path[sep] == os.sep: sep += 1
-			return child._find_rel_node(path, sep)
-		elif sep < 0:
-			name = path[start:]
-			if name == os.pardir: return self.parent or self
-			if name == os.curdir: return self
-			if self.kind != DIR: return None
-			return self.actual_children.get(name, None)
-		else: # sep == start, absolute path
-			root = self
-			while root.parent: root = root.parent
-			assert root.name == os.sep
-			return root._find_rel_node(path, 1)
-
 	def rel_node(self, path): return self._rel_node(path)
 	def _rel_node(self, path, start = 0):
 		sep = path.find(os.sep, start)
@@ -224,8 +183,10 @@ class Node(object):
 			name = path[start:sep]
 			if name == os.pardir: return self.parent or self
 			if name == os.curdir: return self
-			child = Node(self, name)
-			self.declared_children[name] = child
+			try: child = self.declared_children[name]
+			except KeyError:
+				child = Node(self, name)
+				self.declared_children[name] = child
 			if sep == len(path) - 1: return child
 			child._kind = DIR
 			sep += 1
@@ -235,8 +196,10 @@ class Node(object):
 			name = path[start:]
 			if name == os.pardir: return self.parent or self
 			if name == os.curdir: return self
-			child = Node(self, name)
-			self.declared_children[name] = child
+			try: child = self.declared_children[name]
+			except KeyError:
+				child = Node(self, name)
+				self.declared_children[name] = child
 			return child
 		else: # sep == start, absolute path
 			root = self
@@ -252,21 +215,32 @@ class Node(object):
 		return self._abs_path
 	abs_path = property(abs_path)
 
-	def rel_path(self): return self.abs_path
+	def rel_path(self):
+		return self.abs_path
+		
+		path = []
+		cur = self.rel_node(os.getcwd())
+		node = self
+		while node is not cur:
+			path.append(node.name)
+			node = node.parent
+			if node is None: return self.abs_path
+		path.reverse()
+		return os.path.join(path)
 	rel_path = property(rel_path)
 
 	def display(self, cache = False, tabs = 0):
 		if True: path = '  |' * tabs + '- ' + (self.parent and self.name or self.abs_path)
 		else: path = self.rel_path
 		
-		if cache: time = self.old_time is None and '?' or self.old_time
+		if cache: time = self._old_time is None and '?' or self._old_time
 		else: time = self._actual_time is None and '?' or self._actual_time
 		
 		print \
 			(self._sig is None and '?' or self._sig).rjust(12), \
 			str(time).rjust(12), \
 			(self._kind is None and '?' or {DIR: 'dir', FILE: 'file'}[self._kind]).rjust(4) + \
-			' ' + path
+			' ' + path + ' ' * 20 + str(self)
 			
 		if cache:
 			if self._old_children is not None:

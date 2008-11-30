@@ -35,9 +35,10 @@ if __name__ == '__main__':
 		project.dump()
 
 	n = project.fs.node('src')
-	s = n.search_iter(in_pat = '*.cpp')
-	#h = n.search_iter(in_pat = '*.hpp', ex_pat = '*.private.hpp')
-	for f in s: print f.rel_path
-	#for f in h: print f.rel_path
-	project.fs.display()
+	s = n.find_iter(prunes = ['todo'], in_pat = '*.cpp')
+	h = n.find_iter(prunes = ['todo'], in_pat = '*.hpp', ex_pat = '*.private.hpp')
+	for f in s: print 'sssssssssssss', f.rel_path
+	for f in h: print 'hhhhhhhhhhhhh', f.rel_path
+	#project.fs.display(False)
+	#project.fs.display(True)
 	project.dump()
