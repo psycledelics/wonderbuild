@@ -15,6 +15,7 @@ class Cmd(object):
 		return exec_subprocess(self.args)
 
 def exec_subprocess(args, env = os.environ, out_stream = sys.stdout, err_stream = sys.stderr):
+	print args
 	p = subprocess.Popen(
 		args = args,
 		stdout = subprocess.PIPE,

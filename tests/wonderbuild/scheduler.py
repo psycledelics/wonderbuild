@@ -71,10 +71,12 @@ class Scheduler():
 				notify = 0
 				self._condition.acquire()
 				try:
-					for out_task in task.out_tasks():
+					task.processed = True
+					for out_task in task.out_tasks:
+						print out_task
 						ready = True
-						for task in out_task.iter_in_tasks():
-							if not task.processed():
+						for task in out_task.in_tasks:
+							if not task.processed:
 								ready = False
 								break
 						if ready:

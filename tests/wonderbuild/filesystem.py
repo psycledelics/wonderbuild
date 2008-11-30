@@ -8,9 +8,8 @@ from fnmatch import fnmatchcase as match
 from logger import is_debug, debug
 
 class FileSystem(object):
-	def __init__(self, project):
-		self.project = project
-		self.cache_path = os.path.join(project.cache_dir, 'filesystem')
+	def __init__(self, cache_path):
+		self.cache_path = cache_path
 		self.load()
 		if  False and __debug__:
 			if is_debug: self.display(True)
@@ -90,7 +89,7 @@ class Node(object):
 		assert parent is None or not os.path.join(parent.abs_path, name) in all_abs_paths, (parent.abs_path, name)
 		if __debug__:
 			if is_debug:
-				debug('new node  : ' + self.abs_path + ' ' + str(self.parent) + ' ' + name)
+				debug('new node  : ' + self.abs_path)
 				all_abs_paths.add(self.abs_path)
 	
 	def find_iter(self, in_pat = '*', ex_pat = None, prunes = None):

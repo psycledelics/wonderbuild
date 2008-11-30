@@ -14,31 +14,32 @@ if __name__ == '__main__':
 			
 		def dyn_in_tasks(self):
 			if len(self.in_tasks): return None
-			foo = self.project.build_node.rel_node(os.path.join('modules', self.aliases[0], 'foo', 'foo.o'))
-			self.sources = [foo]
+			from task import Obj
 			obj = Obj(project)
-			obj.target = foo
+			obj.source = self.project.src_node.rel_node(os.path.join('src', 'foo', 'foo.cpp'))
+			obj.target = self.project.bld_node.rel_node(os.path.join('modules', 'libfoo', 'src', 'foo', 'foo.o'))
+			obj.out_tasks = [self]
 			self.in_tasks = [obj]
-			for t in self.in_tasks:
-				t.source = t.target.src_node_ext('.cpp')
-				t.out_tasks = [self]
+			self.sources = [obj.target]
+			return self.in_tasks
 				
 		def process(self):
-			self.target = self.project.fs.built_node('libfoo.so')
+			self.target = self.project.bld_node.rel_node(os.path.join('modules', 'libfoo', 'libfoo.so'))
 			Lib.process(self)
 			
 	from project import Project
 	project = Project()
-	if False:
-		lib_foo = LibFoo(project)
-		project.build([lib_foo])
-		project.dump()
 
-	n = project.fs.node('src')
-	s = n.find_iter(prunes = ['todo'], in_pat = '*.cpp')
-	h = n.find_iter(prunes = ['todo'], in_pat = '*.hpp', ex_pat = '*.private.hpp')
-	for f in s: print 'sssssssssssss', f.rel_path
-	for f in h: print 'hhhhhhhhhhhhh', f.rel_path
-	#project.fs.display(False)
-	#project.fs.display(True)
+	if False:
+		n = project.fs.node('src')
+		s = n.find_iter(prunes = ['todo'], in_pat = '*.cpp')
+		h = n.find_iter(prunes = ['todo'], in_pat = '*.hpp', ex_pat = '*.private.hpp')
+		for f in s: print 'sssssssssssss', f.rel_path
+		for f in h: print 'hhhhhhhhhhhhh', f.rel_path
+		#project.fs.display(False)
+		#project.fs.display(True)
+		project.dump()
+	
+	lib_foo = LibFoo(project)
+	project.build([lib_foo])
 	project.dump()
