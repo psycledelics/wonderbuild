@@ -83,7 +83,7 @@ class Scheduler():
 						if is_debug: debug('sched: thread: ' + str(i) + ': waiting')
 					self._condition.wait(timeout = self.timeout)
 				if __debug__:
-					if is_debug: debug('sched: thread ' + str(i) + ': cond ' + str(self._joining) + ' ' + str(self._todo_count) + '-' + str(self._running_count) + '/' + str(self._task_count) + ' ' + str(self._stop_requested))
+					if is_debug: debug('sched: thread: ' + str(i) + ': cond ' + str(self._joining) + ' ' + str(self._todo_count) + '-' + str(self._running_count) + '/' + str(self._task_count) + ' ' + str(self._stop_requested))
 				if self._joining and self._todo_count == 0 or self._stop_requested: break
 				task = self._task_queue.pop()
 				try:
@@ -103,7 +103,7 @@ class Scheduler():
 				else:
 					self._running_count += 1
 					if __debug__:
-						if is_debug: debug('sched: thread ' + str(i) + ': process ' + str(self._task_count - self._todo_count + self._running_count) + '/' + str(self._task_count) + ' ' + str(task.__class__))
+						if is_debug: debug('sched: thread: ' + str(i) + ': process ' + str(self._task_count - self._todo_count + self._running_count) + '/' + str(self._task_count) + ' ' + str(task.__class__))
 					try:
 						self._condition.release()
 						try: executed = task.process()
@@ -132,4 +132,4 @@ class Scheduler():
 					if notify > 1: self._condition.notify(notify - 1)
 			finally: self._condition.release()
 		if __debug__:
-			if is_debug: debug('sched: thread ' + str(i) + ': return')
+			if is_debug: debug('sched: thread: ' + str(i) + ': return')
