@@ -73,7 +73,6 @@ class Scheduler():
 				try:
 					task.processed = True
 					for out_task in task.out_tasks:
-						print out_task
 						ready = True
 						for task in out_task.in_tasks:
 							if not task.processed:
