@@ -39,7 +39,7 @@ class Project(object):
 		gc.disable()
 		try:
 			try:
-				f = file(os.path.join(self.cache_node.abs_path, 'task-sigs'), 'rb')
+				f = file(os.path.join(self.cache_node.abs_path, 'tasks'), 'rb')
 				try: self.task_sigs = cPickle.load(f)
 				finally: f.close()
 			except Exception, e:
@@ -55,7 +55,7 @@ class Project(object):
 		self.fs.dump()
 		gc.disable()
 		try:
-			f = file(os.path.join(self.cache_node.abs_path, 'task-sigs'), 'wb')
+			f = file(os.path.join(self.cache_node.abs_path, 'tasks'), 'wb')
 			try: cPickle.dump(self.task_sigs, f, cPickle.HIGHEST_PROTOCOL)
 			finally: f.close()
 		finally: gc.enable()

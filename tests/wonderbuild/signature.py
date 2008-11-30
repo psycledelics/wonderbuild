@@ -6,6 +6,7 @@ try: from hashlib import md5 as Sig
 except ImportError: from md5 import md5 as Sig
 
 def raw_to_hexstring(s):
+	if s is None: return None
 	# note python has an hex() builtin function but it does not accept a raw input string
 	def byte_to_hexstring(b):
 		def four_bits_to_hexchar(b):

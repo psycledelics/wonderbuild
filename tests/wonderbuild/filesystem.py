@@ -61,13 +61,14 @@ class Node(object):
 	def __getstate__(self):
 		if False and __debug__:
 			if is_debug: debug('getstate: ' + self.abs_path + ' ' + str(self._actual_time or self._old_time) + ' ' + str(self._declared_children))
-		return self.parent, self.name, self._kind, self._declared_children, self._actual_time or self._old_time, self._sig, self._abs_path
+		return self.parent, self.name, self._kind, self._declared_children, self._actual_time or self._old_time, self._abs_path
 
 	def __setstate__(self, data):
-		self.parent, self.name, self._kind, self._old_children, self._old_time, self._sig, self._abs_path = data
+		self.parent, self.name, self._kind, self._old_children, self._old_time, self._abs_path = data
 		self._declared_children = self._old_children
 		self._actual_children = None
 		self._actual_time = None
+		self._sig = None
 		if False and  __debug__:
 			if is_debug: debug('setstate: ' + self.abs_path + ' ' + str(self._old_time) + ' ' + str(self._old_children))
 
@@ -162,6 +163,8 @@ class Node(object):
 	declared_children = property(declared_children)
 
 	def sig(self):
+		if __debug__:
+			if is_debug: debug('node sig: ' + self.abs_path + ' ' + str(self._sig))
 		if self._sig is None:
 			time = self.actual_time
 			assert time is not None

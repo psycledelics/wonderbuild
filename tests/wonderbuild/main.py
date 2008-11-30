@@ -15,12 +15,21 @@ if __name__ == '__main__':
 		def dyn_in_tasks(self):
 			if len(self.in_tasks): return None
 			from task import Obj
-			obj = Obj(project)
-			obj.source = self.project.src_node.rel_node(os.path.join('src', 'foo', 'foo.cpp'))
-			obj.target = self.project.bld_node.rel_node(os.path.join('modules', 'libfoo', 'src', 'foo', 'foo.o'))
-			obj.out_tasks = [self]
-			self.in_tasks = [obj]
-			self.sources = [obj.target]
+
+			obj1 = Obj(project)
+			obj1.include_paths = [self.project.src_node.rel_node('src')]
+			obj1.source = self.project.src_node.rel_node(os.path.join('src', 'foo', 'foo.cpp'))
+			obj1.target = self.project.bld_node.rel_node(os.path.join('modules', 'libfoo', 'src', 'foo', 'foo.o'))
+			obj1.out_tasks = [self]
+
+			obj2 = Obj(project)
+			obj2.include_paths = [self.project.src_node.rel_node('src')]
+			obj2.source = self.project.src_node.rel_node(os.path.join('src', 'main', 'main.cpp'))
+			obj2.target = self.project.bld_node.rel_node(os.path.join('modules', 'libfoo', 'src', 'main', 'main.o'))
+			obj2.out_tasks = [self]
+
+			self.in_tasks = [obj1, obj2]
+			self.sources = [obj1.target, obj2.target]
 			return self.in_tasks
 				
 		def process(self):

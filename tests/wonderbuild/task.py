@@ -4,7 +4,7 @@
 
 import os
 
-from signature import Sig
+from signature import Sig, raw_to_hexstring
 from cmd import exec_subprocess
 
 class Task(object):	
@@ -45,11 +45,14 @@ class Obj(Task):
 			return sig
 		
 	def process(self):
+		print 'task sig:', self.source.rel_path, raw_to_hexstring(self.old_sig()), raw_to_hexstring(self.actual_sig())
 		if self.old_sig() != self.actual_sig():
 			if not os.path.exists(self.target.parent.rel_path):
 				print 'mkdir:', self.target.parent.rel_path
 				os.makedirs(self.target.parent.rel_path)
-			exec_subprocess(['c++', '-fPIC', '-o', self.target.rel_path, '-c', self.source.rel_path])
+			i = []
+			for p in self.include_paths: i += ['-I', p.rel_path]
+			exec_subprocess(['c++', '-fPIC', '-o', self.target.rel_path, '-c', self.source.rel_path] + i)
 			self.update_sig()
 			return True
 		else:
@@ -74,6 +77,7 @@ class Lib(Task):
 			return sig
 
 	def process(self):
+		print 'task sig:', [s.rel_path for s in self.sources], raw_to_hexstring(self.old_sig()), raw_to_hexstring(self.actual_sig())
 		if self.old_sig() != self.actual_sig():
 			exec_subprocess(['c++', '-shared', '-o', self.target.rel_path] + [s.rel_path for s in self.sources])
 			self.update_sig()
