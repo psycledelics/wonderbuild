@@ -41,7 +41,7 @@ if __name__ == '__main__':
 	from project import Project
 	project = Project()
 
-	if True:
+	if False:
 		lib_foo = LibFoo(project)
 		project.build([lib_foo])
 	else:
@@ -50,10 +50,12 @@ if __name__ == '__main__':
 		h = n.find_iter(prunes = ['todo'], in_pat = '*.hpp', ex_pat = '*.private.hpp')
 		for f in s: print 'sssssssssssss', f.path
 		for f in h: print 'hhhhhhhhhhhhh', f.path
-		x = project.fs.node('../atomic/')
+		x = project.fs.node('../atomic')
+		y = project.fs.node('../wonderbuild')
 		project.fs.display(False)
 		#project.fs.display(True)
 		print x.path
+		print y.path
 
 	project.dump()
 

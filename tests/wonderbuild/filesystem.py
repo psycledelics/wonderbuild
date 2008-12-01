@@ -63,7 +63,7 @@ if __debug__:
 class Node(object):
 	__slots__ = (
 		'parent', 'name', '_kind', '_declared_children', '_old_children', '_actual_children',
-		'_old_time', '_actual_time', '_sig', '_path', '_abs_path', '_exists'
+		'_old_time', '_actual_time', '_sig', '_path', '_abs_path', '__height', '__root', '_exists'
 	)
 
 	def __getstate__(self):
@@ -217,41 +217,101 @@ class Node(object):
 				self.declared_children[name] = child
 			return child
 		else: # sep == start, absolute path
-			root = self
-			while root.parent: root = root.parent
-			assert root.name == os.sep
-			return root._rel_node(path, 1)
+			return self._root._rel_node(path, 1)
+	@property
+	def _root(self):
+		try: return self.__root
+		except AttributeError:
+			if self.parent is None:
+				self.__height = 0
+				self.__root = self
+				return self
+			root = self.__root = self.parent._root
+			self.__height = self.parent.__height + 1
+			return root
+
+	@property
+	def _height(self):
+		try: return self.__height
+		except AttributeError:
+			self._root
+			return self.__height
 
 	@property
 	def path(self):
 		if self._path is None:
 			path = []
 			cur = self.rel_node(os.getcwd())
-			node = self
-			while node is not cur:
-				path.append(node.name)
-				node = node.parent
-				if node is None:
-					path = []
-					node = cur
-					cur = self
-					while node is not cur:
-						path.append(os.pardir)
+			if True:
+				node1 = self
+				node2 = cur
+				node1._height
+				node2._height
+				while node1.__height > node2.__height: node1 = node1.parent
+				while node1.__height < node2.__height: node2 = node2.parent
+				while node1 is not node2:
+					node1 = node1.parent
+					node2 = node2.parent
+				ancestor = node1
+				for i in xrange(cur.__height - ancestor.__height): path.append(os.pardir)
+				down = self.__height - ancestor.__height
+				if down > 0:
+					node = self
+					path2 = []
+					for i in xrange(down):
+						path2.append(node.name)
 						node = node.parent
-						if node is None: return self.abs_path
-					self._path = os.sep.join(path)
-					return self._path
-			if len(path) == 0: self._path = os.curdir					
-			else:
-				path.reverse()
+					path2.reverse()
+					path += path2
+				if len(path) == 0: self._path = os.curdir
+				else: self._path = os.sep.join(path)
+			elif False:
+				if self._height >= cur._height:
+					node1 = self
+					node2 = cur
+				else: # self._height < cur._height
+					node1 = cur
+					node2 = self
+				for i in xrange(node1.__height - node2.__height):
+					path.append(os.pardir)
+					node1 = node1.parent
+				path2 = []
+				while node1 is not node2:
+					path2.append(node2.name)
+					node1 = node1.parent
+					node2 = node2.parent
+				path2.reverse()
+				path += path2
 				self._path = os.sep.join(path)
+			else:
+				path = []
+				cur = self.rel_node(os.getcwd())
+				node = self
+				while node is not cur:
+					path.append(node.name)
+					node = node.parent
+					if node is None:
+						path = []
+						node = cur
+						cur = self
+						while node is not cur:
+							path.append(os.pardir)
+							node = node.parent
+							if node is None: return self.abs_path
+						self._path = os.sep.join(path)
+						return self._path
+				if len(path) == 0:
+					self._path = os.curdir
+				else:
+					path.reverse()
+					self._path = os.sep.join(path)
 		return self._path
 
 	@property
 	def abs_path(self):
 		try: return self._abs_path
 		except AttributeError:
-			if not self.parent: self._abs_path = self.name
+			if self.parent is None: self._abs_path = self.name
 			else: self._abs_path = os.path.join(self.parent.abs_path, self.name)
 			return self._abs_path
 

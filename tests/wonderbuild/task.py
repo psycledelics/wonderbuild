@@ -72,7 +72,7 @@ class CxxObj(Task):
 		
 	def process(self):
 		self.target.parent.make_dir()
-		args = ['c++', '-o', self.target.path, '-c', self.source.path]
+		args = ['c++', '-o', self.target.path, self.source.path, '-c', '-pipe']
 		if len(self.paths):
 			for p in self.paths: args += ['-I', p.path]
 		if len(self.defines):
