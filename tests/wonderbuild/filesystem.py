@@ -13,9 +13,7 @@ class FileSystem(object):
 		self.load()
 
 	def load(self):
-		if self.cache_path is None:
-			self.root = Node(None, os.sep)
-			self.root._kind = DIR
+		if self.cache_path is None: self.root = Node(None, os.sep)
 		else:
 			gc.disable()
 			try:
@@ -27,15 +25,17 @@ class FileSystem(object):
 						print >> sys.stderr, 'could not load pickle:', e
 						raise
 					finally: f.close()
-			except:
-				self.root = Node(None, os.sep)
-				self.root._kind = DIR
+			except: self.root = Node(None, os.sep)
 			finally: gc.enable()
 		self.root._fs = self
+		self.root._kind = DIR
+		self.root._exists = True
 		self.root._height = 0
 		if  False and __debug__ and is_debug: self.display(True)
 		self.cur = self.root.rel_node(os.getcwd())
+		self.cur._fs = self
 		self.cur._kind = DIR
+		self.cur._exists = True
 
 	def dump(self):
 		if self.cache_path is None: return
@@ -114,7 +114,6 @@ class Node(object):
 		try: return self._exists
 		except AttributeError:
 			if self._time is not None: self._exists = True
-			elif self.parent is None: self._exists = True
 			else:
 				try: self.parent._did_list_children
 				except AttributeError: self._exists = os.path.exists(self.path)
@@ -248,7 +247,7 @@ class Node(object):
 		try: return self._fs
 		except AttributeError:
 			fs = self._fs = self.parent.fs
-			self._height = self.parent._height + 1
+			self._height = self.parent.height + 1
 			return fs
 
 	@property
@@ -256,6 +255,7 @@ class Node(object):
 		try: return self._height
 		except AttributeError:
 			self.fs
+			self._height = self.parent.height + 1
 			return self._height
 
 	@property
