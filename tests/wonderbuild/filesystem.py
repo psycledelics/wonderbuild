@@ -242,69 +242,28 @@ class Node(object):
 		if self._path is None:
 			path = []
 			cur = self.rel_node(os.getcwd())
-			if True:
-				node1 = self
-				node2 = cur
-				node1._height
-				node2._height
-				while node1.__height > node2.__height: node1 = node1.parent
-				while node1.__height < node2.__height: node2 = node2.parent
-				while node1 is not node2:
-					node1 = node1.parent
-					node2 = node2.parent
-				ancestor = node1
-				for i in xrange(cur.__height - ancestor.__height): path.append(os.pardir)
-				down = self.__height - ancestor.__height
-				if down > 0:
-					node = self
-					path2 = []
-					for i in xrange(down):
-						path2.append(node.name)
-						node = node.parent
-					path2.reverse()
-					path += path2
-				if len(path) == 0: self._path = os.curdir
-				else: self._path = os.sep.join(path)
-			elif False:
-				if self._height >= cur._height:
-					node1 = self
-					node2 = cur
-				else: # self._height < cur._height
-					node1 = cur
-					node2 = self
-				for i in xrange(node1.__height - node2.__height):
-					path.append(os.pardir)
-					node1 = node1.parent
+			node1 = self
+			node2 = cur
+			node1._height
+			node2._height
+			while node1.__height > node2.__height: node1 = node1.parent
+			while node1.__height < node2.__height: node2 = node2.parent
+			while node1 is not node2:
+				node1 = node1.parent
+				node2 = node2.parent
+			ancestor = node1
+			for i in xrange(cur.__height - ancestor.__height): path.append(os.pardir)
+			down = self.__height - ancestor.__height
+			if down > 0:
+				node = self
 				path2 = []
-				while node1 is not node2:
-					path2.append(node2.name)
-					node1 = node1.parent
-					node2 = node2.parent
+				for i in xrange(down):
+					path2.append(node.name)
+					node = node.parent
 				path2.reverse()
 				path += path2
-				self._path = os.sep.join(path)
-			else:
-				path = []
-				cur = self.rel_node(os.getcwd())
-				node = self
-				while node is not cur:
-					path.append(node.name)
-					node = node.parent
-					if node is None:
-						path = []
-						node = cur
-						cur = self
-						while node is not cur:
-							path.append(os.pardir)
-							node = node.parent
-							if node is None: return self.abs_path
-						self._path = os.sep.join(path)
-						return self._path
-				if len(path) == 0:
-					self._path = os.curdir
-				else:
-					path.reverse()
-					self._path = os.sep.join(path)
+			if len(path) == 0: self._path = os.curdir
+			else: self._path = os.sep.join(path)
 		return self._path
 
 	@property
