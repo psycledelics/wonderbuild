@@ -112,7 +112,7 @@ class Scheduler():
 								if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': skip task (in_tasks skipped) ' + str(task.__class__))
 								task.executed = False
 							else:
-								if task.old_sig() == task.actual_sig():
+								if task.old_sig == task.actual_sig:
 									if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': skip task (same sig) ' + str(task.__class__))
 									task.executed = False
 								else:

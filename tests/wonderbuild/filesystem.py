@@ -109,34 +109,35 @@ class Node(object):
 		else: self._kind = FILE
 		self._actual_time = st.st_mtime
 		
+	@property
 	def exists(self):
 		try: return self._exists
 		except AttributeError:
 			self._exists = os.path.exists(self.path)
 			return self._exists
-	exists = property(exists)
 	
 	def make_dir(self):
 		if not self.exists:
 			if __debug__ and is_debug: debug('fs: make dir  : ' + self.path)
 			os.makedirs(self.path)
 
+	@property
 	def kind(self):
 		if self._kind is None: self._do_stat()
 		return self._kind
-	kind = property(kind)
 
+	@property
 	def is_dir(self): return self.kind == DIR
-	is_dir = property(is_dir)
 	
+	@property
 	def is_file(self): return self.kind == FILE
-	is_file = property(is_file)
 
+	@property
 	def actual_time(self):
 		if self._actual_time is None: self._do_stat()
 		return self._actual_time
-	actual_time = property(actual_time)
 
+	@property
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
@@ -147,10 +148,10 @@ class Node(object):
 					if sub_time > time: time = sub_time
 			self._sig = time
 			return self._sig
-	sig = property(sig)
 
 	def sig_to_string(self): return str(self.sig)
 	
+	@property
 	def actual_children(self):
 		if self._actual_children is None:
 			if self.actual_time == self._old_time:
@@ -171,15 +172,14 @@ class Node(object):
 						self._declared_children[name] = child
 				self._actual_children = children
 		return self._actual_children
-	actual_children = property(actual_children)
 		
+	@property
 	def declared_children(self):
 		if self._declared_children is None:
 			if self._actual_children is not None: self._declared_children = self._actual_children
 			elif self._old_children is not None: self._declared_children = self._old_children
 			else: self._declared_children = {}
 		return self._declared_children
-	declared_children = property(declared_children)
 
 	def find_iter(self, in_pat = '*', ex_pat = None, prunes = None):
 		for name, node in self.actual_children.iteritems():
@@ -222,6 +222,7 @@ class Node(object):
 			assert root.name == os.sep
 			return root._rel_node(path, 1)
 
+	@property
 	def path(self):
 		if self._path is None:
 			path = []
@@ -245,15 +246,14 @@ class Node(object):
 				path.reverse()
 				self._path = os.sep.join(path)
 		return self._path
-	path = property(path)
 
+	@property
 	def abs_path(self):
 		try: return self._abs_path
 		except AttributeError:
 			if not self.parent: self._abs_path = self.name
 			else: self._abs_path = os.path.join(self.parent.abs_path, self.name)
 			return self._abs_path
-	abs_path = property(abs_path)
 
 	def display(self, cache = False, tabs = 0):
 		if True: path = '  |' * tabs + '- ' + self.name

@@ -5,7 +5,7 @@
 import sys, os, os.path
 
 from project import Project
-from task import Lib
+from task import Lib, CxxObj
 
 if __name__ == '__main__':
 	class LibFoo(Lib):
@@ -14,39 +14,37 @@ if __name__ == '__main__':
 			
 		def dyn_in_tasks(self):
 			if len(self.in_tasks): return None
-			from task import Obj
 			
 			cxx_paths = [self.project.src_node.rel_node('src')]
 			cxx_flags = ['-fPIC']
 			out = self.project.bld_node.rel_node(os.path.join('modules', 'libfoo'))
 
-			obj1 = Obj(project)
+			obj1 = CxxObj(project)
 			obj1.paths = cxx_paths
-			obj1.flags = cxx_flags
+			obj1.pic = True
 			obj1.source = self.project.src_node.rel_node(os.path.join('src', 'foo', 'foo.cpp'))
 			obj1.target = out.rel_node(os.path.join('src', 'foo', 'foo.o'))
-			obj1.out_tasks = [self]
 
-			obj2 = Obj(project)
+			obj2 = CxxObj(project)
 			obj2.paths = cxx_paths
-			obj2.flags = cxx_flags
+			obj2.pic = True
 			obj2.source = self.project.src_node.rel_node(os.path.join('src', 'main', 'main.cpp'))
 			obj2.target = out.rel_node(os.path.join('src', 'main', 'main.o'))
-			obj2.out_tasks = [self]
 
-			self.in_tasks = [obj1, obj2]
+			self.add_in_task(obj1)
+			self.add_in_task(obj2)
 			self.sources = [obj1.target, obj2.target]
 			self.target = out.rel_node('libfoo.so')
-			self.flags = ['-shared']
+			self.shared = True
 			return self.in_tasks
 			
 	from project import Project
 	project = Project()
 
-	lib_foo = LibFoo(project)
-	project.build([lib_foo])
-		
-	if False:
+	if True:
+		lib_foo = LibFoo(project)
+		project.build([lib_foo])
+	else:
 		n = project.fs.node('src')
 		s = n.find_iter(prunes = ['todo'], in_pat = '*.cpp')
 		h = n.find_iter(prunes = ['todo'], in_pat = '*.hpp', ex_pat = '*.private.hpp')
@@ -54,7 +52,7 @@ if __name__ == '__main__':
 		for f in h: print 'hhhhhhhhhhhhh', f.path
 		x = project.fs.node('../atomic/')
 		project.fs.display(False)
-		project.fs.display(True)
+		#project.fs.display(True)
 		print x.path
 
 	project.dump()
