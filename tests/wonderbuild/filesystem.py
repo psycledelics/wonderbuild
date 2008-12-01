@@ -11,27 +11,31 @@ class FileSystem(object):
 	def __init__(self, cache_path = None):
 		self.cache_path = cache_path
 		self.load()
-		if  False and __debug__:
-			if is_debug: self.display(True)
-		self.cur = self.root.rel_node(os.getcwd())
-		self.cur._kind = DIR
 
 	def load(self):
-		if self.cache_path is None: return
-		gc.disable()
-		try:
-			try: f = file(self.cache_path, 'rb')
-			except IOError: raise
-			else:
-				try: self.root = cPickle.load(f)
-				except Exception, e:
-					print >> sys.stderr, 'could not load pickle:', e
-					raise
-				finally: f.close()
-		except:
+		if self.cache_path is None:
 			self.root = Node(None, os.sep)
 			self.root._kind = DIR
-		finally: gc.enable()
+		else:
+			gc.disable()
+			try:
+				try: f = file(self.cache_path, 'rb')
+				except IOError: raise
+				else:
+					try: self.root = cPickle.load(f)
+					except Exception, e:
+						print >> sys.stderr, 'could not load pickle:', e
+						raise
+					finally: f.close()
+			except:
+				self.root = Node(None, os.sep)
+				self.root._kind = DIR
+			finally: gc.enable()
+		self.root._fs = self
+		self.root._height = 0
+		if  False and __debug__ and is_debug: self.display(True)
+		self.cur = self.root.rel_node(os.getcwd())
+		self.cur._kind = DIR
 
 	def dump(self):
 		if self.cache_path is None: return
@@ -63,20 +67,18 @@ if __debug__:
 class Node(object):
 	__slots__ = (
 		'parent', 'name', '_kind', '_children', '_old_children', '_did_list_children',
-		'_old_time', '_actual_time', '_sig', '_path', '_abs_path', '__height', '__root', '_exists'
+		'_old_time', '_time', '_sig', '_path', '_abs_path', '_height', '_fs', '_exists'
 	)
 
 	def __getstate__(self):
-		if False and __debug__:
-			if is_debug: debug('fs: getstate: ' + self.rel_path + ' ' + str(self._actual_time or self._old_time) + ' ' + str(self._children))
-		return self.parent, self.name, self._kind, self._children, self._actual_time or self._old_time, self._path
+		if False and __debug__ and is_debug: debug('fs: getstate: ' + self.path + ' ' + str(self._time or self._old_time) + ' ' + str(self._children))
+		return self.parent, self.name, self._kind, self._children, self._time or self._old_time, self._path
 
 	def __setstate__(self, data):
 		self.parent, self.name, self._kind, self._old_children, self._old_time, self._path = data
 		self._children = None
-		self._actual_time = None
-		if False and  __debug__:
-			if is_debug: debug('fs: setstate: ' + self.abs_path + ' ' + str(self._old_time) + ' ' + str(self._old_children))
+		self._time = None
+		if False and __debug__ and is_debug: debug('fs: setstate: ' + self.path + ' ' + str(self._old_time) + ' ' + str(self._old_children))
 
 	def __init__(self, parent, name):
 		self.parent = parent
@@ -85,7 +87,7 @@ class Node(object):
 		self._children = None
 		self._old_children = None
 		self._old_time = None
-		self._actual_time = None
+		self._time = None
 		self._path = None
 		if __debug__ and is_debug:
 			global all_abs_paths
@@ -105,13 +107,18 @@ class Node(object):
 			st = os.lstat(self.path)
 		if stat.S_ISDIR(st.st_mode): self._kind = DIR
 		else: self._kind = FILE
-		self._actual_time = st.st_mtime
+		self._time = st.st_mtime
 		
 	@property
 	def exists(self):
 		try: return self._exists
 		except AttributeError:
-			self._exists = os.path.exists(self.path)
+			if self._time is not None: self._exists = True
+			elif self.parent is None: self._exists = True
+			else:
+				try: self.parent._did_list_children
+				except AttributeError: self._exists = os.path.exists(self.path)
+				else: self._exists = self.name in self.parent._children
 			return self._exists
 	
 	def make_dir(self):
@@ -131,15 +138,15 @@ class Node(object):
 	def is_file(self): return self.kind == FILE
 
 	@property
-	def actual_time(self):
-		if self._actual_time is None: self._do_stat()
-		return self._actual_time
+	def time(self):
+		if self._time is None: self._do_stat()
+		return self._time
 
 	@property
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
-			time = self.actual_time
+			time = self.time
 			if self._kind == DIR:
 				self.list_children()
 				for n in self._children.itervalues():
@@ -153,7 +160,7 @@ class Node(object):
 	def list_children(self):
 		try: self._did_list_children
 		except AttributeError:
-			if self.actual_time == self._old_time:
+			if self.time == self._old_time:
 				if self._children is None: self._children = self._old_children
 				else:
 					for name, node in self.__old_children.iteritems():
@@ -205,6 +212,7 @@ class Node(object):
 					for node in node.find_iter(in_pat, ex_pat, prunes): yield node
 		raise StopIteration
 
+	#def rel_node(self, *path):
 	def rel_node(self, path): return self._rel_node(path)
 	def _rel_node(self, path, start = 0):
 		sep = path.find(os.sep, start)
@@ -233,43 +241,40 @@ class Node(object):
 				self.children[name] = child
 			return child
 		else: # sep == start, absolute path
-			return self._root._rel_node(path, 1)
+			return self.fs.root._rel_node(path, 1)
+	
 	@property
-	def _root(self):
-		try: return self.__root
+	def fs(self):
+		try: return self._fs
 		except AttributeError:
-			if self.parent is None:
-				self.__height = 0
-				self.__root = self
-				return self
-			root = self.__root = self.parent._root
-			self.__height = self.parent.__height + 1
-			return root
+			fs = self._fs = self.parent.fs
+			self._height = self.parent._height + 1
+			return fs
 
 	@property
-	def _height(self):
-		try: return self.__height
+	def height(self):
+		try: return self._height
 		except AttributeError:
-			self._root
-			return self.__height
+			self.fs
+			return self._height
 
 	@property
 	def path(self):
 		if self._path is None:
 			path = []
-			cur = self.rel_node(os.getcwd())
+			cur = self.fs.cur
 			node1 = self
 			node2 = cur
-			node1._height
-			node2._height
-			while node1.__height > node2.__height: node1 = node1.parent
-			while node1.__height < node2.__height: node2 = node2.parent
+			node1.height
+			node2.height
+			while node1._height > node2._height: node1 = node1.parent
+			while node1._height < node2._height: node2 = node2.parent
 			while node1 is not node2:
 				node1 = node1.parent
 				node2 = node2.parent
 			ancestor = node1
-			for i in xrange(cur.__height - ancestor.__height): path.append(os.pardir)
-			down = self.__height - ancestor.__height
+			for i in xrange(cur._height - ancestor._height): path.append(os.pardir)
+			down = self._height - ancestor._height
 			if down > 0:
 				node = self
 				path2 = []
@@ -295,7 +300,7 @@ class Node(object):
 		else: path = self.abs_path
 		
 		if cache: time = self._old_time is None and '?' or self._old_time
-		else: time = self._actual_time is None and '?' or self._actual_time
+		else: time = self._time is None and '?' or self._time
 		
 		print \
 			(str(getattr(self, '_sig', '?'))).rjust(12), \
