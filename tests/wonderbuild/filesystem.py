@@ -99,12 +99,9 @@ class Node(object):
 			all_abs_paths.add(self.abs_path)
 	
 	def _do_stat(self):
-		if __debug__:
-			if is_debug: debug('fs: os.stat   : ' + self.path)
+		if __debug__ and is_debug: debug('fs: os.stat   : ' + self.path)
 		try: st = os.stat(self.path)
-		except OSError:
-			# may be a broken symlink
-			st = os.lstat(self.path)
+		except OSError: st = os.lstat(self.path) # may be a broken symlink
 		if stat.S_ISDIR(st.st_mode): self._kind = DIR
 		else: self._kind = FILE
 		self._time = st.st_mtime
@@ -166,8 +163,7 @@ class Node(object):
 						if name in self._children: self._merge(self._children[name], node)
 						else: self._children[name] = node
 			else:
-				if __debug__:
-					if is_debug: debug('fs: os.listdir: ' + self.path + os.sep)
+				if __debug__ and is_debug: debug('fs: os.listdir: ' + self.path + os.sep)
 				if self._children is None:
 					self._children = {}
 					for name in os.listdir(self.path):
@@ -178,6 +174,7 @@ class Node(object):
 			self._did_list_children = None
 	
 	def _merge(self, cur, old):
+		if __debug__ and is_debug: debug('fs: merge: ' + cur.path + ' ' + old.path)
 		if cur._children is None:
 			cur._children = old._old_children
 			if old._old_time is not None:
@@ -199,7 +196,8 @@ class Node(object):
 	@property
 	def children(self):
 		if self._children is None:
-			self._children = {}
+			if self._old_children is None: self._children = {}
+			else: self._children = self._old_children
 		return self._children
 
 	def find_iter(self, in_pat = '*', ex_pat = None, prunes = None):
@@ -309,9 +307,9 @@ class Node(object):
 			' ' + path
 			
 		if cache:
-			if self.__old_children is not None:
+			if self._old_children is not None:
 				tabs += 1
-				for n in self.__old_children.itervalues(): n.display(cache, tabs)
+				for n in self._old_children.itervalues(): n.display(cache, tabs)
 		else:
 			if self._children is not None:
 				tabs += 1

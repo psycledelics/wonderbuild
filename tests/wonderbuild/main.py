@@ -41,7 +41,7 @@ if __name__ == '__main__':
 	from project import Project
 	project = Project()
 
-	if True:
+	if False:
 		lib_foo = LibFoo(project)
 		project.build([lib_foo])
 	else:
@@ -53,7 +53,7 @@ if __name__ == '__main__':
 		x = project.fs.node('../atomic')
 		y = project.fs.node('../wonderbuild')
 		project.fs.display(False)
-		#project.fs.display(True)
+		project.fs.display(True)
 		print x.path
 		print y.path
 
