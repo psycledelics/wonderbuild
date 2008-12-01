@@ -141,7 +141,7 @@ class Node(object):
 		except AttributeError:
 			time = self.actual_time
 			if self._kind == DIR:
-				self._list_children()
+				self.list_children()
 				for n in self._children.itervalues():
 					sub_time = n.sig
 					if sub_time > time: time = sub_time
@@ -150,7 +150,7 @@ class Node(object):
 
 	def sig_to_string(self): return str(self.sig)
 	
-	def _list_children(self):
+	def list_children(self):
 		try: self._did_list_children
 		except AttributeError:
 			if self.actual_time == self._old_time:
@@ -197,7 +197,7 @@ class Node(object):
 		return self._children
 
 	def find_iter(self, in_pat = '*', ex_pat = None, prunes = None):
-		self._list_children()
+		self.list_children()
 		for name, node in self._children.iteritems():
 			if (ex_pat is None or not match(name, ex_pat)) and match(name, in_pat): yield node
 			elif node.is_dir:
