@@ -62,19 +62,18 @@ if __debug__:
 
 class Node(object):
 	__slots__ = (
-		'parent', 'name', '_kind', '_declared_children', '_old_children', '_actual_children',
+		'parent', 'name', '_kind', '_children', '_old_children', '_did_list_children',
 		'_old_time', '_actual_time', '_sig', '_path', '_abs_path', '__height', '__root', '_exists'
 	)
 
 	def __getstate__(self):
 		if False and __debug__:
-			if is_debug: debug('fs: getstate: ' + self.rel_path + ' ' + str(self._actual_time or self._old_time) + ' ' + str(self._declared_children))
-		return self.parent, self.name, self._kind, self._declared_children, self._actual_time or self._old_time, self._path
+			if is_debug: debug('fs: getstate: ' + self.rel_path + ' ' + str(self._actual_time or self._old_time) + ' ' + str(self._children))
+		return self.parent, self.name, self._kind, self._children, self._actual_time or self._old_time, self._path
 
 	def __setstate__(self, data):
 		self.parent, self.name, self._kind, self._old_children, self._old_time, self._path = data
-		self._declared_children = self._old_children
-		self._actual_children = None
+		self._children = None
 		self._actual_time = None
 		if False and  __debug__:
 			if is_debug: debug('fs: setstate: ' + self.abs_path + ' ' + str(self._old_time) + ' ' + str(self._old_children))
@@ -83,18 +82,17 @@ class Node(object):
 		self.parent = parent
 		self.name = name
 		self._kind = None
-		self._declared_children = None
+		self._children = None
 		self._old_children = None
-		self._actual_children = None
 		self._old_time = None
 		self._actual_time = None
 		self._path = None
 		if __debug__ and is_debug:
 			global all_abs_paths
 			assert parent is not None or name == os.sep, (parent, name)
-			assert parent is None or not os.sep in name, (parent.abs_path, name)
-			assert parent is not None or not name in all_abs_paths, (parent, name)
-			assert parent is None or not os.path.join(parent.abs_path, name) in all_abs_paths, (parent.abs_path, name)
+			assert parent is None or os.sep not in name, (parent.abs_path, name)
+			assert parent is not None or name not in all_abs_paths, (parent, name)
+			assert parent is None or os.path.join(parent.abs_path, name) not in all_abs_paths, (parent.abs_path, name)
 			debug('fs: new node  : ' + self.abs_path)
 			all_abs_paths.add(self.abs_path)
 	
@@ -143,7 +141,8 @@ class Node(object):
 		except AttributeError:
 			time = self.actual_time
 			if self._kind == DIR:
-				for n in self.actual_children.itervalues():
+				self._list_children()
+				for n in self._children.itervalues():
 					sub_time = n.sig
 					if sub_time > time: time = sub_time
 			self._sig = time
@@ -151,42 +150,59 @@ class Node(object):
 
 	def sig_to_string(self): return str(self.sig)
 	
-	@property
-	def actual_children(self):
-		if self._actual_children is None:
+	def _list_children(self):
+		try: self._did_list_children
+		except AttributeError:
 			if self.actual_time == self._old_time:
-				self._actual_children = self._old_children
-				self.declared_children
-				for name, node in self._actual_children.iteritems(): self._declared_children[name] = node
+				if self._children is None: self._children = self._old_children
+				else:
+					for name, node in self.__old_children.iteritems():
+						if name in self._children: self._merge(self._children[name], node)
+						else: self._children[name] = node
 			else:
 				if __debug__:
 					if is_debug: debug('fs: os.listdir: ' + self.path + os.sep)
-				children = {}
-				self.declared_children
-				for name in os.listdir(self.path):
-					if name in ignore: continue
-					if name in self._declared_children: children[name] = self._declared_children[name]
-					else:
-						child = Node(self, name)
-						children[name] = child
-						self._declared_children[name] = child
-				self._actual_children = children
-		return self._actual_children
-		
+				if self._children is None:
+					self._children = {}
+					for name in os.listdir(self.path):
+						if name not in ignore: self._children[name] = Node(self, name)
+				else:
+					for name in os.listdir(self.path):
+						if name not in ignore and name not in self._children: self._children[name] = Node(self, name)
+			self._did_list_children = None
+	
+	def _merge(self, cur, old):
+		if cur._children is None:
+			cur._children = old._old_children
+			if old._old_time is not None:
+				cur._old_time = old._old_time
+				cur._kind = old._kind
+			elif old._kind is not None: cur._kind = old._kind
+			if old._path is not None: cur._path = old._path
+		elif old._old_children is None:
+			if old._old_time is not None:
+				cur._old_time = old._old_time
+				cur._kind = old._kind
+			elif old._kind is not None: cur._kind = old._kind
+			if old._path is not None: cur._path = old._path
+		else:
+			for name, node in old_._old_children.iteritems():
+				if name in cur._children: self._merge(cur._children[name], node)
+				else: cur._children[name] = node
+	
 	@property
-	def declared_children(self):
-		if self._declared_children is None:
-			if self._actual_children is not None: self._declared_children = self._actual_children
-			elif self._old_children is not None: self._declared_children = self._old_children
-			else: self._declared_children = {}
-		return self._declared_children
+	def children(self):
+		if self._children is None:
+			self._children = {}
+		return self._children
 
 	def find_iter(self, in_pat = '*', ex_pat = None, prunes = None):
-		for name, node in self.actual_children.iteritems():
+		self._list_children()
+		for name, node in self._children.iteritems():
 			if (ex_pat is None or not match(name, ex_pat)) and match(name, in_pat): yield node
 			elif node.is_dir:
-				if prunes is not None and name in prunes: continue
-				for node in node.find_iter(in_pat, ex_pat, prunes): yield node
+				if prunes is None or name not in prunes:
+					for node in node.find_iter(in_pat, ex_pat, prunes): yield node
 		raise StopIteration
 
 	def rel_node(self, path): return self._rel_node(path)
@@ -199,10 +215,10 @@ class Node(object):
 				if sep == len(path) - 1: return self.parent or self
 				return (self.parent or self)._rel_node(path, sep)
 			if name == os.curdir: return self
-			try: child = self.declared_children[name]
+			try: child = self.children[name]
 			except KeyError:
 				child = Node(self, name)
-				self.declared_children[name] = child
+				self.children[name] = child
 			child._kind = DIR
 			while sep < len(path) - 1 and path[sep] == os.sep: sep += 1
 			if sep == len(path) - 1: return child
@@ -211,10 +227,10 @@ class Node(object):
 			name = path[start:]
 			if name == os.pardir: return self.parent or self
 			if name == os.curdir: return self
-			try: child = self.declared_children[name]
+			try: child = self.children[name]
 			except KeyError:
 				child = Node(self, name)
-				self.declared_children[name] = child
+				self.children[name] = child
 			return child
 		else: # sep == start, absolute path
 			return self._root._rel_node(path, 1)
@@ -288,10 +304,10 @@ class Node(object):
 			' ' + path
 			
 		if cache:
-			if self._old_children is not None:
+			if self.__old_children is not None:
 				tabs += 1
-				for n in self._old_children.itervalues(): n.display(cache, tabs)
+				for n in self.__old_children.itervalues(): n.display(cache, tabs)
 		else:
-			if self._declared_children is not None:
+			if self._children is not None:
 				tabs += 1
-				for n in self._declared_children.itervalues(): n.display(cache, tabs)
+				for n in self._children.itervalues(): n.display(cache, tabs)
