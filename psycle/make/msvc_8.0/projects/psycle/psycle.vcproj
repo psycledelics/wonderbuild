@@ -528,6 +528,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\Canvas.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\Canvas.hpp"
+					>
+				</File>
+				<File
 					RelativePath="$(SolutionDir)\..\..\src\psycle\host\ChildView.cpp"
 					>
 				</File>
@@ -553,6 +561,22 @@
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\src\psycle\host\keybhandler.private.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\machinegui.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\machinegui.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\machineview.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\machineview.hpp"
 					>
 				</File>
 				<File
@@ -609,6 +633,14 @@
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\src\psycle\host\SongpDlg.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\wiregui.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\wiregui.hpp"
 					>
 				</File>
 				<Filter
