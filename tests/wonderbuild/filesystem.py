@@ -145,7 +145,7 @@ class Node(object):
 			time = self.time
 			if self._kind == DIR:
 				self.list_children()
-				for n in self._children.itervalues():
+				for n in self._children.itervalues(): # TODO exclude declared children not listed
 					sub_time = n.sig
 					if sub_time > time: time = sub_time
 			self._sig = time
@@ -202,7 +202,7 @@ class Node(object):
 
 	def find_iter(self, in_pat = '*', ex_pat = None, prunes = None):
 		self.list_children()
-		for name, node in self._children.iteritems():
+		for name, node in self._children.iteritems(): # TODO exclude declared children not listed
 			if (ex_pat is None or not match(name, ex_pat)) and match(name, in_pat): yield node
 			elif node.is_dir:
 				if prunes is None or name not in prunes:

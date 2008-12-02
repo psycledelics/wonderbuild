@@ -144,4 +144,4 @@ class Scheduler():
 							notify += 1
 					if notify > 1: self._condition.notify(notify - 1)
 		finally: self._condition.release()
-		if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': return')
+		if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': terminated')

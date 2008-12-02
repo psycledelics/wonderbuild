@@ -41,7 +41,7 @@ if __name__ == '__main__':
 	from project import Project
 	project = Project()
 
-	if False:
+	if True:
 		lib_foo = LibFoo(project)
 		project.build([lib_foo])
 	else:
