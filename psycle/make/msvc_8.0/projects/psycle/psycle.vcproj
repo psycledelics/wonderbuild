@@ -480,14 +480,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\WaveFile.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\WaveFile.hpp"
-					>
-				</File>
-				<File
 					RelativePath="$(SolutionDir)\..\..\src\psycle\host\XMFile.hpp"
 					>
 				</File>
