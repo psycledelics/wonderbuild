@@ -101,24 +101,9 @@ class Obj(object):
 		self.compiler = compiler
 		self.target = target
 		
-	def run(self):
-		self.compiler.run(source, target)
-		
 class Module(object):
 	def __init__(self, sources, chain, target):
 		self.sources = sources
 		self.chain = chain
 		self.target = target
-	
-	def run(self):
-		has_changed = False
-		objs = []
-		for source in self.sources:
-			if source.has_changed():
-				has_changed = True
-				o = Obj(source, self.chain.cxx, source.change_ext('cpp', 'o'))
-				objs.append(o)
-				o.run()
-		if has_changed:
-			self.chain.linker.run(objs, self.target)
 

@@ -6,7 +6,6 @@ import sys, os, gc, cPickle
 
 from scheduler import Scheduler
 from filesystem import FileSystem
-from options import options
 from logger import is_debug, debug
 
 class Project(object):
@@ -16,14 +15,14 @@ class Project(object):
 		cache_path = 'cache'
 		self.fs = FileSystem(os.path.join(bld_path, cache_path, 'filesystem'))
 		self.src_node = self.fs.cur
-		self.bld_node = self.fs.node(bld_path)
+		self.bld_node = self.fs.cur.rel_node(bld_path)
 		self.cache_node = self.bld_node.rel_node(cache_path)
 		self.load()
 		
-	def add_aliases(self, task, aliases):
+	def add_task(self, task, aliases):
 		self.tasks.append(task)
 		if aliases is not None:
-			debug('project: aliases: ' + str(aliases) + ' ' + str(task))
+			if __debug__ and is_debug: debug('project: aliases: ' + str(aliases) + ' ' + str(task))
 			for a in aliases:
 				try: self.aliases[a].append(task)
 				except KeyError: self.aliases[a] = [task]

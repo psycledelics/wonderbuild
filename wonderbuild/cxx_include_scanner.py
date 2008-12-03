@@ -23,36 +23,47 @@ class IncludeScanner(object):
 	def load(self):
 		gc.disable()
 		try:
-			try:
-				f = file(self.cache_path, 'rb')
-				try:
-					p = cPickle.Unpickler(f)
-					self.deps = p.load()
-				finally: f.close()
-			except Exception, e:
-				print >> sys.stderr, 'could not load pickle:', e
-				self.deps = {} # { unique_path: (rel_includes, abs_includes) }
+			try: f = file(self.cache_path, 'rb')
+			except IOError: raise
 			else:
-				for path in self.deps.keys(): # copy because we remove some elements in the loop
-					print 'scanner: cached:', path
-					try: changed = self.fs.node(path).changed()
-					except OSError: self.not_found.add(path) ; print 'scanner: del not found:', path
-					else:
-						if changed: del self.deps[path] ;  print 'scanner: del changed:', changed
+				try: self.deps = cPickle.load(f)
+				except Exception, e:
+					print >> sys.stderr, 'could not load pickle:', e
+					raise
+				finally: f.close()
+		except: self.deps = {} # { unique_path: (rel_includes, abs_includes) }
+		else:
+			for path in self.deps.keys(): # copy because we remove some elements in the loop
+				print 'scanner: cached:', path
+				node = self.fs.cur.rel_node(path)
+				if not node.exists: self.not_found.add(path) ; print 'scanner: del not found:', path
+				elif node.changed: del self.deps[path] ;  print 'scanner: del changed:', path
 		finally: gc.enable()
 
 	def dump(self):
-		f = file(self.cache_path, 'wb')
+		gc.disable()
 		try:
-			p = cPickle.Pickler(f, cPickle.HIGHEST_PROTOCOL)
-			for path in self.deps: self.fs.node(path)
-			p.dump(self.deps)
-		finally: f.close()
+			f = file(os.path.join(self.cache_node.path, 'tasks'), 'wb')
+			try: cPickle.dump(self.task_sigs, f, cPickle.HIGHEST_PROTOCOL)
+			finally: f.close()
+		finally: gc.enable()
+
+		for path in self.deps: self.fs.node(path)
+		gc.disable()
+		try:
+			f = file(self.cache_path, 'wb')
+			try: cPickle.dump(self.deps, f, cPickle.HIGHEST_PROTOCOL)
+			finally: f.close()
+		finally: gc.enable()
 	
 	def _unique_path(self, file_name):
 		return os.path.abspath(file_name)
+
 		#try: return os.path.realpath(file_name)
 		#except: return os.path.abspath(file_name)
+
+		#return self.fs.cur.rel_node(file_name).path
+		
 
 	def scan_deps(self, file_name): return self._scan_deps(file_name)
 	def _scan_deps(self, file_name, already_seen = None):

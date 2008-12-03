@@ -16,8 +16,7 @@ class Task(object):
 		self.processed = False
 		self.executed = False
 		self.project = project
-		project.add_aliases(self, aliases)
-		project.tasks.append(self)
+		project.add_task(self, aliases)
 
 	def add_in_task(self, task):
 		self.in_tasks.append(task)
