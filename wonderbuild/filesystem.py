@@ -54,7 +54,7 @@ class FileSystem(object):
 		else: return self.cur.rel_node(path)
 	
 	def display(self, cache = False):
-		print 'fs:', cache and 'cached' or 'declared'
+		print 'fs:', cache and 'cached:' or 'declared:'
 		self.root.display(cache)
 
 DIR = 1
@@ -67,7 +67,7 @@ if __debug__:
 class Node(object):
 	__slots__ = (
 		'parent', 'name', '_kind', '_children', '_old_children', '_did_list_children',
-		'_old_time', '_time', '_sig', '_path', '_abs_path', '_height', '_fs', '_exists'
+		'_old_time', '_time', '_sig', '_path', '_abs_path', '_height', '_fs', '_exists', '_changed'
 	)
 
 	def __getstate__(self):
@@ -137,6 +137,21 @@ class Node(object):
 	def time(self):
 		if self._time is None: self._do_stat()
 		return self._time
+
+	@property
+	def changed(self):
+		try: return self._changed
+		except AttributeError:
+			if self._old_time is None or self.time != self._old_time:
+				self._changed = True
+				return True
+			if self._kind == DIR:
+				self.list_children()
+				for n in self._children.itervalues(): # TODO exclude declared children not listed
+					if n.changed():
+						self._changed = True
+						return True
+			return False
 
 	@property
 	def sig(self):
