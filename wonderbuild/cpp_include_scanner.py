@@ -116,10 +116,11 @@ class IncludeScanner(object):
 			if u in self.not_found: return None
 			if os.path.exists(f): return f
 			#elif __debug__ and is_debug: debug('cpp: not found: #include "' + u + '"')
-			if  not include.startswith(os.pardir + os.sep) \
-			and not include.startswith(os.curdir + os.sep):
-				abs = self.search_abs(include)
-				if abs: return abs
+			if False: # be strict
+				if  not include.startswith(os.pardir + os.sep) \
+				and not include.startswith(os.curdir + os.sep):
+					abs = self.search_abs(include)
+					if abs: return abs
 		self.not_found.add(u)
 		return None
 		
