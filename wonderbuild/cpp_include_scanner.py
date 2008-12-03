@@ -48,7 +48,7 @@ class IncludeScanner(object):
 		finally: gc.enable()
 
 	def dump(self):
-		for path in self.deps: self.fs.node(path).time
+		for path in self.deps.iterkeys(): self.fs.node(path).time
 		gc.disable()
 		try:
 			f = file(self.cache_path, 'wb')
