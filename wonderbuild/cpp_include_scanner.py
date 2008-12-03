@@ -276,4 +276,4 @@ if __name__ == '__main__':
 	print >> sys.stderr, 'fs  dump time:', time.time() - t0
 	
 	scanner.display()
-	fs.display(True)
+	fs.display()

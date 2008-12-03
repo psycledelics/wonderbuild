@@ -66,17 +66,17 @@ if __debug__:
 
 class Node(object):
 	__slots__ = (
-		'parent', 'name', '_kind', '_children', '_old_children', '_did_list_children',
-		'_old_time', '_time', '_sig', '_path', '_abs_path', '_height', '_fs', '_exists', '_changed'
+		'parent', 'name', '_kind', '_children', '_actual_children', '_old_children', '_old_time', '_time', '_sig',
+		'_path', '_abs_path', '_height', '_fs', '_exists', '_changed'
 	)
 
 	def __getstate__(self):
 		if False and __debug__ and is_debug: debug('fs: getstate: ' + self.path + ' ' + str(self._time or self._old_time) + ' ' + str(self._children))
-		return self.parent, self.name, self._kind, self._children, self._time or self._old_time, self._path
+		return self.parent, self.name, self._kind, self._children, self._actual_children or self._old_children, self._time or self._old_time, self._path
 
 	def __setstate__(self, data):
-		self.parent, self.name, self._kind, self._old_children, self._old_time, self._path = data
-		self._children = None
+		self.parent, self.name, self._kind, self._children, self._old_children, self._old_time, self._path = data
+		self._actual_children = None
 		self._time = None
 		if False and __debug__ and is_debug: debug('fs: setstate: ' + self.path + ' ' + str(self._old_time) + ' ' + str(self._old_children))
 
@@ -85,6 +85,7 @@ class Node(object):
 		self.name = name
 		self._kind = None
 		self._children = None
+		self._actual_children = None
 		self._old_children = None
 		self._old_time = None
 		self._time = None
@@ -146,8 +147,7 @@ class Node(object):
 				self._changed = True
 				return True
 			if self._kind == DIR:
-				self.list_children()
-				for n in self._children.itervalues(): # TODO exclude declared children not listed
+				for n in self.actual_children.itervalues():
 					if n.changed():
 						self._changed = True
 						return True
@@ -159,8 +159,7 @@ class Node(object):
 		except AttributeError:
 			time = self.time
 			if self._kind == DIR:
-				self.list_children()
-				for n in self._children.itervalues(): # TODO exclude declared children not listed
+				for n in self.actual_children.itervalues():
 					sub_time = n.sig
 					if sub_time > time: time = sub_time
 			self._sig = time
@@ -168,13 +167,16 @@ class Node(object):
 
 	def sig_to_string(self): return str(self.sig)
 	
-	def list_children(self):
-		try: self._did_list_children
-		except AttributeError:
+	@property
+	def actual_children(self):
+		if self._actual_children is None:
 			if self.time == self._old_time:
-				if self._children is None: self._children = self._old_children
+				self._actual_children = self._old_children
+				if self._children is None:
+					self._children = {}
+					self._children.update(self._actual_children)
 				else:
-					for name, node in self._old_children.iteritems():
+					for name, node in self._actual_children.iteritems():
 						if name in self._children: self._merge(self._children[name], node)
 						else: self._children[name] = node
 			else:
@@ -182,11 +184,13 @@ class Node(object):
 				if self._children is None:
 					self._children = {}
 					for name in os.listdir(self.path):
-						if name not in ignore: self._children[name] = Node(self, name)
+						if name not in ignore: self._children[name] = self._actual_children[name] = Node(self, name)
 				else:
 					for name in os.listdir(self.path):
-						if name not in ignore and name not in self._children: self._children[name] = Node(self, name)
-			self._did_list_children = None
+						if name not in ignore:
+							if name in self._children: self._actual_children[name] = self._children[name]
+							else: self._children[name] = self._actual_children[name] = Node(self, name)
+		return self._actual_children
 	
 	def _merge(self, cur, old):
 		if __debug__ and is_debug: debug('fs: merge: ' + cur.path + ' ' + old.path)
@@ -204,20 +208,21 @@ class Node(object):
 			elif old._kind is not None: cur._kind = old._kind
 			if old._path is not None: cur._path = old._path
 		else:
-			for name, node in old_._old_children.iteritems():
+			for name, node in old._old_children.iteritems():
 				if name in cur._children: self._merge(cur._children[name], node)
 				else: cur._children[name] = node
 	
 	@property
 	def children(self):
 		if self._children is None:
-			if self._old_children is None: self._children = {}
-			else: self._children = self._old_children
+			self._children = {}
+			if self._actual_children is not None: self._children.update(self._actual_children)
+			elif self._old_children is not None: self._children.update(self._old_children)
 		return self._children
 
 	def find_iter(self, in_pat = '*', ex_pat = None, prunes = None):
 		self.list_children()
-		for name, node in self._children.iteritems(): # TODO exclude declared children not listed
+		for name, node in self.actual_children.iteritems():
 			if (ex_pat is None or not match(name, ex_pat)) and match(name, in_pat): yield node
 			elif node.is_dir:
 				if prunes is None or name not in prunes:
