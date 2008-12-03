@@ -174,7 +174,7 @@ class Node(object):
 			if self.time == self._old_time:
 				if self._children is None: self._children = self._old_children
 				else:
-					for name, node in self.__old_children.iteritems():
+					for name, node in self._old_children.iteritems():
 						if name in self._children: self._merge(self._children[name], node)
 						else: self._children[name] = node
 			else:
