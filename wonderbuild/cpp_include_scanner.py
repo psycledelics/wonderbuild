@@ -240,8 +240,8 @@ class IncludeScanner(object):
 		
 	def display(self):
 		print 'cpp:'
-		print 'include path:', self.paths
 		for path, includes in self.deps.iteritems(): print path, includes
+		print 'include path:', self.paths
 		print 'not found:', self.not_found
 
 if __name__ == '__main__':
