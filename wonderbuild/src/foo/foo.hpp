@@ -6,6 +6,4 @@
 	#define FOO_LINK __declspec(dllimport)
 #endif
 
-//#include "bong.hpp"
-
 FOO_LINK void foo();

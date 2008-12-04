@@ -328,10 +328,16 @@ class Node(object):
 			' ' + path
 			
 		if cache:
-			if self._old_children is not None:
+			if self._actual_children is not None:
+				tabs += 1
+				for n in self._actual_children.itervalues(): n.display(cache, tabs)
+			elif self._old_children is not None:
 				tabs += 1
 				for n in self._old_children.itervalues(): n.display(cache, tabs)
 		else:
 			if self._children is not None:
 				tabs += 1
-				for n in self._children.itervalues(): n.display(cache, tabs)
+				for n in self._children.itervalues():
+					if self._actual_children is not None and not n.name in self._actual_children: continue
+					if self._old_children is not None and not n.name in self._old_children: continue
+					n.display(cache, tabs)
