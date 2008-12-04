@@ -172,6 +172,7 @@ class Node(object):
 		if self._actual_children is None:
 			if self.time == self._old_time:
 				self._actual_children = self._old_children
+				self._old_children = None
 				if self._children is None:
 					self._children = {}
 					self._children.update(self._actual_children)
