@@ -112,10 +112,11 @@ class Node(object):
 		try: return self._exists
 		except AttributeError:
 			if self._time is not None: self._exists = True
+			elif self.parent._actual_children is not None: self._exists = self.name in self.parent._actual_children
 			else:
-				try: self.parent._did_list_children
-				except AttributeError: self._exists = os.path.exists(self.path)
-				else: self._exists = self.name in self.parent._children
+				try: self._do_stat()
+				except OSError: self._exists = False
+				else: self._exists = True
 			return self._exists
 	
 	def make_dir(self):
@@ -222,7 +223,6 @@ class Node(object):
 		return self._children
 
 	def find_iter(self, in_pat = '*', ex_pat = None, prunes = None):
-		self.list_children()
 		for name, node in self.actual_children.iteritems():
 			if (ex_pat is None or not match(name, ex_pat)) and match(name, in_pat): yield node
 			elif node.is_dir:
