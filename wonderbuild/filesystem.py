@@ -327,17 +327,14 @@ class Node(object):
 			(self._kind is None and '?' or {DIR: 'dir', FILE: 'file'}[self._kind]).rjust(4) + \
 			' ' + path
 			
+		tabs += 1
 		if cache:
 			if self._actual_children is not None:
-				tabs += 1
 				for n in self._actual_children.itervalues(): n.display(cache, tabs)
 			elif self._old_children is not None:
-				tabs += 1
 				for n in self._old_children.itervalues(): n.display(cache, tabs)
-		else:
-			if self._children is not None:
-				tabs += 1
-				for n in self._children.itervalues():
-					if self._actual_children is not None and not n.name in self._actual_children: continue
-					if self._old_children is not None and not n.name in self._old_children: continue
-					n.display(cache, tabs)
+		elif self._children is not None:
+			for n in self._children.itervalues():
+				if self._actual_children is not None and not n.name in self._actual_children: continue
+				if self._old_children is not None and not n.name in self._old_children: continue
+				n.display(cache, tabs)
