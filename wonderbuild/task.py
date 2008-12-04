@@ -53,7 +53,9 @@ class CxxObj(Task):
 		self.debug = False
 		self.optim = None
 		self.pic = True
-		self.flags = os.environ.get('CXXFLAGS', [])
+		flags = os.environ.get('CXXFLAGS', None)
+		if flags is None: self.flags = []
+		else: self.flags = flags.split()
 		
 	@property
 	def uid(self):
@@ -91,7 +93,9 @@ class Lib(Task):
 		self.static_libs = []
 		self.shared_libs = []
 		self.shared = True
-		self.flags = os.environ.get('LDFLAGS', [])
+		flags = os.environ.get('LDFLAGS', None)
+		if flags is None: self.flags = []
+		else: self.flags = flags.split()
 
 	@property
 	def uid(self):
