@@ -540,11 +540,27 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\EffectGui.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\EffectGui.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\ExListBox.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\ExListBox.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\GeneratorGui.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\GeneratorGui.hpp"
 					>
 				</File>
 				<File
