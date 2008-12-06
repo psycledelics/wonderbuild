@@ -43,10 +43,9 @@ class Task(object):
 	def update_sig(self): self.project.task_sigs[self.uid] = self.sig
 	
 def exec_subprocess(args, desc = None, color = '', env = None, out_stream = sys.stdout, err_stream = sys.stderr):
-	if __debug__ and is_debug: s = str(args)
-	elif desc is None: s = ' '.join(args)
-	else: s = desc
-	out_stream.write('\33[7;1;3' + color + 'm' + s + '\33[0m\n')
+	if desc is None: desc = ' '.join(args)
+	out_stream.write('\33[7;1;3' + color + 'mwonderbuild: task: ' + desc + '\33[0m\n')
+	if __debug__ and is_debug: debug('task: exec: \33[7;1;3' + color + 'm' + str(args) + '\33[0m')
 	p = subprocess.Popen(
 		args = args,
 		stdout = subprocess.PIPE,

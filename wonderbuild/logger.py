@@ -8,7 +8,7 @@ if not __debug__:
 else:
 	from options import options, help
 
-	help['--zones'] = ('--zones [zones ...]', 'wonderbuild debugging zones (sched, fs, ...)')
+	help['--zones'] = ('--zones [zones ...]', 'wonderbuild debugging zones (task, fs, sched ...)')
 
 	is_debug = '--zones' in options
 	if not is_debug:
@@ -28,7 +28,7 @@ else:
 			def debug(s):
 				for z in zones:
 					if s.startswith(z):
-						print >> sys.stderr, s
+						print >> sys.stderr, '\33[35mwonderbuild: dbg\33[0m: ' + s
 						break
 		else:
-			def debug(s): print >> sys.stderr, s
+			def debug(s): print >> sys.stderr, '\33[35mwonderbuild: dbg:\33[0m ' + s

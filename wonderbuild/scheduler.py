@@ -46,7 +46,7 @@ class Scheduler():
 		pos = self._task_count - self._todo_count + self._running_count
 		max = self._task_count
 		pct = pos == max and 100 or 100 * pos / max
-		return '\33[7;1;32m[' + str(pct).rjust(3) + '%][' + str(pos) + ' / ' + str(max) + ']\33[0m'
+		return '[' + str(pct).rjust(3) + '%][' + str(pos) + ' / ' + str(max) + ']'
 	
 	def stop(self):
 		if __debug__:
@@ -121,7 +121,7 @@ class Scheduler():
 									except Exception, e:
 										self.exception = e
 										raise
-									if not __debug__ or not is_debug: print self.progress()
+									print '\33[7;1;32mwonderbuild: progress: ' + self.progress() + '\33[0m'
 									task.update_sig()
 									task.executed = True
 						finally: self._condition.acquire()
