@@ -45,13 +45,13 @@ if __name__ == '__main__':
 		lib_foo = LibFoo(project)
 		project.build([lib_foo])
 	else:
-		n = project.fs.node('src')
+		n = project.src_node.rel_node('src')
 		s = n.find_iter(prunes = ['todo'], in_pat = '*.cpp')
 		h = n.find_iter(prunes = ['todo'], in_pat = '*.hpp', ex_pat = '*.private.hpp')
 		for f in s: print 'sssssssssssss', f.path
 		for f in h: print 'hhhhhhhhhhhhh', f.path
-		x = project.fs.node('../atomic')
-		y = project.fs.node('../wonderbuild')
+		x = project.src_node.rel_node('../tests')
+		y = project.src_node.rel_node('../wonderbuild')
 		project.fs.display(False)
 		project.fs.display(True)
 		print x.path

@@ -4,9 +4,25 @@
 
 from options import options
 
-is_debug = __debug__ and '--debug' in options
+is_debug = __debug__ and '--zones' in options
 if is_debug:
 	import sys
-	def debug(s): print >> sys.stderr, s
+	zones = []
+	z = options.index('--zones')
+	l = len(options)
+	z += 1
+	while z < l:
+		o = options[z] + ':'
+		if o.startswith('-'): break
+		zones.append(o)
+		z += 1
+	if len(zones):
+		def debug(s):
+			for z in zones:
+				if s.startswith(z):
+					print >> sys.stderr, s
+					break
+	else:
+		def debug(s): print >> sys.stderr, s
 else:
 	def debug(s): pass

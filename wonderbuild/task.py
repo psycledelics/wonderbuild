@@ -39,9 +39,9 @@ class Task(object):
 		except KeyError: return None
 	
 	@property
-	def actual_sig(self): return None
+	def sig(self): return None
 	
-	def update_sig(self): self.project.task_sigs[self.uid] = self.actual_sig
+	def update_sig(self): self.project.task_sigs[self.uid] = self.sig
 	
 class CxxObj(Task):
 	def __init__(self, project):
@@ -65,21 +65,19 @@ class CxxObj(Task):
 			return sig
 
 	@property
-	def actual_sig(self):
-		try: return self._actual_sig
+	def sig(self):
+		try: return self._sig
 		except AttributeError:
-			sig = self._actual_sig = self.source.sig_to_string()
+			sig = self._sig = self.source.sig_to_string()
 			return sig
 		
 	def process(self):
 		self.target.parent.make_dir()
 		args = ['c++', '-o', self.target.path, self.source.path, '-c', '-pipe']
-		if len(self.paths):
-			for p in self.paths: args += ['-I', p.path]
-		if len(self.defines):
-			for k, v in self.defines.iteritems():
-				if v is None: args.append('-D' + k)
-				else: args.append('-D' + k + '=' + v)
+		for p in self.paths: args += ['-I', p.path]
+		for k, v in self.defines.iteritems():
+			if v is None: args.append('-D' + k)
+			else: args.append('-D' + k + '=' + v)
 		if self.debug: args.append('-g')
 		if self.optim is not None: args.append('-O' + str(self.optim))
 		if self.pic: args.append('-fPIC')
@@ -105,15 +103,15 @@ class Lib(Task):
 			return sig
 
 	@property
-	def actual_sig(self):
-		try: return self._actual_sig
+	def sig(self):
+		try: return self._sig
 		except AttributeError:
 			sig = Sig()
-			for t in self.in_tasks: sig.update(t.actual_sig)
+			for t in self.in_tasks: sig.update(t.sig)
 			ts = [t.target for t in self.in_tasks]
 			for s in self.sources:
 				if not s in ts: sig.update(s.sig_to_string())
-			sig = self._actual_sig = sig.digest()
+			sig = self._sig = sig.digest()
 			return sig
 
 	def process(self):
@@ -123,10 +121,10 @@ class Lib(Task):
 		if len(self.libs):
 			for l in self.libs: args.append('-l' + l)
 		if len(self.static_libs):
-			args.append('-Wl,-B,-static')
+			args.append('-Wl,-Bstatic')
 			for l in self.static_libs: args.append('-l' + l)
 		if len(self.static_libs):
-			args.append('-Wl,-B,-dynamic')
+			args.append('-Wl,-Bdynamic')
 			for l in self.static_libs: args.append('-l' + l)
 		if self.shared: args.append('-shared')
 		return exec_subprocess(args + self.flags)
@@ -175,4 +173,4 @@ def exec_subprocess(args, env = None, out_stream = sys.stdout, err_stream = sys.
 	out, err = p.communicate()
 	out_stream.write(out)
 	err_stream.write(err)
-	return p.returncode
+	return p.returncode, out, err
