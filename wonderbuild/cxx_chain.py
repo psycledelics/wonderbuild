@@ -14,6 +14,8 @@ class Conf(object):
 		self.project = project
 		project.confs.append(self)
 		
+	def help(self): pass
+
 	def conf(self): pass
 
 	@property
@@ -122,11 +124,17 @@ class ObjConf(Conf):
 			self._args = args
 			return args
 
-	def dyn_args(self, target, source):
+	def process(self, target, source):
+		dir = target.parent
+		try:
+			dir.lock.acquire()
+			dir.make_dir()
+		finally: dir.lock.release()
 		args = self.args[:]
 		args[2] = target.path
 		args[3] = source.path
-		return args
+		r, out, err = exec_subprocess(args)
+		if r != 0: raise Exception, r
 			
 class Obj(Task):
 	def __init__(self, obj_conf):
@@ -149,15 +157,7 @@ class Obj(Task):
 			sig = self._sig = self.source.sig_to_string()
 			return sig
 		
-	def process(self):
-		dir = self.target.parent
-		try:
-			dir.lock.acquire()
-			dir.make_dir()
-		finally: dir.lock.release()
-		args = self.conf.dyn_args(self.target, self.source)
-		r, out, err = exec_subprocess(args)
-		if r != 0: raise Exception, r
+	def process(self): self.conf.process(self.target, self.source)
 
 class LibConf(Conf):
 	def __init__(self, obj_conf):
@@ -206,27 +206,32 @@ class LibConf(Conf):
 	def args(self):
 		try: return self._args
 		except AttributeError:
-			args = [self.prog, '-o', None, []]
-			for p in self.pkgs: args += p.lib_args
-			for p in self.paths: args += ['-L', p.path]
-			for l in self.libs: args.append('-l' + l)
-			if len(self.static_libs):
-				args.append('-Wl,-Bstatic')
-				for l in self.static_libs: args.append('-l' + l)
-			if len(self.static_libs):
-				args.append('-Wl,-Bdynamic')
-				for l in self.static_libs: args.append('-l' + l)
-			if self.shared: args.append('-shared')
-			args += self.flags
-			self._args = args
-			return args
+			if self.shared:
+				args = [self.prog, '-o', None, []]
+				for p in self.pkgs: args += p.lib_args
+				for p in self.paths: args += ['-L', p.path]
+				for l in self.libs: args.append('-l' + l)
+				if len(self.static_libs):
+					args.append('-Wl,-Bstatic')
+					for l in self.static_libs: args.append('-l' + l)
+				if len(self.static_libs):
+					args.append('-Wl,-Bdynamic')
+					for l in self.static_libs: args.append('-l' + l)
+				if self.shared: args.append('-shared')
+				args += self.flags
+				self._args = args
+				return args
+			else: pass #TODO ar, ranlib
 
-	def dyn_args(self, target, sources):
-		args = self.args[:]
-		args[2] = target.path
-		args[3] = [s.path for s in sources]
-		args = args[:3] + args[3] + args[4:]
-		return args
+	def process(self, target, sources):
+		if self.shared:
+			args = self.args[:]
+			args[2] = target.path
+			args[3] = [s.path for s in sources]
+			args = args[:3] + args[3] + args[4:]
+			r, out, err = exec_subprocess(args)
+			if r != 0: raise Exception, r
+		else: pass #TODO ar, ranlib
 
 class Lib(Task):
 	def __init__(self, lib_conf, aliases = None):
@@ -255,111 +260,25 @@ class Lib(Task):
 			sig = self._sig = sig.digest()
 			return sig
 
-	def process(self):
-		args = self.conf.dyn_args(self.target, self.sources)
-		r, out, err = exec_subprocess(args)
-		if r != 0: raise Exception, r
+	def process(self): self.conf.process(self.target, self.sources)
 		
-	def new_obj(self, source): return LibObj(self, source)
+	def new_obj(self, source):
+		obj = Obj(self.obj_conf)
+		obj.source = source
+		obj.target = self.target.parent.rel_node(source.path[:source.path.rfind('.')] + '.o')
+		self.add_in_task(obj)
+		self.sources.append(obj.target)
+		return obj
 
-class LibObj(Obj):
-	def __init__(self, lib, source):
-		Obj.__init__(self, lib.obj_conf)
-		self.source = source
-		self.target = lib.target.parent.rel_node(source.path[:source.path.rfind('.')] + '.o')
-		self.add_out_task(lib)
-		lib.sources.append(self.target)
-
-if False:
-	class Contexes(object):
-		def check_and_build(self):
-			'when performing build checks, or building the sources'
-			pass
-		
-		def build(self):
-			'when building the sources'
-			pass
-		
-		class client:
-			'when used as a dependency'
-			pass
-
-	class Cmd(object):
-		def __init__(self, cmd):
-			self.cmd = cmd
-
-		def run(self):
-			exec_subprocess(cmd)
-
-	class Cxx(Cmd):
-		def __init__(self, cmd = 'c++'):
-			Cmd.__init__(self, cmd)
-			self.paths = []
-			self.debug = False
-			self.pic = False
-
-		def run(self, source, target):
-			args = [self.cmd, '-o', source.path, target.path]
-			for i in self.paths: args += ['-I', i.path]
-			if self.debug: args.append('-g')
-			if self.pic: args.append('-fPIC')
-			Cxx.run(self, args)
-
-	class GnuCxx(Cxx):
-		def __init__(self, cmd = 'g++'):
-			Cxx.__init__(self, cmd)
-			self.env_vars = ['CPATH', 'CXXFLAGS']
-
-	class MsCxx(Cxx):
-		def __init__(self):
-			Cxx.__init__(self, 'cl')
-
-		def run(self):
-			args = [self.cmd, '-nologo', '-Fo', self.output.path, self.input.path]
-			Cxx.run(self, args)
-
-	class Archiver(Cmd):
-		def __init__(self, cmd = 'ar'):
-			Cmd.__init__(self, cmd)
-
-	class GnuArchiver(Archiver): pass
-
-	class MsArchiver(Archiver):
-		def __init__(self):
-			Archiver.__init__(self, 'lib')
-
-	class ArchiveIndexer(Cmd):
-		def __init__(self, cmd = 'ranlib'):
-			Cmd.__init__(self, cmd)
-
-	class GnuArchiveIndexer(ArchiveIndexer): pass
-
-	class MsArchiveIndexer(ArchiveIndexer):
-		def __init__(self):
-			ArchiveIndexer.__init__(self, None)
-
-	class Linker(Cmd):
-		def __init__(self, cmd = 'ld'):
-			Cmd.__init__(self, cmd)
-
-	class GnuLinker(Linker): pass
-
-	class MsLinker(Linker):
-		def __init__(self):
-			Cmd.__init__(self, 'link')
-
-	class Chain(object):
-		def __init__(self, compilers = None, archiver = None, archive_indexer = None, linker = None):
-			if compilers is None:
-				self._compilers = object()
-				setattr(self._compilers.__class__, 'cxx', GnuCxx())
-			else: self._compilers = compilers
-		
-			if archiver is None: self._archiver = Archiver()
-			else: self._archiver = archiver
-		
-			if archive_indexer is None: self._archive_indexer = ArchiveIndexer()
-			else: self._archive_indexer = archive_indexer
-		
-			if linker is None: self._linker = GnuLinker()
-			else: self._linker = linker
+class Contexes(object):
+	def check_and_build(self):
+		'when performing build checks, or building the sources'
+		pass
+	
+	def build(self):
+		'when building the sources'
+		pass
+	
+	class client:
+		'when used as a dependency'
+		pass
