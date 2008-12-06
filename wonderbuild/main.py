@@ -23,32 +23,17 @@ def main():
 		def dyn_in_tasks(self):
 			if len(self.in_tasks) != 0: return None
 			self.target = self.project.bld_node.rel_node(os.path.join('modules', 'libfoo', 'libfoo.so'))
-			self.new_obj(self.project.src_node.rel_node(os.path.join('src', 'foo', 'foo.cpp')))
-			self.new_obj(self.project.src_node.rel_node(os.path.join('src', 'main', 'main.cpp')))
-			self.obj_conf.paths = [self.project.src_node.rel_node('src')]
+			src_dir = self.project.src_node.rel_node('src')
+			self.obj_conf.paths = [src_dir]
+			for s in src_dir.rel_node('foo').find_iter(prunes = ['todo'], in_pat = '*.cpp'): self.new_obj(s)
 			return self.in_tasks
 			
 	from project import Project
 	project = Project()
-
-	if True:
-		obj_conf = ObjConf(project)
-		lib_conf = LibConf(obj_conf)
-		lib_foo = LibFoo(lib_conf)
-		project.build([lib_foo])
-	else:
-		n = project.src_node.rel_node('src')
-		s = n.find_iter(prunes = ['todo'], in_pat = '*.cpp')
-		h = n.find_iter(prunes = ['todo'], in_pat = '*.hpp', ex_pat = '*.private.hpp')
-		for f in s: print 'sssssssssssss', f.path
-		for f in h: print 'hhhhhhhhhhhhh', f.path
-		x = project.src_node.rel_node('../tests')
-		y = project.src_node.rel_node('../wonderbuild')
-		project.fs.display(False)
-		project.fs.display(True)
-		print x.path
-		print y.path
-
+	obj_conf = ObjConf(project)
+	lib_conf = LibConf(obj_conf)
+	lib_foo = LibFoo(lib_conf)
+	project.build([lib_foo])
 	project.dump()
 
 if __name__ == '__main__':

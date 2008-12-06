@@ -123,6 +123,7 @@ class Node(object):
 		if not self.exists:
 			if __debug__ and is_debug: debug('fs: os.makedirs: ' + self.path + os.sep)
 			os.makedirs(self.path)
+			self._exists = True
 
 	@property
 	def kind(self):
@@ -182,6 +183,7 @@ class Node(object):
 						if name in self._children: self._merge(self._children[name], node)
 						else: self._children[name] = node
 			else:
+				self._actual_children = {}
 				if __debug__ and is_debug: debug('fs: os.listdir : ' + self.path + os.sep)
 				if self._children is None:
 					self._children = {}
@@ -195,7 +197,8 @@ class Node(object):
 		return self._actual_children
 	
 	def _merge(self, cur, old):
-		if __debug__ and is_debug: debug('fs: merge: ' + cur.path + ' ' + old.path)
+		if __debug__ and is_debug: debug('fs: merge      : ' + cur.path)
+		assert cur.path == old.path
 		if cur._children is None:
 			cur._children = old._old_children
 			if old._old_time is not None:
@@ -223,6 +226,7 @@ class Node(object):
 		return self._children
 
 	def find_iter(self, in_pat = '*', ex_pat = None, prunes = None):
+		if __debug__ and is_debug: debug('fs: find_iter  : ' + self.path + os.sep + ' ' + in_pat + ' ' + str(ex_pat) + ' ' + str(prunes))
 		for name, node in self.actual_children.iteritems():
 			if (ex_pat is None or not match(name, ex_pat)) and match(name, in_pat): yield node
 			elif node.is_dir:
