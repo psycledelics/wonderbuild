@@ -3,4 +3,5 @@
 
 void foo() {
 	std::cout << "foo\n";
+	#warning foo
 }

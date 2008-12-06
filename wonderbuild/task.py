@@ -42,10 +42,11 @@ class Task(object):
 	
 	def update_sig(self): self.project.task_sigs[self.uid] = self.sig
 	
-def exec_subprocess(args, env = None, out_stream = sys.stdout, err_stream = sys.stderr):
+def exec_subprocess(args, desc = None, color = '', env = None, out_stream = sys.stdout, err_stream = sys.stderr):
 	if __debug__ and is_debug: s = str(args)
-	else: s = ' '.join(args)
-	out_stream.write('\33[7;1;34m' + s + '\33[0m\n')
+	elif desc is None: s = ' '.join(args)
+	else: s = desc
+	out_stream.write('\33[7;1;3' + color + 'm' + s + '\33[0m\n')
 	p = subprocess.Popen(
 		args = args,
 		stdout = subprocess.PIPE,
