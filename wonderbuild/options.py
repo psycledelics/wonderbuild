@@ -4,4 +4,6 @@
 
 import sys
 
-options = sys.argv
+options = sys.argv[1:]
+
+help = {}

@@ -2,12 +2,21 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import sys, os, os.path
+def main():
+	import sys
 
-from project import Project
-from task import Lib, CxxObj
+	import logger
+	from options import options, help
+	if '--help' in options:
+		for h in help.itervalues():
+			print h
+		sys.exit(0)
+	for o in options:
+		if o.startswith('-') and not o in help:
+			print >> sys.stderr, 'unknown option:', o
+			sys.exit(1)
 
-if __name__ == '__main__':
+	from task import Lib, CxxObj
 	class LibFoo(Lib):
 		def __init__(self, project):
 			Lib.__init__(self, project, aliases = ['foo'])
@@ -15,6 +24,8 @@ if __name__ == '__main__':
 		def dyn_in_tasks(self):
 			if len(self.in_tasks): return None
 			
+			import os
+
 			cxx_paths = [self.project.src_node.rel_node('src')]
 			cxx_flags = ['-fPIC']
 			out = self.project.bld_node.rel_node(os.path.join('modules', 'libfoo'))
@@ -59,3 +70,5 @@ if __name__ == '__main__':
 
 	project.dump()
 
+if __name__ == '__main__':
+	main()
