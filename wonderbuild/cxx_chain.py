@@ -4,14 +4,18 @@
 
 import os
 
-from signature import Sig, raw_to_hexstring
+from options import options, help
 from logger import is_debug, debug
+from signature import Sig, raw_to_hexstring
 from task import Task, exec_subprocess
 
 class Conf(object):
 	def __init__(self, project):
 		self.project = project
+		project.confs.append(self)
 		
+	def conf(self): pass
+
 	@property
 	def sig(self): pass
 
@@ -63,15 +67,27 @@ class ObjConf(Conf):
 	def __init__(self, project):
 		Conf.__init__(self, project)
 		self.prog = 'c++'
-		flags = os.environ.get('CXXFLAGS', None)
-		if flags is None: self.flags = []
-		else: self.flags = flags.split()
 		self.pkgs = []
 		self.paths = []
 		self.defines = {}
 		self.debug = False
 		self.optim = None
 		self.pic = True
+		
+	def conf(self):
+		help['--cxx-flags'] = ('--cxx-flags=[flags]', 'c++ compiler flags')
+
+		self.flags = []
+		
+		opt = False
+		for o in options:
+			if o.startswith('--cxx-flags='):
+				self.flags += o[len('--cxx-flags='):].split()
+				opt = True
+		
+		if not opt:
+			flags = os.environ.get('CXXFLAGS', None)
+			if flags is not None: self.flags = flags.split()
 
 	@property
 	def sig(self):
@@ -146,15 +162,27 @@ class LibConf(Conf):
 		Conf.__init__(self, obj_conf.project)
 		self.obj_conf = obj_conf
 		self.prog = obj_conf.prog
-		flags = os.environ.get('LDFLAGS', None)
-		if flags is None: self.flags = []
-		else: self.flags = flags.split()
 		self.pkgs = obj_conf.pkgs
 		self.paths = []
 		self.libs = []
 		self.static_libs = []
 		self.shared_libs = []
 		self.shared = obj_conf.pic
+
+	def conf(self):
+		help['--ld-flags'] = ('--ld-flags=[flags]', 'linker flags')
+
+		self.flags = []
+		
+		opt = False
+		for o in options:
+			if o.startswith('--ld-flags='):
+				self.flags += o[len('-ld-flags='):].split()
+				opt = True
+		
+		if not opt:
+			flags = os.environ.get('LDFLAGS', None)
+			if flags is not None: self.flags = flags.split()
 
 	@property
 	def sig(self):

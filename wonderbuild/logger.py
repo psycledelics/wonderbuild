@@ -8,7 +8,7 @@ if not __debug__:
 else:
 	from options import options, help
 
-	help['--zones'] = '--zones [zones]\tdebugging zones (sched, fs, ...)'
+	help['--zones'] = ('--zones [zones]', 'debugging zones (sched, fs, ...)')
 
 	is_debug = '--zones' in options
 	if not is_debug:
@@ -16,14 +16,14 @@ else:
 	else:
 		import sys
 		zones = []
-		z = options.index('--zones')
+		i = options.index('--zones')
 		l = len(options)
-		z += 1
-		while z < l:
-			o = options[z]
+		i += 1
+		while i < l:
+			o = options[i]
 			if o.startswith('-'): break
 			zones.append(o)
-			z += 1
+			i += 1
 		if len(zones):
 			def debug(s):
 				for z in zones:

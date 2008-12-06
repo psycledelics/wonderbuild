@@ -10,8 +10,9 @@ from logger import is_debug, debug
 
 class Project(object):
 	def __init__(self, bld_path = '++wonderbuild'):
-		self.aliases = {} # {name: [tasks]}
+		self.confs = []
 		self.tasks = []
+		self.aliases = {} # {name: [tasks]}
 		cache_path = 'cache'
 		self.fs = FileSystem(os.path.join(bld_path, cache_path, 'filesystem'))
 		self.src_node = self.fs.cur
@@ -26,6 +27,9 @@ class Project(object):
 			for a in aliases:
 				try: self.aliases[a].append(task)
 				except KeyError: self.aliases[a] = [task]
+
+	def conf(self):
+		for c in self.confs: c.conf()
 
 	def build(self, tasks):
 		s = Scheduler()

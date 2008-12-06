@@ -5,16 +5,6 @@
 def main():
 	import sys, os
 
-	import logger
-	from options import options, help
-	if '--help' in options:
-		for h in help.itervalues(): print h
-		sys.exit(0)
-	for o in options:
-		if o.startswith('-') and not o in help:
-			print >> sys.stderr, 'unknown option:', o
-			sys.exit(1)
-
 	from cxx_chain import ObjConf, LibConf, Lib
 
 	class LibFoo(Lib):
@@ -26,6 +16,7 @@ def main():
 			src_dir = self.project.src_node.rel_node('src')
 			self.obj_conf.paths = [src_dir]
 			for s in src_dir.rel_node('foo').find_iter(prunes = ['todo'], in_pat = '*.cpp'): self.new_obj(s)
+			#for h in src_dir.rel_node('foo').find_iter(prunes = ['todo'], in_pat = '*.hpp', ex_pat = '*.private.hpp'): print h.path
 			return self.in_tasks
 			
 	from project import Project
@@ -33,6 +24,19 @@ def main():
 	obj_conf = ObjConf(project)
 	lib_conf = LibConf(obj_conf)
 	lib_foo = LibFoo(lib_conf)
+
+	project.conf()
+	from options import options, help
+	if '--help' in options:
+		for h in help.itervalues(): print h[0].ljust(30), h[1]
+		sys.exit(0)
+	for o in options:
+		if o.startswith('-'):
+			e = o.find('=')
+			if e >= 0 and o[:e] not in help and o not in help:
+				print >> sys.stderr, 'unknown option:', o
+				sys.exit(1)
+
 	project.build([lib_foo])
 	project.dump()
 
