@@ -69,6 +69,7 @@ class Scheduler():
 		del self._threads
 		del self._condition
 		del self._task_queue
+		if hasattr(self, 'exception'): raise self.exception
 	
 	def _thread_function(self, i):
 		if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': started')
@@ -116,7 +117,10 @@ class Scheduler():
 									if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': skip task (same sig) ' + str(task.__class__))
 									task.executed = False
 								else:
-									task.process()
+									try: task.process()
+									except Exception, e:
+										self.exception = e
+										raise
 									if not __debug__ or not is_debug: print self.progress()
 									task.update_sig()
 									task.executed = True

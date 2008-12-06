@@ -2,7 +2,7 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import sys, os, os.path, stat, gc, cPickle
+import sys, os, os.path, stat, gc, cPickle, threading
 from fnmatch import fnmatchcase as match
 
 from logger import is_debug, debug
@@ -67,7 +67,7 @@ if __debug__:
 class Node(object):
 	__slots__ = (
 		'parent', 'name', '_kind', '_children', '_actual_children', '_old_children', '_old_time', '_time', '_sig',
-		'_path', '_abs_path', '_height', '_fs', '_exists', '_changed'
+		'_path', '_abs_path', '_height', '_fs', '_exists', '_changed', '_lock'
 	)
 
 	def __getstate__(self):
@@ -106,6 +106,13 @@ class Node(object):
 		if stat.S_ISDIR(st.st_mode): self._kind = DIR
 		else: self._kind = FILE
 		self._time = st.st_mtime
+
+	@property
+	def lock(self):
+		try: return self._lock
+		except AttributeError:
+			lock = self._lock = threading.Lock()
+			return lock
 		
 	@property
 	def exists(self):
