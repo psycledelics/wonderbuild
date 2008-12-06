@@ -8,15 +8,14 @@ def main():
 	import logger
 	from options import options, help
 	if '--help' in options:
-		for h in help.itervalues():
-			print h
+		for h in help.itervalues(): print h
 		sys.exit(0)
 	for o in options:
 		if o.startswith('-') and not o in help:
 			print >> sys.stderr, 'unknown option:', o
 			sys.exit(1)
 
-	from task import Lib, CxxObj
+	from task import Lib
 	class LibFoo(Lib):
 		def __init__(self, project):
 			Lib.__init__(self, project, aliases = ['foo'])
@@ -31,22 +30,23 @@ def main():
 			cxx_paths = [self.project.src_node.rel_node('src')]
 			cxx_flags = ['-fPIC']
 			out = self.project.bld_node.rel_node(os.path.join('modules', 'libfoo'))
-
-			obj1 = CxxObj(project)
-			obj1.paths = cxx_paths
-			obj1.pic = self.shared
+			
+			from chain import CxxConf
+			conf = CxxConf(self.project)
+			conf.paths = cxx_paths
+			conf.pic = self.shared
+			from task import ConfCxxObj
+			obj1 = ConfCxxObj(conf)
 			obj1.source = self.project.src_node.rel_node(os.path.join('src', 'foo', 'foo.cpp'))
-			obj1.target = out.rel_node(os.path.join('src', 'foo', 'foo.o'))
-
-			obj2 = CxxObj(project)
-			obj2.paths = cxx_paths
-			obj2.pic = self.shared
+			obj1.target = out.rel_node(obj1.source.path[:-3] + 'o')
+			obj2 = ConfCxxObj(conf)
 			obj2.source = self.project.src_node.rel_node(os.path.join('src', 'main', 'main.cpp'))
-			obj2.target = out.rel_node(os.path.join('src', 'main', 'main.o'))
+			obj2.target = out.rel_node(obj2.source.path[:-3] + 'o')
 
 			self.add_in_task(obj1)
 			self.add_in_task(obj2)
 			self.sources = [obj1.target, obj2.target]
+			
 			self.target = out.rel_node('libfoo.so')
 			return self.in_tasks
 			

@@ -2,6 +2,8 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2006-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
+import os
+
 class Conf(object):
 	def __init__(self, project):
 		self.project = project
@@ -13,7 +15,7 @@ class Conf(object):
 	def args(self): pass
 
 class PkgConf(object):
-	def __init__(self, project)
+	def __init__(self, project):
 		self.project = project
 		self.prog = 'pkg-config'
 		self.pkgs = []
@@ -80,10 +82,11 @@ class CxxConf(object):
 			sig = self._sig = sig.digest()
 			return sig
 
+	@property
 	def args(self):
 		try: return self._args
 		except AttributeError:
-			args = [self.prog, '-o', self.target.path, self.source.path, '-c', '-pipe']
+			args = [self.prog, '-o', None, None, '-c', '-pipe']
 			for p in self.pkgs: args += p.compiler_args
 			for p in self.paths: args += ['-I', p.path]
 			for k, v in self.defines.iteritems():
@@ -95,6 +98,12 @@ class CxxConf(object):
 			args += self.flags
 			self._args = args
 			return args
+
+	def dyn_args(self, target, source):
+		args = self.args[:]
+		args[2] = target.path
+		args[3] = source.path
+		return args
 			
 class LibConf(object):
 	def __init__(self, project):
@@ -142,95 +151,96 @@ class LibConf(object):
 			self._args = args
 			return args
 
-class Contexes(object):
-	def check_and_build(self):
-		'when performing build checks, or building the sources'
-		pass
+if False:
+	class Contexes(object):
+		def check_and_build(self):
+			'when performing build checks, or building the sources'
+			pass
 		
-	def build(self):
-		'when building the sources'
-		pass
+		def build(self):
+			'when building the sources'
+			pass
 		
-	class client:
-		'when used as a dependency'
-		pass
+		class client:
+			'when used as a dependency'
+			pass
 
-class Cmd(object):
-	def __init__(self, cmd)
-		self.cmd = cmd
+	class Cmd(object):
+		def __init__(self, cmd):
+			self.cmd = cmd
 
-	def run(self):
-		exec_subprocess(cmd)
+		def run(self):
+			exec_subprocess(cmd)
 
-class Cxx(Cmd):
-	def __init__(self, cmd = 'c++'):
-		Cmd.__init__(self, cmd)
-		self.paths = []
-		self.debug = False
-		self.pic = False
+	class Cxx(Cmd):
+		def __init__(self, cmd = 'c++'):
+			Cmd.__init__(self, cmd)
+			self.paths = []
+			self.debug = False
+			self.pic = False
 
-	def run(self, source, target):
-		args = [self.cmd, '-o', source.path, target.path]
-		for i in self.paths: args += ['-I', i.path]
-		if self.debug: args.append('-g')
-		if self.pic: args.append('-fPIC')
-		Cxx.run(self, args)
+		def run(self, source, target):
+			args = [self.cmd, '-o', source.path, target.path]
+			for i in self.paths: args += ['-I', i.path]
+			if self.debug: args.append('-g')
+			if self.pic: args.append('-fPIC')
+			Cxx.run(self, args)
 
-class GnuCxx(Cxx):
-	def __init__(self, cmd = 'g++'):
-		Cxx.__init__(self, cmd)
-		self.env_vars = ['CPATH', 'CXXFLAGS']
+	class GnuCxx(Cxx):
+		def __init__(self, cmd = 'g++'):
+			Cxx.__init__(self, cmd)
+			self.env_vars = ['CPATH', 'CXXFLAGS']
 
-class MsCxx(Cxx):
-	def __init__(self):
-		Cxx.__init__(self, 'cl')
+	class MsCxx(Cxx):
+		def __init__(self):
+			Cxx.__init__(self, 'cl')
 
-	def run(self):
-		args = [self.cmd, '-nologo', '-Fo', self.output.path, self.input.path]
-		Cxx.run(self, args)
+		def run(self):
+			args = [self.cmd, '-nologo', '-Fo', self.output.path, self.input.path]
+			Cxx.run(self, args)
 
-class Archiver(Cmd):
-	def __init__(self, cmd = 'ar'):
-		Cmd.__init__(self, cmd)
+	class Archiver(Cmd):
+		def __init__(self, cmd = 'ar'):
+			Cmd.__init__(self, cmd)
 
-class GnuArchiver(Archiver): pass
+	class GnuArchiver(Archiver): pass
 
-class MsArchiver(Archiver):
-	def __init__(self):
-		Archiver.__init__(self, 'lib')
+	class MsArchiver(Archiver):
+		def __init__(self):
+			Archiver.__init__(self, 'lib')
 
-class ArchiveIndexer(Cmd):
-	def __init__(self, cmd = 'ranlib'):
-		Cmd.__init__(self, cmd)
+	class ArchiveIndexer(Cmd):
+		def __init__(self, cmd = 'ranlib'):
+			Cmd.__init__(self, cmd)
 
-class GnuArchiveIndexer(ArchiveIndexer): pass
+	class GnuArchiveIndexer(ArchiveIndexer): pass
 
-class MsArchiveIndexer(ArchiveIndexer):
-	def __init__(self):
-		ArchiveIndexer.__init__(self, None)
+	class MsArchiveIndexer(ArchiveIndexer):
+		def __init__(self):
+			ArchiveIndexer.__init__(self, None)
 
-class Linker(Cmd):
-	def __init__(self, cmd = 'ld'):
-		Cmd.__init__(self, cmd)
+	class Linker(Cmd):
+		def __init__(self, cmd = 'ld'):
+			Cmd.__init__(self, cmd)
 
-class GnuLinker(Linker): pass
+	class GnuLinker(Linker): pass
 
-class MsLinker(Linker): pass
-	def __init__(self):
-		Cmd.__init__(self, 'link')
+	class MsLinker(Linker):
+		def __init__(self):
+			Cmd.__init__(self, 'link')
 
-class Chain(object):
-	def __init__(self, compilers = None, archiver = None, archive_indexer = None, linker = None):
-		if compilers is None:
-			self._compilers = object()
-			setattr(self._compilers.__class__, 'cxx', GnuCxx())
-		else self._compilers = compilers
+	class Chain(object):
+		def __init__(self, compilers = None, archiver = None, archive_indexer = None, linker = None):
+			if compilers is None:
+				self._compilers = object()
+				setattr(self._compilers.__class__, 'cxx', GnuCxx())
+			else: self._compilers = compilers
 		
-		if archiver is None: self._archiver = Archiver()
-		else: self._archiver = archiver
+			if archiver is None: self._archiver = Archiver()
+			else: self._archiver = archiver
 		
-		if archive_indexer is None: self._archive_indexer = ArchiveIndexer()
-		else: self._archive_indexer = archive_indexer
+			if archive_indexer is None: self._archive_indexer = ArchiveIndexer()
+			else: self._archive_indexer = archive_indexer
 		
-		if linker is None: self._linker = GnuLinker()
-		else: self._linker = linker
+			if linker is None: self._linker = GnuLinker()
+			else: self._linker = linker

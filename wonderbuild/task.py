@@ -84,6 +84,33 @@ class CxxObj(Task):
 		r, out, err = exec_subprocess(args + self.flags)
 		if r != 0: raise Exception, r
 
+class ConfCxxObj(Task):
+	def __init__(self, conf):
+		Task.__init__(self, conf.project)
+		self.conf = conf
+		self.source = None
+		self.target = None
+		
+	@property
+	def uid(self):
+		try: return self._uid
+		except AttributeError:
+			sig = self._uid = Sig(self.target.path).digest()
+			return sig
+
+	@property
+	def sig(self):
+		try: return self._sig
+		except AttributeError:
+			sig = self._sig = self.source.sig_to_string()
+			return sig
+		
+	def process(self):
+		self.target.parent.make_dir()
+		args = self.conf.dyn_args(self.target, self.source)
+		r, out, err = exec_subprocess(args)
+		if r != 0: raise Exception, r
+
 class Lib(Task):
 	def __init__(self, project, aliases = None):
 		Task.__init__(self, project, aliases)
