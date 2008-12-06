@@ -4,7 +4,6 @@
 
 import sys, os, subprocess
 
-from signature import Sig, raw_to_hexstring
 from logger import is_debug, debug
 
 class Task(object):	
@@ -43,155 +42,10 @@ class Task(object):
 	
 	def update_sig(self): self.project.task_sigs[self.uid] = self.sig
 	
-class CxxObj(Task):
-	def __init__(self, project):
-		Task.__init__(self, project)
-		self.source = None
-		self.target = None
-		self.paths = []
-		self.defines = {}
-		self.debug = False
-		self.optim = None
-		self.pic = True
-		flags = os.environ.get('CXXFLAGS', None)
-		if flags is None: self.flags = []
-		else: self.flags = flags.split()
-		
-	@property
-	def uid(self):
-		try: return self._uid
-		except AttributeError:
-			sig = self._uid = Sig(self.target.path).digest()
-			return sig
-
-	@property
-	def sig(self):
-		try: return self._sig
-		except AttributeError:
-			sig = self._sig = self.source.sig_to_string()
-			return sig
-		
-	def process(self):
-		self.target.parent.make_dir()
-		args = ['c++', '-o', self.target.path, self.source.path, '-c', '-pipe']
-		for p in self.paths: args += ['-I', p.path]
-		for k, v in self.defines.iteritems():
-			if v is None: args.append('-D' + k)
-			else: args.append('-D' + k + '=' + v)
-		if self.debug: args.append('-g')
-		if self.optim is not None: args.append('-O' + str(self.optim))
-		if self.pic: args.append('-fPIC')
-		r, out, err = exec_subprocess(args + self.flags)
-		if r != 0: raise Exception, r
-
-class ConfCxxObj(Task):
-	def __init__(self, conf):
-		Task.__init__(self, conf.project)
-		self.conf = conf
-		self.source = None
-		self.target = None
-		
-	@property
-	def uid(self):
-		try: return self._uid
-		except AttributeError:
-			sig = self._uid = Sig(self.target.path).digest()
-			return sig
-
-	@property
-	def sig(self):
-		try: return self._sig
-		except AttributeError:
-			sig = self._sig = self.source.sig_to_string()
-			return sig
-		
-	def process(self):
-		self.target.parent.make_dir()
-		args = self.conf.dyn_args(self.target, self.source)
-		r, out, err = exec_subprocess(args)
-		if r != 0: raise Exception, r
-
-class Lib(Task):
-	def __init__(self, project, aliases = None):
-		Task.__init__(self, project, aliases)
-		self.paths = []
-		self.libs = []
-		self.static_libs = []
-		self.shared_libs = []
-		self.shared = True
-		flags = os.environ.get('LDFLAGS', None)
-		if flags is None: self.flags = []
-		else: self.flags = flags.split()
-
-	@property
-	def uid(self):
-		try: return self._uid
-		except AttributeError:
-			sig = self._uid = Sig(self.target.path).digest()
-			return sig
-
-	@property
-	def sig(self):
-		try: return self._sig
-		except AttributeError:
-			sig = Sig()
-			for t in self.in_tasks: sig.update(t.sig)
-			ts = [t.target for t in self.in_tasks]
-			for s in self.sources:
-				if not s in ts: sig.update(s.sig_to_string())
-			sig = self._sig = sig.digest()
-			return sig
-
-	def process(self):
-		args = ['c++', '-o', self.target.path] + [s.path for s in self.sources]
-		if len(self.paths):
-			for p in self.paths: args += ['-L', p.path]
-		if len(self.libs):
-			for l in self.libs: args.append('-l' + l)
-		if len(self.static_libs):
-			args.append('-Wl,-Bstatic')
-			for l in self.static_libs: args.append('-l' + l)
-		if len(self.static_libs):
-			args.append('-Wl,-Bdynamic')
-			for l in self.static_libs: args.append('-l' + l)
-		if self.shared: args.append('-shared')
-		r, out, err = exec_subprocess(args + self.flags)
-		if r != 0: raise Exception, r
-
-class LibCxxObj(CxxObj):
-	def __init__(self, lib, source):
-		CxxObj.__init__(self, lib.project)
-		self.source = source
-		path = lib.project.src_node.path_to(source)
-		path = path[:path.rfind('.')] + '.o'
-		self.target = lib.target.parent.rel_node(path)
-		self.add_out_task(lib)
-		lib.sources.append(self.target)
-
-class CxxLib(Lib):
-	def __init__(self, project, aliases):
-		Lib.__init__(self, project, aliases)
-		self.sources = []
-		self.cxx_paths = []
-		self.defines = {}
-		self.debug = False
-		self.optim = None
-		self.cxx_flags = os.environ.get('CXXFLAGS', [])
-
-	def dyn_in_tasks(self):
-		if len(self.in_tasks): return None
-		for s in self.sources:
-			o = LibCxxObj(self, s)
-			o.paths = self.cxx_paths
-			o.defines = self.defines
-			o.debug = self.debug
-			o.optim = self.optim
-			o.flags = self.cxx_flags
-		return self.in_tasks
-
 def exec_subprocess(args, env = None, out_stream = sys.stdout, err_stream = sys.stderr):
 	print '=' * 79
-	print ' '.join(args)
+	if __debug__ and is_debug: print args
+	else: print ' '.join(args)
 	print '_' * 79
 	p = subprocess.Popen(
 		args = args,

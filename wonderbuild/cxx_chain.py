@@ -4,6 +4,10 @@
 
 import os
 
+from signature import Sig, raw_to_hexstring
+from logger import is_debug, debug
+from task import Task, exec_subprocess
+
 class Conf(object):
 	def __init__(self, project):
 		self.project = project
@@ -14,8 +18,9 @@ class Conf(object):
 	@property
 	def args(self): pass
 
-class PkgConf(object):
+class PkgConf(Conf):
 	def __init__(self, project):
+		Conf.__init__(self, project)
 		self.project = project
 		self.prog = 'pkg-config'
 		self.pkgs = []
@@ -54,9 +59,9 @@ class PkgConf(object):
 			self._lib_args = args
 			return args
 	
-class CxxConf(object):
+class ObjConf(Conf):
 	def __init__(self, project):
-		self.project = project
+		Conf.__init__(self, project)
 		self.prog = 'c++'
 		flags = os.environ.get('CXXFLAGS', None)
 		if flags is None: self.flags = []
@@ -105,19 +110,47 @@ class CxxConf(object):
 		args[3] = source.path
 		return args
 			
-class LibConf(object):
-	def __init__(self, project):
-		self.project = project
-		self.prog = 'c++'
+class Obj(Task):
+	def __init__(self, obj_conf):
+		Task.__init__(self, obj_conf.project)
+		self.conf = obj_conf
+		self.source = None
+		self.target = None
+		
+	@property
+	def uid(self):
+		try: return self._uid
+		except AttributeError:
+			sig = self._uid = Sig(self.target.path).digest()
+			return sig
+
+	@property
+	def sig(self):
+		try: return self._sig
+		except AttributeError:
+			sig = self._sig = self.source.sig_to_string()
+			return sig
+		
+	def process(self):
+		self.target.parent.make_dir()
+		args = self.conf.dyn_args(self.target, self.source)
+		r, out, err = exec_subprocess(args)
+		if r != 0: raise Exception, r
+
+class LibConf(Conf):
+	def __init__(self, obj_conf):
+		Conf.__init__(self, obj_conf.project)
+		self.obj_conf = obj_conf
+		self.prog = obj_conf.prog
 		flags = os.environ.get('LDFLAGS', None)
 		if flags is None: self.flags = []
 		else: self.flags = flags.split()
-		self.pkgs = []
+		self.pkgs = obj_conf.pkgs
 		self.paths = []
 		self.libs = []
 		self.static_libs = []
 		self.shared_libs = []
-		self.shared = True
+		self.shared = obj_conf.pic
 
 	@property
 	def sig(self):
@@ -133,10 +166,11 @@ class LibConf(object):
 			sig = self._sig = sig.digest()
 			return sig
 
+	@property
 	def args(self):
 		try: return self._args
 		except AttributeError:
-			args = [self.prog, '-o', self.target.path] + [s.path for s in self.sources]
+			args = [self.prog, '-o', None, []]
 			for p in self.pkgs: args += p.lib_args
 			for p in self.paths: args += ['-L', p.path]
 			for l in self.libs: args.append('-l' + l)
@@ -150,6 +184,55 @@ class LibConf(object):
 			args += self.flags
 			self._args = args
 			return args
+
+	def dyn_args(self, target, sources):
+		args = self.args[:]
+		args[2] = target.path
+		args[3] = [s.path for s in sources]
+		args = args[:3] + args[3] + args[4:]
+		return args
+
+class Lib(Task):
+	def __init__(self, lib_conf, aliases = None):
+		Task.__init__(self, lib_conf.project, aliases)
+		self.conf = lib_conf
+		self.obj_conf = self.conf.obj_conf
+		self.obj_conf.pic = self.conf.shared
+		self.sources = []
+
+	@property
+	def uid(self):
+		try: return self._uid
+		except AttributeError:
+			sig = self._uid = Sig(self.target.path).digest()
+			return sig
+
+	@property
+	def sig(self):
+		try: return self._sig
+		except AttributeError:
+			sig = Sig()
+			for t in self.in_tasks: sig.update(t.sig)
+			ts = [t.target for t in self.in_tasks]
+			for s in self.sources:
+				if not s in ts: sig.update(s.sig_to_string())
+			sig = self._sig = sig.digest()
+			return sig
+
+	def process(self):
+		args = self.conf.dyn_args(self.target, self.sources)
+		r, out, err = exec_subprocess(args)
+		if r != 0: raise Exception, r
+		
+	def new_obj(self, source): return LibObj(self, source)
+
+class LibObj(Obj):
+	def __init__(self, lib, source):
+		Obj.__init__(self, lib.obj_conf)
+		self.source = source
+		self.target = lib.target.parent.rel_node(source.path[:source.path.rfind('.')] + '.o')
+		self.add_out_task(lib)
+		lib.sources.append(self.target)
 
 if False:
 	class Contexes(object):

@@ -3,7 +3,7 @@
 # copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 def main():
-	import sys
+	import sys, os
 
 	import logger
 	from options import options, help
@@ -15,46 +15,26 @@ def main():
 			print >> sys.stderr, 'unknown option:', o
 			sys.exit(1)
 
-	from task import Lib
+	from cxx_chain import ObjConf, LibConf, Lib
+
 	class LibFoo(Lib):
-		def __init__(self, project):
-			Lib.__init__(self, project, aliases = ['foo'])
+		def __init__(self, lib_conf): Lib.__init__(self, lib_conf, aliases = ['foo'])
 			
 		def dyn_in_tasks(self):
-			if len(self.in_tasks): return None
-			
-			import os
-
-			self.shared = True
-
-			cxx_paths = [self.project.src_node.rel_node('src')]
-			cxx_flags = ['-fPIC']
-			out = self.project.bld_node.rel_node(os.path.join('modules', 'libfoo'))
-			
-			from chain import CxxConf
-			conf = CxxConf(self.project)
-			conf.paths = cxx_paths
-			conf.pic = self.shared
-			from task import ConfCxxObj
-			obj1 = ConfCxxObj(conf)
-			obj1.source = self.project.src_node.rel_node(os.path.join('src', 'foo', 'foo.cpp'))
-			obj1.target = out.rel_node(obj1.source.path[:-3] + 'o')
-			obj2 = ConfCxxObj(conf)
-			obj2.source = self.project.src_node.rel_node(os.path.join('src', 'main', 'main.cpp'))
-			obj2.target = out.rel_node(obj2.source.path[:-3] + 'o')
-
-			self.add_in_task(obj1)
-			self.add_in_task(obj2)
-			self.sources = [obj1.target, obj2.target]
-			
-			self.target = out.rel_node('libfoo.so')
+			if len(self.in_tasks) != 0: return None
+			self.target = self.project.bld_node.rel_node(os.path.join('modules', 'libfoo', 'libfoo.so'))
+			self.new_obj(self.project.src_node.rel_node(os.path.join('src', 'foo', 'foo.cpp')))
+			self.new_obj(self.project.src_node.rel_node(os.path.join('src', 'main', 'main.cpp')))
+			self.obj_conf.paths = [self.project.src_node.rel_node('src')]
 			return self.in_tasks
 			
 	from project import Project
 	project = Project()
 
 	if True:
-		lib_foo = LibFoo(project)
+		obj_conf = ObjConf(project)
+		lib_conf = LibConf(obj_conf)
+		lib_foo = LibFoo(lib_conf)
 		project.build([lib_foo])
 	else:
 		n = project.src_node.rel_node('src')
