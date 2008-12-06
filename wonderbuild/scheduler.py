@@ -43,10 +43,11 @@ class Scheduler():
 		if __debug__ and is_debug: debug('sched: add task ' + str(self._todo_count) + '/' + str(self._task_count) + ' ' + str(task.__class__))
 
 	def progress(self):
-		pos = self._task_count - self._todo_count + self._running_count
+		done = self._task_count - self._todo_count
+		run = self._running_count
 		max = self._task_count
-		pct = pos == max and 100 or 100 * pos / max
-		return '[' + str(pct).rjust(3) + '%][' + str(pos) + ' / ' + str(max) + ']'
+		pct = done == max and 100 or 100 * (done + run * 0.5) / max
+		return '[' + str(int(pct)).rjust(3) + '%][' + str(done) + ' / ' + str(max) + ' done, ' + str(run) + ' running]'
 	
 	def stop(self):
 		if __debug__:
@@ -121,7 +122,6 @@ class Scheduler():
 									except Exception, e:
 										self.exception = e
 										raise
-									print '\33[7;1;32mwonderbuild: progress: ' + self.progress() + '\33[0m'
 									task.update_sig()
 									task.executed = True
 						finally: self._condition.acquire()
@@ -131,6 +131,7 @@ class Scheduler():
 						raise
 					self._running_count -= 1
 					self._todo_count -= 1
+					print '\33[7;1;32mwonderbuild: progress: ' + self.progress() + '\33[0m'
 					if self._todo_count == 0 and self._joining:
 						self._condition.notifyAll()
 						break
