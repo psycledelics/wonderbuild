@@ -43,10 +43,9 @@ class Task(object):
 	def update_sig(self): self.project.task_sigs[self.uid] = self.sig
 	
 def exec_subprocess(args, env = None, out_stream = sys.stdout, err_stream = sys.stderr):
-	print '=' * 79
-	if __debug__ and is_debug: print args
-	else: print ' '.join(args)
-	print '_' * 79
+	if __debug__ and is_debug: s = str(args)
+	else: s = ' '.join(args)
+	out_stream.write('\33[7;1;34m' + s + '\33[0m\n')
 	p = subprocess.Popen(
 		args = args,
 		stdout = subprocess.PIPE,
@@ -55,5 +54,8 @@ def exec_subprocess(args, env = None, out_stream = sys.stdout, err_stream = sys.
 	)
 	out, err = p.communicate()
 	out_stream.write(out)
-	err_stream.write(err)
+	if len(err):
+		s = ''
+		for line in err.split('\n')[:-1]: s += '\33[7;1;31merror:\33[0m ' + line + '\n'
+		err_stream.write(s)
 	return p.returncode, out, err

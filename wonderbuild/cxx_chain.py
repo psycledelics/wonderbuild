@@ -51,18 +51,22 @@ class PkgConf(Conf):
 	def compiler_args(self):
 		try: return self._compiler_args
 		except AttributeError:
-			r, out = exec_subprocess([self.prog, '--cflags'] + self.flags + self.pkgs)
+			args = [self.prog, '--cflags'] + self.flags + self.pkgs
+			if __debug__ and is_debug: debug('conf: pkg-config: ' + str(args))
+			r, out, err = exec_subprocess()
 			if r != 0: raise Exception, r
-			self._compiler_args = args
-			return args
+			self._compiler_args = out
+			return out
 
 	@property
 	def lib_args(self):
 		try: return self._lib_args
 		except AttributeError:
-			r, out = exec_subprocess([self.prog, '--libs'] + self.flags + self.pkgs)
+			args = [self.prog, '--libs'] + self.flags + self.pkgs
+			if __debug__ and is_debug: debug('conf: pkg-config: ' + str(args))
+			r, out, err = exec_subprocess(args)
 			if r != 0: raise Exception, r
-			self._lib_args = args
+			self._lib_args = out
 			return args
 	
 class ObjConf(Conf):
@@ -77,19 +81,25 @@ class ObjConf(Conf):
 		self.pic = True
 	
 	def help(self):
-		help['--cxx-flags'] = ('--cxx-flags=[flags]', 'c++ compiler flags')
+		help['--cxx-flags'] = ('--cxx-flags=[flags]', 'use specific c++ compiler flags')
+		help['--cxx-debug'] = ('--cxx-debug', 'make the c++ compiler produce debug information')
+		help['--cxx-optim'] = ('--cxx-optim=<level>', 'use c++ compiler optimisation <level>')
 		
 	def conf(self):
 		help['--cxx-flags'] = None
+		help['--cxx-debug'] = None
+		help['--cxx-optim'] = None
 		self.flags = []
 		
-		opt = False
+		flags = False
 		for o in options:
 			if o.startswith('--cxx-flags='):
 				self.flags += o[len('--cxx-flags='):].split()
-				opt = True
+				flags = True
+			elif o.startswith('--cxx-optim='): self.optim = o[len('--cxx-optim='):]
+			elif o == '--cxx-debug': self.debug = True
 		
-		if not opt:
+		if not flags:
 			flags = os.environ.get('CXXFLAGS', None)
 			if flags is not None: self.flags = flags.split()
 
@@ -118,9 +128,10 @@ class ObjConf(Conf):
 				if v is None: args.append('-D' + k)
 				else: args.append('-D' + k + '=' + v)
 			if self.debug: args.append('-g')
-			if self.optim is not None: args.append('-O' + str(self.optim))
+			if self.optim is not None: args.append('-O' + self.optim)
 			if self.pic: args.append('-fPIC')
 			args += self.flags
+			if __debug__ and is_debug: debug('conf: cxx: obj: ' + str(args))
 			self._args = args
 			return args
 
@@ -164,15 +175,15 @@ class LibConf(Conf):
 		Conf.__init__(self, obj_conf.project)
 		self.obj_conf = obj_conf
 		self.prog = obj_conf.prog
+		self.shared = obj_conf.pic
 		self.pkgs = obj_conf.pkgs
 		self.paths = []
 		self.libs = []
 		self.static_libs = []
 		self.shared_libs = []
-		self.shared = obj_conf.pic
 
 	def help(self):
-		help['--ld-flags'] = ('--ld-flags=[flags]', 'linker flags')
+		help['--ld-flags'] = ('--ld-flags=[flags]', 'use specific linker flags')
 
 	def conf(self):
 		help['--ld-flags'] = None
@@ -219,6 +230,7 @@ class LibConf(Conf):
 					for l in self.static_libs: args.append('-l' + l)
 				if self.shared: args.append('-shared')
 				args += self.flags
+				if __debug__ and is_debug: debug('conf: cxx: lib: ' + str(args))
 				self._args = args
 				return args
 			else: pass #TODO ar, ranlib
@@ -237,9 +249,11 @@ class Lib(Task):
 	def __init__(self, lib_conf, aliases = None):
 		Task.__init__(self, lib_conf.project, aliases)
 		self.conf = lib_conf
-		self.obj_conf = self.conf.obj_conf
-		self.obj_conf.pic = self.conf.shared
+		self.target = None
 		self.sources = []
+
+	@property
+	def obj_conf(self): return self.conf.obj_conf
 
 	@property
 	def uid(self):
@@ -256,7 +270,7 @@ class Lib(Task):
 			for t in self.in_tasks: sig.update(t.sig)
 			ts = [t.target for t in self.in_tasks]
 			for s in self.sources:
-				if not s in ts: sig.update(s.sig_to_string())
+				if s not in ts: sig.update(s.sig_to_string())
 			sig = self._sig = sig.digest()
 			return sig
 

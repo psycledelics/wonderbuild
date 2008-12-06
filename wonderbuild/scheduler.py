@@ -46,7 +46,7 @@ class Scheduler():
 		pos = self._task_count - self._todo_count + self._running_count
 		max = self._task_count
 		pct = pos == max and 100 or 100 * pos / max
-		return '[' + str(pct).rjust(3) + '%][' + str(pos) + ' / ' + str(max) + ']'
+		return '\33[7;1;32m[' + str(pct).rjust(3) + '%][' + str(pos) + ' / ' + str(max) + ']\33[0m'
 	
 	def stop(self):
 		if __debug__:

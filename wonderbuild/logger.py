@@ -8,7 +8,7 @@ if not __debug__:
 else:
 	from options import options, help
 
-	help['--zones'] = ('--zones [zones]', 'debugging zones (sched, fs, ...)')
+	help['--zones'] = ('--zones [zones ...]', 'wonderbuild debugging zones (sched, fs, ...)')
 
 	is_debug = '--zones' in options
 	if not is_debug:
