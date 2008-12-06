@@ -26,19 +26,21 @@ def main():
 			
 			import os
 
+			self.shared = True
+
 			cxx_paths = [self.project.src_node.rel_node('src')]
 			cxx_flags = ['-fPIC']
 			out = self.project.bld_node.rel_node(os.path.join('modules', 'libfoo'))
 
 			obj1 = CxxObj(project)
 			obj1.paths = cxx_paths
-			obj1.pic = True
+			obj1.pic = self.shared
 			obj1.source = self.project.src_node.rel_node(os.path.join('src', 'foo', 'foo.cpp'))
 			obj1.target = out.rel_node(os.path.join('src', 'foo', 'foo.o'))
 
 			obj2 = CxxObj(project)
 			obj2.paths = cxx_paths
-			obj2.pic = True
+			obj2.pic = self.shared
 			obj2.source = self.project.src_node.rel_node(os.path.join('src', 'main', 'main.cpp'))
 			obj2.target = out.rel_node(os.path.join('src', 'main', 'main.o'))
 
@@ -46,7 +48,6 @@ def main():
 			self.add_in_task(obj2)
 			self.sources = [obj1.target, obj2.target]
 			self.target = out.rel_node('libfoo.so')
-			self.shared = True
 			return self.in_tasks
 			
 	from project import Project

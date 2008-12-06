@@ -81,7 +81,8 @@ class CxxObj(Task):
 		if self.debug: args.append('-g')
 		if self.optim is not None: args.append('-O' + str(self.optim))
 		if self.pic: args.append('-fPIC')
-		return exec_subprocess(args + self.flags)
+		r, out, err = exec_subprocess(args + self.flags)
+		if r != 0: raise Exception, r
 
 class Lib(Task):
 	def __init__(self, project, aliases = None):
@@ -127,7 +128,8 @@ class Lib(Task):
 			args.append('-Wl,-Bdynamic')
 			for l in self.static_libs: args.append('-l' + l)
 		if self.shared: args.append('-shared')
-		return exec_subprocess(args + self.flags)
+		r, out, err = exec_subprocess(args + self.flags)
+		if r != 0: raise Exception, r
 
 class LibCxxObj(CxxObj):
 	def __init__(self, lib, source):

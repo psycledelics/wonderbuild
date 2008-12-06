@@ -96,11 +96,11 @@ class Node(object):
 			assert parent is None or os.sep not in name, (parent.abs_path, name)
 			assert parent is not None or name not in all_abs_paths, (parent, name)
 			assert parent is None or os.path.join(parent.abs_path, name) not in all_abs_paths, (parent.abs_path, name)
-			debug('fs: new node  : ' + self.abs_path)
+			debug('fs: new node: ' + self.abs_path)
 			all_abs_paths.add(self.abs_path)
 	
 	def _do_stat(self):
-		if __debug__ and is_debug: debug('fs: os.stat   : ' + self.path)
+		if __debug__ and is_debug: debug('fs: os.stat    : ' + self.path)
 		try: st = os.stat(self.path)
 		except OSError: st = os.lstat(self.path) # may be a broken symlink
 		if stat.S_ISDIR(st.st_mode): self._kind = DIR
@@ -121,7 +121,7 @@ class Node(object):
 	
 	def make_dir(self):
 		if not self.exists:
-			if __debug__ and is_debug: debug('fs: make dir  : ' + self.path)
+			if __debug__ and is_debug: debug('fs: os.makedirs: ' + self.path + os.sep)
 			os.makedirs(self.path)
 
 	@property
@@ -182,7 +182,7 @@ class Node(object):
 						if name in self._children: self._merge(self._children[name], node)
 						else: self._children[name] = node
 			else:
-				if __debug__ and is_debug: debug('fs: os.listdir: ' + self.path + os.sep)
+				if __debug__ and is_debug: debug('fs: os.listdir : ' + self.path + os.sep)
 				if self._children is None:
 					self._children = {}
 					for name in os.listdir(self.path):

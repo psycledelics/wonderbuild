@@ -116,8 +116,7 @@ class Scheduler():
 									if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': skip task (same sig) ' + str(task.__class__))
 									task.executed = False
 								else:
-									result, out, err = task.process()
-									if result != 0: raise Exception, result
+									task.process()
 									if not __debug__ or not is_debug: print self.progress()
 									task.update_sig()
 									task.executed = True
