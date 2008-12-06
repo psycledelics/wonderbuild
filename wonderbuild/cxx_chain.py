@@ -132,10 +132,11 @@ class Obj(Task):
 			return sig
 		
 	def process(self):
+		dir = self.target.parent
 		try:
-			self.target.parent.lock.acquire()
-			self.target.parent.make_dir()
-		finally: self.target.parent.lock.release()
+			dir.lock.acquire()
+			dir.make_dir()
+		finally: dir.lock.release()
 		args = self.conf.dyn_args(self.target, self.source)
 		r, out, err = exec_subprocess(args)
 		if r != 0: raise Exception, r
