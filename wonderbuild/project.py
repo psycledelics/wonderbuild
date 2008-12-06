@@ -30,6 +30,9 @@ class Project(object):
 
 	def conf(self):
 		for c in self.confs: c.conf()
+		
+	def help(self):
+		for c in self.confs: c.help()
 
 	def build(self, tasks):
 		s = Scheduler()

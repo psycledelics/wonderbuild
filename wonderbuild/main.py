@@ -28,12 +28,14 @@ def main():
 	project.conf()
 	from options import options, help
 	if '--help' in options:
+		project.help()
 		for h in help.itervalues(): print h[0].ljust(30), h[1]
 		sys.exit(0)
 	for o in options:
 		if o.startswith('-'):
 			e = o.find('=')
-			if e >= 0 and o[:e] not in help and o not in help:
+			if e >= 0: o = o[:e]
+			if o not in help:
 				print >> sys.stderr, 'unknown option:', o
 				sys.exit(1)
 

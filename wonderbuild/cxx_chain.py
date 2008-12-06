@@ -73,10 +73,12 @@ class ObjConf(Conf):
 		self.debug = False
 		self.optim = None
 		self.pic = True
+	
+	def help(self):
+		help['--cxx-flags'] = ('--cxx-flags=[flags]', 'c++ compiler flags')
 		
 	def conf(self):
-		help['--cxx-flags'] = ('--cxx-flags=[flags]', 'c++ compiler flags')
-
+		help['--cxx-flags'] = None
 		self.flags = []
 		
 		opt = False
@@ -169,9 +171,11 @@ class LibConf(Conf):
 		self.shared_libs = []
 		self.shared = obj_conf.pic
 
-	def conf(self):
+	def help(self):
 		help['--ld-flags'] = ('--ld-flags=[flags]', 'linker flags')
 
+	def conf(self):
+		help['--ld-flags'] = None
 		self.flags = []
 		
 		opt = False
