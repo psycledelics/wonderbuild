@@ -162,24 +162,26 @@ class Node(object):
 						return True
 			return False
 
+	def _deep_time(self):
+		time = self.time
+		if self._kind == DIR:
+			for n in self.actual_children.itervalues():
+				sub_time = n._deep_time()
+				if sub_time > time: time = sub_time
+		return time
+
 	@property
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
-			time = self.time
-			if self._kind == DIR:
-				for n in self.actual_children.itervalues():
-					sub_time = n.sig
-					if sub_time > time: time = sub_time
-			self._sig = time
-			return self._sig
+			if __debug__ and is_debug: debug('fs: sig        : ' + self.path)
+			sig = self._sig = str(self._deep_time())
+			return sig
 
-	def sig_to_string(self): return str(self.sig)
-	
 	@property
 	def actual_children(self):
 		if self._actual_children is None:
-			if self.time == self._old_time:
+			if self.time == self._old_time and self._old_children is not None:
 				self._actual_children = self._old_children
 				self._old_children = None
 				if self._children is None:
@@ -333,7 +335,7 @@ class Node(object):
 		else: time = self._time is None and '?' or self._time
 		
 		print \
-			(str(getattr(self, '_sig', '?'))).rjust(12), \
+			getattr(self, '_sig', '?').rjust(12), \
 			str(time).rjust(12), \
 			(self._kind is None and '?' or {DIR: 'dir', FILE: 'file'}[self._kind]).rjust(4) + \
 			' ' + path

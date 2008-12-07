@@ -120,13 +120,20 @@ class ObjConf(Conf):
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
-			sig = Sig()
-			sig.update(os.environ.get('CPATH', None))
-			sig.update(os.environ.get('CPLUS_INCLUDE_PATH', None))
+			sig = Sig(self.prog)
+			e = os.environ.get('CPATH', None)
+			if e is not None: sig.update(e)
+			e = os.environ.get('CPLUS_INCLUDE_PATH', None)
+			if e is not None: sig.update(e)
+			sig.update(str(self.pic))
+			sig.update(str(self.optim))
+			sig.update(str(self.debug))
 			for p in self.pkgs: sig.update(p.sig)
-			for p in self.paths: sig.update(p.sig)
+			for p in self.paths: sig.update(p.path)
+			for k, v in self.defines.iteritems():
+				sig.update(k)
+				sig.update(v)
 			for f in self.flags: sig.update(f)
-			sig.update(self.shared)
 			sig = self._sig = sig.digest()
 			return sig
 
@@ -174,16 +181,17 @@ class Obj(Task):
 	def uid(self):
 		try: return self._uid
 		except AttributeError:
-			sig = self._uid = Sig(self.target.path).digest()
+			sig = self._uid = self.target.path
 			return sig
 
 	@property
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
-			sig = Sig(self.source.sig_to_string())
+			sig = Sig(self.conf.sig)
+			sig.update(self.source.sig)
 			seen, not_found = self.conf.cpp.scan_deps(self.source.path, [n.path for n in self.conf.paths])
-			for s in seen: sig.update(self.project.src_node.rel_node(s).sig_to_string())
+			for s in seen: sig.update(self.project.src_node.rel_node(s).sig)
 			sig = self._sig = sig.digest()
 			return sig
 		
@@ -257,13 +265,20 @@ class LibConf(Conf):
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
-			sig = Sig()
+			sig = Sig(str(self.shared))
+			if self.shared:
+				sig.update(self.ld_prog)
+				for f in self.ld_flags: sig.update(f)
+			else:
+				sig.update(self.ar_prog)
+				for f in self.ar_flags: sig.update(f)
+				sig.update(self.ranlib_prog)
+				for f in self.ranlib_flags: sig.update(f)
 			for p in self.pkgs: sig.update(p.sig)
-			for p in self.paths: sig.update(p.sig)
+			for p in self.paths: sig.update(p.path)
 			for l in self.libs: sig.update(l)
 			for l in self.static_libs: sig.update(l)
 			for l in self.shared_libs: sig.update(l)
-			for f in self.flags: sig.update(f)
 			sig = self._sig = sig.digest()
 			return sig
 
@@ -338,18 +353,18 @@ class Lib(Task):
 	def uid(self):
 		try: return self._uid
 		except AttributeError:
-			sig = self._uid = Sig(self.target.path).digest()
+			sig = self._uid = self.target.path
 			return sig
 
 	@property
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
-			sig = Sig()
+			sig = Sig(self.conf.sig)
 			for t in self.in_tasks: sig.update(t.sig)
 			ts = [t.target for t in self.in_tasks]
 			for s in self.sources:
-				if s not in ts: sig.update(s.sig_to_string())
+				if s not in ts: sig.update(s.sig)
 			sig = self._sig = sig.digest()
 			return sig
 
