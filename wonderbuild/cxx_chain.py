@@ -81,11 +81,13 @@ class ObjConf(Conf):
 		self.pic = True
 	
 	def help(self):
+		help['--cxx'] = ('--cxx=<prog>', 'use <prog> as c++ compiler')
 		help['--cxx-flags'] = ('--cxx-flags=[flags]', 'use specific c++ compiler flags')
-		help['--cxx-debug'] = ('--cxx-debug', 'make the c++ compiler produce debug information')
+		help['--cxx-debug'] = ('--cxx-debug', 'make the c++ compiler produce debugging information')
 		help['--cxx-optim'] = ('--cxx-optim=<level>', 'use c++ compiler optimisation <level>')
 		
 	def conf(self):
+		help['--cxx'] = None
 		help['--cxx-flags'] = None
 		help['--cxx-debug'] = None
 		help['--cxx-optim'] = None
@@ -97,6 +99,7 @@ class ObjConf(Conf):
 				self.flags += o[len('--cxx-flags='):].split()
 				flags = True
 			elif o.startswith('--cxx-optim='): self.optim = o[len('--cxx-optim='):]
+			elif o.startswith('--cxx='): self.prog = o[len('--cxx='):]
 			elif o == '--cxx-debug': self.debug = True
 		
 		if not flags:

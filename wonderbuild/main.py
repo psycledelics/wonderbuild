@@ -25,7 +25,6 @@ def main():
 	lib_conf = LibConf(obj_conf)
 	lib_foo = LibFoo(lib_conf)
 
-	project.conf()
 	from options import options, help
 	if '--help' in options:
 		project.help()
@@ -39,6 +38,7 @@ def main():
 				print >> sys.stderr, 'unknown option:', o
 				sys.exit(1)
 
+	project.conf()
 	project.build([lib_foo])
 	project.dump()
 
