@@ -44,7 +44,7 @@ class IncludeScanner(object):
 			finally: f.close()
 		finally: gc.enable()
 	
-	def _unique_path(self, file_name): return self.fs.cur.rel_node(file_name).path
+	def _unique_path(self, file_name): return self.fs.cur.rel_node(file_name).abs_path
 		
 
 	def scan_deps(self, file_name, paths):
@@ -260,7 +260,7 @@ if __name__ == '__main__':
 	print >> sys.stderr, 'fs  load time:', time.time() - t0
 
 	t0 = time.time()
-	scanner = IncludeScanner(fs, '/tmp/cpp.cache', dirs)
+	scanner = IncludeScanner(fs, '/tmp/cpp.cache')
 	print >> sys.stderr, 'cpp load time:', time.time() - t0
 
 	for f in files:
@@ -268,6 +268,8 @@ if __name__ == '__main__':
 		seen, not_found = scanner.scan_deps(f, dirs)
 		print 'seen:', seen
 		print 'not found:', not_found
+		fs.cur.rel_node(f).time
+		for s in seen: fs.cur.rel_node(s).time
 
 	t0 = time.time()
 	scanner.dump()

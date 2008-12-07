@@ -46,13 +46,6 @@ class FileSystem(object):
 			finally: f.close()
 		finally: gc.enable()
 		
-	def node(self, path):
-		return self.cur.rel_node(path)
-		
-		path = os.path.normpath(path)
-		if os.path.isabs(path): return self.root.rel_node(path)
-		else: return self.cur.rel_node(path)
-	
 	def display(self, cache = False):
 		print 'fs:', cache and 'cached:' or 'declared:'
 		self.root.display(cache)

@@ -42,18 +42,21 @@ class Project(object):
 		for t in tasks: s.add_task(t)
 		s.join()
 
-	def load(self): # cache -> state
+	def load(self):
 		gc.disable()
 		try:
-			try: f = file(os.path.join(self.cache_node.path, 'tasks'), 'rb')
+			try: f = file(os.path.join(self.cache_node.path, 'state'), 'rb')
 			except IOError: raise
 			else:
-				try: self.task_sigs = cPickle.load(f)
+				try: state = cPickle.load(f)
 				except Exception, e:
 					print >> sys.stderr, 'could not load pickle:', e
 					raise
 				finally: f.close()
-		except: self.task_sigs = {} # {task.uid: task.sig}
+		except:
+			self.task_sigs = {} # {task.uid: task.sig}
+			state = {'task_sigs': self.task_sigs}
+		else: self.task_sigs = state['task_sigs']
 		finally: gc.enable()
 
 	def dump(self):
@@ -62,7 +65,9 @@ class Project(object):
 		self.cpp.dump()
 		gc.disable()
 		try:
-			f = file(os.path.join(self.cache_node.path, 'tasks'), 'wb')
-			try: cPickle.dump(self.task_sigs, f, cPickle.HIGHEST_PROTOCOL)
+			f = file(os.path.join(self.cache_node.path, 'state'), 'wb')
+			try:
+				state = {'task_sigs': self.task_sigs}
+				cPickle.dump(state, f, cPickle.HIGHEST_PROTOCOL)
 			finally: f.close()
 		finally: gc.enable()
