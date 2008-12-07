@@ -14,45 +14,45 @@ _include = re.compile(r'^[ \t]*#[ \t]*include[ \t]*(["<])([^">]*)[">].*$', re.MU
 class IncludeScanner(object):
 	'C/C++ dependency scanner. #include statements, and nothing else, no #if, no #define (dumb)'
 	
-	def __init__(self, filesystem, paths = None, cache_path = '/tmp/cpp.cache'):
+	def __init__(self, filesystem, cache_path = None):
 		self.fs = filesystem
-		if paths is not None: self.paths = paths
-		else: self.paths = set()
 		self.not_found = set() # of unique_path
 		self.cache_path = cache_path
 		self.load()
 
 	def load(self):
+		if self.cache_path is None: self.contents = {} # { unique_path: (rel_includes, abs_includes) }
 		gc.disable()
 		try:
 			try: f = file(self.cache_path, 'rb')
 			except IOError: raise
 			else:
-				try: self.deps = cPickle.load(f)
+				try: self.contents = cPickle.load(f)
 				except Exception, e:
 					print >> sys.stderr, 'could not load pickle:', e
 					raise
 				finally: f.close()
-		except: self.deps = {} # { unique_path: (rel_includes, abs_includes) }
+		except: self.contents = {} # { unique_path: (rel_includes, abs_includes) }
 		else:
-			for path in self.deps.keys(): # copy because we remove some elements in the loop
+			for path in self.contents.keys(): # copy because we remove some elements in the loop
 				node = self.fs.cur.rel_node(path)
 				if not node.exists:
 					self.not_found.add(path)
 					if __debug__ and is_debug: debug('cpp: not found: ' + path)
 				elif node.changed:
-					del self.deps[path]
+					del self.contents[path]
 					if __debug__ and is_debug: debug('cpp: changed  : ' + path)
 				elif __debug__ and is_debug: debug(      'cpp: cached   : ' + path)
 				
 		finally: gc.enable()
 
 	def dump(self):
-		for path in self.deps.iterkeys(): self.fs.node(path).time
+		if self.cache_path is None: return
+		for path in self.contents.iterkeys(): self.fs.node(path).time
 		gc.disable()
 		try:
 			f = file(self.cache_path, 'wb')
-			try: cPickle.dump(self.deps, f, cPickle.HIGHEST_PROTOCOL)
+			try: cPickle.dump(self.contents, f, cPickle.HIGHEST_PROTOCOL)
 			finally: f.close()
 		finally: gc.enable()
 	
@@ -65,72 +65,71 @@ class IncludeScanner(object):
 		#return self.fs.cur.rel_node(file_name).path
 		
 
-	def scan_deps(self, file_name): return self._scan_deps(file_name)
-	def _scan_deps(self, file_name, already_seen = None):
+	def scan_deps(self, file_name, paths):
+		not_found = set()
+		seen = self._scan_deps(file_name, paths, not_found)
+		return seen, not_found
+	def _scan_deps(self, file_name, paths, not_found, seen = None):
 		u = self._unique_path(file_name)
 
-		if already_seen is not None:
-			if u in already_seen: return
- 			already_seen.add(u)
-		else: already_seen = set()
+		if seen is None: seen = set()
+		else:
+			if u in seen: return
+			seen.add(u)
 	
-		try: r = self.deps[u]
+		try: r = self.contents[u]
 		except KeyError:
 			if __debug__ and is_debug: debug('cpp: parsing: ' + u)
 
 			try: f = file(file_name, 'rb')
 			except:
 				self.not_found.add(u)
-				return already_seen
+				return seen
 			try: s = f.read()
 			finally: f.close()
 
 			r = self.parse_string(s)
-			self.deps[u] = r
+			self.contents[u] = r
 		rel_includes, abs_includes = r
 
 		if rel_includes:
 			dir = os.path.dirname(file_name)
 			for include in rel_includes:
-				sub_file_name = self.search_rel(dir, include)
-				if sub_file_name: self._scan_deps(sub_file_name, already_seen)
-				#elif __debug__ and is_debug: debug('cpp: not found: ' + file_name + ': #include "' + include + '"')
+				sub_file_name = self.search_rel(dir, include, paths, not_found)
+				if sub_file_name is not None: self._scan_deps(sub_file_name, paths, not_found, seen)
 
 		if abs_includes:
 			for include in abs_includes:
-				sub_file_name = self.search_abs(include)
-				if sub_file_name: self._scan_deps(sub_file_name, already_seen)
-				#elif __debug__ and is_debug: debug('cpp: not found:' + file_name + ': #include <' + include + '>')
+				sub_file_name = self.search_abs(include, paths, not_found)
+				if sub_file_name is not None: self._scan_deps(sub_file_name, paths, not_found, seen)
+				
+		return seen
 	
-		return already_seen
-	
-	def search_rel(self, dir, include):
+	def search_rel(self, dir, include, paths, not_found):
 		if os.path.isabs(include):
 			u = self._unique_path(include)
 			if u in self.not_found: return None
-			if os.path.exists(f): return f
-			#elif __debug__ and is_debug: debug('cpp: not found: #include "' + u + '"')
+			elif os.path.exists(f): return f
+			elif __debug__ and is_debug: debug('cpp: not found: #include "' + u + '"')
 		else:
 			f = os.path.join(dir, include)
 			u = self._unique_path(f)
 			if u in self.not_found: return None
-			if os.path.exists(f): return f
-			#elif __debug__ and is_debug: debug('cpp: not found: #include "' + u + '"')
-			if False: # be strict
-				if  not include.startswith(os.pardir + os.sep) \
-				and not include.startswith(os.curdir + os.sep):
-					abs = self.search_abs(include)
-					if abs: return abs
+			elif os.path.exists(f): return f
+			elif not include.startswith(os.pardir + os.sep) and not include.startswith(os.curdir + os.sep):
+				abs = self.search_abs(include, paths, not_found)
+				if abs is not None: return abs
+			if __debug__ and is_debug: debug('cpp: not found: #include "' + u + '"')
 		self.not_found.add(u)
 		return None
 		
-	def search_abs(self, include):
-		if include in self.not_found: return None
-		for dir in self.paths:
+	def search_abs(self, include, paths, not_found):
+		if include in not_found: return None
+		for dir in paths:
 			f = os.path.join(dir, include)
 			if os.path.exists(f): return f
-		#if __debug__ and is_debug: debug('cpp: not found: #include <' + include + '>')
-		self.not_found.add(include)
+		if __debug__ and is_debug: debug('cpp: not found: #include <' + include + '>')
+		not_found.add(include)
 		return None
 
 	def parse_string(self, s): return self._parse_string_fast(s)
@@ -240,8 +239,7 @@ class IncludeScanner(object):
 		
 	def display(self):
 		print 'cpp:'
-		for path, includes in self.deps.iteritems(): print path, includes
-		print 'include path:', self.paths
+		for path, includes in self.contents.iteritems(): print path, includes
 		print 'not found:', self.not_found
 
 if __name__ == '__main__':
@@ -260,12 +258,14 @@ if __name__ == '__main__':
 	print >> sys.stderr, 'fs  load time:', time.time() - t0
 
 	t0 = time.time()
-	scanner = IncludeScanner(fs, dirs)
+	scanner = IncludeScanner(fs, '/tmp/cpp.cache', dirs)
 	print >> sys.stderr, 'cpp load time:', time.time() - t0
 
 	for f in files:
 		print 'scanning deps:', f, dirs
-		deps = scanner.scan_deps(f)
+		seen, not_found = scanner.scan_deps(f, dirs)
+		print 'seen:', seen
+		print 'not found:', not_found
 
 	t0 = time.time()
 	scanner.dump()

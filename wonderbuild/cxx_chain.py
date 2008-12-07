@@ -82,6 +82,7 @@ class ObjConf(Conf):
 		help['--cxx-non-pic'] = ('--cxx-non-pic', 'make the c++ compiler emit non-pic code (for static libs or programs)')
 		
 	def conf(self):
+		self.cpp = self.project.cpp
 		self.pic = True
 		self.optim = None
 		self.debug = False
@@ -180,7 +181,10 @@ class Obj(Task):
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
-			sig = self._sig = self.source.sig_to_string()
+			sig = Sig(self.source.sig_to_string())
+			seen, not_found = self.conf.cpp.scan_deps(self.source.path, [n.path for n in self.conf.paths])
+			for s in seen: sig.update(self.project.src_node.rel_node(s).sig_to_string())
+			sig = self._sig = sig.digest()
 			return sig
 		
 	def process(self): self.conf.process(self.target, self.source)

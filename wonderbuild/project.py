@@ -7,6 +7,7 @@ import sys, os, gc, cPickle
 from scheduler import Scheduler
 from filesystem import FileSystem
 from logger import is_debug, debug
+from cpp_include_scanner import IncludeScanner
 
 class Project(object):
 	def __init__(self, bld_path = '++wonderbuild'):
@@ -29,6 +30,7 @@ class Project(object):
 				except KeyError: self.aliases[a] = [task]
 
 	def conf(self):
+		self.cpp = IncludeScanner(self.fs, os.path.join(self.cache_node.path, 'cpp_include_scanner'))
 		for c in self.confs: c.conf()
 		
 	def help(self):
@@ -43,7 +45,7 @@ class Project(object):
 	def load(self):
 		gc.disable()
 		try:
-			try: f = file(os.path.join(self.cache_node.abs_path, 'tasks'), 'rb')
+			try: f = file(os.path.join(self.cache_node.path, 'tasks'), 'rb')
 			except IOError: raise
 			else:
 				try: self.task_sigs = cPickle.load(f)
@@ -57,6 +59,7 @@ class Project(object):
 	def dump(self):
 		self.cache_node.make_dir()
 		self.fs.dump()
+		self.cpp.dump()
 		gc.disable()
 		try:
 			f = file(os.path.join(self.cache_node.path, 'tasks'), 'wb')
