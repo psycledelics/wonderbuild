@@ -42,7 +42,7 @@ class Project(object):
 		for t in tasks: s.add_task(t)
 		s.join()
 
-	def load(self):
+	def load(self): # cache -> state
 		gc.disable()
 		try:
 			try: f = file(os.path.join(self.cache_node.path, 'tasks'), 'rb')

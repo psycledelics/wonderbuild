@@ -33,23 +33,10 @@ class IncludeScanner(object):
 					raise
 				finally: f.close()
 		except: self.contents = {} # { unique_path: (rel_includes, abs_includes) }
-		else:
-			return
-			for path in self.contents.keys(): # copy because we remove some elements in the loop
-				node = self.fs.cur.rel_node(path)
-				if not node.exists:
-					self.not_found.add(path)
-					if __debug__ and is_debug: debug('cpp: not found : ' + path)
-				elif node.changed:
-					del self.contents[path]
-					if __debug__ and is_debug: debug('cpp: changed   : ' + path)
-				elif __debug__ and is_debug: debug(      'cpp: cached    : ' + path)
-				
 		finally: gc.enable()
 
 	def dump(self):
 		if self.cache_path is None: return
-		#for path in self.contents.iterkeys(): self.fs.cur.rel_node(path).time
 		gc.disable()
 		try:
 			f = file(self.cache_path, 'wb')
@@ -61,7 +48,7 @@ class IncludeScanner(object):
 		
 
 	def scan_deps(self, file_name, paths):
-		not_found = set()
+		not_found = []
 		seen = self._scan_deps(file_name, paths, not_found)
 		return seen, not_found
 	def _scan_deps(self, file_name, paths, not_found, seen = None):
@@ -74,12 +61,20 @@ class IncludeScanner(object):
 			if u in seen: return
 			seen.add(u)
 	
+		parse = False
 		try: r = self.contents[u]
-		except KeyError:
+		except KeyError: parse = True
+		else:
+			if self.fs.cur.rel_node(file_name).changed:
+				if __debug__ and is_debug: debug('cpp: changed   : ' + u)
+				parse = True
+			
+		if parse:
 			if __debug__ and is_debug: debug('cpp: parsing   : ' + u)
 
 			try: f = file(file_name, 'rb')
 			except:
+				if __debug__ and is_debug: debug('cpp: not found : ' + u)
 				self.not_found.add(u)
 				return seen
 			try: s = f.read()
@@ -106,7 +101,7 @@ class IncludeScanner(object):
 		if os.path.isabs(include):
 			u = self._unique_path(include)
 			if u in self.not_found:
-				not_found.add(u)
+				not_found.append(u)
 				return None
 			n = self.fs.root.rel_node(f)
 			n.parent.actual_children
@@ -116,7 +111,7 @@ class IncludeScanner(object):
 			f = os.path.join(dir, include)
 			u = self._unique_path(f)
 			if u in self.not_found:
-				not_found.add(u)
+				not_found.append(u)
 				return None
 			n = self.fs.cur.rel_node(f)
 			n.parent.actual_children
@@ -136,7 +131,7 @@ class IncludeScanner(object):
 			n.parent.actual_children
 			if n.exists: return f
 		if __debug__ and is_debug: debug('cpp: not found : #include <' + include + '>')
-		not_found.add(include)
+		not_found.append(include)
 		return None
 
 	def parse_string(self, s): return self._parse_string_fast(s)
