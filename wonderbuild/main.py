@@ -30,6 +30,7 @@ def main():
 		project.help()
 		for h in help.itervalues(): print h[0].ljust(30), h[1]
 		sys.exit(0)
+	project.conf()
 	for o in options:
 		if o.startswith('-'):
 			e = o.find('=')
@@ -37,10 +38,7 @@ def main():
 			if o not in help:
 				print >> sys.stderr, 'unknown option:', o
 				sys.exit(1)
-
-	project.conf()
 	project.build([lib_foo])
 	project.dump()
 
-if __name__ == '__main__':
-	main()
+if __name__ == '__main__': main()
