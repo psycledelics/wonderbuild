@@ -612,6 +612,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\MixerGui.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\MixerGui.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\MouseHandler.private.hpp"
 					>
 				</File>
@@ -653,6 +661,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\SongpDlg.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\VstFxGui.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\VstFxGui.hpp"
 					>
 				</File>
 				<File
