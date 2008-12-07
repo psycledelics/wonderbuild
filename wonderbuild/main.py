@@ -8,11 +8,11 @@ def main():
 	from cxx_chain import ObjConf, LibConf, Lib
 
 	class LibFoo(Lib):
-		def __init__(self, lib_conf): Lib.__init__(self, lib_conf, aliases = ['foo'])
+		def __init__(self, lib_conf): Lib.__init__(self, lib_conf, 'foo')
 			
 		def dyn_in_tasks(self):
 			if len(self.in_tasks) != 0: return None
-			self.target = self.project.bld_node.rel_node(os.path.join('modules', 'libfoo', 'libfoo.so'))
+			Lib.dyn_in_tasks(self)
 			src_dir = self.project.src_node.rel_node('src')
 			self.obj_conf.paths = [src_dir]
 			for s in src_dir.rel_node('foo').find_iter(prunes = ['todo'], in_pat = '*.cpp'): self.new_obj(s)
@@ -28,7 +28,12 @@ def main():
 	from options import options, help
 	if '--help' in options:
 		project.help()
-		for h in help.itervalues(): print h[0].ljust(30), h[1]
+		keys = []
+		for k in help.iterkeys(): keys.append(k)
+		keys.sort()
+		for h in keys:
+			h = help[h]
+			print h[0].ljust(30), h[1]
 		sys.exit(0)
 	project.conf()
 	for o in options:

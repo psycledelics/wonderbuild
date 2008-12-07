@@ -43,9 +43,9 @@ class Scheduler():
 		if __debug__ and is_debug: debug('sched: add task ' + str(self._todo_count) + '/' + str(self._task_count) + ' ' + str(task.__class__))
 
 	def progress(self):
-		done = self._task_count - self._todo_count
-		run = self._running_count
 		max = self._task_count
+		done = max - self._todo_count
+		run = self._running_count
 		pct = done == max and 100 or 100 * (done + run * 0.5) / max
 		return '[' + str(int(pct)).rjust(3) + '%][' + str(done) + ' / ' + str(max) + ' done, ' + str(run) + ' running]'
 	
@@ -131,7 +131,7 @@ class Scheduler():
 						raise
 					self._running_count -= 1
 					self._todo_count -= 1
-					print colored('7;1;32', 'wonderbuild: progress: ' + self.progress())
+					if task.executed: print colored('7;32', 'wonderbuild: progress: ' + self.progress())
 					if self._todo_count == 0 and self._joining:
 						self._condition.notifyAll()
 						break
