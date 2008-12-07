@@ -72,6 +72,8 @@ class IncludeScanner(object):
 	def _scan_deps(self, file_name, paths, not_found, seen = None):
 		u = self._unique_path(file_name)
 
+		if __debug__ and is_debug: debug('cpp: dep      : ' + u)
+
 		if seen is None: seen = set()
 		else:
 			if u in seen: return
@@ -79,7 +81,7 @@ class IncludeScanner(object):
 	
 		try: r = self.contents[u]
 		except KeyError:
-			if __debug__ and is_debug: debug('cpp: parsing: ' + u)
+			if __debug__ and is_debug: debug('cpp: parsing  : ' + u)
 
 			try: f = file(file_name, 'rb')
 			except:
