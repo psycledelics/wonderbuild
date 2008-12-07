@@ -4,7 +4,7 @@
 
 import sys, os, subprocess
 
-from logger import is_debug, debug
+from logger import is_debug, debug, colored
 
 class Task(object):	
 	def __init__(self, project, aliases = None):
@@ -42,10 +42,10 @@ class Task(object):
 	
 	def update_sig(self): self.project.task_sigs[self.uid] = self.sig
 	
-def exec_subprocess(args, desc = None, color = '', env = None, out_stream = sys.stdout, err_stream = sys.stderr):
+def exec_subprocess(args, desc = None, color = '7;1', env = None, out_stream = sys.stdout, err_stream = sys.stderr):
 	if desc is None: desc = ' '.join(args)
-	out_stream.write('\33[7;1;3' + color + 'mwonderbuild: task: ' + desc + '\33[0m\n')
-	if __debug__ and is_debug: debug('task: exec: \33[7;1;3' + color + 'm' + str(args) + '\33[0m')
+	out_stream.write(colored(color, 'wonderbuild: task: ' + desc) + '\n')
+	if __debug__ and is_debug: debug('task: exec: ' + str(args))
 	p = subprocess.Popen(
 		args = args,
 		stdout = subprocess.PIPE,
@@ -56,6 +56,6 @@ def exec_subprocess(args, desc = None, color = '', env = None, out_stream = sys.
 	out_stream.write(out)
 	if len(err):
 		s = ''
-		for line in err.split('\n')[:-1]: s += '\33[7;1;31merror:\33[0m ' + line + '\n'
+		for line in err.split('\n')[:-1]: s += colored('7;1;31', 'error:') + ' ' + line + '\n'
 		err_stream.write(s)
 	return p.returncode, out, err

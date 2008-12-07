@@ -144,7 +144,7 @@ class ObjConf(Conf):
 		args = self.args[:]
 		args[2] = target.path
 		args[3] = source.path
-		r, out, err = exec_subprocess(args, desc = 'compiling c++ ' + source.path + '\t\t->\t\t' + target.path, color = '4')
+		r, out, err = exec_subprocess(args, desc = 'compiling c++ ' + source.path + ' -> ' + target.path, color = '7;1;34')
 		if r != 0: raise Exception, r
 			
 class Obj(Task):
@@ -241,7 +241,7 @@ class LibConf(Conf):
 			args[2] = target.path
 			args[3] = [s.path for s in sources]
 			args = args[:3] + args[3] + args[4:]
-			r, out, err = exec_subprocess(args, desc = 'linking ' + target.path, color = '6')
+			r, out, err = exec_subprocess(args, desc = 'linking ' + target.path, color = '7;1;36')
 			if r != 0: raise Exception, r
 		else: pass #TODO ar, ranlib
 
