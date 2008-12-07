@@ -34,21 +34,22 @@ class IncludeScanner(object):
 				finally: f.close()
 		except: self.contents = {} # { unique_path: (rel_includes, abs_includes) }
 		else:
+			return
 			for path in self.contents.keys(): # copy because we remove some elements in the loop
 				node = self.fs.cur.rel_node(path)
 				if not node.exists:
 					self.not_found.add(path)
-					if __debug__ and is_debug: debug('cpp: not found: ' + path)
+					if __debug__ and is_debug: debug('cpp: not found : ' + path)
 				elif node.changed:
 					del self.contents[path]
-					if __debug__ and is_debug: debug('cpp: changed  : ' + path)
-				elif __debug__ and is_debug: debug(      'cpp: cached   : ' + path)
+					if __debug__ and is_debug: debug('cpp: changed   : ' + path)
+				elif __debug__ and is_debug: debug(      'cpp: cached    : ' + path)
 				
 		finally: gc.enable()
 
 	def dump(self):
 		if self.cache_path is None: return
-		for path in self.contents.iterkeys(): self.fs.cur.rel_node(path).time
+		#for path in self.contents.iterkeys(): self.fs.cur.rel_node(path).time
 		gc.disable()
 		try:
 			f = file(self.cache_path, 'wb')
@@ -56,13 +57,7 @@ class IncludeScanner(object):
 			finally: f.close()
 		finally: gc.enable()
 	
-	def _unique_path(self, file_name):
-		return os.path.abspath(file_name)
-
-		#try: return os.path.realpath(file_name)
-		#except: return os.path.abspath(file_name)
-
-		#return self.fs.cur.rel_node(file_name).path
+	def _unique_path(self, file_name): return self.fs.cur.rel_node(file_name).path
 		
 
 	def scan_deps(self, file_name, paths):
@@ -72,7 +67,7 @@ class IncludeScanner(object):
 	def _scan_deps(self, file_name, paths, not_found, seen = None):
 		u = self._unique_path(file_name)
 
-		if __debug__ and is_debug: debug('cpp: dep      : ' + u)
+		if __debug__ and is_debug: debug('cpp: dep       : ' + u)
 
 		if seen is None: seen = set()
 		else:
@@ -81,7 +76,7 @@ class IncludeScanner(object):
 	
 		try: r = self.contents[u]
 		except KeyError:
-			if __debug__ and is_debug: debug('cpp: parsing  : ' + u)
+			if __debug__ and is_debug: debug('cpp: parsing   : ' + u)
 
 			try: f = file(file_name, 'rb')
 			except:
@@ -110,18 +105,26 @@ class IncludeScanner(object):
 	def search_rel(self, dir, include, paths, not_found):
 		if os.path.isabs(include):
 			u = self._unique_path(include)
-			if u in self.not_found: return None
-			elif os.path.exists(f): return f
-			elif __debug__ and is_debug: debug('cpp: not found: #include "' + u + '"')
+			if u in self.not_found:
+				not_found.add(u)
+				return None
+			n = self.fs.root.rel_node(f)
+			n.parent.actual_children
+			if n.exists: return f
+			if __debug__ and is_debug: debug('cpp: not found : #include "' + u + '"')
 		else:
 			f = os.path.join(dir, include)
 			u = self._unique_path(f)
-			if u in self.not_found: return None
-			elif os.path.exists(f): return f
-			elif not include.startswith(os.pardir + os.sep) and not include.startswith(os.curdir + os.sep):
+			if u in self.not_found:
+				not_found.add(u)
+				return None
+			n = self.fs.cur.rel_node(f)
+			n.parent.actual_children
+			if n.exists: return f
+			if not include.startswith(os.pardir + os.sep) and not include.startswith(os.curdir + os.sep):
 				abs = self.search_abs(include, paths, not_found)
 				if abs is not None: return abs
-			if __debug__ and is_debug: debug('cpp: not found: #include "' + u + '"')
+			if __debug__ and is_debug: debug('cpp: not found : #include "' + u + '"')
 		self.not_found.add(u)
 		return None
 		
@@ -129,8 +132,10 @@ class IncludeScanner(object):
 		if include in not_found: return None
 		for dir in paths:
 			f = os.path.join(dir, include)
-			if os.path.exists(f): return f
-		if __debug__ and is_debug: debug('cpp: not found: #include <' + include + '>')
+			n = self.fs.cur.rel_node(f)
+			n.parent.actual_children
+			if n.exists: return f
+		if __debug__ and is_debug: debug('cpp: not found : #include <' + include + '>')
 		not_found.add(include)
 		return None
 
