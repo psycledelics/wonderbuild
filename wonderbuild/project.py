@@ -62,8 +62,10 @@ class Project(object):
 	def dump(self):
 		gc.disable()
 		try:
-			self.bld_node.make_dir()
-			f = file(os.path.join(self.bld_node.path, 'state-and-cache'), 'wb')
+			try: f = file(os.path.join(self.bld_node.path, 'state-and-cache'), 'wb')
+			except IOError:
+				self.bld_node.make_dir()
+				f = file(os.path.join(self.bld_node.path, 'state-and-cache'), 'wb')
 			try: cPickle.dump(self.state_and_cache, f, cPickle.HIGHEST_PROTOCOL)
 			finally: f.close()
 		finally: gc.enable()
