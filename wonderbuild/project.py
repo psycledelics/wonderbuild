@@ -60,7 +60,7 @@ class Project(object):
 		s.join()
 
 	def dump(self):
-		if __debug__ and is_debug: print self.state_and_cache
+		if False and __debug__ and is_debug: print self.state_and_cache
 		gc.disable()
 		try:
 			try: f = file(os.path.join(self.bld_node.path, 'state-and-cache'), 'wb')

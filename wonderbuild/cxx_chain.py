@@ -181,7 +181,7 @@ class Obj(Task):
 	def uid(self):
 		try: return self._uid
 		except AttributeError:
-			sig = self._uid = self.target.path
+			sig = self._uid = self.target
 			return sig
 
 	@property
@@ -353,7 +353,7 @@ class Lib(Task):
 	def uid(self):
 		try: return self._uid
 		except AttributeError:
-			sig = self._uid = self.target.path
+			sig = self._uid = self.target
 			return sig
 
 	@property

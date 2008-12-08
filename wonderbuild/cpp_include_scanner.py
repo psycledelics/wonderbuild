@@ -22,7 +22,7 @@ class IncludeScanner(object):
 			self.contents = {} # { node: (rel_includes, abs_includes) }
 			state_and_cache[self.__class__.__name__] = self.contents
 		self.not_found = set() # of unique_path
-		if __debug__ and is_debug: self.display()
+		if False and __debug__ and is_debug: self.display()
 	
 	def scan_deps(self, source, paths):
 		not_found = []

@@ -22,7 +22,7 @@ class FileSystem(object):
 		self.cur._fs = self
 		self.cur._kind = DIR
 		self.cur._exists = True
-		if __debug__ and is_debug:
+		if False and __debug__ and is_debug:
 			self.display(True)
 			self.display(False)
 	
