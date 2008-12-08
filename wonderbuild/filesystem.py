@@ -8,44 +8,22 @@ from fnmatch import fnmatchcase as match
 from logger import is_debug, debug
 
 class FileSystem(object):
-	def __init__(self, cache_path = None):
-		self.cache_path = cache_path
-		self.load()
-
-	def load(self):
-		if self.cache_path is None: self.root = Node(None, os.sep)
-		else:
-			gc.disable()
-			try:
-				try: f = file(self.cache_path, 'rb')
-				except IOError: raise
-				else:
-					try: self.root = cPickle.load(f)
-					except Exception, e:
-						print >> sys.stderr, 'could not load pickle:', e
-						raise
-					finally: f.close()
-			except: self.root = Node(None, os.sep)
-			finally: gc.enable()
-		self.root._fs = self
-		self.root._kind = DIR
+	def __init__(self, state_and_cache):
+		self.state_and_cache = state_and_cache
+		try: self.root = state_and_cache[self.__class__.__name__]
+		except KeyError:
+			if  __debug__ and is_debug: debug('fs: all anew')
+			self.root = Node(None, os.sep)
+			state_and_cache[self.__class__.__name__] = self.root
+			self.root._kind = DIR
 		self.root._exists = True
 		self.root._height = 0
-		if  False and __debug__ and is_debug: self.display(True)
+		self.root._fs = self
 		self.cur = self.root.rel_node(os.getcwd())
 		self.cur._fs = self
 		self.cur._kind = DIR
 		self.cur._exists = True
-
-	def dump(self):
-		if self.cache_path is None: return
-		gc.disable()
-		try:
-			f = file(self.cache_path, 'wb')
-			try: cPickle.dump(self.root, f, cPickle.HIGHEST_PROTOCOL)
-			finally: f.close()
-		finally: gc.enable()
-		
+	
 	def display(self, cache = False):
 		print 'fs:', cache and 'cached:' or 'declared:'
 		self.root.display(cache)

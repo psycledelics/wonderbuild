@@ -14,38 +14,17 @@ _include = re.compile(r'^[ \t]*#[ \t]*include[ \t]*(["<])([^">]*)[">].*$', re.MU
 class IncludeScanner(object):
 	'C/C++ dependency scanner. #include statements, and nothing else, no #if, no #define (dumb)'
 	
-	def __init__(self, filesystem, cache_path = None):
+	def __init__(self, filesystem, state_and_cache):
 		self.fs = filesystem
+		self.state_and_cache = state_and_cache
+		try: self.contents = state_and_cache[self.__class__.__name__]
+		except KeyError:
+			if  __debug__ and is_debug: debug('cpp: all anew')
+			self.contents = {} # { unique_path: (rel_includes, abs_includes) }
+			state_and_cache[self.__class__.__name__] = self.contents
 		self.not_found = set() # of unique_path
-		self.cache_path = cache_path
-		self.load()
-
-	def load(self):
-		if self.cache_path is None: self.contents = {} # { unique_path: (rel_includes, abs_includes) }
-		gc.disable()
-		try:
-			try: f = file(self.cache_path, 'rb')
-			except IOError: raise
-			else:
-				try: self.contents = cPickle.load(f)
-				except Exception, e:
-					print >> sys.stderr, 'could not load pickle:', e
-					raise
-				finally: f.close()
-		except: self.contents = {} # { unique_path: (rel_includes, abs_includes) }
-		finally: gc.enable()
-
-	def dump(self):
-		if self.cache_path is None: return
-		gc.disable()
-		try:
-			f = file(self.cache_path, 'wb')
-			try: cPickle.dump(self.contents, f, cPickle.HIGHEST_PROTOCOL)
-			finally: f.close()
-		finally: gc.enable()
 	
 	def _unique_path(self, file_name): return self.fs.cur.rel_node(file_name).abs_path
-		
 
 	def scan_deps(self, file_name, paths):
 		not_found = []

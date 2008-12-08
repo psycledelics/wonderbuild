@@ -11,15 +11,32 @@ from cpp_include_scanner import IncludeScanner
 
 class Project(object):
 	def __init__(self, bld_path = '++wonderbuild'):
+		gc.disable()
+		try:
+			try: f = file(os.path.join(bld_path, 'state-and-cache'), 'rb')
+			except IOError: raise
+			else:
+				try: self.state_and_cache = cPickle.load(f)
+				except Exception, e:
+					print >> sys.stderr, 'could not load pickle:', e
+					raise
+				finally: f.close()
+		except: self.state_and_cache = {}
+		finally: gc.enable()
+
 		self.confs = []
 		self.tasks = []
 		self.aliases = {} # {name: [tasks]}
-		cache_path = 'cache'
-		self.fs = FileSystem(os.path.join(bld_path, cache_path, 'filesystem'))
+
+		try: self.task_sigs = self.state_and_cache[self.__class__.__name__]
+		except KeyError:
+			if  __debug__ and is_debug: debug('project: all anew')
+			self.task_sigs = {} # {task.uid: task.sig}
+			self.state_and_cache[self.__class__.__name__] = self.task_sigs
+
+		self.fs = FileSystem(self.state_and_cache)
 		self.src_node = self.fs.cur
 		self.bld_node = self.fs.cur.rel_node(bld_path)
-		self.cache_node = self.bld_node.rel_node(cache_path)
-		self.load()
 		
 	def add_task(self, task, aliases):
 		self.tasks.append(task)
@@ -30,7 +47,7 @@ class Project(object):
 				except KeyError: self.aliases[a] = [task]
 
 	def conf(self):
-		self.cpp = IncludeScanner(self.fs, os.path.join(self.cache_node.path, 'cpp_include_scanner'))
+		self.cpp = IncludeScanner(self.fs, self.state_and_cache)
 		for c in self.confs: c.conf()
 		
 	def help(self):
@@ -42,32 +59,11 @@ class Project(object):
 		for t in tasks: s.add_task(t)
 		s.join()
 
-	def load(self):
-		gc.disable()
-		try:
-			try: f = file(os.path.join(self.cache_node.path, 'state'), 'rb')
-			except IOError: raise
-			else:
-				try: state = cPickle.load(f)
-				except Exception, e:
-					print >> sys.stderr, 'could not load pickle:', e
-					raise
-				finally: f.close()
-		except:
-			self.task_sigs = {} # {task.uid: task.sig}
-			state = {'task_sigs': self.task_sigs}
-		else: self.task_sigs = state['task_sigs']
-		finally: gc.enable()
-
 	def dump(self):
-		self.cache_node.make_dir()
-		self.fs.dump()
-		self.cpp.dump()
 		gc.disable()
 		try:
-			f = file(os.path.join(self.cache_node.path, 'state'), 'wb')
-			try:
-				state = {'task_sigs': self.task_sigs}
-				cPickle.dump(state, f, cPickle.HIGHEST_PROTOCOL)
+			self.bld_node.make_dir()
+			f = file(os.path.join(self.bld_node.path, 'state-and-cache'), 'wb')
+			try: cPickle.dump(self.state_and_cache, f, cPickle.HIGHEST_PROTOCOL)
 			finally: f.close()
 		finally: gc.enable()
