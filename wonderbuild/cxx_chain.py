@@ -271,9 +271,9 @@ class LibConf(Conf):
 				for f in self.ld_flags: sig.update(f)
 			else:
 				sig.update(self.ar_prog)
-				for f in self.ar_flags: sig.update(f)
+				if self.ar_flags is not None: sig.update(self.ar_flags)
 				sig.update(self.ranlib_prog)
-				for f in self.ranlib_flags: sig.update(f)
+				if self.ranlib_flags is not None: sig.update(self.ranlib_flags)
 			for p in self.pkgs: sig.update(p.sig)
 			for p in self.paths: sig.update(p.path)
 			for l in self.libs: sig.update(l)
@@ -303,10 +303,11 @@ class LibConf(Conf):
 				self._args = args
 				return args
 			else:
-				ar_args = [self.ar_prog, self.ar_flags]
+				ar_args = [self.ar_prog]
+				if self.ar_flags is not None: ar_args.append(self.ar_flags)
 				if __debug__ and is_debug: debug('conf: cxx: ar: ' + str(ar_args))
 				ranlib_args = [self.ranlib_prog]
-				if self.ranlib_flags: ranlib_args.append(self.ranlib_flags)
+				if self.ranlib_flags is not None: ranlib_args.append(self.ranlib_flags)
 				if __debug__ and is_debug: debug('conf: cxx: ranlib: ' + str(ranlib_args))
 				args = self._args = ar_args, ranlib_args
 				return args
