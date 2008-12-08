@@ -695,6 +695,14 @@
 					RelativePath="..\..\..\..\src\psycle\host\WireGui.hpp"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\XmSamplerGui.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\XmSamplerGui.hpp"
+					>
+				</File>
 				<Filter
 					Name="configuration"
 					>
