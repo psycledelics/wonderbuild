@@ -644,6 +644,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\SamplerGui.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\SamplerGui.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\SaveWavDlg.cpp"
 					>
 				</File>
