@@ -190,8 +190,8 @@ class Obj(Task):
 		except AttributeError:
 			sig = Sig(self.conf.sig)
 			sig.update(self.source.sig)
-			seen, not_found = self.conf.cpp.scan_deps(self.source.path, [n.path for n in self.conf.paths])
-			for s in seen: sig.update(self.project.src_node.rel_node(s).sig)
+			seen, not_found = self.conf.cpp.scan_deps(self.source, self.conf.paths)
+			for s in seen: sig.update(s.sig)
 			sig = self._sig = sig.digest()
 			return sig
 		

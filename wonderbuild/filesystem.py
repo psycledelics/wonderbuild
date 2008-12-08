@@ -9,7 +9,6 @@ from logger import is_debug, debug
 
 class FileSystem(object):
 	def __init__(self, state_and_cache):
-		self.state_and_cache = state_and_cache
 		try: self.root = state_and_cache[self.__class__.__name__]
 		except KeyError:
 			if  __debug__ and is_debug: debug('fs: all anew')
@@ -23,6 +22,9 @@ class FileSystem(object):
 		self.cur._fs = self
 		self.cur._kind = DIR
 		self.cur._exists = True
+		if __debug__ and is_debug:
+			self.display(True)
+			self.display(False)
 	
 	def display(self, cache = False):
 		print 'fs:', cache and 'cached:' or 'declared:'
