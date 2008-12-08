@@ -347,7 +347,7 @@ class Lib(Task):
 	def obj_conf(self): return self.conf.obj_conf
 
 	@property
-	def uid(self): return= self.target
+	def uid(self): return self.target
 
 	@property
 	def sig(self):
