@@ -178,11 +178,7 @@ class Obj(Task):
 		self.target = None
 
 	@property
-	def uid(self):
-		try: return self._uid
-		except AttributeError:
-			sig = self._uid = self.target
-			return sig
+	def uid(self): return self.target
 
 	@property
 	def sig(self):
@@ -351,11 +347,7 @@ class Lib(Task):
 	def obj_conf(self): return self.conf.obj_conf
 
 	@property
-	def uid(self):
-		try: return self._uid
-		except AttributeError:
-			sig = self._uid = self.target
-			return sig
+	def uid(self): return= self.target
 
 	@property
 	def sig(self):
