@@ -33,7 +33,9 @@ def main():
 		keys.sort()
 		for h in keys:
 			h = help[h]
-			print h[0].ljust(30), h[1]
+			just = 30
+			print h[0].ljust(just), h[1]
+			if len(h) >= 3: print ''.ljust(just), '(default: ' + h[2] + ')'
 		sys.exit(0)
 	project.conf()
 	for o in options:

@@ -76,10 +76,9 @@ class ObjConf(Conf):
 	def help(self):
 		help['--cxx'] = ('--cxx=<prog>', 'use <prog> as c++ compiler')
 		help['--cxx-flags'] = ('--cxx-flags=[flags]', 'use specific c++ compiler flags')
-		help['--cxx-debug'] = ('--cxx-debug', 'make the c++ compiler produce debugging information')
+		help['--cxx-debug'] = ('--cxx-debug=<yes|no>', 'make the c++ compiler produce debugging information or not', 'no')
 		help['--cxx-optim'] = ('--cxx-optim=<level>', 'use c++ compiler optimisation <level>')
-		help['--cxx-pic'] = ('--cxx-pic', 'make the c++ compiler emit pic code (for shared libs)')
-		help['--cxx-non-pic'] = ('--cxx-non-pic', 'make the c++ compiler emit non-pic code (for static libs or programs)')
+		help['--cxx-pic'] = ('--cxx-pic=<yes|no>', 'make the c++ compiler emit pic code (for shared libs) or non-pic code (for static libs or programs)', 'yes')
 		
 	def conf(self):
 		self.cpp = self.project.cpp
@@ -105,10 +104,9 @@ class ObjConf(Conf):
 			elif o.startswith('--cxx-flags='):
 				self.flags = o[len('--cxx-flags='):].split()
 				flags = True
+			elif o.startswith('--cxx-pic='): self.pic = o[len('--cxx-pic='):] != 'no'
 			elif o.startswith('--cxx-optim='): self.optim = o[len('--cxx-optim='):]
-			elif o == '--cxx-debug': self.debug = True
-			elif o == '--cxx-pic': self.pic = True
-			elif o == '--cxx-non-pic': self.pic = False
+			elif o.startswith('--cxx-debug='): self.debug = o[len('--cxx-debug='):] == 'yes'
 		
 		if not prog: self.prog = os.environ.get('CXX', 'c++')
 		if not flags:
@@ -199,14 +197,13 @@ class LibConf(Conf):
 		self.obj_conf = obj_conf
 
 	def help(self):
-		help['--shared-libs'] = ('--shared-libs', 'build shared libraries')
-		help['--static-libs'] = ('--static-libs', 'build static libraries')
-		help['--ld'] = ('--ld=<prog>', 'use <prog> as shared lib and program linker')
-		help['--ld-flags'] = ('--ld-flags=[flags]', 'use specific linker flags')
-		help['--ar'] = ('--ar=<prog>', 'use <prog> as static lib archiver')
-		help['--ar-flags'] = ('--ar-flags=[flags]', 'use specific archiver flags')
-		help['--ranlib'] = ('--ranlib=<prog>', 'use <prog> as static lib archive indexer')
-		help['--ranlib-flags'] = ('--ranlib-flags=[flags]', 'use specific archive indexer flags')
+		help['--lib-shared'] = ('--lib-shared=<yes|no>', 'build shared libs (rather than static libs)', 'yes')
+		help['--lib-ld'] = ('--lib-ld=<prog>', 'use <prog> as shared lib and program linker')
+		help['--lib-ld-flags'] = ('--lib-ld-flags=[flags]', 'use specific linker flags')
+		help['--lib-ar'] = ('--lib-ar=<prog>', 'use <prog> as static lib archiver', 'ar')
+		help['--lib-ar-flags'] = ('--lib-ar-flags=[flags]', 'use specific archiver flags', 'cr')
+		help['--lib-ranlib'] = ('--lib-ranlib=<prog>', 'use <prog> as static lib archive indexer', 'ranlib')
+		help['--lib-ranlib-flags'] = ('--lib-ranlib-flags=[flags]', 'use specific archive indexer flags')
 
 	def conf(self):
 		self.shared = self.obj_conf.pic
@@ -216,46 +213,46 @@ class LibConf(Conf):
 		self.static_libs = []
 		self.shared_libs = []
 
-		help['--shared-libs'] = None
-		help['--static-libs'] = None
-		help['--ld'] = None
-		help['--ld-flags'] = None
-		help['--ar'] = None
-		help['--ar-flags'] = None
-		help['--ranlib'] = None
-		help['--ranlib-flags'] = None
+		help['--lib-shared'] = None
+		help['--lib-ld'] = None
+		help['--lib-ld-flags'] = None
+		help['--lib-ar'] = None
+		help['--lib-ar-flags'] = None
+		help['--lib-ranlib'] = None
+		help['--lib-ranlib-flags'] = None
 
 		ld_prog = ld_flags = ar_prog = ar_flags = ranlib_prog = ranlib_flags = False
 		for o in options:
-			if o.startswith('--ld='):
-				self.ld_prog = o[len('--ld='):]
+			if o.startswith('--lib-shared'): self.shared = o[len('--lib-shared='):] != 'no'
+			if o.startswith('--lib-ld='):
+				self.ld_prog = o[len('--lib-ld='):]
 				ld = True
-			elif o.startswith('--ld-flags='):
-				self.ld_flags = o[len('--ld-flags='):].split()
+			elif o.startswith('--lib-ld-flags='):
+				self.ld_flags = o[len('--lib-ld-flags='):].split()
 				ld_flags = True
-			if o.startswith('--ar='):
-				self.ar_prog = o[len('--ar='):]
+			if o.startswith('--lib-ar='):
+				self.ar_prog = o[len('--lib-ar='):]
 				ar_prog = True
-			elif o.startswith('--ar-flags='):
-				self.ar_flags = o[len('--ar-flags='):].split()
+			elif o.startswith('--lib-ar-flags='):
+				self.ar_flags = o[len('--lib-ar-flags='):].split()
 				ar_flags = True
-			if o.startswith('--ranlib='):
-				self.ranlib_prog = o[len('--ranlib='):]
+			if o.startswith('--lib-ranlib='):
+				self.ranlib_prog = o[len('--lib-ranlib='):]
 				ranlib_prog = True
-			elif o.startswith('--ranlib-flags='):
-				self.ranlib_flags = o[len('--ranlib-flags='):].split()
+			elif o.startswith('--lib-ranlib-flags='):
+				self.ranlib_flags = o[len('--lib-ranlib-flags='):].split()
 				ranlib_flags = True
-			elif o == '--shared-libs': self.shared = True
-			elif o == '--static-libs': self.shared = False
-		if not ld_prog: self.ld_prog = self.obj_conf.prog
-		if not ld_flags:
-			flags = os.environ.get('LDFLAGS', None)
-			if flags is not None: self.ld_flags = flags.split()
-			else: self.ld_flags = []
-		if not ar_prog: self.ar_prog = 'ar'
-		if not ar_flags: self.ar_flags = os.environ.get('ARFLAGS', 'cr') # s for gnu to run ranlib
-		if not ranlib_prog: self.ranlib_prog = 'ranlib'
-		if not ranlib_flags: self.ranlib_flags = os.environ.get('RANLIBFLAGS', None)
+		if self.shared:
+			if not ld_prog: self.ld_prog = self.obj_conf.prog
+			if not ld_flags:
+				flags = os.environ.get('LDFLAGS', None)
+				if flags is not None: self.ld_flags = flags.split()
+				else: self.ld_flags = []
+		else:
+			if not ar_prog: self.ar_prog = 'ar'
+			if not ar_flags: self.ar_flags = os.environ.get('ARFLAGS', 'cr') # s for gnu to run ranlib
+			if not ranlib_prog: self.ranlib_prog = 'ranlib'
+			if not ranlib_flags: self.ranlib_flags = os.environ.get('RANLIBFLAGS', None)
 
 	@property
 	def sig(self):
@@ -332,7 +329,7 @@ class LibConf(Conf):
 
 			args = ranlib_args[:]
 			args.append(target.path)
-			r, out, err = exec_subprocess(args, desc = 'indexing static lib ' + target.path, color = '7;36')
+			r, out, err = exec_subprocess(args, desc = ' indexing static lib ' + target.path, color = '7;36')
 			if r != 0: raise Exception, r
 
 class Lib(Task):
