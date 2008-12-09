@@ -78,7 +78,7 @@ class ObjConf(Conf):
 		help['--cxx-flags'] = ('--cxx-flags=[flags]', 'use specific c++ compiler flags')
 		help['--cxx-debug'] = ('--cxx-debug=<yes|no>', 'make the c++ compiler produce debugging information or not', 'no')
 		help['--cxx-optim'] = ('--cxx-optim=<level>', 'use c++ compiler optimisation <level>')
-		help['--cxx-pic'] = ('--cxx-pic=<yes|no>', 'make the c++ compiler emit pic code (for shared libs) or non-pic code (for static libs or programs)', 'yes')
+		help['--cxx-pic'] = ('--cxx-pic=<yes|no>', 'make the c++ compiler emit pic code (for shared libs) rather than non-pic code (for static libs or programs)', 'yes')
 		
 	def conf(self):
 		self.cpp = self.project.cpp
