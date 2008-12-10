@@ -8,6 +8,7 @@ from options import options, help
 from logger import is_debug, debug
 from signature import Sig, raw_to_hexstring
 from task import Task, exec_subprocess
+from cpp_include_scanner import IncludeScanner
 
 class Conf(object):
 	def __init__(self, project):
@@ -70,8 +71,7 @@ class PkgConf(Conf):
 			return args
 	
 class BaseObjConf(Conf):
-	def __init__(self, project):
-		Conf.__init__(self, project)
+	def __init__(self, project): Conf.__init__(self, project)
 	
 	def help(self):
 		help['--cxx'] = ('--cxx=<prog>', 'use <prog> as c++ compiler')
@@ -79,13 +79,8 @@ class BaseObjConf(Conf):
 		help['--cxx-debug'] = ('--cxx-debug=<yes|no>', 'make the c++ compiler produce debugging information or not', 'no')
 		help['--cxx-optim'] = ('--cxx-optim=<level>', 'use c++ compiler optimisation <level>')
 		help['--cxx-pic'] = ('--cxx-pic=<yes|no>', 'make the c++ compiler emit pic code (for shared libs) rather than non-pic code (for static libs or programs)', 'yes')
-		
+	
 	def conf(self):
-		self.cpp = self.project.cpp
-		self.pic = True
-		self.optim = None
-		self.debug = False
-
 		help['--cxx'] = None
 		help['--cxx-flags'] = None
 		help['--cxx-debug'] = None
@@ -93,24 +88,35 @@ class BaseObjConf(Conf):
 		help['--cxx-pic'] = None
 		help['--cxx-non-pic'] = None
 
-		prog = flags = False
-		for o in options:
-			if o.startswith('--cxx='):
-				self.prog = o[len('--cxx='):]
-				prog = True
-			elif o.startswith('--cxx-flags='):
-				self.flags = o[len('--cxx-flags='):].split()
-				flags = True
-			elif o.startswith('--cxx-pic='): self.pic = o[len('--cxx-pic='):] != 'no'
-			elif o.startswith('--cxx-optim='): self.optim = o[len('--cxx-optim='):]
-			elif o.startswith('--cxx-debug='): self.debug = o[len('--cxx-debug='):] == 'yes'
+		self.cpp = IncludeScanner(self.project.fs, self.project.state_and_cache)
+
+		try: self.prog, self.flags, self.pic, self.optim, self.debug = self.project.state_and_cache['cxx']
+		except KeyError:
+			self.pic = True
+			self.optim = None
+			self.debug = False
+
+			prog = flags = False
+			for o in options:
+				if o.startswith('--cxx='):
+					self.prog = o[len('--cxx='):]
+					prog = True
+				elif o.startswith('--cxx-flags='):
+					self.flags = o[len('--cxx-flags='):].split()
+					flags = True
+				elif o.startswith('--cxx-pic='): self.pic = o[len('--cxx-pic='):] != 'no'
+				elif o.startswith('--cxx-optim='): self.optim = o[len('--cxx-optim='):]
+				elif o.startswith('--cxx-debug='): self.debug = o[len('--cxx-debug='):] == 'yes'
 		
-		if not prog: self.prog = os.environ.get('CXX', 'c++')
-		if not flags:
-			flags = os.environ.get('CXXFLAGS', None)
-			if flags is not None: self.flags = flags.split()
-			else: self.flags = []
-			
+			if not prog: self.prog = os.environ.get('CXX', 'c++')
+			if not flags:
+				flags = os.environ.get('CXXFLAGS', None)
+				if flags is not None: self.flags = flags.split()
+				else: self.flags = []
+
+			self.project.state_and_cache['cxx'] = self.prog, self.flags, self.pic, self.optim, self.debug
+			self.check_version()
+
 	def check_version(self):
 		if True:
 			r, out, err = exec_subprocess([self.prog, '-dumpversion'], desc = 'checking for c++ compiler version', color = '34', silent = True)
@@ -257,13 +263,6 @@ class LibConf(Conf):
 		help['--lib-ranlib-flags'] = ('--lib-ranlib-flags=[flags]', 'use specific archive indexer flags')
 
 	def conf(self):
-		self.shared = self.obj_conf.base_conf.pic
-		self.pkgs = self.obj_conf.pkgs
-		self.paths = []
-		self.libs = []
-		self.static_libs = []
-		self.shared_libs = []
-
 		help['--lib-shared'] = None
 		help['--lib-ld'] = None
 		help['--lib-ld-flags'] = None
@@ -271,6 +270,13 @@ class LibConf(Conf):
 		help['--lib-ar-flags'] = None
 		help['--lib-ranlib'] = None
 		help['--lib-ranlib-flags'] = None
+
+		self.shared = self.obj_conf.base_conf.pic
+		self.pkgs = self.obj_conf.pkgs
+		self.paths = []
+		self.libs = []
+		self.static_libs = []
+		self.shared_libs = []
 
 		ld_prog = ld_flags = ar_prog = ar_flags = ranlib_prog = ranlib_flags = False
 		for o in options:

@@ -7,7 +7,6 @@ import sys, os, gc, cPickle
 from scheduler import Scheduler
 from filesystem import FileSystem
 from logger import is_debug, debug
-from cpp_include_scanner import IncludeScanner
 
 class Project(object):
 	def __init__(self, bld_path = '++wonderbuild'):
@@ -47,7 +46,6 @@ class Project(object):
 				except KeyError: self.aliases[a] = [task]
 
 	def conf(self):
-		self.cpp = IncludeScanner(self.fs, self.state_and_cache)
 		for c in self.confs: c.conf()
 		
 	def help(self):
