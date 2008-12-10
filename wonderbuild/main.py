@@ -13,10 +13,10 @@ def main():
 		def dyn_in_tasks(self):
 			if len(self.in_tasks) != 0: return None
 			Lib.dyn_in_tasks(self)
-			src_dir = self.project.src_node.rel_node_path('src')
+			src_dir = self.project.src_node.node_path('src')
 			self.obj_conf.paths = [src_dir]
-			for s in src_dir.rel_node_path('foo').find_iter(prunes = ['todo'], in_pat = '*.cpp'): self.new_obj(s)
-			#for h in src_dir.rel_node_path('foo').find_iter(prunes = ['todo'], in_pat = '*.hpp', ex_pat = '*.private.hpp'): print h.path
+			for s in src_dir.node_path('foo').find_iter(prunes = ['todo'], in_pat = '*.cpp'): self.new_obj(s)
+			#for h in src_dir.node_path('foo').find_iter(prunes = ['todo'], in_pat = '*.hpp', ex_pat = '*.private.hpp'): print h.path
 			return self.in_tasks
 			
 	from project import Project

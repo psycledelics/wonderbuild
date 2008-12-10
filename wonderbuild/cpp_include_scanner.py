@@ -73,7 +73,7 @@ class IncludeScanner(object):
 		return seen
 	
 	def search_rel(self, dir, include, paths, not_found):
-		n = dir.rel_node_path(include)
+		n = dir.node_path(include)
 		if n in self.not_found:
 			not_found.append(u)
 			return None
@@ -92,7 +92,7 @@ class IncludeScanner(object):
 	def search_abs(self, include, paths, not_found):
 		if include in not_found: return None
 		for dir in paths:
-			n = dir.rel_node_path(include)
+			n = dir.node_path(include)
 			n.parent.actual_children
 			if n.exists: return n
 		if __debug__ and is_debug: debug('cpp: not found : #include <' + include + '>')

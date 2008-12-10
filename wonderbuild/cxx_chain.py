@@ -306,9 +306,9 @@ class LibConf(Conf):
 				return args
 
 	def target(self, name):
-		dir = self.project.bld_node.rel_node_path(os.path.join('modules', name))
-		if self.shared: return dir.rel_node_path('lib' + name + '.so')
-		else: return dir.rel_node_path('lib' + name + '.a')
+		dir = self.project.bld_node.node_path(os.path.join('modules', name))
+		if self.shared: return dir.node_path('lib' + name + '.so')
+		else: return dir.node_path('lib' + name + '.a')
 
 	def process(self, target, sources):
 		if self.shared:
@@ -365,7 +365,7 @@ class Lib(Task):
 	def new_obj(self, source):
 		obj = Obj(self.obj_conf)
 		obj.source = source
-		obj.target = self.target.parent.rel_node_path(source.path[:source.path.rfind('.')] + '.o')
+		obj.target = self.target.parent.node_path(source.path[:source.path.rfind('.')] + '.o')
 		self.add_in_task(obj)
 		self.sources.append(obj.target)
 		return obj

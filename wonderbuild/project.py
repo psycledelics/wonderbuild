@@ -36,7 +36,7 @@ class Project(object):
 
 		self.fs = FileSystem(self.state_and_cache)
 		self.src_node = self.fs.cur
-		self.bld_node = self.fs.cur.rel_node_path(bld_path)
+		self.bld_node = self.fs.cur.node_path(bld_path)
 		
 	def add_task(self, task, aliases):
 		self.tasks.append(task)
