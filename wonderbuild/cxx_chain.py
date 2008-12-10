@@ -69,7 +69,7 @@ class PkgConf(Conf):
 			self._lib_args = out
 			return args
 	
-class ObjConf(Conf):
+class BaseObjConf(Conf):
 	def __init__(self, project):
 		Conf.__init__(self, project)
 	
@@ -85,9 +85,6 @@ class ObjConf(Conf):
 		self.pic = True
 		self.optim = None
 		self.debug = False
-		self.pkgs = []
-		self.paths = []
-		self.defines = {}
 
 		help['--cxx'] = None
 		help['--cxx-flags'] = None
@@ -147,11 +144,6 @@ class ObjConf(Conf):
 			sig.update(str(self.pic))
 			sig.update(str(self.optim))
 			sig.update(str(self.debug))
-			for p in self.pkgs: sig.update(p.sig)
-			for p in self.paths: sig.update(p.path)
-			for k, v in self.defines.iteritems():
-				sig.update(k)
-				sig.update(v)
 			for f in self.flags: sig.update(f)
 			sig = self._sig = sig.digest()
 			return sig
@@ -161,18 +153,21 @@ class ObjConf(Conf):
 		try: return self._args
 		except AttributeError:
 			args = [self.prog, '-o', None, None, '-c', '-pipe']
-			for p in self.pkgs: args += p.compiler_args
-			for p in self.paths: args += ['-I', p.path]
-			for k, v in self.defines.iteritems():
-				if v is None: args.append('-D' + k)
-				else: args.append('-D' + k + '=' + v)
 			if self.debug: args.append('-g')
 			if self.optim is not None: args.append('-O' + self.optim)
 			if self.pic: args.append('-fPIC')
 			args += self.flags
-			if __debug__ and is_debug: debug('conf: cxx: obj: ' + str(args))
+			if __debug__ and is_debug: debug('conf: cxx: base obj: ' + str(args))
 			self._args = args
 			return args
+
+	def paths_args(self, paths, args):
+		for p in paths: args += ['-I', p.path]
+	
+	def defines_args(self, defines, args):
+		for k, v in defines.iteritems():
+			if v is None: args.append('-D' + k)
+			else: args.append('-D' + k + '=' + v)
 
 	def process(self, target, source):
 		dir = target.parent
@@ -188,7 +183,42 @@ class ObjConf(Conf):
 		else:
 			r, out, err = exec_subprocess(args, desc = 'compiling non-pic/static object from c++ ' + source.path + ' -> ' + target.path, color = '7;34')
 		if r != 0: raise Exception, r
-			
+
+class ObjConf(Conf):
+	def __init__(self, base_obj_conf):
+		Conf.__init__(self, base_obj_conf.project)
+		self.base_conf = base_obj_conf
+	
+	def conf(self):
+		self.pkgs = []
+		self.paths = []
+		self.defines = {}
+
+	@property
+	def sig(self):
+		try: return self._sig
+		except AttributeError:
+			sig = Sig(self.base_conf.sig)
+			for p in self.pkgs: sig.update(p.sig)
+			for p in self.paths: sig.update(p.path)
+			for k, v in self.defines.iteritems():
+				sig.update(k)
+				sig.update(v)
+			sig = self._sig = sig.digest()
+			return sig
+
+	@property
+	def args(self):
+		try: return self._args
+		except AttributeError:
+			args = self.base_conf.args
+			for p in self.pkgs: args += p.compiler_args
+			self.base_conf.paths_args(self.paths, args)
+			self.base_conf.defines_args(self.defines, args)
+			if __debug__ and is_debug: debug('conf: cxx: obj: ' + str(args))
+			self._args = args
+			return args
+
 class Obj(Task):
 	def __init__(self, obj_conf):
 		Task.__init__(self, obj_conf.project)
@@ -205,12 +235,12 @@ class Obj(Task):
 		except AttributeError:
 			sig = Sig(self.conf.sig)
 			sig.update(self.source.sig)
-			seen, not_found = self.conf.cpp.scan_deps(self.source, self.conf.paths)
+			seen, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
 			for s in seen: sig.update(s.sig)
 			sig = self._sig = sig.digest()
 			return sig
 		
-	def process(self): self.conf.process(self.target, self.source)
+	def process(self): self.conf.base_conf.process(self.target, self.source)
 
 class LibConf(Conf):
 	def __init__(self, obj_conf):
@@ -227,7 +257,7 @@ class LibConf(Conf):
 		help['--lib-ranlib-flags'] = ('--lib-ranlib-flags=[flags]', 'use specific archive indexer flags')
 
 	def conf(self):
-		self.shared = self.obj_conf.pic
+		self.shared = self.obj_conf.base_conf.pic
 		self.pkgs = self.obj_conf.pkgs
 		self.paths = []
 		self.libs = []
@@ -264,7 +294,7 @@ class LibConf(Conf):
 				self.ranlib_flags = o[len('--lib-ranlib-flags='):].split()
 				ranlib_flags = True
 		if self.shared:
-			if not ld_prog: self.ld_prog = self.obj_conf.prog
+			if not ld_prog: self.ld_prog = self.obj_conf.base_conf.prog
 			if not ld_flags:
 				flags = os.environ.get('LDFLAGS', None)
 				if flags is not None: self.ld_flags = flags.split()

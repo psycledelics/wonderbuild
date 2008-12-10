@@ -5,7 +5,7 @@
 def main():
 	import sys, os
 
-	from cxx_chain import ObjConf, LibConf, Lib
+	from cxx_chain import BaseObjConf, ObjConf, LibConf, Lib
 
 	class LibFoo(Lib):
 		def __init__(self, lib_conf): Lib.__init__(self, lib_conf, 'foo')
@@ -21,7 +21,8 @@ def main():
 			
 	from project import Project
 	project = Project()
-	obj_conf = ObjConf(project)
+	base_obj_conf = BaseObjConf(project)
+	obj_conf = ObjConf(base_obj_conf)
 	lib_conf = LibConf(obj_conf)
 	lib_foo = LibFoo(lib_conf)
 

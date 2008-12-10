@@ -61,4 +61,4 @@ else:
 			return cols
 		try: _cols() # we try the function once to see if it is suitable
 		except IOError: pass
-		else: cols = property(f)
+		else: cols = property(_cols)
