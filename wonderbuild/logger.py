@@ -42,3 +42,23 @@ if os.environ.get('TERM', 'dumb') in ('dumb', 'emacs') or not out.isatty():
 else:
 	def colored(color, s):
 		return '\33[' + color + 'm' + s + '\33[0m'
+
+@property
+def cols(): return 80
+try: import struct, fcntl, termios
+except ImportError: pass
+else:
+	if out.isatty():
+		def _cols():
+			lines, cols = struct.unpack(
+					"HHHH",
+					fcntl.ioctl(
+						out.fileno(),
+						termios.TIOCGWINSZ,
+						struct.pack("HHHH", 0, 0, 0, 0)
+					)
+				)[:2]
+			return cols
+		try: _cols() # we try the function once to see if it is suitable
+		except IOError: pass
+		else: cols = property(f)
