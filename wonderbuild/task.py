@@ -42,7 +42,7 @@ class Task(object):
 	
 	def update_sig(self): self.project.task_sigs[self.uid] = self.sig
 	
-def exec_subprocess(args, desc = None, color = '7;1', env = None, out_stream = sys.stdout, err_stream = sys.stderr):
+def exec_subprocess(args, desc = None, color = '7;1', env = None, out_stream = sys.stdout, err_stream = sys.stderr, silent = False):
 	if desc is None: desc = ' '.join(args)
 	out_stream.write(colored(color, 'wonderbuild: task: ' + desc) + '\n')
 	if __debug__ and is_debug: debug('task: exec: ' + str(args))
@@ -53,9 +53,10 @@ def exec_subprocess(args, desc = None, color = '7;1', env = None, out_stream = s
 		env = env
 	)
 	out, err = p.communicate()
-	out_stream.write(out)
-	if len(err):
-		s = ''
-		for line in err.split('\n')[:-1]: s += colored('7;1;31', 'error:') + ' ' + line + '\n'
-		err_stream.write(s)
+	if not silent:
+		out_stream.write(out)
+		if len(err):
+			s = ''
+			for line in err.split('\n')[:-1]: s += colored('7;1;31', 'error:') + ' ' + line + '\n'
+			err_stream.write(s)
 	return p.returncode, out, err

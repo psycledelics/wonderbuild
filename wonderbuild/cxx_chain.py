@@ -113,6 +113,27 @@ class ObjConf(Conf):
 			flags = os.environ.get('CXXFLAGS', None)
 			if flags is not None: self.flags = flags.split()
 			else: self.flags = []
+			
+	def check_version(self):
+		if True:
+			r, out, err = exec_subprocess([self.prog, '-dumpversion'], desc = 'checking for c++ compiler version', color = '34', silent = True)
+			if r != 0: raise Exception, r
+			out = out[:out.find('\n')]
+			print '[' + out + ']'
+		else:
+			r, out, err = exec_subprocess([self.prog, '--version'], desc = 'checking for c++ compiler version', color = '34', silent = True)
+			if r != 0: raise Exception, r
+			out = out[:out.find('\n')]
+			p1 = out.find('(')
+			if p1 >= 0:
+				p1 += 1
+				p2 = out.find(')', p1)
+				if p2 >= 0:
+					print '[' + out[p1:p2] + ']'
+					p2 += 2
+					p3 = out.find(' ', p2)
+					if p3 >= 0:
+						print '[' + out[p2:p3] + ']'
 
 	@property
 	def sig(self):
