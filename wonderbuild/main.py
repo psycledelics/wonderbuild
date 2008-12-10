@@ -29,11 +29,14 @@ def main():
 	if '--help' in options:
 		project.help()
 		keys = []
-		for k in help.iterkeys(): keys.append(k)
+		just = 0
+		for k, v in help.iteritems():
+			if len(v[0]) > just: just = len(v[0])
+			keys.append(k)
 		keys.sort()
+		just += 1
 		for h in keys:
 			h = help[h]
-			just = 30
 			print h[0].ljust(just), h[1]
 			if len(h) >= 3: print ''.ljust(just), '(default: ' + h[2] + ')'
 		sys.exit(0)
