@@ -18,7 +18,7 @@ class FileSystem(object):
 		self.root._exists = True
 		self.root._height = 0
 		self.root._fs = self
-		self.cur = self.root.rel_node(os.getcwd())
+		self.cur = self.root.rel_node_path(os.getcwd())
 		self.cur._fs = self
 		self.cur._kind = DIR
 		self.cur._exists = True
@@ -216,16 +216,16 @@ class Node(object):
 					for node in node.find_iter(in_pat, ex_pat, prunes): yield node
 		raise StopIteration
 
-	#def rel_node(self, *path):
-	def rel_node(self, path): return self._rel_node(path)
-	def _rel_node(self, path, start = 0):
+	#def rel_node_path(self, *path):
+	def rel_node_path(self, path): return self._rel_node_path(path)
+	def _rel_node_path(self, path, start = 0):
 		sep = path.find(os.sep, start)
 		if sep > start:
 			name = path[start:sep]
 			if name == os.pardir:
 				while sep < len(path) - 1 and path[sep] == os.sep: sep += 1
 				if sep == len(path) - 1: return self.parent or self
-				return (self.parent or self)._rel_node(path, sep)
+				return (self.parent or self)._rel_node_path(path, sep)
 			if name == os.curdir: return self
 			try: child = self.children[name]
 			except KeyError:
@@ -234,7 +234,7 @@ class Node(object):
 			child._kind = DIR
 			while sep < len(path) - 1 and path[sep] == os.sep: sep += 1
 			if sep == len(path) - 1: return child
-			return child._rel_node(path, sep)
+			return child._rel_node_path(path, sep)
 		elif sep < 0:
 			name = path[start:]
 			if name == os.pardir: return self.parent or self
@@ -245,7 +245,7 @@ class Node(object):
 				self.children[name] = child
 			return child
 		else: # sep == start, absolute path
-			return self.fs.root._rel_node(path, 1)
+			return self.fs.root._rel_node_path(path, 1)
 	
 	@property
 	def fs(self):
