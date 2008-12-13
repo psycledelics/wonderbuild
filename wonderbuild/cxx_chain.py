@@ -268,6 +268,7 @@ class BaseModConf(Conf):
 			if not ranlib_flags: self.ranlib_flags = os.environ.get('RANLIBFLAGS', None)
 
 			self.project.state_and_cache['cxx-module'] = self.sig, self.shared, self.ld_prog, self.ld_flags, self.ar_prog, self.ar_flags, self.ranlib_prog, self.ranlib_flags
+
 		if self.base_obj_conf.kind == 'gcc':
 			self._args = self._gcc_args
 			self.paths_args = self._posix_paths_args
@@ -295,10 +296,10 @@ class BaseModConf(Conf):
 	def _gcc_args(self):
 			args_dict = {}
 			args = [self.ld_prog, '-o', None, None] + self.ld_flags
-			if __debug__ and is_debug: debug('conf: cxx: ld: prog: ' + str(args))
+			if __debug__ and is_debug: debug('conf: cxx: ld: prog  : ' + str(args))
 			args_dict['prog'] = args
 			if self.shared:
-				args = [self.ld_prog, '-o', None, None, '-shared'] + self.ld_flags
+				args = args + ['-shared']
 				if __debug__ and is_debug: debug('conf: cxx: ld: shared: ' + str(args))
 				args_dict['lib'] = args
 			else:
