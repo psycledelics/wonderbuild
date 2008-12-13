@@ -188,7 +188,7 @@ class BaseObjConf(Conf):
 		r, out, err = exec_subprocess(args)
 		if r != 0: raise Exception, r
 
-class BaseModuleConf(Conf):
+class BaseModConf(Conf):
 	def __init__(self, base_obj_conf):
 		Conf.__init__(self, base_obj_conf.project)
 		self.base_obj_conf = base_obj_conf
@@ -360,10 +360,10 @@ class ObjConf(Conf):
 			self._args = args
 			return args
 
-class ModuleConf(Conf):
-	def __init__(self, base_module_conf, obj_conf):
-		Conf.__init__(self, base_module_conf.project)
-		self.base_conf = base_module_conf
+class ModConf(Conf):
+	def __init__(self, base_mod_conf, obj_conf):
+		Conf.__init__(self, base_mod_conf.project)
+		self.base_conf = base_mod_conf
 		self.obj_conf = obj_conf
 
 	def conf(self):
@@ -422,10 +422,10 @@ class Obj(Task):
 		
 	def process(self): self.conf.base_conf.process(self)
 
-class Module(Task):
-	def __init__(self, module_conf, name, aliases = None):
-		Task.__init__(self, module_conf.project, aliases)
-		self.conf = module_conf
+class Mod(Task):
+	def __init__(self, mod_conf, name, aliases = None):
+		Task.__init__(self, mod_conf.project, aliases)
+		self.conf = mod_conf
 		self.name = name
 		self.target = None
 		self.sources = []
