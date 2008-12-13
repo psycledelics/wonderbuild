@@ -135,7 +135,7 @@ class BaseObjConf(Conf):
 			if r != 0:
 				self.print_result_desc(' not gcc\n', color)
 			else:
-				out = out[:out.rfind('\n')]
+				out = out[:out.find('\n')]
 				self.print_result_desc(' gcc version ' + out + '\n', color)
 
 	@property
