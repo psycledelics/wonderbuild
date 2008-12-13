@@ -4,7 +4,7 @@
 
 import os
 
-from options import options, help
+from options import options, known_options, help
 from logger import out, is_debug, debug, colored
 from signature import Sig, raw_to_hexstring
 from task import Task, exec_subprocess
@@ -14,6 +14,8 @@ class Conf(object):
 	def __init__(self, project):
 		self.project = project
 		project.confs.append(self)
+
+	def options(self): pass
 		
 	def help(self): pass
 
@@ -87,8 +89,12 @@ class PkgConf(Conf):
 class BaseObjConf(Conf):
 	def __init__(self, project): Conf.__init__(self, project)
 	
-	_option_list = ['--cxx', '--cxx-flags', '--cxx-debug', '--cxx-optim', '--cxx-pic']
+	_options = set(['--cxx', '--cxx-flags', '--cxx-debug', '--cxx-optim', '--cxx-pic'])
 	
+	def options(self):
+		global known_options
+		known_options |= self.__class__._options
+
 	def help(self):
 		help['--cxx'] = ('--cxx=<prog>', 'use <prog> as c++ compiler')
 		help['--cxx-flags'] = ('--cxx-flags=[flags]', 'use specific c++ compiler flags')
@@ -97,8 +103,6 @@ class BaseObjConf(Conf):
 		help['--cxx-pic'] = ('--cxx-pic=<yes|no>', 'make the c++ compiler emit pic code (for shared libs) rather than non-pic code (for static libs or programs)', 'yes')
 	
 	def conf(self):
-		for o in self.__class__._option_list: help[o] = None
-
 		self.cpp = IncludeScanner(self.project.fs, self.project.state_and_cache)
 
 		try: sig, self.prog, self.flags, self.pic, self.optim, self.debug, self.kind, self.version = self.project.state_and_cache['cxx-compiler']
@@ -145,7 +149,7 @@ class BaseObjConf(Conf):
 		except AttributeError:
 			sig = Sig()
 			for o in options:
-				for oo in self.__class__._option_list:
+				for oo in self.__class__._options:
 					if o.startswith(oo + '='): sig.update(o)
 			sig = self._sig = sig.digest()
 			return sig
@@ -210,12 +214,16 @@ class BaseModConf(Conf):
 		Conf.__init__(self, base_obj_conf.project)
 		self.base_obj_conf = base_obj_conf
 
-	_option_list = [
+	_options = set([
 		'--cxx-mod-shared',
 		'--cxx-mod-ld', '--cxx-mod-ld-flags',
 		'--cxx-mod-ar', '--cxx-mod-ar-flags',
 		'--cxx-mod-ranlib', '--cxx-mod-ranlib-flags'
-	]
+	])
+	
+	def options(self):
+		global known_options
+		known_options |= self.__class__._options
 
 	def help(self):
 		help['--cxx-mod-shared'] = ('--cxx-mod-shared=<yes|no>', 'build shared libs (rather than static libs)', 'yes')
@@ -227,8 +235,6 @@ class BaseModConf(Conf):
 		help['--cxx-mod-ranlib-flags'] = ('--cxx-mod-ranlib-flags=[flags]', 'use specific archive indexer flags')
 
 	def conf(self):
-		for o in self.__class__._option_list: help[o] = None
-
 		try: sig, self.shared, self.ld_prog, self.ld_flags, self.ar_prog, self.ar_flags, self.ranlib_prog, self.ranlib_flags = self.project.state_and_cache['cxx-module']
 		except KeyError: parse = True
 		else: parse = sig != self.sig
@@ -286,7 +292,7 @@ class BaseModConf(Conf):
 		except AttributeError:
 			sig = Sig()
 			for o in options:
-				for oo in self.__class__._option_list:
+				for oo in self.__class__._options:
 					if o.startswith(oo + '='): sig.update(o)
 			sig = self._sig = sig.digest()
 			return sig

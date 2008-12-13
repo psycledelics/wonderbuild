@@ -36,7 +36,7 @@ def main():
 			
 	lib_foo = LibFoo()
 
-	from options import options, help
+	from options import options, known_options, help
 	if '--help' in options:
 		project.help()
 		keys = []
@@ -51,14 +51,15 @@ def main():
 			print h[0].ljust(just), h[1]
 			if len(h) >= 3: print ''.ljust(just), '(default: ' + h[2] + ')'
 		sys.exit(0)
-	project.conf()
+	project.options()
 	for o in options:
 		if o.startswith('-'):
 			e = o.find('=')
 			if e >= 0: o = o[:e]
-			if o not in help:
+			if o not in known_options:
 				print >> sys.stderr, 'unknown option:', o
 				sys.exit(1)
+	project.conf()
 	project.build([lib_foo])
 	project.dump()
 

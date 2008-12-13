@@ -6,4 +6,6 @@ import sys
 
 options = sys.argv[1:]
 
+known_options = set()
+
 help = {}

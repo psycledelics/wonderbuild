@@ -45,12 +45,15 @@ class Project(object):
 				try: self.aliases[a].append(task)
 				except KeyError: self.aliases[a] = [task]
 
-	def conf(self):
-		for c in self.confs: c.conf()
-		
+	def options(self):
+		for c in self.confs: c.options()
+
 	def help(self):
 		for c in self.confs: c.help()
 
+	def conf(self):
+		for c in self.confs: c.conf()
+		
 	def build(self, tasks):
 		s = Scheduler()
 		s.start()

@@ -8,8 +8,9 @@ if not __debug__:
 	is_debug = False
 	def debug(s): pass
 else:
-	from options import options, help
+	from options import options, known_options, help
 
+	known_options.add('--zones')
 	help['--zones'] = ('--zones [zones ...]', 'wonderbuild debugging zones (task, fs, sched, conf, project ...)')
 
 	is_debug = '--zones' in options
