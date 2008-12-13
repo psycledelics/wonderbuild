@@ -46,16 +46,16 @@ class PkgConf(Conf):
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
-			sig = Sig()
-			sig.update(os.environ.get('PKG_CONFIG_PATH', None))
-			sig.update(self.prog)
-			sig.update(self.flags)
+			sig = Sig(self.prog)
+			e = os.environ.get('PKG_CONFIG_PATH', None)
+			if e is not None: sig.update(e)
+			for f in self.flags: sig.update(f)
 			for p in self.pkgs: sig.update(p)
 			sig = self._sig = sig.digest()
 			return sig
 
 	@property
-	def args(self): return self.compiler_args + self.lib_args
+	def args(self): return self.compiler_args, self.libs_args
 
 	@property
 	def compiler_args(self):
@@ -66,12 +66,13 @@ class PkgConf(Conf):
 			r, out, err = exec_subprocess(args, silent = True)
 			self.print_result_desc(' ' + (r == 0 and 'yes' or 'no') + '\n')
 			if r != 0: raise Exception, r
+			out = out.rstrip('\n').split()
 			self._compiler_args = out
 			return out
 
 	@property
-	def lib_args(self, static = False):
-		try: return self._lib_args
+	def libs_args(self, static = False):
+		try: return self._libs_args
 		except AttributeError:
 			args = [self.prog, '--libs'] + self.flags + self.pkgs
 			if static: args.append('--static')
@@ -79,8 +80,9 @@ class PkgConf(Conf):
 			r, out, err = exec_subprocess(args, silent = True)
 			self.print_result_desc(' ' + (r == 0 and 'yes' or 'no') + '\n')
 			if r != 0: raise Exception, r
-			self._lib_args = out
-			return args
+			out = out.rstrip('\n').split()
+			self._libs_args = out
+			return out
 	
 class BaseObjConf(Conf):
 	def __init__(self, project): Conf.__init__(self, project)
@@ -135,7 +137,7 @@ class BaseObjConf(Conf):
 		if r != 0:
 			self.print_result_desc(' not gcc\n', color)
 		else:
-			out = out[:out.find('\n')]
+			out = out.rstrip('\n')
 			self.print_result_desc(' gcc version ' + out + '\n', color)
 
 	@property
@@ -177,7 +179,7 @@ class BaseObjConf(Conf):
 			dir.lock.acquire()
 			dir.make_dir()
 		finally: dir.lock.release()
-		args = self.args[:]
+		args = task.conf.args[:]
 		args[2] = task.target.path
 		args[3] = task.source.path
 		if self.pic:
@@ -301,18 +303,16 @@ class BaseLibConf(Conf):
 
 	def process(self, task):
 		if self.shared:
-			args = self.args[:]
+			args = task.conf.args[:]
 			args[2] = task.target.path
 			args[3] = [s.path for s in task.sources]
 			args = args[:3] + args[3] + args[4:]
-			self.paths_args(task.conf.paths, args)
-			self.libs_args(task.conf.libs, task.conf.static_libs, task.conf.shared_libs, args)
 			task.print_desc('linking shared lib ' + task.target.path, color = '7;1;36')
 			r, out, err = exec_subprocess(args)
 			if r != 0: raise Exception, r
 		else:
 			task.print_desc('archiving and indexing static lib ' + task.target.path, color = '7;36')
-			ar_args, ranlib_args = self.args
+			ar_args, ranlib_args = task.conf.args
 			args = ar_args[:]
 			args.append(task.target.path)
 			args += [s.path for s in task.sources]
@@ -354,10 +354,10 @@ class ObjConf(Conf):
 	def args(self):
 		try: return self._args
 		except AttributeError:
-			args = self.base_conf.args
-			for p in self.pkgs: args += p.compiler_args
+			args = self.base_conf.args[:]
 			self.base_conf.paths_args(self.paths, args)
 			self.base_conf.defines_args(self.defines, args)
+			for p in self.pkgs: args += p.compiler_args
 			if __debug__ and is_debug: debug('conf: cxx: obj: ' + str(args))
 			self._args = args
 			return args
@@ -369,7 +369,6 @@ class LibConf(Conf):
 		self.obj_conf = obj_conf
 
 	def conf(self):
-		self.shared = self.base_conf.shared
 		self.pkgs = self.obj_conf.pkgs
 		self.paths = []
 		self.libs = []
@@ -393,11 +392,13 @@ class LibConf(Conf):
 	def args(self):
 		try: return self._args
 		except AttributeError:
-			args = self.base_conf.args
-			if self.shared:
-				for p in self.pkgs: args += p.lib_args
-			self._args = args
+			args = self.base_conf.args[:]
+			self.base_conf.paths_args(self.paths, args)
+			self.base_conf.libs_args(self.libs, self.static_libs, self.shared_libs, args)
+			if self.base_conf.shared:
+				for p in self.pkgs: args += p.libs_args
 			if __debug__ and is_debug: debug('conf: cxx: lib: ' + str(args))
+			self._args = args
 			return args
 
 class Obj(Task):

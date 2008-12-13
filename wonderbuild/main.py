@@ -5,11 +5,17 @@
 def main():
 	import sys, os
 
-	from cxx_chain import BaseObjConf, BaseLibConf, ObjConf, LibConf, Lib
+	from project import Project
+	project = Project()
 
+	from cxx_chain import BaseObjConf, BaseLibConf
+	base_obj_conf = BaseObjConf(project)
+	base_lib_conf = BaseLibConf(base_obj_conf)
+
+	from cxx_chain import PkgConf, ObjConf, LibConf, Lib
 	class LibFoo(Lib):
-		def __init__(self, lib_conf): Lib.__init__(self, lib_conf, 'foo')
-			
+		def __init__(self): Lib.__init__(self, LibConf(base_lib_conf, LibFoo.FooObjConf()), 'foo')
+
 		def dyn_in_tasks(self):
 			if len(self.in_tasks) != 0: return None
 			Lib.dyn_in_tasks(self)
@@ -18,14 +24,17 @@ def main():
 			for s in src_dir.node_path('foo').find_iter(prunes = ['todo'], in_pat = '*.cpp'): self.new_obj(s)
 			#for h in src_dir.node_path('foo').find_iter(prunes = ['todo'], in_pat = '*.hpp', ex_pat = '*.private.hpp'): print h.path
 			return self.in_tasks
+
+		class FooObjConf(ObjConf):
+			def __init__(self): ObjConf.__init__(self, base_obj_conf)
+		
+			def conf(self):
+				ObjConf.conf(self)
+				pkg_conf = PkgConf(self.project)
+				pkg_conf.pkgs = ['glibmm-2.4']
+				self.pkgs = [pkg_conf]
 			
-	from project import Project
-	project = Project()
-	base_obj_conf = BaseObjConf(project)
-	base_lib_conf = BaseLibConf(base_obj_conf)
-	obj_conf = ObjConf(base_obj_conf)
-	lib_conf = LibConf(base_lib_conf, obj_conf)
-	lib_foo = LibFoo(lib_conf)
+	lib_foo = LibFoo()
 
 	from options import options, help
 	if '--help' in options:
