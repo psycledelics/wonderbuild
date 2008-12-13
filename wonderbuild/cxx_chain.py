@@ -87,6 +87,8 @@ class PkgConf(Conf):
 class BaseObjConf(Conf):
 	def __init__(self, project): Conf.__init__(self, project)
 	
+	_option_list = ['--cxx', '--cxx-flags', '--cxx-debug', '--cxx-optim', '--cxx-pic']
+	
 	def help(self):
 		help['--cxx'] = ('--cxx=<prog>', 'use <prog> as c++ compiler')
 		help['--cxx-flags'] = ('--cxx-flags=[flags]', 'use specific c++ compiler flags')
@@ -95,11 +97,7 @@ class BaseObjConf(Conf):
 		help['--cxx-pic'] = ('--cxx-pic=<yes|no>', 'make the c++ compiler emit pic code (for shared libs) rather than non-pic code (for static libs or programs)', 'yes')
 	
 	def conf(self):
-		help['--cxx'] = None
-		help['--cxx-flags'] = None
-		help['--cxx-debug'] = None
-		help['--cxx-optim'] = None
-		help['--cxx-pic'] = None
+		for o in self.__class__._option_list: help[o] = None
 
 		self.cpp = IncludeScanner(self.project.fs, self.project.state_and_cache)
 
@@ -145,7 +143,10 @@ class BaseObjConf(Conf):
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
-			sig = Sig(str(options))
+			sig = Sig()
+			for o in options:
+				for oo in self.__class__._option_list:
+					if o.startswith(oo + '='): sig.update(o)
 			sig = self._sig = sig.digest()
 			return sig
 
@@ -209,23 +210,24 @@ class BaseModConf(Conf):
 		Conf.__init__(self, base_obj_conf.project)
 		self.base_obj_conf = base_obj_conf
 
+	_option_list = [
+		'--cxx-mod-shared',
+		'--cxx-mod-ld', '--cxx-mod-ld-flags',
+		'--cxx-mod-ar', '--cxx-mod-ar-flags',
+		'--cxx-mod-ranlib', '--cxx-mod-ranlib-flags'
+	]
+
 	def help(self):
-		help['--mod-shared'] = ('--mod-shared=<yes|no>', 'build shared libs (rather than static libs)', 'yes')
-		help['--mod-ld'] = ('--mod-ld=<prog>', 'use <prog> as shared lib and program linker')
-		help['--mod-ld-flags'] = ('--mod-ld-flags=[flags]', 'use specific linker flags')
-		help['--mod-ar'] = ('--mod-ar=<prog>', 'use <prog> as static lib archiver', 'ar')
-		help['--mod-ar-flags'] = ('--mod-ar-flags=[flags]', 'use specific archiver flags', 'cr')
-		help['--mod-ranlib'] = ('--mod-ranlib=<prog>', 'use <prog> as static lib archive indexer', 'ranlib')
-		help['--mod-ranlib-flags'] = ('--mod-ranlib-flags=[flags]', 'use specific archive indexer flags')
+		help['--cxx-mod-shared'] = ('--cxx-mod-shared=<yes|no>', 'build shared libs (rather than static libs)', 'yes')
+		help['--cxx-mod-ld'] = ('--cxx-mod-ld=<prog>', 'use <prog> as shared lib and program linker')
+		help['--cxx-mod-ld-flags'] = ('--cxx-mod-ld-flags=[flags]', 'use specific linker flags')
+		help['--cxx-mod-ar'] = ('--cxx-mod-ar=<prog>', 'use <prog> as static lib archiver', 'ar')
+		help['--cxx-mod-ar-flags'] = ('--cxx-mod-ar-flags=[flags]', 'use specific archiver flags', 'cr')
+		help['--cxx-mod-ranlib'] = ('--cxx-mod-ranlib=<prog>', 'use <prog> as static lib archive indexer', 'ranlib')
+		help['--cxx-mod-ranlib-flags'] = ('--cxx-mod-ranlib-flags=[flags]', 'use specific archive indexer flags')
 
 	def conf(self):
-		help['--mod-shared'] = None
-		help['--mod-ld'] = None
-		help['--mod-ld-flags'] = None
-		help['--mod-ar'] = None
-		help['--mod-ar-flags'] = None
-		help['--mod-ranlib'] = None
-		help['--mod-ranlib-flags'] = None
+		for o in self.__class__._option_list: help[o] = None
 
 		try: sig, self.shared, self.ld_prog, self.ld_flags, self.ar_prog, self.ar_flags, self.ranlib_prog, self.ranlib_flags = self.project.state_and_cache['cxx-module']
 		except KeyError: parse = True
@@ -236,24 +238,24 @@ class BaseModConf(Conf):
 			
 			ld_prog = ld_flags = ar_prog = ar_flags = ranlib_prog = ranlib_flags = False
 			for o in options:
-				if o.startswith('--mod-shared'): self.shared = o[len('--mod-shared='):] != 'no'
-				if o.startswith('--mod-ld='):
-					self.ld_prog = o[len('--mod-ld='):]
+				if o.startswith('--cxx-mod-shared'): self.shared = o[len('--cxx-mod-shared='):] != 'no'
+				if o.startswith('--cxx-mod-ld='):
+					self.ld_prog = o[len('--cxx-mod-ld='):]
 					ld = True
-				elif o.startswith('--mod-ld-flags='):
-					self.ld_flags = o[len('--mod-ld-flags='):].split()
+				elif o.startswith('--cxx-mod-ld-flags='):
+					self.ld_flags = o[len('--cxx-mod-ld-flags='):].split()
 					ld_flags = True
-				if o.startswith('--mod-ar='):
-					self.ar_prog = o[len('--mod-ar='):]
+				if o.startswith('--cxx-mod-ar='):
+					self.ar_prog = o[len('--cxx-mod-ar='):]
 					ar_prog = True
-				elif o.startswith('--mod-ar-flags='):
-					self.ar_flags = o[len('--mod-ar-flags='):].split()
+				elif o.startswith('--cxx-mod-ar-flags='):
+					self.ar_flags = o[len('--cxx-mod-ar-flags='):].split()
 					ar_flags = True
-				if o.startswith('--mod-ranlib='):
-					self.ranlib_prog = o[len('--mod-ranlib='):]
+				if o.startswith('--cxx-mod-ranlib='):
+					self.ranlib_prog = o[len('--cxx-mod-ranlib='):]
 					ranlib_prog = True
-				elif o.startswith('--mod-ranlib-flags='):
-					self.ranlib_flags = o[len('--mod-ranlib-flags='):].split()
+				elif o.startswith('--cxx-mod-ranlib-flags='):
+					self.ranlib_flags = o[len('--cxx-mod-ranlib-flags='):].split()
 					ranlib_flags = True
 
 			if not ld_prog: self.ld_prog = self.base_obj_conf.prog
@@ -282,7 +284,10 @@ class BaseModConf(Conf):
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
-			sig = Sig(str(options))
+			sig = Sig()
+			for o in options:
+				for oo in self.__class__._option_list:
+					if o.startswith(oo + '='): sig.update(o)
 			sig = self._sig = sig.digest()
 			return sig
 
