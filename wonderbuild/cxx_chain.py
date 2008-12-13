@@ -129,14 +129,13 @@ class BaseObjConf(Conf):
 
 	def check_version(self):
 		color = '34'
-		if True:
-			self.print_desc('checking for c++ compiler:', color)
-			r, out, err = exec_subprocess([self.prog, '-dumpversion'], silent = True)
-			if r != 0:
-				self.print_result_desc(' not gcc\n', color)
-			else:
-				out = out[:out.find('\n')]
-				self.print_result_desc(' gcc version ' + out + '\n', color)
+		self.print_desc('checking for c++ compiler:', color)
+		r, out, err = exec_subprocess([self.prog, '-dumpversion'], silent = True)
+		if r != 0:
+			self.print_result_desc(' not gcc\n', color)
+		else:
+			out = out[:out.find('\n')]
+			self.print_result_desc(' gcc version ' + out + '\n', color)
 
 	@property
 	def sig(self):
