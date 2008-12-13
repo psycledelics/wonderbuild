@@ -14,7 +14,7 @@ def main():
 
 	from cxx_chain import PkgConf, ObjConf, ModConf, Mod
 	class LibFoo(Mod):
-		def __init__(self): Mod.__init__(self, ModConf(base_mod_conf, LibFoo.FooObjConf()), 'foo')
+		def __init__(self): Mod.__init__(self, ModConf(base_mod_conf, LibFoo.FooObjConf(), 'lib'), 'foo')
 
 		def dyn_in_tasks(self):
 			if len(self.in_tasks) != 0: return None

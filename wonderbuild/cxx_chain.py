@@ -394,13 +394,13 @@ class ObjConf(Conf):
 			return args
 
 class ModConf(Conf):
-	def __init__(self, base_mod_conf, obj_conf):
+	def __init__(self, base_mod_conf, obj_conf, kind):
 		Conf.__init__(self, base_mod_conf.project)
 		self.base_conf = base_mod_conf
 		self.obj_conf = obj_conf
+		self.kind = kind
 
 	def conf(self):
-		self.kind = 'lib'
 		self.pkgs = self.obj_conf.pkgs
 		self.paths = []
 		self.libs = []
