@@ -47,7 +47,7 @@ class Task(object):
 	def update_sig(self): self.project.task_sigs[self.uid] = self.sig
 	
 def exec_subprocess(args, env = None, out_stream = sys.stdout, err_stream = sys.stderr, silent = False):
-	if __debug__ and is_debug: debug('task: exec: ' + str(args))
+	if __debug__ and is_debug: debug('exec: ' + str(args))
 	p = subprocess.Popen(
 		args = args,
 		stdout = subprocess.PIPE,

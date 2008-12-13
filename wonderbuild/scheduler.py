@@ -15,6 +15,7 @@ class Scheduler():
 
 	def start(self):
 		if __debug__ and is_debug: debug('sched: starting threads: ' + str(self.thread_count))
+		self._tasks = set()
 		self._task_queue = []
 		self._todo_count = self._task_count
 		self._running_count = 0
@@ -31,6 +32,8 @@ class Scheduler():
 	def add_task(self, task):
 		self._condition.acquire()
 		try:
+			if task in self._tasks: return
+			self._tasks.add(task)
 			self._task_count += 1
 			self._todo_count += 1
 			if len(task.in_tasks) == 0:
@@ -38,9 +41,11 @@ class Scheduler():
 				self._condition.notify()
 			else:
 				self._condition.release()
-				for t in task.in_tasks: self.add_task(t)
+				try:
+					for t in task.in_tasks: self.add_task(t)
+				finally: self._condition.acquire()
+			if __debug__ and is_debug: debug('sched: add task ' + str(self._todo_count) + '/' + str(self._task_count) + ' ' + str(task.__class__))
 		finally: self._condition.release()
-		if __debug__ and is_debug: debug('sched: add task ' + str(self._todo_count) + '/' + str(self._task_count) + ' ' + str(task.__class__))
 
 	def progress(self):
 		max = self._task_count
@@ -70,6 +75,7 @@ class Scheduler():
 		del self._threads
 		del self._condition
 		del self._task_queue
+		del self._tasks
 		if hasattr(self, 'exception'): raise self.exception
 	
 	def _thread_function(self, i):

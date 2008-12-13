@@ -2,7 +2,8 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2006-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import os
+import os, threading
+#python 2.5.0a1 from __future__ import with_statement
 
 from options import options, known_options, help
 from logger import out, is_debug, debug, colored
@@ -14,6 +15,7 @@ class Conf(object):
 	def __init__(self, project):
 		self.project = project
 		project.confs.append(self)
+		self.lock = threading.Lock()
 
 	def options(self): pass
 		
@@ -27,12 +29,12 @@ class Conf(object):
 	@property
 	def args(self): pass
 
-	def print_desc(self, desc, color = '7'):
-		out.write(colored(color, 'wonderbuild: conf: ' + desc))
+	def print_desc(self, desc, color = '34'):
+		out.write(colored(color, 'wonderbuild: conf: ' + desc + ':') + ' ')
 		if __debug__ and is_debug: out.write('\n')
 		out.flush()
 		
-	def print_result_desc(self, desc, color = '7'):
+	def print_result_desc(self, desc, color = '34'):
 		out.write(colored(color, desc))
 		out.flush()
 
@@ -61,30 +63,42 @@ class PkgConf(Conf):
 
 	@property
 	def compiler_args(self):
-		try: return self._compiler_args
-		except AttributeError:
-			args = [self.prog, '--cflags'] + self.flags + self.pkgs
-			self.print_desc(str(args))
-			r, out, err = exec_subprocess(args, silent = True)
-			self.print_result_desc(' ' + (r == 0 and 'yes' or 'no') + '\n')
-			if r != 0: raise Exception, r
-			out = out.rstrip('\n').split()
-			self._compiler_args = out
-			return out
+		self.lock.acquire()
+		try:
+			try: return self._compiler_args
+			except AttributeError:
+				args = [self.prog, '--cflags'] + self.flags + self.pkgs
+				self.print_desc('getting pkg-config compile flags: ' + ' '.join(self.pkgs))
+				r, out, err = exec_subprocess(args, silent = True)
+				if r != 0: 
+					self.print_result_desc('error\n', color = '31')
+					raise Exception, r
+				self.print_result_desc('ok\n', color = '32')
+				out = out.rstrip('\n').split()
+				self._compiler_args = out
+				return out
+		finally: self.lock.release()
 
 	@property
 	def libs_args(self, static = False):
-		try: return self._libs_args
-		except AttributeError:
-			args = [self.prog, '--libs'] + self.flags + self.pkgs
-			if static: args.append('--static')
-			self.print_desc(str(args))
-			r, out, err = exec_subprocess(args, silent = True)
-			self.print_result_desc(' ' + (r == 0 and 'yes' or 'no') + '\n')
-			if r != 0: raise Exception, r
-			out = out.rstrip('\n').split()
-			self._libs_args = out
-			return out
+		self.lock.acquire()
+		try:
+			try: return self._libs_args
+			except AttributeError:
+				args = [self.prog, '--libs'] + self.flags + self.pkgs
+				if static:
+					args.append('--static')
+					self.print_desc('getting pkg-config static libs: ' + ' '.join(self.pkgs))
+				else: self.print_desc('getting pkg-config shared libs: ' + ' '.join(self.pkgs))
+				r, out, err = exec_subprocess(args, silent = True)
+				if r != 0: 
+					self.print_result_desc('error\n', color = '31')
+					raise Exception, r
+				self.print_result_desc('ok\n', color = '32')
+				out = out.rstrip('\n').split()
+				self._libs_args = out
+				return out
+		finally: self.lock.release()
 	
 class BaseObjConf(Conf):
 	def __init__(self, project): Conf.__init__(self, project)
@@ -108,7 +122,7 @@ class BaseObjConf(Conf):
 		try: sig, self.prog, self.flags, self.pic, self.optim, self.debug, self.kind, self.version = self.project.state_and_cache['cxx-compiler']
 		except KeyError: parse = True
 		else: parse = sig != self.sig
-		
+	
 		if parse:
 			self.pic = True
 			self.optim = None
@@ -125,7 +139,7 @@ class BaseObjConf(Conf):
 				elif o.startswith('--cxx-pic='): self.pic = o[len('--cxx-pic='):] != 'no'
 				elif o.startswith('--cxx-optim='): self.optim = o[len('--cxx-optim='):]
 				elif o.startswith('--cxx-debug='): self.debug = o[len('--cxx-debug='):] == 'yes'
-		
+	
 			if not prog: self.prog = os.environ.get('CXX', 'c++')
 			if not flags:
 				flags = os.environ.get('CXXFLAGS', None)
@@ -155,25 +169,27 @@ class BaseObjConf(Conf):
 			return sig
 
 	def _check_kind_and_version(self):
-		color = '34'
-		self.print_desc('checking for c++ compiler:', color)
+		self.print_desc('checking for c++ compiler')
 		r, out, err = exec_subprocess([self.prog, '-dumpversion'], silent = True)
 		if r != 0:
-			self.print_result_desc(' not gcc\n', color)
+			self.print_result_desc('not gcc\n', '31')
 			self.kind = None
 			self.version = None
 		else:
 			self.kind = 'gcc'
 			self.version = out.rstrip('\n')
-		self.print_result_desc(' ' + self.kind + ' version ' + self.version + '\n', color)
+		self.print_result_desc(self.kind + ' version ' + self.version + '\n', '32')
 	
 	@property
 	def args(self):
-		try: return self.__args
-		except AttributeError:
-			args = self.__args = self._args()
-			if __debug__ and is_debug: debug('conf: cxx: compiler: ' + str(args))
-			return args
+		self.lock.acquire()
+		try:
+			try: return self.__args
+			except AttributeError:
+				args = self.__args = self._args()
+				if __debug__ and is_debug: debug('conf: cxx: compiler: ' + str(args))
+				return args
+		finally: self.lock.release()
 
 	def _gcc_args(self):
 			args = [self.prog, '-o', None, None, '-c', '-pipe']
@@ -193,19 +209,19 @@ class BaseObjConf(Conf):
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + v)
 
-	def process(self, task):
-		dir = task.target.parent
+	def process(self, obj_task):
+		dir = obj_task.target.parent
 		try:
 			dir.lock.acquire()
 			dir.make_dir()
 		finally: dir.lock.release()
-		args = task.conf.args[:]
-		args[2] = task.target.path
-		args[3] = task.source.path
+		args = obj_task.conf.args[:]
+		args[2] = obj_task.target.path
+		args[3] = obj_task.source.path
 		if self.pic:
-			task.print_desc('compiling pic/shared object from c++ ' + task.source.path + ' -> ' + task.target.path, color = '7;1;34')
+			obj_task.print_desc('compiling pic/shared object from c++ ' + obj_task.source.path + ' -> ' + obj_task.target.path, color = '7;1;34')
 		else:
-			task.print_desc('compiling non-pic/static object from c++ ' + task.source.path + ' -> ' + task.target.path, color = '7;34')
+			obj_task.print_desc('compiling non-pic/static object from c++ ' + obj_task.source.path + ' -> ' + obj_task.target.path, color = '7;34')
 		r, out, err = exec_subprocess(args)
 		if r != 0: raise Exception, r
 
@@ -238,10 +254,10 @@ class BaseModConf(Conf):
 		try: sig, self.shared, self.ld_prog, self.ld_flags, self.ar_prog, self.ar_flags, self.ranlib_prog, self.ranlib_flags = self.project.state_and_cache['cxx-module']
 		except KeyError: parse = True
 		else: parse = sig != self.sig
-		
+	
 		if parse:
 			self.shared = self.base_obj_conf.pic
-			
+		
 			ld_prog = ld_flags = ar_prog = ar_flags = ranlib_prog = ranlib_flags = False
 			for o in options:
 				if o.startswith('--cxx-mod-shared'): self.shared = o[len('--cxx-mod-shared='):] != 'no'
@@ -299,10 +315,13 @@ class BaseModConf(Conf):
 
 	@property
 	def args(self):
-		try: return self.__args
-		except AttributeError:
-			args = self.__args = self._args()
-			return args
+		self.lock.acquire()
+		try:
+			try: return self.__args
+			except AttributeError:
+				args = self.__args = self._args()
+				return args
+		finally: self.lock.release()
 
 	def _gcc_args(self):
 			args_dict = {}
@@ -337,31 +356,40 @@ class BaseModConf(Conf):
 			args.append('-Wl,-Bdynamic')
 			for l in shared_libs: args.append('-l' + l)
 
-	def _linux_target(self, name):
-		dir = self.project.bld_node.node_path(os.path.join('modules', name))
-		if self.shared: return dir.node_path('lib' + name + '.so')
-		else: return dir.node_path('lib' + name + '.a')
+	def _linux_target(self, mod_task):
+		dir = self.project.bld_node.node_path(os.path.join('modules', mod_task.name))
+		if mod_task.conf.kind == 'prog': name = mod_task.name
+		else:
+			name = 'lib' + mod_task.name
+			if self.shared: name += '.so'
+			else: name += '.a'
+		return dir.node_path(name)
 
-	def process(self, task):
-		if self.shared or task.conf.kind == 'prog':
-			args = task.conf.args[:]
-			args[2] = task.target.path
-			args[3] = [s.path for s in task.sources]
+	def process(self, mod_task):
+		if self.shared or mod_task.conf.kind == 'prog':
+			args = mod_task.conf.args[:]
+			args[2] = mod_task.target.path
+			args[3] = [s.path for s in mod_task.sources]
 			args = args[:3] + args[3] + args[4:]
-			task.print_desc('linking shared lib ' + task.target.path, color = '7;1;36')
+			if mod_task.conf.kind == 'prog':
+				mod_task.print_desc('linking program ' + mod_task.target.path, color = '7;1;32')
+			elif mod_task.conf.kind == 'loadable':
+				mod_task.print_desc('linking loadable module ' + mod_task.target.path, color = '7;1;34')
+			else:
+				mod_task.print_desc('linking shared lib ' + mod_task.target.path, color = '7;1;33')
 			r, out, err = exec_subprocess(args)
 			if r != 0: raise Exception, r
 		else:
-			task.print_desc('archiving and indexing static lib ' + task.target.path, color = '7;36')
-			ar_args, ranlib_args = task.conf.args
+			mod_task.print_desc('archiving and indexing static lib ' + mod_task.target.path, color = '7;36')
+			ar_args, ranlib_args = mod_task.conf.args
 			args = ar_args[:]
-			args.append(task.target.path)
-			args += [s.path for s in task.sources]
+			args.append(mod_task.target.path)
+			args += [s.path for s in mod_task.sources]
 			r, out, err = exec_subprocess(args)
 			if r != 0: raise Exception, r
 			if 's' not in self.ar_flags:
 				args = ranlib_args[:]
-				args.append(task.target.path)
+				args.append(mod_task.target.path)
 				r, out, err = exec_subprocess(args)
 				if r != 0: raise Exception, r
 
@@ -394,15 +422,18 @@ class ObjConf(Conf):
 
 	@property
 	def args(self):
-		try: return self._args
-		except AttributeError:
-			args = self.base_conf.args[:]
-			self.base_conf.paths_args(self.paths, args)
-			self.base_conf.defines_args(self.defines, args)
-			for p in self.pkgs: args += p.compiler_args
-			if __debug__ and is_debug: debug('conf: cxx: obj: ' + str(args))
-			self._args = args
-			return args
+		self.lock.acquire()
+		try:
+			try: return self._args
+			except AttributeError:
+				args = self.base_conf.args[:]
+				self.base_conf.paths_args(self.paths, args)
+				self.base_conf.defines_args(self.defines, args)
+				for p in self.pkgs: args += p.compiler_args
+				if __debug__ and is_debug: debug('conf: cxx: obj: ' + str(args))
+				self._args = args
+				return args
+		finally: self.lock.release()
 
 class ModConf(Conf):
 	def __init__(self, base_mod_conf, obj_conf, kind):
@@ -433,16 +464,19 @@ class ModConf(Conf):
 
 	@property
 	def args(self):
-		try: return self._args
-		except AttributeError:
-			args = self.base_conf.args[self.kind][:]
-			self.base_conf.paths_args(self.paths, args)
-			self.base_conf.libs_args(self.libs, self.static_libs, self.shared_libs, args)
-			if self.base_conf.shared:
-				for p in self.pkgs: args += p.libs_args
-			if __debug__ and is_debug: debug('conf: cxx: module: ' + str(args))
-			self._args = args
-			return args
+		self.lock.acquire()
+		try:
+			try: return self._args
+			except AttributeError:
+				args = self.base_conf.args[self.kind][:]
+				self.base_conf.paths_args(self.paths, args)
+				self.base_conf.libs_args(self.libs, self.static_libs, self.shared_libs, args)
+				if self.base_conf.shared:
+					for p in self.pkgs: args += p.libs_args
+				if __debug__ and is_debug: debug('conf: cxx: module: ' + str(args))
+				self._args = args
+				return args
+		finally: self.lock.release()
 
 class Obj(Task):
 	def __init__(self, obj_conf):
@@ -472,7 +506,6 @@ class Mod(Task):
 		Task.__init__(self, mod_conf.project, aliases)
 		self.conf = mod_conf
 		self.name = name
-		self.target = None
 		self.sources = []
 
 	@property
@@ -490,7 +523,12 @@ class Mod(Task):
 			sig = self._sig = sig.digest()
 			return sig
 
-	def dyn_in_tasks(self): self.target = self.conf.base_conf.target(self.name)
+	@property
+	def target(self):
+		try: return self._target
+		except AttributeError:
+			target = self._target = self.conf.base_conf.target(self)
+			return target
 
 	def process(self): self.conf.base_conf.process(self)
 		
