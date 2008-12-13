@@ -8,17 +8,17 @@ def main():
 	from project import Project
 	project = Project()
 
-	from cxx_chain import BaseObjConf, BaseLibConf
+	from cxx_chain import BaseObjConf, BaseModuleConf
 	base_obj_conf = BaseObjConf(project)
-	base_lib_conf = BaseLibConf(base_obj_conf)
+	base_mod_conf = BaseModuleConf(base_obj_conf)
 
-	from cxx_chain import PkgConf, ObjConf, LibConf, Lib
-	class LibFoo(Lib):
-		def __init__(self): Lib.__init__(self, LibConf(base_lib_conf, LibFoo.FooObjConf()), 'foo')
+	from cxx_chain import PkgConf, ObjConf, ModuleConf, Module
+	class LibFoo(Module):
+		def __init__(self): Module.__init__(self, ModuleConf(base_mod_conf, LibFoo.FooObjConf()), 'foo')
 
 		def dyn_in_tasks(self):
 			if len(self.in_tasks) != 0: return None
-			Lib.dyn_in_tasks(self)
+			Module.dyn_in_tasks(self)
 			src_dir = self.project.src_node.node_path('src')
 			self.obj_conf.paths = [src_dir]
 			for s in src_dir.node_path('foo').find_iter(prunes = ['todo'], in_pat = '*.cpp'): self.new_obj(s)

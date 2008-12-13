@@ -103,8 +103,11 @@ class BaseObjConf(Conf):
 
 		self.cpp = IncludeScanner(self.project.fs, self.project.state_and_cache)
 
-		try: self.prog, self.flags, self.pic, self.optim, self.debug = self.project.state_and_cache['cxx']
-		except KeyError:
+		try: sig, self.prog, self.flags, self.pic, self.optim, self.debug = self.project.state_and_cache['cxx-compiler']
+		except KeyError: parse = True
+		else: parse = sig != self.sig
+		
+		if parse:
 			self.pic = True
 			self.optim = None
 			self.debug = False
@@ -127,8 +130,16 @@ class BaseObjConf(Conf):
 				if flags is not None: self.flags = flags.split()
 				else: self.flags = []
 
-			self.project.state_and_cache['cxx'] = self.prog, self.flags, self.pic, self.optim, self.debug
+			self.project.state_and_cache['cxx-compiler'] = self.sig, self.prog, self.flags, self.pic, self.optim, self.debug
 			self.check_version()
+
+	@property
+	def sig(self):
+		try: return self._sig
+		except AttributeError:
+			sig = Sig(str(options))
+			sig = self._sig = sig.digest()
+			return sig
 
 	def check_version(self):
 		color = '34'
@@ -139,18 +150,6 @@ class BaseObjConf(Conf):
 		else:
 			out = out.rstrip('\n')
 			self.print_result_desc(' gcc version ' + out + '\n', color)
-
-	@property
-	def sig(self):
-		try: return self._sig
-		except AttributeError:
-			sig = Sig(self.prog)
-			sig.update(str(self.pic))
-			sig.update(str(self.optim))
-			sig.update(str(self.debug))
-			for f in self.flags: sig.update(f)
-			sig = self._sig = sig.digest()
-			return sig
 
 	@property
 	def args(self):
@@ -189,77 +188,76 @@ class BaseObjConf(Conf):
 		r, out, err = exec_subprocess(args)
 		if r != 0: raise Exception, r
 
-class BaseLibConf(Conf):
+class BaseModuleConf(Conf):
 	def __init__(self, base_obj_conf):
 		Conf.__init__(self, base_obj_conf.project)
 		self.base_obj_conf = base_obj_conf
 
 	def help(self):
-		help['--lib-shared'] = ('--lib-shared=<yes|no>', 'build shared libs (rather than static libs)', 'yes')
-		help['--lib-ld'] = ('--lib-ld=<prog>', 'use <prog> as shared lib and program linker')
-		help['--lib-ld-flags'] = ('--lib-ld-flags=[flags]', 'use specific linker flags')
-		help['--lib-ar'] = ('--lib-ar=<prog>', 'use <prog> as static lib archiver', 'ar')
-		help['--lib-ar-flags'] = ('--lib-ar-flags=[flags]', 'use specific archiver flags', 'cr')
-		help['--lib-ranlib'] = ('--lib-ranlib=<prog>', 'use <prog> as static lib archive indexer', 'ranlib')
-		help['--lib-ranlib-flags'] = ('--lib-ranlib-flags=[flags]', 'use specific archive indexer flags')
+		help['--mod-shared'] = ('--mod-shared=<yes|no>', 'build shared libs (rather than static libs)', 'yes')
+		help['--mod-ld'] = ('--mod-ld=<prog>', 'use <prog> as shared lib and program linker')
+		help['--mod-ld-flags'] = ('--mod-ld-flags=[flags]', 'use specific linker flags')
+		help['--mod-ar'] = ('--mod-ar=<prog>', 'use <prog> as static lib archiver', 'ar')
+		help['--mod-ar-flags'] = ('--mod-ar-flags=[flags]', 'use specific archiver flags', 'cr')
+		help['--mod-ranlib'] = ('--mod-ranlib=<prog>', 'use <prog> as static lib archive indexer', 'ranlib')
+		help['--mod-ranlib-flags'] = ('--mod-ranlib-flags=[flags]', 'use specific archive indexer flags')
 
 	def conf(self):
-		help['--lib-shared'] = None
-		help['--lib-ld'] = None
-		help['--lib-ld-flags'] = None
-		help['--lib-ar'] = None
-		help['--lib-ar-flags'] = None
-		help['--lib-ranlib'] = None
-		help['--lib-ranlib-flags'] = None
+		help['--mod-shared'] = None
+		help['--mod-ld'] = None
+		help['--mod-ld-flags'] = None
+		help['--mod-ar'] = None
+		help['--mod-ar-flags'] = None
+		help['--mod-ranlib'] = None
+		help['--mod-ranlib-flags'] = None
 
-		self.shared = self.base_obj_conf.pic
+		try: sig, self.shared, self.ld_prog, self.ld_flags, self.ar_prog, self.ar_flags, self.ranlib_prog, self.ranlib_flags = self.project.state_and_cache['cxx-module']
+		except KeyError: parse = True
+		else: parse = sig != self.sig
+		
+		if parse:
+			self.shared = self.base_obj_conf.pic
+			
+			ld_prog = ld_flags = ar_prog = ar_flags = ranlib_prog = ranlib_flags = False
+			for o in options:
+				if o.startswith('--mod-shared'): self.shared = o[len('--mod-shared='):] != 'no'
+				if o.startswith('--mod-ld='):
+					self.ld_prog = o[len('--mod-ld='):]
+					ld = True
+				elif o.startswith('--mod-ld-flags='):
+					self.ld_flags = o[len('--mod-ld-flags='):].split()
+					ld_flags = True
+				if o.startswith('--mod-ar='):
+					self.ar_prog = o[len('--mod-ar='):]
+					ar_prog = True
+				elif o.startswith('--mod-ar-flags='):
+					self.ar_flags = o[len('--mod-ar-flags='):].split()
+					ar_flags = True
+				if o.startswith('--mod-ranlib='):
+					self.ranlib_prog = o[len('--mod-ranlib='):]
+					ranlib_prog = True
+				elif o.startswith('--mod-ranlib-flags='):
+					self.ranlib_flags = o[len('--mod-ranlib-flags='):].split()
+					ranlib_flags = True
 
-		ld_prog = ld_flags = ar_prog = ar_flags = ranlib_prog = ranlib_flags = False
-		for o in options:
-			if o.startswith('--lib-shared'): self.shared = o[len('--lib-shared='):] != 'no'
-			if o.startswith('--lib-ld='):
-				self.ld_prog = o[len('--lib-ld='):]
-				ld = True
-			elif o.startswith('--lib-ld-flags='):
-				self.ld_flags = o[len('--lib-ld-flags='):].split()
-				ld_flags = True
-			if o.startswith('--lib-ar='):
-				self.ar_prog = o[len('--lib-ar='):]
-				ar_prog = True
-			elif o.startswith('--lib-ar-flags='):
-				self.ar_flags = o[len('--lib-ar-flags='):].split()
-				ar_flags = True
-			if o.startswith('--lib-ranlib='):
-				self.ranlib_prog = o[len('--lib-ranlib='):]
-				ranlib_prog = True
-			elif o.startswith('--lib-ranlib-flags='):
-				self.ranlib_flags = o[len('--lib-ranlib-flags='):].split()
-				ranlib_flags = True
-		if self.shared:
 			if not ld_prog: self.ld_prog = self.base_obj_conf.prog
 			if not ld_flags:
 				flags = os.environ.get('LDFLAGS', None)
 				if flags is not None: self.ld_flags = flags.split()
 				else: self.ld_flags = []
-		else:
+
 			if not ar_prog: self.ar_prog = 'ar'
 			if not ar_flags: self.ar_flags = os.environ.get('ARFLAGS', 'cr') # s for gnu to run ranlib
 			if not ranlib_prog: self.ranlib_prog = 'ranlib'
 			if not ranlib_flags: self.ranlib_flags = os.environ.get('RANLIBFLAGS', None)
 
+			self.project.state_and_cache['cxx-module'] = self.sig, self.shared, self.ld_prog, self.ld_flags, self.ar_prog, self.ar_flags, self.ranlib_prog, self.ranlib_flags
+
 	@property
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
-			sig = Sig(str(self.shared))
-			if self.shared:
-				sig.update(self.ld_prog)
-				for f in self.ld_flags: sig.update(f)
-			else:
-				sig.update(self.ar_prog)
-				if self.ar_flags is not None: sig.update(self.ar_flags)
-				sig.update(self.ranlib_prog)
-				if self.ranlib_flags is not None: sig.update(self.ranlib_flags)
+			sig = Sig(str(options))
 			sig = self._sig = sig.digest()
 			return sig
 
@@ -362,10 +360,10 @@ class ObjConf(Conf):
 			self._args = args
 			return args
 
-class LibConf(Conf):
-	def __init__(self, base_lib_conf, obj_conf):
-		Conf.__init__(self, base_lib_conf.project)
-		self.base_conf = base_lib_conf
+class ModuleConf(Conf):
+	def __init__(self, base_module_conf, obj_conf):
+		Conf.__init__(self, base_module_conf.project)
+		self.base_conf = base_module_conf
 		self.obj_conf = obj_conf
 
 	def conf(self):
@@ -397,7 +395,7 @@ class LibConf(Conf):
 			self.base_conf.libs_args(self.libs, self.static_libs, self.shared_libs, args)
 			if self.base_conf.shared:
 				for p in self.pkgs: args += p.libs_args
-			if __debug__ and is_debug: debug('conf: cxx: lib: ' + str(args))
+			if __debug__ and is_debug: debug('conf: cxx: module: ' + str(args))
 			self._args = args
 			return args
 
@@ -424,10 +422,10 @@ class Obj(Task):
 		
 	def process(self): self.conf.base_conf.process(self)
 
-class Lib(Task):
-	def __init__(self, lib_conf, name, aliases = None):
-		Task.__init__(self, lib_conf.project, aliases)
-		self.conf = lib_conf
+class Module(Task):
+	def __init__(self, module_conf, name, aliases = None):
+		Task.__init__(self, module_conf.project, aliases)
+		self.conf = module_conf
 		self.name = name
 		self.target = None
 		self.sources = []
