@@ -19,12 +19,12 @@ class Conf(object):
 
 	def options(self): pass
 		
+	@property
+	def sig(self): pass
+
 	def help(self): pass
 
 	def conf(self): pass
-
-	@property
-	def sig(self): pass
 
 	@property
 	def args(self): pass
@@ -109,17 +109,28 @@ class BaseObjConf(Conf):
 		global known_options
 		known_options |= self.__class__._options
 
+	@property
+	def sig(self):
+		try: return self._sig
+		except AttributeError:
+			sig = Sig()
+			for o in options:
+				for oo in self.__class__._options:
+					if o.startswith(oo + '='): sig.update(o)
+			sig = self._sig = sig.digest()
+			return sig
+
 	def help(self):
-		help['--cxx'] = ('--cxx=<prog>', 'use <prog> as c++ compiler')
+		help['--cxx']       = ('--cxx=<prog>', 'use <prog> as c++ compiler')
 		help['--cxx-flags'] = ('--cxx-flags=[flags]', 'use specific c++ compiler flags')
 		help['--cxx-debug'] = ('--cxx-debug=<yes|no>', 'make the c++ compiler produce debugging information or not', 'no')
 		help['--cxx-optim'] = ('--cxx-optim=<level>', 'use c++ compiler optimisation <level>')
-		help['--cxx-pic'] = ('--cxx-pic=<yes|no>', 'make the c++ compiler emit pic code (for shared libs) rather than non-pic code (for static libs or programs)', 'yes')
+		help['--cxx-pic']   = ('--cxx-pic=<yes|no>', 'make the c++ compiler emit pic code (for shared libs) rather than non-pic code (for static libs or programs)', 'yes')
 	
 	def conf(self):
 		self.cpp = IncludeScanner(self.project.fs, self.project.state_and_cache)
 
-		try: sig, self.prog, self.flags, self.pic, self.optim, self.debug, self.kind, self.version = self.project.state_and_cache['cxx-compiler']
+		try: sig, self.prog, self.flags, self.pic, self.optim, self.debug, self.kind, self.version, self.__args = self.project.state_and_cache['cxx-compiler']
 		except KeyError: parse = True
 		else: parse = sig != self.sig
 	
@@ -147,26 +158,20 @@ class BaseObjConf(Conf):
 				else: self.flags = []
 
 			self._check_kind_and_version()
-			self.project.state_and_cache['cxx-compiler'] = self.sig, self.prog, self.flags, self.pic, self.optim, self.debug, self.kind, self.version
+			if self.kind == 'gcc':
+				self._args = self._gcc_args
+			else:
+				print >> sys.stderr, 'unsupported c++ compiler'
+				sys.exit(1)
+			self.project.state_and_cache['cxx-compiler'] = self.sig, self.prog, self.flags, self.pic, self.optim, self.debug, self.kind, self.version, self.args
 
 		if self.kind == 'gcc':
-			self._args = self._gcc_args
+			self.pic_args = self._gcc_pic_args
 			self.paths_args = self._posix_paths_args
 			self.defines_args = self._posix_defines_args
 		else:
 			print >> sys.stderr, 'unsupported c++ compiler'
 			sys.exit(1)
-
-	@property
-	def sig(self):
-		try: return self._sig
-		except AttributeError:
-			sig = Sig()
-			for o in options:
-				for oo in self.__class__._options:
-					if o.startswith(oo + '='): sig.update(o)
-			sig = self._sig = sig.digest()
-			return sig
 
 	def _check_kind_and_version(self):
 		self.print_desc('checking for c++ compiler')
@@ -192,12 +197,15 @@ class BaseObjConf(Conf):
 		finally: self.lock.release()
 
 	def _gcc_args(self):
-			args = [self.prog, '-o', None, None, '-c', '-pipe']
-			if self.debug: args.append('-g')
-			if self.optim is not None: args.append('-O' + self.optim)
-			if self.pic: args.append('-fPIC')
-			args += self.flags
-			return args
+		args = [self.prog, '-o', None, None, '-c', '-pipe']
+		if self.debug: args.append('-g')
+		if self.optim is not None: args.append('-O' + self.optim)
+		args += self.flags
+		return args
+
+	#staticmethod
+	def _gcc_pic_args(self, pic, args):
+		if pic: args.append('-fPIC')
 	
 	#staticmethod
 	def _posix_paths_args(self, paths, args):
@@ -218,7 +226,7 @@ class BaseObjConf(Conf):
 		args = obj_task.conf.args[:]
 		args[2] = obj_task.target.path
 		args[3] = obj_task.source.path
-		if self.pic:
+		if obj_task.conf.pic:
 			obj_task.print_desc('compiling pic/shared object from c++ ' + obj_task.source.path + ' -> ' + obj_task.target.path, color = '7;1;34')
 		else:
 			obj_task.print_desc('compiling non-pic/static object from c++ ' + obj_task.source.path + ' -> ' + obj_task.target.path, color = '7;34')
@@ -241,17 +249,28 @@ class BaseModConf(Conf):
 		global known_options
 		known_options |= self.__class__._options
 
+	@property
+	def sig(self):
+		try: return self._sig
+		except AttributeError:
+			sig = Sig(self.base_obj_conf.sig)
+			for o in options:
+				for oo in self.__class__._options:
+					if o.startswith(oo + '='): sig.update(o)
+			sig = self._sig = sig.digest()
+			return sig
+
 	def help(self):
-		help['--cxx-mod-shared'] = ('--cxx-mod-shared=<yes|no>', 'build and link shared libs (rather than static libs)', 'yes')
-		help['--cxx-mod-ld'] = ('--cxx-mod-ld=<prog>', 'use <prog> as shared lib and program linker')
-		help['--cxx-mod-ld-flags'] = ('--cxx-mod-ld-flags=[flags]', 'use specific linker flags')
-		help['--cxx-mod-ar'] = ('--cxx-mod-ar=<prog>', 'use <prog> as static lib archiver', 'ar')
-		help['--cxx-mod-ar-flags'] = ('--cxx-mod-ar-flags=[flags]', 'use specific archiver flags', 'cr')
-		help['--cxx-mod-ranlib'] = ('--cxx-mod-ranlib=<prog>', 'use <prog> as static lib archive indexer', 'ranlib')
+		help['--cxx-mod-shared']       = ('--cxx-mod-shared=<yes|no>', 'build and link shared libs (rather than static libs)', 'yes')
+		help['--cxx-mod-ld']           = ('--cxx-mod-ld=<prog>', 'use <prog> as shared lib and program linker')
+		help['--cxx-mod-ld-flags']     = ('--cxx-mod-ld-flags=[flags]', 'use specific linker flags')
+		help['--cxx-mod-ar']           = ('--cxx-mod-ar=<prog>', 'use <prog> as static lib archiver', 'ar')
+		help['--cxx-mod-ar-flags']     = ('--cxx-mod-ar-flags=[flags]', 'use specific archiver flags', 'rc')
+		help['--cxx-mod-ranlib']       = ('--cxx-mod-ranlib=<prog>', 'use <prog> as static lib archive indexer', 'ranlib')
 		help['--cxx-mod-ranlib-flags'] = ('--cxx-mod-ranlib-flags=[flags]', 'use specific archive indexer flags')
 
 	def conf(self):
-		try: sig, self.shared, self.ld_prog, self.ld_flags, self.ar_prog, self.ar_flags, self.ranlib_prog, self.ranlib_flags = self.project.state_and_cache['cxx-module']
+		try: sig, self.shared, self.ld_prog, self.ld_flags, self.ar_prog, self.ar_flags, self.ranlib_prog, self.ranlib_flags, self.__args = self.project.state_and_cache['cxx-module']
 		except KeyError: parse = True
 		else: parse = sig != self.sig
 	
@@ -291,27 +310,21 @@ class BaseModConf(Conf):
 			if not ranlib_prog: self.ranlib_prog = 'ranlib'
 			if not ranlib_flags: self.ranlib_flags = os.environ.get('RANLIBFLAGS', None)
 
-			self.project.state_and_cache['cxx-module'] = self.sig, self.shared, self.ld_prog, self.ld_flags, self.ar_prog, self.ar_flags, self.ranlib_prog, self.ranlib_flags
+			if self.base_obj_conf.kind == 'gcc':
+				self._args = self._gcc_args
+			else:
+				print >> sys.stderr, 'unsupported lib archiver/linker'
+				sys.exit(1)
+			self.project.state_and_cache['cxx-module'] = self.sig, self.shared, self.ld_prog, self.ld_flags, self.ar_prog, self.ar_flags, self.ranlib_prog, self.ranlib_flags, self.args
 
 		if self.base_obj_conf.kind == 'gcc':
-			self._args = self._gcc_args
+			self.shared_args = self._gcc_shared_args
 			self.paths_args = self._posix_paths_args
 			self.libs_args = self._gcc_libs_args
 			self.target = self._linux_target
 		else:
 			print >> sys.stderr, 'unsupported lib archiver/linker'
 			sys.exit(1)
-
-	@property
-	def sig(self):
-		try: return self._sig
-		except AttributeError:
-			sig = Sig()
-			for o in options:
-				for oo in self.__class__._options:
-					if o.startswith(oo + '='): sig.update(o)
-			sig = self._sig = sig.digest()
-			return sig
 
 	@property
 	def args(self):
@@ -324,23 +337,22 @@ class BaseModConf(Conf):
 		finally: self.lock.release()
 
 	def _gcc_args(self):
-			args_dict = {}
-			args = [self.ld_prog, '-o', None, None] + self.ld_flags
-			if __debug__ and is_debug: debug('conf: cxx: ld: prog  : ' + str(args))
-			args_dict['prog'] = args
-			if self.shared:
-				args = args + ['-shared']
-				if __debug__ and is_debug: debug('conf: cxx: ld: shared: ' + str(args))
-				args_dict['lib'] = args
-			else:
-				ar_args = [self.ar_prog]
-				if self.ar_flags is not None: ar_args.append(self.ar_flags)
-				if __debug__ and is_debug: debug('conf: cxx: ar: ' + str(ar_args))
-				ranlib_args = [self.ranlib_prog]
-				if self.ranlib_flags is not None: ranlib_args.append(self.ranlib_flags)
-				if __debug__ and is_debug: debug('conf: cxx: ranlib: ' + str(ranlib_args))
-				args_dict['lib'] = ar_args, ranlib_args
-			return args_dict
+		ld_args = [self.ld_prog, '-o', None, None] + self.ld_flags
+		if __debug__ and is_debug: debug('conf: cxx: ld: ' + str(ld_args))
+
+		ar_args = [self.ar_prog]
+		if self.ar_flags is not None: ar_args.append(self.ar_flags)
+		if __debug__ and is_debug: debug('conf: cxx: ar: ' + str(ar_args))
+
+		ranlib_args = [self.ranlib_prog]
+		if self.ranlib_flags is not None: ranlib_args.append(self.ranlib_flags)
+		if __debug__ and is_debug: debug('conf: cxx: ranlib: ' + str(ranlib_args))
+
+		return ld_args, ar_args, ranlib_args
+
+	#staticmethod
+	def _gcc_shared_args(self, shared, args):
+		if shared: args.append('-shared')
 
 	#staticmethod
 	def _posix_paths_args(self, paths, args):
@@ -366,7 +378,7 @@ class BaseModConf(Conf):
 		return dir.node_path(name)
 
 	def process(self, mod_task):
-		if self.shared or mod_task.conf.kind == 'prog':
+		if mod_task.conf.ld:
 			args = mod_task.conf.args[:]
 			args[2] = mod_task.target.path
 			args[3] = [s.path for s in mod_task.sources]
@@ -399,6 +411,7 @@ class ObjConf(Conf):
 		self.base_conf = base_obj_conf
 	
 	def conf(self):
+		self.pic = self.base_conf.pic
 		self.pkgs = []
 		self.paths = []
 		self.defines = {}
@@ -427,6 +440,7 @@ class ObjConf(Conf):
 			try: return self._args
 			except AttributeError:
 				args = self.base_conf.args[:]
+				self.base_conf.pic_args(self.pic, args)
 				self.base_conf.paths_args(self.paths, args)
 				self.base_conf.defines_args(self.defines, args)
 				for p in self.pkgs: args += p.compiler_args
@@ -443,6 +457,15 @@ class ModConf(Conf):
 		self.kind = kind
 
 	def conf(self):
+		if self.kind == 'prog':
+			self.shared = False
+			self.ld = True
+		else:
+			self.shared = self.base_conf.shared
+			self.ld = self.shared
+			if self.shared and not self.obj_conf.pic:
+				debug('conf: cxx: module: overriding obj conf to pic')
+				self.obj_conf.pic = True
 		self.pkgs = self.obj_conf.pkgs
 		self.paths = []
 		self.libs = []
@@ -468,10 +491,14 @@ class ModConf(Conf):
 		try:
 			try: return self._args
 			except AttributeError:
-				args = self.base_conf.args[self.kind][:]
-				self.base_conf.paths_args(self.paths, args)
-				self.base_conf.libs_args(self.libs, self.static_libs, self.shared_libs, args)
-				if self.base_conf.shared:
+				ld_args, ar_args, ranlib_args = self.base_conf.args
+				if not self.ld:
+					args = ar_args, ranlib_args
+				else:
+					args = ld_args[:]
+					self.base_conf.shared_args(self.shared, args)
+					self.base_conf.paths_args(self.paths, args)
+					self.base_conf.libs_args(self.libs, self.static_libs, self.shared_libs, args)
 					for p in self.pkgs: args += p.libs_args
 				if __debug__ and is_debug: debug('conf: cxx: module: ' + str(args))
 				self._args = args

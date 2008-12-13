@@ -84,7 +84,7 @@ def main():
 				print >> sys.stderr, 'unknown option:', o
 				sys.exit(1)
 	project.conf()
-	project.build([lib_foo, main_prog])
+	project.build([main_prog])
 	project.dump()
 
 if __name__ == '__main__': main()
