@@ -5,7 +5,7 @@
 import os
 
 from options import options, help
-from logger import is_debug, debug
+from logger import out, is_debug, debug, colored
 from signature import Sig, raw_to_hexstring
 from task import Task, exec_subprocess
 from cpp_include_scanner import IncludeScanner
@@ -24,6 +24,15 @@ class Conf(object):
 
 	@property
 	def args(self): pass
+
+	def print_desc(self, desc, color = '7'):
+		out.write(colored(color, 'wonderbuild: conf: ' + desc))
+		if __debug__ and is_debug: out.write('\n')
+		out.flush()
+		
+	def print_result_desc(self, desc, color = '7'):
+		out.write(colored(color, desc))
+		out.flush()
 
 class PkgConf(Conf):
 	def __init__(self, project):
@@ -53,8 +62,9 @@ class PkgConf(Conf):
 		try: return self._compiler_args
 		except AttributeError:
 			args = [self.prog, '--cflags'] + self.flags + self.pkgs
-			if __debug__ and is_debug: debug('conf: pkg-config: ' + str(args))
-			r, out, err = exec_subprocess()
+			self.print_desc(str(args))
+			r, out, err = exec_subprocess(args, silent = True)
+			self.print_result_desc(' ' + (r == 0 and 'yes' or 'no') + '\n')
 			if r != 0: raise Exception, r
 			self._compiler_args = out
 			return out
@@ -64,8 +74,9 @@ class PkgConf(Conf):
 		try: return self._lib_args
 		except AttributeError:
 			args = [self.prog, '--libs'] + self.flags + self.pkgs
-			if __debug__ and is_debug: debug('conf: pkg-config: ' + str(args))
-			r, out, err = exec_subprocess(args)
+			self.print_desc(str(args))
+			r, out, err = exec_subprocess(args, silent = True)
+			self.print_result_desc(' ' + (r == 0 and 'yes' or 'no') + '\n')
 			if r != 0: raise Exception, r
 			self._lib_args = out
 			return args
@@ -86,7 +97,6 @@ class BaseObjConf(Conf):
 		help['--cxx-debug'] = None
 		help['--cxx-optim'] = None
 		help['--cxx-pic'] = None
-		help['--cxx-non-pic'] = None
 
 		self.cpp = IncludeScanner(self.project.fs, self.project.state_and_cache)
 
@@ -118,35 +128,21 @@ class BaseObjConf(Conf):
 			self.check_version()
 
 	def check_version(self):
+		color = '34'
 		if True:
-			r, out, err = exec_subprocess([self.prog, '-dumpversion'], desc = 'checking for c++ compiler version', color = '34', silent = True)
-			if r != 0: raise Exception, r
-			out = out[:out.find('\n')]
-			print '[' + out + ']'
-		else:
-			r, out, err = exec_subprocess([self.prog, '--version'], desc = 'checking for c++ compiler version', color = '34', silent = True)
-			if r != 0: raise Exception, r
-			out = out[:out.find('\n')]
-			p1 = out.find('(')
-			if p1 >= 0:
-				p1 += 1
-				p2 = out.find(')', p1)
-				if p2 >= 0:
-					print '[' + out[p1:p2] + ']'
-					p2 += 2
-					p3 = out.find(' ', p2)
-					if p3 >= 0:
-						print '[' + out[p2:p3] + ']'
+			self.print_desc('checking for c++ compiler:', color)
+			r, out, err = exec_subprocess([self.prog, '-dumpversion'], silent = True)
+			if r != 0:
+				self.print_result_desc(' not gcc\n', color)
+			else:
+				out = out[:out.rfind('\n')]
+				self.print_result_desc(' gcc version ' + out + '\n', color)
 
 	@property
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
 			sig = Sig(self.prog)
-			e = os.environ.get('CPATH', None)
-			if e is not None: sig.update(e)
-			e = os.environ.get('CPLUS_INCLUDE_PATH', None)
-			if e is not None: sig.update(e)
 			sig.update(str(self.pic))
 			sig.update(str(self.optim))
 			sig.update(str(self.debug))
@@ -175,19 +171,20 @@ class BaseObjConf(Conf):
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + v)
 
-	def process(self, target, source):
-		dir = target.parent
+	def process(self, task):
+		dir = task.target.parent
 		try:
 			dir.lock.acquire()
 			dir.make_dir()
 		finally: dir.lock.release()
 		args = self.args[:]
-		args[2] = target.path
-		args[3] = source.path
+		args[2] = task.target.path
+		args[3] = task.source.path
 		if self.pic:
-			r, out, err = exec_subprocess(args, desc = 'compiling pic/shared object from c++ ' + source.path + ' -> ' + target.path, color = '7;1;34')
+			task.print_desc('compiling pic/shared object from c++ ' + task.source.path + ' -> ' + task.target.path, color = '7;1;34')
 		else:
-			r, out, err = exec_subprocess(args, desc = 'compiling non-pic/static object from c++ ' + source.path + ' -> ' + target.path, color = '7;34')
+			task.print_desc('compiling non-pic/static object from c++ ' + task.source.path + ' -> ' + task.target.path, color = '7;34')
+		r, out, err = exec_subprocess(args)
 		if r != 0: raise Exception, r
 
 class ObjConf(Conf):
@@ -205,6 +202,10 @@ class ObjConf(Conf):
 		try: return self._sig
 		except AttributeError:
 			sig = Sig(self.base_conf.sig)
+			e = os.environ.get('CPATH', None)
+			if e is not None: sig.update(e)
+			e = os.environ.get('CPLUS_INCLUDE_PATH', None)
+			if e is not None: sig.update(e)
 			for p in self.pkgs: sig.update(p.sig)
 			for p in self.paths: sig.update(p.path)
 			for k, v in self.defines.iteritems():
@@ -246,7 +247,7 @@ class Obj(Task):
 			sig = self._sig = sig.digest()
 			return sig
 		
-	def process(self): self.conf.base_conf.process(self.target, self.source)
+	def process(self): self.conf.base_conf.process(self)
 
 class LibConf(Conf):
 	def __init__(self, obj_conf):
@@ -367,26 +368,29 @@ class LibConf(Conf):
 		if self.shared: return dir.node_path('lib' + name + '.so')
 		else: return dir.node_path('lib' + name + '.a')
 
-	def process(self, target, sources):
+	def process(self, task):
 		if self.shared:
 			args = self.args[:]
-			args[2] = target.path
-			args[3] = [s.path for s in sources]
+			args[2] = task.target.path
+			args[3] = [s.path for s in task.sources]
 			args = args[:3] + args[3] + args[4:]
-			r, out, err = exec_subprocess(args, desc = 'linking shared lib ' + target.path, color = '7;1;36')
+			task.print_desc('linking shared lib ' + task.target.path, color = '7;1;36')
+			r, out, err = exec_subprocess(args)
 			if r != 0: raise Exception, r
 		else:
+			task.print_desc('archiving and indexing static lib ' + task.target.path, color = '7;36')
+
 			ar_args, ranlib_args = self.args
 			
 			args = ar_args[:]
-			args.append(target.path)
-			args += [s.path for s in sources]
-			r, out, err = exec_subprocess(args, desc = 'archiving static lib ' + target.path, color = '7;36')
+			args.append(task.target.path)
+			args += [s.path for s in task.sources]
+			r, out, err = exec_subprocess(args)
 			if r != 0: raise Exception, r
 
 			args = ranlib_args[:]
-			args.append(target.path)
-			r, out, err = exec_subprocess(args, desc = ' indexing static lib ' + target.path, color = '7;36')
+			args.append(task.target.path)
+			r, out, err = exec_subprocess(args)
 			if r != 0: raise Exception, r
 
 class Lib(Task):
@@ -417,7 +421,7 @@ class Lib(Task):
 
 	def dyn_in_tasks(self): self.target = self.conf.target(self.name)
 
-	def process(self): self.conf.process(self.target, self.sources)
+	def process(self): self.conf.process(self)
 		
 	def new_obj(self, source):
 		obj = Obj(self.obj_conf)

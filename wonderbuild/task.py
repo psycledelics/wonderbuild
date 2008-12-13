@@ -4,7 +4,7 @@
 
 import sys, os, subprocess
 
-from logger import is_debug, debug, colored
+from logger import out, is_debug, debug, colored
 
 class Task(object):	
 	def __init__(self, project, aliases = None):
@@ -26,7 +26,11 @@ class Task(object):
 		task.in_tasks.append(self)
 
 	def dyn_in_tasks(self): return None
-		
+
+	def print_desc(self, desc, color = '7;1'):
+		out.write(colored(color, 'wonderbuild: task: ' + desc) + '\n')
+		out.flush()
+	
 	def process(self): pass
 	
 	@property
@@ -42,9 +46,7 @@ class Task(object):
 	
 	def update_sig(self): self.project.task_sigs[self.uid] = self.sig
 	
-def exec_subprocess(args, desc = None, color = '7;1', env = None, out_stream = sys.stdout, err_stream = sys.stderr, silent = False):
-	if desc is None: desc = ' '.join(args)
-	out_stream.write(colored(color, 'wonderbuild: task: ' + desc) + '\n')
+def exec_subprocess(args, env = None, out_stream = sys.stdout, err_stream = sys.stderr, silent = False):
 	if __debug__ and is_debug: debug('task: exec: ' + str(args))
 	p = subprocess.Popen(
 		args = args,
