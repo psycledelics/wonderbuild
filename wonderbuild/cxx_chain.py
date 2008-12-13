@@ -226,7 +226,7 @@ class BaseModConf(Conf):
 		known_options |= self.__class__._options
 
 	def help(self):
-		help['--cxx-mod-shared'] = ('--cxx-mod-shared=<yes|no>', 'build shared libs (rather than static libs)', 'yes')
+		help['--cxx-mod-shared'] = ('--cxx-mod-shared=<yes|no>', 'build and link shared libs (rather than static libs)', 'yes')
 		help['--cxx-mod-ld'] = ('--cxx-mod-ld=<prog>', 'use <prog> as shared lib and program linker')
 		help['--cxx-mod-ld-flags'] = ('--cxx-mod-ld-flags=[flags]', 'use specific linker flags')
 		help['--cxx-mod-ar'] = ('--cxx-mod-ar=<prog>', 'use <prog> as static lib archiver', 'ar')
