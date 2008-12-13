@@ -103,7 +103,7 @@ class BaseObjConf(Conf):
 
 		self.cpp = IncludeScanner(self.project.fs, self.project.state_and_cache)
 
-		try: sig, self.prog, self.flags, self.pic, self.optim, self.debug = self.project.state_and_cache['cxx-compiler']
+		try: sig, self.prog, self.flags, self.pic, self.optim, self.debug, self.kind, self.version = self.project.state_and_cache['cxx-compiler']
 		except KeyError: parse = True
 		else: parse = sig != self.sig
 		
@@ -130,8 +130,16 @@ class BaseObjConf(Conf):
 				if flags is not None: self.flags = flags.split()
 				else: self.flags = []
 
-			self.project.state_and_cache['cxx-compiler'] = self.sig, self.prog, self.flags, self.pic, self.optim, self.debug
-			self.check_version()
+			self._check_kind_and_version()
+			self.project.state_and_cache['cxx-compiler'] = self.sig, self.prog, self.flags, self.pic, self.optim, self.debug, self.kind, self.version
+
+		if self.kind == 'gcc':
+			self._args = self._gcc_args
+			self.paths_args = self._posix_paths_args
+			self.defines_args = self._posix_defines_args
+		else:
+			print >> sys.stderr, 'unsupported c++ compiler'
+			sys.exit(1)
 
 	@property
 	def sig(self):
@@ -141,33 +149,41 @@ class BaseObjConf(Conf):
 			sig = self._sig = sig.digest()
 			return sig
 
-	def check_version(self):
+	def _check_kind_and_version(self):
 		color = '34'
 		self.print_desc('checking for c++ compiler:', color)
 		r, out, err = exec_subprocess([self.prog, '-dumpversion'], silent = True)
 		if r != 0:
 			self.print_result_desc(' not gcc\n', color)
+			self.kind = None
+			self.version = None
 		else:
-			out = out.rstrip('\n')
-			self.print_result_desc(' gcc version ' + out + '\n', color)
-
+			self.kind = 'gcc'
+			self.version = out.rstrip('\n')
+		self.print_result_desc(' ' + self.kind + ' version ' + self.version + '\n', color)
+	
 	@property
 	def args(self):
-		try: return self._args
+		try: return self.__args
 		except AttributeError:
+			args = self.__args = self._args()
+			if __debug__ and is_debug: debug('conf: cxx: compiler: ' + str(args))
+			return args
+
+	def _gcc_args(self):
 			args = [self.prog, '-o', None, None, '-c', '-pipe']
 			if self.debug: args.append('-g')
 			if self.optim is not None: args.append('-O' + self.optim)
 			if self.pic: args.append('-fPIC')
 			args += self.flags
-			if __debug__ and is_debug: debug('conf: cxx: compiler: ' + str(args))
-			self._args = args
 			return args
-
-	def paths_args(self, paths, args):
-		for p in paths: args += ['-I', p.path]
 	
-	def defines_args(self, defines, args):
+	#staticmethod
+	def _posix_paths_args(self, paths, args):
+		for p in paths: args += ['-I', p.path]
+
+	#staticmethod
+	def _posix_defines_args(self, defines, args):
 		for k, v in defines.iteritems():
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + v)
@@ -247,11 +263,19 @@ class BaseModConf(Conf):
 				else: self.ld_flags = []
 
 			if not ar_prog: self.ar_prog = 'ar'
-			if not ar_flags: self.ar_flags = os.environ.get('ARFLAGS', 'cr') # s for gnu to run ranlib
+			if not ar_flags: self.ar_flags = os.environ.get('ARFLAGS', 'rc') # s for gnu to run ranlib
 			if not ranlib_prog: self.ranlib_prog = 'ranlib'
 			if not ranlib_flags: self.ranlib_flags = os.environ.get('RANLIBFLAGS', None)
 
 			self.project.state_and_cache['cxx-module'] = self.sig, self.shared, self.ld_prog, self.ld_flags, self.ar_prog, self.ar_flags, self.ranlib_prog, self.ranlib_flags
+		if self.base_obj_conf.kind == 'gcc':
+			self._args = self._gcc_args
+			self.paths_args = self._posix_paths_args
+			self.libs_args = self._gcc_libs_args
+			self.target = self._linux_target
+		else:
+			print >> sys.stderr, 'unsupported lib archiver/linker'
+			sys.exit(1)
 
 	@property
 	def sig(self):
@@ -263,15 +287,20 @@ class BaseModConf(Conf):
 
 	@property
 	def args(self):
-		try: return self._args
+		try: return self.__args
 		except AttributeError:
+			args = self.__args = self._args()
+			return args
+
+	def _gcc_args(self):
+			args_dict = {}
+			args = [self.ld_prog, '-o', None, None] + self.ld_flags
+			if __debug__ and is_debug: debug('conf: cxx: ld: prog: ' + str(args))
+			args_dict['prog'] = args
 			if self.shared:
-				args = [self.ld_prog, '-o', None, None]
-				if self.shared: args.append('-shared')
-				args += self.ld_flags
-				if __debug__ and is_debug: debug('conf: cxx: ld: ' + str(args))
-				self._args = args
-				return args
+				args = [self.ld_prog, '-o', None, None, '-shared'] + self.ld_flags
+				if __debug__ and is_debug: debug('conf: cxx: ld: shared: ' + str(args))
+				args_dict['lib'] = args
 			else:
 				ar_args = [self.ar_prog]
 				if self.ar_flags is not None: ar_args.append(self.ar_flags)
@@ -279,13 +308,15 @@ class BaseModConf(Conf):
 				ranlib_args = [self.ranlib_prog]
 				if self.ranlib_flags is not None: ranlib_args.append(self.ranlib_flags)
 				if __debug__ and is_debug: debug('conf: cxx: ranlib: ' + str(ranlib_args))
-				args = self._args = ar_args, ranlib_args
-				return args
+				args_dict['lib'] = ar_args, ranlib_args
+			return args_dict
 
-	def paths_args(self, paths, args):
+	#staticmethod
+	def _posix_paths_args(self, paths, args):
 		for p in paths: args += ['-L', p.path]
 	
-	def libs_args(self, libs, static_libs, shared_libs, args):
+	#staticmethod
+	def _gcc_libs_args(self, libs, static_libs, shared_libs, args):
 		for l in libs: args.append('-l' + l)
 		if len(static_libs):
 			args.append('-Wl,-Bstatic')
@@ -294,13 +325,13 @@ class BaseModConf(Conf):
 			args.append('-Wl,-Bdynamic')
 			for l in shared_libs: args.append('-l' + l)
 
-	def target(self, name):
+	def _linux_target(self, name):
 		dir = self.project.bld_node.node_path(os.path.join('modules', name))
 		if self.shared: return dir.node_path('lib' + name + '.so')
 		else: return dir.node_path('lib' + name + '.a')
 
 	def process(self, task):
-		if self.shared:
+		if self.shared or task.conf.kind == 'prog':
 			args = task.conf.args[:]
 			args[2] = task.target.path
 			args[3] = [s.path for s in task.sources]
@@ -316,10 +347,11 @@ class BaseModConf(Conf):
 			args += [s.path for s in task.sources]
 			r, out, err = exec_subprocess(args)
 			if r != 0: raise Exception, r
-			args = ranlib_args[:]
-			args.append(task.target.path)
-			r, out, err = exec_subprocess(args)
-			if r != 0: raise Exception, r
+			if 's' not in self.ar_flags:
+				args = ranlib_args[:]
+				args.append(task.target.path)
+				r, out, err = exec_subprocess(args)
+				if r != 0: raise Exception, r
 
 class ObjConf(Conf):
 	def __init__(self, base_obj_conf):
@@ -367,6 +399,7 @@ class ModConf(Conf):
 		self.obj_conf = obj_conf
 
 	def conf(self):
+		self.kind = 'lib'
 		self.pkgs = self.obj_conf.pkgs
 		self.paths = []
 		self.libs = []
@@ -390,7 +423,7 @@ class ModConf(Conf):
 	def args(self):
 		try: return self._args
 		except AttributeError:
-			args = self.base_conf.args[:]
+			args = self.base_conf.args[self.kind][:]
 			self.base_conf.paths_args(self.paths, args)
 			self.base_conf.libs_args(self.libs, self.static_libs, self.shared_libs, args)
 			if self.base_conf.shared:
@@ -431,9 +464,6 @@ class Mod(Task):
 		self.sources = []
 
 	@property
-	def obj_conf(self): return self.conf.obj_conf
-
-	@property
 	def uid(self): return self.target
 
 	@property
@@ -452,6 +482,9 @@ class Mod(Task):
 
 	def process(self): self.conf.base_conf.process(self)
 		
+	@property
+	def obj_conf(self): return self.conf.obj_conf
+
 	def new_obj(self, source):
 		obj = Obj(self.obj_conf)
 		obj.source = source
