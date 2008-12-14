@@ -8,6 +8,8 @@ from scheduler import Scheduler
 from filesystem import FileSystem
 from logger import is_debug, debug
 
+if __debug__ and is_debug: import time
+
 class Project(object):
 	def __init__(self, bld_path = '++wonderbuild'):
 		gc.disable()
@@ -15,7 +17,10 @@ class Project(object):
 			try: f = file(os.path.join(bld_path, 'state-and-cache'), 'rb')
 			except IOError: raise
 			else:
-				try: self.state_and_cache = cPickle.load(f)
+				try:
+					if __debug__ and is_debug: t0 = time.time()
+					self.state_and_cache = cPickle.load(f)
+					if __debug__ and is_debug: debug('project: pickle: load time: ' + str(time.time() - t0))
 				except Exception, e:
 					print >> sys.stderr, 'could not load pickle:', e
 					raise
@@ -64,10 +69,15 @@ class Project(object):
 		if False and __debug__ and is_debug: print self.state_and_cache
 		gc.disable()
 		try:
-			try: f = file(os.path.join(self.bld_node.path, 'state-and-cache'), 'wb')
+			path = os.path.join(self.bld_node.path, 'state-and-cache')
+			if __debug__ and is_debug: t0 = time.time()
+			try: f = file(path, 'wb')
 			except IOError:
 				self.bld_node.make_dir()
-				f = file(os.path.join(self.bld_node.path, 'state-and-cache'), 'wb')
+				f = file(path, 'wb')
 			try: cPickle.dump(self.state_and_cache, f, cPickle.HIGHEST_PROTOCOL)
 			finally: f.close()
+			if __debug__ and is_debug:
+				debug('project: pickle: dump time: ' + str(time.time() - t0))
+				debug('project: pickle: file size: ' + str(int(os.path.getsize(path) * 1000. / (1 << 20)) * .001) + ' MiB')
 		finally: gc.enable()

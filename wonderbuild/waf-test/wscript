@@ -1,6 +1,6 @@
 #! /usr/bin/env waf
 
-import os, os.path, Options, Build
+import os, Options, Build
 
 APPNAME = 'waf-test'
 VERSION = '1.2.3'
