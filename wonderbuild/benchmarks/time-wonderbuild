@@ -40,19 +40,23 @@ anechoid 2008
 
 	use try/except instead of if exists for implicit deps sigs
 
-		real	0m1.709s
-		user	0m1.548s
-		sys	0m0.108s
+		real    0m1.697s
+		user    0m1.544s
+		sys     0m0.076s
 
-		real	0m1.710s
-		user	0m1.524s
-		sys	0m0.120s
+		real    0m1.697s
+		user    0m1.516s
+		sys     0m0.104s
 
-		real	0m1.661s
-		user	0m1.520s
-		sys	0m0.120s
+		real    0m1.655s
+		user    0m1.536s
+		sys     0m0.088s
 
-		real	0m1.716s
-		user	0m1.564s
-		sys	0m0.076s
+		real    0m1.639s
+		user    0m1.528s
+		sys     0m0.092s
+
+		real    0m1.668s
+		user    0m1.544s
+		sys     0m0.096s
 
