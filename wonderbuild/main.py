@@ -39,7 +39,6 @@ def main():
 	class MainProg(Mod):
 		def __init__(self):
 			Mod.__init__(self, MainProg.MainModConf(base_mod_conf, ObjConf(base_obj_conf), 'prog'), 'main')
-			self.add_in_task(lib_foo)
 
 		class MainModConf(ModConf):
 			def conf(self):
@@ -52,6 +51,7 @@ def main():
 			except AttributeError:
 				self._dyn_in_tasks = None
 				Mod.dyn_in_tasks(self)
+				self.add_in_task(lib_foo)
 				src_dir = self.project.src_node.node_path('src')
 				self.obj_conf.paths = [src_dir]
 				for s in src_dir.node_path('main').find_iter(prunes = ['todo'], in_pat = '*.cpp'): self.new_obj(s)

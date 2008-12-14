@@ -35,7 +35,7 @@ class IncludeScanner(object):
 		else:
 			if source in seen: return
 			seen.add(source)
-	
+
 		parse = False
 		try: r = self.contents[source]
 		except KeyError: parse = True
@@ -43,7 +43,7 @@ class IncludeScanner(object):
 			if source.changed:
 				if __debug__ and is_debug: debug('cpp: changed   : ' + source.path)
 				parse = True
-			
+		
 		if parse:
 			if __debug__ and is_debug: debug('cpp: parsing   : ' + source.path)
 
@@ -69,7 +69,7 @@ class IncludeScanner(object):
 			for include in abs_includes:
 				sub_source = self.search_abs(include, paths, not_found)
 				if sub_source is not None: self._scan_deps(sub_source, paths, not_found, seen)
-				
+			
 		return seen
 	
 	def search_rel(self, dir, include, paths, not_found):

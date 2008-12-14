@@ -89,10 +89,7 @@ class Scheduler():
 					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': notified ' + str(self._joining) + ' ' + str(self._todo_count) + '-' + str(self._running_count) + '/' + str(self._task_count) + ' ' + str(self._stop_requested))
 				if self._joining and self._todo_count == 0 or self._stop_requested: break
 				task = self._task_queue.pop()
-				try:
-					self._condition.release()
-					try: dyn_in_tasks = task.dyn_in_tasks()
-					finally: self._condition.acquire()
+				try: dyn_in_tasks = task.dyn_in_tasks()
 				except:
 					self._stop_requested = True
 					self._condition.notifyAll()
@@ -107,30 +104,29 @@ class Scheduler():
 					self._running_count += 1
 					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': process ' + self.progress() + ' ' + str(task.__class__))
 					try:
-						self._condition.release()
-						try:
-							if len(task.in_tasks) == 0: execute = True
-							else:
-								execute = False
-								for in_task in task.in_tasks:
-									if in_task.executed:
-										execute = True
-										break
-							if not execute:
-								if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': skip task (in_tasks skipped) ' + str(task.__class__))
+						if len(task.in_tasks) == 0: execute = True
+						else:
+							execute = False
+							for in_task in task.in_tasks:
+								if in_task.executed:
+									execute = True
+									break
+						if not execute:
+							if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': skip task (in_tasks skipped) ' + str(task.__class__))
+							task.executed = False
+						else:
+							if task.old_sig == task.sig:
+								if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': skip task (same sig) ' + str(task.__class__))
 								task.executed = False
 							else:
-								if task.old_sig == task.sig:
-									if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': skip task (same sig) ' + str(task.__class__))
-									task.executed = False
-								else:
-									try: task.process()
-									except Exception, e:
-										self.exception = e
-										raise
-									task.update_sig()
-									task.executed = True
-						finally: self._condition.acquire()
+								self._condition.release()
+								try: task.process()
+								except Exception, e:
+									self.exception = e
+									raise
+								finally: self._condition.acquire()
+								task.update_sig()
+								task.executed = True
 					except:
 						self._stop_requested = True
 						self._condition.notifyAll()
