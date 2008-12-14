@@ -4,6 +4,8 @@ import sys
 import os.path
 import random
 
+# for example: ./genbench.py /tmp/build 50 100 15 5
+
 HELP_USAGE = """Usage: generate_libs.py root libs classes internal external.
     root     - Root directory where to create libs.
     libs     - Number of libraries (libraries only depend on those with smaller numbers)
@@ -223,14 +225,14 @@ def CreateW(lib_number, classes):
     handle = file("wscript", "w");
     handle.write("def build(bld):\n")
     handle.write("    obj = bld.new_task_gen('cxx', 'staticlib')\n")
-    handle.write("    obj.includes='. ..'\n")
+    handle.write("    obj.includes='..'\n")
     handle.write("    obj.source='''\n")
 
     for i in xrange(classes):
         handle.write('    class_' + str(i) + '.cpp\n')
 
     handle.write("    '''\n")
-    handle.write("    obj.name = 'lib2'\n")
+    handle.write("    obj.target = 'lib2'\n")
     handle.write('def set_options(opt): pass\n')
     handle.write('def configure(conf): pass\n\n')
 
