@@ -144,9 +144,9 @@ class Scheduler():
 						self._stop_requested = True
 						self._condition.notifyAll()
 						raise
-					self._running_count -= 1
 					self._todo_count -= 1
 					if task.executed: print colored('7;32', 'wonderbuild: progress: ' + self.progress())
+					self._running_count -= 1
 					if self._todo_count == 0 and self._joining:
 						self._condition.notifyAll()
 						break

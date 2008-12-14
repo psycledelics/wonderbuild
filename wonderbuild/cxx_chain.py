@@ -522,9 +522,15 @@ class Obj(Task):
 		except AttributeError:
 			sig = Sig(self.conf.sig)
 			sig.update(self.source.sig)
-			seen, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
-			for s in seen: sig.update(s.sig)
+			try: seen = self.project.state_and_cache['implicit-deps-' + self.target.path]
+			except KeyError:
+				seen, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
+				self.project.state_and_cache['implicit-deps-' + self.target.path] = seen
+			sigs = [s.sig for s in seen]
+			sigs.sort()
+			for s in sigs: sig.update(s)
 			sig = self._sig = sig.digest()
+			if __debug__ and is_debug and sig != self.old_sig: debug('task: sig changed: ' + self.target.path)
 			return sig
 		
 	def process(self): self.conf.base_conf.process(self)
