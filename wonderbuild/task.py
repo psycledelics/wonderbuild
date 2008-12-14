@@ -34,17 +34,17 @@ class Task(object):
 	def process(self): pass
 	
 	@property
-	def uid(self): return None
+	def uid(self): raise Exception, str(self.__class__) + ' must implement the uid property'
 	
 	@property
 	def old_sig(self):
-		try: return self.project.task_sigs[self.uid]
+		try: return self.project.task_states[self.uid]
 		except KeyError: return None
 	
 	@property
-	def sig(self): return None
+	def sig(self): raise Exception, str(self.__class__) + ' must implement the sig property'
 	
-	def update_sig(self): self.project.task_sigs[self.uid] = self.sig
+	def update_sig(self): self.project.task_states[self.uid] = self.sig
 	
 def exec_subprocess(args, env = None, out_stream = sys.stdout, err_stream = sys.stderr, silent = False):
 	if __debug__ and is_debug: debug('exec: ' + str(args))

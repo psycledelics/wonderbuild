@@ -1,11 +1,20 @@
 anechoid 2008
 
-	real	0m50.595s
-	user	1m12.161s
-	sys	1m1.476s
-
-	> /dev/null
+	without > /dev/null
 	
-	real	0m43.412s
-	user	1m12.349s
-	sys	1m0.776s
+		real	0m50.595s
+		user	1m12.161s
+		sys	1m1.476s
+
+	with > /dev/null
+	
+		real	0m43.412s
+		user	1m12.349s
+		sys	1m0.776s
+
+	without > /dev/null
+
+		real	0m45.169s
+		user	1m12.717s
+		sys	1m2.776s
+

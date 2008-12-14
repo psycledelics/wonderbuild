@@ -20,7 +20,7 @@ class Project(object):
 				try:
 					if __debug__ and is_debug: t0 = time.time()
 					self.state_and_cache = cPickle.load(f)
-					if __debug__ and is_debug: debug('project: pickle: load time: ' + str(time.time() - t0))
+					if __debug__ and is_debug: debug('project: pickle: load time: ' + str(time.time() - t0) + ' s')
 				except Exception, e:
 					print >> sys.stderr, 'could not load pickle:', e
 					raise
@@ -32,11 +32,11 @@ class Project(object):
 		self.tasks = []
 		self.aliases = {} # {name: [tasks]}
 
-		try: self.task_sigs = self.state_and_cache[self.__class__.__name__]
+		try: self.task_states = self.state_and_cache[self.__class__.__name__]
 		except KeyError:
 			if  __debug__ and is_debug: debug('project: all anew')
-			self.task_sigs = {} # {task.uid: task.sig}
-			self.state_and_cache[self.__class__.__name__] = self.task_sigs
+			self.task_states = {} # {task.uid: (task sig, task implicit deps ...)}
+			self.state_and_cache[self.__class__.__name__] = self.task_states
 
 		self.fs = FileSystem(self.state_and_cache)
 		self.src_node = self.fs.cur
@@ -78,6 +78,6 @@ class Project(object):
 			try: cPickle.dump(self.state_and_cache, f, cPickle.HIGHEST_PROTOCOL)
 			finally: f.close()
 			if __debug__ and is_debug:
-				debug('project: pickle: dump time: ' + str(time.time() - t0))
+				debug('project: pickle: dump time: ' + str(time.time() - t0) + ' s')
 				debug('project: pickle: file size: ' + str(int(os.path.getsize(path) * 1000. / (1 << 20)) * .001) + ' MiB')
 		finally: gc.enable()

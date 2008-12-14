@@ -517,22 +517,50 @@ class Obj(Task):
 	def uid(self): return self.target
 
 	@property
+	def old_sig(self):
+		try: return self.project.task_states[self.uid][0]
+		except KeyError: return None
+
+	@property
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
 			sig = Sig(self.conf.sig)
 			sig.update(self.source.sig)
-			try: seen = self.project.state_and_cache['implicit-deps-' + self.target.path]
+			new_implicit_deps = False
+			try: self.implicit_deps = self.project.task_states[self.uid][1]
 			except KeyError:
-				seen, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
-				self.project.state_and_cache['implicit-deps-' + self.target.path] = seen
-			sigs = [s.sig for s in seen]
+				self.implicit_deps, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
+				new_implicit_deps = True
+			else:
+				for dep in self.implicit_deps:
+					if not dep.exists:
+						# A cached implicit dep does not exist anymore.
+						# We must recompute the implicit deps.
+						self.implicit_deps, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
+						new_implicit_deps = True
+						break
+			sigs = [s.sig for s in self.implicit_deps]
 			sigs.sort()
 			for s in sigs: sig.update(s)
-			sig = self._sig = sig.digest()
-			if __debug__ and is_debug and sig != self.old_sig: debug('task: sig changed: ' + self.target.path)
+			sig = sig.digest()
+			if sig != self.old_sig:
+				if __debug__ and is_debug: debug('task: sig changed: ' + self.target.path)
+				if not new_implicit_deps:
+					# Either the include path or a source or header content has changed.
+					# We must recompute the implicit deps.
+					sig = Sig(self.conf.sig)
+					sig.update(self.source.sig)
+					self.implicit_deps, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
+					sigs = [s.sig for s in self.implicit_deps]
+					sigs.sort()
+					for s in sigs: sig.update(s)
+					sig = sig.digest()
+			self._sig = sig
 			return sig
 		
+	def update_sig(self): self.project.task_states[self.uid] = (self.sig, self.implicit_deps)
+
 	def process(self): self.conf.base_conf.process(self)
 
 class Mod(Task):

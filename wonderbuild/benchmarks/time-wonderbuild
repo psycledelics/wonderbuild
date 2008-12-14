@@ -16,3 +16,25 @@ anechoid 2008
 		user	0m1.520s
 		sys	0m0.068s
 
+	bugfix: correct implicit deps
+
+		real	0m1.769s
+		user	0m1.648s
+		sys	0m0.068s
+
+		real	0m1.707s
+		user	0m1.560s
+		sys	0m0.108s
+
+		real	0m1.754s
+		user	0m1.584s
+		sys	0m0.112s
+
+		real	0m1.719s
+		user	0m1.592s
+		sys	0m0.096s
+		
+		real	0m1.709s
+		user	0m1.576s
+		sys	0m0.092s
+

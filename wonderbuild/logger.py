@@ -11,7 +11,7 @@ else:
 	from options import options, known_options, help
 
 	known_options.add('--zones')
-	help['--zones'] = ('--zones [zones ...]', 'wonderbuild debugging zones (exec, conf, task, sched, fs, project ...)')
+	help['--zones'] = ('--zones [zones ...]', 'wonderbuild debugging zones (exec, conf, task, sched, fs, project, cpp ...)')
 
 	is_debug = '--zones' in options
 	if not is_debug:
