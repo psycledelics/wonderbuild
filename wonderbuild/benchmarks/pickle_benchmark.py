@@ -58,3 +58,16 @@ if __name__ == '__main__':
 		def __getstate__(self): return self.a, self.b
 		def __setstate__(self, data): self.a, self.b = data
 	test(TwoSlotsTuple)
+	
+	class ManySlotsTuple(object):
+		__slots__ = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z')
+		def __init__(self, a, b): self.a = a; self.b = b
+		def __getstate__(self): return self.a, self.b
+		def __setstate__(self, data): self.a, self.b = data
+	test(ManySlotsTuple)
+
+	class ManyElementDictTuple(object):
+		def __init__(self, a, b): self.a = a; self.b = b; self.c = self.d = self.e = self.f = self.g = self.h = self.i = self.j = self.k = self.l = self.m = self.n = self.o = self.p = self.q = self.r = self.s = self.t = self.u = self.v = self.w = self.x = self.y = self.z = 0
+		def __getstate__(self): return self.a, self.b
+		def __setstate__(self, data): self.a, self.b = data
+	test(ManyElementDictTuple)

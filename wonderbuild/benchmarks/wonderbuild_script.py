@@ -2,10 +2,7 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2006-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-def main():
-	import sys, os
-	sys.path.append(os.path.split(os.path.abspath(os.path.join(os.getcwd(), os.pardir)))[0])
-
+def run():
 	from wonderbuild.project import Project
 	project = Project()
 
@@ -38,13 +35,24 @@ def main():
 		if s.startswith('lib_'): bench_libs.append(BenchLib(s))
 	
 	project.conf()
+	import gc
+	#gc.disable()
 	project.build(bench_libs)
 	project.dump()
 
-	'''import cProfile, pstats
-	cProfile.run('main()', '/tmp/profile')
-	p = pstats.Stats('/tmp/profile')
-	p.sort_stats('cumulative').print_stats(80)'''
+def main():
+	import sys, os
+	sys.path.append(os.path.split(os.path.abspath(os.path.join(os.getcwd(), os.pardir)))[0])
 
-if __name__ == '__main__':
-	main()
+	from wonderbuild.options import options, known_options, help
+	known_options.add('--profile')
+	help['--profile'] = ('--profile', 'profile wonderbuild execution')
+
+	if '--profile' in options:
+		import cProfile, pstats
+		cProfile.run('run()', '/tmp/profile')
+		p = pstats.Stats('/tmp/profile')
+		p.sort_stats('cumulative').reverse_order().print_stats()
+	else: run()
+	
+if __name__ == '__main__': main()
