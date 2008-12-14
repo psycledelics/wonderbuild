@@ -4,7 +4,7 @@
 
 if __name__ == '__main__':
 
-	import os, os.path, cPickle, gc, time
+	import os, cPickle, gc, time
 
 	def load(path):
 		f = file(path, 'rb')
