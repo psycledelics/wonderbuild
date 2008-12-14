@@ -1,18 +1,41 @@
-real	0m0.990s
-user	0m1.188s
-sys	0m0.304s
+anechoid 2008
 
-real    0m9.626s
-user    0m6.360s
-sys     0m3.040s
+	real	0m0.987s
+	user	0m1.196s
+	sys	0m0.276s
 
-real    0m9.708s
-user    0m6.560s
-sys     0m2.770s
+	real	0m0.990s
+	user	0m1.188s
+	sys	0m0.304s
 
---quiet
+	--quiet
 
-real    0m9.377s
-user    0m6.550s
-sys     0m2.670s
+	real	0m0.999s
+	user	0m1.156s
+	sys	0m0.348s
+
+	real	0m0.998s
+	user	0m1.176s
+	sys	0m0.324s
+
+
+	real	0m0.995s
+	user	0m1.156s
+	sys	0m0.328s
+
+eeepc
+
+	real    0m9.626s
+	user    0m6.360s
+	sys     0m3.040s
+
+	real    0m9.708s
+	user    0m6.560s
+	sys     0m2.770s
+
+	--quiet
+
+	real    0m9.377s
+	user    0m6.550s
+	sys     0m2.670s
 

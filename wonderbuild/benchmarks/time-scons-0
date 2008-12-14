@@ -1,7 +1,15 @@
-real	2m16.772s
-user	2m1.104s
-sys	2m21.585s
+anechoid 2008
 
-real    11m9.381s
-user    7m0.060s
-sys     2m44.290s
+	real	2m8.905s
+	user	1m57.471s
+	sys	2m16.697s
+
+	real	2m16.772s
+	user	2m1.104s
+	sys	2m21.585s
+
+eeepc
+
+	real    11m9.381s
+	user    7m0.060s
+	sys     2m44.290s

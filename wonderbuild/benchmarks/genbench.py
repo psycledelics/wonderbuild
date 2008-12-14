@@ -179,7 +179,7 @@ def CreateLibrary(lib_number, classes, internal_includes, external_includes):
 
     os.chdir("..")
 
-    CreateWonderbuild(lib_number, classes)
+    #CreateWonderbuild(lib_number, classes)
 
 
 def CreateSConstruct(libs):
