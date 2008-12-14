@@ -12,7 +12,7 @@ anechoid 2008
 		user	1m12.349s
 		sys	1m0.776s
 
-	without > /dev/null
+	svn rev 7666, without > /dev/null
 
 		real	0m45.169s
 		user	1m12.717s
