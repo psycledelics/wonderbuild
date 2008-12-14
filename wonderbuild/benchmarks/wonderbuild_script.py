@@ -34,7 +34,9 @@ def main():
 				self.paths.append(top_src_dir)
 
 	bench_libs = []
-	for s in top_src_dir.find_iter(in_pat = 'lib_*'): bench_libs.append(BenchLib(s.name))
+	for s in top_src_dir.actual_children:
+		if s.startswith('lib_'): bench_libs.append(BenchLib(s))
+	
 	project.conf()
 	project.build(bench_libs)
 	project.dump()
