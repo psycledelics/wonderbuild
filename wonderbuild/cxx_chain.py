@@ -368,12 +368,13 @@ class BaseModConf(Conf):
 			args.append('-Wl,-Bdynamic')
 			for l in shared_libs: args.append('-l' + l)
 
+	#staticmethod
 	def _linux_target(self, mod_task):
-		dir = self.project.bld_node.node_path(os.path.join('modules', mod_task.name))
+		dir = mod_task.project.bld_node.node_path(os.path.join('modules', mod_task.name))
 		if mod_task.conf.kind == 'prog': name = mod_task.name
 		else:
 			name = 'lib' + mod_task.name
-			if self.shared: name += '.so'
+			if mod_task.conf.shared: name += '.so'
 			else: name += '.a'
 		return dir.node_path(name)
 

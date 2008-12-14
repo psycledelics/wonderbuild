@@ -37,8 +37,7 @@ def main():
 	lib_foo = LibFoo()
 
 	class MainProg(Mod):
-		def __init__(self):
-			Mod.__init__(self, MainProg.MainModConf(base_mod_conf, ObjConf(base_obj_conf), 'prog'), 'main')
+		def __init__(self): Mod.__init__(self, MainProg.MainModConf(base_mod_conf, ObjConf(base_obj_conf), 'prog'), 'main')
 
 		class MainModConf(ModConf):
 			def conf(self):
