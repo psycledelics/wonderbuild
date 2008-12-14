@@ -1,0 +1,36 @@
+Python 2.5.2
+
+OneElementDict
+dump: 4.70174098015
+size: 14737616
+load: 1.38954401016
+OneSlot
+dump: 5.52831196785
+size: 15737609
+load: 1.394302845
+TwoSlots
+dump: 5.93359208107
+size: 20106282
+load: 1.69159293175
+TwoSlotsTuple
+dump: 4.17500400543
+size: 12606287
+load: 0.895298957825
+
+OneElementDict
+dump: 4.90453386307
+size: 14737616
+load: 1.40234994888
+OneSlot
+dump: 5.66278195381
+size: 15737609
+load: 1.35851192474
+TwoSlots
+dump: 5.97241091728
+size: 20106282
+load: 1.670140028
+TwoSlotsTuple
+dump: 4.19002914429
+size: 12606287
+load: 0.906793117523
+
