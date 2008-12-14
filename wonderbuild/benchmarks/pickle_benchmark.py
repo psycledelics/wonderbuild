@@ -23,19 +23,26 @@ if __name__ == '__main__':
 		print 'dump:', time.time() - t0
 		f.close()
 
-	def test(X):
+	def test(X): _test(X, False); _test(X, True)
+	def _test(X, linked):
 		gc.disable()
 		path = '/tmp/t'
 		count = 500000
 		d = {}
-		for x in xrange(count): d[x] = X(x, x)
-		print X.__name__;
+		for x in xrange(count):
+			if x == 0 or not linked: d[x] = X(x, x)
+			else: d[x] = X(d[x // 2], d[x // 2].a)
+		print X.__name__, linked and 'linked' or '';
 		dump(d, path);
 		print 'size:', os.path.getsize(path)
 		d = load(path)
 		for x in xrange(count):
-			assert d[x].a == x
-			#assert d[x].b == x
+			if x == 0 or not linked:
+				assert d[x].a == x
+				#assert d[x].b == x
+			else:
+				assert d[x].a is d[x // 2]
+				#assert d[x].b is d[x // 2].a
 		gc.enable()
 
 	class OneElementDict(object):
