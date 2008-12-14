@@ -2,15 +2,28 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2007-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import threading
+import os, threading
 #python 2.5.0a1 from __future__ import with_statement
 
 from logger import is_debug, debug, colored
+from options import options, known_options, help
+
+try: cpu_count = os.sysconf('SC_NPROCESSORS_ONLN')
+except: cpu_count = int(os.environ.get('NUMBER_OF_PROCESSORS', 1)) # env var defined on mswindows
+
+known_options |= set(['--jobs', '--timeout'])
+help['--jobs'] = ('--jobs=<count>', 'use <count> threads in the scheduler to process the tasks', 'autodetected: ' + str(cpu_count))
+help['--timeout'] = ('--timeout=<seconds>', 'wait at most <seconds> for a task to complete before considering it\'s busted', '3600.0')
 
 class Scheduler():
 	def __init__(self):
-		self.thread_count = 4
-		self.timeout = 3600.0
+		self.thread_count = 0
+		self.timeout = 0
+		for o in options:
+			if o.startswith('--jobs='): self.thread_count = int(o[len('--jobs='):])
+			elif o.startswith('--timeout='): self.timeout = float(o[len('--timeout='):])
+		if self.thread_count == 0: self.thread_count = cpu_count
+		if self.timeout == 0: self.timeout = 3600.0
 		self._todo_count = self._task_count = 0
 
 	def start(self):

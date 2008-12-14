@@ -41,5 +41,12 @@ def main():
 	project.build(bench_libs)
 	project.dump()
 
+	'''
+		import cProfile, pstats
+		cProfile.run("import Build\nBuild.bld.flush()", 'profi.txt')
+		p = pstats.Stats('profi.txt')
+		p.sort_stats('cumulative').print_stats(80)
+	'''
+
 if __name__ == '__main__':
 	main()
