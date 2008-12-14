@@ -179,6 +179,8 @@ def CreateLibrary(lib_number, classes, internal_includes, external_includes):
 
     os.chdir("..")
 
+    CreateWonderbuild(lib_number, classes)
+
 
 def CreateSConstruct(libs):
     handle = file("SConstruct", "w");
@@ -235,6 +237,31 @@ def CreateW(lib_number, classes):
     handle.write("    obj.target = 'lib2'\n")
     handle.write('def set_options(opt): pass\n')
     handle.write('def configure(conf): pass\n\n')
+
+def CreateWonderbuild(lib_number, classes):
+    handle = file("wonderbuild_script_" + str(lib_number), "w");
+    handle.write(
+'''	class BenchLib%s(Mod):
+		def __init__(self, name): Mod.__init__(self, ModConf(base_mod_conf, BenchLib%s.BenchObjConf(base_obj_conf), 'lib'), name)
+	
+		def dyn_in_tasks(self):
+			if len(self.in_tasks) != 0: return None
+			Mod.dyn_in_tasks(self)
+			src_dir = top_src_dir.node_path(self.name)
+			self.obj_conf.paths.append(src_dir)\n''' % (str(lib_number), str(lib_number))
+    )
+    for i in xrange(classes):
+        handle.write(
+'''			self.new_obj(src_dir.node_path('class_%s.cpp'))\n''' % str(i)
+        )
+    handle.write(
+'''			return self.in_tasks
+		class BenchObjConf(ObjConf):
+			def conf(self):
+				ObjConf.conf(self)
+				self.paths.append(top_src_dir)
+	bench_libs.append(BenchLib%s('lib_%s'))\n\n''' % (str(lib_number), str(lib_number))
+    )
 
 def CreateWtop(libs):
     handle = file("wscript", "w")
