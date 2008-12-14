@@ -1,0 +1,18 @@
+anechoid 2008
+
+	without cached cpp deps
+
+		real	0m2.812s
+		user	0m2.688s
+		sys	0m0.092s
+
+	with cached cpp deps
+
+		real	0m1.629s
+		user	0m1.488s
+		sys	0m0.112s
+
+		real	0m1.624s
+		user	0m1.520s
+		sys	0m0.068s
+

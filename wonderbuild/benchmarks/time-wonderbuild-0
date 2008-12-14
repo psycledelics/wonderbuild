@@ -1,0 +1,11 @@
+anechoid 2008
+
+	real	0m50.595s
+	user	1m12.161s
+	sys	1m1.476s
+
+	> /dev/null
+	
+	real	0m43.412s
+	user	1m12.349s
+	sys	1m0.776s
