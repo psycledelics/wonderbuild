@@ -187,14 +187,11 @@ class BaseObjConf(Conf):
 	
 	@property
 	def args(self):
-		self.lock.acquire()
-		try:
-			try: return self.__args
-			except AttributeError:
-				args = self.__args = self._args()
-				if __debug__ and is_debug: debug('conf: cxx: compiler: ' + str(args))
-				return args
-		finally: self.lock.release()
+		try: return self.__args
+		except AttributeError:
+			args = self.__args = self._args()
+			if __debug__ and is_debug: debug('conf: cxx: compiler: ' + str(args))
+			return args
 
 	def _gcc_args(self):
 		args = [self.prog, '-o', None, None, '-c', '-pipe']
@@ -328,13 +325,10 @@ class BaseModConf(Conf):
 
 	@property
 	def args(self):
-		self.lock.acquire()
-		try:
-			try: return self.__args
-			except AttributeError:
-				args = self.__args = self._args()
-				return args
-		finally: self.lock.release()
+		try: return self.__args
+		except AttributeError:
+			args = self.__args = self._args()
+			return args
 
 	def _gcc_args(self):
 		ld_args = [self.ld_prog, '-o', None, None] + self.ld_flags
@@ -532,15 +526,15 @@ class Obj(Task):
 			except KeyError:
 				self.implicit_deps, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
 				new_implicit_deps = True
+				sigs = [s.sig for s in self.implicit_deps]
 			else:
-				for dep in self.implicit_deps:
-					if not dep.exists:
-						# A cached implicit dep does not exist anymore.
-						# We must recompute the implicit deps.
-						self.implicit_deps, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
-						new_implicit_deps = True
-						break
-			sigs = [s.sig for s in self.implicit_deps]
+				try: sigs = [s.sig for s in self.implicit_deps]
+				except OSError:
+					# A cached implicit dep does not exist anymore.
+					# We must recompute the implicit deps.
+					self.implicit_deps, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
+					new_implicit_deps = True
+					sigs = [s.sig for s in self.implicit_deps]
 			sigs.sort()
 			for s in sigs: sig.update(s)
 			sig = sig.digest()

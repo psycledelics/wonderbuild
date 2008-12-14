@@ -32,8 +32,7 @@ class FileSystem(object):
 
 ignore = set(['.svn'])
 
-if __debug__:
-	if is_debug: all_abs_paths = set()
+if __debug__ and is_debug: all_abs_paths = set()
 
 class Node(object):
 	__slots__ = (
