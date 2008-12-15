@@ -5,7 +5,7 @@
 import os, threading
 #python 2.5.0a1 from __future__ import with_statement
 
-from logger import is_debug, debug, colored
+from logger import is_debug, debug, colored, silent
 from options import options, known_options, help
 
 try: cpu_count = os.sysconf('SC_NPROCESSORS_ONLN')
@@ -145,7 +145,7 @@ class Scheduler():
 						self._condition.notifyAll()
 						raise
 					self._todo_count -= 1
-					if task.executed: print colored('7;32', 'wonderbuild: progress: ' + self.progress())
+					if task.executed and not silent: print colored('7;32', 'wonderbuild: progress: ' + self.progress())
 					self._running_count -= 1
 					if self._todo_count == 0 and self._joining:
 						self._condition.notifyAll()

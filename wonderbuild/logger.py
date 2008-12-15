@@ -1,15 +1,20 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2006-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import sys, os
+
+from options import options, known_options, help
+
+known_options.add('--silent')
+help['--silent'] = ('--silent', 'suppress progress output (errors and debugging messages are still printed)')
+
+silent = '--silent' in options
 
 if not __debug__:
 	is_debug = False
 	def debug(s): pass
 else:
-	from options import options, known_options, help
-
 	known_options.add('--zones')
 	help['--zones'] = ('--zones [zones ...]', 'wonderbuild debugging zones (exec, conf, task, sched, fs, project, cpp ...)')
 

@@ -21,11 +21,11 @@ class IncludeScanner(object):
 			if  __debug__ and is_debug: debug('cpp: all anew')
 			self.contents = {} # { node: (rel_includes, abs_includes) }
 			state_and_cache[self.__class__.__name__] = self.contents
-		self.not_found = set() # of unique_path
+		self.not_found = set() # of nodes collected from #include "" but not from #include <>
 		if False and __debug__ and is_debug: self.display()
 	
 	def scan_deps(self, source, paths):
-		not_found = []
+		not_found = set() # contains either nodes (for #include "") or paths (for #include <>)
 		seen = self._scan_deps(source, paths, not_found)
 		return seen, not_found
 	def _scan_deps(self, source, paths, not_found, seen = None):
@@ -37,16 +37,14 @@ class IncludeScanner(object):
 			seen.add(source)
 
 		parse = False
-		try: r = self.contents[source]
+		try: content = self.contents[source]
 		except KeyError: parse = True
 		else:
 			if source.changed:
 				if __debug__ and is_debug: debug('cpp: changed   : ' + source.path)
 				parse = True
-		
 		if parse:
 			if __debug__ and is_debug: debug('cpp: parsing   : ' + source.path)
-
 			try: f = file(source.path, 'rb')
 			except IOError:
 				if __debug__ and is_debug: debug('cpp: not found : ' + source.path)
@@ -54,28 +52,25 @@ class IncludeScanner(object):
 				return seen
 			try: s = f.read()
 			finally: f.close()
+			content = self.parse_string(s)
+			self.contents[source] = content
 
-			r = self.parse_string(s)
-			self.contents[source] = r
-		rel_includes, abs_includes = r
-
-		if rel_includes:
+		rel_includes, abs_includes = content
+		if len(rel_includes) != 0:
 			dir = source.parent
 			for include in rel_includes:
 				sub_source = self.search_rel(dir, include, paths, not_found)
 				if sub_source is not None: self._scan_deps(sub_source, paths, not_found, seen)
-
-		if abs_includes:
+		if len(abs_includes) != 0:
 			for include in abs_includes:
 				sub_source = self.search_abs(include, paths, not_found)
 				if sub_source is not None: self._scan_deps(sub_source, paths, not_found, seen)
-			
 		return seen
 	
 	def search_rel(self, dir, include, paths, not_found):
 		n = dir.node_path(include)
 		if n in self.not_found:
-			not_found.append(u)
+			not_found.add(n)
 			return None
 		if n.parent.exists:
 			n.parent.actual_children
@@ -88,6 +83,7 @@ class IncludeScanner(object):
 				if abs is not None: return abs
 			if __debug__ and is_debug: debug('cpp: not found : #include "' + u + '"')
 		self.not_found.add(n)
+		not_found.add(n)
 		return None
 		
 	def search_abs(self, include, paths, not_found):
@@ -98,7 +94,7 @@ class IncludeScanner(object):
 				n.parent.actual_children
 				if n.exists: return n
 		if __debug__ and is_debug: debug('cpp: not found : #include <' + include + '>')
-		not_found.append(include)
+		not_found.add(include)
 		return None
 
 	def parse_string(self, s): return self._parse_string_fast(s)

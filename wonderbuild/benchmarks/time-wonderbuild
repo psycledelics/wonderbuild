@@ -38,7 +38,7 @@ anechoid 2008
 		user	0m1.576s
 		sys	0m0.092s
 
-	use try/except instead of if exists for implicit deps sigs
+	use try/except instead of 'if exists' for implicit deps sigs
 
 		real    0m1.697s
 		user    0m1.544s
@@ -59,4 +59,47 @@ anechoid 2008
 		real    0m1.668s
 		user    0m1.544s
 		sys     0m0.096s
+		
+	use ''.join(sigs) instead of 'for s in sigs' for implicit deps sigs
 
+		real    0m1.653s
+		user    0m1.524s
+		sys     0m0.092s
+
+		real    0m1.647s
+		user    0m1.540s
+		sys     0m0.064s
+
+		real    0m1.644s
+		user    0m1.488s
+		sys     0m0.112s
+
+		real    0m1.662s
+		user    0m1.528s
+		sys     0m0.104s
+
+		real    0m1.628s
+		user    0m1.492s
+		sys     0m0.100s
+
+	no idea what changed, but it's a tiny bit faster
+
+		real	0m1.623s
+		user	0m1.492s
+		sys	0m0.096s
+
+		real	0m1.626s
+		user	0m1.492s
+		sys	0m0.084s
+
+		real	0m1.618s
+		user	0m1.484s
+		sys	0m0.096s
+
+		real	0m1.613s
+		user	0m1.448s
+		sys	0m0.116s
+
+		real	0m1.613s
+		user	0m1.488s
+		sys	0m0.080s

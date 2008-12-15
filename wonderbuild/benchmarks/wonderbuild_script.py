@@ -1,16 +1,13 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2006-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-def run():
-	from wonderbuild.project import Project
-	project = Project()
-
-	from wonderbuild.cxx_chain import BaseObjConf, BaseModConf
+def wonderbuild_script(project):
+	from cxx_chain import BaseObjConf, BaseModConf
 	base_obj_conf = BaseObjConf(project)
 	base_mod_conf = BaseModConf(base_obj_conf)
 
-	from wonderbuild.cxx_chain import PkgConf, ObjConf, ModConf, Mod
+	from cxx_chain import PkgConf, ObjConf, ModConf, Mod
 
 	top_src_dir = project.src_node.node_path('bench')
 
@@ -34,25 +31,4 @@ def run():
 	for s in top_src_dir.actual_children:
 		if s.startswith('lib_'): bench_libs.append(BenchLib(s))
 	
-	project.conf()
-	import gc
-	#gc.disable()
-	project.build(bench_libs)
-	project.dump()
-
-def main():
-	import sys, os
-	sys.path.append(os.path.split(os.path.abspath(os.path.join(os.getcwd(), os.pardir)))[0])
-
-	from wonderbuild.options import options, known_options, help
-	known_options.add('--profile')
-	help['--profile'] = ('--profile', 'profile wonderbuild execution')
-
-	if '--profile' in options:
-		import cProfile, pstats
-		cProfile.run('run()', '/tmp/profile')
-		p = pstats.Stats('/tmp/profile')
-		p.sort_stats('cumulative').reverse_order().print_stats()
-	else: run()
-	
-if __name__ == '__main__': main()
+	return bench_libs

@@ -1,12 +1,12 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2006-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2007-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import os, threading
 #python 2.5.0a1 from __future__ import with_statement
 
 from options import options, known_options, help
-from logger import out, is_debug, debug, colored
+from logger import out, is_debug, debug, colored, silent
 from signature import Sig, raw_to_hexstring
 from task import Task, exec_subprocess
 from cpp_include_scanner import IncludeScanner
@@ -30,11 +30,13 @@ class Conf(object):
 	def args(self): pass
 
 	def print_desc(self, desc, color = '34'):
+		if silent: return
 		out.write(colored(color, 'wonderbuild: conf: ' + desc + ':') + ' ')
 		if __debug__ and is_debug: out.write('\n')
 		out.flush()
 		
 	def print_result_desc(self, desc, color = '34'):
+		if silent: return
 		out.write(colored(color, desc))
 		out.flush()
 
@@ -68,7 +70,7 @@ class PkgConf(Conf):
 			try: return self._compiler_args
 			except AttributeError:
 				args = [self.prog, '--cflags'] + self.flags + self.pkgs
-				self.print_desc('getting pkg-config compile flags: ' + ' '.join(self.pkgs))
+				if not silent: self.print_desc('getting pkg-config compile flags: ' + ' '.join(self.pkgs))
 				r, out, err = exec_subprocess(args, silent = True)
 				if r != 0: 
 					self.print_result_desc('error\n', color = '31')
@@ -88,13 +90,13 @@ class PkgConf(Conf):
 				args = [self.prog, '--libs'] + self.flags + self.pkgs
 				if static:
 					args.append('--static')
-					self.print_desc('getting pkg-config static libs: ' + ' '.join(self.pkgs))
-				else: self.print_desc('getting pkg-config shared libs: ' + ' '.join(self.pkgs))
+					if not silent: self.print_desc('getting pkg-config static libs: ' + ' '.join(self.pkgs))
+				elif not silent: self.print_desc('getting pkg-config shared libs: ' + ' '.join(self.pkgs))
 				r, out, err = exec_subprocess(args, silent = True)
 				if r != 0: 
-					self.print_result_desc('error\n', color = '31')
+					if not silent: self.print_result_desc('error\n', color = '31')
 					raise Exception, r
-				self.print_result_desc('ok\n', color = '32')
+				if not silent: self.print_result_desc('ok\n', color = '32')
 				out = out.rstrip('\n').split()
 				self._libs_args = out
 				return out
@@ -158,32 +160,27 @@ class BaseObjConf(Conf):
 				else: self.flags = []
 
 			self._check_kind_and_version()
-			if self.kind == 'gcc':
-				self._args = self._gcc_args
-			else:
-				print >> sys.stderr, 'unsupported c++ compiler'
-				sys.exit(1)
+			if self.kind == 'gcc': self._args = self._gcc_args
+			else: raise Exception, 'unsupported c++ compiler'
 			self.project.state_and_cache['cxx-compiler'] = self.sig, self.prog, self.flags, self.pic, self.optim, self.debug, self.kind, self.version, self.args
 
 		if self.kind == 'gcc':
 			self.pic_args = self._gcc_pic_args
 			self.paths_args = self._posix_paths_args
 			self.defines_args = self._posix_defines_args
-		else:
-			print >> sys.stderr, 'unsupported c++ compiler'
-			sys.exit(1)
+		else: raise Exception, 'unsupported c++ compiler'
 
 	def _check_kind_and_version(self):
-		self.print_desc('checking for c++ compiler')
+		if not silent: self.print_desc('checking for c++ compiler')
 		r, out, err = exec_subprocess([self.prog, '-dumpversion'], silent = True)
 		if r != 0:
-			self.print_result_desc('not gcc\n', '31')
+			if not silent: self.print_result_desc('not gcc\n', '31')
 			self.kind = None
 			self.version = None
 		else:
 			self.kind = 'gcc'
 			self.version = out.rstrip('\n')
-		self.print_result_desc(self.kind + ' version ' + self.version + '\n', '32')
+		if not silent: self.print_result_desc(self.kind + ' version ' + self.version + '\n', '32')
 	
 	@property
 	def args(self):
@@ -223,10 +220,11 @@ class BaseObjConf(Conf):
 		args = obj_task.conf.args[:]
 		args[2] = obj_task.target.path
 		args[3] = obj_task.source.path
-		if obj_task.conf.pic:
-			obj_task.print_desc('compiling pic/shared object from c++ ' + obj_task.source.path + ' -> ' + obj_task.target.path, color = '7;1;34')
-		else:
-			obj_task.print_desc('compiling non-pic/static object from c++ ' + obj_task.source.path + ' -> ' + obj_task.target.path, color = '7;34')
+		if not silent:
+			if obj_task.conf.pic:
+				obj_task.print_desc('compiling pic/shared object from c++ ' + obj_task.source.path + ' -> ' + obj_task.target.path, color = '7;1;34')
+			else:
+				obj_task.print_desc('compiling non-pic/static object from c++ ' + obj_task.source.path + ' -> ' + obj_task.target.path, color = '7;34')
 		r, out, err = exec_subprocess(args)
 		if r != 0: raise Exception, r
 
@@ -307,11 +305,8 @@ class BaseModConf(Conf):
 			if not ranlib_prog: self.ranlib_prog = 'ranlib'
 			if not ranlib_flags: self.ranlib_flags = os.environ.get('RANLIBFLAGS', None)
 
-			if self.base_obj_conf.kind == 'gcc':
-				self._args = self._gcc_args
-			else:
-				print >> sys.stderr, 'unsupported lib archiver/linker'
-				sys.exit(1)
+			if self.base_obj_conf.kind == 'gcc': self._args = self._gcc_args
+			else: raise Exception, 'unsupported lib archiver/linker'
 			self.project.state_and_cache['cxx-module'] = self.sig, self.shared, self.ld_prog, self.ld_flags, self.ar_prog, self.ar_flags, self.ranlib_prog, self.ranlib_flags, self.args
 
 		if self.base_obj_conf.kind == 'gcc':
@@ -319,9 +314,7 @@ class BaseModConf(Conf):
 			self.paths_args = self._posix_paths_args
 			self.libs_args = self._gcc_libs_args
 			self.target = self._linux_target
-		else:
-			print >> sys.stderr, 'unsupported lib archiver/linker'
-			sys.exit(1)
+		else: raise Exception, 'unsupported lib archiver/linker'
 
 	@property
 	def args(self):
@@ -378,16 +371,17 @@ class BaseModConf(Conf):
 			args[2] = mod_task.target.path
 			args[3] = [s.path for s in mod_task.sources]
 			args = args[:3] + args[3] + args[4:]
-			if mod_task.conf.kind == 'prog':
-				mod_task.print_desc('linking program ' + mod_task.target.path, color = '7;1;32')
-			elif mod_task.conf.kind == 'loadable':
-				mod_task.print_desc('linking loadable module ' + mod_task.target.path, color = '7;1;34')
-			else:
-				mod_task.print_desc('linking shared lib ' + mod_task.target.path, color = '7;1;33')
+			if not silent:
+				if mod_task.conf.kind == 'prog':
+					mod_task.print_desc('linking program ' + mod_task.target.path, color = '7;1;32')
+				elif mod_task.conf.kind == 'loadable':
+					mod_task.print_desc('linking loadable module ' + mod_task.target.path, color = '7;1;34')
+				else:
+					mod_task.print_desc('linking shared lib ' + mod_task.target.path, color = '7;1;33')
 			r, out, err = exec_subprocess(args)
 			if r != 0: raise Exception, r
 		else:
-			mod_task.print_desc('archiving and indexing static lib ' + mod_task.target.path, color = '7;36')
+			if not silent: mod_task.print_desc('archiving and indexing static lib ' + mod_task.target.path, color = '7;36')
 			ar_args, ranlib_args = mod_task.conf.args
 			args = ar_args[:]
 			args.append(mod_task.target.path)
@@ -515,45 +509,94 @@ class Obj(Task):
 		try: return self.project.task_states[self.uid][0]
 		except KeyError: return None
 
-	@property
-	def sig(self):
-		try: return self._sig
-		except AttributeError:
-			sig = Sig(self.conf.sig)
-			sig.update(self.source.sig)
-			new_implicit_deps = False
-			try: self.implicit_deps = self.project.task_states[self.uid][1]
-			except KeyError:
-				self.implicit_deps, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
-				new_implicit_deps = True
-				sigs = [s.sig for s in self.implicit_deps]
-			else:
-				try: sigs = [s.sig for s in self.implicit_deps]
-				except OSError:
-					# A cached implicit dep does not exist anymore.
-					# We must recompute the implicit deps.
-					self.implicit_deps, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
+	if True: # faster
+		@property
+		def sig(self):
+			try: return self._sig
+			except AttributeError:
+				sig = Sig(self.conf.sig)
+				sig.update(self.source.sig)
+				new_implicit_deps = False
+				try: old_sig, self._implicit_deps = self.project.task_states[self.uid]
+				except KeyError:
+					old_sig = None
+					self._implicit_deps, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
 					new_implicit_deps = True
-					sigs = [s.sig for s in self.implicit_deps]
+					sigs = [s.sig for s in self._implicit_deps]
+				else:
+					try: sigs = [s.sig for s in self._implicit_deps]
+					except OSError:
+						# A cached implicit dep does not exist anymore.
+						# We must recompute the implicit deps.
+						self._implicit_deps, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
+						new_implicit_deps = True
+						sigs = [s.sig for s in self._implicit_deps]
+				sigs.sort()
+				sig.update(''.join(sigs))
+				sig = sig.digest()
+				if sig != old_sig:
+					if __debug__ and is_debug: debug('task: sig changed: ' + self.target.path)
+					if not new_implicit_deps:
+						# Either the include path or a source or header content has changed.
+						# We must recompute the implicit deps.
+						sig = Sig(self.conf.sig)
+						sig.update(self.source.sig)
+						self._implicit_deps, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
+						sigs = [s.sig for s in self._implicit_deps]
+						sigs.sort()
+						sig.update(''.join(sigs))
+						sig = sig.digest()
+				self._sig = sig
+				return sig
+
+		def update_sig(self): self.project.task_states[self.uid] = (self.sig, self._implicit_deps)
+
+	else: # slower
+		@property
+		def sig(self):
+			try: return self._sig
+			except AttributeError:
+				scan_implicit_deps = False
+				try: old_sig, self._implicit_deps, self._implicit_deps_sig = self.project.task_states[self.uid]
+				except KeyError:
+					old_sig = None
+					scan_implicit_deps = True
+				else:
+					try:
+						for dep in self._implicit_deps:
+							if dep.changed:
+								scan_implicit_deps = True
+								break
+					except OSError:
+						# A cached implicit dep does not exist anymore.
+						# We must recompute the implicit deps.
+						scan_implicit_deps = True
+				if scan_implicit_deps: self._do_scan_implicit_deps()
+				sig = Sig(self.conf.sig)
+				sig.update(self.source.sig)
+				sig.update(self._implicit_deps_sig)
+				sig = sig.digest()
+				if sig != old_sig:
+					if __debug__ and is_debug: debug('task: sig changed: ' + self.target.path)
+					if not scan_implicit_deps:
+						# Either the include path or the source content has changed.
+						# We must recompute the implicit deps.
+						self._do_scan_implicit_deps()
+						sig = Sig(self.conf.sig)
+						sig.update(self.source.sig)
+						sig.update(self._implicit_deps_sig)
+						sig = sig.digest()
+				self._sig = sig
+				return sig
+
+		def _do_scan_implicit_deps(self):
+			if __debug__ and is_debug: debug('task: scanning implicit deps: ' + self.source.path)
+			self._implicit_deps, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
+			sigs = [s.sig for s in self._implicit_deps]
 			sigs.sort()
-			for s in sigs: sig.update(s)
-			sig = sig.digest()
-			if sig != self.old_sig:
-				if __debug__ and is_debug: debug('task: sig changed: ' + self.target.path)
-				if not new_implicit_deps:
-					# Either the include path or a source or header content has changed.
-					# We must recompute the implicit deps.
-					sig = Sig(self.conf.sig)
-					sig.update(self.source.sig)
-					self.implicit_deps, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
-					sigs = [s.sig for s in self.implicit_deps]
-					sigs.sort()
-					for s in sigs: sig.update(s)
-					sig = sig.digest()
-			self._sig = sig
-			return sig
-		
-	def update_sig(self): self.project.task_states[self.uid] = (self.sig, self.implicit_deps)
+			self._implicit_deps_sig = Sig(''.join(sigs)).digest()
+
+		def update_sig(self): self.project.task_states[self.uid] = (self.sig, self._implicit_deps, self._implicit_deps_sig)
 
 	def process(self): self.conf.base_conf.process(self)
 
