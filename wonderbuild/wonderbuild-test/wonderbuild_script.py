@@ -13,8 +13,6 @@ def wonderbuild_script(project):
 		def __init__(self): Mod.__init__(self, ModConf(base_mod_conf, LibFoo.FooObjConf(base_obj_conf), 'lib'), 'foo')
 
 		def dyn_in_tasks(self):
-			if len(self.in_tasks) != 0: return None
-			Mod.dyn_in_tasks(self)
 			src_dir = self.project.src_node.node_path('src')
 			self.obj_conf.paths = [src_dir]
 			for s in src_dir.node_path('foo').find_iter(prunes = ['todo'], in_pat = '*.cpp'): self.new_obj(s)
@@ -40,16 +38,12 @@ def wonderbuild_script(project):
 				self.libs.append(lib_foo.name)
 
 		def dyn_in_tasks(self):
-			try: self._dyn_in_tasks
-			except AttributeError:
-				self._dyn_in_tasks = None
-				Mod.dyn_in_tasks(self)
-				self.add_in_task(lib_foo)
-				src_dir = self.project.src_node.node_path('src')
-				self.obj_conf.paths = [src_dir]
-				for s in src_dir.node_path('main').find_iter(prunes = ['todo'], in_pat = '*.cpp'): self.new_obj(s)
-				#for h in src_dir.node_path('foo').find_iter(prunes = ['todo'], in_pat = '*.hpp', ex_pat = '*.private.hpp'): print h.path
-				return self.in_tasks
+			self.add_in_task(lib_foo)
+			src_dir = self.project.src_node.node_path('src')
+			self.obj_conf.paths = [src_dir]
+			for s in src_dir.node_path('main').find_iter(prunes = ['todo'], in_pat = '*.cpp'): self.new_obj(s)
+			#for h in src_dir.node_path('foo').find_iter(prunes = ['todo'], in_pat = '*.hpp', ex_pat = '*.private.hpp'): print h.path
+			return self.in_tasks
 	main_prog = MainProg()
 
 	return [main_prog]

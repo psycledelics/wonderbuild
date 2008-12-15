@@ -3,6 +3,7 @@
 # copyright 2007-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import os, threading
+from collections import deque
 #python 2.5.0a1 from __future__ import with_statement
 
 from logger import is_debug, debug, colored, silent
@@ -11,9 +12,12 @@ from options import options, known_options, help
 try: cpu_count = os.sysconf('SC_NPROCESSORS_ONLN')
 except: cpu_count = int(os.environ.get('NUMBER_OF_PROCESSORS', 1)) # env var defined on mswindows
 
-known_options |= set(['--jobs', '--timeout'])
+known_options |= set(['--jobs', '--timeout', '--progress'])
 help['--jobs'] = ('--jobs=<count>', 'use <count> threads in the scheduler to process the tasks', 'autodetected: ' + str(cpu_count))
 help['--timeout'] = ('--timeout=<seconds>', 'wait at most <seconds> for a task to complete before considering it\'s busted', '3600.0')
+help['--progress'] = ('--progress', 'show output progress even when silent')
+
+no_silent_progress = not silent or '--progress' in options
 
 class Scheduler():
 	def __init__(self):
@@ -29,7 +33,7 @@ class Scheduler():
 	def start(self):
 		if __debug__ and is_debug: debug('sched: starting threads: ' + str(self.thread_count))
 		self._tasks = set()
-		self._task_queue = []
+		self._task_queue = deque()
 		self._todo_count = self._task_count
 		self._running_count = 0
 		self._stop_requested = False
@@ -102,13 +106,15 @@ class Scheduler():
 					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': notified ' + str(self._joining) + ' ' + str(self._todo_count) + '-' + str(self._running_count) + '/' + str(self._task_count) + ' ' + str(self._stop_requested))
 				if self._joining and self._todo_count == 0 or self._stop_requested: break
 				task = self._task_queue.pop()
-				try: dyn_in_tasks = task.dyn_in_tasks()
-				except:
-					self._stop_requested = True
-					self._condition.notifyAll()
-					raise
+				if not task.dyn_in_tasks_called:
+					try: dyn_in_tasks = task.dyn_in_tasks()
+					except:
+						self._stop_requested = True
+						self._condition.notifyAll()
+						raise
+					task.dyn_in_tasks_called = True
 				if dyn_in_tasks is not None and len(dyn_in_tasks) != 0:
-					self._task_queue += dyn_in_tasks
+					self._task_queue.extendleft(dyn_in_tasks)
 					notify = len(dyn_in_tasks)
 					self._todo_count += notify
 					self._task_count += notify
@@ -145,7 +151,7 @@ class Scheduler():
 						self._condition.notifyAll()
 						raise
 					self._todo_count -= 1
-					if task.executed and not silent: print colored('7;32', 'wonderbuild: progress: ' + self.progress())
+					if no_silent_progress and task.executed: print colored('7;32', 'wonderbuild: progress: ' + self.progress())
 					self._running_count -= 1
 					if self._todo_count == 0 and self._joining:
 						self._condition.notifyAll()

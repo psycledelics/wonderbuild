@@ -7,7 +7,7 @@ def run():
 	project = Project()
 
 	d = {}
-	execfile('wonderbuild_script.py', d, d)
+	execfile('wonderbuild_script.py', d)
 	tasks = d['wonderbuild_script'](project)
 
 	from options import options, known_options, help

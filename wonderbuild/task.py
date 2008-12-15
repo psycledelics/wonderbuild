@@ -12,6 +12,7 @@ class Task(object):
 		self.out_tasks = []
 		#self.in_nodes = []
 		#self.out_nodes = []
+		self.dyn_in_tasks_called = False
 		self.processed = False
 		self.executed = False
 		self.project = project

@@ -15,8 +15,6 @@ def wonderbuild_script(project):
 		def __init__(self, name): Mod.__init__(self, ModConf(base_mod_conf, BenchLib.BenchObjConf(base_obj_conf), 'lib'), name)
 		
 		def dyn_in_tasks(self):
-			if len(self.in_tasks) != 0: return None
-			Mod.dyn_in_tasks(self)
 			src_dir = top_src_dir.node_path(self.name)
 			self.obj_conf.paths.append(src_dir)
 			for s in src_dir.find_iter(in_pat = '*.cpp'): self.new_obj(s)
