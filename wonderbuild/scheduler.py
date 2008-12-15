@@ -113,12 +113,12 @@ class Scheduler():
 						self._condition.notifyAll()
 						raise
 					task.dyn_in_tasks_called = True
-				if dyn_in_tasks is not None and len(dyn_in_tasks) != 0:
-					self._task_queue.extendleft(dyn_in_tasks)
-					notify = len(dyn_in_tasks)
-					self._todo_count += notify
-					self._task_count += notify
-					if notify > 1: self._condition.notify(notify - 1)
+					if dyn_in_tasks is not None and len(dyn_in_tasks) != 0:
+						self._task_queue.extendleft(dyn_in_tasks)
+						notify = len(dyn_in_tasks)
+						self._todo_count += notify
+						self._task_count += notify
+						if notify > 1: self._condition.notify(notify - 1)
 				else:
 					self._running_count += 1
 					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': process ' + self.progress() + ' ' + str(task.__class__))
