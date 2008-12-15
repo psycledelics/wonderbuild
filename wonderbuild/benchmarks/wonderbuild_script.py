@@ -9,7 +9,7 @@ def wonderbuild_script(project):
 
 	from cxx_chain import PkgConf, ObjConf, ModConf, Mod
 
-	top_src_dir = project.src_node.node_path('bench')
+	top_src_dir = project.src_node.node_path('++bench')
 
 	class BenchLib(Mod):
 		def __init__(self, name): Mod.__init__(self, ModConf(base_mod_conf, BenchLib.BenchObjConf(base_obj_conf), 'lib'), name)
