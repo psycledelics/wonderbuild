@@ -16,12 +16,12 @@ class IncludeScanner(object):
 	
 	def __init__(self, filesystem, state_and_cache):
 		self.fs = filesystem
-		try: self.contents = state_and_cache[self.__class__.__name__]
+		try: self.contents, self.not_found = state_and_cache[self.__class__.__name__]
 		except KeyError:
 			if  __debug__ and is_debug: debug('cpp: all anew')
 			self.contents = {} # { node: (rel_includes, abs_includes) }
-			state_and_cache[self.__class__.__name__] = self.contents
-		self.not_found = set() # of nodes collected from #include "" but not from #include <>
+			self.not_found = set() # of nodes collected from #include "" but not from #include <>
+			state_and_cache[self.__class__.__name__] = self.contents, self.not_found
 		if False and __debug__ and is_debug: self.display()
 	
 	def scan_deps(self, source, paths):

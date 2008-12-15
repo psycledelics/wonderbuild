@@ -103,3 +103,22 @@ anechoid 2008
 		real	0m1.613s
 		user	0m1.488s
 		sys	0m0.080s
+	
+	store cpp not found #include ""
+	
+		real    0m1.105s
+		user    0m0.988s
+		sys     0m0.084s
+
+		real    0m1.124s
+		user    0m1.064s
+		sys     0m0.028s
+
+		real    0m1.142s
+		user    0m1.044s
+		sys     0m0.064s
+
+		real    0m1.134s
+		user    0m1.040s
+		sys     0m0.056s
+
