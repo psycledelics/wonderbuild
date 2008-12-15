@@ -104,21 +104,21 @@ anechoid 2008
 		user	0m1.488s
 		sys	0m0.080s
 	
-	store cpp not found #include ""
-	
-		real    0m1.105s
-		user    0m0.988s
-		sys     0m0.084s
+	reduce pickle size by two by not storing cpp info
 
-		real    0m1.124s
-		user    0m1.064s
-		sys     0m0.028s
+		real	0m1.128s
+		user	0m1.064s
+		sys	0m0.040s
 
-		real    0m1.142s
-		user    0m1.044s
-		sys     0m0.064s
+		real	0m1.190s
+		user	0m1.092s
+		sys	0m0.044s
 
-		real    0m1.134s
-		user    0m1.040s
-		sys     0m0.056s
+		real	0m1.128s
+		user	0m1.036s
+		sys	0m0.056s
+
+		real	0m1.132s
+		user	0m1.032s
+		sys	0m0.068s
 
