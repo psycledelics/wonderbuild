@@ -42,7 +42,10 @@ class Node(object):
 
 	def __getstate__(self):
 		#if __debug__ and is_debug: debug('fs: getstate: ' + self.path + ' ' + str(self._time or self._old_time) + ' ' + str(self._children))
-		return self.parent, self.name, self._is_dir, self._children, self._actual_children or self._old_children, self._time or self._old_time, self._path
+		if False: # todo problem with merge?
+			return self.parent, self.name, self._is_dir, None, self._actual_children or self._old_children, self._time or self._old_time, self._path
+		else:
+			return self.parent, self.name, self._is_dir, self._children, self._actual_children or self._old_children, self._time or self._old_time, self._path
 
 	def __setstate__(self, data):
 		self.parent, self.name, self._is_dir, self._children, self._old_children, self._old_time, self._path = data
@@ -276,11 +279,11 @@ class Node(object):
 			down = self._height - ancestor._height
 			if down > 0:
 				node = self
-				path2 = []
+				path2 = [] # todo deque
 				for i in xrange(down):
-					path2.append(node.name)
+					path2.append(node.name) # todo deque.appendleft
 					node = node.parent
-				path2.reverse()
+				path2.reverse() # todo deque
 				path += path2
 			if len(path) == 0: self._path = os.curdir
 			else: self._path = os.sep.join(path)
