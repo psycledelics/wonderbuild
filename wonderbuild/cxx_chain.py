@@ -197,26 +197,27 @@ class BaseObjConf(Conf):
 		args += self.flags
 		return args
 
-	#staticmethod
-	def _gcc_pic_args(self, pic, args):
+	@staticmethod
+	def _gcc_pic_args(pic, args):
 		if pic: args.append('-fPIC')
 	
-	#staticmethod
-	def _posix_paths_args(self, paths, args):
+	@staticmethod
+	def _posix_paths_args(paths, args):
 		for p in paths: args += ['-I', p.path]
 
-	#staticmethod
-	def _posix_defines_args(self, defines, args):
+	@staticmethod
+	def _posix_defines_args(defines, args):
 		for k, v in defines.iteritems():
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + v)
 
 	def process(self, obj_task):
 		dir = obj_task.target.parent
+		lock = dir.lock
 		try:
-			dir.lock.acquire()
+			lock.acquire()
 			dir.make_dir()
-		finally: dir.lock.release()
+		finally: lock.release()
 		args = obj_task.conf.args[:]
 		args[2] = obj_task.target.path
 		args[3] = obj_task.source.path
@@ -337,16 +338,16 @@ class BaseModConf(Conf):
 
 		return ld_args, ar_args, ranlib_args
 
-	#staticmethod
-	def _gcc_shared_args(self, shared, args):
+	@staticmethod
+	def _gcc_shared_args(shared, args):
 		if shared: args.append('-shared')
 
-	#staticmethod
-	def _posix_paths_args(self, paths, args):
+	@staticmethod
+	def _posix_paths_args(paths, args):
 		for p in paths: args += ['-L', p.path]
 	
-	#staticmethod
-	def _gcc_libs_args(self, libs, static_libs, shared_libs, args):
+	@staticmethod
+	def _gcc_libs_args(libs, static_libs, shared_libs, args):
 		for l in libs: args.append('-l' + l)
 		if len(static_libs):
 			args.append('-Wl,-Bstatic')
@@ -355,8 +356,8 @@ class BaseModConf(Conf):
 			args.append('-Wl,-Bdynamic')
 			for l in shared_libs: args.append('-l' + l)
 
-	#staticmethod
-	def _linux_target(self, mod_task):
+	@staticmethod
+	def _linux_target(mod_task):
 		dir = mod_task.project.bld_node.node_path(os.path.join('modules', mod_task.name))
 		if mod_task.conf.kind == 'prog': name = mod_task.name
 		else:

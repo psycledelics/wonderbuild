@@ -18,3 +18,13 @@ anechoid 2008
 		user	1m12.717s
 		sys	1m2.776s
 
+	svn rev 7675, with --silent
+
+		real    0m41.947s
+		user    1m12.733s
+		sys     0m55.699s
+
+		real    0m42.066s
+		user    1m12.549s
+		sys     0m56.068s
+

@@ -3,6 +3,7 @@
 # copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import sys, os, os.path, stat, gc, cPickle, threading
+from collections import deque
 from fnmatch import fnmatchcase as match
 
 from logger import is_debug, debug
@@ -279,11 +280,10 @@ class Node(object):
 			down = self._height - ancestor._height
 			if down > 0:
 				node = self
-				path2 = [] # todo deque
+				path2 = deque()
 				for i in xrange(down):
-					path2.append(node.name) # todo deque.appendleft
+					path2.appendleft(node.name)
 					node = node.parent
-				path2.reverse() # todo deque
 				path += path2
 			if len(path) == 0: self._path = os.curdir
 			else: self._path = os.sep.join(path)
