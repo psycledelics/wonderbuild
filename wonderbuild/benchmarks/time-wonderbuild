@@ -122,3 +122,7 @@ anechoid 2008
 		user	0m1.032s
 		sys	0m0.068s
 
+		real    0m1.118s
+		user    0m1.048s
+		sys     0m0.040s
+
