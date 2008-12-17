@@ -688,6 +688,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\VstGenGui.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\VstGenGui.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\WireGui.cpp"
 					>
 				</File>
