@@ -41,12 +41,14 @@ class IncludeScanner(object):
 			seen.add(source)
 
 		parse = False
-		try: content = self.contents[source]
+		try: up_to_date, rel_includes, abs_includes = self.contents[source]
 		except KeyError: parse = True
 		else:
-			if source.changed:
-				if __debug__ and is_debug: debug('cpp: changed   : ' + source.path)
-				parse = True
+			if not up_to_date:
+				if source.changed:
+					if __debug__ and is_debug: debug('cpp: changed   : ' + source.path)
+					parse = True
+				else: self.contents[source] = True, rel_includes, abs_includes
 		if parse:
 			if __debug__ and is_debug: debug('cpp: parsing   : ' + source.path)
 			try: f = file(source.path, 'rb')
@@ -56,10 +58,9 @@ class IncludeScanner(object):
 				return seen
 			try: s = f.read()
 			finally: f.close()
-			content = self.parse_string(s)
-			self.contents[source] = content
+			rel_includes, abs_includes = self.parse_string(s)
+			self.contents[source] = True, rel_includes, abs_includes
 
-		rel_includes, abs_includes = content
 		if len(rel_includes) != 0:
 			dir = source.parent
 			for include in rel_includes:
