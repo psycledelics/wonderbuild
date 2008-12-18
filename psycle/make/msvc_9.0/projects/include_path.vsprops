@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="include_path"
+	InheritedPropertySheets=".\top_src_dir.vsprops"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="$(IncludePath)"
+	/>
+	<Tool
+		Name="VCResourceCompilerTool"
+		AdditionalIncludeDirectories="$(IncludePath)"
+	/>
+	<UserMacro
+		Name="IncludePath"
+		Value="&quot;$(ProjectDir)/src&quot;;&quot;$(SolutionDir)/src&quot;;&quot;$(SolutionDir)/../msvc_common/src&quot;;&quot;$(TopSrcDir)/packageneric/src&quot;;&quot;$(TopSrcDir)/external-packages/vst-2.4&quot;;&quot;$(TopSrcDir)/external-packages/foobar2000&quot;;&quot;$(TopSrcDir)/external-packages/winamp-2&quot;;&quot;$(TopSrcDir)/external-packages/zlib-1.2.3/include&quot;;&quot;$(TopSrcDir)/external-packages/dsound-9/include&quot;;&quot;$(TopSrcDir)/external-packages/boost-1.33.1/include&quot;;&quot;$(TopSrcDir)/external-packages/asio-2.1/common&quot;;&quot;$(TopSrcDir)/external-packages/asio-2.1/host&quot;;&quot;$(TopSrcDir)/external-packages/asio-2.1/host/pc&quot;;&quot;$(TopSrcDir)/external-packages/&quot;;&quot;$(TopSrcDir)/diversalis/src&quot;;&quot;$(TopSrcDir)/universalis/src&quot;;&quot;$(TopSrcDir)/psycle-helpers/src&quot;;&quot;$(TopSrcDir)/psycle-audiodrivers/src&quot;;&quot;$(TopSrcDir)/psycle-core/src&quot;;&quot;$(TopSrcDir)/psycle-plugins/src&quot;;&quot;$(TopSrcDir)/psycle/src&quot;"
+		InheritsFromParent="true"
+		Delimiter=";"
+	/>
+</VisualStudioPropertySheet>
