@@ -3,6 +3,9 @@
 # copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import sys
+from optparse import OptionParser
+
+parser = OptionParser()
 
 options = sys.argv[1:]
 

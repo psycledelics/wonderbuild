@@ -16,7 +16,7 @@ class IncludeScanner(object):
 	
 	def __init__(self, filesystem, state_and_cache):
 		self.fs = filesystem
-		if False: # slower due to pickle size increase
+		if False: # a tiny bit slower due to slight pickle size increase
 			try: self.contents, self.not_found = state_and_cache[self.__class__.__name__]
 			except KeyError:
 				if  __debug__ and is_debug: debug('cpp: all anew')

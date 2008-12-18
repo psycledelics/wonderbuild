@@ -43,10 +43,7 @@ class Node(object):
 
 	def __getstate__(self):
 		#if __debug__ and is_debug: debug('fs: getstate: ' + self.path + ' ' + str(self._time or self._old_time) + ' ' + str(self._children))
-		if False: # todo problem with merge?
-			return self.parent, self.name, self._is_dir, None, self._actual_children or self._old_children, self._time or self._old_time, self._path
-		else:
-			return self.parent, self.name, self._is_dir, self._children, self._actual_children or self._old_children, self._time or self._old_time, self._path
+		return self.parent, self.name, self._is_dir, self._children, self._actual_children or self._old_children, self._time or self._old_time, self._path
 
 	def __setstate__(self, data):
 		self.parent, self.name, self._is_dir, self._children, self._old_children, self._old_time, self._path = data
