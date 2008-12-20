@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import sys, os, gc, cPickle
 
@@ -12,7 +12,8 @@ if __debug__ and is_debug: import time
 
 class Project(object):
 	def __init__(self, bld_path = '++wonderbuild'):
-		gc.disable()
+		gc_enabled = gc.isenabled()
+		if gc_enabled: gc.disable()
 		try:
 			try: f = file(os.path.join(bld_path, 'state-and-cache'), 'rb')
 			except IOError: raise
@@ -26,7 +27,8 @@ class Project(object):
 					raise
 				finally: f.close()
 		except: self.state_and_cache = {}
-		finally: gc.enable()
+		finally:
+			if gc_enabled: gc.enable()
 
 		self.cfgs = []
 		self.tasks = []
@@ -67,7 +69,8 @@ class Project(object):
 
 	def dump(self):
 		if False and __debug__ and is_debug: print self.state_and_cache
-		gc.disable()
+		gc_enabled = gc.isenabled()
+		if gc_enabled: gc.disable()
 		try:
 			path = os.path.join(self.bld_node.path, 'state-and-cache')
 			if __debug__ and is_debug: t0 = time.time()
@@ -80,4 +83,5 @@ class Project(object):
 			if __debug__ and is_debug:
 				debug('project: pickle: dump time: ' + str(time.time() - t0) + ' s')
 				debug('project: pickle: file size: ' + str(int(os.path.getsize(path) * 1000. / (1 << 20)) * .001) + ' MiB')
-		finally: gc.enable()
+		finally:
+			if gc_enabled: gc.enable()

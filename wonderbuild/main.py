@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import sys, os
 	
@@ -57,24 +57,27 @@ def run():
 		print_help(sys.stderr)
 		return 1
 
-	import gc; gc.disable()
 	project.configure()
 	project.build(tasks)
 	project.dump()
 	return 0
 
 def main():
-	#import gc; gc.disable()
+	import gc
+	gc_enabled = gc.isenabled()
+	if gc_enabled: gc.disable()
+	try:
+		from options import options, known_options, help
+		known_options.add('--profile')
+		help['--profile'] = ('--profile', 'profile wonderbuild execution')
 
-	from options import options, known_options, help
-	known_options.add('--profile')
-	help['--profile'] = ('--profile', 'profile wonderbuild execution')
-
-	if '--profile' in options:
-		import cProfile, pstats
-		cProfile.run('sys.exit(run())', '/tmp/profile')
-		p = pstats.Stats('/tmp/profile')
-		p.sort_stats('cumulative').reverse_order().print_stats()
-	else: sys.exit(run())
+		if '--profile' in options:
+			import cProfile, pstats
+			cProfile.run('sys.exit(run())', '/tmp/profile')
+			p = pstats.Stats('/tmp/profile')
+			p.sort_stats('cumulative').reverse_order().print_stats()
+		else: sys.exit(run())
+	finally:
+		if gc_enabled: gc.enable()
 
 if __name__ == '__main__': main()
