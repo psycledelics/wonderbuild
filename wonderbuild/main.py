@@ -8,8 +8,8 @@ def run():
 	from project import Project
 	project = Project()
 
-	d = {}
 	if os.path.exists('wonderbuild_script.py'):
+		d = {}
 		execfile('wonderbuild_script.py', d)
 		tasks = d['wonderbuild_script'](project)
 		usage = False
@@ -57,7 +57,8 @@ def run():
 		print_help(sys.stderr)
 		return 1
 
-	project.conf()
+	import gc; gc.disable()
+	project.configure()
 	project.build(tasks)
 	project.dump()
 	return 0

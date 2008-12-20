@@ -16,38 +16,33 @@ if not __debug__:
 	def debug(s): pass
 else:
 	known_options.add('--zones')
-	help['--zones'] = ('--zones [zones ...]', 'wonderbuild debugging zones (exec, conf, task, sched, fs, project, cpp ...)')
+	help['--zones'] = ('--zones=[zone,...]', 'wonderbuild debugging zones, comma-separated list (exec, cfg, task, sched, fs, project, cpp ...)')
 
-	is_debug = '--zones' in options
+	zones = None
+	for o in options:
+		if o.startswith('--zones='):
+			zones = o[len('--zones='):].split(',')
+			break
+	is_debug = zones is not None
 	if not is_debug:
+		del zones
+		is_debug = False
 		def debug(s): pass
+	elif len(zones):
+		def debug(s):
+			for z in zones:
+				if s.startswith(z):
+					print >> sys.stderr, colored('35', 'wonderbuild: dbg:') + ' ' + s
+					break
 	else:
-		zones = []
-		i = options.index('--zones')
-		l = len(options)
-		i += 1
-		while i < l:
-			o = options[i]
-			if o.startswith('-'): break
-			zones.append(o)
-			i += 1
-		if len(zones):
-			def debug(s):
-				for z in zones:
-					if s.startswith(z):
-						print >> sys.stderr, colored('35', 'wonderbuild: dbg:') + ' ' + s
-						break
-		else:
-			def debug(s): print >> sys.stderr, colored('35', 'wonderbuild: dbg:') + ' ' + s
+		def debug(s): print >> sys.stderr, colored('35', 'wonderbuild: dbg:') + ' ' + s
 
 out = sys.stdout
 
 if os.environ.get('TERM', 'dumb') in ('dumb', 'emacs') or not out.isatty():
-	def colored(color, s):
-		return s
+	def colored(color, s): return s
 else:
-	def colored(color, s):
-		return '\33[' + color + 'm' + s + '\33[0m'
+	def colored(color, s): return '\33[' + color + 'm' + s + '\33[0m'
 
 @property
 def cols(): return 80

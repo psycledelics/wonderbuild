@@ -28,7 +28,7 @@ class Project(object):
 		except: self.state_and_cache = {}
 		finally: gc.enable()
 
-		self.confs = []
+		self.cfgs = []
 		self.tasks = []
 		self.aliases = {} # {name: [tasks]}
 
@@ -51,13 +51,13 @@ class Project(object):
 				except KeyError: self.aliases[a] = [task]
 
 	def options(self):
-		for c in self.confs: c.options()
+		for c in self.cfgs: c.options()
 
 	def help(self):
-		for c in self.confs: c.help()
+		for c in self.cfgs: c.help()
 
-	def conf(self):
-		for c in self.confs: c.conf()
+	def configure(self):
+		for c in self.cfgs: c.configure()
 		
 	def build(self, tasks):
 		s = Scheduler()

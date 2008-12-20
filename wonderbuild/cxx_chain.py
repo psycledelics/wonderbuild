@@ -11,27 +11,27 @@ from signature import Sig, raw_to_hexstring
 from task import Task, exec_subprocess, exec_subprocess_pipe
 from cpp_include_scanner import IncludeScanner
 
-class Conf(object):
+class Cfg(object):
 	def __init__(self, project):
 		self.project = project
-		project.confs.append(self)
+		project.cfgs.append(self)
 		self.lock = threading.Lock()
 
 	def options(self): pass
 		
-	@property
-	def sig(self): pass
-
 	def help(self): pass
 
-	def conf(self): pass
+	def configure(self): pass
+
+	@property
+	def sig(self): raise Exception, str(self.__class__) + ' must implement the sig property'
 
 	@property
 	def args(self): pass
 
 	def print_desc(self, desc, color = '34'):
 		if silent: return
-		out.write(colored(color, 'wonderbuild: conf: ' + desc + ':') + ' ')
+		out.write(colored(color, 'wonderbuild: cfg: ' + desc + ':') + ' ')
 		if __debug__ and is_debug: out.write('\n')
 		out.flush()
 		
@@ -40,10 +40,9 @@ class Conf(object):
 		out.write(colored(color, desc))
 		out.flush()
 
-class PkgConf(Conf):
+class PkgCfg(Cfg):
 	def __init__(self, project):
-		Conf.__init__(self, project)
-		self.project = project
+		Cfg.__init__(self, project)
 		self.prog = 'pkg-config'
 		self.pkgs = []
 		self.flags = []
@@ -102,9 +101,7 @@ class PkgConf(Conf):
 				return out
 		finally: self.lock.release()
 	
-class BaseObjConf(Conf):
-	def __init__(self, project): Conf.__init__(self, project)
-	
+class BaseCxxCfg(Cfg):
 	_options = set(['--cxx', '--cxx-flags', '--cxx-debug', '--cxx-optim', '--cxx-pic'])
 	
 	def options(self):
@@ -129,7 +126,7 @@ class BaseObjConf(Conf):
 		help['--cxx-optim'] = ('--cxx-optim=<level>', 'use c++ compiler optimisation <level>')
 		help['--cxx-pic']   = ('--cxx-pic=<yes|no>', 'make the c++ compiler emit pic code (for shared libs) rather than non-pic code (for static libs or programs)', 'yes')
 	
-	def conf(self):
+	def configure(self):
 		self.cpp = IncludeScanner(self.project.fs, self.project.state_and_cache)
 
 		try: sig, self.prog, self.flags, self.pic, self.optim, self.debug, self.kind, self.version, self.__args = self.project.state_and_cache['cxx-compiler']
@@ -187,7 +184,7 @@ class BaseObjConf(Conf):
 		try: return self.__args
 		except AttributeError:
 			args = self.__args = self._args()
-			if __debug__ and is_debug: debug('conf: cxx: compiler: ' + str(args))
+			if __debug__ and is_debug: debug('cfg: cxx: compiler: ' + str(args))
 			return args
 
 	def _gcc_args(self):
@@ -211,28 +208,28 @@ class BaseObjConf(Conf):
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + v)
 
-	def process(self, obj_task):
-		dir = obj_task.target.parent
+	def process(self, cxx_task):
+		dir = cxx_task.target.parent
 		lock = dir.lock
 		try:
 			lock.acquire()
 			dir.make_dir()
 		finally: lock.release()
-		args = obj_task.conf.args[:]
-		args[2] = obj_task.target.path
-		args[3] = obj_task.source.path
+		args = cxx_task.cfg.args[:]
+		args[2] = cxx_task.target.path
+		args[3] = cxx_task.source.path
 		if not silent:
-			if obj_task.conf.pic:
-				obj_task.print_desc('compiling pic/shared object from c++ ' + obj_task.source.path + ' -> ' + obj_task.target.path, color = '7;1;34')
+			if cxx_task.cfg.pic:
+				cxx_task.print_desc('compiling pic/shared object from c++ ' + cxx_task.source.path + ' -> ' + cxx_task.target.path, color = '7;1;34')
 			else:
-				obj_task.print_desc('compiling non-pic/static object from c++ ' + obj_task.source.path + ' -> ' + obj_task.target.path, color = '7;34')
+				cxx_task.print_desc('compiling non-pic/static object from c++ ' + cxx_task.source.path + ' -> ' + cxx_task.target.path, color = '7;34')
 		r = exec_subprocess(args)
 		if r != 0: raise Exception, r
 
-class BaseModConf(Conf):
-	def __init__(self, base_obj_conf):
-		Conf.__init__(self, base_obj_conf.project)
-		self.base_obj_conf = base_obj_conf
+class BaseModCfg(Cfg):
+	def __init__(self, base_cxx_cfg):
+		Cfg.__init__(self, base_cxx_cfg.project)
+		self.base_cxx_cfg = base_cxx_cfg
 
 	_options = set([
 		'--cxx-mod-shared',
@@ -249,7 +246,7 @@ class BaseModConf(Conf):
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
-			sig = Sig(self.base_obj_conf.sig)
+			sig = Sig(self.base_cxx_cfg.sig)
 			for o in options:
 				for oo in self.__class__._options:
 					if o.startswith(oo + '='): sig.update(o)
@@ -265,13 +262,13 @@ class BaseModConf(Conf):
 		help['--cxx-mod-ranlib']       = ('--cxx-mod-ranlib=<prog>', 'use <prog> as static lib archive indexer', 'ranlib')
 		help['--cxx-mod-ranlib-flags'] = ('--cxx-mod-ranlib-flags=[flags]', 'use specific archive indexer flags')
 
-	def conf(self):
+	def configure(self):
 		try: sig, self.shared, self.ld_prog, self.ld_flags, self.ar_prog, self.ar_flags, self.ranlib_prog, self.ranlib_flags, self.__args = self.project.state_and_cache['cxx-module']
 		except KeyError: parse = True
 		else: parse = sig != self.sig
 	
 		if parse:
-			self.shared = self.base_obj_conf.pic
+			self.shared = self.base_cxx_cfg.pic
 		
 			ld_prog = ld_flags = ar_prog = ar_flags = ranlib_prog = ranlib_flags = False
 			for o in options:
@@ -295,7 +292,7 @@ class BaseModConf(Conf):
 					self.ranlib_flags = o[len('--cxx-mod-ranlib-flags='):].split()
 					ranlib_flags = True
 
-			if not ld_prog: self.ld_prog = self.base_obj_conf.prog
+			if not ld_prog: self.ld_prog = self.base_cxx_cfg.prog
 			if not ld_flags:
 				flags = os.environ.get('LDFLAGS', None)
 				if flags is not None: self.ld_flags = flags.split()
@@ -306,11 +303,11 @@ class BaseModConf(Conf):
 			if not ranlib_prog: self.ranlib_prog = 'ranlib'
 			if not ranlib_flags: self.ranlib_flags = os.environ.get('RANLIBFLAGS', None)
 
-			if self.base_obj_conf.kind == 'gcc': self._args = self._gcc_args
+			if self.base_cxx_cfg.kind == 'gcc': self._args = self._gcc_args
 			else: raise Exception, 'unsupported lib archiver/linker'
 			self.project.state_and_cache['cxx-module'] = self.sig, self.shared, self.ld_prog, self.ld_flags, self.ar_prog, self.ar_flags, self.ranlib_prog, self.ranlib_flags, self.args
 
-		if self.base_obj_conf.kind == 'gcc':
+		if self.base_cxx_cfg.kind == 'gcc':
 			self.shared_args = self._gcc_shared_args
 			self.paths_args = self._posix_paths_args
 			self.libs_args = self._gcc_libs_args
@@ -326,15 +323,15 @@ class BaseModConf(Conf):
 
 	def _gcc_args(self):
 		ld_args = [self.ld_prog, '-o', None, None] + self.ld_flags
-		if __debug__ and is_debug: debug('conf: cxx: ld: ' + str(ld_args))
+		if __debug__ and is_debug: debug('cfg: cxx: ld: ' + str(ld_args))
 
 		ar_args = [self.ar_prog]
 		if self.ar_flags is not None: ar_args.append(self.ar_flags)
-		if __debug__ and is_debug: debug('conf: cxx: ar: ' + str(ar_args))
+		if __debug__ and is_debug: debug('cfg: cxx: ar: ' + str(ar_args))
 
 		ranlib_args = [self.ranlib_prog]
 		if self.ranlib_flags is not None: ranlib_args.append(self.ranlib_flags)
-		if __debug__ and is_debug: debug('conf: cxx: ranlib: ' + str(ranlib_args))
+		if __debug__ and is_debug: debug('cfg: cxx: ranlib: ' + str(ranlib_args))
 
 		return ld_args, ar_args, ranlib_args
 
@@ -359,23 +356,23 @@ class BaseModConf(Conf):
 	@staticmethod
 	def _linux_target(mod_task):
 		dir = mod_task.project.bld_node.node_path(os.path.join('modules', mod_task.name))
-		if mod_task.conf.kind == 'prog': name = mod_task.name
+		if mod_task.cfg.kind == 'prog': name = mod_task.name
 		else:
 			name = 'lib' + mod_task.name
-			if mod_task.conf.shared: name += '.so'
+			if mod_task.cfg.shared: name += '.so'
 			else: name += '.a'
 		return dir.node_path(name)
 
 	def process(self, mod_task):
-		if mod_task.conf.ld:
-			args = mod_task.conf.args[:]
+		if mod_task.cfg.ld:
+			args = mod_task.cfg.args[:]
 			args[2] = mod_task.target.path
 			args[3] = [s.path for s in mod_task.sources]
 			args = args[:3] + args[3] + args[4:]
 			if not silent:
-				if mod_task.conf.kind == 'prog':
+				if mod_task.cfg.kind == 'prog':
 					mod_task.print_desc('linking program ' + mod_task.target.path, color = '7;1;32')
-				elif mod_task.conf.kind == 'loadable':
+				elif mod_task.cfg.kind == 'loadable':
 					mod_task.print_desc('linking loadable module ' + mod_task.target.path, color = '7;1;34')
 				else:
 					mod_task.print_desc('linking shared lib ' + mod_task.target.path, color = '7;1;33')
@@ -383,7 +380,7 @@ class BaseModConf(Conf):
 			if r != 0: raise Exception, r
 		else:
 			if not silent: mod_task.print_desc('archiving and indexing static lib ' + mod_task.target.path, color = '7;36')
-			ar_args, ranlib_args = mod_task.conf.args
+			ar_args, ranlib_args = mod_task.cfg.args
 			args = ar_args[:]
 			args.append(mod_task.target.path)
 			args += [s.path for s in mod_task.sources]
@@ -395,13 +392,13 @@ class BaseModConf(Conf):
 				r = exec_subprocess(args)
 				if r != 0: raise Exception, r
 
-class ObjConf(Conf):
-	def __init__(self, base_obj_conf):
-		Conf.__init__(self, base_obj_conf.project)
-		self.base_conf = base_obj_conf
+class CxxCfg(Cfg):
+	def __init__(self, base_cxx_cfg):
+		Cfg.__init__(self, base_cxx_cfg.project)
+		self.base_cfg = base_cxx_cfg
 	
-	def conf(self):
-		self.pic = self.base_conf.pic
+	def configure(self):
+		self.pic = self.base_cfg.pic
 		self.pkgs = []
 		self.paths = []
 		self.defines = {}
@@ -410,7 +407,7 @@ class ObjConf(Conf):
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
-			sig = Sig(self.base_conf.sig)
+			sig = Sig(self.base_cfg.sig)
 			e = os.environ.get('CPATH', None)
 			if e is not None: sig.update(e)
 			e = os.environ.get('CPLUS_INCLUDE_PATH', None)
@@ -429,34 +426,34 @@ class ObjConf(Conf):
 		try:
 			try: return self._args
 			except AttributeError:
-				args = self.base_conf.args[:]
-				self.base_conf.pic_args(self.pic, args)
-				self.base_conf.paths_args(self.paths, args)
-				self.base_conf.defines_args(self.defines, args)
+				args = self.base_cfg.args[:]
+				self.base_cfg.pic_args(self.pic, args)
+				self.base_cfg.paths_args(self.paths, args)
+				self.base_cfg.defines_args(self.defines, args)
 				for p in self.pkgs: args += p.compiler_args
-				if __debug__ and is_debug: debug('conf: cxx: obj: ' + str(args))
+				if __debug__ and is_debug: debug('cfg: cxx: ' + str(args))
 				self._args = args
 				return args
 		finally: self.lock.release()
 
-class ModConf(Conf):
-	def __init__(self, base_mod_conf, obj_conf, kind):
-		Conf.__init__(self, base_mod_conf.project)
-		self.base_conf = base_mod_conf
-		self.obj_conf = obj_conf
+class ModCfg(Cfg):
+	def __init__(self, base_mod_cfg, cxx_cfg, kind):
+		Cfg.__init__(self, base_mod_cfg.project)
+		self.base_cfg = base_mod_cfg
+		self.cxx_cfg = cxx_cfg
 		self.kind = kind
 
-	def conf(self):
+	def configure(self):
 		if self.kind == 'prog':
 			self.shared = False
 			self.ld = True
 		else:
-			self.shared = self.base_conf.shared
+			self.shared = self.base_cfg.shared
 			self.ld = self.shared
-			if self.shared and not self.obj_conf.pic:
-				debug('conf: cxx: module: overriding obj conf to pic')
-				self.obj_conf.pic = True
-		self.pkgs = self.obj_conf.pkgs
+			if self.shared and not self.cxx_cfg.pic:
+				debug('cfg: cxx: module: overriding cxx cfg to pic')
+				self.cxx_cfg.pic = True
+		self.pkgs = self.cxx_cfg.pkgs
 		self.paths = []
 		self.libs = []
 		self.static_libs = []
@@ -466,7 +463,7 @@ class ModConf(Conf):
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
-			sig = Sig(str(self.base_conf.sig))
+			sig = Sig(str(self.base_cfg.sig))
 			for p in self.pkgs: sig.update(p.sig)
 			for p in self.paths: sig.update(p.path)
 			for l in self.libs: sig.update(l)
@@ -481,24 +478,24 @@ class ModConf(Conf):
 		try:
 			try: return self._args
 			except AttributeError:
-				ld_args, ar_args, ranlib_args = self.base_conf.args
+				ld_args, ar_args, ranlib_args = self.base_cfg.args
 				if not self.ld:
 					args = ar_args, ranlib_args
 				else:
 					args = ld_args[:]
-					self.base_conf.shared_args(self.shared, args)
-					self.base_conf.paths_args(self.paths, args)
-					self.base_conf.libs_args(self.libs, self.static_libs, self.shared_libs, args)
+					self.base_cfg.shared_args(self.shared, args)
+					self.base_cfg.paths_args(self.paths, args)
+					self.base_cfg.libs_args(self.libs, self.static_libs, self.shared_libs, args)
 					for p in self.pkgs: args += p.libs_args
-				if __debug__ and is_debug: debug('conf: cxx: module: ' + str(args))
+				if __debug__ and is_debug: debug('cfg: cxx: module: ' + str(args))
 				self._args = args
 				return args
 		finally: self.lock.release()
 
-class Obj(Task):
-	def __init__(self, obj_conf):
-		Task.__init__(self, obj_conf.project)
-		self.conf = obj_conf
+class CxxTask(Task):
+	def __init__(self, cxx_cfg):
+		Task.__init__(self, cxx_cfg.project)
+		self.cfg = cxx_cfg
 		self.source = None
 		self.target = None
 
@@ -515,13 +512,13 @@ class Obj(Task):
 		def sig(self):
 			try: return self._sig
 			except AttributeError:
-				sig = Sig(self.conf.sig)
+				sig = Sig(self.cfg.sig)
 				sig.update(self.source.sig)
 				new_implicit_deps = False
 				try: old_sig, self._implicit_deps = self.project.task_states[self.uid]
 				except KeyError:
 					old_sig = None
-					self._implicit_deps, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
+					self._implicit_deps, not_found = self.cfg.base_cfg.cpp.scan_deps(self.source, self.cfg.paths)
 					new_implicit_deps = True
 					sigs = [s.sig for s in self._implicit_deps]
 				else:
@@ -529,7 +526,7 @@ class Obj(Task):
 					except OSError:
 						# A cached implicit dep does not exist anymore.
 						# We must recompute the implicit deps.
-						self._implicit_deps, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
+						self._implicit_deps, not_found = self.cfg.base_cfg.cpp.scan_deps(self.source, self.cfg.paths)
 						new_implicit_deps = True
 						sigs = [s.sig for s in self._implicit_deps]
 				sigs.sort()
@@ -540,9 +537,9 @@ class Obj(Task):
 					if not new_implicit_deps:
 						# Either the include path or a source or header content has changed.
 						# We must recompute the implicit deps.
-						sig = Sig(self.conf.sig)
+						sig = Sig(self.cfg.sig)
 						sig.update(self.source.sig)
-						self._implicit_deps, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
+						self._implicit_deps, not_found = self.cfg.base_cfg.cpp.scan_deps(self.source, self.cfg.paths)
 						sigs = [s.sig for s in self._implicit_deps]
 						sigs.sort()
 						sig.update(''.join(sigs))
@@ -573,7 +570,7 @@ class Obj(Task):
 						# We must recompute the implicit deps.
 						scan_implicit_deps = True
 				if scan_implicit_deps: self._do_scan_implicit_deps()
-				sig = Sig(self.conf.sig)
+				sig = Sig(self.cfg.sig)
 				sig.update(self.source.sig)
 				sig.update(self._implicit_deps_sig)
 				sig = sig.digest()
@@ -583,7 +580,7 @@ class Obj(Task):
 						# Either the include path or the source content has changed.
 						# We must recompute the implicit deps.
 						self._do_scan_implicit_deps()
-						sig = Sig(self.conf.sig)
+						sig = Sig(self.cfg.sig)
 						sig.update(self.source.sig)
 						sig.update(self._implicit_deps_sig)
 						sig = sig.digest()
@@ -592,19 +589,19 @@ class Obj(Task):
 
 		def _do_scan_implicit_deps(self):
 			if __debug__ and is_debug: debug('task: scanning implicit deps: ' + self.source.path)
-			self._implicit_deps, not_found = self.conf.base_conf.cpp.scan_deps(self.source, self.conf.paths)
+			self._implicit_deps, not_found = self.cfg.base_cfg.cpp.scan_deps(self.source, self.cfg.paths)
 			sigs = [s.sig for s in self._implicit_deps]
 			sigs.sort()
 			self._implicit_deps_sig = Sig(''.join(sigs)).digest()
 
 		def update_sig(self): self.project.task_states[self.uid] = (self.sig, self._implicit_deps, self._implicit_deps_sig)
 
-	def process(self): self.conf.base_conf.process(self)
+	def process(self): self.cfg.base_cfg.process(self)
 
-class Mod(Task):
-	def __init__(self, mod_conf, name, aliases = None):
-		Task.__init__(self, mod_conf.project, aliases)
-		self.conf = mod_conf
+class ModTask(Task):
+	def __init__(self, mod_cfg, name, aliases = None):
+		Task.__init__(self, mod_cfg.project, aliases)
+		self.cfg = mod_cfg
 		self.name = name
 		self.sources = []
 
@@ -615,7 +612,7 @@ class Mod(Task):
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
-			sig = Sig(self.conf.sig)
+			sig = Sig(self.cfg.sig)
 			for t in self.in_tasks: sig.update(t.sig)
 			ts = [t.target for t in self.in_tasks]
 			for s in self.sources:
@@ -627,21 +624,21 @@ class Mod(Task):
 	def target(self):
 		try: return self._target
 		except AttributeError:
-			target = self._target = self.conf.base_conf.target(self)
+			target = self._target = self.cfg.base_cfg.target(self)
 			return target
 
-	def process(self): self.conf.base_conf.process(self)
+	def process(self): self.cfg.base_cfg.process(self)
 		
 	@property
-	def obj_conf(self): return self.conf.obj_conf
+	def cxx_cfg(self): return self.cfg.cxx_cfg
 
-	def new_obj(self, source):
-		obj = Obj(self.obj_conf)
-		obj.source = source
-		obj.target = self.target.parent.node_path(source.path[:source.path.rfind('.')] + '.o')
-		self.add_in_task(obj)
-		self.sources.append(obj.target)
-		return obj
+	def add_new_cxx_task(self, source):
+		cxx_task = CxxTask(self.cxx_cfg)
+		cxx_task.source = source
+		cxx_task.target = self.target.parent.node_path(source.path[:source.path.rfind('.')] + '.o')
+		self.add_in_task(cxx_task)
+		self.sources.append(cxx_task.target)
+		return cxx_task
 
 class Contexes(object):
 	def check_and_build(self):

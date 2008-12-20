@@ -20,11 +20,11 @@ class IncludeScanner(object):
 			try: self.contents, self.not_found = state_and_cache[self.__class__.__name__]
 			except KeyError:
 				if  __debug__ and is_debug: debug('cpp: all anew')
-				self.contents = {} # { node: (rel_includes, abs_includes) }
+				self.contents = {} # {node: (rel_includes, abs_includes)}
 				self.not_found = set() # of nodes collected from #include "" but not from #include <>
 				state_and_cache[self.__class__.__name__] = self.contents, self.not_found
 		else:
-			self.contents = {} # { node: (rel_includes, abs_includes) }
+			self.contents = {} # {node: (rel_includes, abs_includes)}
 			self.not_found = set() # of nodes collected from #include "" but not from #include <>
 		if False and __debug__ and is_debug: self.display()
 	
@@ -37,7 +37,7 @@ class IncludeScanner(object):
 
 		if seen is None: seen = set()
 		else:
-			if source in seen: return
+			if source in seen: return seen
 			seen.add(source)
 
 		parse = False

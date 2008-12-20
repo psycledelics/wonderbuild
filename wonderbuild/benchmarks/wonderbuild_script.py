@@ -3,26 +3,25 @@
 # copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 def wonderbuild_script(project):
-	from cxx_chain import BaseObjConf, BaseModConf
-	base_obj_conf = BaseObjConf(project)
-	base_mod_conf = BaseModConf(base_obj_conf)
+	from cxx_chain import BaseCxxCfg, BaseModCfg, PkgCfg, CxxCfg, ModCfg, ModTask
 
-	from cxx_chain import PkgConf, ObjConf, ModConf, Mod
+	base_cxx_cfg = BaseCxxCfg(project)
+	base_mod_cfg = BaseModCfg(base_cxx_cfg)
 
 	top_src_dir = project.src_node.node_path('++bench')
 
-	class BenchLib(Mod):
-		def __init__(self, name): Mod.__init__(self, ModConf(base_mod_conf, BenchLib.BenchObjConf(base_obj_conf), 'lib'), name)
+	class BenchLib(ModTask):
+		def __init__(self, name): ModTask.__init__(self, ModCfg(base_mod_cfg, BenchLib.BenchCxxCfg(base_cxx_cfg), 'lib'), name)
 		
 		def dyn_in_tasks(self):
 			src_dir = top_src_dir.node_path(self.name)
-			self.obj_conf.paths.append(src_dir)
-			for s in src_dir.find_iter(in_pat = '*.cpp'): self.new_obj(s)
+			self.cxx_cfg.paths.append(src_dir)
+			for s in src_dir.find_iter(in_pat = '*.cpp'): self.add_new_cxx_task(s)
 			return self.in_tasks
 
-		class BenchObjConf(ObjConf):
-			def conf(self):
-				ObjConf.conf(self)
+		class BenchCxxCfg(CxxCfg):
+			def configure(self):
+				CxxCfg.configure(self)
 				self.paths.append(top_src_dir)
 
 	bench_libs = []

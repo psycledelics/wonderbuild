@@ -32,3 +32,9 @@ anechoid 2008
 		user	1m9.596s
 		sys	0m57.340s
 
+	don't pipe subprocesses
+	
+		real    0m39.953s
+		user    1m8.488s
+		sys     1m1.876s
+
