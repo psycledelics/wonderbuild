@@ -8,7 +8,7 @@ def wonderbuild_script(project):
 	base_cxx_cfg = BaseCxxCfg(project)
 	base_mod_cfg = BaseModCfg(base_cxx_cfg)
 
-	top_src_dir = project.src_node.node_path('++bench')
+	top_src_dir = project.src_node.node_path('++bench-wonderbuild')
 
 	class BenchLib(ModTask):
 		def __init__(self, name): ModTask.__init__(self, ModCfg(base_mod_cfg, BenchLib.BenchCxxCfg(base_cxx_cfg), 'lib'), name)
