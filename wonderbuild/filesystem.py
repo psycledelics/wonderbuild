@@ -47,8 +47,7 @@ class Node(object):
 
 	def __setstate__(self, data):
 		self.parent, self.name, self._is_dir, self._children, self._old_children, self._old_time, self._path = data
-		self._actual_children = None
-		self._time = None
+		self._actual_children = self._time = None
 		#if __debug__ and is_debug: debug('fs: setstate: ' + self.path + ' ' + str(self._old_time) + ' ' + str(self._old_children))
 
 	def __init__(self, parent, name):

@@ -25,8 +25,6 @@ class Schedulable(object):
 class Task(Schedulable):
 	def __init__(self, project, aliases = None):
 		Schedulable.__init__(self)
-		#self.in_nodes = []
-		#self.out_nodes = []
 		self.project = project
 		project.add_task(self, aliases)
 
@@ -57,19 +55,30 @@ class Task(Schedulable):
 		out.write(colored(color, 'wonderbuild: task: ' + desc) + '\n')
 		out.flush()
 
-def exec_subprocess(args, env = None, out_stream = sys.stdout, err_stream = sys.stderr, silent = False):
+def exec_subprocess(args, env = None):
 	if __debug__ and is_debug: debug('exec: ' + str(args))
+	return subprocess.call(
+		args = args,
+		bufsize = -1,
+		stdout = None,
+		stderr = None,
+		env = env
+	)
+
+def exec_subprocess_pipe(args, env = None, silent = False):
+	if __debug__ and is_debug: debug('exec: pipe: ' + str(args))
 	p = subprocess.Popen(
 		args = args,
+		bufsize = -1,
 		stdout = subprocess.PIPE,
 		stderr = subprocess.PIPE,
 		env = env
 	)
 	out, err = p.communicate()
 	if not silent:
-		out_stream.write(out)
+		sys.stdout.write(out)
 		if len(err):
 			s = ''
 			for line in err.split('\n')[:-1]: s += colored('7;1;31', 'error:') + ' ' + line + '\n'
-			err_stream.write(s)
+			sys.stderr.write(s)
 	return p.returncode, out, err

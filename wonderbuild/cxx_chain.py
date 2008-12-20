@@ -8,7 +8,7 @@ import os, threading
 from options import options, known_options, help
 from logger import out, is_debug, debug, colored, silent
 from signature import Sig, raw_to_hexstring
-from task import Task, exec_subprocess
+from task import Task, exec_subprocess, exec_subprocess_pipe
 from cpp_include_scanner import IncludeScanner
 
 class Conf(object):
@@ -71,7 +71,7 @@ class PkgConf(Conf):
 			except AttributeError:
 				args = [self.prog, '--cflags'] + self.flags + self.pkgs
 				if not silent: self.print_desc('getting pkg-config compile flags: ' + ' '.join(self.pkgs))
-				r, out, err = exec_subprocess(args, silent = True)
+				r, out, err = exec_subprocess_pipe(args, silent = True)
 				if r != 0: 
 					self.print_result_desc('error\n', color = '31')
 					raise Exception, r
@@ -92,7 +92,7 @@ class PkgConf(Conf):
 					args.append('--static')
 					if not silent: self.print_desc('getting pkg-config static libs: ' + ' '.join(self.pkgs))
 				elif not silent: self.print_desc('getting pkg-config shared libs: ' + ' '.join(self.pkgs))
-				r, out, err = exec_subprocess(args, silent = True)
+				r, out, err = exec_subprocess_pipe(args, silent = True)
 				if r != 0: 
 					if not silent: self.print_result_desc('error\n', color = '31')
 					raise Exception, r
@@ -172,7 +172,7 @@ class BaseObjConf(Conf):
 
 	def _check_kind_and_version(self):
 		if not silent: self.print_desc('checking for c++ compiler')
-		r, out, err = exec_subprocess([self.prog, '-dumpversion'], silent = True)
+		r, out, err = exec_subprocess_pipe([self.prog, '-dumpversion'], silent = True)
 		if r != 0:
 			if not silent: self.print_result_desc('not gcc\n', '31')
 			self.kind = None
@@ -226,7 +226,7 @@ class BaseObjConf(Conf):
 				obj_task.print_desc('compiling pic/shared object from c++ ' + obj_task.source.path + ' -> ' + obj_task.target.path, color = '7;1;34')
 			else:
 				obj_task.print_desc('compiling non-pic/static object from c++ ' + obj_task.source.path + ' -> ' + obj_task.target.path, color = '7;34')
-		r, out, err = exec_subprocess(args)
+		r = exec_subprocess(args)
 		if r != 0: raise Exception, r
 
 class BaseModConf(Conf):
@@ -379,7 +379,7 @@ class BaseModConf(Conf):
 					mod_task.print_desc('linking loadable module ' + mod_task.target.path, color = '7;1;34')
 				else:
 					mod_task.print_desc('linking shared lib ' + mod_task.target.path, color = '7;1;33')
-			r, out, err = exec_subprocess(args)
+			r = exec_subprocess(args)
 			if r != 0: raise Exception, r
 		else:
 			if not silent: mod_task.print_desc('archiving and indexing static lib ' + mod_task.target.path, color = '7;36')
@@ -387,12 +387,12 @@ class BaseModConf(Conf):
 			args = ar_args[:]
 			args.append(mod_task.target.path)
 			args += [s.path for s in mod_task.sources]
-			r, out, err = exec_subprocess(args)
+			r = exec_subprocess(args)
 			if r != 0: raise Exception, r
 			if 's' not in self.ar_flags:
 				args = ranlib_args[:]
 				args.append(mod_task.target.path)
-				r, out, err = exec_subprocess(args)
+				r = exec_subprocess(args)
 				if r != 0: raise Exception, r
 
 class ObjConf(Conf):
