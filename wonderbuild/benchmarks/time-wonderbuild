@@ -126,21 +126,3 @@ anechoid 2008
 		user    0m1.048s
 		sys     0m0.040s
 
-	don't pipe subprocesses
-
-		real    0m6.016s
-		user    0m9.289s
-		sys     0m7.892s
-
-		real    0m6.071s
-		user    0m9.249s
-		sys     0m7.948s
-
-		real    0m6.014s
-		user    0m9.273s
-		sys     0m7.964s
-
-		real    0m5.936s
-		user    0m9.417s
-		sys     0m7.796s
-
