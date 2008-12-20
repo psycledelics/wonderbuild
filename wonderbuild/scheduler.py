@@ -42,6 +42,7 @@ class Scheduler():
 		self._condition = threading.Condition(threading.Lock())
 		for i in xrange(self.thread_count):
 			t = threading.Thread(target = self._thread_function, args = (i,), name = 'scheduler-thread-' + str(i))
+			#t.daemon = True
 			t.setDaemon(True)
 			t.start()
 			self._threads.append(t)
@@ -128,16 +129,15 @@ class Scheduler():
 				if not execute:
 					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': skip task (in_tasks skipped) ' + str(task))
 					task.executed = False
+				elif not task.need_process():
+					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': skip task (same sig) ' + str(task))
+					task.executed = False
 				else:
-					if not task.need_process():
-						if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': skip task (same sig) ' + str(task))
-						task.executed = False
-					else:
-						self._condition.release()
-						try: task.process()
-						finally: self._condition.acquire()
-						task.update_sig()
-						task.executed = True
+					self._condition.release()
+					try: task.process()
+					finally: self._condition.acquire()
+					task.update_sig()
+					task.executed = True
 				self._todo_count -= 1
 				if no_silent_progress and task.executed: print colored('7;32', 'wonderbuild: progress: ' + self.progress())
 				self._running_count -= 1
