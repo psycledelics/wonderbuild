@@ -1,232 +1,190 @@
-Sun Dec 21 16:42:01 2008    /tmp/profile
+Sun Dec 21 18:41:42 2008    /tmp/profile
 
-         66956 function calls (56642 primitive calls) in 1.093 CPU seconds
+         46109 function calls (35795 primitive calls) in 1.061 CPU seconds
 
    Ordered by: cumulative time
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/pickle.py:69(UnpicklingError)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:218(set_parser)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/pickle.py:62(PicklingError)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/pickle.py:58(PickleError)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/pickle.py:82(_Stop)
+        4    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:661(client)
         1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:659(_check_choice)
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:709(_DummyThread)
         1    0.000    0.000    0.000    0.000 wonderbuild_script.py:21(BenchCxxCfg)
-        2    0.000    0.000    0.000    0.000 {method 'join' of 'str' objects}
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:623(_check_action)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:629(_check_type)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:702(_check_callback)
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/pickle.py:69(UnpicklingError)
+        2    0.000    0.000    0.000    0.000 {method 'endswith' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/pickle.py:62(PicklingError)
+        1    0.000    0.000    0.000    0.000 {method 'has_key' of 'dict' objects}
         1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:678(_set_daemon)
-        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:246(fs)
+        1    0.000    0.000    0.000    0.000 {_hashlib.openssl_sha224}
         1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/pickle.py:1253(_EmptyClass)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:693(_check_nargs)
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/pickle.py:58(PickleError)
         1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/subprocess.py:364(CalledProcessError)
         1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/stat.py:29(S_IFMT)
         1    0.000    0.000    0.000    0.000 {_hashlib.openssl_sha512}
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:965(set_description)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:687(_check_const)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:944(_create_option_mappings)
+        2    0.000    0.000    0.000    0.000 {gc.isenabled}
         1    0.000    0.000    0.000    0.000 <string>:1(<module>)
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/pickle.py:82(_Stop)
         1    0.000    0.000    0.000    0.000 {_hashlib.openssl_sha1}
-        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:661(client)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:669(_MainThread)
-        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/__init__.py:1(<module>)
         1    0.000    0.000    0.000    0.000 {_hashlib.openssl_sha256}
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:1263(_init_parsing_state)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:960(set_conflict_handler)
+        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:11(FileSystem)
         1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:192(_release_save)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:672(_check_dest)
         1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:241(options)
         1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:322(_BoundedSemaphore)
-        2    0.000    0.000    0.000    0.000 {method 'translate' of 'str' objects}
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:640(_Timer)
-        1    0.000    0.000    0.000    0.000 {_hashlib.openssl_sha224}
         1    0.000    0.000    0.000    0.000 {sys.exit}
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:640(_Timer)
         1    0.000    0.000    0.000    0.000 wonderbuild_script.py:5(<module>)
         1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/task.py:9(Schedulable)
         1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:37(_Verbose)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:274(_Semaphore)
-        2    0.000    0.000    0.000    0.000 {gc.isenabled}
         1    0.000    0.000    0.000    0.000 {_hashlib.openssl_sha384}
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:79(_RLock)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:337(_Event)
-        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:11(FileSystem)
-        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cpp_include_scanner.py:14(IncludeScanner)
-        4    0.000    0.000    0.000    0.000 {method 'reverse' of 'list' objects}
-        4    0.000    0.000    0.000    0.000 {method 'lower' of 'str' objects}
-        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:445(ModCfg)
-        4    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:195(_acquire_restore)
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/UserDict.py:17(__getitem__)
+        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:247(fs)
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:669(_MainThread)
+        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cpp_include_scanner.py:13(IncludeScanner)
         1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/project.py:13(Project)
-        4    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:624(isDaemon)
+        1    0.000    0.000    0.000    0.000 {hasattr}
+        2    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:263(path)
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:156(_Condition)
+        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/scheduler.py:22(Scheduler)
+        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:401(CxxCfg)
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:195(_acquire_restore)
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:79(_RLock)
+        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cpp_include_scanner.py:16(__init__)
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/UserDict.py:44(has_key)
         1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:387(Thread)
-        4    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:628(setDaemon)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:981(_check_conflict)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:1238(_create_option_list)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/subprocess.py:534(Popen)
+        9    0.000    0.000    0.000    0.000 {thread.get_ident}
         1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:610(ModTask)
         1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:501(CxxTask)
         1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/stat.py:45(S_ISDIR)
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:274(_Semaphore)
         4    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_parse.py:73(__init__)
-        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cpp_include_scanner.py:17(__init__)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:573(_check_opt_strings)
-        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:43(PkgCfg)
         2    0.000    0.000    0.000    0.000 {method 'isatty' of 'file' objects}
-        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:107(options)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:156(_Condition)
+        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/task.py:25(Task)
+        4    0.000    0.000    0.000    0.000 {range}
         6    0.000    0.000    0.000    0.000 {getattr}
-        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/scheduler.py:22(Scheduler)
-        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:401(CxxCfg)
+        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:445(ModCfg)
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:337(_Event)
+        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:14(Cfg)
         1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:652(Contexes)
         5    0.000    0.000    0.000    0.000 {method 'extend' of 'list' objects}
         1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/fnmatch.py:11(<module>)
-        9    0.000    0.000    0.000    0.000 {thread.get_ident}
+        4    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:624(isDaemon)
+        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:107(options)
+        4    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:628(setDaemon)
+        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:43(PkgCfg)
         2    0.000    0.000    0.000    0.000 {method 'digest' of '_hashlib.HASH' objects}
         1    0.000    0.000    0.000    0.000 {method 'update' of '_hashlib.HASH' objects}
        10    0.000    0.000    0.000    0.000 {max}
         1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:230(__init__)
-       12    0.000    0.000    0.000    0.000 {setattr}
-        3    0.000    0.000    0.000    0.000 {_hashlib.openssl_md5}
         1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:229(BaseModCfg)
-        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/task.py:25(Task)
-        4    0.000    0.000    0.000    0.000 {hasattr}
-        8    0.000    0.000    0.000    0.000 {range}
-        1    0.000    0.000    0.000    0.000 {posix.getcwd}
-        4    0.000    0.000    0.000    0.000 /usr/lib/python2.5/UserDict.py:17(__getitem__)
-        8    0.000    0.000    0.000    0.000 {method 'replace' of 'str' objects}
-        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:104(BaseCxxCfg)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:267(notifyAll)
-        4    0.000    0.000    0.000    0.000 {_sre.compile}
-       11    0.000    0.000    0.000    0.000 {method 'remove' of 'list' objects}
        12    0.000    0.000    0.000    0.000 {isinstance}
-        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:14(Cfg)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:709(_DummyThread)
-       16    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_parse.py:138(__setitem__)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:582(_set_opt_strings)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:933(__init__)
-       12    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:198(children)
-        8    0.000    0.000    0.000    0.000 {method 'split' of 'str' objects}
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/pickle.py:171(Pickler)
+        1    0.000    0.000    0.000    0.000 {posix.getcwd}
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:267(notifyAll)
+        3    0.000    0.000    0.000    0.000 {_hashlib.openssl_md5}
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/subprocess.py:534(Popen)
+       11    0.000    0.000    0.000    0.000 {method 'remove' of 'list' objects}
+        4    0.000    0.000    0.000    0.000 {_sre.compile}
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/UserDict.py:57(get)
         1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/scheduler.py:23(__init__)
+       12    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:199(children)
+        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:104(BaseCxxCfg)
        11    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:39(__init__)
-       23    0.000    0.000    0.000    0.000 {method 'has_key' of 'dict' objects}
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:194(__init__)
         1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/traceback.py:1(<module>)
         7    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_parse.py:78(opengroup)
-        7    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_parse.py:89(closegroup)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:359(__init__)
-        9    0.000    0.000    0.000    0.000 /usr/lib/python2.5/UserDict.py:44(has_key)
         7    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_parse.py:231(_class_escape)
-        2    0.000    0.000    0.000    0.000 /usr/lib/python2.5/encodings/__init__.py:48(normalize_encoding)
-       44    0.000    0.000    0.000    0.000 {ord}
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/pickle.py:171(Pickler)
+       16    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_parse.py:138(__setitem__)
+        2    0.000    0.000    0.000    0.000 /usr/lib/python2.5/posixpath.py:56(join)
+        8    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_compile.py:480(isstring)
+        7    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_parse.py:89(closegroup)
+       16    0.000    0.000    0.000    0.000 {method 'find' of 'str' objects}
+       10    0.000    0.000    0.000    0.000 /usr/lib/python2.5/hashlib.py:106(<lambda>)
         1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:38(Node)
         1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:74(_do_stat)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/pickle.py:827(Unpickler)
-       10    0.000    0.000    0.000    0.000 /usr/lib/python2.5/hashlib.py:106(<lambda>)
-        8    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_compile.py:480(isstring)
-        1    0.000    0.000    0.000    0.000 wonderbuild_script.py:13(BenchLib)
-       28    0.000    0.000    0.000    0.000 {method 'find' of 'str' objects}
-        4    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_parse.py:184(__init__)
-        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:115(time)
        51    0.000    0.000    0.000    0.000 {method 'iteritems' of 'dict' objects}
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/posixpath.py:168(exists)
+        1    0.000    0.000    0.000    0.000 wonderbuild_script.py:13(BenchLib)
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/pickle.py:827(Unpickler)
+        2    0.000    0.000    0.000    0.000 {posix.stat}
+        4    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_parse.py:184(__init__)
+       44    0.000    0.000    0.000    0.000 {ord}
         8    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:733(currentThread)
-       53    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_compile.py:24(_identityfunction)
         4    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:415(_set_daemon)
-       53    0.000    0.000    0.000    0.000 {method 'add' of 'set' objects}
-        2    0.000    0.000    0.000    0.000 {filter}
-       50    0.000    0.000    0.000    0.000 {method 'endswith' of 'str' objects}
-       37    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_parse.py:96(__init__)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:603(_set_attrs)
-       21    0.000    0.000    0.000    0.000 {time.time}
-        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/main.py:5(<module>)
+        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:115(time)
+        1    0.000    0.000    0.000    0.000 {filter}
+       53    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_compile.py:24(_identityfunction)
        65    0.000    0.000    0.000    0.000 {built-in method release}
+       53    0.000    0.000    0.000    0.000 {method 'add' of 'set' objects}
         8    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_parse.py:263(_escape)
+       37    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_parse.py:96(__init__)
         2    0.000    0.000    0.000    0.000 {dir}
-        9    0.000    0.000    0.000    0.000 /usr/lib/python2.5/UserDict.py:57(get)
+       21    0.000    0.000    0.000    0.000 {time.time}
         1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:245(sig)
        61    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:44(_note)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:671(__init__)
       100    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:20(options)
-        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:265(configure)
        16    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_parse.py:140(__getslice__)
+        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:671(__init__)
+        1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:265(configure)
         2    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:111(sig)
         2    0.000    0.000    0.000    0.000 {method 'close' of 'file' objects}
        16    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_compile.py:360(_simple)
       110    0.000    0.000    0.000    0.000 {thread.allocate_lock}
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:554(__init__)
+        6    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:158(__init__)
         1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:129(configure)
        99    0.000    0.000    0.000    0.000 {min}
-        4    0.000    0.000    0.000    0.000 /usr/lib/python2.5/locale.py:281(normalize)
-      137    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_parse.py:136(__getitem__)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:1008(add_option)
-        6    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:158(__init__)
         2    0.000    0.000    0.000    0.000 {posix.sysconf}
+      115    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
+      137    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_parse.py:136(__getitem__)
+      145    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
        50    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/project.py:47(add_task)
        57    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_parse.py:144(append)
        52    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:198(_is_owned)
-      161    0.000    0.000    0.000    0.000 {method 'get' of 'dict' objects}
-       18    0.000    0.000    0.000    0.000 {posix.stat}
-        4    0.000    0.000    0.000    0.000 {thread.start_new_thread}
-       50    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/task.py:10(__init__)
-       50    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:406(configure)
         6    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:153(Condition)
+       50    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/task.py:10(__init__)
+        4    0.000    0.000    0.000    0.000 {thread.start_new_thread}
        77    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_parse.py:132(__len__)
-        2    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_compile.py:264(_mk_bitmap)
       130    0.000    0.000    0.000    0.000 {built-in method acquire}
+        2    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_compile.py:264(_mk_bitmap)
+       50    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:406(configure)
+     13/3    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:218(_node_path)
         1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/project.py:55(options)
-      163    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
-     13/3    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:217(_node_path)
-        3    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:216(node_path)
+        3    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:217(node_path)
       117    0.000    0.000    0.000    0.000 {built-in method match}
         1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:12(__init__)
        98    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_parse.py:201(match)
-        4    0.000    0.000    0.000    0.000 /usr/lib/python2.5/gettext.py:130(_expand_lang)
        50    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:452(configure)
-       17    0.000    0.000    0.000    0.000 /usr/lib/python2.5/posixpath.py:168(exists)
-       18    0.000    0.000    0.000    0.000 /usr/lib/python2.5/posixpath.py:56(join)
         5    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:396(__init__)
         1    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:5(<module>)
        50    0.000    0.000    0.000    0.000 wonderbuild_script.py:22(configure)
-       51    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:249(notify)
        50    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:446(__init__)
+       51    0.000    0.000    0.000    0.000 /usr/lib/python2.5/threading.py:249(notify)
        50    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:402(__init__)
     53/20    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_parse.py:146(getwidth)
-  670/650    0.000    0.000    0.000    0.000 {len}
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:1272(set_usage)
+  666/646    0.000    0.000    0.000    0.000 {len}
        50    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/task.py:26(__init__)
       102    0.000    0.000    0.000    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:15(__init__)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:1243(_add_help_option)
-        1    0.000    0.000    0.000    0.000 /usr/lib/python2.5/optparse.py:1253(_populate_option_list)
-      853    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
         1    0.000    0.000    0.000    0.000 {execfile}
         4    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_compile.py:367(_compile_info)
-      152    0.000    0.000    0.000    0.000 /usr/lib/python2.5/sre_parse.py:188(__next)
+      828    0.000    0.000    0.000    0.000 {method 'append' of 'list' objects}
+      152    0.000    0.000    0.001    0.000 /usr/lib/python2.5/sre_parse.py:188(__next)
        50    0.000    0.000    0.001    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:611(__init__)
         1    0.001    0.001    0.001    0.001 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/logger.py:5(<module>)
       124    0.000    0.000    0.001    0.000 /usr/lib/python2.5/sre_parse.py:207(get)
-        2    0.000    0.000    0.001    0.000 /usr/lib/python2.5/gettext.py:421(find)
         1    0.000    0.000    0.001    0.001 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/project.py:61(configure)
-        2    0.000    0.000    0.001    0.000 /usr/lib/python2.5/gettext.py:476(translation)
-        2    0.000    0.000    0.001    0.000 /usr/lib/python2.5/gettext.py:542(dgettext)
-        2    0.000    0.000    0.001    0.000 /usr/lib/python2.5/gettext.py:580(gettext)
        13    0.001    0.000    0.001    0.000 /usr/lib/python2.5/sre_compile.py:213(_optimize_charset)
         1    0.001    0.001    0.001    0.001 /usr/lib/python2.5/threading.py:1(<module>)
        50    0.000    0.000    0.001    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/scheduler.py:50(add_task)
-        1    0.000    0.000    0.001    0.001 /usr/lib/python2.5/optparse.py:1186(__init__)
        13    0.000    0.000    0.001    0.000 /usr/lib/python2.5/sre_compile.py:184(_compile_charset)
-        1    0.000    0.000    0.001    0.001 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/options.py:5(<module>)
         1    0.001    0.001    0.001    0.001 /usr/lib/python2.5/hashlib.py:52(<module>)
-        1    0.000    0.000    0.001    0.001 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/signature.py:5(<module>)
       117    0.000    0.000    0.001    0.000 /usr/lib/python2.5/re.py:134(match)
+        1    0.000    0.000    0.001    0.001 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/signature.py:5(<module>)
        50    0.000    0.000    0.001    0.000 wonderbuild_script.py:14(__init__)
      37/4    0.001    0.000    0.002    0.000 /usr/lib/python2.5/sre_compile.py:38(_compile)
         1    0.000    0.000    0.002    0.002 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/scheduler.py:5(<module>)
         1    0.001    0.001    0.002    0.002 /usr/lib/python2.5/pickle.py:25(<module>)
      17/6    0.001    0.000    0.002    0.000 /usr/lib/python2.5/sre_parse.py:385(_parse)
      11/4    0.000    0.000    0.002    0.001 /usr/lib/python2.5/sre_parse.py:307(_parse_sub)
-        4    0.000    0.000    0.002    0.001 /usr/lib/python2.5/sre_parse.py:669(parse)
         4    0.000    0.000    0.002    0.001 /usr/lib/python2.5/sre_compile.py:486(_code)
+        4    0.000    0.000    0.002    0.001 /usr/lib/python2.5/sre_parse.py:669(parse)
         1    0.001    0.001    0.003    0.003 /usr/lib/python2.5/subprocess.py:353(<module>)
         1    0.000    0.000    0.003    0.003 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/task.py:5(<module>)
         1    0.001    0.001    0.003    0.003 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/project.py:5(<module>)
@@ -235,23 +193,22 @@ Sun Dec 21 16:42:01 2008    /tmp/profile
         4    0.000    0.000    0.004    0.001 /usr/lib/python2.5/sre_compile.py:501(compile)
       120    0.000    0.000    0.005    0.000 /usr/lib/python2.5/re.py:227(_compile)
         1    0.000    0.000    0.008    0.008 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/cxx_chain.py:5(<module>)
-        4    0.000    0.000    0.012    0.003 /usr/lib/python2.5/threading.py:430(start)
-        1    0.000    0.000    0.012    0.012 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/scheduler.py:33(start)
-    20512    0.014    0.000    0.014    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:262(path)
-    15469    0.020    0.000    0.020    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:48(__setstate__)
-    15469    0.021    0.000    0.021    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:44(__getstate__)
- 10255/55    0.041    0.000    0.055    0.001 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:177(_merge)
-        1    0.000    0.000    0.055    0.055 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:150(actual_children)
-        1    0.000    0.000    0.065    0.065 wonderbuild_script.py:5(wonderbuild_script)
-        1    0.110    0.110    0.130    0.130 {cPickle.load}
-        1    0.000    0.000    0.131    0.131 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/project.py:14(__init__)
-        1    0.318    0.318    0.339    0.339 {cPickle.dump}
-        1    0.001    0.001    0.339    0.339 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/project.py:70(dump)
+        4    0.000    0.000    0.014    0.004 /usr/lib/python2.5/threading.py:430(start)
+        1    0.000    0.000    0.014    0.014 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/scheduler.py:33(start)
+    15469    0.019    0.000    0.019    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:48(__setstate__)
+    15469    0.020    0.000    0.020    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:44(__getstate__)
+ 10255/55    0.025    0.000    0.025    0.000 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:177(_merge)
+        1    0.000    0.000    0.025    0.025 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/filesystem.py:150(actual_children)
+        1    0.000    0.000    0.035    0.035 wonderbuild_script.py:5(wonderbuild_script)
+        1    0.106    0.106    0.125    0.125 {cPickle.load}
+        1    0.000    0.000    0.126    0.126 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/project.py:14(__init__)
+        1    0.320    0.320    0.341    0.341 {cPickle.dump}
+        1    0.001    0.001    0.341    0.341 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/project.py:70(dump)
         1    0.000    0.000    0.539    0.539 /usr/lib/python2.5/threading.py:207(wait)
         4    0.000    0.000    0.539    0.135 /usr/lib/python2.5/threading.py:579(join)
         1    0.000    0.000    0.539    0.539 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/scheduler.py:85(join)
-       19    0.550    0.029    0.550    0.029 {time.sleep}
-        1    0.000    0.000    0.552    0.552 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/project.py:64(build)
-        1    0.000    0.000    1.092    1.092 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/main.py:9(run)
+       19    0.552    0.029    0.552    0.029 {time.sleep}
+        1    0.000    0.000    0.554    0.554 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/project.py:64(build)
+        1    0.000    0.000    1.061    1.061 /mnt/tmp/work/bohan/sf/psycle/branches/bohan/wonderbuild/wonderbuild/main.py:39(run)
 
 
