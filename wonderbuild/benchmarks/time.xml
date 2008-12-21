@@ -50,13 +50,13 @@
 						<td align='right'>wonderbuild</td>
 						<td width='10px'/>
 						<td align='right'> 39.8s</td>
-						<td><div style='background-color: orange; width: 39px'><br/></div></td>
+						<td><div style='background-color: orange; width: 40px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>waf</td>
 						<td width='10px'/>
 						<td align='right'> 46.0s</td>
-						<td><div style='background-color: orange; width: 55px'><br/></div></td>
+						<td><div style='background-color: orange; width: 46px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>scons</td>
@@ -86,7 +86,7 @@
 						<td align='right'>wonderbuild</td>
 						<td width='10px'/>
 						<td align='right'> 1.05s</td>
-						<td><div style='background-color: orange; width: 108px'><br/></div></td>
+						<td><div style='background-color: orange; width: 105px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>waf</td>
