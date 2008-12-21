@@ -75,10 +75,17 @@ def exec_subprocess_pipe(args, env = None, silent = False):
 		env = env
 	)
 	out, err = p.communicate()
-	if not silent or __debug__ and is_debug:
-		sys.stdout.write(out)
+	if not silent:
+		if len(out): sys.stdout.write(out)
 		if len(err):
 			s = ''
 			for line in err.split('\n')[:-1]: s += colored('7;1;31', 'error:') + ' ' + line + '\n'
 			sys.stderr.write(s)
+	elif __debug__ and is_debug:
+		if len(out):
+			for line in out.split('\n')[:-1]: debug('exec: pipe: ' + colored('7;1;32', 'out') + ': ' + line)
+		if len(err):
+			s = ''
+			for line in err.split('\n')[:-1]: debug('exec: pipe: ' + colored('7;1;31', 'err') + ': ' + line)
+			debug(s)
 	return p.returncode, out, err

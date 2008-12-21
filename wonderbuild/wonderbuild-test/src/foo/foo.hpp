@@ -6,4 +6,8 @@
 	#define FOO_LINK __declspec(dllimport)
 #endif
 
+#if 0
+	#include "bar.hpp"
+#endif
+
 FOO_LINK void foo();

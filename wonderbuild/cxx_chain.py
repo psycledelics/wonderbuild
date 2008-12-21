@@ -299,7 +299,12 @@ class BaseModCfg(Cfg):
 				else: self.ld_flags = []
 
 			if not ar_prog: self.ar_prog = 'ar'
-			if not ar_flags: self.ar_flags = os.environ.get('ARFLAGS', 'rc') # s for gnu to run ranlib
+			if not ar_flags:
+				self.ar_flags = os.environ.get('ARFLAGS', None)
+				if self.ar_flags is None:
+					if self.base_cxx_cfg.kind == 'gcc': self.ar_flags = 'rcus'
+					else: self.ar_flags = 'rc'
+					
 			if not ranlib_prog: self.ranlib_prog = 'ranlib'
 			if not ranlib_flags: self.ranlib_flags = os.environ.get('RANLIBFLAGS', None)
 
@@ -311,6 +316,7 @@ class BaseModCfg(Cfg):
 			self.shared_args = self._gcc_shared_args
 			self.paths_args = self._posix_paths_args
 			self.libs_args = self._gcc_libs_args
+			self.ar_flags = 'rcs'
 			self.target = self._linux_target
 		else: raise Exception, 'unsupported lib archiver/linker'
 
@@ -519,6 +525,7 @@ class CxxTask(Task):
 				except KeyError:
 					old_sig = None
 					self._implicit_deps, not_found = self.cfg.base_cfg.cpp.scan_deps(self.source, self.cfg.paths)
+					if __debug__ and is_debug and len(not_found): debug('cpp: deps not found: ' + self.source.path + ': '+ str([str(x) for x in not_found]))
 					new_implicit_deps = True
 					sigs = [s.sig for s in self._implicit_deps]
 				else:
@@ -527,6 +534,7 @@ class CxxTask(Task):
 						# A cached implicit dep does not exist anymore.
 						# We must recompute the implicit deps.
 						self._implicit_deps, not_found = self.cfg.base_cfg.cpp.scan_deps(self.source, self.cfg.paths)
+						if __debug__ and is_debug and len(not_found): debug('cpp: deps not found: ' + self.source.path + ': '+ str([str(x) for x in not_found]))
 						new_implicit_deps = True
 						sigs = [s.sig for s in self._implicit_deps]
 				sigs.sort()
@@ -540,6 +548,7 @@ class CxxTask(Task):
 						sig = Sig(self.cfg.sig)
 						sig.update(self.source.sig)
 						self._implicit_deps, not_found = self.cfg.base_cfg.cpp.scan_deps(self.source, self.cfg.paths)
+						if __debug__ and is_debug and len(not_found): debug('cpp: deps not found: ' + self.source.path + ': '+ str([str(x) for x in not_found]))
 						sigs = [s.sig for s in self._implicit_deps]
 						sigs.sort()
 						sig.update(''.join(sigs))

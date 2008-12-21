@@ -69,6 +69,8 @@ class Node(object):
 			debug('fs: new node: ' + self.abs_path)
 			all_abs_paths.add(self.abs_path)
 	
+	def __str__(self): return self.path
+	
 	def _do_stat(self):
 		if __debug__ and is_debug: debug('fs: os.stat    : ' + self.path)
 		try: st = os.stat(self.path)

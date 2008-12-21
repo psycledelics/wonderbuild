@@ -86,7 +86,7 @@ class IncludeScanner(object):
 			if not include.startswith(os.pardir + os.sep) and not include.startswith(os.curdir + os.sep):
 				abs = self.search_abs(include, paths, not_found)
 				if abs is not None: return abs
-			if __debug__ and is_debug: debug('cpp: not found : #include "' + u + '"')
+			if __debug__ and is_debug: debug('cpp: not found : #include "' + include + '"')
 		self.not_found.add(n)
 		not_found.add(n)
 		return None
