@@ -38,3 +38,8 @@ anechoid 2008
 		user    1m8.488s
 		sys     1m1.876s
 
+	no gc
+		real    0m39.801s
+		user    1m8.576s
+		sys     1m1.052s
+

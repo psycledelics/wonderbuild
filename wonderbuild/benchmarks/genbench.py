@@ -176,11 +176,9 @@ def CreateLibrary(lib_number, classes, internal_includes, external_includes):
     #CreateLibJamFile(lib_number, classes)
     #CreateVCProjFile(lib_number, classes)
     CreateW(lib_number, classes)
+    CreateAutotools(lib_number, classes)
 
     os.chdir("..")
-
-    #CreateWonderbuild(lib_number, classes)
-
 
 def CreateSConstruct(libs):
     handle = file("SConstruct", "w");
@@ -238,31 +236,6 @@ def CreateW(lib_number, classes):
     handle.write('def set_options(opt): pass\n')
     handle.write('def configure(conf): pass\n\n')
 
-def CreateWonderbuild(lib_number, classes):
-    handle = file("wonderbuild_script_" + str(lib_number), "w");
-    handle.write(
-'''	class BenchLib%s(Mod):
-		def __init__(self, name): Mod.__init__(self, ModConf(base_mod_conf, BenchLib%s.BenchObjConf(base_obj_conf), 'lib'), name)
-	
-		def dyn_in_tasks(self):
-			if len(self.in_tasks) != 0: return None
-			Mod.dyn_in_tasks(self)
-			src_dir = top_src_dir.node_path(self.name)
-			self.obj_conf.paths.append(src_dir)\n''' % (str(lib_number), str(lib_number))
-    )
-    for i in xrange(classes):
-        handle.write(
-'''			self.new_obj(src_dir.node_path('class_%s.cpp'))\n''' % str(i)
-        )
-    handle.write(
-'''			return self.in_tasks
-		class BenchObjConf(ObjConf):
-			def conf(self):
-				ObjConf.conf(self)
-				self.paths.append(top_src_dir)
-	bench_libs.append(BenchLib%s('lib_%s'))\n\n''' % (str(lib_number), str(lib_number))
-    )
-
 def CreateWtop(libs):
     handle = file("wscript", "w")
 
@@ -294,6 +267,34 @@ def CreateFullSolution(libs):
                       '", "' + project_name + '", "{CF495178-8865-4D20-939D-AAA' + str(i) + '}"\n')
         handle.write('EndProject\n')
 
+def CreateAutotoolsTop(libs):
+    handle = file("configure.ac", "w")
+    handle.write('''\
+AC_INIT([bench], [1.0.0])
+AC_CONFIG_AUX_DIR([autotools-aux])
+AM_INIT_AUTOMAKE([subdir-objects nostdinc no-define tar-pax dist-bzip2])
+AM_PROG_LIBTOOL
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+''')
+
+    handle = file("Makefile.am", "w")
+    handle.write('''\
+AM_CPPFLAGS = -I$(srcdir)
+lib_LTLIBRARIES =
+''')
+    for i in xrange(libs): handle.write('include lib_%s/Makefile.am\n' % str(i))
+
+def CreateAutotools(lib_number, classes):
+
+    handle = file("Makefile.am", "w")
+    handle.write('''\
+lib_LTLIBRARIES += lib%s.la
+lib%s_la_SOURCES =''' % (str(lib_number), str(lib_number)))
+    for i in xrange(classes): handle.write(' lib_%s/class_%s.cpp' % (str(lib_number), str(i)))
+    handle.write('\n')
+
 def SetDir(dir):
     if (not os.path.exists(dir)):
         os.mkdir(dir)
@@ -319,6 +320,7 @@ def main(argv):
     CreateWtop(libs)
     #CreateFullJamfile(libs)
     #CreateFullSolution(libs)
+    CreateAutotoolsTop(libs)
 
 if __name__ == "__main__":
     main( sys.argv )

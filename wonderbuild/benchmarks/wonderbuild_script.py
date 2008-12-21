@@ -8,14 +8,13 @@ def wonderbuild_script(project):
 	base_cxx_cfg = BaseCxxCfg(project)
 	base_mod_cfg = BaseModCfg(base_cxx_cfg)
 
-	top_src_dir = project.src_node.node_path('++bench-wonderbuild')
+	top_src_dir = project.src_node.node_path('bench-wonderbuild')
 
 	class BenchLib(ModTask):
 		def __init__(self, name): ModTask.__init__(self, ModCfg(base_mod_cfg, BenchLib.BenchCxxCfg(base_cxx_cfg), 'lib'), name)
 		
 		def dyn_in_tasks(self):
 			src_dir = top_src_dir.node_path(self.name)
-			self.cxx_cfg.paths.append(src_dir)
 			for s in src_dir.find_iter(in_pat = '*.cpp'): self.add_new_cxx_task(s)
 			return self.in_tasks
 

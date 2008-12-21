@@ -126,3 +126,25 @@ anechoid 2008
 		user    0m1.048s
 		sys     0m0.040s
 
+	svn rev 7707, no gc
+
+		real	0m1.075s
+		user	0m0.968s
+		sys	0m0.064s
+
+		real	0m1.079s
+		user	0m0.992s
+		sys	0m0.040s
+
+		real	0m1.081s
+		user	0m0.968s
+		sys	0m0.060s
+
+		real	0m1.083s
+		user	0m0.964s
+		sys	0m0.064s
+
+		real	0m1.076s
+		user	0m0.952s
+		sys	0m0.076s
+
