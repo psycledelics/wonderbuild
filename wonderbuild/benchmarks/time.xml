@@ -4,17 +4,17 @@
 <!--?xml-stylesheet href='http://psycle.sourceforge.net/displayer.psycledelics.css' type='text/css'?-->
 <part caption='Benchmarks of various build tools' image='http://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Koch_curve.svg/180px-Koch_curve.svg.png' alt='koch curve'>
 	<part caption='genbench.py (from waf)' anchor='genbench.py'>
+		<part caption='Versions'>
+			<ul>
+				<li>Scons version was 0.97.0</li>
+				<li>Waf version was somewhere after 1.5.1 (svn rev 5178)</li>
+				<li>Autotools versions: autoconf was 2.61, automake 1.10.1, libtool 1.5.26</li>
+				<li>Make version was GNU make 3.81</li>
+				<li>Tool chain versions: gcc was 4.2.4, binutils was 2.18.0</li>
+			</ul>
+		</part>
 		<part caption='Notes'>
-			In these benchmarks, all tools were run with silent/quiet option and/or &gt; /dev/null.
-			<br/>
-			All tests were run with 4 jobs on the same quad core system, ext2 filesystem on lvm/dmraid0 device, linux, gcc's C++ compiler.
-			<br/>
-			Waf's parallel algorithm was set to "normal" (faster than "max parallel").
-			<br/>
-			All tests were run at least seven times (first run not counted) and the average taken (sorry, didn't measure incertitude).
-			Initial builds for scons and autools were not run seven times, they take AGES.
-			<br/>
-			Since genbench.py produces a random setup, all these tests were run on the same genbench output,
+			Since <a href='http://code.google.com/p/waf/source/browse/trunk/utils/genbench.py'>genbench.py</a> produces a random setup, all these tests were run on the same genbench output,
 			but each copied to its own directory to ensure they don't interfere with each others, i.e.
 			<code>
 				<pre>
@@ -27,8 +27,24 @@
 				</pre>
 			</code>
 			This genbench.py invocation generates 10000 tiny interdependent C++ source and header files, to be built into 50 static libs.
+			<br/><br/>
+			In these benchmarks, all tools were run with silent/quiet option and/or > /dev/null.
 			<br/>
-			The autotools generated only one makefile with everything (no recursive make invocation), and C++ dependencies were tracked with gcc while compiling.
+			All tests were run with 4 jobs on the same quad core system, ext2 filesystem on lvm/dmraid0 device, linux, gcc's C++ compiler.
+			<br/>
+			The command lines used to run the tests were:
+			<code>
+				<pre>
+	time make -C bench-make --jobs=4 --silent
+	time ../wonderbuild.py --cxx-pic=no --jobs=4 --silent
+	(cd bench-waf &amp;&amp; time ../../waf/waf-light --jobs=4) > /dev/null
+	time make -C bench-autotools --jobs=4 --silent > /dev/null
+	(cd bench-scons &amp;&amp; time scons --jobs=4 -Q) > /dev/null
+				</pre>
+			</code>
+			Waf's parallel algorithm was set to "normal" (faster than "max parallel").
+			<br/><br/>
+			The autotools generated only one makefile with everything (no recursive make invocation), and C++ dependencies were tracked with gcc while compiling; libtool was enabled, even for building static libs.
 			<br/>
 			The toy makefiles generated were recursive, and C++ dependencies were tracked with the makedepend X utility.
 			<br/>
@@ -36,10 +52,17 @@
 			wonderbuild used a dumb include scanner, with no condition nor macro evaluation.
 			<br/>
 			Waf and scons were tuned to use file timestamps comparisons rather than md5 sums.
+			<br/><br/>
+			All tests were run at least seven times (first run not counted) and the average taken (sorry, didn't measure incertitude).
+			Initial builds for scons and autools were not run seven times as they take AGES.
 			<br/>
 			Configuration time was not counted (altough it's not really clear for scons).
 			<part caption='Running wonderbuild'>
-				You can try wonderbuild with this benchmark with:
+				Wonderbuild is a work-in-progress and not ready for production.
+				Currently, it aims at building C++ code only, it's not documented, and lacks some essential features.
+				If you need a complete and fast build tool, i suggest you try <a href='http://code.google.com/p/waf'>waf</a>.
+				<br/><br/>
+				However, if you have an insterest in developping build tool systems, you can try wonderbuild with this benchmark with:
 				<code>
 					<pre>
 	svn co https://psycle.svn.sourceforge.net/svnroot/psycle/branches/bohan/wonderbuild --ignore-externals
