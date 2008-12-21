@@ -33,7 +33,7 @@
 			The toy makefiles generated were recursive, and C++ dependencies were tracked with the makedepend X utility.
 			<br/>
 			Unlike waf and scons, which used a full-featured preprocessor to scan C++ dependencies,
-			wonderbuild used a dumb preprocessor scanner, with no macro evaluation.
+			wonderbuild used a dumb include scanner, with no condition nor macro evaluation.
 			<br/>
 			Waf and scons were tuned to use file timestamps comparisons rather than md5 sums.
 			<br/>
