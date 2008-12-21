@@ -42,6 +42,8 @@
 	(cd bench-scons &amp;&amp; time scons --jobs=4 -Q) > /dev/null
 				</pre>
 			</code>
+			The autotools were configured with --disable-shared CXXFLAGS=-Wall, as the other benches.
+			<br/><br/>
 			The autotools generated only one makefile with everything (no recursive make invocation), and C++ dependencies were tracked with gcc while compiling; libtool was enabled, even for building static libs.
 			<br/>
 			The toy makefiles generated were recursive, and C++ dependencies were tracked with the makedepend X utility.
