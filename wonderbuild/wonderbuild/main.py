@@ -4,10 +4,10 @@
 
 import sys, os
 	
-from options import options, known_options, help
+from wonderbuild.options import options, known_options, help
 
 def run():
-	from project import Project
+	from wonderbuild.project import Project
 	project = Project()
 
 	if os.path.exists('wonderbuild_script.py'):

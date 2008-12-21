@@ -2,7 +2,7 @@
 
 if __name__ == '__main__':
 	import sys, os
-	if True:
+	if False:
 		dir = os.path.abspath(os.path.dirname(sys.argv[0]))
 		if dir not in sys.path: sys.path.append(dir)
 		from wonderbuild.main import main
