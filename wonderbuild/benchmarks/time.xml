@@ -52,7 +52,7 @@
 	touch bench-wonderbuild/lib_17/*.h &amp;&amp; time ../main.py --cxx-pic=no --silent # big partial rebuild
 					</pre>
 				</code>
-				The build is in benchmarks/++wonderbuild
+				The build dir is benchmarks/++wonderbuild
 			</part>
 		</part>
 		<part caption='Results'>
