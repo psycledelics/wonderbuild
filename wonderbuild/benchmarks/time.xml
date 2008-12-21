@@ -6,11 +6,11 @@
 	<part caption='genbench.py (from waf)' anchor='genbench.py'>
 		<part caption='Versions'>
 			<ul>
-				<li>Scons version was 0.97.0</li>
+				<li>Scons version was 1.2.0</li>
 				<li>Waf version was somewhere after 1.5.1 (svn rev 5178)</li>
-				<li>Autotools versions: autoconf was 2.61, automake 1.10.1, libtool 1.5.26</li>
+				<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
 				<li>Make version was GNU make 3.81</li>
-				<li>Tool chain versions: gcc was 4.2.4, binutils was 2.18.0</li>
+				<li>Tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
 			</ul>
 		</part>
 		<part caption='Notes'>
@@ -39,14 +39,14 @@
 	time ../wonderbuild.py --cxx-pic=no --jobs=4 --silent
 	(cd bench-waf &amp;&amp; time ../../waf/waf-light --jobs=4) > /dev/null
 	time make -C bench-autotools --jobs=4 --silent > /dev/null
-	(cd bench-scons &amp;&amp; time scons --jobs=4 -Q) > /dev/null
+	time SCONS_LIB_DIR=$(pwd)/../scons/src/engine python ../scons/src/script/scons.py -C bench-scons --no-cache --jobs=4 --silent -Q
 				</pre>
 			</code>
 			The autotools were configured with --disable-shared CXXFLAGS=-Wall, as the other benches.
 			<br/><br/>
 			The autotools generated only one makefile with everything (no recursive make invocation), and C++ dependencies were tracked with gcc while compiling; libtool was enabled, even for building static libs.
 			<br/>
-			The toy makefiles generated were recursive, and C++ dependencies were tracked with the makedepend X utility.
+			The toy makefiles generated were recursive, and C++ dependencies were tracked using the makedepend X utility.
 			<br/>
 			Waf and scons used a full-featured custom preprocessor to scan C++ dependencies.
 			<br/>
@@ -56,9 +56,12 @@
 			Wonderbuild used either gcc's generated deps as a side-effect of compilation (-MMD option),
 			or a custom dumb include scanner, with no condition nor macro evaluation.
 			<br/>
+			Waf's parallel algorithm was set to "normal" (faster than "max parallel").
+			<br/>
 			Waf and scons were tuned to use file timestamps comparisons rather than md5 sums.
 			<br/>
-			Waf's parallel algorithm was set to "normal" (faster than "max parallel").
+			Scons' automatic fetching of source files from SCMs was disabled, cache of implicit deps was enabled, built target cache was disabled.
+			Scons built directly in the source dir, so there was no need to disable the annoying copying of source files to the build dir.
 			<br/><br/>
 			All tests were run at least seven times (first run not counted) and the average taken (sorry, didn't measure incertitude).
 			Initial builds for scons and autools were not run seven times as they take AGES.
@@ -116,8 +119,8 @@
 						<tr>
 							<td align='right'>scons</td>
 							<td width='10px'/>
-							<td align='right'>128.0s</td>
-							<td><div style='background-color: orange; width: 128px'><br/></div></td>
+							<td align='right'>115.0s</td>
+							<td><div style='background-color: orange; width: 115px'><br/></div></td>
 						</tr>
 						<tr>
 							<td align='right'>autotools</td>
@@ -164,7 +167,7 @@
 						<tr>
 							<td align='right'>scons</td>
 							<td width='10px'/>
-							<td align='right'>22.00s</td>
+							<td align='right'>19.71s</td>
 							<td><div style='background-color: orange; width: 800px'><br/></div></td>
 							<td>//</td>
 							<td><div style='background-color: orange; width: 50px'><br/></div></td>
@@ -210,7 +213,7 @@
 						<tr>
 							<td align='right'>scons</td>
 							<td width='10px'/>
-							<td align='right'>26.00s</td>
+							<td align='right'>20.62s</td>
 							<td><div style='background-color: orange; width: 800px'><br/></div></td>
 							<td>//</td>
 							<td><div style='background-color: orange; width: 50px'><br/></div></td>
@@ -256,8 +259,8 @@
 						<tr>
 							<td align='right'>scons</td>
 							<td width='10px'/>
-							<td align='right'>41.00s</td>
-							<td><div style='background-color: orange; width: 410px'><br/></div></td>
+							<td align='right'>34.41s</td>
+							<td><div style='background-color: orange; width: 344px'><br/></div></td>
 						</tr>
 					</table>
 				</code>
