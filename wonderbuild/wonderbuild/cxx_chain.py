@@ -7,7 +7,7 @@ import os, threading
 
 from options import options, known_options, help
 from logger import out, is_debug, debug, colored, silent
-from signature import Sig, raw_to_hexstring
+from signature import Sig
 from task import Task, exec_subprocess, exec_subprocess_pipe
 from cpp_include_scanner import IncludeScanner
 

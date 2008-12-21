@@ -3,7 +3,6 @@
 # copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import sys, os.path, re, cPickle, gc
-from hashlib import md5 as Sig
 
 from logger import is_debug, debug
 
@@ -114,9 +113,6 @@ class IncludeScanner(object):
 			if s is None: return ''
 			return s
 		s = _cpp.sub(repl, s)
-
-		#for l in s.split('\n'): print '[' + l + ']'
-		#return
 
 		rel_includes = set()
 		abs_includes = set()
