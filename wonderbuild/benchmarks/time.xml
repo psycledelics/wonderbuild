@@ -4,16 +4,39 @@
 <!--?xml-stylesheet href='http://psycle.sourceforge.net/displayer.psycledelics.css' type='text/css'?-->
 <part caption='Benchmarks of various build tools' image='http://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Koch_curve.svg/180px-Koch_curve.svg.png' alt='koch curve'>
 	<part caption='genbench.py (from waf)' anchor='genbench.py'>
-		In these benchmarks, waf and scons were tuned to use timestamp file signatures rather than md5 sum.
+		In these benchmarks, all tools were run with silent/quiet option and/or &gt; /dev/null.
 		<br/>
-		All tools were run with silent/quiet option and/or &gt; /dev/null.
+		All tests were run with 4 jobs on the same quad core system, ext2 filesystem on lvm/dmraid0 device, linux, gcc's C++ compiler.
 		<br/>
-		Run with 4 jobs on a quad core system, ext2 filesystem on lvm/dmraid0, linux.
+		Since genbench.py produces a random setup, all these tests were run on the same genbench output,
+		but each copied to its own directory to ensure they don't interfere with each others, i.e.
+		<code>
+			<pre>
+	./genbench.py bench 50 100 15 5
+	cp -R bench bench-make
+	cp -R bench bench-wonderbuild
+	cp -R bench bench-waf
+	cp -R bench bench-autotools
+	cp -R bench bench-scons
+			</pre>
+		</code>
+		This genbench.py invocation generates 10000 tiny interdependent C++ source and header files, to be built into 50 static libs.
+		<br/>
+		The autotools generated only one makefile with everything (no recursive make invocation), and C++ dependencies were tracked with gcc while compiling.
+		<br/>
+		The toy makefiles generated were recursive, and C++ dependencies were tracked with the makedepend X utility.
+		<br/>
+		Unlike waf and scons, which used a full-featured preprocessor to scan C++ dependencies,
+		wonderbuild used a dumb preprocessor scanner, with no macro evaluation.
+		<br/>
+		Waf and scons were tuned to use file timestamps comparisons rather than md5 sums.
+		<br/>
+		Configuration time was not counted (altough it's not really clear for scons).
 		<part caption='Initial full build'>
 			<code>
 				<table style='background-color: rgb(95%, 95%, 85%)'>
 					<tr>
-						<td align='right'>toy makefile</td>
+						<td align='right'>toy makefiles</td>
 						<td width='10px'/>
 						<td align='right'> 35.2s</td>
 						<td><div style='background-color: orange; width: 35px'><br/></div></td>
@@ -49,7 +72,7 @@
 			<code>
 				<table style='background-color: rgb(95%, 95%, 85%)'>
 					<tr>
-						<td align='right'>toy makefile</td>
+						<td align='right'>toy makefiles</td>
 						<td width='10px'/>
 						<td align='right'> 1.00s</td>
 						<td><div style='background-color: orange; width: 100px'><br/></div></td>
@@ -82,12 +105,12 @@
 			</code>
 		</part>
 		<part caption='Small partial rebuild'>
-			after modification of lib_x/class_x.h, rebuild of 19 object files from c++ and 6 static libs
+			After modification of lib_x/class_x.h, rebuild of 19 object files from c++ and 6 static libs
 			<br/><br/>
 			<code>
 				<table style='background-color: rgb(95%, 95%, 85%)'>
 					<tr>
-						<td align='right'>toy makefile</td>
+						<td align='right'>toy makefiles</td>
 						<td width='10px'/>
 						<td align='right'> 1.23s</td>
 						<td><div style='background-color: orange; width: 123px'><br/></div></td>
@@ -120,12 +143,12 @@
 			</code>
 		</part>
 		<part caption='Big partial rebuild'>
-			after modification of lib_x/*.h, rebuild of 575 object files from c++ and 33 static libs
+			After modification of lib_x/*.h, rebuild of 575 object files from c++ and 33 static libs
 			<br/><br/>
 			<code>
 				<table style='background-color: rgb(95%, 95%, 85%)'>
 					<tr>
-						<td align='right'>toy makefile</td>
+						<td align='right'>toy makefiles</td>
 						<td width='10px'/>
 						<td align='right'> 5.25s</td>
 						<td><div style='background-color: orange; width: 52px'><br/></div></td>
