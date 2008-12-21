@@ -8,6 +8,11 @@
 		<br/>
 		All tests were run with 4 jobs on the same quad core system, ext2 filesystem on lvm/dmraid0 device, linux, gcc's C++ compiler.
 		<br/>
+		Waf's parallel algorithm was set to "normal" (faster than "max parallel").
+		<br/>
+		All tests were run at least seven times (first run not counted) and the average taken (sorry, didn't measure incertitude).
+		Between runs of the initial build, the directory was cleaned rather than recreated to ensure the OS could keep it's filesystem cache.
+		<br/>
 		Since genbench.py produces a random setup, all these tests were run on the same genbench output,
 		but each copied to its own directory to ensure they don't interfere with each others, i.e.
 		<code>
@@ -50,7 +55,7 @@
 					<tr>
 						<td align='right'>waf</td>
 						<td width='10px'/>
-						<td align='right'> 55.9s</td>
+						<td align='right'> 46.0s</td>
 						<td><div style='background-color: orange; width: 55px'><br/></div></td>
 					</tr>
 					<tr>
@@ -86,8 +91,8 @@
 					<tr>
 						<td align='right'>waf</td>
 						<td width='10px'/>
-						<td align='right'> 2.05s</td>
-						<td><div style='background-color: orange; width: 205px'><br/></div></td>
+						<td align='right'> 1.71s</td>
+						<td><div style='background-color: orange; width: 171px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>autotools</td>
@@ -124,8 +129,8 @@
 					<tr>
 						<td align='right'>waf</td>
 						<td width='10px'/>
-						<td align='right'> 2.55s</td>
-						<td><div style='background-color: orange; width: 255px'><br/></div></td>
+						<td align='right'> 2.14s</td>
+						<td><div style='background-color: orange; width: 214px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>autotools</td>
@@ -162,8 +167,8 @@
 					<tr>
 						<td align='right'>waf</td>
 						<td width='10px'/>
-						<td align='right'> 7.80s</td>
-						<td><div style='background-color: orange; width: 78px'><br/></div></td>
+						<td align='right'> 6.98s</td>
+						<td><div style='background-color: orange; width: 70px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>autotools</td>
