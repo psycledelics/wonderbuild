@@ -48,7 +48,10 @@
 			<br/>
 			The toy makefiles generated were recursive, and C++ dependencies were tracked with the makedepend X utility.
 			<br/>
-			Waf and scons, which used a full-featured custom preprocessor to scan C++ dependencies.
+			Waf and scons used a full-featured custom preprocessor to scan C++ dependencies.
+			<br/>
+			Waf is also able to use gcc's generated deps as a side-effect of compilation (-MMD option),
+			but i didn't measure it yet.
 			<br/>
 			Wonderbuild used either gcc's generated deps as a side-effect of compilation (-MMD option),
 			or a custom dumb include scanner, with no condition nor macro evaluation.
