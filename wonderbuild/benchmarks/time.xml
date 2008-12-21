@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='ascii' ?>
-<?xml-stylesheet type='text/xsl' href='http://psycle.sourceforge.net/displayer.xsl'?>
+<!--?xml-stylesheet type='text/xsl' href='http://psycle.sourceforge.net/displayer.xsl'?-->
+<?xml-stylesheet type='text/xsl' href='time.xsl'?>
 <!--?xml-stylesheet href='http://psycle.sourceforge.net/displayer.psycledelics.css' type='text/css'?-->
 <part caption='Benchmarks of various build tools' image='http://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Koch_curve.svg/180px-Koch_curve.svg.png' alt='koch curve'>
 	<part caption='genbench.py (from waf)' anchor='genbench.py'>
