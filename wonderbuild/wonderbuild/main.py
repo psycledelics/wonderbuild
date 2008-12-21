@@ -80,4 +80,7 @@ def main():
 	finally:
 		if gc_enabled: gc.enable()
 
-if __name__ == '__main__': main()
+if __name__ == '__main__':
+	dir = os.path.abspath(os.path.dirname(os.path.dirname(sys.argv[0])))
+	if not dir in sys.path: sys.path.append(dir)
+	main()
