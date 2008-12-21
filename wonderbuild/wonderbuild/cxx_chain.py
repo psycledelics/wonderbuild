@@ -127,7 +127,7 @@ class BaseCxxCfg(Cfg):
 		help['--cxx-pic']   = ('--cxx-pic=<yes|no>', 'make the c++ compiler emit pic code (for shared libs) rather than non-pic code (for static libs or programs)', 'yes')
 	
 	def configure(self):
-		self.cpp = IncludeScanner(self.project.fs, self.project.state_and_cache)
+		self.cpp = IncludeScanner(self.project.state_and_cache)
 
 		try: sig, self.prog, self.flags, self.pic, self.optim, self.debug, self.kind, self.version, self.__args = self.project.state_and_cache['cxx-compiler']
 		except KeyError: parse = True
@@ -207,6 +207,20 @@ class BaseCxxCfg(Cfg):
 		for k, v in defines.iteritems():
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + v)
+
+	@staticmethod
+	def _read_gcc_dep_file(target, dep_rel):
+		'''reads deps from a .d file generated as side-effect of compilation by gcc's -MD or -MMD option'''
+		
+		path = target.path[:target.path.rfind('.')] + '.d'
+		f = open(path, 'rb')
+		try: deps = f.read()
+		finally: f.close()
+		deps = deps.replace('\\\n', '')
+		deps = deps[deps.find(':') + 1:].split()
+		deps = [dep_rel.node_path(dep) for dep in deps]
+		if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
+		return deps
 
 	def process(self, cxx_task):
 		dir = cxx_task.target.parent
@@ -513,7 +527,47 @@ class CxxTask(Task):
 		try: return self.project.task_states[self.uid][0]
 		except KeyError: return None
 
-	if True: # faster
+	if False: # gcc deps (fastest)
+		@property
+		def sig(self):
+			try: return self._sig
+			except AttributeError:
+				try: old_sig, implicit_deps = self.project.task_states[self.uid]
+				except KeyError:
+					self._sig = 0
+					return self._sig
+				else:
+					try: sigs = [s.sig for s in implicit_deps]
+					except OSError:
+						# A cached implicit dep does not exist anymore.
+						# We must recompute the implicit deps.
+						if __debug__ and is_debug: debug('cpp: deps not found: ' + self.source.path)
+						self._sig = 0
+						return self._sig
+				sigs.sort()
+				sig = Sig(self.cfg.sig)
+				sig.update(''.join(sigs))
+				sig = sig.digest()
+				if sig != old_sig:
+					if __debug__ and is_debug: debug('task: sig changed: ' + self.target.path)
+					# Either the include path or a source or header content has changed.
+					# We must recompute the implicit deps.
+					self._sig = 0
+					return self._sig
+				self._sig = sig
+				return sig
+
+		def update_sig(self):
+			implicit_deps = self.cfg.base_cfg._read_gcc_dep_file(self.target, self.project.fs.cur)
+			sigs = [s.sig for s in implicit_deps]
+			sigs.sort()
+			sig = Sig(self.cfg.sig)
+			sig.update(''.join(sigs))
+			sig = sig.digest()
+			self._sig = sig
+			self.project.task_states[self.uid] = (sig, implicit_deps)
+
+	elif True: # faster
 		@property
 		def sig(self):
 			try: return self._sig
@@ -642,12 +696,12 @@ class ModTask(Task):
 	def cxx_cfg(self): return self.cfg.cxx_cfg
 
 	def add_new_cxx_task(self, source):
-		cxx_task = CxxTask(self.cxx_cfg)
-		cxx_task.source = source
-		cxx_task.target = self.target.parent.node_path(source.path[:source.path.rfind('.')] + '.o')
-		self.add_in_task(cxx_task)
-		self.sources.append(cxx_task.target)
-		return cxx_task
+		t = CxxTask(self.cxx_cfg)
+		t.source = source
+		t.target = self.target.parent.node_path(source.path[:source.path.rfind('.')] + '.o')
+		self.add_in_task(t)
+		self.sources.append(t.target)
+		return t
 
 class Contexes(object):
 	def check_and_build(self):

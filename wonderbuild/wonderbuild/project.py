@@ -15,7 +15,7 @@ class Project(object):
 		gc_enabled = gc.isenabled()
 		if gc_enabled: gc.disable()
 		try:
-			try: f = file(os.path.join(bld_path, 'state-and-cache'), 'rb')
+			try: f = open(os.path.join(bld_path, 'state-and-cache'), 'rb')
 			except IOError: raise
 			else:
 				try:
@@ -74,10 +74,10 @@ class Project(object):
 		try:
 			path = os.path.join(self.bld_node.path, 'state-and-cache')
 			if __debug__ and is_debug: t0 = time.time()
-			try: f = file(path, 'wb')
+			try: f = open(path, 'wb')
 			except IOError:
 				self.bld_node.make_dir()
-				f = file(path, 'wb')
+				f = open(path, 'wb')
 			try: cPickle.dump(self.state_and_cache, f, cPickle.HIGHEST_PROTOCOL)
 			finally: f.close()
 			if __debug__ and is_debug:

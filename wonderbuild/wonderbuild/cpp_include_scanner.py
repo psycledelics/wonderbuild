@@ -13,8 +13,7 @@ _include = re.compile(r'^[ \t]*#[ \t]*include[ \t]*(["<])([^">]*)[">].*$', re.MU
 class IncludeScanner(object):
 	'C/C++ dependency scanner. #include statements, and nothing else, no #if, no #define (dumb)'
 	
-	def __init__(self, filesystem, state_and_cache):
-		self.fs = filesystem
+	def __init__(self, state_and_cache):
 		if False: # a tiny bit slower due to slight pickle size increase
 			try: self.contents, self.not_found = state_and_cache[self.__class__.__name__]
 			except KeyError:
@@ -50,7 +49,7 @@ class IncludeScanner(object):
 				else: self.contents[source] = True, rel_includes, abs_includes
 		if parse:
 			if __debug__ and is_debug: debug('cpp: parsing   : ' + source.path)
-			try: f = file(source.path, 'rb')
+			try: f = open(source.path, 'rb')
 			except IOError:
 				if __debug__ and is_debug: debug('cpp: not found : ' + source.path)
 				self.not_found.add(source)

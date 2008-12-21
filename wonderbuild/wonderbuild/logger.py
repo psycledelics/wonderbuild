@@ -16,12 +16,17 @@ if not __debug__:
 	def debug(s): pass
 else:
 	known_options.add('--zones')
-	help['--zones'] = ('--zones=[zone,...]', 'wonderbuild debugging zones, comma-separated list (exec, cfg, task, sched, fs, project, cpp ...)')
+	help['--zones'] = ('--zones=[zone,...]', 'wonderbuild debugging zones, comma-separated list, or no list for all zones. (example values: exec,cfg,task,sched,fs,project,cpp,...)')
 
 	zones = None
 	for o in options:
+		if o == '--zones':
+			zones = []
+			break
 		if o.startswith('--zones='):
-			zones = o[len('--zones='):].split(',')
+			o = o[len('--zones='):]
+			if len(o): zones = o.split(',')
+			else: zones = []
 			break
 	is_debug = zones is not None
 	if not is_debug:
@@ -35,6 +40,7 @@ else:
 					print >> sys.stderr, colored('35', 'wonderbuild: dbg:') + ' ' + s
 					break
 	else:
+		del zones
 		def debug(s): print >> sys.stderr, colored('35', 'wonderbuild: dbg:') + ' ' + s
 
 out = sys.stdout
