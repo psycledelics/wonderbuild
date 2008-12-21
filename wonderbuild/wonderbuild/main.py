@@ -4,8 +4,10 @@
 
 import sys, os
 	
+from options import options, known_options, help
+
 def run():
-	from project import Project
+	from wonderbuild.project import Project
 	project = Project()
 
 	if os.path.exists('wonderbuild_script.py'):
@@ -17,7 +19,6 @@ def run():
 		print >> sys.stderr, 'no wonderbuild_script.py found'
 		usage = True
 
-	from options import options, known_options, help
 	help['--version'] = ('--version', 'show the version of this tool and exit')
 
 	def print_help(out):
@@ -67,13 +68,18 @@ def main():
 	gc_enabled = gc.isenabled()
 	if gc_enabled: gc.disable()
 	try:
-		from options import options, known_options, help
 		known_options.add('--profile')
 		help['--profile'] = ('--profile', 'profile wonderbuild execution')
-
+		
 		if '--profile' in options:
 			import cProfile, pstats
-			cProfile.run('sys.exit(run())', '/tmp/profile')
+			cProfile.run(
+				'''from wonderbuild.options import known_options;'''
+				'''known_options.add('--profile');'''
+				'''from wonderbuild.main import run;'''
+				'''sys.exit(run())'''
+				, '/tmp/profile'
+			)
 			p = pstats.Stats('/tmp/profile')
 			p.sort_stats('cumulative').reverse_order().print_stats()
 		else: sys.exit(run())
