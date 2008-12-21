@@ -3,7 +3,7 @@
 # copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 def wonderbuild_script(project):
-	from cxx_chain import BaseCxxCfg, BaseModCfg, PkgCfg, CxxCfg, ModCfg, ModTask
+	from wonderbuild.cxx_chain import BaseCxxCfg, BaseModCfg, PkgCfg, CxxCfg, ModCfg, ModTask
 
 	base_cxx_cfg = BaseCxxCfg(project)
 	base_mod_cfg = BaseModCfg(base_cxx_cfg)

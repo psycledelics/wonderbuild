@@ -42,14 +42,14 @@
 				You can try wonderbuild with this benchmark with:
 				<code>
 					<pre>
-	svn co https://psycle.svn.sourceforge.net/svnroot/psycle/branches/bohan/wonderbuild
+	svn co https://psycle.svn.sourceforge.net/svnroot/psycle/branches/bohan/wonderbuild --ignore-externals
 	cd wonderbuild/benchmarks
 	./genbench.py bench 50 100 15 5
 	cp -R bench bench-wonderbuild
-	time ../main.py --cxx-pic=no --silent # initial full build
-	time ../main.py --cxx-pic=no --silent # no-op build
-	touch bench-wonderbuild/lib_17/class_17.h &amp;&amp; time ../main.py --cxx-pic=no --silent # small partial rebuild
-	touch bench-wonderbuild/lib_17/*.h &amp;&amp; time ../main.py --cxx-pic=no --silent # big partial rebuild
+	time ../wonderbuild.py --cxx-pic=no --silent # initial full build
+	time ../wonderbuild.py --cxx-pic=no --silent # no-op build
+	touch bench-wonderbuild/lib_17/class_17.h &amp;&amp; time ../wonderbuild.py --cxx-pic=no --silent # small partial rebuild
+	touch bench-wonderbuild/lib_17/*.h &amp;&amp; time ../wonderbuild.py --cxx-pic=no --silent # big partial rebuild
 					</pre>
 				</code>
 				The build dir is benchmarks/++wonderbuild
