@@ -59,6 +59,7 @@
 			Waf's parallel algorithm was set to "normal" (faster than "max parallel").
 			<br/>
 			Waf and scons were tuned to use file timestamps comparisons rather than md5 sums.
+			(for waf, in Utils.py, def h_file(filename): return str(os.stat(filename).st_mtime) )
 			<br/>
 			Scons' automatic fetching of source files from SCMs was disabled, cache of implicit deps was enabled, built target cache was disabled.
 			Scons built directly in the source dir, so there was no need to disable the annoying copying of source files to the build dir.
