@@ -165,7 +165,9 @@
 							<td align='right'>scons</td>
 							<td width='10px'/>
 							<td align='right'>22.00s</td>
-							<td><div style='background-color: orange; width: 2200px'><br/></div></td>
+							<td><div style='background-color: orange; width: 800px'><br/></div></td>
+							<td>//</td>
+							<td><div style='background-color: orange; width: 50px'><br/></div></td>
 						</tr>
 					</table>
 				</code>
@@ -209,7 +211,9 @@
 							<td align='right'>scons</td>
 							<td width='10px'/>
 							<td align='right'>26.00s</td>
-							<td><div style='background-color: orange; width: 2600px'><br/></div></td>
+							<td><div style='background-color: orange; width: 800px'><br/></div></td>
+							<td>//</td>
+							<td><div style='background-color: orange; width: 50px'><br/></div></td>
 						</tr>
 					</table>
 				</code>
