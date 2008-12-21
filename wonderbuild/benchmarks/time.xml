@@ -13,6 +13,7 @@
 			<br/>
 			All tests were run at least seven times (first run not counted) and the average taken (sorry, didn't measure incertitude).
 			Between runs of the initial build, the directory was cleaned rather than recreated to ensure the OS could keep it's filesystem cache.
+			Initial builds for scons and autools were not run seven times, they take AGES.
 			<br/>
 			Since genbench.py produces a random setup, all these tests were run on the same genbench output,
 			but each copied to its own directory to ensure they don't interfere with each others, i.e.
