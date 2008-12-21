@@ -175,8 +175,9 @@ class Node(object):
 		return self._actual_children
 	
 	def _merge(self, cur, old):
-		if __debug__ and is_debug: debug('fs: merge      : ' + cur.path)
-		assert cur.path == old.path
+		if __debug__ and is_debug:
+			debug('fs: merge      : ' + cur.path)
+			assert cur.path == old.path
 		if cur._children is None:
 			cur._children = old._old_children
 			if old._old_time is not None:
