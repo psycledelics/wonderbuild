@@ -1,0 +1,60 @@
+#! /bin/sh
+
+set -x &&
+
+jobs=4 &&
+
+main() {
+	op=$1 && shift &&
+	tool=$1 && shift &&
+	
+	cd $(dirname $0)/bench-$tool &&
+
+	case $op in
+		reset) rm -Rf build-$tool ;;
+		small) touch lib_17/class_17.hpp ;;
+		big)   touch lib_17/*.hpp ;;
+	esac &&
+
+	case $tool in
+		wonderbuild)
+			time ../../wonderbuild.py --cxx-pic=no --jobs=$jobs "$@"
+		;;
+	
+		waf)
+			if ! test -d build-$tool
+			then
+				../../waf/waf-light configure
+			fi &&
+			time ../../waf/waf-light --jobs=$jobs "$@"
+		;;
+	
+		scons)
+			time SCONS_LIB_DIR=$(pwd)/../../scons/src/engine \
+				python ../../scons/src/script/scons.py --no-cache --jobs=$jobs "$@"
+		;;
+
+		make)
+			if test $op = reset
+			then
+				make -r clean
+			fi &&
+			time make -r --jobs=$jobs "$@"
+		;;
+	
+		autotools)
+			if ! test -f configure
+			then
+				autoreconf --install --symlink
+			fi &&
+			if ! test -d build-$tool
+			then
+				mkdir build-$tool &&
+				(cd build-$tool && ../configure --disable-shared CXXFLAGS=)
+			fi &&
+			time make -C build-$tool -r --jobs=$jobs "$@"
+		;;
+	esac
+} &&
+
+main "$@"
