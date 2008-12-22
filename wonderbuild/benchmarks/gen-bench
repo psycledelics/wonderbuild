@@ -1,5 +1,7 @@
 #! /usr/bin/env python
 
+# related: http://gamesfromwithin.com/?p=44
+
 import sys, os
 from random import Random
 random = Random(0) # initialise with seed to have reproductible benches
