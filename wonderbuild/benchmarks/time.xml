@@ -104,9 +104,10 @@
 		<part caption='What is wonderbuild?'>
 			Wonderbuild is a work-in-progress and not ready for production.
 			Currently, it aims at building C++ code only, it's not documented, and lacks some essential features.
+			<br/>
 			If you need a complete and fast build tool, i suggest you try <a href='http://code.google.com/p/waf'>waf</a>.
-			<br/><br/>
-			However, if you have an insterest in developping build tool systems,
+			<br/>
+			However, if you have an insterest in developping build tools,
 			you can try wonderbuild with this benchmark with:
 			<code>
 				<pre>
@@ -129,37 +130,37 @@
 					<tr>
 						<td align='right'>toy makefiles</td>
 						<td width='10px'/>
-						<td align='right'> 35.2s</td>
-						<td><div style='background-color: orange; width: 35px'><br/></div></td>
+						<td align='right'> 34.10s</td>
+						<td><div style='background-color: orange; width: 34px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>wonderbuild (gcc deps)</td>
 						<td width='10px'/>
-						<td align='right'> 35.8s</td>
+						<td align='right'> 36.22s</td>
 						<td><div style='background-color: orange; width: 36px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>wonderbuild (dumb deps)</td>
 						<td width='10px'/>
-						<td align='right'> 39.8s</td>
-						<td><div style='background-color: orange; width: 40px'><br/></div></td>
+						<td align='right'> 38.49s</td>
+						<td><div style='background-color: orange; width: 38px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>waf</td>
 						<td width='10px'/>
-						<td align='right'> 46.0s</td>
+						<td align='right'> 45.65s</td>
 						<td><div style='background-color: orange; width: 46px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>scons</td>
 						<td width='10px'/>
-						<td align='right'>115.0s</td>
-						<td><div style='background-color: orange; width: 115px'><br/></div></td>
+						<td align='right'>131.00s</td>
+						<td><div style='background-color: orange; width: 131px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>autotools</td>
 						<td width='10px'/>
-						<td align='right'>188.0s</td>
+						<td align='right'>188.00s</td>
 						<td><div style='background-color: orange; width: 188px'><br/></div></td>
 					</tr>
 				</table>
@@ -171,14 +172,14 @@
 					<tr>
 						<td align='right'>toy makefiles</td>
 						<td width='10px'/>
-						<td align='right'> 0.99s</td>
-						<td><div style='background-color: orange; width: 99px'><br/></div></td>
+						<td align='right'> 0.79s</td>
+						<td><div style='background-color: orange; width: 79px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>wonderbuild (gcc deps)</td>
 						<td width='10px'/>
-						<td align='right'> 0.99s</td>
-						<td><div style='background-color: orange; width: 99px'><br/></div></td>
+						<td align='right'> 0.98s</td>
+						<td><div style='background-color: orange; width: 98px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>wonderbuild (dumb deps)</td>
@@ -195,13 +196,13 @@
 					<tr>
 						<td align='right'>autotools</td>
 						<td width='10px'/>
-						<td align='right'> 3.50s</td>
-						<td><div style='background-color: orange; width: 350px'><br/></div></td>
+						<td align='right'> 2.05s</td>
+						<td><div style='background-color: orange; width: 205px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>scons</td>
 						<td width='10px'/>
-						<td align='right'>19.71s</td>
+						<td align='right'>23.25s</td>
 						<td><div style='background-color: orange; width: 800px'><br/></div></td>
 						<td>//</td>
 						<td><div style='background-color: orange; width: 50px'><br/></div></td>
@@ -210,44 +211,44 @@
 			</code>
 		</part>
 		<part caption='Small partial rebuild'>
-			After touch lib_17/class_17.hpp => rebuild of 19 object files from c++ and 6 static libs
+			After touch lib_17/class_17.hpp => rebuild of 26 object files from c++ and 8 static libs
 			<br/><br/>
 			<code>
 				<table style='background-color: rgb(95%, 95%, 85%)'>
 					<tr>
-						<td align='right'>wonderbuild (gcc deps)</td>
-						<td width='10px'/>
-						<td align='right'> 1.15s</td>
-						<td><div style='background-color: orange; width: 115px'><br/></div></td>
-					</tr>
-					<tr>
 						<td align='right'>toy makefiles</td>
 						<td width='10px'/>
-						<td align='right'> 1.23s</td>
-						<td><div style='background-color: orange; width: 123px'><br/></div></td>
+						<td align='right'> 1.01s</td>
+						<td><div style='background-color: orange; width: 101px'><br/></div></td>
+					</tr>
+					<tr>
+						<td align='right'>wonderbuild (gcc deps)</td>
+						<td width='10px'/>
+						<td align='right'> 1.21s</td>
+						<td><div style='background-color: orange; width: 121px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>wonderbuild (dumb deps)</td>
 						<td width='10px'/>
-						<td align='right'> 1.25s</td>
-						<td><div style='background-color: orange; width: 125px'><br/></div></td>
+						<td align='right'> 1.29s</td>
+						<td><div style='background-color: orange; width: 129px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>waf</td>
 						<td width='10px'/>
-						<td align='right'> 2.14s</td>
-						<td><div style='background-color: orange; width: 214px'><br/></div></td>
+						<td align='right'> 2.24s</td>
+						<td><div style='background-color: orange; width: 224px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>autotools</td>
 						<td width='10px'/>
-						<td align='right'> 5.40s</td>
-						<td><div style='background-color: orange; width: 540px'><br/></div></td>
+						<td align='right'> 4.63s</td>
+						<td><div style='background-color: orange; width: 463px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>scons</td>
 						<td width='10px'/>
-						<td align='right'>20.62s</td>
+						<td align='right'>24.37s</td>
 						<td><div style='background-color: orange; width: 800px'><br/></div></td>
 						<td>//</td>
 						<td><div style='background-color: orange; width: 50px'><br/></div></td>
@@ -256,45 +257,45 @@
 			</code>
 		</part>
 		<part caption='Big partial rebuild'>
-			After touch lib_17/*.hpp => rebuild of 575 object files from c++ and 33 static libs
+			After touch lib_17/*.hpp => rebuild of 585 object files from c++ and 33 static libs
 			<br/><br/>
 			<code>
 				<table style='background-color: rgb(95%, 95%, 85%)'>
 					<tr>
-						<td align='right'>wonderbuild (gcc deps)</td>
-						<td width='10px'/>
-						<td align='right'> 5.12s</td>
-						<td><div style='background-color: orange; width: 51px'><br/></div></td>
-					</tr>
-					<tr>
 						<td align='right'>toy makefiles</td>
 						<td width='10px'/>
-						<td align='right'> 5.25s</td>
-						<td><div style='background-color: orange; width: 52px'><br/></div></td>
+						<td align='right'> 4.81s</td>
+						<td><div style='background-color: orange; width: 48px'><br/></div></td>
+					</tr>
+					<tr>
+						<td align='right'>wonderbuild (gcc deps)</td>
+						<td width='10px'/>
+						<td align='right'> 5.31s</td>
+						<td><div style='background-color: orange; width: 53px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>wonderbuild (dumb deps)</td>
 						<td width='10px'/>
-						<td align='right'> 5.70s</td>
-						<td><div style='background-color: orange; width: 57px'><br/></div></td>
+						<td align='right'> 5.56s</td>
+						<td><div style='background-color: orange; width: 56px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>waf</td>
 						<td width='10px'/>
-						<td align='right'> 6.98s</td>
-						<td><div style='background-color: orange; width: 70px'><br/></div></td>
+						<td align='right'> 7.08s</td>
+						<td><div style='background-color: orange; width: 71px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>autotools</td>
 						<td width='10px'/>
-						<td align='right'>29.80s</td>
-						<td><div style='background-color: orange; width: 298px'><br/></div></td>
+						<td align='right'>29.64s</td>
+						<td><div style='background-color: orange; width: 296px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>scons</td>
 						<td width='10px'/>
-						<td align='right'>34.41s</td>
-						<td><div style='background-color: orange; width: 344px'><br/></div></td>
+						<td align='right'>39.58s</td>
+						<td><div style='background-color: orange; width: 396px'><br/></div></td>
 					</tr>
 				</table>
 			</code>

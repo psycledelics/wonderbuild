@@ -11,14 +11,15 @@ main() {
 	cd $(dirname $0)/bench-$tool &&
 
 	case $op in
-		reset) rm -Rf build-$tool ;;
+		reset) rm -Rf build-$tool ++* ;;
+		no-op) ;;
 		small) touch lib_17/class_17.hpp ;;
 		big)   touch lib_17/*.hpp ;;
 	esac &&
 
 	case $tool in
 		wonderbuild)
-			time ../../wonderbuild.py --cxx-pic=no --jobs=$jobs "$@"
+			time ../../wonderbuild.py --cxx=g++ --cxx-pic=no --jobs=$jobs "$@"
 		;;
 	
 		waf)
@@ -30,14 +31,14 @@ main() {
 		;;
 	
 		scons)
-			time SCONS_LIB_DIR=$(pwd)/../../scons/src/engine \
-				python ../../scons/src/script/scons.py --no-cache --jobs=$jobs "$@"
+			SCONS_LIB_DIR=$(pwd)/../../scons/src/engine \
+				time python ../../scons/src/script/scons.py --no-cache --jobs=$jobs "$@"
 		;;
 
 		make)
 			if test $op = reset
 			then
-				make -r clean
+				make -r clean --silent
 			fi &&
 			time make -r --jobs=$jobs "$@"
 		;;

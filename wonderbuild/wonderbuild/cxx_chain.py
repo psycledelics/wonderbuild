@@ -529,7 +529,7 @@ class CxxTask(Task):
 		try: return self.project.task_states[self.uid][0]
 		except KeyError: return None
 
-	if True: # gcc deps (fastest)
+	if False: # gcc deps (fastest)
 		def process(self):
 			self.cfg.base_cfg.process(self)
 			implicit_deps = self.cfg.base_cfg._read_gcc_dep_file(self.target, self.project.fs.cur)
