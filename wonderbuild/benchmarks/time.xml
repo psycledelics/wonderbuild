@@ -77,13 +77,13 @@
 	# wonderbuild
 	(
 		cd bench-wonderbuild &amp;&amp;
-		time ../../wonderbuild.py --cxx-pic=no --jobs=4 --silent
+		time ../../wonderbuild.py --jobs=4 --silent
 	)
 
 	# waf
 	(
 		cd bench-waf &amp;&amp;
-		../../waf-light configure &amp;&amp;
+		../../waf/waf-light configure &amp;&amp;
 		(time ../../waf/waf-light --jobs=4) > /dev/null
 	)
 

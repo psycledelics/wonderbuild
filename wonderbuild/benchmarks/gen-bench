@@ -2,6 +2,7 @@
 
 import sys, os
 from random import Random
+random = Random(0) # initialise with seed to have reproductible benches
 
 # for example: ./gen-bench /tmp/build 50 100 15 5
 
@@ -87,7 +88,6 @@ class %(name)s	{
 })
 
 def create_cpp(name, lib_number, classes_per_lib, internal_includes, external_includes):
-	random = Random(0) # initialise with seed to have reproductible benches
 	f = open(name + '.cpp', 'w')
 	f.write ('#include "' + name + '.hpp"\n')
 	includes = random.sample(xrange(classes_per_lib), internal_includes)
@@ -290,7 +290,7 @@ $(lib): $(objects)
 	$(CXX) $(CXX_FLAGS) $(DEFINES) $(INCLUDE_PATHS) -c $< -o $@
 
 clean:
-	@rm $(objects) $(lib) 2> /dev/null
+	@rm -f $(objects) $(lib)
 	
 depend:
 	@$(DEPEND) $(DEFINES) $(INCLUDE_PATHS) $(src)
