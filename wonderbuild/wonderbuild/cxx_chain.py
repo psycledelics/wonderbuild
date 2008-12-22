@@ -436,7 +436,7 @@ class CxxCfg(Cfg):
 			for p in self.paths: sig.update(p.path)
 			for k, v in self.defines.iteritems():
 				sig.update(k)
-				sig.update(v)
+				if v is not None: sig.update(v)
 			sig = self._sig = sig.digest()
 			return sig
 
@@ -529,7 +529,7 @@ class CxxTask(Task):
 		try: return self.project.task_states[self.uid][0]
 		except KeyError: return None
 
-	if False: # gcc deps (fastest)
+	if True: # gcc deps (fastest)
 		def process(self):
 			self.cfg.base_cfg.process(self)
 			implicit_deps = self.cfg.base_cfg._read_gcc_dep_file(self.target, self.project.fs.cur)

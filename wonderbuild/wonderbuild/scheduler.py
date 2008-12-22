@@ -119,13 +119,14 @@ class Scheduler():
 						continue
 				self._running_count += 1
 				if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': process ' + self.progress() + ' ' + str(task))
-				if task.need_process():
+				process = task.need_process()
+				if process:
 					self._condition.release()
 					try: task.process()
 					finally: self._condition.acquire()
 					task.post_process()
 				self._todo_count -= 1
-				if no_silent_progress and task.executed: print colored('7;32', 'wonderbuild: progress: ' + self.progress())
+				if no_silent_progress and process: print colored('7;32', 'wonderbuild: progress: ' + self.progress())
 				self._running_count -= 1
 				if self._todo_count == 0 and self._joining:
 					self._condition.notifyAll()

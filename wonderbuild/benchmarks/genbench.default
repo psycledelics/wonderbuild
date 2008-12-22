@@ -3,7 +3,7 @@
 cd $(dirname $0) &&
 
 rm -Rf bench bench-* &&
-./genbench.py bench 50 100 15 5 &&
+./gen-bench bench 50 100 15 5 &&
 
 cp -R bench bench-wonderbuild &&
 cp -R bench bench-make &&
@@ -13,8 +13,7 @@ cp -R bench bench-waf &&
 cp -R bench bench-autotools && 
 cd bench-autotools &&
 find . -type f -name Makefile -exec rm {} \; &&
-touch README AUTHORS NEWS ChangeLog &&
-autoreconf --install --symlink --verbose &&
-mkdir ++autotools &&
-cd ++autotools &&
-../configure --disable-shared CXXFLAGS=-Wall
+autoreconf --install --symlink &&
+mkdir build-autotools &&
+cd build-autotools &&
+../configure --disable-shared CXXFLAGS=
