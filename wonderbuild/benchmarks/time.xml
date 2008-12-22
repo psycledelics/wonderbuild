@@ -7,7 +7,7 @@
 		<part caption='Versions'>
 			<ul>
 				<li>Scons version was 1.2.0</li>
-				<li>Waf version was somewhere after 1.5.1 (svn rev 5178)</li>
+				<li>Waf version was 1.5.2</li>
 				<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
 				<li>Make version was GNU make 3.81</li>
 				<li>Tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
@@ -58,8 +58,8 @@
 			<br/>
 			Waf's parallel algorithm was set to "normal" (faster than "max parallel").
 			<br/>
-			Waf and scons were tuned to use file timestamps comparisons rather than md5 sums.
-			(for waf, in Utils.py, def h_file(filename): return str(os.stat(filename).st_mtime) )
+			Waf and scons were tuned to use file timestamps comparisons rather than md5 sums
+			(for waf, in Utils.py, def h_file(filename): return str(os.stat(filename).st_mtime) ).
 			<br/>
 			Scons' automatic fetching of source files from SCMs was disabled, cache of implicit deps was enabled, built target cache was disabled.
 			Scons built directly in the source dir, so there was no need to disable the annoying copying of source files to the build dir.
