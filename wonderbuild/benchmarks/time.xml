@@ -13,7 +13,7 @@
 		</ul>
 	</part>
 	<part caption='Notes'>
-		The benchmarks were generated with the <a href='gen-bench/'> script.
+		The benchmarks were generated with the <a href='gen-bench'/> script.
 		The script produces reproductible seeded-random setups.
 		All these tests were run on the same gen-bench output,
 		but each copied to its own directory to ensure they don't interfere with each others, i.e.
