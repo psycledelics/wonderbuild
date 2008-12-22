@@ -130,37 +130,37 @@
 					<tr>
 						<td align='right'>toy makefiles</td>
 						<td width='10px'/>
-						<td align='right'> 34.10s</td>
+						<td align='right'> 34.1s</td>
 						<td><div style='background-color: orange; width: 34px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>wonderbuild (gcc deps)</td>
 						<td width='10px'/>
-						<td align='right'> 36.22s</td>
+						<td align='right'> 36.2s</td>
 						<td><div style='background-color: orange; width: 36px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>wonderbuild (dumb deps)</td>
 						<td width='10px'/>
-						<td align='right'> 38.49s</td>
+						<td align='right'> 38.5s</td>
 						<td><div style='background-color: orange; width: 38px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>waf</td>
 						<td width='10px'/>
-						<td align='right'> 45.65s</td>
+						<td align='right'> 45.7s</td>
 						<td><div style='background-color: orange; width: 46px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>scons</td>
 						<td width='10px'/>
-						<td align='right'>131.00s</td>
+						<td align='right'>131.0s</td>
 						<td><div style='background-color: orange; width: 131px'><br/></div></td>
 					</tr>
 					<tr>
 						<td align='right'>autotools</td>
 						<td width='10px'/>
-						<td align='right'>188.00s</td>
+						<td align='right'>188.0s</td>
 						<td><div style='background-color: orange; width: 188px'><br/></div></td>
 					</tr>
 				</table>
