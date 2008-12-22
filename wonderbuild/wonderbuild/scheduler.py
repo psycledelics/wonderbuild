@@ -119,40 +119,21 @@ class Scheduler():
 						continue
 				self._running_count += 1
 				if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': process ' + self.progress() + ' ' + str(task))
-				if len(task.in_tasks) == 0: execute = True
-				else:
-					execute = False
-					for in_task in task.in_tasks:
-						if in_task.executed:
-							execute = True
-							break
-				if not execute:
-					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': skip task (in_tasks skipped) ' + str(task))
-					task.executed = False
-				elif not task.need_process():
-					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': skip task (same sig) ' + str(task))
-					task.executed = False
-				else:
+				if task.need_process():
 					self._condition.release()
 					try: task.process()
 					finally: self._condition.acquire()
 					task.update_sig()
-					task.executed = True
 				self._todo_count -= 1
 				if no_silent_progress and task.executed: print colored('7;32', 'wonderbuild: progress: ' + self.progress())
 				self._running_count -= 1
 				if self._todo_count == 0 and self._joining:
 					self._condition.notifyAll()
 					break
-				task.processed = True
 				notify = -1
 				for out_task in task.out_tasks:
-					ready = True
-					for task in out_task.in_tasks:
-						if not task.processed:
-							ready = False
-							break
-					if ready:
+					out_task.in_tasks_visited += 1
+					if out_task.in_tasks_visited == len(out_task.in_tasks):
 						self._task_queue.append(out_task)
 						notify += 1
 				if notify > 0: self._condition.notify(notify)

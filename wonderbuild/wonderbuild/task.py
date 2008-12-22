@@ -11,14 +11,18 @@ class Schedulable(object):
 		self.in_tasks = []
 		self.out_tasks = []
 		self.dyn_in_tasks_called = False
+		self.in_tasks_visited = 0
 		self.processed = False
-		self.executed = False
 
 	def dyn_in_tasks(self): return None
 
-	def need_process(self): raise Exception, str(self.__class__) + ' must implement the need_process method'
+	def need_process(self):
+		if len(self.in_tasks) == 0: return True
+		for in_task in self.in_tasks:
+			if in_task.processed: return True
+		return False
 
-	def process(self): pass
+	def process(self): self.processed = True
 	
 	def update_sig(self): raise Exception, str(self.__class__) + ' must implement the update_sig method'
 
@@ -47,7 +51,14 @@ class Task(Schedulable):
 	@property
 	def sig(self): raise Exception, str(self.__class__) + ' must implement the sig property'
 
-	def need_process(self): return self.sig != self.old_sig
+	def need_process(self):
+		if not Schedulable.need_process(self):
+			if __debug__ and is_debug: debug('task: skip (in_tasks skipped) ' + str(self))
+			return False
+		if self.sig != self.old_sig:
+			return True
+		if __debug__ and is_debug: debug('task: skip (same sig) ' + str(self))
+ 		return False
 
 	def update_sig(self): self.project.task_states[self.uid] = self.sig
 

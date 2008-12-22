@@ -519,6 +519,8 @@ class CxxTask(Task):
 		self.source = None
 		self.target = None
 
+	def __str__(self): return str(self.target)
+
 	@property
 	def uid(self): return self.target
 
@@ -549,7 +551,7 @@ class CxxTask(Task):
 				sig.update(''.join(sigs))
 				sig = sig.digest()
 				if sig != old_sig:
-					if __debug__ and is_debug: debug('task: sig changed: ' + self.target.path)
+					if __debug__ and is_debug: debug('task: sig changed: ' + str(self))
 					# Either the include path or a source or header content has changed.
 					# We must recompute the implicit deps.
 					self._sig = 0
@@ -659,7 +661,9 @@ class CxxTask(Task):
 
 		def update_sig(self): self.project.task_states[self.uid] = (self.sig, self._implicit_deps, self._implicit_deps_sig)
 
-	def process(self): self.cfg.base_cfg.process(self)
+	def process(self):
+		self.cfg.base_cfg.process(self)
+		Task.process(self)
 
 class ModTask(Task):
 	def __init__(self, mod_cfg, name, aliases = None):
@@ -667,6 +671,8 @@ class ModTask(Task):
 		self.cfg = mod_cfg
 		self.name = name
 		self.sources = []
+
+	def __str__(self): return str(self.target)
 
 	@property
 	def uid(self): return self.target
@@ -677,6 +683,7 @@ class ModTask(Task):
 		except AttributeError:
 			sig = Sig(self.cfg.sig)
 			for t in self.in_tasks: sig.update(t.sig)
+			# allow pre-built objects as sources
 			ts = [t.target for t in self.in_tasks]
 			for s in self.sources:
 				if s not in ts: sig.update(s.sig)
@@ -690,7 +697,9 @@ class ModTask(Task):
 			target = self._target = self.cfg.base_cfg.target(self)
 			return target
 
-	def process(self): self.cfg.base_cfg.process(self)
+	def process(self):
+		self.cfg.base_cfg.process(self)
+		Task.process(self)
 		
 	@property
 	def cxx_cfg(self): return self.cfg.cxx_cfg
