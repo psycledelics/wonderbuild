@@ -123,7 +123,7 @@ class Scheduler():
 					self._condition.release()
 					try: task.process()
 					finally: self._condition.acquire()
-					task.update_sig()
+					task.post_process()
 				self._todo_count -= 1
 				if no_silent_progress and task.executed: print colored('7;32', 'wonderbuild: progress: ' + self.progress())
 				self._running_count -= 1

@@ -24,7 +24,7 @@ class Schedulable(object):
 
 	def process(self): self.processed = True
 	
-	def update_sig(self): raise Exception, str(self.__class__) + ' must implement the update_sig method'
+	def post_process(self): pass
 
 class Task(Schedulable):
 	def __init__(self, project, aliases = None):
@@ -60,7 +60,7 @@ class Task(Schedulable):
 		if __debug__ and is_debug: debug('task: skip (same sig) ' + str(self))
  		return False
 
-	def update_sig(self): self.project.task_states[self.uid] = self.sig
+	def post_process(self): self.project.task_states[self.uid] = self.sig
 
 	def print_desc(self, desc, color = '7;1'):
 		out.write(colored(color, 'wonderbuild: task: ' + desc) + '\n')

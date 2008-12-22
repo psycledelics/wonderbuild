@@ -530,6 +530,20 @@ class CxxTask(Task):
 		except KeyError: return None
 
 	if False: # gcc deps (fastest)
+		def process(self):
+			self.cfg.base_cfg.process(self)
+			implicit_deps = self.cfg.base_cfg._read_gcc_dep_file(self.target, self.project.fs.cur)
+			sigs = [s.sig for s in implicit_deps]
+			sigs.sort()
+			sig = Sig(self.cfg.sig)
+			sig.update(''.join(sigs))
+			sig = sig.digest()
+			self._sig = sig
+			self.project.task_states[self.uid] = (sig, implicit_deps)
+			Task.process(self)
+
+		def post_process(self): pass # already done in a thread-safe way in process()
+
 		@property
 		def sig(self):
 			try: return self._sig
@@ -558,112 +572,101 @@ class CxxTask(Task):
 					return self._sig
 				self._sig = sig
 				return sig
+	else:
+		def process(self):
+			self.cfg.base_cfg.process(self)
+			Task.process(self)
 
-		def update_sig(self):
-			implicit_deps = self.cfg.base_cfg._read_gcc_dep_file(self.target, self.project.fs.cur)
-			sigs = [s.sig for s in implicit_deps]
-			sigs.sort()
-			sig = Sig(self.cfg.sig)
-			sig.update(''.join(sigs))
-			sig = sig.digest()
-			self._sig = sig
-			self.project.task_states[self.uid] = (sig, implicit_deps)
+		if True: # faster
+			def post_process(self): self.project.task_states[self.uid] = (self.sig, self._implicit_deps)
 
-	elif True: # faster
-		@property
-		def sig(self):
-			try: return self._sig
-			except AttributeError:
-				sig = Sig(self.cfg.sig)
-				sig.update(self.source.sig)
-				new_implicit_deps = False
-				try: old_sig, self._implicit_deps = self.project.task_states[self.uid]
-				except KeyError:
-					old_sig = None
-					self._implicit_deps, not_found = self.cfg.base_cfg.cpp.scan_deps(self.source, self.cfg.paths)
-					if __debug__ and is_debug and len(not_found): debug('cpp: deps not found: ' + self.source.path + ': '+ str([str(x) for x in not_found]))
-					new_implicit_deps = True
-					sigs = [s.sig for s in self._implicit_deps]
-				else:
-					try: sigs = [s.sig for s in self._implicit_deps]
-					except OSError:
-						# A cached implicit dep does not exist anymore.
-						# We must recompute the implicit deps.
+			@property
+			def sig(self):
+				try: return self._sig
+				except AttributeError:
+					sig = Sig(self.cfg.sig)
+					sig.update(self.source.sig)
+					new_implicit_deps = False
+					try: old_sig, self._implicit_deps = self.project.task_states[self.uid]
+					except KeyError:
+						old_sig = None
 						self._implicit_deps, not_found = self.cfg.base_cfg.cpp.scan_deps(self.source, self.cfg.paths)
 						if __debug__ and is_debug and len(not_found): debug('cpp: deps not found: ' + self.source.path + ': '+ str([str(x) for x in not_found]))
 						new_implicit_deps = True
 						sigs = [s.sig for s in self._implicit_deps]
-				sigs.sort()
-				sig.update(''.join(sigs))
-				sig = sig.digest()
-				if sig != old_sig:
-					if __debug__ and is_debug: debug('task: sig changed: ' + self.target.path)
-					if not new_implicit_deps:
-						# Either the include path or a source or header content has changed.
-						# We must recompute the implicit deps.
-						sig = Sig(self.cfg.sig)
-						sig.update(self.source.sig)
-						self._implicit_deps, not_found = self.cfg.base_cfg.cpp.scan_deps(self.source, self.cfg.paths)
-						if __debug__ and is_debug and len(not_found): debug('cpp: deps not found: ' + self.source.path + ': '+ str([str(x) for x in not_found]))
-						sigs = [s.sig for s in self._implicit_deps]
-						sigs.sort()
-						sig.update(''.join(sigs))
-						sig = sig.digest()
-				self._sig = sig
-				return sig
+					else:
+						try: sigs = [s.sig for s in self._implicit_deps]
+						except OSError:
+							# A cached implicit dep does not exist anymore.
+							# We must recompute the implicit deps.
+							self._implicit_deps, not_found = self.cfg.base_cfg.cpp.scan_deps(self.source, self.cfg.paths)
+							if __debug__ and is_debug and len(not_found): debug('cpp: deps not found: ' + self.source.path + ': '+ str([str(x) for x in not_found]))
+							new_implicit_deps = True
+							sigs = [s.sig for s in self._implicit_deps]
+					sigs.sort()
+					sig.update(''.join(sigs))
+					sig = sig.digest()
+					if sig != old_sig:
+						if __debug__ and is_debug: debug('task: sig changed: ' + self.target.path)
+						if not new_implicit_deps:
+							# Either the include path or a source or header content has changed.
+							# We must recompute the implicit deps.
+							sig = Sig(self.cfg.sig)
+							sig.update(self.source.sig)
+							self._implicit_deps, not_found = self.cfg.base_cfg.cpp.scan_deps(self.source, self.cfg.paths)
+							if __debug__ and is_debug and len(not_found): debug('cpp: deps not found: ' + self.source.path + ': '+ str([str(x) for x in not_found]))
+							sigs = [s.sig for s in self._implicit_deps]
+							sigs.sort()
+							sig.update(''.join(sigs))
+							sig = sig.digest()
+					self._sig = sig
+					return sig
+		else: # slower
+			def post_process(self): self.project.task_states[self.uid] = (self.sig, self._implicit_deps, self._implicit_deps_sig)
 
-		def update_sig(self): self.project.task_states[self.uid] = (self.sig, self._implicit_deps)
-
-	else: # slower
-		@property
-		def sig(self):
-			try: return self._sig
-			except AttributeError:
-				scan_implicit_deps = False
-				try: old_sig, self._implicit_deps, self._implicit_deps_sig = self.project.task_states[self.uid]
-				except KeyError:
-					old_sig = None
-					scan_implicit_deps = True
-				else:
-					try:
-						for dep in self._implicit_deps:
-							if dep.changed:
-								scan_implicit_deps = True
-								break
-					except OSError:
-						# A cached implicit dep does not exist anymore.
-						# We must recompute the implicit deps.
+			@property
+			def sig(self):
+				try: return self._sig
+				except AttributeError:
+					scan_implicit_deps = False
+					try: old_sig, self._implicit_deps, self._implicit_deps_sig = self.project.task_states[self.uid]
+					except KeyError:
+						old_sig = None
 						scan_implicit_deps = True
-				if scan_implicit_deps: self._do_scan_implicit_deps()
-				sig = Sig(self.cfg.sig)
-				sig.update(self.source.sig)
-				sig.update(self._implicit_deps_sig)
-				sig = sig.digest()
-				if sig != old_sig:
-					if __debug__ and is_debug: debug('task: sig changed: ' + self.target.path)
-					if not scan_implicit_deps:
-						# Either the include path or the source content has changed.
-						# We must recompute the implicit deps.
-						self._do_scan_implicit_deps()
-						sig = Sig(self.cfg.sig)
-						sig.update(self.source.sig)
-						sig.update(self._implicit_deps_sig)
-						sig = sig.digest()
-				self._sig = sig
-				return sig
+					else:
+						try:
+							for dep in self._implicit_deps:
+								if dep.changed:
+									scan_implicit_deps = True
+									break
+						except OSError:
+							# A cached implicit dep does not exist anymore.
+							# We must recompute the implicit deps.
+							scan_implicit_deps = True
+					if scan_implicit_deps: self._do_scan_implicit_deps()
+					sig = Sig(self.cfg.sig)
+					sig.update(self.source.sig)
+					sig.update(self._implicit_deps_sig)
+					sig = sig.digest()
+					if sig != old_sig:
+						if __debug__ and is_debug: debug('task: sig changed: ' + self.target.path)
+						if not scan_implicit_deps:
+							# Either the include path or the source content has changed.
+							# We must recompute the implicit deps.
+							self._do_scan_implicit_deps()
+							sig = Sig(self.cfg.sig)
+							sig.update(self.source.sig)
+							sig.update(self._implicit_deps_sig)
+							sig = sig.digest()
+					self._sig = sig
+					return sig
 
-		def _do_scan_implicit_deps(self):
-			if __debug__ and is_debug: debug('task: scanning implicit deps: ' + self.source.path)
-			self._implicit_deps, not_found = self.cfg.base_cfg.cpp.scan_deps(self.source, self.cfg.paths)
-			sigs = [s.sig for s in self._implicit_deps]
-			sigs.sort()
-			self._implicit_deps_sig = Sig(''.join(sigs)).digest()
-
-		def update_sig(self): self.project.task_states[self.uid] = (self.sig, self._implicit_deps, self._implicit_deps_sig)
-
-	def process(self):
-		self.cfg.base_cfg.process(self)
-		Task.process(self)
+			def _do_scan_implicit_deps(self):
+				if __debug__ and is_debug: debug('task: scanning implicit deps: ' + self.source.path)
+				self._implicit_deps, not_found = self.cfg.base_cfg.cpp.scan_deps(self.source, self.cfg.paths)
+				sigs = [s.sig for s in self._implicit_deps]
+				sigs.sort()
+				self._implicit_deps_sig = Sig(''.join(sigs)).digest()
 
 class ModTask(Task):
 	def __init__(self, mod_cfg, name, aliases = None):
