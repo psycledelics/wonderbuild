@@ -7,10 +7,11 @@ cd $(dirname $0) &&
 rm -Rf bench bench-* &&
 ./gen-bench bench 50 100 15 5 &&
 
-cp -R bench bench-wonderbuild &&
 cp -R bench bench-make &&
-cp -R bench bench-scons &&
+cp -R bench bench-jam &&
+cp -R bench bench-wonderbuild &&
 cp -R bench bench-waf &&
+cp -R bench bench-scons &&
 
 cp -R bench bench-autotools && 
 cd bench-autotools &&

@@ -42,7 +42,15 @@ main() {
 			fi &&
 			time make -r --jobs=$jobs "$@"
 		;;
-	
+
+		jam)
+			if test $op = reset
+			then
+				jam clean
+			fi &&
+			time jam -j4 "$@"
+		;;
+
 		autotools)
 			if ! test -f configure
 			then

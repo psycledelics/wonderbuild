@@ -186,13 +186,36 @@
 		</xsl:copy>
 	</xsl:template>
 
+	<xsl:template match='bars'>
+		<code>
+			<table class='bar'>
+				<xsl:apply-templates/>
+			</table>
+		</code>
+	</xsl:template>
+	
 	<xsl:template match='bar'>
-		<td>
-			<div class='bar'>
-				<xsl:attribute name='style'>width: <xsl:value-of select='@width'/>px</xsl:attribute>
-				&#160;
-			</div>
-		</td>
+		<tr>
+			<td align='right'><xsl:value-of select='@name'/></td>
+			<td width='10px'/>
+			<td align='right'><xsl:value-of select='@value'/></td>
+			<xsl:choose>
+				<xsl:when test='@width &gt; 700'>
+					<td><div class='bar' style='width: 650px'>&#160;</div></td>
+					<td>//</td>
+					<td><div class='bar' style='width: 50px'>&#160;</div></td>
+				</xsl:when>
+				<xsl:otherwise>
+					<td colspan='3'>
+						<div class='bar'>
+							<xsl:attribute name='style'>width: <xsl:value-of select='@width'/>px</xsl:attribute>
+							&#160;
+						</div>
+					</td>
+				</xsl:otherwise>
+			</xsl:choose>
+			<xsl:apply-templates/>
+		</tr>
 	</xsl:template>
 
 </xsl:transform>

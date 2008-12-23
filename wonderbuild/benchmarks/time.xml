@@ -5,6 +5,7 @@
 		<ul>
 			<li>Scons version was 1.2.0</li>
 			<li>Waf version was 1.5.2</li>
+			<li>Jam version was 2.5</li>
 			<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
 			<li>Make version was GNU make 3.81</li>
 			<li>Tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
@@ -19,6 +20,7 @@
 			<pre>
 	./gen-bench bench 50 100 15 5
 	cp -R bench bench-make
+	cp -R bench bench-jam
 	cp -R bench bench-wonderbuild
 	cp -R bench bench-waf
 	cp -R bench bench-autotools
@@ -72,6 +74,9 @@
 	# toy makefiles
 	time make -C bench-make -r --jobs=4 --silent
 
+	# jam
+	time jam -j4 > /dev/null
+
 	# wonderbuild
 	(
 		cd bench-wonderbuild &amp;&amp;
@@ -124,180 +129,52 @@
 	</part>
 	<part caption='Results'>
 		<part caption='Initial full build'>
-			<code>
-				<table class='bar'>
-					<tr>
-						<td align='right'>toy makefiles</td>
-						<td width='10px'/>
-						<td align='right'> 34.1s</td>
-						<bar width='34'/>
-					</tr>
-					<tr>
-						<td align='right'>wonderbuild (gcc deps)</td>
-						<td width='10px'/>
-						<td align='right'> 36.2s</td>
-						<bar width='36'/>
-					</tr>
-					<tr>
-						<td align='right'>wonderbuild (dumb deps)</td>
-						<td width='10px'/>
-						<td align='right'> 38.5s</td>
-						<bar width='38'/>
-					</tr>
-					<tr>
-						<td align='right'>waf</td>
-						<td width='10px'/>
-						<td align='right'> 45.7s</td>
-						<bar width='46'/>
-					</tr>
-					<tr>
-						<td align='right'>scons</td>
-						<td width='10px'/>
-						<td align='right'>131.0s</td>
-						<bar width='131'/>
-					</tr>
-					<tr>
-						<td align='right'>autotools</td>
-						<td width='10px'/>
-						<td align='right'>188.0s</td>
-						<bar width='188'/>
-					</tr>
-				</table>
-			</code>
+			<bars>
+				<bar name='toy makefiles' value=' 34.1s' width=' 34'/>
+				<bar name='jam'           value=' 35.6s' width=' 36'/>
+				<bar name='wonderbuild'   value=' 36.2s' width=' 36'>using gcc deps</bar>
+				<bar name='wonderbuild'   value=' 38.5s' width=' 38'>using dumb deps</bar>
+				<bar name='waf'           value=' 45.7s' width=' 46'/>
+				<bar name='scons'         value='131.0s' width='131'/>
+				<bar name='autotools'     value='188.0s' width='188'/>
+			</bars>
 		</part>
 		<part caption='Big partial rebuild'>
 			After touch lib_17/*.hpp => rebuild of 585 object files from c++ and 33 static libs
 			<br/><br/>
-			<code>
-				<table class='bar'>
-					<tr>
-						<td align='right'>toy makefiles</td>
-						<td width='10px'/>
-						<td align='right'> 4.81s</td>
-						<bar width='48'/>
-					</tr>
-					<tr>
-						<td align='right'>wonderbuild (gcc deps)</td>
-						<td width='10px'/>
-						<td align='right'> 5.31s</td>
-						<bar width='53'/>
-					</tr>
-					<tr>
-						<td align='right'>wonderbuild (dumb deps)</td>
-						<td width='10px'/>
-						<td align='right'> 5.56s</td>
-						<bar width='56'/>
-					</tr>
-					<tr>
-						<td align='right'>waf</td>
-						<td width='10px'/>
-						<td align='right'> 7.08s</td>
-						<bar width='71'/>
-					</tr>
-					<tr>
-						<td align='right'>autotools</td>
-						<td width='10px'/>
-						<td align='right'>29.64s</td>
-						<bar width='296'/>
-					</tr>
-					<tr>
-						<td align='right'>scons</td>
-						<td width='10px'/>
-						<td align='right'>39.58s</td>
-						<bar width='396'/>
-					</tr>
-				</table>
-			</code>
+			<bars>
+				<bar name='jam'           value=' 4.25s' width=' 43'><span style='color: red'>missed header deps!</span></bar>
+				<bar name='toy makefiles' value=' 4.81s' width=' 48'/>
+				<bar name='wonderbuild'   value=' 5.31s' width=' 53'>using gcc deps</bar>
+				<bar name='wonderbuild'   value=' 5.56s' width=' 56'>using dumb deps</bar>
+				<bar name='waf'           value=' 7.08s' width=' 71'/>
+				<bar name='autotools'     value='29.64s' width='296'/>
+				<bar name='scons'         value='39.58s' width='396'/>
+			</bars>
 		</part>
 		<part caption='Small partial rebuild'>
 			After touch lib_17/class_17.hpp => rebuild of 26 object files from c++ and 8 static libs
 			<br/><br/>
-			<code>
-				<table class='bar'>
-					<tr>
-						<td align='right'>toy makefiles</td>
-						<td width='10px'/>
-						<td align='right'> 1.01s</td>
-						<bar width='101'/>
-					</tr>
-					<tr>
-						<td align='right'>wonderbuild (gcc deps)</td>
-						<td width='10px'/>
-						<td align='right'> 1.21s</td>
-						<bar width='121'/>
-					</tr>
-					<tr>
-						<td align='right'>wonderbuild (dumb deps)</td>
-						<td width='10px'/>
-						<td align='right'> 1.29s</td>
-						<bar width='129'/>
-					</tr>
-					<tr>
-						<td align='right'>waf</td>
-						<td width='10px'/>
-						<td align='right'> 2.24s</td>
-						<bar width='224'/>
-					</tr>
-					<tr>
-						<td align='right'>autotools</td>
-						<td width='10px'/>
-						<td align='right'> 4.63s</td>
-						<bar width='463'/>
-					</tr>
-					<tr>
-						<td align='right'>scons</td>
-						<td width='10px'/>
-						<td align='right'>24.37s</td>
-						<bar width='800'/>
-						<td>//</td>
-						<bar width='50'/>
-					</tr>
-				</table>
-			</code>
+			<bars>
+				<bar name='jam'           value=' 0.81s' width='  81'><span style='color: red'>missed header deps!</span></bar>
+				<bar name='toy makefiles' value=' 1.01s' width=' 101'/>
+				<bar name='wonderbuild'   value=' 1.21s' width=' 121'>using gcc deps</bar>
+				<bar name='wonderbuild'   value=' 1.29s' width=' 129'>using dump deps</bar>
+				<bar name='waf'           value=' 2.24s' width=' 224'/>
+				<bar name='autotools'     value=' 4.63s' width=' 463'/>
+				<bar name='scons'         value='24.37s' width='2437'/>
+			</bars>
 		</part>
 		<part caption='No-op rebuild'>
-			<code>
-				<table class='bar'>
-					<tr>
-						<td align='right'>toy makefiles</td>
-						<td width='10px'/>
-						<td align='right'> 0.79s</td>
-						<bar width='79'/>
-					</tr>
-					<tr>
-						<td align='right'>wonderbuild (gcc deps)</td>
-						<td width='10px'/>
-						<td align='right'> 0.98s</td>
-						<bar width='98'/>
-					</tr>
-					<tr>
-						<td align='right'>wonderbuild (dumb deps)</td>
-						<td width='10px'/>
-						<td align='right'> 1.05s</td>
-						<bar width='105'/>
-					</tr>
-					<tr>
-						<td align='right'>waf</td>
-						<td width='10px'/>
-						<td align='right'> 1.71s</td>
-						<bar width='171'/>
-					</tr>
-					<tr>
-						<td align='right'>autotools</td>
-						<td width='10px'/>
-						<td align='right'> 2.05s</td>
-						<bar width='205'/>
-					</tr>
-					<tr>
-						<td align='right'>scons</td>
-						<td width='10px'/>
-						<td align='right'>23.25s</td>
-						<bar width='800'/>
-						<td>//</td>
-						<bar width='50'/>
-					</tr>
-				</table>
-			</code>
+			<bars>
+				<bar name='jam'           value=' 0.71s' width='  71'/>
+				<bar name='toy makefiles' value=' 0.79s' width='  79'/>
+				<bar name='wonderbuild'   value=' 0.98s' width='  98'>using gcc deps</bar>
+				<bar name='wonderbuild'   value=' 1.05s' width=' 105'>using dumb deps</bar>
+				<bar name='waf'           value=' 1.71s' width=' 171'/>
+				<bar name='autotools'     value=' 2.05s' width=' 205'/>
+				<bar name='scons'         value='23.25s' width='2325'/>
+			</bars>
 		</part>
 	</part>
 </part>

@@ -208,7 +208,7 @@ def create_scons_sub(lib_number, classes):
 Import('env')
 env = env.Clone()
 env.Append(
-	CPPDEFINES = {'BENCH_LIB_%(num)s': None}
+	CPPDEFINES = {'BENCH_LIB': '%(num)s'}
 )
 env.StaticLibrary('%(tgt)s', Split('%(src)s'))
 ''' % {
@@ -243,7 +243,7 @@ def create_autotools_sub(lib_number, classes):
 	f = open('Makefile.am', 'w')
 	f.write('''\
 lib_LTLIBRARIES += %(tgt)s.la
-%(tgt)s_la_CPPFLAGS = $(AM_CPPFLAGS) -DBENCH_LIB_%(num)s
+%(tgt)s_la_CPPFLAGS = $(AM_CPPFLAGS) -DBENCH_LIB=%(num)s
 %(tgt)s_la_SOURCES = %(src)s
 ''' % {
 	'num': str(lib_number),
@@ -272,7 +272,7 @@ def create_makefile_rec_sub(lib_number, classes):
 	f = open('Makefile', 'w')
 	f.write ('''\
 INCLUDE_PATHS = -I..
-DEFINES = -DBENCH -DBENCH_LIB_%(num)s
+DEFINES = -DBENCH -DBENCH_LIB=%(num)s
 DEPEND = makedepend
 CXX = g++
 CXX_FLAGS = -g -O0 -Wall 
@@ -304,28 +304,48 @@ depend:
 
 def create_jam(libs):
 	f = open('Jamfile', 'w')
-	f.write ('SubDir TOP ;\n\n')
-	for i in xrange(libs): f.write('SubInclude TOP ' + lib_dir(i) + ' ;\n')
+	f.write ('''\
+SubDir TOP ;
+%(subs)s
+''' % {
+	'subs': '\n'.join(['SubInclude TOP %s ;' % lib_dir(i) for i in xrange(libs)])
+})
 	f = open('Jamrules', 'w')
-	f.write('INCLUDES = $(TOP) ;\n')
+	f.write('''\
+C++FLAGS = -g -Wall -DBENCH ;
+OPTIM = -O0 ;
+HDRS = $(TOP) ;
+''')
 
 def create_jam_sub(lib_number, classes):
 	f = open('Jamfile', 'w')
-	f.write ('SubDir TOP ' + lib_dir(lib_number) + ' ;\n\n')
-	f.write ('SubDirHdrs $(INCLUDES) ;\n\n')
-	f.write ('Library ' + lib_name(lib_number) + ' :\n')
-	for i in xrange(classes): f.write('    class_' + str(i) + '.cpp\n')
-	f.write ('    ;\n')
+	f.write ('''\
+SubDir TOP %(dir)s ;
+SUBDIRC++FLAGS = -DBENCH_LIB=%(num)s ;
+SUBDIRHDRS = $(TOP)/%(dir)s ;
+SubDirHdrs = $(TOP)/%(dir)s ;
+Library %(tgt)s :
+%(src)s
+	;
+''' % {
+	'num': str(lib_number),
+	'dir': lib_dir(lib_number),
+	'tgt': lib_name(lib_number),
+	'src': '\n'.join(['	class_%s.cpp' % str(i) for i in xrange(classes)])
+})
 
 def create_msvc(libs):
 	f = open('solution.sln', 'w')
 	f.write('Microsoft Visual Studio Solution File, Format Version 8.00\n')
-
 	for i in xrange(libs):
-		project_path = lib_dir(i) + '\\' + lib_name(i) + '.vcproj'
-		f.write('Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "' + lib_name(i) + '", "' +
-			project_path + '", "{CF495178-8865-4D20-939D-AAA' + str(i) + '}"\n')
-		f.write('EndProject\n')
+		f.write('''\
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "%(tgt)s", "%(dir)s\\%(tgt)s.vcproj", "{CF495178-8865-4D20-939D-AAA%(num)s}"
+EndProject
+''' % {
+	'num': str(i),
+	'dir': lib_dir(i),
+	'tgt': lib_name(i)
+})
 
 def create_msvc_sub(lib_number, classes):
 	f = open(lib_name(lib_number) + '.vcproj', 'w')
@@ -334,8 +354,8 @@ def create_msvc_sub(lib_number, classes):
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name=""" + '"' + lib_name(lib_number) + '"' + """
-	ProjectGUID="{CF495178-8865-4D20-939D-AAA""" + str(lib_number) + """}"
+	Name="%(tgt)s"
+	ProjectGUID="{CF495178-8865-4D20-939D-AAA%(num)s}"
 	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
@@ -351,7 +371,7 @@ def create_msvc_sub(lib_number, classes):
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="BENCH"
+				PreprocessorDefinitions="BENCH;BENCH_LIB=%(num)s"
 				AdditionalIncludeDirectories=".."
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -364,7 +384,7 @@ def create_msvc_sub(lib_number, classes):
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)/""" + lib_name(lib_number) + """.lib"/>
+				OutputFile="$(OutDir)/%(tgt)s.lib"/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -376,7 +396,9 @@ def create_msvc_sub(lib_number, classes):
 	</Globals>
 </VisualStudioProject>
 ''' % {
-	'src': '\n'.join(['<File RelativePath="class_' + str(i) + '.cpp"/>\n' for i in xrange(classes)])
+	'num': str(lib_number),
+	'tgt': lib_name(lib_number),
+	'src': '\n'.join(['		<File RelativePath="class_%s.cpp"/>' % str(i) for i in xrange(classes)])
 })
 
 if __name__ == "__main__": main(sys.argv)
