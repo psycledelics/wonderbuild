@@ -1,5 +1,4 @@
 <?xml version='1.0' encoding='ascii' ?>
-<!--?xml-stylesheet href='displayer.css' type='text/css'?-->
 <xsl:transform version='1.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
 	<!--xsl:output method='xml'/-->
 	<xsl:output method='html'/>
@@ -9,15 +8,15 @@
 		<!--DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"-->
 		<html>
 			<head>
-				<meta name='description' content='Psycle Modular Music Creation Studio'/>
-				<meta name='keywords' content='psycle modular music tracker studio vst host open source free software c++ gnu linux gpl'/>
+				<meta name='description' content='Benchmarks of various build tools'/>
+				<meta name='keywords' content='build tool c++ gcc make scons waf python autotools automake libtool open source free software gnu linux gpl'/>
 				<link rel='shortcut icon' href='http://psycle.sourceforge.net/favicon.ico' type='image/x-icon'/>
-				<link rel='stylesheet' href='http://psycle.sourceforge.net/displayer.psycledelics.css' type='text/css' title='psycledelics'/>
+				<link rel='stylesheet' href='time.css' type='text/css' title='psycledelics'/>
 				<!--style type='text/css' title='psycledelics'>
-					@import url(http://psycle.sourceforge.net/displayer.psycledelics.css);
+					@import url(time.css);
 				</style-->
-				<link rel='home' title='Home' href='/'/>
-				<link rel='author' title='psycledelics' href='http://psycle.pastnotecut.org'/>
+				<link rel='home' title='Home' href='http://retropaganda.info/~bohan/work/sf/psycle/branches/bohan/wonderbuild'/>
+				<link rel='author' title='Author' href='http://retropaganda.info/~bohan'/>
 				<title><xsl:value-of select='@caption'/></title>
 			</head>
 			<body>
@@ -59,7 +58,7 @@
 			<table class='caption-root'>
 				<tr>
 					<td nowrap='true'>
-						<a href='http://sourceforge.net/projects/psycle/'>
+						<a href='http://retropaganda.info/~bohan/work/sf/psycle/branches/bohan/wonderbuild'>
 							<img alt='{$alt}' border='0' align='left' src='{$image}'/>
 						</a>
 					</td>
@@ -185,6 +184,15 @@
 		<xsl:copy>
 			<xsl:copy-of select='@*'/>
 		</xsl:copy>
+	</xsl:template>
+
+	<xsl:template match='bar'>
+		<td>
+			<div class='bar'>
+				<xsl:attribute name='style'>width: <xsl:value-of select='@width'/>px</xsl:attribute>
+				&#160;
+			</div>
+		</td>
 	</xsl:template>
 
 </xsl:transform>

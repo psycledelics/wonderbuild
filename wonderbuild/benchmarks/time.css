@@ -1,0 +1,120 @@
+body {
+	margin: 0;
+	padding: 0;
+	background-color: rgb(85%, 85%, 65%);
+	color: black;
+	font-family: verdana, helvetica, sans-serif;
+	font-size: 14px;
+}
+
+div.caption-root {
+	padding: 8px;
+	background-color: rgb(90%, 90%, 70%);
+	border-style: solid;
+	border-width: 1px;
+	border-color: rgb(50%, 50%, 50%);
+	text-align: center;
+}
+
+table.caption-root {
+	font-weight: bolder;
+	font-size: 2.5em;
+}
+
+.body-root {
+	margin-left: 24px;
+	margin-right: 24px;
+	padding: 24px;
+	padding-top: 11px;
+	background-color: rgb(82%, 82%, 61%);
+	text-align: justify;
+	text-justify: distribute;
+}
+
+.part-root {
+}
+
+.part {
+}
+
+div.index {
+	padding: 0.5em;
+	background-color: rgb(90%, 90%, 70%);
+	border-style: solid;
+	border-width: 2px;
+	border-top-width: 0;
+	border-color: rgb(50%, 50%, 50%);
+	margin-bottom: 3em;
+}
+
+table.index {
+	font-weight: bold;
+	font-size: 1em; /* this is necessary */
+}
+
+.caption {
+	padding: 3px;
+	margin-top: 1em;
+	background-color: rgb(73%, 73%, 53%);
+	border-style: solid;
+	border-width: 2px;
+	border-color: rgb(50%, 50%, 50%);
+	font-weight: bold;
+}
+
+.part-body {
+	margin-left: 2em;
+	margin-top: 1em;
+	background-color: rgb(82%, 82%, 61%);
+}
+
+.body {
+	margin-top: 0.5em;
+	margin-left: 0;
+	font-weight: normal;
+}
+
+br {
+}
+
+li {
+	margin-top: 0.25em;
+	margin-bottom: 0.25em;
+}
+
+.indented {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em; 
+	margin-left: 2em;
+	text-align: left;
+}
+
+code {
+	font-size: small;
+	font-weight: bold;
+	color: rgb(15%, 15%, 15%);
+	font-family: lucida console, monospace;
+	white-space: nowrap;
+}
+
+a {
+	color: rgb(25%, 25%, 50%);
+}
+
+a.hidden {
+	color: black;
+	text-decoration: none;
+}
+
+a:hover {
+	background-color: rgb(95%, 95%, 85%);
+}
+
+table.bar {
+	background-color: rgb(92%, 92%, 75%);
+}
+
+div.bar {
+	background-color: orange;
+	white-space: nowrap;
+}
