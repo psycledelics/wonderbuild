@@ -4,7 +4,7 @@
 	<part caption='Versions'>
 		<ul>
 			<li>Scons version was 1.2.0</li>
-			<li>Waf version was 1.5.2</li>
+			<li>Waf version was somewhere after 1.5.2 (svn rev 5202)</li>
 			<li>Jam version was 2.5</li>
 			<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
 			<li>Make version was GNU make 3.81</li>
@@ -147,7 +147,7 @@
 				<bar name='toy makefiles' value=' 4.81s' width=' 48'/>
 				<bar name='wonderbuild'   value=' 5.31s' width=' 53'>using gcc deps</bar>
 				<bar name='wonderbuild'   value=' 5.56s' width=' 56'>using dumb deps</bar>
-				<bar name='waf'           value=' 7.08s' width=' 71'/>
+				<bar name='waf'           value=' 6.93s' width=' 69'/>
 				<bar name='autotools'     value='29.64s' width='296'/>
 				<bar name='scons'         value='39.58s' width='396'/>
 			</bars>
@@ -160,7 +160,7 @@
 				<bar name='toy makefiles' value=' 1.01s' width=' 101'/>
 				<bar name='wonderbuild'   value=' 1.21s' width=' 121'>using gcc deps</bar>
 				<bar name='wonderbuild'   value=' 1.29s' width=' 129'>using dump deps</bar>
-				<bar name='waf'           value=' 2.24s' width=' 224'/>
+				<bar name='waf'           value=' 2.03s' width=' 203'/>
 				<bar name='autotools'     value=' 4.63s' width=' 463'/>
 				<bar name='scons'         value='24.37s' width='2437'/>
 			</bars>
@@ -171,7 +171,7 @@
 				<bar name='toy makefiles' value=' 0.79s' width='  79'/>
 				<bar name='wonderbuild'   value=' 0.98s' width='  98'>using gcc deps</bar>
 				<bar name='wonderbuild'   value=' 1.05s' width=' 105'>using dumb deps</bar>
-				<bar name='waf'           value=' 1.71s' width=' 171'/>
+				<bar name='waf'           value=' 1.51s' width=' 151'/>
 				<bar name='autotools'     value=' 2.05s' width=' 205'/>
 				<bar name='scons'         value='23.25s' width='2325'/>
 			</bars>
