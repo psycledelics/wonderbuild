@@ -138,8 +138,8 @@
 	<part caption='Results'>
 		<part caption='Initial full build'>
 			<bars>
-				<bar name='toy makefiles' value=' 34.1s' width=' 34'><span style='color: red'>missed header deps!</span></bar>
-				<bar name='jam'           value=' 35.6s' width=' 36'/>
+				<bar name='toy makefiles' value=' 34.1s' width=' 34'/>
+				<bar name='jam'           value=' 35.6s' width=' 36'><span style='color: red'>missed header deps!</span></bar>
 				<bar name='wonderbuild'   value=' 36.2s' width=' 36'>using gcc deps</bar>
 				<bar name='wonderbuild'   value=' 38.5s' width=' 38'>using dumb deps</bar>
 				<bar name='waf'           value=' 43.4s' width=' 43'>using gcc deps</bar>
