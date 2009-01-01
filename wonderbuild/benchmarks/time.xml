@@ -4,7 +4,7 @@
 	<part caption='Versions'>
 		<ul>
 			<li>Scons version was 1.2.0</li>
-			<li>Waf version was somewhere after 1.5.2 (svn rev 5263)</li>
+			<li>Waf version was somewhere after 1.5.2 (svn rev 5274)</li>
 			<li>Jam version was 2.5</li>
 			<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
 			<li>Make version was GNU make 3.81</li>
