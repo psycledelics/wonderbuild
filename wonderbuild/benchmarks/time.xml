@@ -42,7 +42,7 @@
 		<br/>
 		Wonderbuild used either gcc's generated deps as a side-effect of compilation (-MMD option),
 		or a custom dumb include scanner, with no condition nor macro evaluation.
-		<br/>
+		<br/><br/>
 		Despite a lot of efforts, i wasn't able to find out why jam is missing some header depencencies.
 		While it's possible this could be fixed with a trivial change,
 		i must point out that the documentation is rather confusing.
@@ -50,7 +50,7 @@
 		I decided to keep jam's benchmark results, since it's one of the fastest build tool,
 		and it's missing only a few dependencies (precisely, it's rebuilding all libs but lib17 itself),
 		so real numbers should actually be a bit higher, but not much.
-		<br/>
+		<br/><br/>
 		Waf's parallel algorithm was set to "normal" (faster than "max parallel").
 		<br/>
 		Waf and scons were tuned to use file timestamps comparisons rather than md5 sums
