@@ -156,7 +156,9 @@ blddir = 'build-waf'
 
 def set_options(opt): pass
 
-def configure(conf): conf.check_tool('g++')
+def configure(conf):
+	conf.check_tool('g++')
+	#conf.check_tool('gccdeps')
 
 def build(bld):
 	bld.add_subdirs('%(subs)s')

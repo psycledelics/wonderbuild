@@ -4,7 +4,7 @@
 	<part caption='Versions'>
 		<ul>
 			<li>Scons version was 1.2.0</li>
-			<li>Waf version was somewhere after 1.5.2 (svn rev 5202)</li>
+			<li>Waf version was somewhere after 1.5.2 (svn rev 5263)</li>
 			<li>Jam version was 2.5</li>
 			<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
 			<li>Make version was GNU make 3.81</li>
@@ -35,10 +35,10 @@
 		<br/>
 		The toy makefiles generated were recursive, and C++ dependencies were tracked using the makedepend X utility.
 		<br/>
-		Waf and scons used a full-featured custom preprocessor to scan C++ dependencies.
+		Scons used a full-featured custom preprocessor to scan C++ dependencies.
 		<br/>
-		Waf is also able to use gcc's generated deps as a side-effect of compilation (-MMD option),
-		but i didn't measure it yet.
+		Waf used either gcc's generated deps as a side-effect of compilation (-MMD option),
+		or a full-featured custom preprocessor.
 		<br/>
 		Wonderbuild used either gcc's generated deps as a side-effect of compilation (-MMD option),
 		or a custom dumb include scanner, with no condition nor macro evaluation.
@@ -134,7 +134,8 @@
 				<bar name='jam'           value=' 35.6s' width=' 36'/>
 				<bar name='wonderbuild'   value=' 36.2s' width=' 36'>using gcc deps</bar>
 				<bar name='wonderbuild'   value=' 38.5s' width=' 38'>using dumb deps</bar>
-				<bar name='waf'           value=' 45.7s' width=' 46'/>
+				<bar name='waf'           value=' 43.1s' width=' 43'>using gcc deps</bar>
+				<bar name='waf'           value=' 43.2s' width=' 43'>using waf cpp</bar>
 				<bar name='scons'         value='131.0s' width='131'/>
 				<bar name='autotools'     value='188.0s' width='188'/>
 			</bars>
@@ -147,7 +148,8 @@
 				<bar name='toy makefiles' value=' 4.81s' width=' 48'/>
 				<bar name='wonderbuild'   value=' 5.31s' width=' 53'>using gcc deps</bar>
 				<bar name='wonderbuild'   value=' 5.56s' width=' 56'>using dumb deps</bar>
-				<bar name='waf'           value=' 6.93s' width=' 69'/>
+				<bar name='waf'           value=' 6.75s' width=' 68'>using waf cpp</bar>
+				<bar name='waf'           value=' 6.77s' width=' 68'>using gcc deps</bar>
 				<bar name='autotools'     value='29.64s' width='296'/>
 				<bar name='scons'         value='39.58s' width='396'/>
 			</bars>
@@ -160,7 +162,8 @@
 				<bar name='toy makefiles' value=' 1.01s' width=' 101'/>
 				<bar name='wonderbuild'   value=' 1.21s' width=' 121'>using gcc deps</bar>
 				<bar name='wonderbuild'   value=' 1.29s' width=' 129'>using dump deps</bar>
-				<bar name='waf'           value=' 2.03s' width=' 203'/>
+				<bar name='waf'           value=' 1.89s' width=' 189'>using waf cpp</bar>
+				<bar name='waf'           value=' 1.91s' width=' 191'>using gcc deps</bar>
 				<bar name='autotools'     value=' 4.63s' width=' 463'/>
 				<bar name='scons'         value='24.37s' width='2437'/>
 			</bars>
@@ -171,7 +174,8 @@
 				<bar name='toy makefiles' value=' 0.79s' width='  79'/>
 				<bar name='wonderbuild'   value=' 0.98s' width='  98'>using gcc deps</bar>
 				<bar name='wonderbuild'   value=' 1.05s' width=' 105'>using dumb deps</bar>
-				<bar name='waf'           value=' 1.51s' width=' 151'/>
+				<bar name='waf'           value=' 1.45s' width=' 145'>using gcc deps</bar>
+				<bar name='waf'           value=' 1.46s' width=' 146'>using waf cpp</bar>
 				<bar name='autotools'     value=' 2.05s' width=' 205'/>
 				<bar name='scons'         value='23.25s' width='2325'/>
 			</bars>
