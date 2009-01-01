@@ -106,38 +106,37 @@ def create_wonderbuild(libs):
     f = open('wonderbuild_script.py', 'w')
     f.write('''\
 def wonderbuild_script(project):
-	from wonderbuild.cxx_chain import BaseCxxCfg, BaseModCfg, PkgCfg, CxxCfg, ModCfg, ModTask
+	from wonderbuild.cxx_chain import UserCfg, DevCfg, ModTask
 
-	class CustomBaseCxxCfg(BaseCxxCfg):
+	user_cfg = UserCfg(project)
+
+	class CustomUserCfg(UserCfg):
 		def configure(self):
-			BaseCxxCfg.configure(self)
-			self.flags += ['-g', 'O0', '-Wall']
-			self.pic = False
-
-	base_cxx_cfg = CustomBaseCxxCfg(project)
-	base_mod_cfg = BaseModCfg(base_cxx_cfg)
+			UserCfg.configure(self)
+			self.cxx_flags += ['-g', 'O0', '-Wall']
+			self.shared = False
 
 	top_src_dir = project.src_node
 
 	class BenchLib(ModTask):
 		def __init__(self, name, i):
-			ModTask.__init__(self, ModCfg(base_mod_cfg, BenchLib.BenchCxxCfg(base_cxx_cfg, i), 'lib'), name)
+			ModTask.__init__(self, BenchLib.Cfg(user_cfg, 'lib', i), name)
 	
+		class Cfg(DevCfg):
+			def __init__(self, user_cfg, kind, i):
+				DevCfg.__init__(self, user_cfg, kind)
+				self.i = i
+				
+			def configure(self):
+				DevCfg.configure(self)
+				self.include_paths.append(top_src_dir)
+				self.defines['BENCH'] = None
+				self.defines['BENCH_LIB'] = self.i
+
 		def dyn_in_tasks(self):
 			src_dir = top_src_dir.node_path(self.name)
 			for s in src_dir.find_iter(in_pat = '*.cpp'): self.add_new_cxx_task(s)
 			return self.in_tasks
-
-		class BenchCxxCfg(CxxCfg):
-			def __init__(self, base_cfg, i):
-				CxxCfg.__init__(self, base_cfg)
-				self.i = i
-				
-			def configure(self):
-				CxxCfg.configure(self)
-				self.paths.append(top_src_dir)
-				self.defines['BENCH'] = None
-				self.defines['BENCH_LIB'] = self.i
 
 	bench_libs = []
 	for s in top_src_dir.actual_children:

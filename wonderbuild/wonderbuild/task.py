@@ -66,24 +66,26 @@ class Task(Schedulable):
 		out.write(colored(color, 'wonderbuild: task: ' + desc) + '\n')
 		out.flush()
 
-def exec_subprocess(args, env = None):
+def exec_subprocess(args, env = None, cwd = None):
 	if __debug__ and is_debug: debug('exec: ' + str(args))
 	return subprocess.call(
 		args = args,
 		bufsize = -1,
 		stdout = None,
 		stderr = None,
-		env = env
+		env = env,
+		cwd = cwd
 	)
 
-def exec_subprocess_pipe(args, env = None, silent = False):
+def exec_subprocess_pipe(args, env = None, cwd = None, silent = False):
 	if __debug__ and is_debug: debug('exec: pipe: ' + str(args))
 	p = subprocess.Popen(
 		args = args,
 		bufsize = -1,
 		stdout = subprocess.PIPE,
 		stderr = subprocess.PIPE,
-		env = env
+		env = env,
+		cwd = cwd
 	)
 	out, err = p.communicate()
 	if not silent:

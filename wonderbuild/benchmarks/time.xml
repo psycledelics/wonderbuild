@@ -140,7 +140,7 @@
 			<bars>
 				<bar name='toy makefiles' value=' 34.1s' width=' 34'/>
 				<bar name='jam'           value=' 35.6s' width=' 36'><span style='color: red'>missed header deps!</span></bar>
-				<bar name='wonderbuild'   value=' 36.2s' width=' 36'>using gcc deps</bar>
+				<bar name='wonderbuild'   value=' 35.8s' width=' 36'>using gcc deps</bar>
 				<bar name='wonderbuild'   value=' 38.5s' width=' 38'>using dumb deps</bar>
 				<bar name='waf'           value=' 43.4s' width=' 43'>using gcc deps</bar>
 				<bar name='waf'           value=' 46.1s' width=' 46'>using waf cpp</bar>
@@ -154,7 +154,7 @@
 			<bars>
 				<bar name='jam'           value=' 4.25s' width=' 43'><span style='color: red'>missed header deps!</span></bar>
 				<bar name='toy makefiles' value=' 4.81s' width=' 48'/>
-				<bar name='wonderbuild'   value=' 5.31s' width=' 53'>using gcc deps</bar>
+				<bar name='wonderbuild'   value=' 5.21s' width=' 52'>using gcc deps</bar>
 				<bar name='wonderbuild'   value=' 5.56s' width=' 56'>using dumb deps</bar>
 				<bar name='waf'           value=' 6.75s' width=' 68'>using gcc deps</bar>
 				<bar name='waf'           value=' 6.89s' width=' 69'>using waf cpp</bar>
