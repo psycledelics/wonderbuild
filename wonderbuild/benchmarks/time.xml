@@ -170,8 +170,7 @@
 				<bar name='toy makefiles' value=' 1.01s' width=' 101'/>
 				<bar name='wonderbuild'   value=' 1.21s' width=' 121'>using gcc deps</bar>
 				<bar name='wonderbuild'   value=' 1.29s' width=' 129'>using dump deps</bar>
-				<bar name='waf'           value=' 1.92s' width=' 192'>using gcc deps</bar>
-				<bar name='waf'           value=' 1.92s' width=' 192'>using waf cpp</bar>
+				<bar name='waf'           value=' 1.92s' width=' 192'>same with gcc deps and waf cpp</bar>
 				<bar name='autotools'     value=' 4.63s' width=' 463'/>
 				<bar name='scons'         value='24.37s' width='2437'/>
 			</bars>
@@ -182,8 +181,7 @@
 				<bar name='toy makefiles' value=' 0.79s' width='  79'/>
 				<bar name='wonderbuild'   value=' 0.98s' width='  98'>using gcc deps</bar>
 				<bar name='wonderbuild'   value=' 1.05s' width=' 105'>using dumb deps</bar>
-				<bar name='waf'           value=' 1.44s' width=' 144'>using gcc deps</bar>
-				<bar name='waf'           value=' 1.44s' width=' 144'>using waf cpp</bar>
+				<bar name='waf'           value=' 1.20s' width=' 120'>same with gcc deps and waf cpp</bar>
 				<bar name='autotools'     value=' 2.05s' width=' 205'/>
 				<bar name='scons'         value='23.25s' width='2325'/>
 			</bars>
