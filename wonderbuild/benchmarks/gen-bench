@@ -158,6 +158,7 @@ def set_options(opt): pass
 def configure(conf):
 	conf.check_tool('g++')
 	#conf.check_tool('gccdeps')
+	#conf.check_tool('batched_cc')
 
 def build(bld):
 	bld.add_subdirs('%(subs)s')

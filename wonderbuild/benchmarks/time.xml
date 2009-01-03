@@ -139,7 +139,8 @@
 		<part caption='Initial full build'>
 			<bars>
 				<bar-section>Using batch compilation</bar-section>
-				<bar name='wonderbuild'   value=' 28.2s' width=' 28'/>
+				<bar name='wonderbuild'   value=' 28.2s' width=' 28'>using one batch per lib</bar>
+				<bar name='waf'           value=' 40.7s' width=' 41'>using waf cpp</bar>
 				<bar-section>Not using batch compilation</bar-section>
 				<bar name='toy makefiles' value=' 34.1s' width=' 34'/>
 				<bar name='jam'           value=' 35.6s' width=' 36'><span style='color: red'>missed header deps!</span></bar>
@@ -156,7 +157,8 @@
 			<br/><br/>
 			<bars>
 				<bar-section>Using batch compilation</bar-section>
-				<bar name='wonderbuild'   value=' 4.13s' width=' 41'/>
+				<bar name='wonderbuild'   value=' 4.13s' width=' 41'>using one batch per lib</bar>
+				<bar name='waf'           value=' 6.63s' width=' 66'>using waf cpp</bar>
 				<bar-section>Not using batch compilation</bar-section>
 				<bar name='jam'           value=' 4.25s' width=' 43'><span style='color: red'>missed header deps!</span></bar>
 				<bar name='toy makefiles' value=' 4.81s' width=' 48'/>
@@ -173,7 +175,8 @@
 			<br/><br/>
 			<bars>
 				<bar-section>Using batch compilation</bar-section>
-				<bar name='wonderbuild'   value=' 1.04s' width=' 104'/>
+				<bar name='wonderbuild'   value=' 1.04s' width=' 104'>using one batch per lib</bar>
+				<bar name='waf'           value=' 2.00s' width=' 200'>using waf cpp</bar>
 				<bar-section>Not using batch compilation</bar-section>
 				<bar name='jam'           value=' 0.81s' width='  81'><span style='color: red'>missed header deps!</span></bar>
 				<bar name='toy makefiles' value=' 1.01s' width=' 101'/>
@@ -187,7 +190,8 @@
 		<part caption='No-op rebuild'>
 			<bars>
 				<bar-section>Using batch compilation</bar-section>
-				<bar name='wonderbuild'   value=' 0.76s' width='  76'/>
+				<bar name='wonderbuild'   value=' 0.76s' width='  76'>using one batch per lib</bar>
+				<bar name='waf'           value=' 1.15s' width=' 115'>using waf cpp</bar>
 				<bar-section>Not using batch compilation</bar-section>
 				<bar name='jam'           value=' 0.71s' width='  71'><span style='color: red'>missed header deps!</span></bar>
 				<bar name='toy makefiles' value=' 0.79s' width='  79'/>
