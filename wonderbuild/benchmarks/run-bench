@@ -2,7 +2,7 @@
 
 set -x &&
 
-jobs=4 &&
+jobs=16 &&
 
 main() {
 	op=$1 && shift &&
