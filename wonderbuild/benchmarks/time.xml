@@ -153,6 +153,7 @@
 			After touch lib_17/*.hpp => rebuild of 585 object files from c++ and 33 static libs
 			<br/><br/>
 			<bars>
+				<bar name='wonderbuild'   value=' 4.09s' width=' 41'>using batch compilation and gcc deps</bar>
 				<bar name='jam'           value=' 4.25s' width=' 43'><span style='color: red'>missed header deps!</span></bar>
 				<bar name='toy makefiles' value=' 4.81s' width=' 48'/>
 				<bar name='wonderbuild'   value=' 5.21s' width=' 52'>using gcc deps</bar>
@@ -168,6 +169,7 @@
 			<br/><br/>
 			<bars>
 				<bar name='jam'           value=' 0.81s' width='  81'><span style='color: red'>missed header deps!</span></bar>
+				<bar name='wonderbuild'   value=' 0.97s' width='  97'>using batch compilation and gcc deps</bar>
 				<bar name='toy makefiles' value=' 1.01s' width=' 101'/>
 				<bar name='wonderbuild'   value=' 1.21s' width=' 121'>using gcc deps</bar>
 				<bar name='wonderbuild'   value=' 1.29s' width=' 129'>using dump deps</bar>
@@ -178,6 +180,7 @@
 		</part>
 		<part caption='No-op rebuild'>
 			<bars>
+				<bar name='wonderbuild'   value=' 0.67s' width='  67'>using batch compilation and gcc deps</bar>
 				<bar name='jam'           value=' 0.71s' width='  71'><span style='color: red'>missed header deps!</span></bar>
 				<bar name='toy makefiles' value=' 0.79s' width='  79'/>
 				<bar name='wonderbuild'   value=' 0.98s' width='  98'>using gcc deps</bar>
