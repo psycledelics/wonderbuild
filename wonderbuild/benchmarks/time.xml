@@ -67,7 +67,7 @@
 		<br/><br/>
 		All tests were run at least seven times (first run not counted) and the average taken
 		(sorry, didn't measure incertitude).
-		Initial builds for scons and autools were not run seven times as they take AGES.
+		Initial builds were not always run seven times, but the first run was never counted.
 		<br/>
 		All tools were run with silent/quiet option and/or > /dev/null.
 		<br/>
@@ -140,7 +140,7 @@
 			<bars>
 				<bar-section>Using batch compilation</bar-section>
 				<bar name='wonderbuild'   value=' 28.2s' width=' 28'>using one batch per lib</bar>
-				<bar name='waf'           value=' 40.7s' width=' 41'>using waf cpp</bar>
+				<bar name='waf'           value=' 39.7s' width=' 39'>using waf cpp and mv for moving</bar>
 				<bar-section>Not using batch compilation</bar-section>
 				<bar name='toy makefiles' value=' 34.1s' width=' 34'/>
 				<bar name='jam'           value=' 35.6s' width=' 36'><span style='color: red'>missed header deps!</span></bar>
@@ -158,7 +158,7 @@
 			<bars>
 				<bar-section>Using batch compilation</bar-section>
 				<bar name='wonderbuild'   value=' 4.13s' width=' 41'>using one batch per lib</bar>
-				<bar name='waf'           value=' 6.63s' width=' 66'>using waf cpp</bar>
+				<bar name='waf'           value=' 6.64s' width=' 66'>using waf cpp</bar>
 				<bar-section>Not using batch compilation</bar-section>
 				<bar name='jam'           value=' 4.25s' width=' 43'><span style='color: red'>missed header deps!</span></bar>
 				<bar name='toy makefiles' value=' 4.81s' width=' 48'/>
@@ -176,7 +176,7 @@
 			<bars>
 				<bar-section>Using batch compilation</bar-section>
 				<bar name='wonderbuild'   value=' 1.04s' width=' 104'>using one batch per lib</bar>
-				<bar name='waf'           value=' 2.00s' width=' 200'>using waf cpp</bar>
+				<bar name='waf'           value=' 1.90s' width=' 190'>using waf cpp</bar>
 				<bar-section>Not using batch compilation</bar-section>
 				<bar name='jam'           value=' 0.81s' width='  81'><span style='color: red'>missed header deps!</span></bar>
 				<bar name='toy makefiles' value=' 1.01s' width=' 101'/>
