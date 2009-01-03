@@ -206,7 +206,7 @@
 			<xsl:choose>
 				<xsl:when test='@width > 10000'>
 					<td>
-						<div class='bar' style='width: 950px'>
+						<div class='bar' style='width: 9500px'>
 							&#160;
 							<span class='bar-note'><xsl:apply-templates/></span>
 						</div>
