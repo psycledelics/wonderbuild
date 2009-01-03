@@ -396,7 +396,6 @@ class ModTask(Task):
 
 	def dyn_in_tasks(self, sched_context):
 		changed_sources = []
-		
 		try: state = self.project.task_states[self.uid]
 		except KeyError:
 			if __debug__ and is_debug: debug('task: no state: ' + str(self))

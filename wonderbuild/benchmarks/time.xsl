@@ -187,11 +187,9 @@
 	</xsl:template>
 
 	<xsl:template match='bars'>
-		<code>
-			<table class='bar'>
-				<xsl:apply-templates/>
-			</table>
-		</code>
+		<table class='bar'>
+			<xsl:apply-templates/>
+		</table>
 	</xsl:template>
 	
 	<xsl:template match='bar-section'>
@@ -202,12 +200,17 @@
 
 	<xsl:template match='bar'>
 		<tr>
-			<td align='right' width='100px'><xsl:value-of select='@name'/></td>
-			<td width='10px'/>
-			<td align='right' width='50px'><xsl:value-of select='@value'/></td>
+			<td align='right'><xsl:value-of select='@name'/></td>
+			<td>&#160;</td>
+			<td align='right'><xsl:value-of select='@value'/></td>
 			<xsl:choose>
-				<xsl:when test='@width &gt; 600'>
-					<td><div class='bar' style='width: 550px'>&#160;</div></td>
+				<xsl:when test='@width > 10000'>
+					<td>
+						<div class='bar' style='width: 950px'>
+							&#160;
+							<span class='bar-note'><xsl:apply-templates/></span>
+						</div>
+					</td>
 					<td><span style='color: red'>//</span></td>
 					<td><div class='bar' style='width: 50px'>&#160;</div></td>
 				</xsl:when>
@@ -216,11 +219,11 @@
 						<div class='bar'>
 							<xsl:attribute name='style'>width: <xsl:value-of select='@width'/>px</xsl:attribute>
 							&#160;
+							<span class='bar-note'><xsl:apply-templates/></span>
 						</div>
 					</td>
 				</xsl:otherwise>
 			</xsl:choose>
-			<xsl:apply-templates/>
 		</tr>
 	</xsl:template>
 

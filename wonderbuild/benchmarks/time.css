@@ -112,6 +112,9 @@ a:hover {
 
 table.bar {
 	background-color: rgb(92%, 92%, 75%);
+	color: rgb(15%, 15%, 15%);
+	white-space: nowrap;
+	font-size: 0.9em;
 }
 
 div.bar {
@@ -121,8 +124,14 @@ div.bar {
 
 tr.bar-section {
 	background-color: rgb(90%, 85%, 50%);
+	font-weight: bold;
 }
 
 td.bar-section {
 	padding: 5px;
+}
+
+span.bar-note {
+	font-size: 0.85em;
+	color: rgb(60%, 45%, 35%);
 }
