@@ -6,8 +6,11 @@ import os
 
 from logger import is_debug, debug, colored
 from signature import Sig
+from cpp_include_scanner import IncludeScanner
 
-class CfgImpl(object):
+class Impl(object):
+	def __init__(self, state_and_cache):
+		self.cpp = IncludeScanner(state_and_cache)
 
 	@property
 	def cxx_prog(self): return 'cl'

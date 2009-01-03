@@ -9,7 +9,6 @@ from options import options, known_options, help
 from logger import out, is_debug, debug, colored, silent
 from signature import Sig
 from cfg import Cfg
-from cpp_include_scanner import IncludeScanner
 from task import Task, exec_subprocess_pipe
 
 class UserCfg(Cfg):
@@ -151,8 +150,6 @@ class UserCfg(Cfg):
 		elif self.kind == 'gcc':
 			import gcc
 			self.impl = gcc.Impl()
-		else:
-			self.cpp = IncludeScanner(self.project.state_and_cache)
 
 		if self.impl is None:
 			raise Exception, 'unsupported c++ compiler'
@@ -337,7 +334,7 @@ class CxxTask(Task):
 	@property
 	def impl(self): return self.user_cfg.impl
 
-	def __str__(self): return ' ' .join([str(s) for s in self.sources])
+	def __str__(self): return ' '.join([str(s) for s in self.sources])
 
 	@property
 	def uid(self): return self.mod_task.uid
@@ -363,10 +360,7 @@ class CxxTask(Task):
 			node.parent.actual_children
 			if not node.exists:
 				f = open(node.path, 'wb')
-				try:
-					f.write('#include "')
-					f.write(s.rel_path(self.target_dir))
-					f.write('"\n')
+				try: f.write('#include "%s"\n' % s.rel_path(self.target_dir))
 				finally: f.close()
 			self._actual_sources.append(node)
 		self.impl.process_cxx_task(self)
