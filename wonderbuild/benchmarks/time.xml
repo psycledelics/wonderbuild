@@ -6,7 +6,7 @@
 			<bars>
 				<bar-section>Using batch compilation</bar-section>
 				<bar name='wonderbuild'   value=' 28.2s' width=' 282'>1 batch/lib, gcc deps</bar>
-				<bar name='waf'           value=' 38.2s' width=' 382'>max 50 srcs/batch, waf cpp, no mv</bar>
+				<bar name='waf'           value=' 38.2s' width=' 382'>max 50 srcs/batch, waf cpp, shutil</bar>
 				<bar name='waf'           value=' 39.7s' width=' 397'>max 50 srcs/batch, waf cpp, mv</bar>
 				<bar-section>Not using batch compilation</bar-section>
 				<bar name='toy makefiles' value=' 34.1s' width=' 341'/>
@@ -25,7 +25,7 @@
 			<bars>
 				<bar-section>Using batch compilation</bar-section>
 				<bar name='wonderbuild'   value=' 4.13s' width=' 413'>1 batch/lib, gcc deps</bar>
-				<bar name='waf'           value=' 6.42s' width=' 642'>max 50 srcs/batch, waf cpp, no mv</bar>
+				<bar name='waf'           value=' 6.42s' width=' 642'>max 50 srcs/batch, waf cpp, shutil</bar>
 				<bar name='waf'           value=' 6.64s' width=' 664'>max 50 srcs/batch, waf cpp, mv</bar>
 				<bar-section>Not using batch compilation</bar-section>
 				<bar name='jam'           value=' 4.25s' width=' 425'><span style='color: red'>missed header deps!</span></bar>
@@ -44,7 +44,7 @@
 			<bars>
 				<bar-section>Using batch compilation</bar-section>
 				<bar name='wonderbuild'   value=' 1.04s' width=' 104'>1 batch/lib, gcc deps</bar>
-				<bar name='waf'           value=' 1.90s' width=' 190'>max 50 srcs/batch, waf cpp (same whether mv or not)</bar>
+				<bar name='waf'           value=' 1.90s' width=' 190'>max 50 srcs/batch, waf cpp (same with shutil or mvt)</bar>
 				<bar-section>Not using batch compilation</bar-section>
 				<bar name='jam'           value=' 0.81s' width='  81'><span style='color: red'>missed header deps!</span></bar>
 				<bar name='toy makefiles' value=' 1.01s' width=' 101'/>
@@ -59,7 +59,7 @@
 			<bars>
 				<bar-section>Using batch compilation</bar-section>
 				<bar name='wonderbuild'   value=' 0.76s' width='  76'>1 batch/lib, gcc deps</bar>
-				<bar name='waf'           value=' 1.15s' width=' 115'>max 50 srcs/batch, waf cpp (same whether mv or not)</bar>
+				<bar name='waf'           value=' 1.15s' width=' 115'>max 50 srcs/batch, waf cpp (same with shutil or mv)</bar>
 				<bar-section>Not using batch compilation</bar-section>
 				<bar name='jam'           value=' 0.71s' width='  71'><span style='color: red'>missed header deps!</span></bar>
 				<bar name='toy makefiles' value=' 0.79s' width='  79'/>
