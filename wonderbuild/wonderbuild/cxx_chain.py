@@ -42,8 +42,8 @@ class UserCfg(Cfg):
 		help['--cxx-mod-ld']           = ('--cxx-mod-ld=<prog>', 'use <prog> as shared lib and program linker')
 		help['--cxx-mod-ld-flags']     = ('--cxx-mod-ld-flags=[flags]', 'use specific linker flags')
 		help['--cxx-mod-ar']           = ('--cxx-mod-ar=<prog>', 'use <prog> as static lib archiver', 'ar')
-		help['--cxx-mod-ar-flags']     = ('--cxx-mod-ar-flags=[flags]', 'use specific archiver flags', 'rc')
-		help['--cxx-mod-ranlib']       = ('--cxx-mod-ranlib=<prog>', 'use <prog> as static lib archive indexer', 'ranlib')
+		help['--cxx-mod-ar-flags']     = ('--cxx-mod-ar-flags=[flags]', 'use specific archiver flags', 'rc (rcs for gnu ar)')
+		help['--cxx-mod-ranlib']       = ('--cxx-mod-ranlib=<prog>', 'use <prog> as static lib archive indexer', 'ranlib (or via ar s flag for gnu ar)')
 		help['--cxx-mod-ranlib-flags'] = ('--cxx-mod-ranlib-flags=[flags]', 'use specific archive indexer flags')
 	
 	def configure(self):
@@ -134,8 +134,8 @@ class UserCfg(Cfg):
 			if not ar_flags:
 				self.ar_flags = os.environ.get('ARFLAGS', None)
 				if self.ar_flags is None:
-					if self.kind == 'gcc': self.ar_flags = 'rcus'
-					else: self.ar_flags = 'rc'
+					self.ar_flags = 'rc'
+					if self.kind == 'gcc': self.ar_flags += 's'
 				
 			if not ranlib_prog: self.ranlib_prog = self.impl.ranlib_prog
 			if not ranlib_flags: self.ranlib_flags = os.environ.get('RANLIBFLAGS', None)
@@ -361,6 +361,17 @@ class CxxTask(Task):
 				pic = 'non-pic'
 				color = '7;34'
 			self.print_desc('batch-compiling ' + pic + ' objects from c++ ' + str(self), color)
+		self._actual_sources = []
+		for s in self.sources:
+			node = self.mod_task._unique_base_name_node(s)
+			if not node.exists:
+				f = open(node.path, 'wb')
+				try:
+					f.write('#include "')
+					f.write(s.rel_path(self.target_dir))
+					f.write('"\n')
+				finally: f.close()
+			self._actual_sources.append(node)
 		self.impl.process_cxx_task(self)
 		Task.process(self)
 
@@ -465,9 +476,28 @@ class ModTask(Task):
 				else:
 					self.print_desc('linking shared lib ' + str(self.target), color = '7;1;33')
 			else: self.print_desc('archiving and indexing static lib ' + str(self.target), color = '7;36')
-		self.impl.process_mod_task(self)
+		if self.cfg.ld: sources = mod_task.sources
+		else: sources = self._changed_sources
+		objs_paths = []
+		for s in sources:
+			node = self._unique_base_name_node(s)
+			path = node.path[:node.path.rfind('.')] + '.o'
+			objs_paths.append(path)
+		self.impl.process_mod_task(self, objs_paths)
+		implicit_deps = self.project.task_states[self.uid][2]
+		# remove old sources from implicit deps dictionary
+		sources_states = {}
+		for s in self.sources: sources_states[s] = implicit_deps[s]
+		self.project.task_states[self.uid] = self.cfg.mod_sig, self.cfg.cxx_sig, sources_states
 		Task.process(self)
 
+	def _unique_base_name_node(self, source):
+		path = source.rel_path(self.project.src_node)
+		path = path.replace(os.pardir, '_')
+		path = path.replace(os.sep, ',')
+		node = self.target_dir.node_path(path)
+		return node
+		
 class PkgCfg(Cfg):
 	def __init__(self, project):
 		Cfg.__init__(self, project)

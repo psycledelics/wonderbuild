@@ -41,17 +41,6 @@ class Impl(object):
 	
 	@staticmethod
 	def process_cxx_task(cxx_task):
-		cxx_task._actual_sources = []
-		for s in cxx_task.sources:
-			node = Impl._unique_base_name_node(cxx_task.mod_task, s)
-			if not node.exists:
-				f = open(node.path, 'wb')
-				try:
-					f.write('#include "')
-					f.write(s.rel_path(cxx_task.target_dir))
-					f.write('"\n')
-				finally: f.close()
-			cxx_task._actual_sources.append(node)
 		args = cxx_task.cfg.cxx_args
 		args = [args[0], '-c'] + [s.name for s in cxx_task._actual_sources] + args[1:]
 		r = exec_subprocess(args, cwd = cxx_task.target_dir.path)
@@ -124,13 +113,7 @@ class Impl(object):
 		if __debug__ and is_debug: debug('cfg: cxx: dev: impl: gcc: ld: ' + str(args))
 	
 	@staticmethod
-	def process_mod_task(mod_task):
-		objs_paths = []
-		for s in mod_task.sources:
-			node = Impl._unique_base_name_node(mod_task, s)
-			path = node.path[:node.path.rfind('.')] + '.o'
-			objs_paths.append(path)
-
+	def process_mod_task(mod_task, objs_paths):
 		if mod_task.cfg.ld:
 			args = mod_task.cfg.mod_args[:]
 			args = [args[0], '-o', mod_task.target.path] + objs_paths + args[1:]
@@ -149,12 +132,6 @@ class Impl(object):
 				r = exec_subprocess(args)
 				if r != 0: raise Exception, r
 
-		implicit_deps = mod_task.project.task_states[mod_task.uid][2]
-		# remove old sources from implicit deps dictionary
-		sources_states = {}
-		for s in mod_task.sources: sources_states[s] = implicit_deps[s]
-		mod_task.project.task_states[mod_task.uid] = mod_task.cfg.mod_sig, mod_task.cfg.cxx_sig, sources_states
-
 	@staticmethod
 	def mod_task_target(mod_task):
 		dir = mod_task.project.bld_node.node_path('modules').node_path(mod_task.name)
@@ -162,11 +139,3 @@ class Impl(object):
 		elif mod_task.cfg.shared: name = 'lib' + mod_task.name + '.so'
 		else: name = 'lib' + mod_task.name + '.a'
 		return dir.node_path(name)
-
-	@staticmethod
-	def _unique_base_name_node(mod_task, source):
-		path = source.rel_path(mod_task.project.src_node)
-		path = path.replace(os.pardir, '_')
-		path = path.replace(os.sep, ',')
-		node = mod_task.target_dir.node_path(path) #XXX thread
-		return node
