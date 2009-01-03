@@ -138,6 +138,7 @@
 	<part caption='Results'>
 		<part caption='Initial full build'>
 			<bars>
+				<bar name='wonderbuild'   value=' 29.1s' width=' 29'>using batch compilation and gcc deps</bar>
 				<bar name='toy makefiles' value=' 34.1s' width=' 34'/>
 				<bar name='jam'           value=' 35.6s' width=' 36'><span style='color: red'>missed header deps!</span></bar>
 				<bar name='wonderbuild'   value=' 35.8s' width=' 36'>using gcc deps</bar>
