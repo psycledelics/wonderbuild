@@ -62,7 +62,7 @@ class Impl(object):
 		finally: f.close()
 		deps = deps.replace('\\\n', '')
 		deps = deps[deps.find(':') + 1:].split()
-		deps = deps[2:] # skip the first implicit deps, which is the dummy actual source
+		deps = deps[1:] # skip the first implicit deps, which is the dummy actual source
 		deps = [dep_rel.node_path(dep) for dep in deps]
 		if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
 		return deps

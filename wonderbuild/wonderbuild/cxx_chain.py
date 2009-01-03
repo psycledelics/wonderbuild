@@ -354,16 +354,13 @@ class CxxTask(Task):
 			self.target_dir.make_dir()
 		finally: lock.release()
 		if not silent:
-			if self.cfg.pic:
-				pic = 'pic'
-				color = '7;1;34'
-			else:
-				pic = 'non-pic'
-				color = '7;34'
+			if self.cfg.pic: pic = 'pic'; color = '7;1;34'
+			else: pic = 'non-pic'; color = '7;34'
 			self.print_desc('batch-compiling ' + pic + ' objects from c++ ' + str(self), color)
 		self._actual_sources = []
 		for s in self.sources:
 			node = self.mod_task._unique_base_name_node(s)
+			node.parent.actual_children
 			if not node.exists:
 				f = open(node.path, 'wb')
 				try:
@@ -476,7 +473,7 @@ class ModTask(Task):
 				else:
 					self.print_desc('linking shared lib ' + str(self.target), color = '7;1;33')
 			else: self.print_desc('archiving and indexing static lib ' + str(self.target), color = '7;36')
-		if self.cfg.ld: sources = mod_task.sources
+		if self.cfg.ld: sources = self.sources
 		else: sources = self._changed_sources
 		objs_paths = []
 		for s in sources:
