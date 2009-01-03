@@ -114,7 +114,7 @@ table.bar {
 	background-color: rgb(92%, 92%, 75%);
 	color: rgb(15%, 15%, 15%);
 	white-space: nowrap;
-	font-size: 0.9em;
+	font-size: 0.85em;
 }
 
 div.bar {
@@ -133,5 +133,5 @@ td.bar-section {
 
 span.bar-note {
 	font-size: 0.85em;
-	color: rgb(60%, 45%, 35%);
+	color: rgb(50%, 40%, 25%);
 }
