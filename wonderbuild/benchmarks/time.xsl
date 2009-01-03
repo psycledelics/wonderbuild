@@ -194,11 +194,17 @@
 		</code>
 	</xsl:template>
 	
+	<xsl:template match='bar-section'>
+		<tr class='bar-section'>
+			<td class='bar-section' colspan='7'><xsl:apply-templates/></td>
+		</tr>
+	</xsl:template>
+
 	<xsl:template match='bar'>
 		<tr>
-			<td align='right'><xsl:value-of select='@name'/></td>
+			<td align='right' width='100px'><xsl:value-of select='@name'/></td>
 			<td width='10px'/>
-			<td align='right'><xsl:value-of select='@value'/></td>
+			<td align='right' width='50px'><xsl:value-of select='@value'/></td>
 			<xsl:choose>
 				<xsl:when test='@width &gt; 700'>
 					<td><div class='bar' style='width: 650px'>&#160;</div></td>

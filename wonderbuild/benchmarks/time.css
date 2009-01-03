@@ -118,3 +118,11 @@ div.bar {
 	background-color: orange;
 	white-space: nowrap;
 }
+
+tr.bar-section {
+	background-color: rgb(90%, 85%, 50%);
+}
+
+td.bar-section {
+	padding: 5px;
+}
