@@ -7,7 +7,7 @@ import sys, os
 from options import options, known_options, help
 
 known_options.add('--silent')
-help['--silent'] = ('--silent', 'suppress progress output (errors and debugging messages are still printed)')
+help['--silent'] = ('--silent', 'suppress printing of informative messages (errors and debugging messages are still printed)')
 
 silent = '--silent' in options
 

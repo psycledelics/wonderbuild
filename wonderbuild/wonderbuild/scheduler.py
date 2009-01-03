@@ -15,7 +15,7 @@ except: cpu_count = int(os.environ.get('NUMBER_OF_PROCESSORS', 1)) # env var def
 known_options |= set(['--jobs', '--timeout', '--progress'])
 help['--jobs'] = ('--jobs=<count>', 'use <count> threads in the scheduler to process the tasks', 'autodetected: ' + str(cpu_count))
 help['--timeout'] = ('--timeout=<seconds>', 'wait at most <seconds> for a task to complete before considering it\'s busted', '3600.0')
-help['--progress'] = ('--progress', 'show output progress even when silent')
+help['--progress'] = ('--progress', 'show task completion progress even when silent')
 
 no_silent_progress = not silent or '--progress' in options
 
@@ -43,8 +43,7 @@ class Scheduler(object):
 		self._task_queue = []#deque()
 		self._todo_count = self._task_count
 		self._running_count = 0
-		self._stop_requested = False
-		self._joining = False
+		self._stop_requested = self._joining = False
 		self._threads = []
 		self._lock = threading.Lock()
 		self._condition = threading.Condition(self._lock)
@@ -134,7 +133,7 @@ class Scheduler(object):
 					try: task.process()
 					finally: self._condition.acquire()
 				self._todo_count -= 1
-				if no_silent_progress and process: print colored('7;32', 'wonderbuild: progress: ' + self.progress())
+				if no_silent_progress and process: print colored('7', 'wonderbuild: progress: ' + self.progress())
 				self._running_count -= 1
 				if self._todo_count == 0 and self._joining:
 					self._condition.notifyAll()

@@ -59,50 +59,30 @@ class UserCfg(Cfg):
 
 		if parse:
 			if __debug__ and is_debug: debug('cfg: cxx: user: parsing options')
-			
-			self.shared = self.pic = None
-			self.optim = None
+			self.shared = self.pic = self.optim = None
 			self.debug = False
-
 			cxx_prog = cxx_flags = ld_prog = ld_flags = ar_prog = ar_flags = ranlib_prog = ranlib_flags = False
 			for o in options:
-				if o.startswith('--cxx='):
-					self.cxx_prog = o[len('--cxx='):]
-					cxx_prog = True
-				elif o.startswith('--cxx-flags='):
-					self.cxx_flags = o[len('--cxx-flags='):].split()
-					cxx_flags = True
+				if o.startswith('--cxx='): self.cxx_prog = o[len('--cxx='):]; cxx_prog = True
+				elif o.startswith('--cxx-flags='): self.cxx_flags = o[len('--cxx-flags='):].split(); cxx_flags = True
 				elif o.startswith('--cxx-pic='): self.pic = o[len('--cxx-pic='):] != 'no'
 				elif o.startswith('--cxx-optim='): self.optim = o[len('--cxx-optim='):]
 				elif o.startswith('--cxx-debug='): self.debug = o[len('--cxx-debug='):] == 'yes'
 				elif o.startswith('--cxx-mod-shared'): self.shared = o[len('--cxx-mod-shared='):] != 'no'
-				elif o.startswith('--cxx-mod-ld='):
-					self.ld_prog = o[len('--cxx-mod-ld='):]
-					ld = True
-				elif o.startswith('--cxx-mod-ld-flags='):
-					self.ld_flags = o[len('--cxx-mod-ld-flags='):].split()
-					ld_flags = True
-				if o.startswith('--cxx-mod-ar='):
-					self.ar_prog = o[len('--cxx-mod-ar='):]
-					ar_prog = True
-				elif o.startswith('--cxx-mod-ar-flags='):
-					self.ar_flags = o[len('--cxx-mod-ar-flags='):].split()
-					ar_flags = True
-				if o.startswith('--cxx-mod-ranlib='):
-					self.ranlib_prog = o[len('--cxx-mod-ranlib='):]
-					ranlib_prog = True
-				elif o.startswith('--cxx-mod-ranlib-flags='):
-					self.ranlib_flags = o[len('--cxx-mod-ranlib-flags='):].split()
-					ranlib_flags = True
-
+				elif o.startswith('--cxx-mod-ld='): self.ld_prog = o[len('--cxx-mod-ld='):]; ld = True
+				elif o.startswith('--cxx-mod-ld-flags='): self.ld_flags = o[len('--cxx-mod-ld-flags='):].split(); ld_flags = True
+				elif o.startswith('--cxx-mod-ar='): self.ar_prog = o[len('--cxx-mod-ar='):]; ar_prog = True
+				elif o.startswith('--cxx-mod-ar-flags='): self.ar_flags = o[len('--cxx-mod-ar-flags='):].split(); ar_flags = True
+				elif o.startswith('--cxx-mod-ranlib='): self.ranlib_prog = o[len('--cxx-mod-ranlib='):]; ranlib_prog = True
+				elif o.startswith('--cxx-mod-ranlib-flags='): self.ranlib_flags = o[len('--cxx-mod-ranlib-flags='):].split(); ranlib_flags = True
 			if self.pic is None:
 				if self.shared is None: self.shared = True
 				self.pic = False
 			elif self.shared is None: self.shared = self.pic
-			
+
 			if not cxx_prog: self.cxx_prog = 'c++'
 
-			if not silent: self.print_desc('checking for c++ compiler')
+			self.print_desc('checking for c++ compiler')
 			r, out, err = exec_subprocess_pipe([self.cxx_prog, '-dumpversion'], silent = True)
 			if r != 0:
 				if not silent: self.print_result_desc('not gcc\n', '31')
@@ -115,8 +95,7 @@ class UserCfg(Cfg):
 				ld_prog = True
 				import gcc
 				self.impl = gcc.Impl()
-				
-			if not silent: self.print_result_desc(self.kind + ' version ' + self.version + '\n', '32')
+			self.print_result_desc(self.kind + ' version ' + self.version + '\n', '32')
 
 			if not cxx_flags:
 				flags = os.environ.get('CXXFLAGS', None)
@@ -253,7 +232,6 @@ class DevCfg(Cfg):
 			if self.shared and not self.pic:
 				debug('cfg: cxx: dev: shared lib => overriding cfg to pic')
 				self.pic = True
-
 		self.libs_paths = []
 		self.libs = []
 		self.static_libs = []
@@ -308,8 +286,7 @@ class DevCfg(Cfg):
 			try: return self._mod_args
 			except AttributeError:
 				ld_args, ar_args, ranlib_args = self.user_cfg.mod_args
-				if not self.ld:
-					args = ar_args, ranlib_args
+				if not self.ld: args = ar_args, ranlib_args
 				else:
 					args = ld_args[:]
 					self.impl.dev_cfg_ld_args(self, args)
@@ -428,23 +405,20 @@ class ModTask(Task):
 						continue
 					if __debug__ and is_debug: debug('task: skip: no change: ' + str(s))
 		if len(changed_sources) != 0:
-			t = CxxTask(self)
-			t.sources = changed_sources
-			self.add_in_task(t)
+			batches = []
+			for i in xrange(sched_context.thread_count): batches.append([])
+			i = 0
+			for s in changed_sources:
+				batches[i].append(s)
+				i += 1
+				if i == sched_context.thread_count: i = 0
+			for b in batches:
+				if len(b) == 0: continue
+				t = CxxTask(self)
+				t.sources = b
+				self.add_in_task(t)
 		self._changed_sources = changed_sources
 		return self.in_tasks
-
-		#TODO		
-		batch_size = float(len(self.sources)) / sched_context.thread_count
-		lower_bound = 0
-		upper_bound = batch_size
-		while upper_bound < len(self.sources):
-			print self.sources, lower_bound, upper_bound
-			t = CxxTask(self)
-			t.sources = self.sources[int(lower_bound):int(upper_bound)]
-			self.add_in_task(t)
-			lower_bound += batch_size
-			upper_bound += batch_size
 
 	def need_process(self):
 		if len(self._changed_sources) != 0: return True
@@ -458,14 +432,11 @@ class ModTask(Task):
 
 	def process(self):
 		if not silent:
-			if self.cfg.ld:
-				if self.cfg.kind == 'prog':
-					self.print_desc('linking program ' + str(self.target), color = '7;1;32')
-				elif self.cfg.kind == 'loadable':
-					self.print_desc('linking loadable module ' + str(self.target), color = '7;1;34')
-				else:
-					self.print_desc('linking shared lib ' + str(self.target), color = '7;1;33')
-			else: self.print_desc('archiving and indexing static lib ' + str(self.target), color = '7;36')
+			if not self.cfg.ld: desc = 'archiving and indexing static lib'; color = '7;36'
+			elif self.cfg.kind == 'prog': desc = 'linking program'; color = '7;1;32'
+			elif self.cfg.kind == 'loadable': desc = 'linking loadable module'; color = '7;1;34'
+			else: desc = 'linking shared lib'; color = '7;1;33'
+			self.print_desc(desc + ' ' + str(self), color)
 		if self.cfg.ld: sources = self.sources
 		else: sources = self._changed_sources
 		objs_paths = []
