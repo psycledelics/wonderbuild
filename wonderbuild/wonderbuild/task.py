@@ -6,31 +6,15 @@ import sys, os, subprocess
 
 from logger import out, is_debug, debug, colored
 
-class Schedulable(object):
-	def __init__(self):
+class Task(object):
+	def __init__(self, project, aliases = None):
+		self.project = project
+		project.add_task(self, aliases)
 		self.in_tasks = []
 		self.out_tasks = []
 		self.dyn_in_tasks_called = False
 		self.in_tasks_visited = 0
 		self.processed = False
-
-	def dyn_in_tasks(self): return None
-
-	def need_process(self):
-		if len(self.in_tasks) == 0: return True
-		for in_task in self.in_tasks:
-			if in_task.processed: return True
-		return False
-
-	def process(self): self.processed = True
-	
-	def post_process(self): pass
-
-class Task(Schedulable):
-	def __init__(self, project, aliases = None):
-		Schedulable.__init__(self)
-		self.project = project
-		project.add_task(self, aliases)
 
 	def add_in_task(self, task):
 		self.in_tasks.append(task)
@@ -40,34 +24,23 @@ class Task(Schedulable):
 		self.out_tasks.append(task)
 		task.in_tasks.append(self)
 
-	@property
-	def uid(self): raise Exception, str(self.__class__) + ' must implement the uid property'
-	
-	@property
-	def old_sig(self):
-		try: return self.project.task_states[self.uid]
-		except KeyError: return None
-	
-	@property
-	def sig(self): raise Exception, str(self.__class__) + ' must implement the sig property'
+	def dyn_in_tasks(self, sched_context): return None
 
 	def need_process(self):
-		if not Schedulable.need_process(self):
-			if __debug__ and is_debug: debug('task: skip (in_tasks skipped) ' + str(self))
-			return False
-		if self.sig != self.old_sig:
-			return True
-		if __debug__ and is_debug: debug('task: skip (same sig) ' + str(self))
- 		return False
+		# This default implementation is not really useful
+		if len(self.in_tasks) == 0: return True
+		for in_task in self.in_tasks:
+			if in_task.processed: return True
+		return False
 
-	def post_process(self): self.project.task_states[self.uid] = self.sig
+	def process(self): self.processed = True
 
 	def print_desc(self, desc, color = '7;1'):
 		out.write(colored(color, 'wonderbuild: task: ' + desc) + '\n')
 		out.flush()
 
 def exec_subprocess(args, env = None, cwd = None):
-	if __debug__ and is_debug: debug('exec: ' + str(args))
+	if __debug__ and is_debug: debug('exec: ' + str(args) + ' ' + str(cwd) + ' ' + str(env))
 	return subprocess.call(
 		args = args,
 		bufsize = -1,
@@ -78,7 +51,7 @@ def exec_subprocess(args, env = None, cwd = None):
 	)
 
 def exec_subprocess_pipe(args, env = None, cwd = None, silent = False):
-	if __debug__ and is_debug: debug('exec: pipe: ' + str(args))
+	if __debug__ and is_debug: debug('exec: pipe: ' + str(args) + ' ' + str(cwd) + ' ' + str(env))
 	p = subprocess.Popen(
 		args = args,
 		bufsize = -1,

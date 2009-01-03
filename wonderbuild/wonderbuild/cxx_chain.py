@@ -112,8 +112,10 @@ class UserCfg(Cfg):
 			else:
 				self.kind = 'gcc'
 				self.version = out.rstrip('\n')
+				self.ld_prog = self.cxx_prog
+				ld_prog = True
 				import gcc
-				self.impl = gcc.CfgImpl()
+				self.impl = gcc.Impl()
 				
 			if not silent: self.print_result_desc(self.kind + ' version ' + self.version + '\n', '32')
 
@@ -148,7 +150,7 @@ class UserCfg(Cfg):
 
 		elif self.kind == 'gcc':
 			import gcc
-			self.impl = gcc.CfgImpl()
+			self.impl = gcc.Impl()
 		else:
 			self.cpp = IncludeScanner(self.project.state_and_cache)
 
@@ -321,11 +323,13 @@ class DevCfg(Cfg):
 		finally: self.lock.release()
 
 class CxxTask(Task):
-	def __init__(self, dev_cfg):
-		Task.__init__(self, dev_cfg.project)
-		self.cfg = dev_cfg
-		self.source = None
-		self.target = None
+	def __init__(self, mod_task):
+		Task.__init__(self, mod_task.project)
+		self.mod_task = mod_task
+		self.sources = []
+
+	@property
+	def cfg(self): return self.mod_task.cfg
 
 	@property
 	def user_cfg(self): return self.cfg.user_cfg
@@ -333,37 +337,32 @@ class CxxTask(Task):
 	@property
 	def impl(self): return self.user_cfg.impl
 
-	def __str__(self): return str(self.target)
+	def __str__(self): return ' ' .join([str(s) for s in self.sources])
 
 	@property
-	def uid(self): return self.target
+	def uid(self): return self.mod_task.uid
 
 	@property
-	def old_sig(self):
-		try: return self.project.task_states[self.uid][0]
-		except KeyError: return None
+	def target_dir(self): return self.mod_task.target_dir
 
-	@property
-	def sig(self): return self.impl.cxx_task_sig(self)
+	def need_process(self): return True
 
 	def process(self):
-		dir = self.target.parent
-		lock = dir.lock
+		lock = self.target_dir.lock
 		try:
 			lock.acquire()
-			dir.make_dir()
+			self.target_dir.make_dir()
 		finally: lock.release()
 		if not silent:
 			if self.cfg.pic:
-				self.print_desc('compiling pic/shared object from c++ ' +
-					self.source.path + ' -> ' + self.target.path, color = '7;1;34')
+				pic = 'pic'
+				color = '7;1;34'
 			else:
-				self.print_desc('compiling non-pic/static object from c++ ' +
-					self.source.path + ' -> ' + self.target.path, color = '7;34')
+				pic = 'non-pic'
+				color = '7;34'
+			self.print_desc('batch-compiling ' + pic + ' objects from c++ ' + str(self), color)
 		self.impl.process_cxx_task(self)
 		Task.process(self)
-
-	def post_process(self): self.impl.post_process_cxx_task(self)
 
 class ModTask(Task):
 	def __init__(self, dev_cfg, name, aliases = None):
@@ -384,42 +383,90 @@ class ModTask(Task):
 	def uid(self): return self.target
 
 	@property
-	def sig(self):
-		try: return self._sig
-		except AttributeError:
-			sig = Sig(self.cfg.mod_sig)
-			sig.update(self.impl.mod_task_sig(self))
-			for t in self.in_tasks: sig.update(t.sig)
-			sig = self._sig = sig.digest()
-			return sig
-
-	@property
 	def target(self):
 		try: return self._target
 		except AttributeError:
 			target = self._target = self.impl.mod_task_target(self)
 			return target
 
+	@property
+	def target_dir(self): return self.target.parent
+
+	def dyn_in_tasks(self, sched_context):
+		changed_sources = []
+		
+		try: state = self.project.task_states[self.uid]
+		except KeyError:
+			if __debug__ and is_debug: debug('task: no state: ' + str(self))
+			self.project.task_states[self.uid] = None, None, {}
+			changed_sources = self.sources
+		else:
+			if state[1] != self.cfg.cxx_sig:
+				if __debug__ and is_debug: debug('task: cxx sig changed: ' + str(self))
+				changed_sources = self.sources
+			else:
+				implicit_deps = state[2]
+				for s in self.sources:
+					try: old_sig, deps = implicit_deps[s]
+					except KeyError:
+						# This is a new source.
+						changed_sources.append(s)
+						continue
+					try: sigs = [dep.sig for dep in deps]
+					except OSError:
+						# A cached implicit dep does not exist anymore.
+						if __debug__ and is_debug: debug('cpp: deps not found: ' + str(s))
+						changed_sources.append(s)
+						continue
+					sigs.sort()
+					sig = Sig(''.join(sigs)).digest()
+					if old_sig != sig:
+						# The cached implicit deps changed.
+						if __debug__ and is_debug: debug('cpp: deps changed: ' + str(s))
+						changed_sources.append(s)
+						continue
+					if __debug__ and is_debug: debug('task: skip: no change: ' + str(s))
+		if len(changed_sources) != 0:
+			t = CxxTask(self)
+			t.sources = changed_sources
+			self.add_in_task(t)
+		self._changed_sources = changed_sources
+		return self.in_tasks
+
+		#TODO		
+		batch_size = float(len(self.sources)) / sched_context.thread_count
+		lower_bound = 0
+		upper_bound = batch_size
+		while upper_bound < len(self.sources):
+			print self.sources, lower_bound, upper_bound
+			t = CxxTask(self)
+			t.sources = self.sources[int(lower_bound):int(upper_bound)]
+			self.add_in_task(t)
+			lower_bound += batch_size
+			upper_bound += batch_size
+
+	def need_process(self):
+		if len(self._changed_sources) != 0: return True
+		state = self.project.task_states[self.uid]
+		if state[0] != self.cfg.mod_sig:
+			if __debug__ and is_debug: debug('task: mod sig changed: ' + str(self))
+			self._changed_sources = self.sources
+			return True
+		if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
+		return False
+
 	def process(self):
 		if not silent:
 			if self.cfg.ld:
 				if self.cfg.kind == 'prog':
-					self.print_desc('linking program ' + self.target.path, color = '7;1;32')
+					self.print_desc('linking program ' + str(self.target), color = '7;1;32')
 				elif self.cfg.kind == 'loadable':
-					self.print_desc('linking loadable module ' + self.target.path, color = '7;1;34')
+					self.print_desc('linking loadable module ' + str(self.target), color = '7;1;34')
 				else:
-					self.print_desc('linking shared lib ' + self.target.path, color = '7;1;33')
-			else: self.print_desc('archiving and indexing static lib ' + self.target.path, color = '7;36')
+					self.print_desc('linking shared lib ' + str(self.target), color = '7;1;33')
+			else: self.print_desc('archiving and indexing static lib ' + str(self.target), color = '7;36')
 		self.impl.process_mod_task(self)
 		Task.process(self)
-		
-	def add_new_cxx_task(self, source):
-		t = CxxTask(self.cfg)
-		t.source = source
-		t.target = self.target.parent.node_path(source.path[:source.path.rfind('.')] + '.o')
-		self.add_in_task(t)
-		self.sources.append(t.target)
-		return t
 
 class PkgCfg(Cfg):
 	def __init__(self, project):

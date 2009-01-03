@@ -2,7 +2,7 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import sys, os, os.path, stat, gc, cPickle, threading
+import sys, os, stat, threading
 from collections import deque
 from fnmatch import fnmatchcase as match
 
@@ -13,8 +13,7 @@ class FileSystem(object):
 		try: self.root = state_and_cache[self.__class__.__name__]
 		except KeyError:
 			if  __debug__ and is_debug: debug('fs: all anew')
-			self.root = Node(None, os.sep)
-			state_and_cache[self.__class__.__name__] = self.root
+			self.root = state_and_cache[self.__class__.__name__] = Node(None, os.sep)
 			self.root._is_dir = True
 		self.root._exists = True
 		self.root._height = 0
@@ -53,13 +52,10 @@ class Node(object):
 	def __init__(self, parent, name):
 		self.parent = parent
 		self.name = name
-		self._is_dir = None
-		self._children = None
-		self._actual_children = None
-		self._old_children = None
-		self._old_time = None
-		self._time = None
 		self._path = None
+		self._is_dir = None
+		self._children = self._actual_children = self._old_children = None
+		self._old_time = self._time = None
 		if __debug__ and is_debug:
 			global all_abs_paths
 			assert parent is not None or name == os.sep, (parent, name)
@@ -262,31 +258,32 @@ class Node(object):
 
 	@property
 	def path(self):
-		if self._path is None:
-			path = []
-			cur = self.fs.cur
-			node1 = self
-			node2 = cur
-			node1.height
-			node2.height
-			while node1._height > node2._height: node1 = node1.parent
-			while node1._height < node2._height: node2 = node2.parent
-			while node1 is not node2:
-				node1 = node1.parent
-				node2 = node2.parent
-			ancestor = node1
-			for i in xrange(cur._height - ancestor._height): path.append(os.pardir)
-			down = self._height - ancestor._height
-			if down > 0:
-				node = self
-				path2 = deque()
-				for i in xrange(down):
-					path2.appendleft(node.name)
-					node = node.parent
-				path += path2
-			if len(path) == 0: self._path = os.curdir
-			else: self._path = os.sep.join(path)
+		if self._path is None: self._path = self.rel_path(self.fs.cur)
 		return self._path
+
+	def rel_path(self, from_node):
+		path = []
+		node1 = self
+		node2 = from_node
+		node1.height
+		node2.height
+		while node1._height > node2._height: node1 = node1.parent
+		while node1._height < node2._height: node2 = node2.parent
+		while node1 is not node2:
+			node1 = node1.parent
+			node2 = node2.parent
+		ancestor = node1
+		for i in xrange(from_node._height - ancestor._height): path.append(os.pardir)
+		down = self._height - ancestor._height
+		if down > 0:
+			node = self
+			path2 = deque()
+			for i in xrange(down):
+				path2.appendleft(node.name)
+				node = node.parent
+			path += path2
+		if len(path) == 0: return os.curdir
+		else: return os.sep.join(path)
 
 	@property
 	def abs_path(self):

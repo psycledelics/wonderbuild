@@ -20,15 +20,10 @@ def wonderbuild_script(project):
 				##self.pkgs = [pkg_cfg]
 				#if pkg_cfg.exists: self.pkgs += pkg_cfg.pkgs
 
-		def dyn(self):
-			self.cxx_cfg.paths = [src_dir]
-			for s in src_dir.node_path('foo').find_iter(prunes = ['todo'], in_pat = '*.cpp'): self.add_source(s)
-
-		def dyn_in_tasks(self):
+		def dyn_in_tasks(self, sched_ctx):
 			self.cfg.include_paths = [src_dir]
-			for s in src_dir.node_path('foo').find_iter(prunes = ['todo'], in_pat = '*.cpp'): self.add_new_cxx_task(s)
-			#for h in src_dir.node_path('foo').find_iter(prunes = ['todo'], in_pat = '*.hpp', ex_pat = '*.private.hpp'): print h.path
-			return self.in_tasks
+			for s in src_dir.node_path('foo').find_iter(prunes = ['todo'], in_pat = '*.cpp'): self.sources.append(s)
+			return ModTask.dyn_in_tasks(self, sched_ctx)
 	lib_foo = LibFoo()
 
 	class MainProg(ModTask):
@@ -41,11 +36,10 @@ def wonderbuild_script(project):
 				self.libs_paths.append(lib_foo.target.parent)
 				self.libs.append(lib_foo.name)
 
-		def dyn_in_tasks(self):
+		def dyn_in_tasks(self, sched_ctx):
 			self.add_in_task(lib_foo)
-			for s in src_dir.node_path('main').find_iter(prunes = ['todo'], in_pat = '*.cpp'): self.add_new_cxx_task(s)
-			#for h in src_dir.node_path('foo').find_iter(prunes = ['todo'], in_pat = '*.hpp', ex_pat = '*.private.hpp'): print h.path
-			return self.in_tasks
+			for s in src_dir.node_path('main').find_iter(prunes = ['todo'], in_pat = '*.cpp'): self.sources.append(s)
+			return ModTask.dyn_in_tasks(self, sched_ctx)
 	main_prog = MainProg()
 
 	return [main_prog]

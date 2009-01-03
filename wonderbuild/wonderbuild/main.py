@@ -31,6 +31,7 @@ else:
 					, '/tmp/profile'
 				)
 				p = pstats.Stats('/tmp/profile')
+				#p.sort_stats('time').print_stats(45)
 				p.sort_stats('cumulative').reverse_order().print_stats()
 			else: sys.exit(run())
 		finally:

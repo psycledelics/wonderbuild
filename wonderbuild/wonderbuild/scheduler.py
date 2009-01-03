@@ -19,7 +19,7 @@ help['--progress'] = ('--progress', 'show output progress even when silent')
 
 no_silent_progress = not silent or '--progress' in options
 
-class Scheduler():
+class Scheduler(object):
 	def __init__(self):
 		self.thread_count = 0
 		self.timeout = 0
@@ -30,7 +30,14 @@ class Scheduler():
 		if self.timeout == 0: self.timeout = 3600.0
 		self._todo_count = self._task_count = 0
 
+	class Context(object):
+		def __init__(self, scheduler):
+			self.thread_count = scheduler.thread_count
+			self.lock = scheduler._lock
+		
 	def start(self):
+		# TODO create the threads lazilly (optimisation)
+		# TODO for profiling, don't create threads, use only the main thread
 		if __debug__ and is_debug: debug('sched: starting threads: ' + str(self.thread_count))
 		self._tasks = set()
 		self._task_queue = []#deque()
@@ -39,7 +46,9 @@ class Scheduler():
 		self._stop_requested = False
 		self._joining = False
 		self._threads = []
-		self._condition = threading.Condition(threading.Lock())
+		self._lock = threading.Lock()
+		self._condition = threading.Condition(self._lock)
+		self._context = Scheduler.Context(self)
 		for i in xrange(self.thread_count):
 			t = threading.Thread(target = self._thread_function, args = (i,), name = 'scheduler-thread-' + str(i))
 			#t.daemon = True
@@ -108,7 +117,7 @@ class Scheduler():
 				if self._joining and self._todo_count == 0 or self._stop_requested: break
 				task = self._task_queue.pop()
 				if not task.dyn_in_tasks_called:
-					dyn_in_tasks = task.dyn_in_tasks()
+					dyn_in_tasks = task.dyn_in_tasks(self._context)
 					task.dyn_in_tasks_called = True
 					if dyn_in_tasks is not None and len(dyn_in_tasks) != 0:
 						self._task_queue += dyn_in_tasks
@@ -124,7 +133,6 @@ class Scheduler():
 					self._condition.release()
 					try: task.process()
 					finally: self._condition.acquire()
-					task.post_process()
 				self._todo_count -= 1
 				if no_silent_progress and process: print colored('7;32', 'wonderbuild: progress: ' + self.progress())
 				self._running_count -= 1
