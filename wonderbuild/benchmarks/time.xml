@@ -139,17 +139,18 @@
 		<part caption='Initial full build'>
 			<bars>
 				<bar-section>Using batch compilation</bar-section>
-				<bar name='wonderbuild'   value=' 28.2s' width=' 28'>using one batch per lib</bar>
-				<bar name='waf'           value=' 39.7s' width=' 39'>using waf cpp and mv for moving</bar>
+				<bar name='wonderbuild'   value=' 28.2s' width=' 282'>1 batch/lib</bar>
+				<bar name='waf'           value=' 38.2s' width=' 382'>max 50 srcs/batch, waf cpp, no mv</bar>
+				<bar name='waf'           value=' 39.7s' width=' 397'>max 50 srcs/batch, waf cpp, mv</bar>
 				<bar-section>Not using batch compilation</bar-section>
-				<bar name='toy makefiles' value=' 34.1s' width=' 34'/>
-				<bar name='jam'           value=' 35.6s' width=' 36'><span style='color: red'>missed header deps!</span></bar>
-				<bar name='wonderbuild'   value=' 35.8s' width=' 36'>using gcc deps</bar>
-				<bar name='wonderbuild'   value=' 38.5s' width=' 38'>using dumb deps</bar>
-				<bar name='waf'           value=' 43.4s' width=' 43'>using gcc deps</bar>
-				<bar name='waf'           value=' 46.1s' width=' 46'>using waf cpp</bar>
-				<bar name='scons'         value='131.0s' width='131'/>
-				<bar name='autotools'     value='188.0s' width='188'/>
+				<bar name='toy makefiles' value=' 34.1s' width=' 341'/>
+				<bar name='jam'           value=' 35.6s' width=' 356'><span style='color: red'>missed header deps!</span></bar>
+				<bar name='wonderbuild'   value=' 35.8s' width=' 358'>gcc deps</bar>
+				<bar name='wonderbuild'   value=' 38.5s' width=' 385'>dumb deps</bar>
+				<bar name='waf'           value=' 43.4s' width=' 434'>gcc deps</bar>
+				<bar name='waf'           value=' 46.1s' width=' 461'>waf cpp</bar>
+				<bar name='scons'         value='131.0s' width='1310'><span style='color: red'>slow!</span></bar>
+				<bar name='autotools'     value='188.0s' width='1880'><span style='color: red'>slow!</span></bar>
 			</bars>
 		</part>
 		<part caption='Big partial rebuild'>
@@ -157,15 +158,16 @@
 			<br/><br/>
 			<bars>
 				<bar-section>Using batch compilation</bar-section>
-				<bar name='wonderbuild'   value=' 4.13s' width=' 41'>using one batch per lib</bar>
-				<bar name='waf'           value=' 6.64s' width=' 66'>using waf cpp</bar>
+				<bar name='wonderbuild'   value=' 4.13s' width=' 41'>1 batch/lib</bar>
+				<bar name='waf'           value=' 6.42s' width=' 64'>max 50 srcs/batch, waf cpp, no mv</bar>
+				<bar name='waf'           value=' 6.64s' width=' 66'>max 50 srcs/batch, waf cpp, mv</bar>
 				<bar-section>Not using batch compilation</bar-section>
 				<bar name='jam'           value=' 4.25s' width=' 43'><span style='color: red'>missed header deps!</span></bar>
 				<bar name='toy makefiles' value=' 4.81s' width=' 48'/>
-				<bar name='wonderbuild'   value=' 5.21s' width=' 52'>using gcc deps</bar>
-				<bar name='wonderbuild'   value=' 5.56s' width=' 56'>using dumb deps</bar>
-				<bar name='waf'           value=' 6.75s' width=' 68'>using gcc deps</bar>
-				<bar name='waf'           value=' 6.89s' width=' 69'>using waf cpp</bar>
+				<bar name='wonderbuild'   value=' 5.21s' width=' 52'>gcc deps</bar>
+				<bar name='wonderbuild'   value=' 5.56s' width=' 56'>dumb deps</bar>
+				<bar name='waf'           value=' 6.75s' width=' 68'>gcc deps</bar>
+				<bar name='waf'           value=' 6.89s' width=' 69'>waf cpp</bar>
 				<bar name='autotools'     value='29.64s' width='296'/>
 				<bar name='scons'         value='39.58s' width='396'/>
 			</bars>
@@ -175,31 +177,31 @@
 			<br/><br/>
 			<bars>
 				<bar-section>Using batch compilation</bar-section>
-				<bar name='wonderbuild'   value=' 1.04s' width=' 104'>using one batch per lib</bar>
-				<bar name='waf'           value=' 1.90s' width=' 190'>using waf cpp</bar>
+				<bar name='wonderbuild'   value=' 1.04s' width=' 104'>1 batch/lib</bar>
+				<bar name='waf'           value=' 1.90s' width=' 190'>max 50 srcs/batch, waf cpp (same whether mv or not)</bar>
 				<bar-section>Not using batch compilation</bar-section>
 				<bar name='jam'           value=' 0.81s' width='  81'><span style='color: red'>missed header deps!</span></bar>
 				<bar name='toy makefiles' value=' 1.01s' width=' 101'/>
-				<bar name='wonderbuild'   value=' 1.21s' width=' 121'>using gcc deps</bar>
-				<bar name='wonderbuild'   value=' 1.29s' width=' 129'>using dump deps</bar>
-				<bar name='waf'           value=' 1.92s' width=' 192'>same with gcc deps and waf cpp</bar>
+				<bar name='wonderbuild'   value=' 1.21s' width=' 121'>gcc deps</bar>
+				<bar name='wonderbuild'   value=' 1.29s' width=' 129'>dump deps</bar>
+				<bar name='waf'           value=' 1.92s' width=' 192'>(same with gcc deps and waf cpp)</bar>
 				<bar name='autotools'     value=' 4.63s' width=' 463'/>
-				<bar name='scons'         value='24.37s' width='2437'/>
+				<bar name='scons'         value='24.37s' width='2437'><span style='color: red'>slow!</span></bar>
 			</bars>
 		</part>
 		<part caption='No-op rebuild'>
 			<bars>
 				<bar-section>Using batch compilation</bar-section>
-				<bar name='wonderbuild'   value=' 0.76s' width='  76'>using one batch per lib</bar>
-				<bar name='waf'           value=' 1.15s' width=' 115'>using waf cpp</bar>
+				<bar name='wonderbuild'   value=' 0.76s' width='  76'>1 batch/lib</bar>
+				<bar name='waf'           value=' 1.15s' width=' 115'>max 50 srcs/batch, waf cpp (same whether mv or not)</bar>
 				<bar-section>Not using batch compilation</bar-section>
 				<bar name='jam'           value=' 0.71s' width='  71'><span style='color: red'>missed header deps!</span></bar>
 				<bar name='toy makefiles' value=' 0.79s' width='  79'/>
-				<bar name='wonderbuild'   value=' 0.98s' width='  98'>using gcc deps</bar>
-				<bar name='wonderbuild'   value=' 1.05s' width=' 105'>using dumb deps</bar>
-				<bar name='waf'           value=' 1.20s' width=' 120'>same with gcc deps and waf cpp</bar>
+				<bar name='wonderbuild'   value=' 0.98s' width='  98'>gcc deps</bar>
+				<bar name='wonderbuild'   value=' 1.05s' width=' 105'>dumb deps</bar>
+				<bar name='waf'           value=' 1.20s' width=' 120'>(same with gcc deps and waf cpp)</bar>
 				<bar name='autotools'     value=' 2.05s' width=' 205'/>
-				<bar name='scons'         value='23.25s' width='2325'/>
+				<bar name='scons'         value='23.25s' width='2325'><span style='color: red'>slow!</span></bar>
 			</bars>
 		</part>
 	</part>
