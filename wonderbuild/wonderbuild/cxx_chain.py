@@ -430,8 +430,8 @@ class ModTask(Task):
 		for t in self.in_tasks:
 			if t.processed:
 				try: ld = t.cfg.ld
-				except AttributeError: continue # not a link task
-				if ld:
+				except AttributeError: continue # not a lib task
+				if not ld:
 					if __debug__ and is_debug: debug('task: in task changed: ' + str(self) + ' ' + str(t))
 					return True
 		if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
