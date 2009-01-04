@@ -429,7 +429,9 @@ class ModTask(Task):
 			return True
 		if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 		for t in self.in_tasks:
-			if t.processed: return True
+			if t.processed:
+				if __debug__ and is_debug: debug('task: in task changed: ' + str(self) + ' ' + str(t))
+				return True
 		return False
 
 	def process(self):
