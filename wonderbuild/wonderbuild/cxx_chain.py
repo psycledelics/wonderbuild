@@ -428,6 +428,8 @@ class ModTask(Task):
 			self._changed_sources = self.sources
 			return True
 		if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
+		for t in self.in_tasks:
+			if t.processed: return True
 		return False
 
 	def process(self):
