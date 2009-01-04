@@ -440,7 +440,9 @@ class ModTask(Task):
 	def process(self):
 		if not silent:
 			if not self.cfg.ld: desc = 'archiving and indexing static lib'; color = '7;36'
-			elif self.cfg.kind == 'prog': desc = 'linking program'; color = '7;1;32'
+			elif self.cfg.kind == 'prog':
+				if not self.cfg.pic: desc = 'linking non-pic program'; color = '7;32'
+				else: desc = 'linking pic program'; color = '7;1;32'
 			elif self.cfg.kind == 'loadable': desc = 'linking loadable module'; color = '7;1;34'
 			else: desc = 'linking shared lib'; color = '7;1;33'
 			self.print_desc(desc + ' ' + str(self), color)
