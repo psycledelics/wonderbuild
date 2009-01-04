@@ -48,7 +48,7 @@ main() {
 			then
 				jam clean
 			fi &&
-			time jam -j4 "$@"
+			time jam -j$jobs "$@"
 		;;
 
 		autotools)
