@@ -323,9 +323,8 @@ class CxxTask(Task):
 
 	def process(self):
 		lock = self.target_dir.lock
-		try:
-			lock.acquire()
-			self.target_dir.make_dir()
+		lock.acquire()
+		try: self.target_dir.make_dir()
 		finally: lock.release()
 		if not silent:
 			if self.cfg.pic: pic = 'pic'; color = '7;1;34'

@@ -15,18 +15,20 @@ class Project(object):
 		gc_enabled = gc.isenabled()
 		if gc_enabled: gc.disable()
 		try:
-			try: f = open(os.path.join(bld_path, 'state-and-cache'), 'rb')
-			except IOError: raise
-			else:
-				try:
-					if __debug__ and is_debug: t0 = time.time()
-					self.state_and_cache = cPickle.load(f)
-					if __debug__ and is_debug: debug('project: pickle: load time: ' + str(time.time() - t0) + ' s')
-				except Exception, e:
-					print >> sys.stderr, 'could not load pickle:', e
-					raise
-				finally: f.close()
-		except: self.state_and_cache = {}
+			try:
+				try: f = open(os.path.join(bld_path, 'state-and-cache'), 'rb')
+				except IOError: raise
+				else:
+					try:
+						try:
+							if __debug__ and is_debug: t0 = time.time()
+							self.state_and_cache = cPickle.load(f)
+							if __debug__ and is_debug: debug('project: pickle: load time: ' + str(time.time() - t0) + ' s')
+						except Exception, e:
+							print >> sys.stderr, 'could not load pickle:', e
+							raise
+					finally: f.close()
+			except: self.state_and_cache = {}
 		finally:
 			if gc_enabled: gc.enable()
 

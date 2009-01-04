@@ -108,48 +108,49 @@ class Scheduler(object):
 		if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': started')
 		self._condition.acquire()
 		try:
-			while True:
-				while (not self._joining or self._todo_count != 0) and not self._stop_requested and len(self._task_queue) == 0:
-					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': waiting')
-					self._condition.wait(timeout = self.timeout)
-					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': notified ' + str(self._joining) + ' ' + str(self._todo_count) + '-' + str(self._running_count) + '/' + str(self._task_count) + ' ' + str(self._stop_requested))
-				if self._joining and self._todo_count == 0 or self._stop_requested: break
-				task = self._task_queue.pop()
-				if not task.dyn_in_tasks_called:
-					dyn_in_tasks = task.dyn_in_tasks(self._context)
-					task.dyn_in_tasks_called = True
-					if dyn_in_tasks is not None and len(dyn_in_tasks) != 0:
-						self._task_queue += dyn_in_tasks
-						notify = len(dyn_in_tasks)
-						self._todo_count += notify
-						self._task_count += notify
-						if notify > 1: self._condition.notify(notify - 1)
-						continue
-				self._running_count += 1
-				if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': process ' + self.progress() + ' ' + str(task))
-				process = task.need_process()
-				if process:
-					self._condition.release()
-					try: task.process()
-					finally: self._condition.acquire()
-				self._todo_count -= 1
-				if no_silent_progress and process: print colored('7', 'wonderbuild: progress: ' + self.progress())
-				self._running_count -= 1
-				if self._todo_count == 0 and self._joining:
-					self._condition.notifyAll()
-					break
-				notify = -1
-				for out_task in task.out_tasks:
-					out_task.in_tasks_visited += 1
-					if out_task.in_tasks_visited == len(out_task.in_tasks):
-						self._task_queue.append(out_task)
-						notify += 1
-				if notify > 0: self._condition.notify(notify)
-		except Exception, e:
-			self.exception = e
-			self._stop_requested = True
-			self._condition.notifyAll()
-			raise
+			try:
+				while True:
+					while (not self._joining or self._todo_count != 0) and not self._stop_requested and len(self._task_queue) == 0:
+						if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': waiting')
+						self._condition.wait(timeout = self.timeout)
+						if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': notified ' + str(self._joining) + ' ' + str(self._todo_count) + '-' + str(self._running_count) + '/' + str(self._task_count) + ' ' + str(self._stop_requested))
+					if self._joining and self._todo_count == 0 or self._stop_requested: break
+					task = self._task_queue.pop()
+					if not task.dyn_in_tasks_called:
+						dyn_in_tasks = task.dyn_in_tasks(self._context)
+						task.dyn_in_tasks_called = True
+						if dyn_in_tasks is not None and len(dyn_in_tasks) != 0:
+							self._task_queue += dyn_in_tasks
+							notify = len(dyn_in_tasks)
+							self._todo_count += notify
+							self._task_count += notify
+							if notify > 1: self._condition.notify(notify - 1)
+							continue
+					self._running_count += 1
+					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': process ' + self.progress() + ' ' + str(task))
+					process = task.need_process()
+					if process:
+						self._condition.release()
+						try: task.process()
+						finally: self._condition.acquire()
+					self._todo_count -= 1
+					if no_silent_progress and process: print colored('7', 'wonderbuild: progress: ' + self.progress())
+					self._running_count -= 1
+					if self._todo_count == 0 and self._joining:
+						self._condition.notifyAll()
+						break
+					notify = -1
+					for out_task in task.out_tasks:
+						out_task.in_tasks_visited += 1
+						if out_task.in_tasks_visited == len(out_task.in_tasks):
+							self._task_queue.append(out_task)
+							notify += 1
+					if notify > 0: self._condition.notify(notify)
+			except Exception, e:
+				self.exception = e
+				self._stop_requested = True
+				self._condition.notifyAll()
+				raise
 		finally:
 			if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': terminated')
 			self._condition.release()

@@ -297,6 +297,10 @@ class Node(object):
 		if True: path = '  |' * tabs + '- ' + self.name
 		else: path = self.abs_path
 		
+		# python 2.5
+		#if cache: time = '?' if self._old_time is None else self._old_time
+		#else: time = '?' if self._time is None else self._time
+
 		if cache: time = self._old_time is None and '?' or self._old_time
 		else: time = self._time is None and '?' or self._time
 		
