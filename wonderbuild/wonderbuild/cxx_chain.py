@@ -410,8 +410,7 @@ class ModTask(Task):
 			i = 0
 			for s in changed_sources:
 				batches[i].append(s)
-				i += 1
-				if i == sched_context.thread_count: i = 0
+				i = (i + 1) % sched_context.thread_count
 			for b in batches:
 				if len(b) == 0: break
 				t = CxxTask(self)
