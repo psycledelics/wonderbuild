@@ -432,6 +432,9 @@ class ModTask(Task):
 				if not ld:
 					if __debug__ and is_debug: debug('task: in task changed: ' + str(self) + ' ' + str(t))
 					return True
+		if not self.impl.mod_task_target(self).exists:
+			if __debug__ and is_debug: debug('task: target removed: ' + str(self))
+			return True
 		if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 		return False
 
