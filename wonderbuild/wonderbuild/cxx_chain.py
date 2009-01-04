@@ -413,7 +413,7 @@ class ModTask(Task):
 				i += 1
 				if i == sched_context.thread_count: i = 0
 			for b in batches:
-				if len(b) == 0: continue
+				if len(b) == 0: break
 				t = CxxTask(self)
 				t.sources = b
 				self.add_in_task(t)
@@ -442,7 +442,7 @@ class ModTask(Task):
 		objs_paths = []
 		for s in sources:
 			node = self._unique_base_name_node(s)
-			path = node.path[:node.path.rfind('.')] + '.o'
+			path = node.path[:node.path.rfind('.')] + '.o' #XXX move to impl because it's .obj for msvc
 			objs_paths.append(path)
 		self.impl.process_mod_task(self, objs_paths)
 		implicit_deps = self.project.task_states[self.uid][2]
