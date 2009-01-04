@@ -40,7 +40,7 @@ class Task(object):
 		out.flush()
 
 def exec_subprocess(args, env = None, cwd = None):
-	if __debug__ and is_debug: debug('exec: ' + str(args) + ' ' + str(cwd) + ' ' + str(env))
+	if __debug__ and is_debug: debug('exec: ' + str(cwd) + ' ' + str(env) + ' ' + str(args))
 	return subprocess.call(
 		args = args,
 		bufsize = -1,
@@ -51,7 +51,7 @@ def exec_subprocess(args, env = None, cwd = None):
 	)
 
 def exec_subprocess_pipe(args, env = None, cwd = None, silent = False):
-	if __debug__ and is_debug: debug('exec: pipe: ' + str(args) + ' ' + str(cwd) + ' ' + str(env))
+	if __debug__ and is_debug: debug('exec: pipe: ' + str(cwd) + ' ' + str(env) + ' ' + str(args))
 	p = subprocess.Popen(
 		args = args,
 		bufsize = -1,
