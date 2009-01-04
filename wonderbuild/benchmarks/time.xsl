@@ -187,24 +187,37 @@
 	</xsl:template>
 
 	<xsl:template match='bars'>
+		<xsl:param name='scale'>
+			<xsl:choose>
+				<xsl:when test='@scale != ""'><xsl:value-of select='@scale'/></xsl:when>
+				<xsl:otherwise>1</xsl:otherwise>
+			</xsl:choose>
+		</xsl:param>
 		<table class='bar'>
-			<xsl:apply-templates/>
+			<xsl:apply-templates>
+				<xsl:with-param name='scale'>
+					<xsl:value-of select='$scale'/>
+				</xsl:with-param>
+			</xsl:apply-templates>
 		</table>
 	</xsl:template>
 	
 	<xsl:template match='bar-section'>
 		<tr class='bar-section'>
-			<td class='bar-section' colspan='7'><xsl:apply-templates/></td>
+			<td class='bar-section' colspan='7'>
+				<xsl:apply-templates/>
+			</td>
 		</tr>
 	</xsl:template>
 
 	<xsl:template match='bar'>
+		<xsl:param name='scale'/>
 		<tr>
 			<td align='right'><xsl:value-of select='@name'/></td>
 			<td>&#160;</td>
-			<td align='right'><xsl:value-of select='@value'/></td>
+			<td align='right'><xsl:value-of select='@value'/>s</td>
 			<xsl:choose>
-				<xsl:when test='@width > 10000'>
+				<xsl:when test='@value * $scale > 10000'>
 					<td>
 						<div class='bar' style='width: 9500px'>
 							&#160;
@@ -217,7 +230,7 @@
 				<xsl:otherwise>
 					<td colspan='3'>
 						<div class='bar'>
-							<xsl:attribute name='style'>width: <xsl:value-of select='@width'/>px</xsl:attribute>
+							<xsl:attribute name='style'>width: <xsl:number value='@value * $scale'/>px</xsl:attribute>
 							&#160;
 							<span class='bar-note'><xsl:apply-templates/></span>
 						</div>

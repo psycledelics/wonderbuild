@@ -4,141 +4,151 @@
 	<part caption='Results'>
 		<part caption='Results on a fast machine'>
 			All tests were run with 4 jobs on the same quad core system,
-			ext2 filesystem on lvm/dmraid0 device, linux, gcc's C++ compiler.
+			ext2 filesystem on lvm/dmraid0 device, linux 2.6.24, gcc's C++ compiler.
+			<part caption='Tool versions'>
+				<ul>
+					<li>Scons version was 1.2.0</li>
+					<li>Waf version was somewhere after 1.5.2 (svn rev 5345)</li>
+					<li>Jam version was 2.5</li>
+					<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
+					<li>Make version was gnu make 3.81</li>
+					<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
+				</ul>
+			</part>
 			<part caption='Initial full build'>
-				<bars>
+				<bars scale='5'>
 					<bar-section>Using batch compilation</bar-section>
-					<bar name='wonderbuild'   value=' 28.2s' width=' 282'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
-					<bar name='waf'           value=' 38.2s' width=' 382'>max 50 srcs/batch, waf cpp, shutil</bar>
-					<bar name='waf'           value=' 39.7s' width=' 397'>max 50 srcs/batch, waf cpp, mv</bar>
+					<bar name='wonderbuild'   value=' 28.2'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
+					<bar name='waf'           value=' 38.2'>max 50 srcs/batch, waf cpp, shutil</bar>
+					<bar name='waf'           value=' 39.7'>max 50 srcs/batch, waf cpp, mv</bar>
 					<bar-section>Not using batch compilation</bar-section>
-					<bar name='toy makefiles' value=' 34.1s' width=' 341'>(recursive)</bar>
-					<bar name='jam'           value=' 35.6s' width=' 356'><span style='color: red'>missed header deps!</span></bar>
-					<bar name='wonderbuild'   value=' 35.8s' width=' 358'>gcc deps</bar>
-					<bar name='wonderbuild'   value=' 38.5s' width=' 385'>dumb deps</bar>
-					<bar name='waf'           value=' 43.4s' width=' 434'>gcc deps</bar>
-					<bar name='waf'           value=' 46.1s' width=' 461'>waf cpp</bar>
-					<bar name='scons'         value='131.0s' width='1310'/>
-					<bar name='autotools'     value='188.0s' width='1880'>(non recursive)</bar>
+					<bar name='toy makefiles' value=' 34.1'>(recursive)</bar>
+					<bar name='jam'           value=' 35.6'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='wonderbuild'   value=' 35.8'>gcc deps</bar>
+					<bar name='wonderbuild'   value=' 38.5'>dumb deps</bar>
+					<bar name='waf'           value=' 43.4'>gcc deps</bar>
+					<bar name='waf'           value=' 46.1'>waf cpp</bar>
+					<bar name='scons'         value='131.0'/>
+					<bar name='autotools'     value='188.0'>(non recursive)</bar>
 				</bars>
 			</part>
 			<part caption='Big partial rebuild'>
 				After touch lib_17/*.hpp => rebuild of 585 object files from c++ and 33 static libs
 				<br/><br/>
-				<bars>
+				<bars scale='20'>
 					<bar-section>Using batch compilation</bar-section>
-					<bar name='wonderbuild'   value=' 4.13s' width=' 413'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
-					<bar name='waf'           value=' 6.42s' width=' 642'>max 50 srcs/batch, waf cpp, shutil</bar>
-					<bar name='waf'           value=' 6.64s' width=' 664'>max 50 srcs/batch, waf cpp, mv</bar>
+					<bar name='wonderbuild'   value=' 4.13'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
+					<bar name='waf'           value=' 6.42'>max 50 srcs/batch, waf cpp, shutil</bar>
+					<bar name='waf'           value=' 6.64'>max 50 srcs/batch, waf cpp, mv</bar>
 					<bar-section>Not using batch compilation</bar-section>
-					<bar name='jam'           value=' 4.25s' width=' 425'><span style='color: red'>missed header deps!</span></bar>
-					<bar name='toy makefiles' value=' 4.81s' width=' 481'>(recursive)</bar>
-					<bar name='wonderbuild'   value=' 5.21s' width=' 521'>gcc deps</bar>
-					<bar name='wonderbuild'   value=' 5.56s' width=' 556'>dumb deps</bar>
-					<bar name='waf'           value=' 6.75s' width=' 675'>gcc deps</bar>
-					<bar name='waf'           value=' 6.89s' width=' 689'>waf cpp</bar>
-					<bar name='autotools'     value='29.64s' width='2964'>(non recursive)</bar>
-					<bar name='scons'         value='39.58s' width='3958'/>
+					<bar name='jam'           value=' 4.25'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='toy makefiles' value=' 4.81'>(recursive)</bar>
+					<bar name='wonderbuild'   value=' 5.21'>gcc deps</bar>
+					<bar name='wonderbuild'   value=' 5.56'>dumb deps</bar>
+					<bar name='waf'           value=' 6.75'>gcc deps</bar>
+					<bar name='waf'           value=' 6.89'>waf cpp</bar>
+					<bar name='autotools'     value='29.64'>(non recursive)</bar>
+					<bar name='scons'         value='39.58'/>
 				</bars>
 			</part>
 			<part caption='Small partial rebuild'>
 				After touch lib_17/class_17.hpp => rebuild of 26 object files from c++ and 8 static libs
 				<br/><br/>
-				<bars>
+				<bars scale='60'>
 					<bar-section>Using batch compilation</bar-section>
-					<bar name='wonderbuild'   value=' 1.04s' width=' 104'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
-					<bar name='waf'           value=' 1.90s' width=' 190'>max 50 srcs/batch, waf cpp (same with shutil or mv)</bar>
+					<bar name='wonderbuild'   value=' 1.04'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
+					<bar name='waf'           value=' 1.90'>max 50 srcs/batch, waf cpp (same with shutil or mv)</bar>
 					<bar-section>Not using batch compilation</bar-section>
-					<bar name='jam'           value=' 0.81s' width='  81'><span style='color: red'>missed header deps!</span></bar>
-					<bar name='toy makefiles' value=' 1.01s' width=' 101'>(recursive)</bar>
-					<bar name='wonderbuild'   value=' 1.21s' width=' 121'>gcc deps</bar>
-					<bar name='wonderbuild'   value=' 1.29s' width=' 129'>dump deps</bar>
-					<bar name='waf'           value=' 1.92s' width=' 192'>(same with gcc deps and waf cpp)</bar>
-					<bar name='autotools'     value=' 4.63s' width=' 463'>(non recursive)</bar>
-					<bar name='scons'         value='24.37s' width='2437'/>
+					<bar name='jam'           value=' 0.81'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='toy makefiles' value=' 1.01'>(recursive)</bar>
+					<bar name='wonderbuild'   value=' 1.21'>gcc deps</bar>
+					<bar name='wonderbuild'   value=' 1.29'>dump deps</bar>
+					<bar name='waf'           value=' 1.92'>(same with gcc deps and waf cpp)</bar>
+					<bar name='autotools'     value=' 4.63'>(non recursive)</bar>
+					<bar name='scons'         value='24.37'/>
 				</bars>
 			</part>
 			<part caption='No-op rebuild'>
-				<bars>
+				<bars scale='60'>
 					<bar-section>Using batch compilation</bar-section>
-					<bar name='wonderbuild'   value=' 0.76s' width='  76'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
-					<bar name='waf'           value=' 1.15s' width=' 115'>max 50 srcs/batch, waf cpp (same with shutil or mv)</bar>
+					<bar name='wonderbuild'   value=' 0.76'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
+					<bar name='waf'           value=' 1.15'>max 50 srcs/batch, waf cpp (same with shutil or mv)</bar>
 					<bar-section>Not using batch compilation</bar-section>
-					<bar name='jam'           value=' 0.71s' width='  71'><span style='color: red'>missed header deps!</span></bar>
-					<bar name='toy makefiles' value=' 0.79s' width='  79'>(recursive)</bar>
-					<bar name='wonderbuild'   value=' 0.98s' width='  98'>gcc deps</bar>
-					<bar name='wonderbuild'   value=' 1.05s' width=' 105'>dumb deps</bar>
-					<bar name='waf'           value=' 1.20s' width=' 120'>(same with gcc deps and waf cpp)</bar>
-					<bar name='autotools'     value=' 2.05s' width=' 205'>(non recursive)</bar>
-					<bar name='scons'         value='23.25s' width='2325'/>
+					<bar name='jam'           value=' 0.71'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='toy makefiles' value=' 0.79'>(recursive)</bar>
+					<bar name='wonderbuild'   value=' 0.98'>gcc deps</bar>
+					<bar name='wonderbuild'   value=' 1.05'>dumb deps</bar>
+					<bar name='waf'           value=' 1.20'>(same with gcc deps and waf cpp)</bar>
+					<bar name='autotools'     value=' 2.05'>(non recursive)</bar>
+					<bar name='scons'         value='23.25'/>
 				</bars>
 			</part>
 		</part>
 		<part caption='Results on a slower machine'>
-			All tests were run with 1 job on the same system, linux, gcc's C++ compiler.
+			All tests were run with 1 job on the same system, linux 2.6.24, gcc's C++ compiler.
+			<part caption='Tool versions'>
+				<ul>
+					<li>Scons version was 1.2.0</li>
+					<li>Waf version was somewhere after 1.5.2 (svn rev 5345)</li>
+					<li>Jam version was 2.5</li>
+					<li>Autotools versions were autoconf 2.61, automake 1.10, libtool 1.5.22</li>
+					<li>Make version was gnu make 3.81</li>
+					<li>Compiler tool chain versions were gcc 4.1.2, binutils 2.17</li>
+				</ul>
+			</part>
 			<part caption='Initial full build'>
 				<bars>
 					<bar-section>Using batch compilation</bar-section>
-					<bar name='wonderbuild'   value=' 171s' width=' 171'>gcc deps</bar>
+					<bar name='wonderbuild'   value=' 171'>gcc deps</bar>
 					<bar-section>Not using batch compilation</bar-section>
-					<bar name='jam'           value=' todo' width='   0'><span style='color: red'>missed header deps!</span></bar>
-					<bar name='toy makefiles' value=' 189s' width=' 189'>(recursive)</bar>
-					<bar name='waf'           value=' 251s' width=' 251'>waf cpp</bar>
-					<bar name='autotools'     value=' todo' width='   0'>(non recursive)</bar>
-					<bar name='scons'         value=' todo' width='   0'/>
+					<bar name='jam'           value='   0'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='toy makefiles' value=' 189'>(recursive)</bar>
+					<bar name='waf'           value=' 251'>waf cpp</bar>
+					<bar name='autotools'     value='   0'>(non recursive)</bar>
+					<bar name='scons'         value=' 445'/>
 				</bars>
 			</part>
 			<part caption='Big partial rebuild'>
 				After touch lib_17/*.hpp => rebuild of 585 object files from c++ and 33 static libs
 				<br/><br/>
-				<bars>
+				<bars scale='5'>
 					<bar-section>Using batch compilation</bar-section>
-					<bar name='wonderbuild'   value=' 23.2s' width=' 232'>gcc deps</bar>
+					<bar name='wonderbuild'   value=' 23.2'>gcc deps</bar>
 					<bar-section>Not using batch compilation</bar-section>
-					<bar name='jam'           value='  todo' width='   0'><span style='color: red'>missed header deps!</span></bar>
-					<bar name='toy makefiles' value=' 24.4s' width=' 244'>(recursive)</bar>
-					<bar name='waf'           value=' 36.2s' width=' 362'>waf cpp</bar>
-					<bar name='autotools'     value='  todo' width='   0'>(non recursive)</bar>
-					<bar name='scons'         value='  todo' width='   0'/>
+					<bar name='jam'           value='    0'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='toy makefiles' value=' 24.4'>(recursive)</bar>
+					<bar name='waf'           value=' 36.2'>waf cpp</bar>
+					<bar name='autotools'     value='    0'>(non recursive)</bar>
+					<bar name='scons'         value='122.8'/>
 				</bars>
 			</part>
 			<part caption='Small partial rebuild'>
 				After touch lib_17/class_17.hpp => rebuild of 26 object files from c++ and 8 static libs
 				<br/><br/>
-				<bars>
+				<bars scale='20'>
 					<bar-section>Using batch compilation</bar-section>
-					<bar name='wonderbuild'   value=' 3.65s' width=' 365'>gcc deps</bar>
+					<bar name='wonderbuild'   value=' 3.65'>gcc deps</bar>
 					<bar-section>Not using batch compilation</bar-section>
-					<bar name='jam'           value='  todo' width='   0'><span style='color: red'>missed header deps!</span></bar>
-					<bar name='toy makefiles' value=' 3.33s' width=' 333'>(recursive)</bar>
-					<bar name='waf'           value=' 6.22s' width=' 622'>waf cpp</bar>
-					<bar name='autotools'     value='  todo' width='   0'>(non recursive)</bar>
-					<bar name='scons'         value='  todo' width='   0'/>
+					<bar name='jam'           value='    0'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='toy makefiles' value=' 3.33'>(recursive)</bar>
+					<bar name='waf'           value=' 6.22'>waf cpp</bar>
+					<bar name='autotools'     value='    0'>(non recursive)</bar>
+					<bar name='scons'         value=' 77.1'/>
 				</bars>
 			</part>
 			<part caption='No-op rebuild'>
-				<bars>
+				<bars scale='20'>
 					<bar-section>Using batch compilation</bar-section>
-					<bar name='wonderbuild'   value=' 2.45s' width=' 245'>gcc deps</bar>
+					<bar name='wonderbuild'   value=' 2.45'>gcc deps</bar>
 					<bar-section>Not using batch compilation</bar-section>
-					<bar name='jam'           value='  todo' width='   0'><span style='color: red'>missed header deps!</span></bar>
-					<bar name='toy makefiles' value=' 2.25s' width=' 225'>(recursive)</bar>
-					<bar name='waf'           value=' 3.12s' width=' 312'>waf cpp</bar>
-					<bar name='autotools'     value='  todo' width='   0'>(non recursive)</bar>
-					<bar name='scons'         value='  todo' width='   0'/>
+					<bar name='jam'           value='    0'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='toy makefiles' value=' 2.25'>(recursive)</bar>
+					<bar name='waf'           value=' 3.12'>waf cpp</bar>
+					<bar name='autotools'     value='    0'>(non recursive)</bar>
+					<bar name='scons'         value='73.12'/>
 				</bars>
 			</part>
 		</part>
-	</part>
-	<part caption='Tool versions'>
-		<ul>
-			<li>Scons version was 1.2.0</li>
-			<li>Waf version was somewhere after 1.5.2 (svn rev 5345)</li>
-			<li>Jam version was 2.5</li>
-			<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
-			<li>Make version was GNU make 3.81</li>
-			<li>Tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
-		</ul>
 	</part>
 	<part caption='Configuration details'>
 		The benchmarks were generated with this <a href='gen-bench'/> script.
