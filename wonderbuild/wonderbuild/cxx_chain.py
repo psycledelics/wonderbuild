@@ -427,11 +427,11 @@ class ModTask(Task):
 			if __debug__ and is_debug: debug('task: mod sig changed: ' + str(self))
 			self._changed_sources = self.sources
 			return True
-		if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 		for t in self.in_tasks:
 			if t.processed:
 				if __debug__ and is_debug: debug('task: in task changed: ' + str(self) + ' ' + str(t))
 				return True
+		if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 		return False
 
 	def process(self):
