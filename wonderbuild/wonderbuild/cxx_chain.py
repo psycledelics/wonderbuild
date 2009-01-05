@@ -401,10 +401,12 @@ class ModTask(Task):
 						if __debug__ and is_debug: debug('cpp: deps changed: ' + str(s))
 						changed_sources.append(s)
 						continue
-					if self.user_cfg.check_missing and not self.target_dir.node_path(self._obj_name(s)).exists:
-						if __debug__ and is_debug: debug('task: target removed: ' + str(s))
-						changed_sources.append(s)
-						continue
+					if self.user_cfg.check_missing:
+						o = self.target_dir.node_path(self._obj_name(s))
+						if not o.exists:
+							if __debug__ and is_debug: debug('task: target removed: ' + str(o))
+							changed_sources.append(s)
+							continue
 					if __debug__ and is_debug: debug('task: skip: no change: ' + str(s))
 		if len(changed_sources) != 0:
 			batches = []
@@ -422,6 +424,10 @@ class ModTask(Task):
 		return self.in_tasks
 
 	def need_process(self):
+		if self.user_cfg.check_missing and not self.target.exists:
+			if __debug__ and is_debug: debug('task: target removed: ' + str(self))
+			self._changed_sources = self.sources
+			return True
 		if len(self._changed_sources) != 0: return True
 		state = self.project.task_states[self.uid]
 		if state[0] != self.cfg.mod_sig:
@@ -435,10 +441,6 @@ class ModTask(Task):
 				if not ld:
 					if __debug__ and is_debug: debug('task: in task changed: ' + str(self) + ' ' + str(t))
 					return True
-		if self.user_cfg.check_missing and not self.target.exists:
-			if __debug__ and is_debug: debug('task: target removed: ' + str(self))
-			self._changed_sources = self.sources
-			return True
 		if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 		return False
 
