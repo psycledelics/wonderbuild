@@ -47,26 +47,22 @@ class Impl(object):
 		if r != 0: raise Exception, r
 		implicit_deps = cxx_task.project.task_states[cxx_task.uid][2]
 		for s in zip(cxx_task.sources, cxx_task._actual_sources):
-			deps = Impl._read_dep_file(s[1], cxx_task.target_dir)
+			# reads deps from the .d files generated as side-effect of compilation by gcc's -MD or -MMD option
+			path = s[1].path
+			f = open(path[:path.rfind('.')] + '.d', 'rb')
+			try: deps = f.read().replace('\\\n', '')
+			finally: f.close()
+			target_dir = cxx_task.target_dir
+			# note: we skip the first implicit dep, which is the dummy actual source
+			deps = [target_dir.node_path(d) for d in deps[deps.find(':') + 1:].split()[1:]]
+			if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
 			sigs = [d.sig for d in deps]
 			sigs.sort()
-			sig = Sig(''.join(sigs))
-			implicit_deps[s[0]] = sig.digest(), deps
+			implicit_deps[s[0]] = Sig(''.join(sigs)).digest(), deps
 
-	@staticmethod
-	def _read_dep_file(target, dep_rel):
-		'''reads deps from a .d file generated as side-effect of compilation by gcc's -MD or -MMD option'''
-		path = target.path[:target.path.rfind('.')] + '.d'
-		f = open(path, 'rb')
-		try: deps = f.read()
-		finally: f.close()
-		deps = deps.replace('\\\n', '')
-		deps = deps[deps.find(':') + 1:].split()
-		deps = deps[1:] # skip the first implicit deps, which is the dummy actual source
-		deps = [dep_rel.node_path(dep) for dep in deps]
-		if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
-		return deps
-
+	@property
+	def cxx_task_target_ext(self): return '.o'
+		
 	@property
 	def ld_prog(self): return 'g++' #XXX make it same as user_cfg.cxx_prog
 	
@@ -113,17 +109,19 @@ class Impl(object):
 		if __debug__ and is_debug: debug('cfg: cxx: dev: impl: gcc: ld: ' + str(args))
 	
 	@staticmethod
-	def process_mod_task(mod_task, objs_paths):
+	def process_mod_task(mod_task, obj_names):
+		path = mod_task.target_dir.path
+		obj_paths = [os.path.join(path, o) for o in obj_names]
 		if mod_task.cfg.ld:
 			args = mod_task.cfg.mod_args[:]
-			args = [args[0], '-o', mod_task.target.path] + objs_paths + args[1:]
+			args = [args[0], '-o', mod_task.target.path] + obj_paths + args[1:]
 			r = exec_subprocess(args)
 			if r != 0: raise Exception, r
 		else:
 			ar_args, ranlib_args = mod_task.cfg.mod_args
 			args = ar_args[:]
 			args.append(mod_task.target.path)
-			args += objs_paths
+			args += obj_paths
 			r = exec_subprocess(args)
 			if r != 0: raise Exception, r
 			if 's' not in mod_task.user_cfg.ar_flags:
@@ -133,9 +131,8 @@ class Impl(object):
 				if r != 0: raise Exception, r
 
 	@staticmethod
-	def mod_task_target(mod_task):
-		dir = mod_task.project.bld_node.node_path('modules').node_path(mod_task.name)
+	def mod_task_target_name(mod_task):
 		if mod_task.cfg.kind == 'prog': name = mod_task.name
 		elif mod_task.cfg.shared: name = 'lib' + mod_task.name + '.so'
 		else: name = 'lib' + mod_task.name + '.a'
-		return dir.node_path(name)
+		return name

@@ -37,7 +37,7 @@ if __debug__ and is_debug: all_abs_paths = set()
 class Node(object):
 	__slots__ = (
 		'parent', 'name', '_is_dir', '_children', '_actual_children', '_old_children', '_old_time', '_time', '_sig',
-		'_path', '_abs_path', '_height', '_fs', '_exists', '_changed', '_lock'
+		'_path', '_abs_path', '_height', '_fs', '_exists', '_lock'
 	)
 
 	def __getstate__(self):
@@ -106,26 +106,9 @@ class Node(object):
 		return self._is_dir
 	
 	@property
-	def is_file(self): return not self.is_dir
-
-	@property
 	def time(self):
 		if self._time is None: self._do_stat()
 		return self._time
-
-	@property
-	def changed(self):
-		try: return self._changed
-		except AttributeError:
-			if self._old_time is None or self.time != self._old_time:
-				self._changed = True
-				return True
-			if self._is_dir:
-				for n in self.actual_children.itervalues():
-					if n.changed():
-						self._changed = True
-						return True
-			return False
 
 	def _deep_time(self):
 		time = self.time
@@ -209,7 +192,6 @@ class Node(object):
 					for node in node.find_iter(in_pat, ex_pat, prunes): yield node
 		raise StopIteration
 
-	#def node_path(self, *path):
 	def node_path(self, path): return self._node_path(path)
 	def _node_path(self, path, start = 0):
 		sep = path.find(os.sep, start)

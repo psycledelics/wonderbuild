@@ -13,41 +13,41 @@ from task import Task, exec_subprocess_pipe
 
 class UserCfg(Cfg):
 	_cxx_options = set([
-		'--cxx',
-		'--cxx-flags',
-		'--cxx-debug',
-		'--cxx-optim',
-		'--cxx-pic'
+		'--cxx=',
+		'--cxx-flags=',
+		'--cxx-debug=',
+		'--cxx-optim=',
+		'--cxx-pic='
 	])
 
 	_mod_options = set([
-		'--cxx-mod-shared',
-		'--cxx-mod-ld',
-		'--cxx-mod-ld-flags',
-		'--cxx-mod-ar',
-		'--cxx-mod-ar-flags',
-		'--cxx-mod-ranlib',
-		'--cxx-mod-ranlib-flags'
+		'--cxx-mod-shared=',
+		'--cxx-mod-ld=',
+		'--cxx-mod-ld-flags=',
+		'--cxx-mod-ar=',
+		'--cxx-mod-ranlib='
 	])
 	
-	_options = _cxx_options | _mod_options
-
+	_options = _cxx_options | _mod_options | set([
+		'--cxx-check-missing='
+	])
+	
 	def help(self):
-		help['--cxx-flags']            = ('--cxx-flags=[flags]', 'use specific c++ compiler flags')
-		help['--cxx-debug']            = ('--cxx-debug=<yes|no>', 'make the c++ compiler produce debugging information or not', 'no')
-		help['--cxx-optim']            = ('--cxx-optim=<level>', 'use c++ compiler optimisation <level>')
-		help['--cxx-pic']              = ('--cxx-pic=<yes|no>', 'make the c++ compiler emit pic code rather than non-pic code for static libs and programs (always pic for shared libs)', 'no (for static libs and programs)')
-		help['--cxx-mod-shared']       = ('--cxx-mod-shared=<yes|no>', 'build and link shared libs (rather than static libs)', 'yes unless pic is set explicitly to no')
-		help['--cxx-mod-ld']           = ('--cxx-mod-ld=<prog>', 'use <prog> as shared lib and program linker')
-		help['--cxx-mod-ld-flags']     = ('--cxx-mod-ld-flags=[flags]', 'use specific linker flags')
-		help['--cxx-mod-ar']           = ('--cxx-mod-ar=<prog>', 'use <prog> as static lib archiver', 'ar')
-		help['--cxx-mod-ar-flags']     = ('--cxx-mod-ar-flags=[flags]', 'use specific archiver flags', 'rc (rcs for gnu ar)')
-		help['--cxx-mod-ranlib']       = ('--cxx-mod-ranlib=<prog>', 'use <prog> as static lib archive indexer', 'ranlib (or via ar s flag for gnu ar)')
-		help['--cxx-mod-ranlib-flags'] = ('--cxx-mod-ranlib-flags=[flags]', 'use specific archive indexer flags')
+		help['--cxx=']                  = ('--cxx=<prog>', 'use <prog> as c++ compiler')
+		help['--cxx-flags=']            = ('--cxx-flags=[flags]', 'use specific c++ compiler flags')
+		help['--cxx-debug=']            = ('--cxx-debug=<yes|no>', 'make the c++ compiler produce debugging information or not', 'no')
+		help['--cxx-optim=']            = ('--cxx-optim=<level>', 'use c++ compiler optimisation <level>')
+		help['--cxx-pic=']              = ('--cxx-pic=<yes|no>', 'make the c++ compiler emit pic code rather than non-pic code for static libs and programs (always pic for shared libs)', 'no (for static libs and programs)')
+		help['--cxx-mod-shared=']       = ('--cxx-mod-shared=<yes|no>', 'build and link shared libs (rather than static libs)', 'yes unless pic is set explicitly to no')
+		help['--cxx-mod-ld=']           = ('--cxx-mod-ld=<prog>', 'use <prog> as shared lib and program linker')
+		help['--cxx-mod-ld-flags=']     = ('--cxx-mod-ld-flags=[flags]', 'use specific linker flags')
+		help['--cxx-mod-ar=']           = ('--cxx-mod-ar=<prog>', 'use <prog> as static lib archiver', 'ar')
+		help['--cxx-mod-ranlib=']       = ('--cxx-mod-ranlib=<prog>', 'use <prog> as static lib archive indexer', 'ranlib (or via ar s flag for gnu ar)')
+		help['--cxx-check-missing=']    = ('--cxx-check-missing=<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'no')
 	
 	def configure(self):
 		try:
-			old_sig, \
+			old_sig, self.check_missing, \
 			self.kind, self.version, \
 			self.cxx_prog, self.cxx_flags, self.pic, self.optim, self.debug, \
 			self.shared, self.ld_prog, self.ld_flags, \
@@ -60,8 +60,8 @@ class UserCfg(Cfg):
 		if parse:
 			if __debug__ and is_debug: debug('cfg: cxx: user: parsing options')
 			self.shared = self.pic = self.optim = None
-			self.debug = False
-			cxx_prog = cxx_flags = ld_prog = ld_flags = ar_prog = ar_flags = ranlib_prog = ranlib_flags = False
+			self.debug = self.check_missing = False
+			cxx_prog = cxx_flags = ld_prog = ld_flags = ar_prog = ranlib_prog = False
 			for o in options:
 				if o.startswith('--cxx='): self.cxx_prog = o[len('--cxx='):]; cxx_prog = True
 				elif o.startswith('--cxx-flags='): self.cxx_flags = o[len('--cxx-flags='):].split(); cxx_flags = True
@@ -72,9 +72,8 @@ class UserCfg(Cfg):
 				elif o.startswith('--cxx-mod-ld='): self.ld_prog = o[len('--cxx-mod-ld='):]; ld = True
 				elif o.startswith('--cxx-mod-ld-flags='): self.ld_flags = o[len('--cxx-mod-ld-flags='):].split(); ld_flags = True
 				elif o.startswith('--cxx-mod-ar='): self.ar_prog = o[len('--cxx-mod-ar='):]; ar_prog = True
-				elif o.startswith('--cxx-mod-ar-flags='): self.ar_flags = o[len('--cxx-mod-ar-flags='):].split(); ar_flags = True
 				elif o.startswith('--cxx-mod-ranlib='): self.ranlib_prog = o[len('--cxx-mod-ranlib='):]; ranlib_prog = True
-				elif o.startswith('--cxx-mod-ranlib-flags='): self.ranlib_flags = o[len('--cxx-mod-ranlib-flags='):].split(); ranlib_flags = True
+				elif o.startswith('--cxx-check-missing='): self.check_missing = o[len('--cxx-check-missing='):]  == 'yes'
 			if self.pic is None:
 				if self.shared is None: self.shared = True
 				self.pic = False
@@ -95,7 +94,7 @@ class UserCfg(Cfg):
 				ld_prog = True
 				import gcc
 				self.impl = gcc.Impl()
-			self.print_result_desc(self.kind + ' version ' + self.version + '\n', '32')
+			self.print_result_desc(str(self.kind) + ' version ' + str(self.version) + '\n', '32')
 
 			if not cxx_flags:
 				flags = os.environ.get('CXXFLAGS', None)
@@ -109,17 +108,14 @@ class UserCfg(Cfg):
 				else: self.ld_flags = []
 
 			if not ar_prog: self.ar_prog = self.impl.ar_prog
-			if not ar_flags:
-				self.ar_flags = os.environ.get('ARFLAGS', None)
-				if self.ar_flags is None:
-					self.ar_flags = 'rc'
-					if self.kind == 'gcc': self.ar_flags += 's'
+			self.ar_flags = 'rc'
+			if self.kind == 'gcc': self.ar_flags += 's'
 				
 			if not ranlib_prog: self.ranlib_prog = self.impl.ranlib_prog
-			if not ranlib_flags: self.ranlib_flags = os.environ.get('RANLIBFLAGS', None)
+			self.ranlib_flags = None
 			
 			self.project.state_and_cache[self.__class__.__name__] = \
-				self.sig, \
+				self.sig, self.check_missing, \
 				self.kind, self.version, \
 				self.cxx_prog, self.cxx_flags, self.pic, self.optim, self.debug, \
 				self.shared, self.ld_prog, self.ld_flags, \
@@ -331,9 +327,9 @@ class CxxTask(Task):
 			else: pic = 'non-pic'; color = '7;34'
 			self.print_desc('batch-compiling ' + pic + ' objects from c++ ' + str(self), color)
 		self._actual_sources = []
+		self.target_dir.actual_children # not needed, just an optimisation
 		for s in self.sources:
-			node = self.mod_task._unique_base_name_node(s)
-			node.parent.actual_children
+			node = self.target_dir.node_path(self.mod_task._unique_base_name(s))
 			if not node.exists:
 				f = open(node.path, 'wb')
 				try: f.write('#include "%s"\n' % s.rel_path(self.target_dir))
@@ -358,14 +354,17 @@ class ModTask(Task):
 	def __str__(self): return str(self.target)
 
 	@property
-	def uid(self): return self.target
+	def uid(self): return self.name
 
 	@property
 	def target(self):
 		try: return self._target
 		except AttributeError:
-			target = self._target = self.impl.mod_task_target(self)
-			return target
+			self._target = self.project.bld_node.\
+				node_path('modules').\
+				node_path(self.name).\
+				node_path(self.impl.mod_task_target_name(self))
+			return self._target
 
 	@property
 	def target_dir(self): return self.target.parent
@@ -402,6 +401,10 @@ class ModTask(Task):
 						if __debug__ and is_debug: debug('cpp: deps changed: ' + str(s))
 						changed_sources.append(s)
 						continue
+					if self.user_cfg.check_missing and not self.target_dir.node_path(self._obj_name(s)).exists:
+						if __debug__ and is_debug: debug('task: target removed: ' + str(s))
+						changed_sources.append(s)
+						continue
 					if __debug__ and is_debug: debug('task: skip: no change: ' + str(s))
 		if len(changed_sources) != 0:
 			batches = []
@@ -432,7 +435,7 @@ class ModTask(Task):
 				if not ld:
 					if __debug__ and is_debug: debug('task: in task changed: ' + str(self) + ' ' + str(t))
 					return True
-		if not self.impl.mod_task_target(self).exists:
+		if self.user_cfg.check_missing and not self.target.exists:
 			if __debug__ and is_debug: debug('task: target removed: ' + str(self))
 			self._changed_sources = self.sources
 			return True
@@ -450,12 +453,7 @@ class ModTask(Task):
 			self.print_desc(desc + ' ' + str(self), color)
 		if self.cfg.ld: sources = self.sources
 		else: sources = self._changed_sources
-		objs_paths = []
-		for s in sources:
-			node = self._unique_base_name_node(s)
-			path = node.path[:node.path.rfind('.')] + '.o' #XXX move to impl because it's .obj for msvc
-			objs_paths.append(path)
-		self.impl.process_mod_task(self, objs_paths)
+		self.impl.process_mod_task(self, [self._obj_name(s) for s in sources])
 		implicit_deps = self.project.task_states[self.uid][2]
 		# remove old sources from implicit deps dictionary
 		sources_states = {}
@@ -463,13 +461,13 @@ class ModTask(Task):
 		self.project.task_states[self.uid] = self.cfg.mod_sig, self.cfg.cxx_sig, sources_states
 		Task.process(self)
 
-	def _unique_base_name_node(self, source):
-		path = source.rel_path(self.project.src_node)
-		path = path.replace(os.pardir, '_')
-		path = path.replace(os.sep, ',')
-		node = self.target_dir.node_path(path)
-		return node
-		
+	def _unique_base_name(self, source):
+		return source.rel_path(self.project.src_node).replace(os.pardir, '_').replace(os.sep, ',')
+
+	def _obj_name(self, source):
+		name = self._unique_base_name(source)
+		return name[:name.rfind('.')] + self.impl.cxx_task_target_ext
+
 class PkgCfg(Cfg):
 	def __init__(self, project):
 		Cfg.__init__(self, project)
@@ -527,16 +525,3 @@ class PkgCfg(Cfg):
 				self._mod_args = out
 				return out
 		finally: self.lock.release()
-
-class Contexes(object):
-	def check_and_build(self):
-		'when performing build checks, or building the sources'
-		pass
-	
-	def build(self):
-		'when building the sources'
-		pass
-	
-	class client:
-		'when used as a dependency'
-		pass

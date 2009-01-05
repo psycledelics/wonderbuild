@@ -76,7 +76,7 @@ class IncludeScanner(object):
 			not_found.add(n)
 			return None
 		if n.parent.exists:
-			n.parent.actual_children
+			n.parent.actual_children # not needed, just an optimisation
 			if n.exists: return n
 		if os.path.isabs(include):
 			if __debug__ and is_debug: debug('cpp: not found : #include "' + include + '"')
@@ -94,7 +94,7 @@ class IncludeScanner(object):
 		for dir in paths:
 			n = dir.node_path(include)
 			if n.parent.exists:
-				n.parent.actual_children
+				n.parent.actual_children # not needed, just an optimisation
 				if n.exists: return n
 		if __debug__ and is_debug: debug('cpp: not found : #include <' + include + '>')
 		not_found.add(include)

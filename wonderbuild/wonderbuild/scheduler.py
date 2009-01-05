@@ -12,9 +12,9 @@ from options import options, known_options, help
 try: cpu_count = os.sysconf('SC_NPROCESSORS_ONLN')
 except: cpu_count = int(os.environ.get('NUMBER_OF_PROCESSORS', 1)) # env var defined on mswindows
 
-known_options |= set(['--jobs', '--timeout', '--progress'])
-help['--jobs'] = ('--jobs=<count>', 'use <count> threads in the scheduler to process the tasks', 'autodetected: ' + str(cpu_count))
-help['--timeout'] = ('--timeout=<seconds>', 'wait at most <seconds> for a task to complete before considering it\'s busted', '3600.0')
+known_options |= set(['--jobs=', '--timeout=', '--progress'])
+help['--jobs='] = ('--jobs=<count>', 'use <count> threads in the scheduler to process the tasks', 'autodetected: ' + str(cpu_count))
+help['--timeout='] = ('--timeout=<seconds>', 'wait at most <seconds> for a task to complete before considering it\'s busted', '3600.0')
 help['--progress'] = ('--progress', 'show task completion progress even when silent')
 
 no_silent_progress = not silent or '--progress' in options

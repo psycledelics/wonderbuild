@@ -12,3 +12,17 @@ options = sys.argv[1:]
 known_options = set()
 
 help = {}
+
+def validate_options():
+	ok = True
+	for o in options:
+		if o.startswith('-'):
+			e = o.find('=')
+			if e >= 0:
+				if o[:e + 1] in known_options: continue
+				o = o[:e]
+			if o in known_options: continue
+			print >> sys.stderr, 'unknown option: ' + o
+			ok = False
+	return ok
+

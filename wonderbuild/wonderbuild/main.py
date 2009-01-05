@@ -11,7 +11,7 @@ if __name__ == '__main__':
 		from wonderbuild.main import main
 	main()
 else:
-	from wonderbuild.options import options, known_options, help
+	from wonderbuild.options import options, validate_options, known_options, help
 
 	def main():
 		import gc
@@ -19,7 +19,7 @@ else:
 		if gc_enabled: gc.disable()
 		try:
 			known_options.add('--profile')
-			help['--profile'] = ('--profile', 'profile wonderbuild execution')
+			help['--profile'] = ('--profile', 'profile execution')
 		
 			if '--profile' in options:
 				import cProfile, pstats
@@ -77,19 +77,13 @@ else:
 			return 0
 	
 		project.options()
-		for o in options:
-			if o.startswith('-'):
-				e = o.find('=')
-				if e >= 0: o = o[:e]
-				if o not in known_options:
-					print >> sys.stderr, 'unknown option: ' + o
-					usage = True
+		usage = not validate_options()
 
 		if usage:
 			print_help(sys.stderr)
 			return 1
 
 		project.configure()
-		project.build(tasks)
-		project.dump()
+		try: project.build(tasks)
+		finally: project.dump()
 		return 0

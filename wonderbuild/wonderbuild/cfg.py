@@ -27,7 +27,8 @@ class Cfg(object):
 			sig = Sig()
 			for o in options:
 				for oo in self.__class__._options:
-					if o.startswith(oo + '='): sig.update(o)
+					e = oo.find('=')
+					if (e >= 0 and o.startswith(oo)) or o == oo: sig.update(o) # TODO make = optional
 			sig = self._options_sig = sig.digest()
 			return sig
 
