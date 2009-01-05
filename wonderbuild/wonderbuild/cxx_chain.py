@@ -460,7 +460,7 @@ class ModTask(Task):
 		# remove old sources from implicit deps dictionary
 		sources_states = {}
 		for s in self.sources: sources_states[s] = implicit_deps[s]
-		self.project.task_states[self.uid] = self.cfg.mod_sig, self.cfg.cxx_sig, sources_states
+		self.project.task_states[self.uid] = self.cfg.mod_sig, self.cfg.cxx_sig, sources_states #XXX move cxx_sig into obj sig
 		Task.process(self)
 
 	def _unique_base_name(self, source):
