@@ -11,7 +11,7 @@ main() {
 	cd $(dirname $0)/bench-$tool &&
 
 	case $op in
-		reset) rm -Rf build-$tool ++* ;;
+		reset) rm -Rf build-$tool ;;
 		no-op) ;;
 		small) touch lib_17/class_17.hpp ;;
 		big)   touch lib_17/*.hpp ;;
@@ -19,7 +19,7 @@ main() {
 
 	case $tool in
 		wonderbuild)
-			time ../../wonderbuild.py --cxx=g++ --cxx-pic=no --jobs=$jobs "$@"
+			time ../../wonderbuild.py --bld-dir=build-$tool --cxx=g++ --cxx-pic=no --jobs=$jobs "$@"
 		;;
 	
 		waf)
