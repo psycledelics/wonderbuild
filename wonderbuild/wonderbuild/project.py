@@ -6,12 +6,24 @@ import sys, os, gc, cPickle
 
 from scheduler import Scheduler
 from filesystem import FileSystem
+from options import options, known_options, help
 from logger import is_debug, debug
 
 if __debug__ and is_debug: import time
 
+known_options |= set(['--src-dir=', '--bld-dir='])
+help['--src-dir='] = ('--src-dir=<dir>', 'use <dir> as the source dir', os.getcwd())
+help['--bld-dir='] = ('--bld-dir=<dir>', 'use <dir> as the build dir', '<src-dir>' + os.sep + '++wonderbuild')
+
 class Project(object):
-	def __init__(self, bld_path = '++wonderbuild'):
+	def __init__(self):
+		src_path = bld_path = None
+		for o in options:
+			if o.startswith('--src-dir='): src_path = o[len('--src-dir='):]
+			elif o.startswith('--bld-dir='): bld_path = o[len('--bld-dir='):]
+		if src_path is None: src_path = help['--src-dir='][2]
+		if bld_path is None: bld_path = os.path.join(src_path, '++wonderbuild')
+		if src_path == bld_path: raise Exception, 'build dir and source dir are the same'
 		gc_enabled = gc.isenabled()
 		if gc_enabled: gc.disable()
 		try:
@@ -43,7 +55,7 @@ class Project(object):
 			self.state_and_cache[self.__class__.__name__] = self.task_states
 
 		self.fs = FileSystem(self.state_and_cache)
-		self.src_node = self.fs.cur
+		self.src_node = self.fs.cur.node_path(src_path)
 		self.bld_node = self.fs.cur.node_path(bld_path)
 		
 	def add_task(self, task, aliases):

@@ -41,13 +41,14 @@ else:
 		from wonderbuild.project import Project
 		project = Project()
 
-		if os.path.exists('wonderbuild_script.py'):
+		script = project.src_node.node_path('wonderbuild_script.py')
+		if script.exists:
 			d = {}
 			execfile('wonderbuild_script.py', d)
 			tasks = d['wonderbuild_script'](project)
 			usage = False
 		else:
-			print >> sys.stderr, 'no wonderbuild_script.py found'
+			print >> sys.stderr, 'no ' + script.path + ' found'
 			usage = True
 
 		help['--version'] = ('--version', 'show the version of this tool and exit')
