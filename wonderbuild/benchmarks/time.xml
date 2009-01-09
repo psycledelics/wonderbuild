@@ -72,8 +72,8 @@
 			</part>
 			<part caption='No-op rebuild'>
 				<bars scale='60'>
-					<bar name='wonderbuild'   value=' 0.76'/>
 					<bar name='jam'           value=' 0.71'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='wonderbuild'   value=' 0.76'/>
 					<bar name='toy makefiles' value=' 0.79'>(recursive)</bar>
 					<bar name='waf'           value=' 1.15'/>
 					<bar name='autotools'     value=' 2.05'>(non recursive)</bar>
@@ -137,9 +137,9 @@
 			</part>
 			<part caption='No-op rebuild'>
 				<bars scale='20'>
-					<bar name='wonderbuild'   value=' 2.45'>gcc deps</bar>
 					<bar name='jam'           value=' 2.02'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 2.25'>(recursive)</bar>
+					<bar name='wonderbuild'   value=' 2.45'>gcc deps</bar>
 					<bar name='waf'           value=' 3.12'>waf cpp</bar>
 					<bar name='autotools'     value=' 7.11'>(non recursive)</bar>
 					<bar name='scons'         value='73.12'/>
