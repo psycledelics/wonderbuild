@@ -30,7 +30,8 @@
 					<bar name='wonderbuild'   value=' 38.5'>dumb deps</bar>
 					<bar name='waf'           value=' 43.4'>gcc deps</bar>
 					<bar name='waf'           value=' 46.1'>waf cpp</bar>
-					<bar name='scons'         value='131.0'/>
+					<bar name='scons'         value='131.0'>with fast tuning options</bar>
+					<bar name='scons'         value='137.7'>with default options</bar>
 					<bar name='autotools'     value='188.0'>(non recursive)</bar>
 				</bars>
 			</part>
@@ -50,7 +51,7 @@
 					<bar name='waf'           value=' 6.75'>gcc deps</bar>
 					<bar name='waf'           value=' 6.89'>waf cpp</bar>
 					<bar name='autotools'     value='29.64'>(non recursive)</bar>
-					<bar name='scons'         value='39.58'/>
+					<bar name='scons'         value='39.58'>(with fast tuning options)</bar>
 				</bars>
 			</part>
 			<part caption='Small partial rebuild'>
@@ -67,7 +68,7 @@
 					<bar name='wonderbuild'   value=' 1.29'>dump deps</bar>
 					<bar name='waf'           value=' 1.92'>(same with gcc deps and waf cpp)</bar>
 					<bar name='autotools'     value=' 4.63'>(non recursive)</bar>
-					<bar name='scons'         value='24.37'/>
+					<bar name='scons'         value='24.37'>(with fast tuning options)</bar>
 				</bars>
 			</part>
 			<part caption='No-op rebuild'>
@@ -77,7 +78,8 @@
 					<bar name='toy makefiles' value=' 0.79'>(recursive)</bar>
 					<bar name='waf'           value=' 1.15'/>
 					<bar name='autotools'     value=' 2.05'>(non recursive)</bar>
-					<bar name='scons'         value='23.25'/>
+					<bar name='scons'         value='23.25'>with fast tuning options</bar>
+					<bar name='scons'         value='35.97'>with default options</bar>
 				</bars>
 			</part>
 		</part>
