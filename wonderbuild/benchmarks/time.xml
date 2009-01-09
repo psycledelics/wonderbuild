@@ -72,15 +72,10 @@
 			</part>
 			<part caption='No-op rebuild'>
 				<bars scale='60'>
-					<bar-section>Using batch compilation</bar-section>
-					<bar name='wonderbuild'   value=' 0.76'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
-					<bar name='waf'           value=' 1.15'>max 50 srcs/batch, waf cpp (same with shutil or mv)</bar>
-					<bar-section>Not using batch compilation</bar-section>
+					<bar name='wonderbuild'   value=' 0.76'/>
 					<bar name='jam'           value=' 0.71'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 0.79'>(recursive)</bar>
-					<bar name='wonderbuild'   value=' 0.98'>gcc deps</bar>
-					<bar name='wonderbuild'   value=' 1.05'>dumb deps</bar>
-					<bar name='waf'           value=' 1.20'>(same with gcc deps and waf cpp)</bar>
+					<bar name='waf'           value=' 1.15'/>
 					<bar name='autotools'     value=' 2.05'>(non recursive)</bar>
 					<bar name='scons'         value='23.25'/>
 				</bars>
@@ -142,9 +137,7 @@
 			</part>
 			<part caption='No-op rebuild'>
 				<bars scale='20'>
-					<bar-section>Using batch compilation</bar-section>
 					<bar name='wonderbuild'   value=' 2.45'>gcc deps</bar>
-					<bar-section>Not using batch compilation</bar-section>
 					<bar name='jam'           value=' 2.02'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 2.25'>(recursive)</bar>
 					<bar name='waf'           value=' 3.12'>waf cpp</bar>
@@ -158,7 +151,7 @@
 			<br/><br/>
 			(Note: the wonderbuild script finds source files dynamically instead of relying on a hard-coded file list.)
 			<part caption='No-op rebuild'>
-				<bars scale='0.02' unit=''>
+				<bars unit='' scale='0.02'>
 					<bar-section>Number of stat() calls</bar-section>
 					<bar name='jam'           value=' 9252'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='wonderbuild'   value='10342'>without check of missing built files</bar>
@@ -166,6 +159,8 @@
 					<bar name='waf'           value='10442'/>
 					<bar name='scons'         value='46693'/>
 					<bar name='toy makefiles' value='61996'>(recursive)</bar>
+				</bars>
+				<bars unit='' scale='0.02'>
 					<bar-section>Number of fstat() calls</bar-section>
 					<bar name='wonderbuild'   value='  213'>(same with or without check of missing built files)</bar>
 					<bar name='waf'           value='  514'/>
