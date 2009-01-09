@@ -162,8 +162,8 @@
 					<bar-section>Number of stat() calls</bar-section>
 					<bar name='jam'           value=' 9252'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='wonderbuild'   value='10342'>without check of missing built files</bar>
+					<bar name='wonderbuild'   value='10392'>with check of missing built files (including intermediate object files)</bar>
 					<bar name='waf'           value='10442'/>
-					<bar name='wonderbuild'   value='15392'>with check of missing built files (including intermediate object files)</bar>
 					<bar name='scons'         value='46693'/>
 					<bar name='toy makefiles' value='61996'>(recursive)</bar>
 					<bar-section>Number of fstat() calls</bar-section>

@@ -402,6 +402,8 @@ class ModTask(Task):
 						changed_sources.append(s)
 						continue
 					if self.user_cfg.check_missing:
+						try: self.target_dir.actual_children # not needed, just an optimisation
+						except OSError: pass
 						o = self.target_dir.node_path(self._obj_name(s))
 						if not o.exists:
 							if __debug__ and is_debug: debug('task: target removed: ' + str(o))
