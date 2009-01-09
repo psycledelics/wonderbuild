@@ -189,14 +189,23 @@
 	<xsl:template match='bars'>
 		<xsl:param name='scale'>
 			<xsl:choose>
-				<xsl:when test='@scale != ""'><xsl:value-of select='@scale'/></xsl:when>
+				<xsl:when test='@scale'><xsl:value-of select='@scale'/></xsl:when>
 				<xsl:otherwise>1</xsl:otherwise>
+			</xsl:choose>
+		</xsl:param>
+		<xsl:param name='unit'>
+			<xsl:choose>
+				<xsl:when test='@unit'><xsl:value-of select='@unit'/></xsl:when>
+				<xsl:otherwise>s</xsl:otherwise>
 			</xsl:choose>
 		</xsl:param>
 		<table class='bar'>
 			<xsl:apply-templates>
 				<xsl:with-param name='scale'>
 					<xsl:value-of select='$scale'/>
+				</xsl:with-param>
+				<xsl:with-param name='unit'>
+					<xsl:value-of select='$unit'/>
 				</xsl:with-param>
 			</xsl:apply-templates>
 		</table>
@@ -212,10 +221,11 @@
 
 	<xsl:template match='bar'>
 		<xsl:param name='scale'/>
+		<xsl:param name='unit'/>
 		<tr>
 			<td align='right'><xsl:value-of select='@name'/></td>
 			<td>&#160;</td>
-			<td align='right'><xsl:value-of select='@value'/>s</td>
+			<td align='right'><xsl:value-of select='@value'/><xsl:value-of select='$unit'/></td>
 			<xsl:choose>
 				<xsl:when test='@value * $scale > 10000'>
 					<td>

@@ -277,7 +277,7 @@ INCLUDE_PATHS = -I..
 DEFINES = -DBENCH -DBENCH_LIB=%(num)s
 DEPEND = makedepend
 CXX = g++
-CXX_FLAGS = -g -O0 -Wall 
+CXX_FLAGS = -g -O0 -Wall -pipe
 AR = ar
 AR_FLAGS = crus
 .SUFFIXES: .o .cpp

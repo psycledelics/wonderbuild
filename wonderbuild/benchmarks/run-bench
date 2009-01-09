@@ -4,6 +4,9 @@ set -x &&
 
 jobs=4 &&
 
+measure=time &&
+#measure='strace -fF' &&
+
 main() {
 	op=$1 && shift &&
 	tool=$1 && shift &&
@@ -19,7 +22,7 @@ main() {
 
 	case $tool in
 		wonderbuild)
-			time ../../wonderbuild.py --bld-dir=build-$tool --cxx=g++ --cxx-pic=no --jobs=$jobs "$@"
+			$measure ../../wonderbuild.py --bld-dir=build-$tool --cxx=g++ --cxx-pic=no --jobs=$jobs "$@"
 		;;
 	
 		waf)
@@ -27,12 +30,12 @@ main() {
 			then
 				../../waf/waf-light configure
 			fi &&
-			time ../../waf/waf-light --jobs=$jobs "$@"
+			$measure ../../waf/waf-light --jobs=$jobs "$@"
 		;;
 	
 		scons)
 			SCONS_LIB_DIR=$(pwd)/../../scons/src/engine \
-				time python ../../scons/src/script/scons.py --no-cache --jobs=$jobs "$@"
+				$measure python ../../scons/src/script/scons.py --no-cache --jobs=$jobs "$@"
 		;;
 
 		make)
@@ -40,7 +43,7 @@ main() {
 			then
 				make -r clean --silent
 			fi &&
-			time make -r --jobs=$jobs "$@"
+			$measure make -r --jobs=$jobs "$@"
 		;;
 
 		jam)
@@ -48,7 +51,7 @@ main() {
 			then
 				jam clean
 			fi &&
-			time jam -j$jobs "$@"
+			$measure jam -j$jobs "$@"
 		;;
 
 		autotools)
@@ -61,7 +64,7 @@ main() {
 				mkdir build-$tool &&
 				(cd build-$tool && ../configure --disable-shared CXXFLAGS=)
 			fi &&
-			time make -C build-$tool -r --jobs=$jobs "$@"
+			$measure make -C build-$tool -r --jobs=$jobs "$@"
 		;;
 	esac
 } &&

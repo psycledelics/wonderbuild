@@ -2,18 +2,19 @@
 <?xml-stylesheet type='text/xsl' href='time.xsl'?>
 <part caption='Benchmarks of various C++ build tools' image='http://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Koch_curve.svg/180px-Koch_curve.svg.png' alt='koch curve'>
 	<part caption='Results'>
-		<part caption='Results on a fast machine'>
+		<part caption='Times on a fast machine'>
 			All tests were run with 4 jobs on the same quad core system,
 			ext2 filesystem on lvm/dmraid0 device, linux 2.6.24, gcc's C++ compiler.
 			<part caption='Tool versions'>
 				<ul>
 					<li>Scons version was 1.2.0</li>
 					<li>Waf version was somewhere after 1.5.2 (svn rev 5345)</li>
+					<li>Python version was 2.5.2</li>
 					<li>Jam version was 2.5</li>
 					<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
 					<li>Make version was gnu make 3.81</li>
-					<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
 					<li>Shell was dash (not bash) version 0.5.4</li>
+					<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
 				</ul>
 			</part>
 			<part caption='Initial full build'>
@@ -85,17 +86,18 @@
 				</bars>
 			</part>
 		</part>
-		<part caption='Results on a slower machine'>
+		<part caption='Times on a slower machine'>
 			All tests were run with 1 job on the same system, linux 2.6.24, gcc's C++ compiler.
 			<part caption='Tool versions'>
 				<ul>
 					<li>Scons version was 1.2.0</li>
 					<li>Waf version was somewhere after 1.5.2 (svn rev 5345)</li>
+					<li>Python version was 2.4.4</li>
 					<li>Jam version was 2.5</li>
 					<li>Autotools versions were autoconf 2.61, automake 1.10, libtool 1.5.22</li>
 					<li>Make version was gnu make 3.81</li>
-					<li>Compiler tool chain versions were gcc 4.1.2, binutils 2.17</li>
 					<li>Shell was bash version 3.1.17</li>
+					<li>Compiler tool chain versions were gcc 4.1.2, binutils 2.17</li>
 				</ul>
 			</part>
 			<part caption='Initial full build'>
@@ -148,6 +150,42 @@
 					<bar name='waf'           value=' 3.12'>waf cpp</bar>
 					<bar name='autotools'     value=' 7.11'>(non recursive)</bar>
 					<bar name='scons'         value='73.12'/>
+				</bars>
+			</part>
+		</part>
+		<part caption='Number of system calls' anchor='strace'>
+			The following numbers were obtained with <code>strace -fF</code>
+			<br/><br/>
+			(Note: the wonderbuild script finds source files dynamically instead of relying on a hard-coded file list.)
+			<part caption='No-op rebuild'>
+				<bars scale='0.02' unit=''>
+					<bar-section>Number of stat() calls</bar-section>
+					<bar name='jam'           value=' 9252'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='wonderbuild'   value='10342'>without check of missing built files</bar>
+					<bar name='waf'           value='10442'/>
+					<bar name='wonderbuild'   value='15392'>with check of missing built files (including intermediate object files)</bar>
+					<bar name='scons'         value='46693'/>
+					<bar name='toy makefiles' value='61996'>(recursive)</bar>
+					<bar-section>Number of fstat() calls</bar-section>
+					<bar name='wonderbuild'   value='  213'>(same with or without check of missing built files)</bar>
+					<bar name='waf'           value='  514'/>
+					<bar name='scons'         value='  780'/>
+					<bar name='jam'           value='10560'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='toy makefiles' value='32014'>(recursive)</bar>
+					<bar-section>Number of open() calls</bar-section>
+					<bar name='wonderbuild'   value='  742'>(same with or without check of missing built files)</bar>
+					<bar name='waf'           value=' 1547'/>
+					<bar name='scons'         value=' 2433'/>
+					<bar name='jam'           value=' 9308'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='toy makefiles' value='33227'>(recursive)</bar>
+				</bars>
+				<bars unit=''>
+					<bar-section>Number of getdents() calls</bar-section>
+					<bar name='wonderbuild'   value='    5'>(same with or without check of missing built files)</bar>
+					<bar name='jam'           value='  152'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='toy makefiles' value='  202'>(recursive)</bar>
+					<bar name='scons'         value='  217'/>
+					<bar name='waf'           value='  309'/>
 				</bars>
 			</part>
 		</part>
