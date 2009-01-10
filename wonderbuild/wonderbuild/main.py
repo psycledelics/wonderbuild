@@ -18,21 +18,27 @@ else:
 		gc_enabled = gc.isenabled()
 		if gc_enabled: gc.disable()
 		try:
-			known_options.add('--profile')
-			help['--profile'] = ('--profile', 'profile execution')
+			known_options.add('--profile=')
+			help['--profile='] = ('--profile=<file>', 'profile execution and put results in <file>')
 		
-			if '--profile' in options:
+			profile = None
+			for o in options:
+				if o.startswith('--profile='):
+					profile = o[len('--profile='):]
+					break
+			
+			if profile is not None:
 				import cProfile, pstats
 				cProfile.run(
 					'''from wonderbuild.options import known_options;'''
-					'''known_options.add('--profile');'''
+					'''known_options.add('--profile=');'''
 					'''from wonderbuild.main import run;'''
 					'''sys.exit(run())'''
-					, '/tmp/profile'
+					, profile
 				)
-				p = pstats.Stats('/tmp/profile')
-				#p.sort_stats('time').print_stats(45)
-				p.sort_stats('cumulative').reverse_order().print_stats()
+				s = pstats.Stats(profile)
+				#s.sort_stats('time').print_stats(45)
+				s.sort_stats('cumulative').reverse_order().print_stats()
 			else: sys.exit(run())
 		finally:
 			if gc_enabled: gc.enable()

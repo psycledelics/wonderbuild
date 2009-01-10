@@ -183,13 +183,29 @@ class Node(object):
 			elif self._old_children is not None: self._children.update(self._old_children)
 		return self._children
 
-	def find_iter(self, in_pat = '*', ex_pat = None, prunes = None):
+	def find_iter(self, in_pats = ['*'], ex_pats = None, prune_pats = None):
 		if __debug__ and is_debug: debug('fs: find_iter  : ' + self.path + os.sep + ' ' + in_pat + ' ' + str(ex_pat) + ' ' + str(prunes))
 		for name, node in self.actual_children.iteritems():
-			if (ex_pat is None or not match(name, ex_pat)) and match(name, in_pat): yield node
-			elif node.is_dir:
-				if prunes is None or name not in prunes:
-					for node in node.find_iter(in_pat, ex_pat, prunes): yield node
+			matched = False
+			if ex_pats is not None:
+				for pat in ex_pats:
+					if match(name, pat):
+						matched = True
+						break
+			if not matched:
+				for pat in in_pats:
+					if match(name, pat):
+						yield node
+						matched = True
+						break
+				if not matched and node.is_dir:
+					if prune_pats is not None:
+						for pat in prune_pats:
+							if match(name, pat):
+								matched = True
+								break
+					if not matched:
+						for node in node.find_iter(in_pats, ex_pats, prune_pats): yield node
 		raise StopIteration
 
 	def node_path(self, path): return self._node_path(path)
