@@ -22,14 +22,7 @@ class FileSystem(object):
 		self.cur._fs = self
 		self.cur._is_dir = True
 		self.cur._exists = True
-		if False and __debug__ and is_debug:
-			self.display(True)
-			self.display(False)
 	
-	def display(self, cache = False):
-		print 'fs:', cache and 'cached:' or 'declared:'
-		self.root.display(cache)
-
 ignore = set(['.svn'])
 
 if __debug__ and is_debug: all_abs_paths = set()
@@ -64,6 +57,7 @@ class Node(object):
 			assert parent is None or os.path.join(parent.abs_path, name) not in all_abs_paths, (parent.abs_path, name)
 			debug('fs: new node: ' + self.abs_path)
 			all_abs_paths.add(self.abs_path)
+		#if parent is not None: parent.children[name] = self
 	
 	def __str__(self): return self.path
 	
@@ -184,60 +178,35 @@ class Node(object):
 		return self._children
 
 	def find_iter(self, in_pats = ['*'], ex_pats = None, prune_pats = None):
-		if __debug__ and is_debug: debug('fs: find_iter  : ' + self.path + os.sep + ' ' + in_pat + ' ' + str(ex_pat) + ' ' + str(prunes))
+		if __debug__ and is_debug: debug('fs: find_iter  : ' + self.path + os.sep + ' ' + str(in_pats) + ' ' + str(ex_pats) + ' ' + str(prune_pats))
 		for name, node in self.actual_children.iteritems():
 			matched = False
 			if ex_pats is not None:
 				for pat in ex_pats:
-					if match(name, pat):
-						matched = True
-						break
+					if match(name, pat): matched = True; break
 			if not matched:
 				for pat in in_pats:
-					if match(name, pat):
-						yield node
-						matched = True
-						break
+					if match(name, pat): yield node; matched = True; break
 				if not matched and node.is_dir:
 					if prune_pats is not None:
 						for pat in prune_pats:
-							if match(name, pat):
-								matched = True
-								break
+							if match(name, pat): matched = True; break
 					if not matched:
 						for node in node.find_iter(in_pats, ex_pats, prune_pats): yield node
 		raise StopIteration
 
-	def node_path(self, path): return self._node_path(path)
-	def _node_path(self, path, start = 0):
-		sep = path.find(os.sep, start)
-		if sep > start:
-			name = path[start:sep]
-			if name == os.pardir:
-				while sep < len(path) - 1 and path[sep] == os.sep: sep += 1
-				if sep == len(path) - 1: return self.parent or self
-				return (self.parent or self)._node_path(path, sep)
-			if name == os.curdir: return self
-			try: child = self.children[name]
-			except KeyError:
-				child = Node(self, name)
-				self.children[name] = child
-			child._is_dir = True
-			while sep < len(path) - 1 and path[sep] == os.sep: sep += 1
-			if sep == len(path) - 1: return child
-			return child._node_path(path, sep)
-		elif sep < 0:
-			name = path[start:]
-			if name == os.pardir: return self.parent or self
-			if name == os.curdir: return self
-			try: child = self.children[name]
-			except KeyError:
-				child = Node(self, name)
-				self.children[name] = child
-			return child
-		else: # sep == start, absolute path
-			return self.fs.root._node_path(path, 1)
-	
+	def node_path(self, path):
+		if os.path.isabs(path) and self is not self.fs.root: return self.fs.root.node_path(path)
+		node = self
+		for name in path.split(os.sep):
+			if name == os.pardir: node = node.parent or node
+			elif name != os.curdir:
+				try: node = node.children[name]
+				except KeyError:
+					node._is_dir = True
+					node.children[name] = node = Node(node, name)
+		return node
+
 	@property
 	def fs(self):
 		try: return self._fs
@@ -290,32 +259,3 @@ class Node(object):
 			if self.parent is None: self._abs_path = self.name
 			else: self._abs_path = os.path.join(self.parent.abs_path, self.name)
 			return self._abs_path
-
-	def display(self, cache = False, tabs = 0):
-		if True: path = '  |' * tabs + '- ' + self.name
-		else: path = self.abs_path
-		
-		# python 2.5
-		#if cache: time = '?' if self._old_time is None else self._old_time
-		#else: time = '?' if self._time is None else self._time
-
-		if cache: time = self._old_time is None and '?' or self._old_time
-		else: time = self._time is None and '?' or self._time
-		
-		print \
-			getattr(self, '_sig', '?').rjust(12), \
-			str(time).rjust(12), \
-			(self._is_dir is None and '?' or self._is_dir and 'dir' or 'file').rjust(4) + \
-			' ' + path
-			
-		tabs += 1
-		if cache:
-			if self._actual_children is not None:
-				for n in self._actual_children.itervalues(): n.display(cache, tabs)
-			elif self._old_children is not None:
-				for n in self._old_children.itervalues(): n.display(cache, tabs)
-		elif self._children is not None:
-			for n in self._children.itervalues():
-				if self._actual_children is not None and not n.name in self._actual_children: continue
-				if self._old_children is not None and not n.name in self._old_children: continue
-				n.display(cache, tabs)
