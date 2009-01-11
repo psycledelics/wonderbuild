@@ -32,5 +32,3 @@ if __name__ == '__main__':
 	for i in xrange(count2):
 		for j in xrange(count): x.p
 	print time.time() - t0
-
-
