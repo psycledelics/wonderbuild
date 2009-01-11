@@ -80,6 +80,7 @@ class Project(object):
 		s.process(tasks)
 
 	def dump(self):
+		self.bld_node.forget()
 		if False and __debug__ and is_debug: print self.state_and_cache
 		gc_enabled = gc.isenabled()
 		if gc_enabled: gc.disable()
