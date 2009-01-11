@@ -36,28 +36,37 @@ class Scheduler(object):
 			self.lock = scheduler._lock
 
 	def process(self, tasks):
-		self.start()
-		for t in tasks: self.add_task(t)
-		self.join()
+		if self.thread_count == 1:
+			self._pre_start()
+			for t in tasks: self.add_task(t)
+			self._joining = True
+			self._thread_function(0)
+			self._post_join()
+		else:
+			self.start()
+			for t in tasks: self.add_task(t)
+			self.join()
 		
-	def start(self):
+	def _pre_start(self):
 		self._tasks = set()
 		self._task_queue = []#deque()
 		self._todo_count = self._task_count
 		self._running_count = 0
 		self._stop_requested = self._joining = False
-		self._threads = []
 		self._lock = threading.Lock()
 		self._condition = threading.Condition(self._lock)
 		self._context = Scheduler.Context(self)
-		if self.thread_count != 1:
-			if __debug__ and is_debug: debug('sched: starting threads: ' + str(self.thread_count))
-			for i in xrange(self.thread_count):
-				t = threading.Thread(target = self._thread_function, args = (i,), name = 'scheduler-thread-' + str(i))
-				#t.daemon = True
-				t.setDaemon(True)
-				t.start()
-				self._threads.append(t)
+
+	def start(self):
+		if __debug__ and is_debug: debug('sched: starting threads: ' + str(self.thread_count))
+		self._pre_start()
+		self._threads = []
+		for i in xrange(self.thread_count):
+			t = threading.Thread(target = self._thread_function, args = (i,), name = 'scheduler-thread-' + str(i))
+			#t.daemon = True
+			t.setDaemon(True)
+			t.start()
+			self._threads.append(t)
 
 	def add_task(self, task):
 		self._condition.acquire()
@@ -94,18 +103,17 @@ class Scheduler(object):
 		self.join()
 		
 	def join(self):
-		if self.thread_count == 1:
+		if __debug__ and is_debug: debug('sched: joining threads')
+		self._condition.acquire()
+		try:
 			self._joining = True
-			self._thread_function(0)
-		else:
-				if __debug__ and is_debug: debug('sched: joining threads')
-				self._condition.acquire()
-				try:
-					self._joining = True
-					self._condition.notifyAll()
-				finally: self._condition.release()
-				for t in self._threads: t.join(timeout = self.timeout)
+			self._condition.notifyAll()
+		finally: self._condition.release()
+		for t in self._threads: t.join(timeout = self.timeout)
 		del self._threads
+		self._post_join()
+	
+	def _post_join(self):
 		del self._condition
 		del self._task_queue
 		del self._tasks
