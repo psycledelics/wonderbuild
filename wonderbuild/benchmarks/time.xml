@@ -94,10 +94,10 @@
 			<part caption='Initial full build'>
 				<bars scale='0.7'>
 					<bar-section>Using batch compilation</bar-section>
-					<bar name='wonderbuild'   value=' 171'>gcc deps</bar>
+					<bar name='wonderbuild'   value=' 168'>gcc deps</bar>
 					<bar-section>Not using batch compilation</bar-section>
-					<bar name='jam'           value=' 203'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 189'>(recursive)</bar>
+					<bar name='jam'           value=' 203'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='waf'           value=' 251'>waf cpp</bar>
 					<bar name='scons'         value=' 445'/>
 					<bar name='autotools'     value='1336'>(non recursive)</bar>
@@ -108,7 +108,7 @@
 				<br/><br/>
 				<bars scale='4.5'>
 					<bar-section>Using batch compilation</bar-section>
-					<bar name='wonderbuild'   value=' 23.2'>gcc deps</bar>
+					<bar name='wonderbuild'   value=' 21.9'>gcc deps</bar>
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='jam'           value=' 22.6'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 24.4'>(recursive)</bar>
@@ -122,7 +122,7 @@
 				<br/><br/>
 				<bars scale='20'>
 					<bar-section>Using batch compilation</bar-section>
-					<bar name='wonderbuild'   value=' 3.65'>gcc deps</bar>
+					<bar name='wonderbuild'   value=' 2.77'>gcc deps</bar>
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='jam'           value=' 2.58'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 3.33'>(recursive)</bar>
@@ -133,9 +133,9 @@
 			</part>
 			<part caption='No-op rebuild'>
 				<bars scale='20'>
+					<bar name='wonderbuild'   value=' 1.75'>gcc deps</bar>
 					<bar name='jam'           value=' 2.02'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 2.25'>(recursive)</bar>
-					<bar name='wonderbuild'   value=' 2.45'>gcc deps</bar>
 					<bar name='waf'           value=' 3.12'>waf cpp</bar>
 					<bar name='autotools'     value=' 7.11'>(non recursive)</bar>
 					<bar name='scons'         value='73.12'/>
