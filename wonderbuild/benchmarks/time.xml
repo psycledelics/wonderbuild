@@ -26,8 +26,6 @@
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='toy makefiles' value=' 34.1'>(recursive)</bar>
 					<bar name='jam'           value=' 35.6'><span style='color: red'>missed header deps!</span></bar>
-					<bar name='wonderbuild'   value=' 35.8'>gcc deps</bar>
-					<bar name='wonderbuild'   value=' 38.5'>dumb deps</bar>
 					<bar name='waf'           value=' 43.4'>gcc deps</bar>
 					<bar name='waf'           value=' 46.1'>waf cpp</bar>
 					<bar name='scons'         value='131.0'>with fast tuning options</bar>
@@ -46,8 +44,6 @@
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='jam'           value=' 4.25'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 4.81'>(recursive)</bar>
-					<bar name='wonderbuild'   value=' 5.21'>gcc deps</bar>
-					<bar name='wonderbuild'   value=' 5.56'>dumb deps</bar>
 					<bar name='waf'           value=' 6.75'>gcc deps</bar>
 					<bar name='waf'           value=' 6.89'>waf cpp</bar>
 					<bar name='autotools'     value='29.64'>(non recursive)</bar>
