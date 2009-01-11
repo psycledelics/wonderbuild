@@ -20,7 +20,7 @@
 			<part caption='Initial full build'>
 				<bars scale='5'>
 					<bar-section>Using batch compilation</bar-section>
-					<bar name='wonderbuild'   value=' 29.1'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
+					<bar name='wonderbuild'   value=' 27.9'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
 					<bar name='waf'           value=' 38.2'>max 50 srcs/batch, waf cpp, shutil</bar>
 					<bar name='waf'           value=' 39.7'>max 50 srcs/batch, waf cpp, mv</bar>
 					<bar-section>Not using batch compilation</bar-section>
@@ -38,7 +38,7 @@
 				<br/><br/>
 				<bars scale='20'>
 					<bar-section>Using batch compilation</bar-section>
-					<bar name='wonderbuild'   value=' 4.20'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
+					<bar name='wonderbuild'   value=' 4.05'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
 					<bar name='waf'           value=' 6.42'>max 50 srcs/batch, waf cpp, shutil</bar>
 					<bar name='waf'           value=' 6.64'>max 50 srcs/batch, waf cpp, mv</bar>
 					<bar-section>Not using batch compilation</bar-section>
@@ -67,7 +67,7 @@
 			</part>
 			<part caption='No-op rebuild'>
 				<bars scale='60'>
-					<bar name='wonderbuild'   value=' 0.70'/>
+					<bar name='wonderbuild'   value=' 0.69'/>
 					<bar name='jam'           value=' 0.71'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 0.79'>(recursive)</bar>
 					<bar name='waf'           value=' 1.15'/>
