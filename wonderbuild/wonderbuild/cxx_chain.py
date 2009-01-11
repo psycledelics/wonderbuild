@@ -459,9 +459,11 @@ class ModTask(Task):
 		else: sources = self._changed_sources
 		self.impl.process_mod_task(self, [self._obj_name(s) for s in sources])
 		implicit_deps = self.project.task_states[self.uid][2]
-		# remove old sources from implicit deps dictionary
-		sources_states = {}
-		for s in self.sources: sources_states[s] = implicit_deps[s]
+		if len(implicit_deps) > len(self.sources):
+			# remove old sources from implicit deps dictionary
+			sources_states = {}
+			for s in self.sources: sources_states[s] = implicit_deps[s]
+		else: sources_states = implicit_deps
 		self.project.task_states[self.uid] = self.cfg.mod_sig, self.cfg.cxx_sig, sources_states #XXX move cxx_sig into obj sig
 		Task.process(self)
 
