@@ -275,4 +275,4 @@ class Node(object):
 		parent = self.parent
 		if parent._children is not None and name in parent._children: del parent._children[name]
 		if parent._actual_children is not None and name in parent._actual_children: del parent._actual_children[name]
-		if parent._old_children is not None and name in parent._od_children: del parent._old_children[name]
+		if parent._old_children is not None and name in parent._old_children: del parent._old_children[name]
