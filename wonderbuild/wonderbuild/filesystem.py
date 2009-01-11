@@ -22,15 +22,6 @@ class FileSystem(object):
 		self.cur._fs = self
 		self.cur._is_dir = True
 		self.cur._exists = True
-		if False:
-			f = open('/tmp/t', 'w')
-			try:
-				def x(n):
-					print >> f, n.path
-					if n._children is not None:
-						for c in n._children.itervalues(): x(c)
-				x(self.root)
-			finally: f.close()
 	
 ignore = set(['.svn'])
 
@@ -270,7 +261,7 @@ class Node(object):
 			return self._abs_path
 
 	def forget(self):
-		"detach the node from its parent. This is used to trim the tree from branches we don't want to dump in the pickle"
+		"detach the node from its parent. This is used to cut from the tree the branches we don't want to dump in the pickle"
 		name = self.name
 		parent = self.parent
 		if parent._children is not None and name in parent._children: del parent._children[name]
