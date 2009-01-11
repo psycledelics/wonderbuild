@@ -22,7 +22,7 @@ def wonderbuild_script(project):
 
 		def dyn_in_tasks(self, sched_ctx):
 			self.cfg.include_paths = [src_dir]
-			for s in src_dir.node_path('foo').find_iter(prunes = ['todo'], in_pat = '*.cpp'): self.sources.append(s)
+			for s in src_dir.node_path('foo').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 			return ModTask.dyn_in_tasks(self, sched_ctx)
 	lib_foo = LibFoo()
 
@@ -38,7 +38,7 @@ def wonderbuild_script(project):
 
 		def dyn_in_tasks(self, sched_ctx):
 			self.add_in_task(lib_foo)
-			for s in src_dir.node_path('main').find_iter(prunes = ['todo'], in_pat = '*.cpp'): self.sources.append(s)
+			for s in src_dir.node_path('main').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 			return ModTask.dyn_in_tasks(self, sched_ctx)
 	main_prog = MainProg()
 

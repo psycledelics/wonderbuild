@@ -26,3 +26,16 @@ def validate_options():
 			ok = False
 	return ok
 
+def print_help(out):
+	help['--help'] = ('--help', 'show this help and exit')
+	keys = []
+	just = 0
+	for k, v in help.iteritems():
+		if len(v[0]) > just: just = len(v[0])
+		keys.append(k)
+	keys.sort()
+	just += 1
+	for h in keys:
+		h = help[h]
+		print h[0].ljust(just), h[1]
+		if len(h) >= 3: print >> out, ''.ljust(just), '(default: ' + h[2] + ')'

@@ -5,13 +5,12 @@
 import sys, os
 
 if __name__ == '__main__':
-	dir = os.path.abspath(os.path.dirname(os.path.dirname(sys.argv[0]))) # __file__
-	if dir not in sys.path:
-		sys.path.append(dir)
-		from wonderbuild.main import main
+	dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+	if dir not in sys.path: sys.path.append(dir)
+	from wonderbuild.main import main
 	main()
 else:
-	from wonderbuild.options import options, validate_options, known_options, help
+	from wonderbuild.options import options, validate_options, known_options, help, print_help
 
 	def main():
 		import gc
@@ -27,19 +26,16 @@ else:
 					profile = o[len('--profile='):]
 					break
 			
-			if profile is not None:
-				import cProfile, pstats
-				cProfile.run(
-					'''from wonderbuild.options import known_options;'''
-					'''known_options.add('--profile=');'''
-					'''from wonderbuild.main import run;'''
-					'''sys.exit(run())'''
-					, profile
-				)
+			if profile is None: sys.exit(run())
+			else:
+				import cProfile
+				# cProfile is only able to profile one thread
+				options.append('--jobs=1') # overrides possible previous --jobs options
+				cProfile.run('from wonderbuild.main import run; run()', profile)
+				import pstats
 				s = pstats.Stats(profile)
 				#s.sort_stats('time').print_stats(45)
 				s.sort_stats('cumulative').reverse_order().print_stats()
-			else: sys.exit(run())
 		finally:
 			if gc_enabled: gc.enable()
 
@@ -59,23 +55,8 @@ else:
 
 		help['--version'] = ('--version', 'show the version of this tool and exit')
 
-		def print_help(out):
-			help['--help'] = ('--help', 'show this help and exit')
-
-			project.help()
-			keys = []
-			just = 0
-			for k, v in help.iteritems():
-				if len(v[0]) > just: just = len(v[0])
-				keys.append(k)
-			keys.sort()
-			just += 1
-			for h in keys:
-				h = help[h]
-				print h[0].ljust(just), h[1]
-				if len(h) >= 3: print >> out, ''.ljust(just), '(default: ' + h[2] + ')'
-
 		if '--help' in options:
+			project.help()
 			print_help(sys.stdout)
 			return 0
 
@@ -87,6 +68,7 @@ else:
 		usage = not validate_options()
 
 		if usage:
+			project.help()
 			print_help(sys.stderr)
 			return 1
 

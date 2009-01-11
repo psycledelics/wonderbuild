@@ -77,9 +77,7 @@ class Project(object):
 		
 	def build(self, tasks):
 		s = Scheduler()
-		s.start()
-		for t in tasks: s.add_task(t)
-		s.join()
+		s.process(tasks)
 
 	def dump(self):
 		if False and __debug__ and is_debug: print self.state_and_cache
