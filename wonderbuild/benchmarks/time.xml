@@ -8,7 +8,7 @@
 			<part caption='Tool versions'>
 				<ul>
 					<li>Scons version was 1.2.0</li>
-					<li>Waf version was somewhere after 1.5.2 (svn rev 5345)</li>
+					<li>Waf version was somewhere after 1.5.2 (svn rev 5358)</li>
 					<li>Python version was 2.5.2</li>
 					<li>Jam version was 2.5</li>
 					<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
@@ -26,8 +26,8 @@
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='toy makefiles' value=' 34.1'>(recursive)</bar>
 					<bar name='jam'           value=' 35.6'><span style='color: red'>missed header deps!</span></bar>
-					<bar name='waf'           value=' 43.4'>gcc deps</bar>
-					<bar name='waf'           value=' 46.1'>waf cpp</bar>
+					<bar name='waf'           value=' 42.8'>gcc deps</bar>
+					<bar name='waf'           value=' 45.6'>waf cpp</bar>
 					<bar name='scons'         value='131.0'>with fast tuning options</bar>
 					<bar name='scons'         value='137.7'>with default options</bar>
 					<bar name='autotools'     value='188.0'>(non recursive)</bar>
