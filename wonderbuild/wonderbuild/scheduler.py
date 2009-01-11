@@ -40,7 +40,7 @@ class Scheduler(object):
 			self._pre_start()
 			for t in tasks: self.add_task(t)
 			self._joining = True
-			self._thread_function(0)
+			self._thread_function(0) # XXX need a way to handle timeout
 			self._post_join()
 		else:
 			self.start()
