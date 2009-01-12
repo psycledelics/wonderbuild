@@ -153,21 +153,24 @@
 					<bar name='wonderbuild'   value='10342'>without check of missing built files</bar>
 					<bar name='wonderbuild'   value='10392'>with check of missing built files (including intermediate object files)</bar>
 					<bar name='waf'           value='10442'/>
-					<bar name='scons'         value='46693'/>
+					<bar name='scons'         value='46693'>with fast tuning options</bar>
 					<bar name='toy makefiles' value='61996'>(recursive)</bar>
+					<bar name='scons'         value='67190'>with default options</bar>
 				</bars>
 				<bars unit='' scale='0.02'>
 					<bar-section>Number of fstat() calls</bar-section>
 					<bar name='wonderbuild'   value='  213'>(same with or without check of missing built files)</bar>
 					<bar name='waf'           value='  514'/>
-					<bar name='scons'         value='  780'/>
+					<bar name='scons'         value='  780'>with fast tuning options</bar>
 					<bar name='jam'           value='10560'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value='32014'>(recursive)</bar>
+					<bar name='scons'         value='60780'>with default options</bar>
 					<bar-section>Number of open() calls</bar-section>
 					<bar name='wonderbuild'   value='  742'>(same with or without check of missing built files)</bar>
 					<bar name='waf'           value=' 1547'/>
-					<bar name='scons'         value=' 2433'/>
+					<bar name='scons'         value=' 2433'>with fast tuning options</bar>
 					<bar name='jam'           value=' 9308'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='scons'         value='27433'>with default options</bar>
 					<bar name='toy makefiles' value='33227'>(recursive)</bar>
 				</bars>
 				<bars unit=''>
@@ -175,7 +178,7 @@
 					<bar name='wonderbuild'   value='    5'>(same with or without check of missing built files)</bar>
 					<bar name='jam'           value='  152'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value='  202'>(recursive)</bar>
-					<bar name='scons'         value='  217'/>
+					<bar name='scons'         value='  217'>(same with or without fast tuning options)</bar>
 					<bar name='waf'           value='  309'/>
 				</bars>
 			</part>
