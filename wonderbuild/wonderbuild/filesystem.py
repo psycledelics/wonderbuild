@@ -199,6 +199,7 @@ class Node(object):
 		if os.path.isabs(path) and self is not self.fs.root: return self.fs.root.node_path(path)
 		node = self
 		for name in path.split(os.sep):
+			if len(name) == 0: continue
 			if name == os.pardir: node = node.parent or node
 			elif name != os.curdir:
 				try: node = node.children[name]
