@@ -327,7 +327,7 @@ class CxxTask(Task):
 			else: pic = 'non-pic'; color = '7;34'
 			self.print_desc('batch-compiling ' + pic + ' objects from c++ ' + str(self), color)
 		self._actual_sources = []
-		self.target_dir.actual_children # not needed, just an optimisation
+		#self.target_dir.actual_children # not needed, just an optimisation
 		for s in self.sources:
 			node = self.target_dir.node_path(self.mod_task._unique_base_name(s))
 			if not node.exists:
@@ -402,8 +402,8 @@ class ModTask(Task):
 						changed_sources.append(s)
 						continue
 					if self.user_cfg.check_missing:
-						try: self.target_dir.actual_children # not needed, just an optimisation
-						except OSError: pass
+						#try: self.target_dir.actual_children # not needed, just an optimisation
+						#except OSError: pass
 						o = self.target_dir.node_path(self._obj_name(s))
 						if not o.exists:
 							if __debug__ and is_debug: debug('task: target removed: ' + str(o))
