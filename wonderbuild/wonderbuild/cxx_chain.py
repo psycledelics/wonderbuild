@@ -410,6 +410,7 @@ class ModTask(Task):
 							changed_sources.append(s)
 							continue
 					if __debug__ and is_debug: debug('task: skip: no change: ' + str(s))
+				if not self.user_cfg.check_missing: self.target_dir.forget()
 		if len(changed_sources) != 0:
 			batches = []
 			for i in xrange(sched_context.thread_count): batches.append([])

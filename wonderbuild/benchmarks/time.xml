@@ -159,16 +159,14 @@
 				</bars>
 				<bars unit='' scale='0.02'>
 					<bar-section>Number of fstat() calls</bar-section>
-					<bar name='wonderbuild'   value='  215'>without check of missing built files</bar>
-					<bar name='wonderbuild'   value='  265'>with check of missing built files (including intermediate object files)</bar>
+					<bar name='wonderbuild'   value='  215'>(same with or without check of missing built files)</bar>
 					<bar name='waf'           value='  514'/>
 					<bar name='scons'         value='  780'>with fast tuning options</bar>
 					<bar name='jam'           value='10560'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value='32014'>(recursive)</bar>
 					<bar name='scons'         value='60780'>with default options</bar>
 					<bar-section>Number of open() calls</bar-section>
-					<bar name='wonderbuild'   value='  749'>without check of missing built files</bar>
-					<bar name='wonderbuild'   value='  799'>with check of missing built files (including intermediate object files)</bar>
+					<bar name='wonderbuild'   value='  749'>(same with or without check of missing built files)</bar>
 					<bar name='waf'           value=' 1547'/>
 					<bar name='scons'         value=' 2433'>with fast tuning options</bar>
 					<bar name='jam'           value=' 9308'><span style='color: red'>missed header deps!</span></bar>
@@ -177,10 +175,9 @@
 				</bars>
 				<bars unit=''>
 					<bar-section>Number of getdents() calls</bar-section>
-					<bar name='wonderbuild'   value='    5'>without check of missing built files</bar>
+					<bar name='wonderbuild'   value='    5'>(same with or without check of missing built files)</bar>
 					<bar name='jam'           value='  152'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value='  202'>(recursive)</bar>
-					<bar name='wonderbuild'   value='  205'>with check of missing built files (including intermediate object files)</bar>
 					<bar name='scons'         value='  217'>(same with or without fast tuning options)</bar>
 					<bar name='waf'           value='  309'/>
 				</bars>
