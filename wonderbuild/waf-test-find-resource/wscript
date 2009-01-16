@@ -14,7 +14,12 @@ def configure(conf): pass
 
 def build(bld):
 
-	for p in ('dir', 'wscript'):
-		node = bld.srcnode.find_resource(p)
-		if node: print 'found', node
-		else: print 'not found'
+	for path in ('dir', 'wscript'):
+	
+		node = bld.srcnode.find_resource(path)
+		if node: print 'found resource', node
+		else: print 'not found resource', path
+
+		node = bld.srcnode.find_dir(path)
+		if node: print 'found dir     ', node
+		else: print 'not found dir    ', path
