@@ -22,4 +22,4 @@ def build(bld):
 
 		node = bld.srcnode.find_dir(path)
 		if node: print 'found dir     ', node
-		else: print 'not found dir    ', path
+		else: print 'not found dir     ', path
