@@ -1,0 +1,20 @@
+#! /usr/bin/env waf
+
+APPNAME = 'dummy'
+VERSION = '0.0.0'
+
+srcdir = '.'
+blddir = '++build'
+
+def init(): pass
+
+def set_options(opt): pass
+
+def configure(conf): pass
+
+def build(bld):
+
+	for p in ('dir', 'wscript'):
+		node = bld.srcnode.find_resource(p)
+		if node: print 'found', node
+		else: print 'not found'
