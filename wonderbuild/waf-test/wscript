@@ -70,7 +70,7 @@ def module(bld, target, kind, types = ['static', 'shared'], sources = None, incl
 		for s in sources:
 			node = bld.path.find_dir(s) # is it a dir?
 			if node:
-				for f in node.find_iter(in_pats = ['*.cpp']): obj.source.append(f.relpath_gen(bld.path))
+				for f in node.find_iter(in_pat = ['*.cpp']): obj.source.append(f.relpath_gen(bld.path))
 			else: obj.source.append(s)
 		obj.includes = includes
 		if type != 'static': obj.rpath = '\\$ORIGIN:\\$ORIGIN/../lib'
@@ -99,7 +99,7 @@ def install_headers(bld, includes, headers):
 		node = bld.path.find_dir(h) # is it a dir ?
 		if node:
 			for pat in '*.hpp', '*.h':
-				for f in node.find_iter(in_pats = ['*.hpp']): headers_filenames.append(f.relpath_gen(bld.path))
+				for f in node.find_iter(in_pat = ['*.hpp']): headers_filenames.append(f.relpath_gen(bld.path))
 		else: headers_filenames.append(h)
 	#print 'found header files:', headers_filenames
 	global APPNAME, VERSION
