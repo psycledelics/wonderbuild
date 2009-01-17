@@ -9,7 +9,36 @@ def wonderbuild_script(project):
 
 	src_dir = project.src_node.node_path('src')
 
-	if False:	
+	if False:
+		build_cfg = user_cfg
+
+		check_cfg = build_cfg.clone()
+	
+		class StdMathCheck(BuildCheck):
+			def __init__(self, base_build_cfg): BuildCheck.__init__(self, 'c++-std-math', base_build_cfg)
+
+			@property
+			def build_cfg(self):
+				try: return self._build_cfg
+				except AttributeError:
+					self._build_cfg = self.base_build_cfg.clone()
+					self._build_cfg.link.libs.append('m')
+					return self._build_cfg
+				
+			@property
+			def source(self):
+				return '''\
+					#include <cmath>
+					int main() {
+						float const f(std::sin(1f));
+						return 0;
+					}'''
+
+			def apply_to(self, build_cfg): build_cfg.link.libs.append('m')
+
+		std_math_check = StdMathCheck(check_cfg)
+		if std_math_check.result: std_math_check.apply_to(build_cfg)
+	
 		class PCH(CxxPCH):
 			def sources(self):
 				try: return self._sources
