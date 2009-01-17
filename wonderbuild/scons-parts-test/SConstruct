@@ -1,0 +1,7 @@
+import sys, os
+sys.path.append(os.path.join(os.pardir, 'scons-parts', 'parts'))
+
+from parts import *
+
+Part('hello', 'hello.parts')
+Part('print_msg', 'print_msg.parts')

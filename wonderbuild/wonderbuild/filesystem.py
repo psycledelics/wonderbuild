@@ -35,9 +35,11 @@ class Node(object):
 
 	def __getstate__(self):
 		#if __debug__ and is_debug: debug('fs: getstate: ' + self.path + ' ' + str(self._time or self._old_time) + ' ' + str(self._children))
+		# TODO optim: minimal number of attributes if not a dir: no need to save self._children, self._actual_children or self._old_children, self._time or self._old_time
 		return self.parent, self.name, self._is_dir, self._children, self._actual_children or self._old_children, self._time or self._old_time, self._path
 
 	def __setstate__(self, data):
+		# TODO optim: minimal number of attributes if not a dir
 		self.parent, self.name, self._is_dir, self._children, self._old_children, self._old_time, self._path = data
 		self._actual_children = self._time = None
 		#if __debug__ and is_debug: debug('fs: setstate: ' + self.path + ' ' + str(self._old_time) + ' ' + str(self._old_children))

@@ -9,6 +9,15 @@ def wonderbuild_script(project):
 
 	src_dir = project.src_node.node_path('src')
 
+	if False:	
+		class PCH(CxxPCH):
+			def sources(self):
+				try: return self._sources
+				except AttributeError:
+					for s in src_dir.find_iter(in_pats = ['*.hpp'], prune_pats = ['todo']): self._sources.append(s)
+					return self._sources
+		pch = PCH(project)
+
 	class LibFoo(ModTask):
 		def __init__(self): ModTask.__init__(self, LibFoo.Cfg(user_cfg, 'lib'), 'foo')
 
