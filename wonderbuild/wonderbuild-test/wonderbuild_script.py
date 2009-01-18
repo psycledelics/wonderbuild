@@ -3,7 +3,7 @@
 # copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 def wonderbuild_script(project):
-	from wonderbuild.cxx_chain import UserCfg, PkgCfg, DevCfg, ModTask
+	from wonderbuild.cxx_chain import UserCfg, DevCfg, ModTask
 
 	user_cfg = UserCfg(project)
 
@@ -17,14 +17,8 @@ def wonderbuild_script(project):
 		class StdMathCheck(BuildCheck):
 			def __init__(self, base_build_cfg): BuildCheck.__init__(self, 'c++-std-math', base_build_cfg)
 
-			@property
-			def build_cfg(self):
-				try: return self._build_cfg
-				except AttributeError:
-					self._build_cfg = self.base_build_cfg.clone()
-					self._build_cfg.link.libs.append('m')
-					return self._build_cfg
-				
+			def apply_to(self, build_cfg): build_cfg.link.libs.append('m')
+
 			@property
 			def source(self):
 				return '''\
@@ -34,18 +28,41 @@ def wonderbuild_script(project):
 						return 0;
 					}'''
 
-			def apply_to(self, build_cfg): build_cfg.link.libs.append('m')
-
 		std_math_check = StdMathCheck(check_cfg)
 		if std_math_check.result: std_math_check.apply_to(build_cfg)
+		build_cfg.add_in_task(std_math_check)
+
+		build_cfg.cxx.include_paths.append(src_dir)
 	
-		class PCH(CxxPCH):
-			def sources(self):
-				try: return self._sources
-				except AttributeError:
-					for s in src_dir.find_iter(in_pats = ['*.hpp'], prune_pats = ['todo']): self._sources.append(s)
-					return self._sources
-		pch = PCH(project)
+		class Pch(CxxPreCompileTask):
+			def __init__(self, cxx_build_cfg, header):
+				CxxPreCompileTask.__init__(self, build_cfg.cxx, header)
+				
+			@property
+			def header(self): return src_dir.node_path('pch.hpp')
+			
+		pch = Pch(build_cfg.cxx.clone())
+		pch.apply_to(build_cfg.cxx)
+		
+		class LibFoo(ModTask):
+			def __init__(self):
+				ModTask.__init__(self, LibFoo.Cfg(build_cfg, 'lib'), 'foo')
+				self.add_in_task(pch)
+
+			class Cfg(DevCfg):
+				def configure(self):
+					DevCfg.configure(self)
+					self.cxx.includes.append(pch.include)
+					##pkg_cfg = PkgCfg(self.project)
+					##pkg_cfg.pkgs = ['glibmm-2.4']
+					##self.pkgs = [pkg_cfg]
+					#if pkg_cfg.exists: self.pkgs += pkg_cfg.pkgs
+
+			def dyn_in_tasks(self, sched_ctx):
+				self.add_in_task(pch)
+				for s in src_dir.node_path('foo').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
+				return ModTask.dyn_in_tasks(self, sched_ctx)
+		lib_foo = LibFoo()
 
 	class LibFoo(ModTask):
 		def __init__(self): ModTask.__init__(self, LibFoo.Cfg(user_cfg, 'lib'), 'foo')
@@ -53,10 +70,6 @@ def wonderbuild_script(project):
 		class Cfg(DevCfg):
 			def configure(self):
 				DevCfg.configure(self)
-				##pkg_cfg = PkgCfg(self.project)
-				##pkg_cfg.pkgs = ['glibmm-2.4']
-				##self.pkgs = [pkg_cfg]
-				#if pkg_cfg.exists: self.pkgs += pkg_cfg.pkgs
 
 		def dyn_in_tasks(self, sched_ctx):
 			self.cfg.include_paths = [src_dir]

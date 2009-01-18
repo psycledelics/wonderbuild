@@ -441,7 +441,10 @@ class ModTask(Task):
 			if t.processed:
 				try: ld = t.cfg.ld
 				except AttributeError: continue # not a lib task
-				if not ld:
+				if True:#if not ld: when a dependant lib changes its kind from static to shared, we actually need to relink.
+					# TODO To be able to detect when a dependant lib changes its kind,
+					# we'd need to store these kinds in the task state.
+					# For now, we always relink, even when the dependent lib was already a shared lib before.
 					if __debug__ and is_debug: debug('task: in task changed: ' + str(self) + ' ' + str(t))
 					return True
 		if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))

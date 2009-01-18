@@ -16,13 +16,13 @@ class ClientCxxCfg(object):
 		self.project = project
 		self.include_paths = []
 		self.defines = {}
-		self.flags = []
+		self.cxx_flags = []
 		self.pkgs = []
 		
 	def apply(self, other):
 		for i in other.include_paths: self.include_paths.append(i)
 		self.defines.update(other.defines)
-		for f in other.flags: self.flags.append(f)
+		for f in other.cxx_flags: self.cxx_flags.append(f)
 		for p in other.pkgs: self.pkgs.append(p)
 		
 	def clone(self):
@@ -33,7 +33,7 @@ class ClientCxxCfg(object):
 class BuildCxxCfg(ClientCxxCfg):
 	def __init__(self, project)
 		ClientCxxCfg.__init__(self, project)
-		self.cxx_prog = 'g++'
+		self.cxx_prog = 'c++'
 		self.pic = True
 		self.includes = []
 		self.impl = None
@@ -52,28 +52,73 @@ class ClientLinkCfg(object)
 		self.project = project
 		self.lib_paths = []
 		self.libs = []
-		self.flags = []
+		self.ld_flags = []
 		self.pkgs = []
+
+	def apply(self, other):
+		for i in other.lib_paths: self.lib_paths.append(i)
+		for l in other.libs: self.libs.append(l)
+		for f in other.ld_flags: self.ld_flags.append(f)
+		for p in other.pkgs: self.pkgs.append(p)
+		
+	def clone(self):
+		c = self.__class__(self.project)
+		c.apply(self)
+		return c
 
 class BuildLinkCfg(ClientLinkCfg)
 	def __init__(self, project):
 		ClientLinkCfg.__init__(self, project)
-		self.ld_prog = 'g++'
+		self.ld_prog = 'c++'
 		self.shared = True
+
+	def apply(self):
+		self.ld_prog = other.ld_prog
+		self.shared = other.shared
+		
+	def apply_client(self, other): ClientLinkCfg.apply(self, other)
+
+class ClientCfg(object):
+	def __init__(self, project)
+		self.cxx = ClientCxxCfg(project)
+		self.link = ClientLinkCfg(project)
+		
+	def apply(self, other):
+		self.cxx.apply(other.cxx)
+		self.link.apply(other.link)
+
+	def clone(self):
+		c = self.__class__(project)
+		c.apply(self)
+		return c
+
+class BuildCfg(object):
+	def __init__(self, project):
+		self.cxx = BuildCxxCfg(project)
+		self.link = BuildLinkCfg(project)
+		
+	def apply_client(self, other):
+		self.cxx.apply_client(other)
+		self.link.apply_client(other)
 
 class BuildCheck(object):
 	def __init__(self, name, base_build_cfg)
 		self.name = name
-		self.base_build_cfg
+		self._base_build_cfg
+
+	def apply_to(self, build_cfg): pass
 
 	@property
 	def source(self): pass
 
 	@property
-	def build_cfg(self): pass
-	
-	def apply_to(self, build_cfg): pass
-
+	def build_cfg(self):
+		try: return self._build_cfg
+		except AttributeError:
+			self._build_cfg = self._base_build_cfg.clone()
+			self.apply_to(self._build_cfg)
+			return self._build_cfg
+		
 	@property
 	def project(self): return self.base_build_cfg.project
 	
@@ -107,7 +152,11 @@ class CxxPreCompileTask(Task):
 	def __init__(self, build_cxx_cfg, header):
 		Task.__init__(self, build_cxx_cfg.project)
 		self.cfg = build_cxx_cfg
-		self.header = header
+
+	@property
+	def header(self): pass
+
+	def apply_to_(self, cxx_build_cfg): cxx_build_cfg.includes.append(self.header)
 
 	@property
 	def impl(self): return self.cfg.impl
