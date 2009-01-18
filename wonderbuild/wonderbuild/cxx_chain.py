@@ -81,7 +81,7 @@ class UserCfg(Cfg):
 
 			if not cxx_prog: self.cxx_prog = 'c++'
 
-			self.print_desc('checking for c++ compiler')
+			self.print_desc('checking for c++ tool chain')
 			r, out, err = exec_subprocess_pipe([self.cxx_prog, '-dumpversion'], silent = True)
 			if r != 0:
 				if not silent: self.print_result_desc('not gcc\n', '31')

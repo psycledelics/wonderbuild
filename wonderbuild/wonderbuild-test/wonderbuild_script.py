@@ -8,6 +8,10 @@ def wonderbuild_script(project):
 	user_cfg = UserCfg(project)
 
 	src_dir = project.src_node.node_path('src')
+	
+	if True:
+		import wonderbuild.cxx_chain2
+		u = wonderbuild.cxx_chain2.UserCfg(project)
 
 	if False:
 		build_cfg = user_cfg
@@ -34,42 +38,40 @@ def wonderbuild_script(project):
 
 		build_cfg.cxx.include_paths.append(src_dir)
 	
-		class Pch(CxxPreCompileTask):
-			def __init__(self, cxx_build_cfg, header):
-				CxxPreCompileTask.__init__(self, build_cfg.cxx, header)
-				
-			@property
-			def header(self): return src_dir.node_path('pch.hpp')
-			
-		pch = Pch(build_cfg.cxx.clone())
-		pch.apply_to(build_cfg.cxx)
+		pch = CxxPreCompileTask(build_cfg.clone(), src_dir.node_path('pch.hpp'))
+		pch.apply_to(build_cfg)
 		
+		class Pch(ModTask):
+			def __init__(self):
+				ModTask.__init__(self, 'pch', ModTask.Kinds.PCH, build_cfg)
+
+			@property
+			def header(self): src_dir.node_path('pch.hpp')
+		pch = Pch()
+
 		class LibFoo(ModTask):
 			def __init__(self):
-				ModTask.__init__(self, LibFoo.Cfg(build_cfg, 'lib'), 'foo')
-				self.add_in_task(pch)
-
-			class Cfg(DevCfg):
-				def configure(self):
-					DevCfg.configure(self)
-					self.cxx.includes.append(pch.include)
-					##pkg_cfg = PkgCfg(self.project)
-					##pkg_cfg.pkgs = ['glibmm-2.4']
-					##self.pkgs = [pkg_cfg]
-					#if pkg_cfg.exists: self.pkgs += pkg_cfg.pkgs
+				ModTask.__init__(self, 'foo', ModTask.Kinds.LIB, build_cfg)
+				self.client_of(pch)
 
 			def dyn_in_tasks(self, sched_ctx):
-				self.add_in_task(pch)
 				for s in src_dir.node_path('foo').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 				return ModTask.dyn_in_tasks(self, sched_ctx)
 		lib_foo = LibFoo()
 
-	class LibFoo(ModTask):
-		def __init__(self): ModTask.__init__(self, LibFoo.Cfg(user_cfg, 'lib'), 'foo')
+		class MainProg(ModTask):
+			def __init__(self):
+				ModTask.__init__(self, 'main', ModTask.Kinds.PROG, build_cfg)
+				self.client_of(pch)
 
-		class Cfg(DevCfg):
-			def configure(self):
-				DevCfg.configure(self)
+			def dyn_in_tasks(self, sched_ctx):
+				self.client_of(lib_foo)
+				for s in src_dir.node_path('main').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
+				return ModTask.dyn_in_tasks(self, sched_ctx)
+		main_prog = MainProg()
+
+	class LibFoo(ModTask):
+		def __init__(self): ModTask.__init__(self, DevCfg(user_cfg, 'lib'), 'foo')
 
 		def dyn_in_tasks(self, sched_ctx):
 			self.cfg.include_paths = [src_dir]
@@ -78,17 +80,13 @@ def wonderbuild_script(project):
 	lib_foo = LibFoo()
 
 	class MainProg(ModTask):
-		def __init__(self): ModTask.__init__(self, MainProg.Cfg(user_cfg, 'prog'), 'main')
-
-		class Cfg(DevCfg):
-			def configure(self):
-				DevCfg.configure(self)
-				self.include_paths = [src_dir]
-				self.libs_paths.append(lib_foo.target.parent)
-				self.libs.append(lib_foo.name)
+		def __init__(self): ModTask.__init__(self, DevCfg(user_cfg, 'prog'), 'main')
 
 		def dyn_in_tasks(self, sched_ctx):
 			self.add_in_task(lib_foo)
+			self.cfg.include_paths = [src_dir]
+			self.cfg.libs_paths.append(lib_foo.target.parent)
+			self.cfg.libs.append(lib_foo.name)
 			for s in src_dir.node_path('main').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 			return ModTask.dyn_in_tasks(self, sched_ctx)
 	main_prog = MainProg()
