@@ -111,8 +111,8 @@ def wonderbuild_script(project):
 	class CustomUserCfg(UserCfg):
 		def configure(self):
 			UserCfg.configure(self)
-			self.cxx_flags += ['-g', '-O0', '-Wall']
-			self.shared = False
+			self.cxx_flags = ['-g', '-O0', '-Wall']
+			self.shared = self.pic = False
 
 	user_cfg = CustomUserCfg(project)
 

@@ -22,7 +22,7 @@ main() {
 
 	case $tool in
 		wonderbuild)
-			$measure ../../wonderbuild.py --bld-dir=build-$tool --cxx=g++ --cxx-pic=no --jobs=$jobs "$@"
+			$measure ../../wonderbuild.py --bld-dir=build-$tool --cxx=g++ --jobs=$jobs "$@"
 		;;
 	
 		waf)
