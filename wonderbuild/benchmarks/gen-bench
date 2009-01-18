@@ -108,13 +108,13 @@ def create_wonderbuild(libs):
 def wonderbuild_script(project):
 	from wonderbuild.cxx_chain import UserCfg, DevCfg, ModTask
 
-	user_cfg = UserCfg(project)
-
 	class CustomUserCfg(UserCfg):
 		def configure(self):
 			UserCfg.configure(self)
-			self.cxx_flags += ['-g', 'O0', '-Wall']
+			self.cxx_flags += ['-g', '-O0', '-Wall']
 			self.shared = False
+
+	user_cfg = CustomUserCfg(project)
 
 	top_src_dir = project.src_node
 

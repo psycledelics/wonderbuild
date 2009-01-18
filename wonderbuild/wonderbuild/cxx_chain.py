@@ -51,8 +51,7 @@ class UserCfg(Cfg):
 			self.kind, self.version, \
 			self.cxx_prog, self.cxx_flags, self.pic, self.optim, self.debug, \
 			self.shared, self.ld_prog, self.ld_flags, \
-			self.ar_prog, self.ar_flags, self.ranlib_prog, self.ranlib_flags, \
-			self._cxx_args, self._mod_args = \
+			self.ar_prog, self.ar_flags, self.ranlib_prog, self.ranlib_flags = \
 				self.project.state_and_cache[self.__class__.__name__]
 		except KeyError: parse = True
 		else: parse = old_sig != self.sig
@@ -119,8 +118,7 @@ class UserCfg(Cfg):
 				self.kind, self.version, \
 				self.cxx_prog, self.cxx_flags, self.pic, self.optim, self.debug, \
 				self.shared, self.ld_prog, self.ld_flags, \
-				self.ar_prog, self.ar_flags, self.ranlib_prog, self.ranlib_flags, \
-				self.cxx_args, self.mod_args
+				self.ar_prog, self.ar_flags, self.ranlib_prog, self.ranlib_flags
 
 		elif self.kind == 'gcc':
 			import gcc

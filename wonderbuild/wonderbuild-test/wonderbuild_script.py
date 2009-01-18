@@ -3,21 +3,15 @@
 # copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 def wonderbuild_script(project):
-	from wonderbuild.cxx_chain import UserCfg, DevCfg, ModTask
-
-	user_cfg = UserCfg(project)
-
 	src_dir = project.src_node.node_path('src')
-	
-	if True:
-		import wonderbuild.cxx_chain2
-		u = wonderbuild.cxx_chain2.UserCfg(project)
+	tasks = []
+
+	from wonderbuild.cxx_chain2 import UserCfg, ModTask
+	build_cfg = UserCfg(project)
 
 	if False:
-		build_cfg = user_cfg
-
 		check_cfg = build_cfg.clone()
-	
+
 		class StdMathCheck(BuildCheck):
 			def __init__(self, base_build_cfg): BuildCheck.__init__(self, 'c++-std-math', base_build_cfg)
 
@@ -37,10 +31,10 @@ def wonderbuild_script(project):
 		build_cfg.add_in_task(std_math_check)
 
 		build_cfg.cxx.include_paths.append(src_dir)
-	
+
 		pch = CxxPreCompileTask(build_cfg.clone(), src_dir.node_path('pch.hpp'))
 		pch.apply_to(build_cfg)
-		
+	
 		class Pch(ModTask):
 			def __init__(self):
 				ModTask.__init__(self, 'pch', ModTask.Kinds.PCH, build_cfg)
@@ -49,46 +43,31 @@ def wonderbuild_script(project):
 			def header(self): src_dir.node_path('pch.hpp')
 		pch = Pch()
 
-		class LibFoo(ModTask):
-			def __init__(self):
-				ModTask.__init__(self, 'foo', ModTask.Kinds.LIB, build_cfg)
-				self.client_of(pch)
-
-			def dyn_in_tasks(self, sched_ctx):
-				for s in src_dir.node_path('foo').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
-				return ModTask.dyn_in_tasks(self, sched_ctx)
-		lib_foo = LibFoo()
-
-		class MainProg(ModTask):
-			def __init__(self):
-				ModTask.__init__(self, 'main', ModTask.Kinds.PROG, build_cfg)
-				self.client_of(pch)
-
-			def dyn_in_tasks(self, sched_ctx):
-				self.client_of(lib_foo)
-				for s in src_dir.node_path('main').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
-				return ModTask.dyn_in_tasks(self, sched_ctx)
-		main_prog = MainProg()
-
 	class LibFoo(ModTask):
-		def __init__(self): ModTask.__init__(self, DevCfg(user_cfg, 'lib'), 'foo')
+		def __init__(self):
+			ModTask.__init__(self, 'foo', ModTask.Kinds.LIB, build_cfg)
+			#self.client_of(pch)
 
 		def dyn_in_tasks(self, sched_ctx):
-			self.cfg.include_paths = [src_dir]
 			for s in src_dir.node_path('foo').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 			return ModTask.dyn_in_tasks(self, sched_ctx)
 	lib_foo = LibFoo()
-
+	
 	class MainProg(ModTask):
-		def __init__(self): ModTask.__init__(self, DevCfg(user_cfg, 'prog'), 'main')
+		def __init__(self):
+			ModTask.__init__(self, 'main', ModTask.Kinds.PROG, build_cfg)
+			#self.client_of(pch)
 
 		def dyn_in_tasks(self, sched_ctx):
+			#self.client_of(lib_foo)
 			self.add_in_task(lib_foo)
 			self.cfg.include_paths = [src_dir]
-			self.cfg.libs_paths.append(lib_foo.target.parent)
+			self.cfg.lib_paths.append(lib_foo.target.parent)
 			self.cfg.libs.append(lib_foo.name)
 			for s in src_dir.node_path('main').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 			return ModTask.dyn_in_tasks(self, sched_ctx)
 	main_prog = MainProg()
 
-	return [main_prog]
+	tasks.append(main_prog)
+
+	return tasks

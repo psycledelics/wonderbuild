@@ -14,20 +14,24 @@ from task import Task, exec_subprocess_pipe
 class ClientCfg(object):
 	def __init__(self, project):
 		self.project = project
-		self.include_paths = []
 		self.defines = {}
+		self.include_paths = []
 		self.cxx_flags = []
 		self.lib_paths = []
 		self.libs = []
+		self.static_libs = []
+		self.shared_libs = []
 		self.ld_flags = []
 		self.pkgs = []
 		
 	def apply(self, other):
-		for i in other.include_paths: self.include_paths.append(i)
 		self.defines.update(other.defines)
+		for i in other.include_paths: self.include_paths.append(i)
 		for f in other.cxx_flags: self.cxx_flags.append(f)
 		for i in other.lib_paths: self.lib_paths.append(i)
 		for l in other.libs: self.libs.append(l)
+		for l in other.static_libs: self.static_libs.append(l)
+		for l in other.shared_libs: self.shared_libs.append(l)
 		for f in other.ld_flags: self.ld_flags.append(f)
 		for p in other.pkgs: self.pkgs.append(p)
 
@@ -39,14 +43,18 @@ class ClientCfg(object):
 class BuildCfg(ClientCfg):
 	def __init__(self, project):
 		ClientCfg.__init__(self, project)
-		self.cxx_prog = 'c++'
-		self.pic = False
+		self.cxx_prog = None
+		self.pic = None
 		self.includes = []
-		self.ld_prog = 'c++'
-		self.ar_prog = 'ar'
-		self.ranlib_prog = 'ranlib'
-		self.shared = True
+		self.ld_prog = None
+		self.ar_prog = None
+		self.ranlib_prog = None
+		self.shared = None
 		self.impl = None
+		self.kind = self.version = None
+		self.debug = False
+		self.optim = None
+		self.check_missing = False
 	
 	def apply(self, other):
 		ClientCfg.apply(self, other)
@@ -58,6 +66,101 @@ class BuildCfg(ClientCfg):
 		self.ranlib_prog = other.ranlib_prog
 		self.shared = other.shared
 		self.impl = other.impl
+		self.kind = other.kind
+		self.version = other.version
+
+	@property
+	def _common_sig(self):
+		try: return self.__common_sig
+		except AttributeError:
+			sig = Sig(self.impl.common_env_sig)
+			for name in ('PATH',):
+				e = os.environ.get(name, None)
+				if e is not None: sig.update(e)
+			sig.update(self.kind)
+			sig.update(self.version)
+			sig.update(str(self.debug))
+			sig.update(str(self.optim))
+			for p in self.pkgs: sig.update(p.sig)
+			sig = self.__common_sig = sig.digest()
+			return sig
+		
+	@property
+	def cxx_sig(self):
+		try: return self._cxx_sig
+		except AttributeError:
+			sig = Sig(self._common_sig)
+			sig.update(self.cxx_prog)
+			sig.update(str(self.pic))
+			for k, v in self.defines.iteritems():
+				sig.update(k)
+				if v is not None: sig.update(v)
+			for i in self.include_paths: sig.update(i.abs_path)
+			for i in self.includes: sig.update(i.abs_path)
+			for f in self.cxx_flags: sig.update(f)
+			sig.update(self.impl.cxx_env_sig)
+			sig = self._cxx_sig = sig.digest()
+			return sig
+
+	@property
+	def _common_mod_sig(self):
+		try: return self.__common_mod_sig
+		except AttributeError:
+			sig = Sig(self._common_sig)
+			sig.update(str(self.shared))
+			for p in self.lib_paths: sig.update(p.path)
+			for l in self.libs: sig.update(l)
+			for l in self.static_libs: sig.update(l)
+			for l in self.shared_libs: sig.update(l)
+			sig.update(self.impl.common_mod_env_sig)
+			sig = self.__common_mod_sig = sig.digest()
+			return sig
+
+	@property
+	def ar_ranlib_sig(self):
+		try: return self._ar_ranlib_sig
+		except AttributeError:
+			sig = Sig(self._common_mod_sig)
+			sig.update(self.ar_prog)
+			sig.update(self.ranlib_prog)
+			sig.update(self.impl.ar_ranlib_env_sig)
+			sig = self._ar_ranlib_sig = sig.digest()
+			return sig
+
+	@property
+	def ld_sig(self):
+		try: return self._ld_sig
+		except AttributeError:
+			sig = Sig(self._common_mod_sig)
+			sig.update(self.ld_prog)
+			for f in self.ld_flags: sig.update(f)
+			sig.update(self.impl.ld_env_sig)
+			sig = self._ld_sig = sig.digest()
+			return sig
+
+	@property
+	def cxx_args(self):
+		try: return self._cxx_args
+		except AttributeError:
+			args = self._cxx_args = self.impl.cfg_cxx_args(self)
+			if __debug__ and is_debug: debug('cfg: cxx: build: cxx: ' + str(args))
+			return args
+
+	@property
+	def ld_args(self):
+		try: return self._ld_args
+		except AttributeError:
+			args = self._ld_args = self.impl.cfg_ld_args(self)
+			if __debug__ and is_debug: debug('cfg: cxx: build: ld: ' + str(args))
+			return args
+
+	@property
+	def ar_ranlib_args(self):
+		try: return self._ar_ranlib_args
+		except AttributeError:
+			args = self._ar_ranlib_args = self.impl.cfg_ar_ranlib_args(self)
+			if __debug__ and is_debug: debug('cfg: cxx: build: ar ranlib: ' + str(args))
+			return args
 
 class UserCfg(Cfg, BuildCfg):
 	_cxx_options = set([
@@ -92,18 +195,20 @@ class UserCfg(Cfg, BuildCfg):
 		help['--cxx-mod-ar=']           = ('--cxx-mod-ar=<prog>', 'use <prog> as static lib archiver', 'ar')
 		help['--cxx-mod-ranlib=']       = ('--cxx-mod-ranlib=<prog>', 'use <prog> as static lib archive indexer', 'ranlib (or via ar s flag for gnu ar)')
 		help['--cxx-check-missing=']    = ('--cxx-check-missing=<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'no')
-	
-	def configure(self):
+
+	def __init__(self, project):
+		Cfg.__init__(self, project)
+		BuildCfg.__init__(self, project)
+
 		try:
 			old_sig, self.check_missing, \
 			self.kind, self.version, \
 			self.cxx_prog, self.cxx_flags, self.pic, self.optim, self.debug, \
 			self.shared, self.ld_prog, self.ld_flags, \
-			self.ar_prog, self.ar_flags, self.ranlib_prog, self.ranlib_flags, \
-			self._cxx_args, self._mod_args = \
-				self.project.state_and_cache[self.__class__.__name__ + '2'] # XXX revert
+			self.ar_prog, self.ranlib_prog = \
+				self.project.state_and_cache[self.__class__.__name__ + '2'] # XXX remove '2' (below too)
 		except KeyError: parse = True
-		else: parse = old_sig != self.sig
+		else: parse = old_sig != self.options_sig
 
 		if parse:
 			if __debug__ and is_debug: debug('cfg: cxx: user: parsing options')
@@ -140,8 +245,8 @@ class UserCfg(Cfg, BuildCfg):
 				self.version = out.rstrip('\n')
 				self.ld_prog = self.cxx_prog
 				ld_prog = True
-				import gcc
-				self.impl = gcc.Impl()
+				import gcc2
+				self.impl = gcc2.Impl()
 			self.print_result_desc(str(self.kind) + ' version ' + str(self.version) + '\n', '32')
 
 			if not cxx_flags:
@@ -156,202 +261,47 @@ class UserCfg(Cfg, BuildCfg):
 				else: self.ld_flags = []
 
 			if not ar_prog: self.ar_prog = self.impl.ar_prog
-			self.ar_flags = 'rc'
-			if self.kind == 'gcc': self.ar_flags += 's'
-				
 			if not ranlib_prog: self.ranlib_prog = self.impl.ranlib_prog
-			self.ranlib_flags = None
 			
-			self.project.state_and_cache[self.__class__.__name__] = \
-				self.sig, self.check_missing, \
+			# XXX remove '2' (above too)
+			self.project.state_and_cache[self.__class__.__name__ + '2'] = \
+				self.options_sig, self.check_missing, \
 				self.kind, self.version, \
 				self.cxx_prog, self.cxx_flags, self.pic, self.optim, self.debug, \
 				self.shared, self.ld_prog, self.ld_flags, \
-				self.ar_prog, self.ar_flags, self.ranlib_prog, self.ranlib_flags, \
-				self.cxx_args, self.mod_args
+				self.ar_prog, self.ranlib_prog
 
 		elif self.kind == 'gcc':
-			import gcc
-			self.impl = gcc.Impl()
+			import gcc2
+			self.impl = gcc2.Impl()
 
-		if self.impl is None:
-			raise Exception, 'unsupported c++ compiler'
+		if self.impl is None: raise Exception, 'unsupported c++ compiler'
 
-	@property
-	def sig(self):
-		try: return self._sig
-		except AttributeError:
-			sig = Sig(self.env_sig)
-			sig.update(self.options_sig) # TODO don't sign the options, because we miss the defaults
-			sig = self._sig = sig.digest()
-			return sig
-
-	@property
-	def env_sig(self):
-		try: return self._env_sig
-		except AttributeError:
-			sig = Sig()
-			e = os.environ.get('PATH', None)
-			if e is not None: sig.update(e)
-			sig = self._env_sig = sig.digest()
-			return sig
-
-	@property
-	def cxx_options_sig(self):
-		try: return self._cxx_options_sig
-		except AttributeError:
-			sig = Sig()
-			for o in options:
-				for oo in self.__class__._cxx_options:
-					if o.startswith(oo + '='): sig.update(o)
-			sig = self._cxx_options_sig = sig.digest()
-			return sig
-
-	@property
-	def mod_options_sig(self):
-		try: return self._mod_options_sig
-		except AttributeError:
-			sig = Sig()
-			for o in options:
-				for oo in self.__class__._mod_options:
-					if o.startswith(oo + '='): sig.update(o)
-			sig = self._mod_options_sig = sig.digest()
-			return sig
-
-	@property
-	def cxx_sig(self):
-		try: return self._cxx_sig
-		except AttributeError:
-			sig = Sig(self.cxx_options_sig) # TODO don't sign the options, because we miss the defaults
-			sig.update(self.env_sig) # TODO sign abs prog paths instead
-			sig.update(self.impl.cxx_env_sig)
-			sig = self._cxx_sig = sig.digest()
-			return sig
-
-	@property
-	def mod_sig(self):
-		try: return self._mod_sig
-		except AttributeError:
-			sig = Sig(self.mod_options_sig) # TODO don't sign the options, because we miss the defaults
-			sig.update(self.env_sig) # TODO sign abs prog paths instead
-			sig.update(self.impl.mod_env_sig)
-			sig = self._mod_sig = sig.digest()
-			return sig
-
-	@property
-	def cxx_args(self):
-		try: return self._cxx_args
-		except AttributeError:
-			args = self._cxx_args = self.impl.user_cfg_cxx_args(self)
-			if __debug__ and is_debug: debug('cfg: cxx: user: cxx: ' + str(args))
-			return args
-
-	@property
-	def mod_args(self):
-		try: return self._mod_args
-		except AttributeError:
-			args = self._mod_args = self.impl.user_cfg_mod_args(self)
-			if __debug__ and is_debug: debug('cfg: cxx: user: mod: ' + str(args))
-			return args
-
-class DevelCfg(BuildCfg):
-	class Kinds(object):
-		PROG = 0
-		LIB = 1
-
-	def __init__(self, base_build_cfg, kind = Kinds.LIB):
-		BuildCfg.__init__(self, base_build_cfg.project)
-		self._base_build_cfg = base_build_cfg
-		self._base_build_cfg.apply_to(self)
-		if self.kind == DevelCfg.Kinds.PROG:
-			self.shared = False
-			self.ld = True
-		else:
-			self.ld = self.shared
-			if self.shared and not self.pic:
-				debug('cfg: cxx: devel: shared lib => overriding cfg to pic')
-				self.pic = True
-		self.kind = kind
-
-	@property
-	def cxx_sig(self):
-		try: return self._cxx_sig
-		except AttributeError:
-			sig = Sig(self.user_cfg.cxx_sig)
-			sig.update(str(self.pic))
-			for k, v in self.defines.iteritems():
-				sig.update(k)
-				if v is not None: sig.update(v)
-			for p in self.include_paths: sig.update(p.path)
-			for p in self.pkgs: sig.update(p.sig)
-			sig = self._cxx_sig = sig.digest()
-			return sig
-
-	@property
-	def mod_sig(self):
-		try: return self._mod_sig
-		except AttributeError:
-			sig = Sig(self.user_cfg.mod_sig)
-			sig.update(str(self.shared))
-			for p in self.libs_paths: sig.update(p.path)
-			for l in self.libs: sig.update(l)
-			for l in self.static_libs: sig.update(l)
-			for l in self.shared_libs: sig.update(l)
-			for p in self.pkgs: sig.update(p.sig)
-			sig = self._mod_sig = sig.digest()
-			return sig
-
-	@property
-	def cxx_args(self):
-		self.lock.acquire()
-		try:
-			try: return self._cxx_args
-			except AttributeError:
-				args = self.user_cfg.cxx_args[:]
-				self.impl.dev_cfg_cxx_args(self, args)
-				for p in self.pkgs: args += p.cxx_args
-				if __debug__ and is_debug: debug('cfg: cxx: devel: cxx: ' + str(args))
-				self._cxx_args = args
-				return args
-		finally: self.lock.release()
-
-	@property
-	def mod_args(self):
-		self.lock.acquire()
-		try:
-			try: return self._mod_args
-			except AttributeError:
-				ld_args, ar_args, ranlib_args = self.user_cfg.mod_args
-				if not self.ld: args = ar_args, ranlib_args
-				else:
-					args = ld_args[:]
-					self.impl.dev_cfg_ld_args(self, args)
-					for p in self.pkgs: args += p.mod_args
-				if __debug__ and is_debug: debug('cfg: cxx: devel: mod: ' + str(args))
-				self._mod_args = args
-				return args
-		finally: self.lock.release()
+	def clone(self):
+		c = BuildCfg(self.project)
+		c.apply(self)
+		return c
 
 class BuildCheck(object):
-	def __init__(self, name, base_build_cfg):
+	def __init__(self, name, base_cfg):
 		self.name = name
-		self._base_build_cfg
+		self._base_cfg
 
-	def apply_to(self, build_cfg): pass
+	def apply_to(self, cfg): pass
 
 	@property
 	def source(self): pass
 
 	@property
-	def build_cfg(self):
-		try: return self._build_cfg
+	def cfg(self):
+		try: return self._cfg
 		except AttributeError:
-			self._build_cfg = self._base_build_cfg.clone()
-			self.apply_to(self._build_cfg)
-			return self._build_cfg
+			self._cfg = self._base_cfg.clone()
+			self.apply_to(self._cfg)
+			return self._cfg
 		
 	@property
-	def project(self): return self._base_build_cfg.project
+	def project(self): return self._base_cfg.project
 	
 	@property
 	def uid(self): return self.name
@@ -376,21 +326,211 @@ class BuildCheck(object):
 				f = open(n.path, 'w')
 				try: f.write(self.source)
 				finally: f.close()
-				self._result = self.build_cfg.impl.process_cxx() == 0
+				self._result = self.cfg.impl.process_cxx() == 0
 				return self._result
 				
+class CxxTask(Task):
+	def __init__(self, mod_task):
+		Task.__init__(self, mod_task.project)
+		self.mod_task = mod_task
+		self.sources = []
+
+	@property
+	def cfg(self): return self.mod_task.cfg
+
+	def __str__(self): return ' '.join([str(s) for s in self.sources])
+
+	@property
+	def uid(self): return self.mod_task.uid
+
+	@property
+	def target_dir(self): return self.mod_task.target_dir
+
+	def need_process(self): return True
+
+	def process(self):
+		lock = self.target_dir.lock
+		lock.acquire()
+		try: self.target_dir.make_dir()
+		finally: lock.release()
+		if not silent:
+			if self.cfg.pic: pic = 'pic'; color = '7;1;34'
+			else: pic = 'non-pic'; color = '7;34'
+			self.print_desc('batch-compiling ' + pic + ' objects from c++ ' + str(self), color)
+		self._actual_sources = []
+		self.target_dir.actual_children # not needed, just an optimisation
+		for s in self.sources:
+			node = self.target_dir.node_path(self.mod_task._unique_base_name(s))
+			if not node.exists:
+				f = open(node.path, 'wb')
+				try: f.write('#include "%s"\n' % s.rel_path(self.target_dir))
+				finally: f.close()
+			self._actual_sources.append(node)
+		self.cfg.impl.process_cxx_task(self)
+		Task.process(self)
+
+class ModTask(Task):
+	class Kinds(object):
+		PROG = 0
+		LIB = 1
+		LOADABLE = 2
+
+	def __init__(self, name, kind, base_cfg, aliases = None):
+		Task.__init__(self, base_cfg.project, aliases)
+		self.name = name
+		self.sources = []
+		self.kind = kind
+		self.cfg = base_cfg.clone()
+		if self.kind == ModTask.Kinds.PROG:
+			self.cfg.shared = False
+			self.ld = True
+		else:
+			self.ld = self.cfg.shared
+			if self.cfg.shared and not self.cfg.pic:
+				debug('cfg: cxx: mod: shared lib => overriding cfg to pic')
+				self.cfg.pic = True
+
+	def __str__(self): return str(self.target)
+
+	@property
+	def uid(self): return self.name
+
+	@property
+	def target(self):
+		try: return self._target
+		except AttributeError:
+			self._target = self.project.bld_node.\
+				node_path('modules').\
+				node_path(self.name).\
+				node_path(self.cfg.impl.mod_task_target_name(self))
+			return self._target
+
+	@property
+	def target_dir(self): return self.target.parent
+
+	def dyn_in_tasks(self, sched_context):
+		changed_sources = []
+		try: state = self.project.task_states[self.uid]
+		except KeyError:
+			if __debug__ and is_debug: debug('task: no state: ' + str(self))
+			self.project.task_states[self.uid] = None, None, {}
+			changed_sources = self.sources
+		else:
+			if state[1] != self.cfg.cxx_sig:
+				if __debug__ and is_debug: debug('task: cxx sig changed: ' + str(self))
+				changed_sources = self.sources
+			else:
+				implicit_deps = state[2]
+				for s in self.sources:
+					try: old_sig, deps = implicit_deps[s]
+					except KeyError:
+						# This is a new source.
+						changed_sources.append(s)
+						continue
+					try: sigs = [dep.sig for dep in deps]
+					except OSError:
+						# A cached implicit dep does not exist anymore.
+						if __debug__ and is_debug: debug('cpp: deps not found: ' + str(s))
+						changed_sources.append(s)
+						continue
+					sigs.sort()
+					sig = Sig(''.join(sigs)).digest()
+					if old_sig != sig:
+						# The cached implicit deps changed.
+						if __debug__ and is_debug: debug('cpp: deps changed: ' + str(s))
+						changed_sources.append(s)
+						continue
+					if self.cfg.check_missing:
+						try: self.target_dir.actual_children # not needed, just an optimisation
+						except OSError: pass
+						o = self.target_dir.node_path(self._obj_name(s))
+						if not o.exists:
+							if __debug__ and is_debug: debug('task: target removed: ' + str(o))
+							changed_sources.append(s)
+							continue
+					if __debug__ and is_debug: debug('task: skip: no change: ' + str(s))
+				if not self.cfg.check_missing: self.target_dir.forget()
+		if len(changed_sources) != 0:
+			batches = []
+			for i in xrange(sched_context.thread_count): batches.append([])
+			i = 0
+			for s in changed_sources:
+				batches[i].append(s)
+				i = (i + 1) % sched_context.thread_count
+			for b in batches:
+				if len(b) == 0: break
+				t = CxxTask(self)
+				t.sources = b
+				self.add_in_task(t)
+		self._changed_sources = changed_sources
+		return self.in_tasks
+
+	def need_process(self):
+		if self.cfg.check_missing and not self.target.exists:
+			if __debug__ and is_debug: debug('task: target removed: ' + str(self))
+			self._changed_sources = self.sources
+			return True
+		if len(self._changed_sources) != 0: return True
+		state = self.project.task_states[self.uid]
+		if state[0] != self._mod_sig:
+			if __debug__ and is_debug: debug('task: mod sig changed: ' + str(self))
+			self._changed_sources = self.sources
+			return True
+		for t in self.in_tasks:
+			if t.processed:
+				try: ld = t.ld
+				except AttributeError: continue # not a lib task
+				if True:#if not ld: when a dependant lib changes its kind from static to shared, we actually need to relink.
+					# TODO To be able to detect when a dependant lib changes its kind,
+					# we'd need to store these kinds in the task state.
+					# For now, we always relink, even when the dependent lib was already a shared lib before.
+					if __debug__ and is_debug: debug('task: in task changed: ' + str(self) + ' ' + str(t))
+					return True
+		if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
+		return False
+
+	def process(self):
+		if not silent:
+			if not self.ld: desc = 'archiving and indexing static lib'; color = '7;36'
+			elif self.kind == ModTask.Kinds.PROG:
+				if not self.cfg.pic: desc = 'linking non-pic program'; color = '7;32'
+				else: desc = 'linking pic program'; color = '7;1;32'
+			elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = '7;1;34'
+			else: desc = 'linking shared lib'; color = '7;1;33'
+			self.print_desc(desc + ' ' + str(self), color)
+		if self.ld: sources = self.sources
+		else: sources = self._changed_sources
+		self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources])
+		implicit_deps = self.project.task_states[self.uid][2]
+		if len(implicit_deps) > len(self.sources):
+			# remove old sources from implicit deps dictionary
+			sources_states = {}
+			for s in self.sources: sources_states[s] = implicit_deps[s]
+		else: sources_states = implicit_deps
+		self.project.task_states[self.uid] = self._mod_sig, self.cfg.cxx_sig, sources_states #XXX move cxx_sig into obj sig
+		Task.process(self)
+
+	def _unique_base_name(self, source):
+		return source.rel_path(self.project.src_node).replace(os.pardir, '_').replace(os.sep, ',')
+
+	def _obj_name(self, source):
+		name = self._unique_base_name(source)
+		return name[:name.rfind('.')] + self.cfg.impl.cxx_task_target_ext
+
+	@property
+	def _mod_sig(self):
+		if self.ld: return self.cfg.ld_sig
+		else: return self.cfg.ar_ranlib_sig
+
 class CxxPreCompileTask(Task):
-	def __init__(self, header, build_cfg):
-		Task.__init__(self, build_cfg.project)
-		self.cfg = build_cfg
+	def __init__(self, header, cfg):
+		Task.__init__(self, cfg.project)
+		self.cfg = cfg
 
 	@property
 	def header(self): pass
 
-	def apply_to_(self, build_cfg): build_cfg.includes.append(self.header)
-
-	@property
-	def impl(self): return self.cfg.impl
+	def apply_to_(self, cfg): cfg.includes.append(self.header)
 
 	def __str__(self): return str(header)
 
