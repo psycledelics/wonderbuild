@@ -11,6 +11,14 @@ from task import exec_subprocess
 class Impl(object):
 
 	@property
+	def common_env_sig(self):
+		sig = Sig()
+		for name in ('LD_LIBRARY_PATH',):
+			e = os.environ.get(name, None)
+			if e is not None: sig.update(e)
+		return sig.digest()
+
+	@property
 	def cxx_prog(self): return 'g++'
 
 	@property
@@ -22,22 +30,18 @@ class Impl(object):
 		return sig.digest()
 
 	@staticmethod
-	def user_cfg_cxx_args(user_cfg):
-		args = [user_cfg.cxx_prog, '-pipe', '-MMD']
-		if user_cfg.debug: args.append('-g')
-		if user_cfg.optim is not None: args.append('-O' + user_cfg.optim)
-		args += user_cfg.cxx_flags
-		if __debug__ and is_debug: debug('cfg: cxx: user: impl: gcc: cxx: ' + str(args))
-		return args
-
-	@staticmethod
-	def dev_cfg_cxx_args(dev_cfg, args):
-		if dev_cfg.pic: args.append('-fPIC')
-		for p in dev_cfg.include_paths: args += ['-I', os.path.join(os.pardir, os.pardir, p.rel_path(dev_cfg.project.bld_node))]
-		for k, v in dev_cfg.defines.iteritems():
+	def cfg_cxx_args(cfg):
+		args = [cfg.cxx_prog, '-pipe', '-MMD'] + cfg.cxx_flags
+		if cfg.debug: args.append('-g')
+		if cfg.optim is not None: args.append('-O' + cfg.optim)
+		if cfg.pic: args.append('-fPIC')
+		for p in cfg.include_paths: args += ['-I', os.path.join(os.pardir, os.pardir, p.rel_path(cfg.project.bld_node))]
+		for i in cfg.includes: args += ['-include', os.path.join(os.pardir, os.pardir, i.rel_path(cfg.project.bld_node))]
+		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + v)
-		if __debug__ and is_debug: debug('cfg: cxx: dev: impl: gcc: cxx: ' + str(args))
+		#if __debug__ and is_debug: debug('cfg: cxx: impl: gcc: cxx: ' + str(args))
+		return args
 	
 	@staticmethod
 	def process_cxx_task(cxx_task):
@@ -73,7 +77,13 @@ class Impl(object):
 	def ranlib_prog(self): return 'ranlib' # for gnu ar, 'ar s' is used instead of ranlib
 	
 	@property
-	def mod_env_sig(self):
+	def common_mod_env_sig(self): return ''
+
+	@property
+	def ar_ranlib_env_sig(self): return ''
+
+	@property
+	def ld_env_sig(self):
 		sig = Sig()
 		for name in ('GNUTARGET', 'LDEMULATION', 'COLLECT_NO_DEMANGLE'):
 			e = os.environ.get(name, None)
@@ -81,50 +91,47 @@ class Impl(object):
 		return sig.digest()
 
 	@staticmethod
-	def user_cfg_mod_args(user_cfg):
-		ld_args = [user_cfg.ld_prog] + user_cfg.ld_flags
-		if __debug__ and is_debug: debug('cfg: cxx: user: impl: gcc: ld: ' + str(ld_args))
-
-		ar_args = [user_cfg.ar_prog]
-		if user_cfg.ar_flags is not None: ar_args.append(user_cfg.ar_flags)
-		if __debug__ and is_debug: debug('cfg: cxx: user: impl: gcc: ar: ' + str(ar_args))
-
-		ranlib_args = [user_cfg.ranlib_prog]
-		if user_cfg.ranlib_flags is not None: ranlib_args.append(user_cfg.ranlib_flags)
-		if __debug__ and is_debug: debug('cfg: cxx: user: impl: gcc: ranlib: ' + str(ranlib_args))
-
-		return ld_args, ar_args, ranlib_args
+	def cfg_ld_args(cfg):
+		args = [cfg.ld_prog] + cfg.ld_flags
+		if cfg.shared: args.append('-shared')
+		for p in cfg.lib_paths: args += ['-L', p.path]
+		for l in cfg.libs: args.append('-l' + l)
+		if len(cfg.static_libs):
+			args.append('-Wl,-Bstatic')
+			for l in cfg.static_libs: args.append('-l' + l)
+		if len(cfg.static_libs):
+			args.append('-Wl,-Bdynamic')
+			for l in cfg.shared_libs: args.append('-l' + l)
+		#if __debug__ and is_debug: debug('cfg: cxx: impl: gcc: ld: ' + str(args))
+		return args
 
 	@staticmethod
-	def dev_cfg_ld_args(dev_cfg, args):
-		if dev_cfg.shared: args.append('-shared')
-		for p in dev_cfg.libs_paths: args += ['-L', p.path]
-		for l in dev_cfg.libs: args.append('-l' + l)
-		if len(dev_cfg.static_libs):
-			args.append('-Wl,-Bstatic')
-			for l in dev_cfg.static_libs: args.append('-l' + l)
-		if len(dev_cfg.static_libs):
-			args.append('-Wl,-Bdynamic')
-			for l in dev_cfg.shared_libs: args.append('-l' + l)
-		if __debug__ and is_debug: debug('cfg: cxx: dev: impl: gcc: ld: ' + str(args))
-	
+	def cfg_ar_ranlib_args(cfg):
+		ar_args = [cfg.ar_prog, 'rcs']
+		#if __debug__ and is_debug: debug('cfg: cxx: impl: gcc: ar: ' + str(ar_args))
+		if True: return ar_args, None # We use the s option in gnu ar to do the same as ranlib.
+		else:
+			ranlib_args = [cfg.ranlib_prog]
+			#if __debug__ and is_debug: debug('cfg: cxx: impl: gcc: ranlib: ' + str(ranlib_args))
+			return ar_args, ranlib_args
+
 	@staticmethod
 	def process_mod_task(mod_task, obj_names):
 		path = mod_task.target_dir.path
 		obj_paths = [os.path.join(path, o) for o in obj_names]
-		if mod_task.cfg.ld:
-			args = mod_task.cfg.mod_args[:]
+		if mod_task.ld:
+			args = mod_task.cfg.ld_args[:]
 			args = [args[0], '-o', mod_task.target.path] + obj_paths + args[1:]
 			r = exec_subprocess(args)
 			if r != 0: raise Exception, r
 		else:
-			ar_args, ranlib_args = mod_task.cfg.mod_args
+			ar_args, ranlib_args = mod_task.cfg.ar_ranlib_args
 			args = ar_args[:]
 			args.append(mod_task.target.path)
 			args += obj_paths
 			r = exec_subprocess(args)
 			if r != 0: raise Exception, r
-			if 's' not in mod_task.user_cfg.ar_flags:
+			if ranlib_args is not None:
 				args = ranlib_args[:]
 				args.append(mod_task.target.path)
 				r = exec_subprocess(args)
@@ -132,7 +139,7 @@ class Impl(object):
 
 	@staticmethod
 	def mod_task_target_name(mod_task):
-		if mod_task.cfg.kind == 'prog': name = mod_task.name
+		if mod_task.kind == mod_task.Kinds.PROG: name = mod_task.name
 		elif mod_task.cfg.shared: name = 'lib' + mod_task.name + '.so'
 		else: name = 'lib' + mod_task.name + '.a'
 		return name

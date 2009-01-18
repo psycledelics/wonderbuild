@@ -55,7 +55,7 @@
 				<br/><br/>
 				<bars scale='60'>
 					<bar-section>Using batch compilation</bar-section>
-					<bar name='wonderbuild'   value=' 0.89'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
+					<bar name='wonderbuild'   value=' 0.87'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
 					<bar name='waf'           value=' 1.90'>max 50 srcs/batch, waf cpp (same with shutil or mv)</bar>
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='jam'           value=' 0.81'><span style='color: red'>missed header deps!</span></bar>

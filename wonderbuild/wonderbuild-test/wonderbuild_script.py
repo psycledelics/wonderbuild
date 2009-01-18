@@ -6,7 +6,7 @@ def wonderbuild_script(project):
 	src_dir = project.src_node.node_path('src')
 	tasks = []
 
-	from wonderbuild.cxx_chain2 import UserCfg, ModTask
+	from wonderbuild.cxx_chain import UserCfg, ModTask
 	build_cfg = UserCfg(project)
 
 	if False:
@@ -67,7 +67,6 @@ def wonderbuild_script(project):
 			for s in src_dir.node_path('main').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 			return ModTask.dyn_in_tasks(self, sched_ctx)
 	main_prog = MainProg()
-
 	tasks.append(main_prog)
 
 	return tasks
