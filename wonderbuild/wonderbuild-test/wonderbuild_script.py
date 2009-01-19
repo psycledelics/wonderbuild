@@ -13,12 +13,12 @@ def wonderbuild_script(project):
 		check_cfg = build_cfg.clone()
 
 		class StdMathCheck(BuildCheck):
-			def __init__(self, base_build_cfg): BuildCheck.__init__(self, 'c++-std-math', base_build_cfg)
+			def __init__(self, base_cfg): BuildCheck.__init__(self, 'c++-std-math', base_cfg)
 
-			def apply_to(self, build_cfg): build_cfg.link.libs.append('m')
+			def apply_to(self, cfg): cfg.libs.append('m')
 
 			@property
-			def source(self):
+			def source_text(self):
 				return '''\
 					#include <cmath>
 					int main() {
