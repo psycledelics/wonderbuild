@@ -50,28 +50,33 @@ def exec_subprocess(args, env = None, cwd = None):
 		cwd = cwd
 	)
 
-def exec_subprocess_pipe(args, env = None, cwd = None, silent = False):
+def exec_subprocess_pipe(args, input = None, env = None, cwd = None, silent = False):
 	if __debug__ and is_debug: debug('exec: pipe: ' + str(cwd) + ' ' + str(env) + ' ' + str(args))
 	p = subprocess.Popen(
 		args = args,
 		bufsize = -1,
+		stdin = input and subprocess.PIPE,
 		stdout = subprocess.PIPE,
 		stderr = subprocess.PIPE,
 		env = env,
 		cwd = cwd
 	)
-	out, err = p.communicate()
-	if not silent:
-		if len(out): sys.stdout.write(out)
-		if len(err):
-			s = ''
-			for line in err.split('\n')[:-1]: s += colored('7;1;31', 'error:') + ' ' + line + '\n'
-			sys.stderr.write(s)
-	elif __debug__ and is_debug:
+	if input is not None:
+		if __debug__ and is_debug:
+			for line in input.split('\n')[:-1]: debug('exec: pipe: ' + colored('7;1;36', 'in') + ': ' + line)
+		elif not silent: sys.stdout.write(input)
+	out, err = p.communicate(input)
+	if __debug__ and is_debug:
 		if len(out):
 			for line in out.split('\n')[:-1]: debug('exec: pipe: ' + colored('7;1;32', 'out') + ': ' + line)
 		if len(err):
 			s = ''
 			for line in err.split('\n')[:-1]: debug('exec: pipe: ' + colored('7;1;31', 'err') + ': ' + line)
 			debug(s)
+	elif not silent:
+		if len(out): sys.stdout.write(out)
+		if len(err):
+			s = ''
+			for line in err.split('\n')[:-1]: s += colored('7;1;31', 'error:') + ' ' + line + '\n'
+			sys.stderr.write(s)
 	return p.returncode, out, err

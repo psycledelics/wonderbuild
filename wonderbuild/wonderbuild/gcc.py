@@ -6,7 +6,7 @@ import os
 
 from logger import is_debug, debug, colored
 from signature import Sig
-from task import exec_subprocess
+from task import exec_subprocess, exec_subprocess_pipe
 
 class Impl(object):
 
@@ -31,22 +31,21 @@ class Impl(object):
 
 	@staticmethod
 	def cfg_cxx_args(cfg):
-		args = [cfg.cxx_prog, '-pipe', '-MMD'] + cfg.cxx_flags
+		args = [cfg.cxx_prog, '-pipe'] + cfg.cxx_flags
 		if cfg.debug: args.append('-g')
 		if cfg.optim is not None: args.append('-O' + cfg.optim)
 		if cfg.pic: args.append('-fPIC')
-		for p in cfg.include_paths: args += ['-I', os.path.join(os.pardir, os.pardir, p.rel_path(cfg.project.bld_node))]
-		for i in cfg.includes: args += ['-include', os.path.join(os.pardir, os.pardir, i.rel_path(cfg.project.bld_node))]
 		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + v)
+		for i in cfg.includes: args += ['-include', os.path.join(os.pardir, os.pardir, i.rel_path(cfg.project.bld_node))]
+		for p in cfg.include_paths: args += ['-I', os.path.join(os.pardir, os.pardir, p.rel_path(cfg.project.bld_node))]
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: gcc: cxx: ' + str(args))
 		return args
 	
 	@staticmethod
 	def process_cxx_task(cxx_task):
-		args = cxx_task.cfg.cxx_args
-		args = [args[0], '-c'] + [s.name for s in cxx_task._actual_sources] + args[1:]
+		args = cxx_task.cfg.cxx_args + ['-c', '-MMD'] + [s.name for s in cxx_task._actual_sources]
 		r = exec_subprocess(args, cwd = cxx_task.target_dir.path)
 		if r != 0: raise Exception, r
 		implicit_deps = cxx_task.project.task_states[cxx_task.uid][2]
@@ -68,7 +67,7 @@ class Impl(object):
 	def cxx_task_target_ext(self): return '.o'
 		
 	@property
-	def ld_prog(self): return 'g++' #XXX make it same as user_cfg.cxx_prog
+	def ld_prog(self): return 'g++'
 	
 	@property
 	def ar_prog(self): return 'ar'
@@ -143,3 +142,10 @@ class Impl(object):
 		elif mod_task.cfg.shared: name = 'lib' + mod_task.name + '.so'
 		else: name = 'lib' + mod_task.name + '.a'
 		return name
+	
+	@staticmethod
+	def build_check(base_cfg, source_text, silent = False):
+		cfg = base_cfg.clone()
+		cfg.shared = cfg.pic = False
+		args = cfg.cxx_args + ['-xc++', '-', '-o/dev/null'] + cfg.ld_args[1:]
+		return 0 == exec_subprocess_pipe(args, input = source_text, silent = silent)

@@ -24,7 +24,8 @@ def wonderbuild_script(project):
 					int main() {
 						float const f(std::sin(1f));
 						return 0;
-					}'''
+					}
+					\n'''
 
 		std_math_check = StdMathCheck(check_cfg)
 		if std_math_check.result: std_math_check.apply_to(build_cfg)
@@ -42,6 +43,14 @@ def wonderbuild_script(project):
 			@property
 			def header(self): src_dir.node_path('pch.hpp')
 		pch = Pch()
+
+	build_cfg.impl.build_check(build_cfg,
+		'''\
+			int main() {
+				#warning test
+				return 0;
+			}
+		\n''')
 
 	class LibFoo(ModTask):
 		def __init__(self):

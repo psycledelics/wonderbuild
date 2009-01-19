@@ -163,23 +163,17 @@ class BuildCfg(ClientCfg):
 			return args
 
 class UserCfg(Cfg, BuildCfg):
-	_cxx_options = set([
+	_options = set([
 		'--cxx=',
 		'--cxx-flags=',
 		'--cxx-debug=',
 		'--cxx-optim=',
-		'--cxx-pic='
-	])
-
-	_mod_options = set([
+		'--cxx-pic=',
 		'--cxx-mod-shared=',
 		'--cxx-mod-ld=',
 		'--cxx-mod-ld-flags=',
 		'--cxx-mod-ar=',
-		'--cxx-mod-ranlib='
-	])
-	
-	_options = _cxx_options | _mod_options | set([
+		'--cxx-mod-ranlib=',
 		'--cxx-check-missing='
 	])
 	
@@ -243,8 +237,9 @@ class UserCfg(Cfg, BuildCfg):
 			else:
 				self.kind = 'gcc'
 				self.version = out.rstrip('\n')
-				self.ld_prog = self.cxx_prog
-				ld_prog = True
+				if not ld_prog:
+					self.ld_prog = self.cxx_prog
+					ld_prog = True
 				import gcc
 				self.impl = gcc.Impl()
 			self.print_result_desc(str(self.kind) + ' version ' + str(self.version) + '\n', '32')
@@ -281,53 +276,6 @@ class UserCfg(Cfg, BuildCfg):
 		c.apply(self)
 		return c
 
-class BuildCheck(object):
-	def __init__(self, name, base_cfg):
-		self.name = name
-		self._base_cfg
-
-	def apply_to(self, cfg): pass
-
-	@property
-	def source(self): pass
-
-	@property
-	def cfg(self):
-		try: return self._cfg
-		except AttributeError:
-			self._cfg = self._base_cfg.clone()
-			self.apply_to(self._cfg)
-			return self._cfg
-		
-	@property
-	def project(self): return self._base_cfg.project
-	
-	@property
-	def uid(self): return self.name
-	
-	@property
-	def result(self):
-		try: return self._result
-		except AttributeError:
-			n = self.project.bld_node.node_path('checks').node_path(self.name)
-			changed = False
-			if not n.exists: changed = True
-			try: old_sig = self.project.state_and_cache[self.uid]
-			except KeyError: changed = True
-			else:
-				sig = Sig(self.source)
-				sig.update(self.build.sig)
-				sig = sig.digest()
-				if old_sig != sig: changed = True
-			if changed:
-				n.make_dir()
-				n = n.node_path('source.cpp')
-				f = open(n.path, 'w')
-				try: f.write(self.source)
-				finally: f.close()
-				self._result = self.cfg.impl.process_cxx() == 0
-				return self._result
-				
 class CxxTask(Task):
 	def __init__(self, mod_task):
 		Task.__init__(self, mod_task.project)
@@ -377,17 +325,18 @@ class ModTask(Task):
 	def __init__(self, name, kind, base_cfg, aliases = None):
 		Task.__init__(self, base_cfg.project, aliases)
 		self.name = name
-		self.sources = []
 		self.kind = kind
 		self.cfg = base_cfg.clone()
 		if self.kind == ModTask.Kinds.PROG:
 			self.cfg.shared = False
 			self.ld = True
 		else:
+			if self.kind == ModTask.Kinds.LOADABLE: self.cfg.shared = True
 			self.ld = self.cfg.shared
 			if self.cfg.shared and not self.cfg.pic:
 				debug('cfg: cxx: mod: shared lib => overriding cfg to pic')
 				self.cfg.pic = True
+		self.sources = []
 
 	def __str__(self): return str(self.target)
 
@@ -520,6 +469,53 @@ class ModTask(Task):
 	def _mod_sig(self):
 		if self.ld: return self.cfg.ld_sig
 		else: return self.cfg.ar_ranlib_sig
+
+class BuildCheck(object):
+	def __init__(self, name, base_cfg):
+		self.name = name
+		self._base_cfg
+
+	def apply_to(self, cfg): pass
+
+	@property
+	def source(self): pass
+
+	@property
+	def cfg(self):
+		try: return self._cfg
+		except AttributeError:
+			self._cfg = self._base_cfg.clone()
+			self.apply_to(self._cfg)
+			return self._cfg
+		
+	@property
+	def project(self): return self._base_cfg.project
+	
+	@property
+	def uid(self): return self.name
+	
+	@property
+	def result(self):
+		try: return self._result
+		except AttributeError:
+			n = self.project.bld_node.node_path('checks').node_path(self.name)
+			changed = False
+			if not n.exists: changed = True
+			try: old_sig = self.project.state_and_cache[self.uid]
+			except KeyError: changed = True
+			else:
+				sig = Sig(self.source)
+				sig.update(self.build.sig)
+				sig = sig.digest()
+				if old_sig != sig: changed = True
+			if changed:
+				n.make_dir()
+				n = n.node_path('source.cpp')
+				f = open(n.path, 'w')
+				try: f.write(self.source)
+				finally: f.close()
+				self._result = self.cfg.impl.process_cxx() == 0
+				return self._result
 
 class CxxPreCompileTask(Task):
 	def __init__(self, header, cfg):
