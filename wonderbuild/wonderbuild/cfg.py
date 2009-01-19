@@ -35,14 +35,3 @@ class Cfg(object):
 	def help(self): pass
 
 	def configure(self): pass
-
-	def print_desc(self, desc, color = '34'):
-		if silent: return
-		out.write(colored(color, 'wonderbuild: cfg: ' + desc + ':') + ' ')
-		if __debug__ and is_debug: out.write('\n')
-		out.flush()
-		
-	def print_result_desc(self, desc, color = '34'):
-		if silent: return
-		out.write(colored(color, desc))
-		out.flush()

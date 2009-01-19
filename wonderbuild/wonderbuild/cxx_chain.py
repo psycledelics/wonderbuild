@@ -162,6 +162,17 @@ class BuildCfg(ClientCfg):
 			if __debug__ and is_debug: debug('cfg: cxx: build: ar ranlib: ' + str(args))
 			return args
 
+	def print_desc(self, desc, color = '34'):
+		if silent: return
+		out.write(colored(color, 'wonderbuild: cfg: ' + desc + ':') + ' ')
+		if __debug__ and is_debug: out.write('\n')
+		out.flush()
+		
+	def print_result_desc(self, desc, color = '34'):
+		if silent: return
+		out.write(colored(color, desc))
+		out.flush()
+		
 class UserCfg(Cfg, BuildCfg):
 	_options = set([
 		'--cxx=',
@@ -473,12 +484,15 @@ class ModTask(Task):
 class BuildCheck(object):
 	def __init__(self, name, base_cfg):
 		self.name = name
-		self._base_cfg
+		self._base_cfg = base_cfg
 
 	def apply_to(self, cfg): pass
 
 	@property
-	def source(self): pass
+	def source_text(self):
+		return \
+			'int main() { return 0; }\n' \
+			'#error default source text not redefined\n'
 
 	@property
 	def cfg(self):
@@ -493,29 +507,59 @@ class BuildCheck(object):
 	
 	@property
 	def uid(self): return self.name
+
+	@property
+	def sig(self):
+		try: return self._sig
+		except AttributeError:
+			sig = Sig(self.source_text)
+			sig.update(self._base_cfg.cxx_sig)
+			sig.update(self._base_cfg.ld_sig)
+			sig = self._sig = sig.digest()
+			return sig
 	
 	@property
 	def result(self):
 		try: return self._result
 		except AttributeError:
-			n = self.project.bld_node.node_path('checks').node_path(self.name)
 			changed = False
-			if not n.exists: changed = True
-			try: old_sig = self.project.state_and_cache[self.uid]
+			dir = self.project.bld_node.node_path('checks').node_path(self.name)
+			if not dir.exists: changed = True
+			try: old_sig, self._result = self.project.state_and_cache[self.uid]
 			except KeyError: changed = True
 			else:
-				sig = Sig(self.source)
-				sig.update(self.build.sig)
-				sig = sig.digest()
-				if old_sig != sig: changed = True
+				if old_sig != self.sig: changed = True
 			if changed:
-				n.make_dir()
-				n = n.node_path('source.cpp')
-				f = open(n.path, 'w')
-				try: f.write(self.source)
+				dir.make_dir()
+				source = dir.node_path('source.cpp')
+				f = open(source.path, 'w')
+				try: f.write(self.source_text)
 				finally: f.close()
-				self._result = self.cfg.impl.process_cxx() == 0
-				return self._result
+				if not silent: self.cfg.print_desc('checking for ' + self.name)
+				r, out, err = self.cfg.impl.build_check(self.cfg, self.source_text, silent = True)
+				log = dir.node_path('build.log')
+				f = open(log.path, 'w')
+				try:
+					f.write(str(self.cfg.cxx_args))
+					f.write('\n')
+					f.write(str(self.cfg.ld_args))
+					f.write('\n')
+					f.write(self.source_text)
+					f.write('\n')
+					f.write(out)
+					f.write('\n')
+					f.write(err)
+					f.write('\n')
+					f.write('return code: ')
+					f.write(str(r))
+					f.write('\n')
+				finally: f.close()
+				self._result = r == 0
+				self.project.state_and_cache[self.uid] = self.sig, self._result
+				if not silent:
+					if self._result: self.cfg.print_result_desc('yes\n', '32')
+					else: self.cfg.print_result_desc('no\n', '31')
+			return self._result
 
 class CxxPreCompileTask(Task):
 	def __init__(self, header, cfg):

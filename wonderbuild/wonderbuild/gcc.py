@@ -147,5 +147,5 @@ class Impl(object):
 	def build_check(base_cfg, source_text, silent = False):
 		cfg = base_cfg.clone()
 		cfg.shared = cfg.pic = False
-		args = cfg.cxx_args + ['-xc++', '-', '-o/dev/null'] + cfg.ld_args[1:]
-		return 0 == exec_subprocess_pipe(args, input = source_text, silent = silent)
+		args = cfg.cxx_args + ['-xc++', '-', '-o', os.devnull] + cfg.ld_args[1:]
+		return exec_subprocess_pipe(args, input = source_text, silent = silent)

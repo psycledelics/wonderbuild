@@ -63,20 +63,26 @@ def exec_subprocess_pipe(args, input = None, env = None, cwd = None, silent = Fa
 	)
 	if input is not None:
 		if __debug__ and is_debug:
-			for line in input.split('\n')[:-1]: debug('exec: pipe: ' + colored('7;1;36', 'in') + ': ' + line)
-		elif not silent: sys.stdout.write(input)
+			for line in input.split('\n')[:-1]: debug('exec: pipe: ' + colored('7;36', 'in') + ': ' + line)
+		elif not silent:
+			sys.stdout.write('\n')
+			sys.stdout.write(input)
 	out, err = p.communicate(input)
 	if __debug__ and is_debug:
 		if len(out):
-			for line in out.split('\n')[:-1]: debug('exec: pipe: ' + colored('7;1;32', 'out') + ': ' + line)
+			for line in out.split('\n')[:-1]: debug('exec: pipe: ' + colored('7;32', 'out') + ': ' + line)
 		if len(err):
 			s = ''
 			for line in err.split('\n')[:-1]: debug('exec: pipe: ' + colored('7;1;31', 'err') + ': ' + line)
 			debug(s)
+		if p.returncode == 0: debug('exec: pipe: ' + colored('7;32', 'ret') + ': ' + str(p.returncode) + ' ok')
+		else: debug('exec: pipe: ' + colored('7;1;31', 'ret') + ': ' + str(p.returncode) + ' failed')
 	elif not silent:
 		if len(out): sys.stdout.write(out)
 		if len(err):
 			s = ''
 			for line in err.split('\n')[:-1]: s += colored('7;1;31', 'error:') + ' ' + line + '\n'
 			sys.stderr.write(s)
+		if p.returncode == 0: sys.stdout.write('exec: pipe: ' + colored('7;32', 'ret') + ': ' + str(p.returncode) + ' ok\n')
+		else: sys.stderr.write('exec: pipe: ' + colored('7;1;31', 'ret') + ': ' + str(p.returncode) + ' failed\n')
 	return p.returncode, out, err
