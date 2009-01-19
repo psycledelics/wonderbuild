@@ -13,7 +13,7 @@ class Impl(object):
 	@property
 	def common_env_sig(self):
 		sig = Sig()
-		for name in ('LD_LIBRARY_PATH',):
+		for name in ('LD_LIBRARY_PATH', 'GCC_EXEC_PREFIX'):
 			e = os.environ.get(name, None)
 			if e is not None: sig.update(e)
 		return sig.digest()
