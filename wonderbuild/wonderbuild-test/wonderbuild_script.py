@@ -51,11 +51,6 @@ def wonderbuild_script(project):
 		def dyn_in_tasks(self, sched_ctx):
 			for s in src_dir.node_path('foo').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 			return ModTask.dyn_in_tasks(self, sched_ctx)
-			if False:
-				for t in ModTask.dyn_in_tasks(self, sched_ctx): std_math_check.out_tasks.append(t)
-			else:
-				for t in ModTask.dyn_in_tasks(self, sched_ctx): t.add_in_task(std_math_check)
-			return [std_math_check]
 	lib_foo = LibFoo()
 	
 	class MainProg(ModTask):
