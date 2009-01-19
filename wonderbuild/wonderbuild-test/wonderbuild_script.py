@@ -29,7 +29,7 @@ def wonderbuild_script(project):
 				\n'''
 
 	std_math_check = StdMathCheckTask(check_cfg)
-	#if std_math_check.result: std_math_check.apply_to(build_cfg)
+	if std_math_check.result: std_math_check.apply_to(build_cfg)
 
 	if False:
 		pch = CxxPreCompileTask(build_cfg.clone(), src_dir.node_path('pch.hpp'))
@@ -50,6 +50,7 @@ def wonderbuild_script(project):
 
 		def dyn_in_tasks(self, sched_ctx):
 			for s in src_dir.node_path('foo').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
+			return ModTask.dyn_in_tasks(self, sched_ctx)
 			if False:
 				for t in ModTask.dyn_in_tasks(self, sched_ctx): std_math_check.out_tasks.append(t)
 			else:
