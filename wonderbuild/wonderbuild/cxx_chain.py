@@ -68,6 +68,8 @@ class BuildCfg(ClientCfg):
 		self.impl = other.impl
 		self.kind = other.kind
 		self.version = other.version
+		self.debug = other.debug
+		self.optim = other.optim
 
 	@property
 	def _common_sig(self):
@@ -480,6 +482,86 @@ class ModTask(Task):
 	def _mod_sig(self):
 		if self.ld: return self.cfg.ld_sig
 		else: return self.cfg.ar_ranlib_sig
+
+class BuildCheckTask(Task):
+	def __init__(self, name, base_cfg):
+		Task.__init__(self, base_cfg.project)
+		self.name = name
+		self._base_cfg = base_cfg
+
+	def apply_to(self, cfg): pass
+
+	@property
+	def source_text(self):
+		return \
+			'int main() { return 0; }\n' \
+			'#error default source text not redefined\n'
+
+	@property
+	def cfg(self):
+		try: return self._cfg
+		except AttributeError:
+			self._cfg = self._base_cfg.clone()
+			self.apply_to(self._cfg)
+			return self._cfg
+	
+	@property
+	def uid(self): return self.name
+
+	@property
+	def sig(self):
+		try: return self._sig
+		except AttributeError:
+			sig = Sig(self.source_text)
+			sig.update(self._base_cfg.cxx_sig)
+			sig.update(self._base_cfg.ld_sig)
+			sig = self._sig = sig.digest()
+			return sig
+
+	def need_process(self):
+			try: old_sig, self._result = self.project.state_and_cache[self.uid]
+			except KeyError: return True
+			if old_sig != self.sig: return True
+			return False
+
+	def process(self):
+			dir = self.project.bld_node.node_path('checks').node_path(self.name)
+			dir.make_dir()
+			source = dir.node_path('source.cpp')
+			f = open(source.path, 'w')
+			try: f.write(self.source_text)
+			finally: f.close()
+			if not silent: self.cfg.print_desc('checking for ' + self.name)
+			r, out, err = self.cfg.impl.build_check(self.cfg, self.source_text, silent = True)
+			log = dir.node_path('build.log')
+			f = open(log.path, 'w')
+			try:
+				f.write(str(self.cfg.cxx_args))
+				f.write('\n')
+				f.write(str(self.cfg.ld_args))
+				f.write('\n')
+				f.write(self.source_text)
+				f.write('\n')
+				f.write(out)
+				f.write('\n')
+				f.write(err)
+				f.write('\n')
+				f.write('return code: ')
+				f.write(str(r))
+				f.write('\n')
+			finally: f.close()
+			self._result = r == 0
+			self.project.state_and_cache[self.uid] = self.sig, self._result
+			if not silent:
+				if self._result: self.cfg.print_result_desc('yes\n', '32')
+				else: self.cfg.print_result_desc('no\n', '31')
+
+	@property
+	def result(self):
+		try: return self._result
+		except AttributeError:
+			if self.need_process(): self.process()
+			return self._result
 
 class BuildCheck(object):
 	def __init__(self, name, base_cfg):
