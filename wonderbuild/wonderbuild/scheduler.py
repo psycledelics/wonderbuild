@@ -15,9 +15,6 @@ except: cpu_count = int(os.environ.get('NUMBER_OF_PROCESSORS', 1)) # env var def
 known_options |= set(['--jobs=', '--timeout=', '--progress'])
 help['--jobs='] = ('--jobs=<count>', 'use <count> threads in the scheduler to process the tasks', 'autodetected: ' + str(cpu_count))
 help['--timeout='] = ('--timeout=<seconds>', 'wait at most <seconds> for a task to complete before considering it\'s busted', '3600.0')
-help['--progress'] = ('--progress', 'show task completion progress even when silent')
-
-no_silent_progress = not silent or '--progress' in options
 
 class Scheduler(object):
 	def __init__(self):
@@ -73,8 +70,8 @@ class Scheduler(object):
 		try:
 			if task in self._tasks: return
 			self._tasks.add(task)
-			self._task_count += 1
 			self._todo_count += 1
+			self._task_count += 1
 			if len(task.in_tasks) == 0:
 				self._task_queue.append(task)
 				self._condition.notify()
@@ -83,16 +80,9 @@ class Scheduler(object):
 				try:
 					for t in task.in_tasks: self.add_task(t)
 				finally: self._condition.acquire()
-			if __debug__ and is_debug: debug('sched: add task ' + str(self._todo_count) + '/' + str(self._task_count) + ' ' + str(task.__class__))
+			if __debug__ and is_debug: debug('sched: add task ' + str(self._todo_count) + ' ' + str(task.__class__))
 		finally: self._condition.release()
 
-	def progress(self):
-		max = self._task_count
-		done = max - self._todo_count
-		run = self._running_count
-		pct = done == max and 100 or 100 * (done + run * .5) / max
-		return '[' + str(int(pct)).rjust(3) + '%][' + str(done) + ' / ' + str(max) + ' done, ' + str(run) + ' running]'
-	
 	def stop(self):
 		if __debug__ and is_debug: debug('sched: stopping threads')
 		self._condition.acquire()
@@ -138,19 +128,13 @@ class Scheduler(object):
 							self._task_queue += dyn_in_tasks
 							notify = len(dyn_in_tasks)
 							self._todo_count += notify
-							self._task_count += notify
 							if notify > 1: self._condition.notify(notify - 1)
 							continue
-					self._running_count += 1
-					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': process ' + self.progress() + ' ' + str(task))
-					process = task.need_process()
-					if process:
+					if task.need_process():
 						self._condition.release()
 						try: task.process()
 						finally: self._condition.acquire()
 					self._todo_count -= 1
-					if no_silent_progress and process: print colored('7', 'wonderbuild: progress: ' + self.progress())
-					self._running_count -= 1
 					if self._todo_count == 0 and self._joining:
 						self._condition.notifyAll()
 						break
