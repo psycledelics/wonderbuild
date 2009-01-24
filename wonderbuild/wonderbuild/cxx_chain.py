@@ -307,12 +307,9 @@ class CxxTask(Task):
 	def target_dir(self): return self.mod_task.target_dir
 
 	def __call__(self, sched_context):
+		self.target_dir.make_dir()
 		sched_context.lock.release()
 		try:
-			lock = self.target_dir.lock
-			lock.acquire()
-			try: self.target_dir.make_dir()
-			finally: lock.release()
 			if not silent:
 				if self.cfg.pic: pic = 'pic'; color = '7;1;34'
 				else: pic = 'non-pic'; color = '7;34'
@@ -516,133 +513,42 @@ class BuildCheckTask(Task):
 	@property
 	def uid(self): return self.name
 
-	@property
-	def sig(self):
-		try: return self._sig
+	def __call__(self, sched_context):
+		try: self._result
 		except AttributeError:
-			sig = Sig(self.source_text)
-			sig.update(self._base_cfg.cxx_sig)
-			sig.update(self._base_cfg.ld_sig)
-			sig = self._sig = sig.digest()
-			return sig
+			sched_context.lock.release()
+			try: self.result
+			finally: sched_context.lock.acquire()
+		raise StopIteration
 
-	def need_process(self):
-			try: old_sig, self._result = self.project.state_and_cache[self.uid]
-			except KeyError: return True
-			if old_sig != self.sig: return True
-			return False
-
-	def process(self):
-			dir = self.project.bld_node.node_path('checks').node_path(self.name)
-			dir.make_dir()
-			source = dir.node_path('source.cpp')
-			f = open(source.path, 'w')
-			try: f.write(self.source_text)
-			finally: f.close()
-			if not silent: self.cfg.print_desc('checking for ' + self.name)
-			r, out, err = self.cfg.impl.build_check(self.cfg, self.source_text, silent = True)
-			log = dir.node_path('build.log')
-			f = open(log.path, 'w')
-			try:
-				f.write(str(self.cfg.cxx_args))
-				f.write('\n')
-				f.write(str(self.cfg.ld_args))
-				f.write('\n')
-				f.write(self.source_text)
-				f.write('\n')
-				f.write(out)
-				f.write('\n')
-				f.write(err)
-				f.write('\n')
-				f.write('return code: ')
-				f.write(str(r))
-				f.write('\n')
-			finally: f.close()
-			self._result = r == 0
-			self.project.state_and_cache[self.uid] = self.sig, self._result
-			if not silent:
-				if self._result: self.cfg.print_result_desc('yes\n', '32')
-				else: self.cfg.print_result_desc('no\n', '31')
-
-	@property
-	def result(self):
-		try: return self._result
-		except AttributeError:
-			if self.need_process(): self.process()
-			return self._result
-
-class BuildCheck(object):
-	def __init__(self, name, base_cfg):
-		self.name = name
-		self._base_cfg = base_cfg
-
-	def apply_to(self, cfg): pass
-
-	@property
-	def source_text(self):
-		return \
-			'int main() { return 0; }\n' \
-			'#error default source text not redefined\n'
-
-	@property
-	def cfg(self):
-		try: return self._cfg
-		except AttributeError:
-			self._cfg = self._base_cfg.clone()
-			self.apply_to(self._cfg)
-			return self._cfg
-		
-	@property
-	def project(self): return self._base_cfg.project
-	
-	@property
-	def uid(self): return self.name
-
-	@property
-	def sig(self):
-		try: return self._sig
-		except AttributeError:
-			sig = Sig(self.source_text)
-			sig.update(self._base_cfg.cxx_sig)
-			sig.update(self._base_cfg.ld_sig)
-			sig = self._sig = sig.digest()
-			return sig
-	
 	@property
 	def result(self):
 		try: return self._result
 		except AttributeError:
 			changed = False
-			dir = self.project.bld_node.node_path('checks').node_path(self.name)
-			if not dir.exists: changed = True
 			try: old_sig, self._result = self.project.state_and_cache[self.uid]
 			except KeyError: changed = True
 			else:
 				if old_sig != self.sig: changed = True
-			if changed:
-				dir.make_dir()
-				source = dir.node_path('source.cpp')
-				f = open(source.path, 'w')
-				try: f.write(self.source_text)
-				finally: f.close()
+			if not changed:
+				if __debug__ and is_debug: debug('task: skip: no change: ' + self.name)
+			else:
+				dir = self.project.bld_node.node_path('checks').node_path(self.name)
+				lock = dir.lock
+				lock.acquire()
+				try: dir.make_dir()
+				finally: lock.release()
 				if not silent: self.cfg.print_desc('checking for ' + self.name)
 				r, out, err = self.cfg.impl.build_check(self.cfg, self.source_text, silent = True)
 				log = dir.node_path('build.log')
 				f = open(log.path, 'w')
 				try:
-					f.write(str(self.cfg.cxx_args))
-					f.write('\n')
-					f.write(str(self.cfg.ld_args))
-					f.write('\n')
-					f.write(self.source_text)
-					f.write('\n')
-					f.write(out)
-					f.write('\n')
-					f.write(err)
-					f.write('\n')
-					f.write('return code: ')
-					f.write(str(r))
-					f.write('\n')
+					f.write(str(self.cfg.cxx_args)); f.write('\n')
+					f.write(str(self.cfg.ld_args)); f.write('\n')
+					f.write(self.source_text); f.write('\n')
+					f.write(out); f.write('\n')
+					f.write(err); f.write('\n')
+					f.write('return code: '); f.write(str(r)); f.write('\n')
 				finally: f.close()
 				self._result = r == 0
 				self.project.state_and_cache[self.uid] = self.sig, self._result
@@ -650,6 +556,16 @@ class BuildCheck(object):
 					if self._result: self.cfg.print_result_desc('yes\n', '32')
 					else: self.cfg.print_result_desc('no\n', '31')
 			return self._result
+
+	@property
+	def sig(self):
+		try: return self._sig
+		except AttributeError:
+			sig = Sig(self.source_text)
+			sig.update(self._base_cfg.cxx_sig)
+			sig.update(self._base_cfg.ld_sig)
+			sig = self._sig = sig.digest()
+			return sig
 
 class CxxPreCompileTask(Task):
 	def __init__(self, header, cfg):
@@ -675,29 +591,34 @@ class CxxPreCompileTask(Task):
 				node_path(self.header.rel_path(self.project.src_node)) #XXX
 			return self._target_dir
 
-	def need_process(self):
-		changed = False
-		try: old_cfg_sig, deps, old_dep_sig = self.project.task_states[self.uid]
-		except KeyError:
-			if __debug__ and is_debug: debug('task: no state: ' + str(self))
-			self.project.task_states[self.uid] = None, None, None
-			changed = True
-		else:
-			if old_cfg_sig != self.cfg.sig:
-				if __debug__ and is_debug: debug('task: cxx sig changed: ' + str(self))
+	def __call__(self, sched_context):
+		sched_context.lock.release()
+		try:
+			changed = False
+			try: old_cfg_sig, deps, old_dep_sig = self.project.task_states[self.uid]
+			except KeyError:
+				if __debug__ and is_debug: debug('task: no state: ' + str(self))
+				self.project.task_states[self.uid] = None, None, None
 				changed = True
 			else:
-				try: dep_sigs = [dep.sig for dep in deps]
-				except OSError:
-					# A cached implicit dep does not exist anymore.
-					if __debug__ and is_debug: debug('cpp: deps not found: ' + str(self.header))
+				if old_cfg_sig != self.cfg.sig:
+					if __debug__ and is_debug: debug('task: cxx sig changed: ' + str(self))
 					changed = True
 				else:
-					dep_sigs.sort()
-					dep_sig = Sig(''.join(dep_sigs)).digest()
-					if old_dep_sig != sig:
-						# The cached implicit deps changed.
-						if __debug__ and is_debug: debug('cpp: deps changed: ' + str(self.header))
+					try: dep_sigs = [dep.sig for dep in deps]
+					except OSError:
+						# A cached implicit dep does not exist anymore.
+						if __debug__ and is_debug: debug('cpp: deps not found: ' + str(self.header))
 						changed = True
-		if __debug__ and is_debug and not changed: debug('task: skip: no change: ' + str(self.header))
-		return changed
+					else:
+						dep_sigs.sort()
+						dep_sig = Sig(''.join(dep_sigs)).digest()
+						if old_dep_sig != sig:
+							# The cached implicit deps changed.
+							if __debug__ and is_debug: debug('cpp: deps changed: ' + str(self.header))
+							changed = True
+			if not changed:
+				if __debug__ and is_debug: debug('task: skip: no change: ' + str(self.header))
+			else: self.cfg.impl.precompile(self.cfg, self.header)
+		finally: sched_context.lock.acquire()
+		raise StopIteration

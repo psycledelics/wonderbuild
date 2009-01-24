@@ -5,32 +5,32 @@
 def wonderbuild_script(project):
 	tasks = []
 
-	from wonderbuild.cxx_chain import UserCfg, BuildCheckTask, BuildCheck, ModTask
+	from wonderbuild.cxx_chain import UserCfg, BuildCheckTask, ModTask
 	build_cfg = UserCfg(project)
 
 	src_dir = project.src_node.node_path('src')
 	build_cfg.include_paths.append(src_dir)
 
-	if False:
-		check_cfg = build_cfg.clone()
+	check_cfg = build_cfg.clone()
 
-		class StdMathCheckTask(BuildCheckTask):
-			def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'c++-std-math', base_cfg)
+	class StdMathCheckTask(BuildCheckTask):
+		def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'c++-std-math', base_cfg)
 
-			def apply_to(self, cfg): cfg.libs.append('m')
+		def apply_to(self, cfg): cfg.libs.append('m')
 
-			@property
-			def source_text(self):
-				return '''\
-					#include <cmath>
-					int main() {
-						float const f(std::sin(1.f));
-						return 0;
-					}
-					\n'''
+		@property
+		def source_text(self):
+			return '''\
+				#include <cmath>
+				int main() {
+					float const f(std::sin(1.f));
+					return 0;
+				}
+				\n'''
 
-		std_math_check = StdMathCheckTask(check_cfg)
-		if std_math_check.result: std_math_check.apply_to(build_cfg)
+	std_math_check = StdMathCheckTask(check_cfg)
+
+	if False and std_math_check.result: std_math_check.apply_to(build_cfg)
 
 	if False:
 		pch = CxxPreCompileTask(build_cfg.clone(), src_dir.node_path('pch.hpp'))
@@ -48,8 +48,10 @@ def wonderbuild_script(project):
 		def __init__(self): ModTask.__init__(self, 'foo', ModTask.Kinds.LIB, build_cfg)
 
 		def __call__(self, sched_ctx):
+			yield [std_math_check]
+			if std_math_check.result: std_math_check.apply_to(self.cfg)
 			for s in src_dir.node_path('foo').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
-			return ModTask.__call__(self, sched_ctx)
+			for t in ModTask.__call__(self, sched_ctx): yield t
 	lib_foo = LibFoo()
 	
 	class MainProg(ModTask):
