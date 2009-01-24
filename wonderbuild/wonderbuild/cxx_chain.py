@@ -413,8 +413,9 @@ class ModTask(Task):
 							changed_sources.append(s)
 							continue
 					if __debug__ and is_debug: debug('task: skip: no change: ' + str(s))
-				if not self.cfg.check_missing: self.target_dir.forget()
+		need_process = False
 		if len(changed_sources) != 0:
+			need_process = True
 			batches = []
 			for i in xrange(sched_context.thread_count): batches.append([])
 			i = 0
@@ -428,8 +429,6 @@ class ModTask(Task):
 				t.sources = b
 				tasks.append(t)
 			yield tasks
-		need_process = False
-		if len(changed_sources) != 0: need_process = True
 		elif self.cfg.check_missing and not self.target.exists:
 			if __debug__ and is_debug: debug('task: target removed: ' + str(self))
 			changed_sources = sources
@@ -442,16 +441,18 @@ class ModTask(Task):
 				need_process = True
 			else:
 				for t in self.dep_lib_tasks:
-					if t.processed:
-						try: ld = t.ld
-						except AttributeError: continue # not a lib task
-						if True:#if not ld: when a dependant lib changes its kind from static to shared, we actually need to relink.
-							# TODO To be able to detect when a dependant lib changes its kind,
-							# we'd need to store these kinds in the task state.
-							# For now, we always relink, even when the dependent lib was already a shared lib before.
-							if __debug__ and is_debug: debug('task: in task changed: ' + str(self) + ' ' + str(t))
-							need_process = True
-							break
+					try: processed = t._needed_process
+					except AttributeError: continue # not a lib task
+					if processed:
+							try: ld = t.ld
+							except AttributeError: continue # not a lib task
+							if True:#if not ld: when a dependant lib changes its kind from static to shared, we actually need to relink.
+								# TODO To be able to detect when a dependant lib changes its kind,
+								# we'd need to store these kinds in the task state.
+								# For now, we always relink, even when the dependent lib was already a shared lib before.
+								if __debug__ and is_debug: debug('task: in task changed: ' + str(self) + ' ' + str(t))
+								need_process = True
+								break
 		if not need_process:
 			if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 		else:
@@ -476,6 +477,8 @@ class ModTask(Task):
 				else: sources_states = implicit_deps
 				self.project.task_states[self.uid] = self._mod_sig, self.cfg.cxx_sig, sources_states #XXX move cxx_sig into obj sig
 			finally: sched_context.lock.acquire()
+		if not self.cfg.check_missing: self.target_dir.forget()
+		self._needed_process = need_process
 		raise StopIteration
 
 	def _unique_base_name(self, source):
