@@ -290,10 +290,10 @@ class UserCfg(Cfg, BuildCfg):
 		return c
 
 class CxxTask(Task):
-	def __init__(self, mod_task):
+	def __init__(self, mod_task, sources):
 		Task.__init__(self, mod_task.project)
 		self.mod_task = mod_task
-		self.sources = []
+		self.sources = sources
 
 	@property
 	def cfg(self): return self.mod_task.cfg
@@ -425,9 +425,7 @@ class ModTask(Task):
 			tasks = []
 			for b in batches:
 				if len(b) == 0: break
-				t = CxxTask(self)
-				t.sources = b
-				tasks.append(t)
+				tasks.append(CxxTask(self, b))
 			yield tasks
 		elif self.cfg.check_missing and not self.target.exists:
 			if __debug__ and is_debug: debug('task: target removed: ' + str(self))
