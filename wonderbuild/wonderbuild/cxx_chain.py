@@ -394,7 +394,7 @@ class ModTask(Task):
 						if __debug__ and is_debug: debug('cpp: deps not found: ' + str(s))
 						changed_sources.append(s)
 						continue
-					sigs.sort()
+					sigs.sort() # TODO use heapq
 					sig = Sig(''.join(sigs)).digest()
 					if old_sig != sig:
 						# The cached implicit deps changed.
