@@ -10,30 +10,13 @@ class Task(object):
 	def __init__(self, project, aliases = None):
 		self.project = project
 		project.add_task(self, aliases)
-		self.in_tasks = []
+		self.in_task_todo_count = 0
 		self.out_tasks = []
-		self.dyn_in_tasks_called = False
-		self.in_tasks_visited = 0
 		self.processed = False
 
-	def add_in_task(self, task):
-		self.in_tasks.append(task)
-		task.out_tasks.append(self)
-
-	def add_out_task(self, task):
-		self.out_tasks.append(task)
-		task.in_tasks.append(self)
-
-	def dyn_in_tasks(self, sched_context): return None
-
-	def need_process(self):
-		# This default implementation is not really useful
-		if len(self.in_tasks) == 0: return True
-		for in_task in self.in_tasks:
-			if in_task.processed: return True
-		return False
-
-	def process(self): self.processed = True
+	def __call__(self, sched_context):
+		yield []
+		raise StopIteration
 
 	def print_desc(self, desc, color = '7;1'):
 		out.write(colored(color, 'wonderbuild: task: ' + desc) + '\n')

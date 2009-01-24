@@ -306,28 +306,29 @@ class CxxTask(Task):
 	@property
 	def target_dir(self): return self.mod_task.target_dir
 
-	def need_process(self): return True
-
-	def process(self):
-		lock = self.target_dir.lock
-		lock.acquire()
-		try: self.target_dir.make_dir()
-		finally: lock.release()
-		if not silent:
-			if self.cfg.pic: pic = 'pic'; color = '7;1;34'
-			else: pic = 'non-pic'; color = '7;34'
-			self.print_desc('batch-compiling ' + pic + ' objects from c++ ' + str(self), color)
-		self._actual_sources = []
-		self.target_dir.actual_children # not needed, just an optimisation
-		for s in self.sources:
-			node = self.target_dir.node_path(self.mod_task._unique_base_name(s))
-			if not node.exists:
-				f = open(node.path, 'wb')
-				try: f.write('#include "%s"\n' % s.rel_path(self.target_dir))
-				finally: f.close()
-			self._actual_sources.append(node)
-		self.cfg.impl.process_cxx_task(self)
-		Task.process(self)
+	def __call__(self, sched_context):
+		sched_context.lock.release()
+		try:
+			lock = self.target_dir.lock
+			lock.acquire()
+			try: self.target_dir.make_dir()
+			finally: lock.release()
+			if not silent:
+				if self.cfg.pic: pic = 'pic'; color = '7;1;34'
+				else: pic = 'non-pic'; color = '7;34'
+				self.print_desc('batch-compiling ' + pic + ' objects from c++ ' + str(self), color)
+			self._actual_sources = []
+			self.target_dir.actual_children # not needed, just an optimisation
+			for s in self.sources:
+				node = self.target_dir.node_path(self.mod_task._unique_base_name(s))
+				if not node.exists:
+					f = open(node.path, 'wb')
+					try: f.write('#include "%s"\n' % s.rel_path(self.target_dir))
+					finally: f.close()
+				self._actual_sources.append(node)
+			self.cfg.impl.process_cxx_task(self)
+		finally: sched_context.lock.acquire()
+		raise StopIteration
 
 class ModTask(Task):
 	class Kinds(object):
@@ -350,6 +351,7 @@ class ModTask(Task):
 				debug('cfg: cxx: mod: shared lib => overriding cfg to pic')
 				self.cfg.pic = True
 		self.sources = []
+		self.dep_lib_tasks = []
 
 	def __str__(self): return str(self.target)
 
@@ -369,7 +371,8 @@ class ModTask(Task):
 	@property
 	def target_dir(self): return self.target.parent
 
-	def dyn_in_tasks(self, sched_context):
+	def __call__(self, sched_context):
+		if len(self.dep_lib_tasks): yield self.dep_lib_tasks
 		changed_sources = []
 		try: state = self.project.task_states[self.uid]
 		except KeyError:
@@ -418,58 +421,62 @@ class ModTask(Task):
 			for s in changed_sources:
 				batches[i].append(s)
 				i = (i + 1) % sched_context.thread_count
+			tasks = []
 			for b in batches:
 				if len(b) == 0: break
 				t = CxxTask(self)
 				t.sources = b
-				self.add_in_task(t)
-		self._changed_sources = changed_sources
-		return self.in_tasks
-
-	def need_process(self):
-		if self.cfg.check_missing and not self.target.exists:
+				tasks.append(t)
+			yield tasks
+		need_process = False
+		if len(changed_sources) != 0: need_process = True
+		elif self.cfg.check_missing and not self.target.exists:
 			if __debug__ and is_debug: debug('task: target removed: ' + str(self))
-			self._changed_sources = self.sources
-			return True
-		if len(self._changed_sources) != 0: return True
-		state = self.project.task_states[self.uid]
-		if state[0] != self._mod_sig:
-			if __debug__ and is_debug: debug('task: mod sig changed: ' + str(self))
-			self._changed_sources = self.sources
-			return True
-		for t in self.in_tasks:
-			if t.processed:
-				try: ld = t.ld
-				except AttributeError: continue # not a lib task
-				if True:#if not ld: when a dependant lib changes its kind from static to shared, we actually need to relink.
-					# TODO To be able to detect when a dependant lib changes its kind,
-					# we'd need to store these kinds in the task state.
-					# For now, we always relink, even when the dependent lib was already a shared lib before.
-					if __debug__ and is_debug: debug('task: in task changed: ' + str(self) + ' ' + str(t))
-					return True
-		if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
-		return False
-
-	def process(self):
-		if not silent:
-			if not self.ld: desc = 'archiving and indexing static lib'; color = '7;36'
-			elif self.kind == ModTask.Kinds.PROG:
-				if not self.cfg.pic: desc = 'linking non-pic program'; color = '7;32'
-				else: desc = 'linking pic program'; color = '7;1;32'
-			elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = '7;1;34'
-			else: desc = 'linking shared lib'; color = '7;1;33'
-			self.print_desc(desc + ' ' + str(self), color)
-		if self.ld: sources = self.sources
-		else: sources = self._changed_sources
-		self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources])
-		implicit_deps = self.project.task_states[self.uid][2]
-		if len(implicit_deps) > len(self.sources):
-			# remove old sources from implicit deps dictionary
-			sources_states = {}
-			for s in self.sources: sources_states[s] = implicit_deps[s]
-		else: sources_states = implicit_deps
-		self.project.task_states[self.uid] = self._mod_sig, self.cfg.cxx_sig, sources_states #XXX move cxx_sig into obj sig
-		Task.process(self)
+			changed_sources = sources
+			need_process = True
+		else:
+			state = self.project.task_states[self.uid]
+			if state[0] != self._mod_sig:
+				if __debug__ and is_debug: debug('task: mod sig changed: ' + str(self))
+				changed_sources = self.sources
+				need_process = True
+			else:
+				for t in self.dep_lib_tasks:
+					if t.processed:
+						try: ld = t.ld
+						except AttributeError: continue # not a lib task
+						if True:#if not ld: when a dependant lib changes its kind from static to shared, we actually need to relink.
+							# TODO To be able to detect when a dependant lib changes its kind,
+							# we'd need to store these kinds in the task state.
+							# For now, we always relink, even when the dependent lib was already a shared lib before.
+							if __debug__ and is_debug: debug('task: in task changed: ' + str(self) + ' ' + str(t))
+							need_process = True
+							break
+		if not need_process:
+			if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
+		else:
+			sched_context.lock.release()
+			try:
+				if not silent:
+					if not self.ld: desc = 'archiving and indexing static lib'; color = '7;36'
+					elif self.kind == ModTask.Kinds.PROG:
+						if not self.cfg.pic: desc = 'linking non-pic program'; color = '7;32'
+						else: desc = 'linking pic program'; color = '7;1;32'
+					elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = '7;1;34'
+					else: desc = 'linking shared lib'; color = '7;1;33'
+					self.print_desc(desc + ' ' + str(self), color)
+				if self.ld: sources = self.sources
+				else: sources = changed_sources
+				self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources])
+				implicit_deps = self.project.task_states[self.uid][2]
+				if len(implicit_deps) > len(self.sources):
+					# remove old sources from implicit deps dictionary
+					sources_states = {}
+					for s in self.sources: sources_states[s] = implicit_deps[s]
+				else: sources_states = implicit_deps
+				self.project.task_states[self.uid] = self._mod_sig, self.cfg.cxx_sig, sources_states #XXX move cxx_sig into obj sig
+			finally: sched_context.lock.acquire()
+		raise StopIteration
 
 	def _unique_base_name(self, source):
 		return source.rel_path(self.project.src_node).replace(os.pardir, '_').replace(os.sep, ',')

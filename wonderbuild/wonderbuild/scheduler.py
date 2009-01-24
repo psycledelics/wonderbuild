@@ -25,7 +25,6 @@ class Scheduler(object):
 			elif o.startswith('--timeout='): self.timeout = float(o[len('--timeout='):])
 		if self.thread_count == 0: self.thread_count = cpu_count
 		if self.timeout == 0: self.timeout = 3600.0
-		self._todo_count = self._task_count = 0
 
 	class Context(object):
 		def __init__(self, scheduler):
@@ -47,8 +46,7 @@ class Scheduler(object):
 	def _pre_start(self):
 		self._tasks = set()
 		self._task_queue = []#deque()
-		self._todo_count = self._task_count
-		self._running_count = 0
+		self._todo_count = self._running_count = 0
 		self._stop_requested = self._joining = False
 		self._lock = threading.Lock()
 		self._condition = threading.Condition(self._lock)
@@ -71,16 +69,9 @@ class Scheduler(object):
 			if task in self._tasks: return
 			self._tasks.add(task)
 			self._todo_count += 1
-			self._task_count += 1
-			if len(task.in_tasks) == 0:
-				self._task_queue.append(task)
-				self._condition.notify()
-			else:
-				self._condition.release()
-				try:
-					for t in task.in_tasks: self.add_task(t)
-				finally: self._condition.acquire()
+			self._task_queue.append(task)
 			if __debug__ and is_debug: debug('sched: add task ' + str(self._todo_count) + ' ' + str(task.__class__))
+			self._condition.notify()
 		finally: self._condition.release()
 
 	def stop(self):
@@ -118,33 +109,38 @@ class Scheduler(object):
 					while (not self._joining or self._todo_count != 0) and not self._stop_requested and len(self._task_queue) == 0:
 						if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': waiting')
 						self._condition.wait(timeout = self.timeout)
-						if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': notified ' + str(self._joining) + ' ' + str(self._todo_count) + '-' + str(self._running_count) + '/' + str(self._task_count) + ' ' + str(self._stop_requested))
+						if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': notified ' + str(self._joining) + ' ' + str(self._todo_count) + ' ' + str(self._running_count) + ' ' + str(self._stop_requested))
 					if self._joining and self._todo_count == 0 or self._stop_requested: break
 					task = self._task_queue.pop()
-					if not task.dyn_in_tasks_called:
-						dyn_in_tasks = task.dyn_in_tasks(self._context)
-						task.dyn_in_tasks_called = True
-						if dyn_in_tasks is not None and len(dyn_in_tasks) != 0:
-							self._task_queue += dyn_in_tasks
-							notify = len(dyn_in_tasks)
+					if not task.processed:
+						try: 
+							try: task_gen = task.task_gen
+							except AttributeError: task_gen = task.task_gen = task(self._context)
+							in_tasks = task_gen.next()
+						except StopIteration: task.processed = True
+						except:
+							task_gen.close()
+							raise
+						else:
+							for in_task in in_tasks: in_task.out_tasks.append(task)
+							self._task_queue += in_tasks
+							notify = len(in_tasks)
+							task.in_task_todo_count += notify
 							self._todo_count += notify
 							if notify > 1: self._condition.notify(notify - 1)
 							continue
-					if task.need_process():
-						self._condition.release()
-						try: task.process()
-						finally: self._condition.acquire()
-					self._todo_count -= 1
-					if self._todo_count == 0 and self._joining:
-						self._condition.notifyAll()
-						break
+					self._todo_count -= 1 #XXX
 					notify = -1
 					for out_task in task.out_tasks:
-						out_task.in_tasks_visited += 1
-						if out_task.in_tasks_visited == len(out_task.in_tasks):
+						out_task.in_task_todo_count -= 1
+						if out_task.in_task_todo_count == 0:
 							self._task_queue.append(out_task)
 							notify += 1
+					task.out_tasks = []
 					if notify > 0: self._condition.notify(notify)
+					elif notify < 0 and self._todo_count == 0 and self._joining:
+						self._condition.notifyAll()
+						break
 			except Exception, e:
 				self.exception = e
 				self._stop_requested = True
