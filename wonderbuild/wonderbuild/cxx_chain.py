@@ -573,7 +573,7 @@ class PreCompileTask(Task):
 		self.cfg = cfg
 
 	def apply_to(self, cfg):
-		cfg.include_paths.append(self.target_dir)
+		cfg.include_paths.append(self.project.bld_node.node_path('precompiled'))
 		cfg.includes.append(self.header)
 
 	def __str__(self): return str(self.header)
