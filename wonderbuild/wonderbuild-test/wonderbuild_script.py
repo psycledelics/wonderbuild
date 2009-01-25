@@ -42,7 +42,7 @@ def wonderbuild_script(project):
 		def __call__(self, sched_ctx):
 			self.t0 = StdMathCheckTask.SubCheckTask(False, self.name + '-without-libm', self.base_cfg, silent = True)
 			self.t1 = StdMathCheckTask.SubCheckTask(True, self.name + '-with-libm', self.base_cfg, silent = True)
-			yield [self.t0, self.t1]
+			yield (self.t0, self.t1)
 			if not silent:
 				self.cfg.print_desc('checking for ' + self.name)
 				if self.result: self.cfg.print_result_desc('yes with' + (self.m and '' or 'out') + ' libm\n', '32')
