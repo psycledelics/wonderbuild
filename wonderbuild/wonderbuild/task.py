@@ -35,15 +35,27 @@ def exec_subprocess(args, env = None, cwd = None):
 
 def exec_subprocess_pipe(args, input = None, env = None, cwd = None, silent = False):
 	if __debug__ and is_debug: debug('exec: pipe: ' + str(cwd) + ' ' + str(env) + ' ' + str(args))
-	p = subprocess.Popen(
-		args = args,
-		bufsize = -1,
-		stdin = input and subprocess.PIPE,
-		stdout = subprocess.PIPE,
-		stderr = subprocess.PIPE,
-		env = env,
-		cwd = cwd
-	)
+	if input is not None: # workaround for bug still present in python 2.5.2
+		_lock.acquire()
+		try: p = subprocess.Popen(
+				args = args,
+				bufsize = -1,
+				stdin = subprocess.PIPE,
+				stdout = subprocess.PIPE,
+				stderr = subprocess.PIPE,
+				env = env,
+				cwd = cwd
+			)
+		finally: _lock.release()
+	else: p = subprocess.Popen(
+			args = args,
+			bufsize = -1,
+			stdin = None,
+			stdout = subprocess.PIPE,
+			stderr = subprocess.PIPE,
+			env = env,
+			cwd = cwd
+		)
 	if input is not None:
 		if __debug__ and is_debug:
 			for line in input.split('\n')[:-1]: debug('exec: pipe: ' + colored('7;36', 'in') + ': ' + line)
@@ -69,3 +81,6 @@ def exec_subprocess_pipe(args, input = None, env = None, cwd = None, silent = Fa
 		if p.returncode == 0: sys.stdout.write('exec: pipe: ' + colored('7;32', 'ret') + ': ' + str(p.returncode) + ' ok\n')
 		else: sys.stderr.write('exec: pipe: ' + colored('7;1;31', 'ret') + ': ' + str(p.returncode) + ' failed\n')
 	return p.returncode, out, err
+# workaround for bug still present in python 2.5.2
+import threading
+_lock = threading.Lock() # used in exec_subprocess_pipe

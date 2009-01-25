@@ -8,15 +8,27 @@ if __name__ == '__main__':
 	input = 'test\n'
 	args = ['cat']
 	
+	lock = threading.Lock() # workaround for bug still present in python 2.5.2
+	
 	def thread_function(input, args):
 		while True:
-			p = subprocess.Popen(
-				args = args,
-				bufsize = -1,
-				stdin = input and subprocess.PIPE,
-				stdout = subprocess.PIPE,
-				stderr = subprocess.PIPE,
-			)
+			if input is not None: # workaround for bug still present in python 2.5.2
+				lock.acquire()
+				try: p = subprocess.Popen(
+						args = args,
+						bufsize = -1,
+						stdin = subprocess.PIPE,
+						stdout = subprocess.PIPE,
+						stderr = subprocess.PIPE,
+					)
+				finally: lock.release()
+			else: p = subprocess.Popen(
+					args = args,
+					bufsize = -1,
+					stdin = None,
+					stdout = subprocess.PIPE,
+					stderr = subprocess.PIPE,
+				)
 			out, err = p.communicate(input)
 			print p.returncode, time.time()
 
