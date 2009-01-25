@@ -573,7 +573,7 @@ class PreCompileTask(Task):
 		self.cfg = cfg
 
 	def apply_to(self, cfg):
-		cfg.include_paths.append(self.project.bld_node.node_path('precompiled'))
+		cfg.include_paths.append(self.target_dir)
 		cfg.includes.append(self.header)
 
 	def __str__(self): return str(self.header)
@@ -585,9 +585,7 @@ class PreCompileTask(Task):
 	def target_dir(self):
 		try: return self._target_dir
 		except AttributeError:
-			self._target_dir = self.project.bld_node.\
-				node_path('precompiled').\
-				node_path(self.header.rel_path(self.project.src_node)) #XXX
+			self._target_dir = self.project.bld_node.node_path('precompiled').node_path(self.header.parent.rel_path(self.project.src_node))
 			return self._target_dir
 
 	def __call__(self, sched_context):

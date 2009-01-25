@@ -45,7 +45,7 @@ class Impl(object):
 	
 	@staticmethod
 	def process_precompile_task(precompile_task):
-		dir = precompile_task.target_dir.parent.node_path(precompile_task.target_dir.name + '.gch')
+		dir = precompile_task.target_dir.node_path(precompile_task.header.name + '.gch')
 		lock = dir.lock
 		lock.acquire()
 		try: dir.make_dir()
