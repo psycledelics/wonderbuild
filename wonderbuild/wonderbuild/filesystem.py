@@ -67,8 +67,7 @@ class Node(object):
 		if __debug__ and is_debug: debug('fs: os.stat    : ' + self.path)
 		try: st = os.stat(self.path)
 		except OSError: st = os.lstat(self.path) # may be a broken symlink
-		if stat.S_ISDIR(st.st_mode): self._is_dir = True
-		else: self._is_dir = False
+		self._is_dir = stat.S_ISDIR(st.st_mode)
 		self._time = st.st_mtime
 
 	@property

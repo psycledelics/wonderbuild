@@ -44,9 +44,34 @@ class Impl(object):
 		return args
 	
 	@staticmethod
+	def process_precompile_task(precompile_task):
+		dir = precompile_task.target_dir.parent.node_path(precompile_task.target_dir.name + '.gch')
+		lock = dir.lock
+		lock.acquire()
+		try: dir.make_dir()
+		finally: lock.release()
+		path = os.path.join(dir.path, 'x.')
+		 # -fpch-deps? -Wmissing-include-dirs -Winvalid-pch -H -Wp,-v
+		args = precompile_task.cfg.cxx_args + ['-xc++-header', '-MMD', precompile_task.header.path, '-o', path]
+		r = exec_subprocess(args)
+		if r != 0: raise Exception, r
+		# reads deps from the .d files generated as side-effect of compilation by gcc's -MD or -MMD option
+		f = open(path[:path.rfind('.')] + '.d', 'rb')
+		try: deps = f.read().replace('\\\n', '')
+		finally: f.close()
+		cwd = precompile_task.project.fs.cur
+		deps = [cwd.node_path(d) for d in deps[deps.find(':') + 1:].split()]
+		if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
+		dep_sigs = [d.sig for d in deps]
+		dep_sigs.sort()
+		precompile_task.project.task_states[precompile_task.uid] = precompile_task.cfg.cxx_sig, deps, Sig(''.join(dep_sigs)).digest()
+		# TODO create a file with a #error to ensure the pch is used
+
+	@staticmethod
 	def process_cxx_task(cxx_task):
 		args = cxx_task.cfg.cxx_args + ['-c', '-MMD'] + [s.name for s in cxx_task._actual_sources]
-		r = exec_subprocess(args, cwd = cxx_task.target_dir.path)
+		cwd = cxx_task.target_dir
+		r = exec_subprocess(args, cwd = cwd.path)
 		if r != 0: raise Exception, r
 		implicit_deps = cxx_task.project.task_states[cxx_task.uid][2]
 		for s in zip(cxx_task.sources, cxx_task._actual_sources):
@@ -55,13 +80,12 @@ class Impl(object):
 			f = open(path[:path.rfind('.')] + '.d', 'rb')
 			try: deps = f.read().replace('\\\n', '')
 			finally: f.close()
-			target_dir = cxx_task.target_dir
 			# note: we skip the first implicit dep, which is the dummy actual source
-			deps = [target_dir.node_path(d) for d in deps[deps.find(':') + 1:].split()[1:]]
+			deps = [cwd.node_path(d) for d in deps[deps.find(':') + 1:].split()[1:]]
 			if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
-			sigs = [d.sig for d in deps]
-			sigs.sort()
-			implicit_deps[s[0]] = Sig(''.join(sigs)).digest(), deps
+			dep_sigs = [d.sig for d in deps]
+			dep_sigs.sort()
+			implicit_deps[s[0]] = deps, Sig(''.join(dep_sigs)).digest()
 
 	@property
 	def cxx_task_target_ext(self): return '.o'

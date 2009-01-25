@@ -5,7 +5,7 @@
 def wonderbuild_script(project):
 	tasks = []
 
-	from wonderbuild.cxx_chain import UserCfg, BuildCheckTask, ModTask
+	from wonderbuild.cxx_chain import UserCfg, BuildCheckTask, PreCompileTask, ModTask
 	build_cfg = UserCfg(project)
 
 	src_dir = project.src_node.node_path('src')
@@ -32,37 +32,44 @@ def wonderbuild_script(project):
 
 	if False and std_math_check.result: std_math_check.apply_to(build_cfg)
 
-	if False:
-		pch = CxxPreCompileTask(build_cfg.clone(), src_dir.node_path('pch.hpp'))
-		pch.apply_to(build_cfg)
-	
-		class Pch(ModTask):
-			def __init__(self):
-				ModTask.__init__(self, 'pch', ModTask.Kinds.PCH, build_cfg)
+	class Pch(PreCompileTask):
+		def __init__(self): PreCompileTask.__init__(self, src_dir.node_path('pch.hpp'), build_cfg.clone())
 
-			@property
-			def header(self): src_dir.node_path('pch.hpp')
-		pch = Pch()
+		def apply_to(self, cfg):
+			if std_math_check.result:
+				std_math_check.apply_to(cfg)
+				PreCompileTask.apply_to(self, cfg)
+
+		def __call__(self, sched_ctx):
+			yield [std_math_check]
+			if not std_math_check.result: raise StopIteration
+			for t in PreCompileTask.__call__(self, sched_ctx): yield t
+			#raise StopIteration
+	pch = Pch()
+	pch.apply_to(build_cfg)
 
 	class LibFoo(ModTask):
 		def __init__(self): ModTask.__init__(self, 'foo', ModTask.Kinds.LIB, build_cfg)
 
 		def __call__(self, sched_ctx):
-			yield [std_math_check]
+			yield [std_math_check, pch]
 			if std_math_check.result: std_math_check.apply_to(self.cfg)
 			for s in src_dir.node_path('foo').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 			for t in ModTask.__call__(self, sched_ctx): yield t
+			#raise StopIteration
 	lib_foo = LibFoo()
 	
 	class MainProg(ModTask):
 		def __init__(self): ModTask.__init__(self, 'main', ModTask.Kinds.PROG, build_cfg)
 
 		def __call__(self, sched_ctx):
+			yield [pch]
 			self.dep_lib_tasks.append(lib_foo)
 			self.cfg.lib_paths.append(lib_foo.target.parent)
 			self.cfg.libs.append(lib_foo.name)
 			for s in src_dir.node_path('main').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
-			return ModTask.__call__(self, sched_ctx)
+			for t in ModTask.__call__(self, sched_ctx): yield t
+			#raise StopIteration
 	main_prog = MainProg()
 	tasks.append(main_prog)
 

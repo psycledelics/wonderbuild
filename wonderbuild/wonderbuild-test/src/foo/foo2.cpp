@@ -1,3 +1,4 @@
+#include <pch.hpp>
 #include "foo2.hpp"
 
 namespace foo {

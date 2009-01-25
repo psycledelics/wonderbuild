@@ -113,13 +113,14 @@ class Scheduler(object):
 					if self._joining and self._todo_count == 0 or self._stop_requested: break
 					task = self._task_queue.pop()
 					if not task.processed:
-						try: 
+						task_gen = None
+						try:
 							try: task_gen = task.task_gen
 							except AttributeError: task_gen = task.task_gen = task(self._context)
 							in_tasks = task_gen.next()
 						except StopIteration: task.processed = True
 						except:
-							task_gen.close()
+							if task_gen is not None: task_gen.close()
 							raise
 						else:
 							for in_task in in_tasks: in_task.out_tasks.append(task)

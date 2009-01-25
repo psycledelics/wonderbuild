@@ -383,20 +383,19 @@ class ModTask(Task):
 			else:
 				implicit_deps = state[2]
 				for s in self.sources:
-					try: old_sig, deps = implicit_deps[s]
+					try: deps, old_dep_sig = implicit_deps[s] # TODO also put self.cfg.cxx_sig
 					except KeyError:
 						# This is a new source.
 						changed_sources.append(s)
 						continue
-					try: sigs = [dep.sig for dep in deps]
+					try: dep_sigs = [dep.sig for dep in deps]
 					except OSError:
 						# A cached implicit dep does not exist anymore.
 						if __debug__ and is_debug: debug('cpp: deps not found: ' + str(s))
 						changed_sources.append(s)
 						continue
-					sigs.sort() # TODO use heapq
-					sig = Sig(''.join(sigs)).digest()
-					if old_sig != sig:
+					dep_sigs.sort() # TODO use heapq
+					if old_dep_sig != Sig(''.join(dep_sigs)).digest():
 						# The cached implicit deps changed.
 						if __debug__ and is_debug: debug('cpp: deps changed: ' + str(s))
 						changed_sources.append(s)
@@ -567,17 +566,18 @@ class BuildCheckTask(Task):
 			sig = self._sig = sig.digest()
 			return sig
 
-class CxxPreCompileTask(Task):
+class PreCompileTask(Task):
 	def __init__(self, header, cfg):
 		Task.__init__(self, cfg.project)
+		self.header = header
 		self.cfg = cfg
 
-	@property
-	def header(self): pass
+	def apply_to(self, cfg):
+		dir = self.target_dir.parent.node_path(self.target_dir.name)
+		#cfg.include_paths.append(dir)
+		cfg.includes.append(self.header)
 
-	def apply_to_(self, cfg): cfg.includes.append(self.header)
-
-	def __str__(self): return str(header)
+	def __str__(self): return str(self.header)
 
 	@property
 	def uid(self): return self.header #XXX
@@ -587,7 +587,7 @@ class CxxPreCompileTask(Task):
 		try: return self._target_dir
 		except AttributeError:
 			self._target_dir = self.project.bld_node.\
-				node_path('precompiled-headers').\
+				node_path('precompiled').\
 				node_path(self.header.rel_path(self.project.src_node)) #XXX
 			return self._target_dir
 
@@ -598,10 +598,9 @@ class CxxPreCompileTask(Task):
 			try: old_cfg_sig, deps, old_dep_sig = self.project.task_states[self.uid]
 			except KeyError:
 				if __debug__ and is_debug: debug('task: no state: ' + str(self))
-				self.project.task_states[self.uid] = None, None, None
 				changed = True
 			else:
-				if old_cfg_sig != self.cfg.sig:
+				if old_cfg_sig != self.cfg.cxx_sig:
 					if __debug__ and is_debug: debug('task: cxx sig changed: ' + str(self))
 					changed = True
 				else:
@@ -612,13 +611,14 @@ class CxxPreCompileTask(Task):
 						changed = True
 					else:
 						dep_sigs.sort()
-						dep_sig = Sig(''.join(dep_sigs)).digest()
-						if old_dep_sig != sig:
+						if old_dep_sig != Sig(''.join(dep_sigs)).digest():
 							# The cached implicit deps changed.
 							if __debug__ and is_debug: debug('cpp: deps changed: ' + str(self.header))
 							changed = True
 			if not changed:
 				if __debug__ and is_debug: debug('task: skip: no change: ' + str(self.header))
-			else: self.cfg.impl.precompile(self.cfg, self.header)
+			else:
+				if not silent: self.print_desc('pre-compiling c++ ' + str(self), color = '7;35')
+				self.cfg.impl.process_precompile_task(self)
 		finally: sched_context.lock.acquire()
 		raise StopIteration
