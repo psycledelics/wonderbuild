@@ -542,9 +542,9 @@ class BuildCheckTask(Task):
 				log = dir.node_path('build.log')
 				f = open(log.path, 'w')
 				try:
+					f.write(self.source_text); f.write('\n')
 					f.write(str(self.cfg.cxx_args)); f.write('\n')
 					f.write(str(self.cfg.ld_args)); f.write('\n')
-					f.write(self.source_text); f.write('\n')
 					f.write(out); f.write('\n')
 					f.write(err); f.write('\n')
 					f.write('return code: '); f.write(str(r)); f.write('\n')
