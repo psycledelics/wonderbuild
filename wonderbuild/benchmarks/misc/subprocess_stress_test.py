@@ -2,15 +2,12 @@
 
 if __name__ == '__main__':
 
-	import os, threading, time
-
-	if True: import subprocess
-	else: import pproc as subprocess
+	import threading, subprocess, time
 	
 	thread_count = 2
-	if True: input = 'test\n'; args = ['cat']
-	else: input = 'int main() { return 0; }\n'; args = ['c++', '-xc++', '-', '-o', os.devnull]
-
+	input = 'test\n'
+	args = ['cat']
+	
 	def thread_function(input, args):
 		while True:
 			p = subprocess.Popen(
