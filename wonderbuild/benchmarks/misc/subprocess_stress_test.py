@@ -3,13 +3,17 @@
 if __name__ == '__main__':
 
 	import os, threading, time
-	
-	#import pproc as subprocess
-	import subprocess
+
+	if True: import subprocess
+	else: import pproc as subprocess
 	
 	thread_count = 2
-	input = 'int main() { return 0; }\n'
-	args = ['c++', '-xc++', '-', '-o', os.devnull]
+	if True:
+		input = 'test\n'
+		args = ['cat']
+	else:
+		input = 'int main() { return 0; }\n'
+		args = ['c++', '-xc++', '-', '-o', os.devnull]
 
 	def thread_function(input, args):
 		while True:
