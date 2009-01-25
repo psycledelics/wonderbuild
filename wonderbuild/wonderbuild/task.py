@@ -27,8 +27,6 @@ def exec_subprocess(args, env = None, cwd = None):
 	return subprocess.call(
 		args = args,
 		bufsize = -1,
-		stdout = None,
-		stderr = None,
 		env = env,
 		cwd = cwd
 	)

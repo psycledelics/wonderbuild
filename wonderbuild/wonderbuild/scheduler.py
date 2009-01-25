@@ -33,6 +33,8 @@ class Scheduler(object):
 
 	def process(self, tasks):
 		if self.thread_count == 1:
+			self._lock = Scheduler._DummyLock()
+			self._condition = Scheduler._DummyCondition()
 			self._pre_start()
 			for t in tasks: self.add_task(t)
 			self._joining = True
@@ -43,17 +45,26 @@ class Scheduler(object):
 			for t in tasks: self.add_task(t)
 			self.join()
 		
+	class _DummyLock(object):
+		def acquire(self): pass
+		def release(self): pass
+	
+	class _DummyCondition(_DummyLock):
+		def wait(self, timeout): pass
+		def notify(self, count = 1): pass
+		def notifyAll(self): pass
+
 	def _pre_start(self):
 		self._tasks = set()
 		self._task_queue = []#deque()
 		self._todo_count = self._running_count = 0
 		self._stop_requested = self._joining = False
-		self._lock = threading.Lock()
-		self._condition = threading.Condition(self._lock)
 		self._context = Scheduler.Context(self)
 
 	def start(self):
 		if __debug__ and is_debug: debug('sched: starting threads: ' + str(self.thread_count))
+		self._lock = threading.Lock()
+		self._condition = threading.Condition(self._lock)
 		self._pre_start()
 		self._threads = []
 		for i in xrange(self.thread_count):
