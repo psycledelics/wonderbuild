@@ -488,10 +488,11 @@ class ModTask(Task):
 		else: return self.cfg.ar_ranlib_sig
 
 class BuildCheckTask(Task):
-	def __init__(self, name, base_cfg):
+	def __init__(self, name, base_cfg, silent = False):
 		Task.__init__(self, base_cfg.project)
 		self.name = name
-		self._base_cfg = base_cfg
+		self.base_cfg = base_cfg
+		self.silent = silent
 
 	def apply_to(self, cfg): pass
 
@@ -505,7 +506,7 @@ class BuildCheckTask(Task):
 	def cfg(self):
 		try: return self._cfg
 		except AttributeError:
-			self._cfg = self._base_cfg.clone()
+			self._cfg = self.base_cfg.clone()
 			self.apply_to(self._cfg)
 			return self._cfg
 	
@@ -537,8 +538,8 @@ class BuildCheckTask(Task):
 				lock.acquire()
 				try: dir.make_dir()
 				finally: lock.release()
-				if not silent: self.cfg.print_desc('checking for ' + self.name)
-				r, out, err = self.cfg.impl.build_check(self.cfg, self.source_text, silent = True)
+				if not silent and not self.silent: self.cfg.print_desc('checking for ' + self.name)
+				r, out, err = self.cfg.impl.process_build_check_task(self)
 				log = dir.node_path('build.log')
 				f = open(log.path, 'w')
 				try:
@@ -551,7 +552,7 @@ class BuildCheckTask(Task):
 				finally: f.close()
 				self._result = r == 0
 				self.project.state_and_cache[self.uid] = self.sig, self._result
-				if not silent:
+				if not silent and not self.silent:
 					if self._result: self.cfg.print_result_desc('yes\n', '32')
 					else: self.cfg.print_result_desc('no\n', '31')
 			return self._result
@@ -561,8 +562,8 @@ class BuildCheckTask(Task):
 		try: return self._sig
 		except AttributeError:
 			sig = Sig(self.source_text)
-			sig.update(self._base_cfg.cxx_sig)
-			sig.update(self._base_cfg.ld_sig)
+			sig.update(self.base_cfg.cxx_sig)
+			sig.update(self.base_cfg.ld_sig)
 			sig = self._sig = sig.digest()
 			return sig
 

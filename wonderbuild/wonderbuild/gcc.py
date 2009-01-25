@@ -166,10 +166,10 @@ class Impl(object):
 		elif mod_task.cfg.shared: name = 'lib' + mod_task.name + '.so'
 		else: name = 'lib' + mod_task.name + '.a'
 		return name
-	
+
 	@staticmethod
-	def build_check(base_cfg, source_text, silent = False):
-		cfg = base_cfg.clone()
+	def process_build_check_task(build_check_task):
+		cfg = build_check_task.cfg
 		cfg.shared = cfg.pic = False
 		args = cfg.cxx_args + ['-xc++', '-', '-o', os.devnull] + cfg.ld_args[1:]
-		return exec_subprocess_pipe(args, input = source_text, silent = silent)
+		return exec_subprocess_pipe(args, input = build_check_task.source_text, silent = build_check_task.silent)
