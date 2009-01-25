@@ -120,7 +120,9 @@ class Scheduler(object):
 							in_tasks = task_gen.next()
 						except StopIteration: task.processed = True
 						except:
-							if task_gen is not None: task_gen.close()
+							if task_gen is not None: 
+								try: task_gen.close() # XXX no close() on python 2.4
+								except: pass # we only want the original exception
 							raise
 						else:
 							for in_task in in_tasks: in_task.out_tasks.append(task)
