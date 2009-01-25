@@ -8,6 +8,9 @@ if __name__ == '__main__':
 	input = 'test\n'
 	args = ['cat']
 	
+	input = None
+	args = ['cat', '/tmp/t']
+	
 	def thread_function(input, args):
 		while True:
 			p = subprocess.Popen(
