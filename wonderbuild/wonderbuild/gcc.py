@@ -50,13 +50,13 @@ class Impl(object):
 		lock.acquire()
 		try: dir.make_dir()
 		finally: lock.release()
-		path = os.path.join(dir.path, 'x.')
+		path = os.path.join(dir.path, 'x')
 		 # -fpch-deps? -Wmissing-include-dirs -Winvalid-pch -H -Wp,-v
 		args = precompile_task.cfg.cxx_args + ['-xc++-header', '-MMD', precompile_task.header.path, '-o', path]
 		r = exec_subprocess(args)
 		if r != 0: raise Exception, r
 		# reads deps from the .d files generated as side-effect of compilation by gcc's -MD or -MMD option
-		f = open(path[:path.rfind('.')] + '.d', 'rb')
+		f = open(path + '.d', 'rb')
 		try: deps = f.read().replace('\\\n', '')
 		finally: f.close()
 		cwd = precompile_task.project.fs.cur
