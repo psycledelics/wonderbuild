@@ -3,8 +3,6 @@
 # copyright 2007-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import os, threading
-#from collections import deque
-#python 2.5.0a1 from __future__ import with_statement
 
 from logger import is_debug, debug, colored, silent
 from options import options, known_options, help
@@ -36,13 +34,13 @@ class Scheduler(object):
 			self._lock = Scheduler._DummyLock()
 			self._condition = Scheduler._DummyCondition()
 			self._pre_start()
-			for t in tasks: self.add_task(t)
+			self.add_tasks(tasks)
 			self._joining = True
 			self._thread_function(0) # XXX need a way to handle timeout
 			self._post_join()
 		else:
-			self.start()
-			for t in tasks: self.add_task(t)
+			self.start() # TODO add the tasks to the queue before starting all the threads
+			self.add_tasks(tasks)
 			self.join()
 		
 	class _DummyLock(object):
@@ -55,9 +53,8 @@ class Scheduler(object):
 		def notifyAll(self): pass
 
 	def _pre_start(self):
-		self._tasks = set()
-		self._task_queue = []#deque()
-		self._todo_count = self._running_count = 0
+		self._task_queue = []
+		self._todo_count = 0
 		self._stop_requested = self._joining = False
 		self._context = Scheduler.Context(self)
 
@@ -69,20 +66,20 @@ class Scheduler(object):
 		self._threads = []
 		for i in xrange(self.thread_count):
 			t = threading.Thread(target = self._thread_function, args = (i,), name = 'scheduler-thread-' + str(i))
-			#t.daemon = True
 			t.setDaemon(True)
 			t.start()
 			self._threads.append(t)
 
-	def add_task(self, task):
+	def add_tasks(self, tasks):
 		self._condition.acquire()
 		try:
-			if task in self._tasks: return
-			self._tasks.add(task)
-			self._todo_count += 1
-			self._task_queue.append(task)
-			if __debug__ and is_debug: debug('sched: add task ' + str(self._todo_count) + ' ' + str(task.__class__))
-			self._condition.notify()
+			notify = len(tasks)
+			self._todo_count += notify
+			self._task_queue += tasks
+			for task in tasks:
+				task.queued = True
+				if __debug__ and is_debug: debug('sched: tasks queued ' + str(self._todo_count) + ' ' + str(len(self._task_queue)) + ' ' + str(task))
+			self._condition.notify(notify)
 		finally: self._condition.release()
 
 	def stop(self):
@@ -108,8 +105,21 @@ class Scheduler(object):
 	def _post_join(self):
 		del self._condition
 		del self._task_queue
-		del self._tasks
 		if hasattr(self, 'exception'): raise self.exception
+	
+	if __debug__:
+		def _debug_state(self, i, event):
+			debug(
+				'sched: thread: ' + \
+				str(i) + ': ' + \
+				event + ': ' + \
+				str(self._joining) + ' ' + \
+				str(self._stop_requested) + ' ' + \
+				str(self._todo_count) + ' ' + \
+				str(len(self._task_queue)) + ' ' + \
+				str(self._task_queue)
+			)
+			assert self._todo_count >= len(self._task_queue)
 	
 	def _thread_function(self, i):
 		if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': started')
@@ -118,37 +128,48 @@ class Scheduler(object):
 			try:
 				while True:
 					while (not self._joining or self._todo_count != 0) and not self._stop_requested and len(self._task_queue) == 0:
-						if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': waiting')
+						if __debug__ and is_debug: self._debug_state(i, 'waiting')
 						self._condition.wait(timeout = self.timeout)
-						if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': notified ' + str(self._joining) + ' ' + str(self._todo_count) + ' ' + str(self._running_count) + ' ' + str(self._stop_requested))
+						if __debug__ and is_debug: self._debug_state(i, 'notified')
+					if __debug__ and is_debug: self._debug_state(i, 'condition met')
 					if self._joining and self._todo_count == 0 or self._stop_requested: break
 					task = self._task_queue.pop()
+					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': task pop: ' + str(task) + ' ' + str(task.out_tasks))
+					task.queued = False
 					if not task.processed:
-						task_gen = None
 						try:
-							try: task_gen = task.task_gen
-							except AttributeError: task_gen = task.task_gen = task(self._context)
+							try: task_gen = task.generator
+							except AttributeError: task_gen = task.generator = task(self._context)
 							in_tasks = task_gen.next()
-						except StopIteration: task.processed = True
+						except StopIteration:
+							if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': task processed: ' + str(task) + ' ' + str(task.out_tasks))
+							task.processed = True
 						except:
-							if task_gen is not None: 
-								try: task_gen.close() # XXX no close() on python 2.4
+							if task_gen is not None:
+								try: task_gen.close() # note: no close() on python 2.4
 								except: pass # we only want the original exception
 							raise
 						else:
-							for in_task in in_tasks: in_task.out_tasks.append(task)
-							self._task_queue += in_tasks
-							notify = len(in_tasks)
-							task.in_task_todo_count += notify
+							notify = 0
+							task.in_task_todo_count += len(in_tasks)
+							for in_task in in_tasks:
+								in_task.out_tasks.append(task)
+								if not in_task.queued and in_task.in_task_todo_count == 0:
+									if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': in task queued: ' + str(in_task))
+									self._task_queue.append(in_task)
+									in_task.queued = True
+								 	notify += 1
 							self._todo_count += notify
 							if notify > 1: self._condition.notify(notify - 1)
 							continue
-					self._todo_count -= 1 #XXX
+					self._todo_count -= 1
 					notify = -1
 					for out_task in task.out_tasks:
 						out_task.in_task_todo_count -= 1
-						if out_task.in_task_todo_count == 0:
+						if not out_task.queued and out_task.in_task_todo_count == 0:
+							if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': out task queued: ' + str(out_task))
 							self._task_queue.append(out_task)
+							out_task.queued = True
 							notify += 1
 					task.out_tasks = []
 					if notify > 0: self._condition.notify(notify)

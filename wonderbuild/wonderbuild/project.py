@@ -43,29 +43,13 @@ class Project(object):
 			except: self.state_and_cache = {}
 		finally:
 			if gc_enabled: gc.enable()
-
 		self.cfgs = []
-		self.tasks = []
-		self.aliases = {} # {name: [tasks]}
-
-		try: self.task_states = self.state_and_cache[self.__class__.__name__]
-		except KeyError:
-			if  __debug__ and is_debug: debug('project: all anew')
-			self.task_states = {} # {task.uid: (task sig, task implicit deps ...)}
-			self.state_and_cache[self.__class__.__name__] = self.task_states
-
+		self.task_aliases = {} # {name: [tasks]}
 		self.fs = FileSystem(self.state_and_cache)
 		self.src_node = self.fs.cur.node_path(src_path)
 		self.bld_node = self.fs.cur.node_path(bld_path)
+		self.processsing = False
 		
-	def add_task(self, task, aliases):
-		self.tasks.append(task)
-		if aliases is not None:
-			if __debug__ and is_debug: debug('project: aliases: ' + str(aliases) + ' ' + str(task))
-			for a in aliases:
-				try: self.aliases[a].append(task)
-				except KeyError: self.aliases[a] = [task]
-
 	def options(self):
 		for c in self.cfgs: c.options()
 
@@ -74,10 +58,25 @@ class Project(object):
 
 	def configure(self):
 		for c in self.cfgs: c.configure()
+
+	def add_task_aliases(self, task, aliases = None):
+		if self.processsing: return # no need to add aliases during processing
+		aliases = aliases is None and (None,) or (None,) + aliases
+		if __debug__ and is_debug: debug('project: aliases: ' + str(aliases) + ' ' + str(task.__class__))
+		for a in aliases:
+			try: self.task_aliases[a].append(task)
+			except KeyError: self.task_aliases[a] = [task]
+
+	def tasks_with_aliases(self, task_aliases = None):
+		tasks = set()
+		if task_aliases is None: task_aliases = (None,)
+		for a in task_aliases: tasks |= set(self.task_aliases[a])
+		return tasks
 		
-	def build(self, tasks):
-		s = Scheduler()
-		s.process(tasks)
+	def process(self, tasks):
+		self.processsing = True
+		Scheduler().process(tasks)
+		self.processsing = False
 
 	def dump(self):
 		#self.bld_node.forget()

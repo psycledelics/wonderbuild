@@ -6,7 +6,7 @@ import os
 
 from logger import is_debug, debug, colored
 from signature import Sig
-from task import exec_subprocess, exec_subprocess_pipe
+from subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 
 class Impl(object):
 
@@ -45,7 +45,7 @@ class Impl(object):
 	
 	@staticmethod
 	def process_precompile_task(precompile_task):
-		dir = precompile_task.target_dir.node_path(precompile_task.header.name + '.gch')
+		dir = precompile_task.target
 		lock = dir.lock
 		lock.acquire()
 		try: dir.make_dir()
@@ -64,8 +64,11 @@ class Impl(object):
 		if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
 		dep_sigs = [d.sig for d in deps]
 		dep_sigs.sort()
-		precompile_task.project.task_states[precompile_task.uid] = precompile_task.cfg.cxx_sig, deps, Sig(''.join(dep_sigs)).digest()
+		precompile_task.project.state_and_cache[precompile_task.uid] = precompile_task.cfg.cxx_sig, deps, Sig(''.join(dep_sigs)).digest()
 		# TODO create a file with a #error to ensure the pch is used
+
+	@property
+	def precompile_task_target_ext(self): return '.gch'
 
 	@staticmethod
 	def process_cxx_task(cxx_task):
@@ -73,7 +76,7 @@ class Impl(object):
 		cwd = cxx_task.target_dir
 		r = exec_subprocess(args, cwd = cwd.path)
 		if r != 0: raise Exception, r
-		implicit_deps = cxx_task.project.task_states[cxx_task.uid][2]
+		implicit_deps = cxx_task.project.state_and_cache[cxx_task.uid][2]
 		for s in zip(cxx_task.sources, cxx_task._actual_sources):
 			# reads deps from the .d files generated as side-effect of compilation by gcc's -MD or -MMD option
 			path = s[1].path

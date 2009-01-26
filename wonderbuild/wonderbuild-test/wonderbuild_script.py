@@ -71,7 +71,7 @@ def wonderbuild_script(project):
 				PreCompileTask.apply_to(self, cfg)
 
 		def __call__(self, sched_ctx):
-			yield [std_math_check]
+			yield (std_math_check,)
 			if not std_math_check.result: raise StopIteration
 			for t in PreCompileTask.__call__(self, sched_ctx): yield t
 			#raise StopIteration
@@ -82,7 +82,7 @@ def wonderbuild_script(project):
 		def __init__(self): ModTask.__init__(self, 'foo', ModTask.Kinds.LIB, build_cfg)
 
 		def __call__(self, sched_ctx):
-			yield [std_math_check, pch]
+			yield (std_math_check, pch)
 			pch.apply_to(self.cfg)
 			if std_math_check.result: std_math_check.apply_to(self.cfg)
 			for s in src_dir.node_path('foo').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
@@ -94,7 +94,7 @@ def wonderbuild_script(project):
 		def __init__(self): ModTask.__init__(self, 'main', ModTask.Kinds.PROG, build_cfg)
 
 		def __call__(self, sched_ctx):
-			yield [pch]
+			yield (pch,)
 			pch.apply_to(self.cfg)
 			self.dep_lib_tasks.append(lib_foo)
 			self.cfg.lib_paths.append(lib_foo.target.parent)

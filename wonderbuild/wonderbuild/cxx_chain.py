@@ -9,7 +9,8 @@ from options import options, known_options, help
 from logger import out, is_debug, debug, colored, silent
 from signature import Sig
 from cfg import Cfg
-from task import Task, exec_subprocess_pipe
+from task import Task
+from subprocess_wrapper import exec_subprocess_pipe
 
 class ClientCfg(object):
 	def __init__(self, project):
@@ -334,7 +335,7 @@ class ModTask(Task):
 		LOADABLE = 2
 
 	def __init__(self, name, kind, base_cfg, aliases = None):
-		Task.__init__(self, base_cfg.project, aliases)
+		Task.__init__(self, base_cfg.project, aliases or (name,))
 		self.name = name
 		self.kind = kind
 		self.cfg = base_cfg.clone()
@@ -369,12 +370,12 @@ class ModTask(Task):
 	def target_dir(self): return self.target.parent
 
 	def __call__(self, sched_context):
-		if len(self.dep_lib_tasks): yield self.dep_lib_tasks
+		if len(self.dep_lib_tasks) != 0: yield self.dep_lib_tasks
 		changed_sources = []
-		try: state = self.project.task_states[self.uid]
+		try: state = self.project.state_and_cache[self.uid]
 		except KeyError:
 			if __debug__ and is_debug: debug('task: no state: ' + str(self))
-			self.project.task_states[self.uid] = None, None, {}
+			self.project.state_and_cache[self.uid] = None, None, {}
 			changed_sources = self.sources
 		else:
 			if state[1] != self.cfg.cxx_sig:
@@ -428,7 +429,7 @@ class ModTask(Task):
 			changed_sources = sources
 			need_process = True
 		else:
-			state = self.project.task_states[self.uid]
+			state = self.project.state_and_cache[self.uid]
 			if state[0] != self._mod_sig:
 				if __debug__ and is_debug: debug('task: mod sig changed: ' + str(self))
 				changed_sources = self.sources
@@ -463,13 +464,13 @@ class ModTask(Task):
 				if self.ld: sources = self.sources
 				else: sources = changed_sources
 				self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources])
-				implicit_deps = self.project.task_states[self.uid][2]
+				implicit_deps = self.project.state_and_cache[self.uid][2]
 				if len(implicit_deps) > len(self.sources):
 					# remove old sources from implicit deps dictionary
 					sources_states = {}
 					for s in self.sources: sources_states[s] = implicit_deps[s]
 				else: sources_states = implicit_deps
-				self.project.task_states[self.uid] = self._mod_sig, self.cfg.cxx_sig, sources_states #XXX move cxx_sig into obj sig
+				self.project.state_and_cache[self.uid] = self._mod_sig, self.cfg.cxx_sig, sources_states #XXX move cxx_sig into obj sig
 			finally: sched_context.lock.acquire()
 		if not self.cfg.check_missing: self.target_dir.forget()
 		self._needed_process = need_process
@@ -577,23 +578,28 @@ class PreCompileTask(Task):
 		cfg.include_paths.append(self.target_dir)
 		cfg.includes.append(self.header)
 
-	def __str__(self): return str(self.header)
+	def __str__(self): return str(self.target)
 
 	@property
-	def uid(self): return self.header #XXX
+	def uid(self): return self.header
 
 	@property
-	def target_dir(self):
-		try: return self._target_dir
+	def target(self):
+		try: return self._target
 		except AttributeError:
-			self._target_dir = self.project.bld_node.node_path('precompiled').node_path(self.header.parent.rel_path(self.project.src_node))
-			return self._target_dir
+			self._target = self.project.bld_node.\
+				node_path('precompiled').\
+				node_path(self.header.rel_path(self.project.src_node) + self.cfg.impl.precompile_task_target_ext)
+			return self._target
+
+	@property
+	def target_dir(self): return self.target.parent
 
 	def __call__(self, sched_context):
 		sched_context.lock.release()
 		try:
 			changed = False
-			try: old_cfg_sig, deps, old_dep_sig = self.project.task_states[self.uid]
+			try: old_cfg_sig, deps, old_dep_sig = self.project.state_and_cache[self.uid]
 			except KeyError:
 				if __debug__ and is_debug: debug('task: no state: ' + str(self))
 				changed = True
