@@ -3,7 +3,6 @@
 # copyright 2007-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import os, threading
-#python 2.5.0a1 from __future__ import with_statement
 
 from options import options, known_options, help
 from logger import out, is_debug, debug, colored, silent

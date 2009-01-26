@@ -11,16 +11,25 @@ from logger import is_debug, debug
 
 if __debug__ and is_debug: import time
 
-known_options |= set(['--src-dir=', '--bld-dir='])
+known_options |= set(['--src-dir=', '--bld-dir=', '--aliases=', '--list-aliases'])
 help['--src-dir='] = ('--src-dir=<dir>', 'use <dir> as the source dir', os.getcwd())
 help['--bld-dir='] = ('--bld-dir=<dir>', 'use <dir> as the build dir', '<src-dir>' + os.sep + '++wonderbuild')
+help['--aliases='] = ('--aliases=<name,...>', 'build tasks with aliases <name,...>, comma-separated list')
+help['--list-aliases'] = ('--list-aliases', 'list the available task aliases')
 
 class Project(object):
 	def __init__(self):
 		src_path = bld_path = None
+		self.requested_task_aliases = None
+		self.list_aliases = False
 		for o in options:
 			if o.startswith('--src-dir='): src_path = o[len('--src-dir='):]
 			elif o.startswith('--bld-dir='): bld_path = o[len('--bld-dir='):]
+			elif o.startswith('--aliases='):
+				o = o[len('--aliases='):]
+				if len(o): self.requested_task_aliases = o.split(',')
+				else: self.requested_task_aliases = (None,)
+			elif o == '--list-aliases': self.list_aliases = True
 		if src_path is None: src_path = help['--src-dir='][2]
 		if bld_path is None: bld_path = os.path.join(src_path, '++wonderbuild')
 		if src_path == bld_path: raise Exception, 'build dir and source dir are the same'
@@ -74,9 +83,14 @@ class Project(object):
 		return tasks
 		
 	def process(self, tasks):
-		self.processsing = True
-		Scheduler().process(tasks)
-		self.processsing = False
+		if self.list_aliases:
+			for k, v in self.task_aliases.iteritems():
+				print k, v
+		else:
+			if self.requested_task_aliases is not None: tasks = self.tasks_with_aliases(self.requested_task_aliases)
+			self.processsing = True
+			Scheduler().process(tasks)
+			self.processsing = False
 
 	def dump(self):
 		#self.bld_node.forget()

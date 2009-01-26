@@ -3,9 +3,11 @@
 # copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 def wonderbuild_script(project):
+	from wonderbuild.cxx_chain import UserCfg, BuildCheckTask, PreCompileTask, ModTask
+	from wonderbuild.std_checks import StdMathCheckTask
+	
 	tasks = []
 
-	from wonderbuild.cxx_chain import UserCfg, BuildCheckTask, PreCompileTask, ModTask
 	build_cfg = UserCfg(project)
 
 	src_dir = project.src_node.node_path('src')
@@ -13,53 +15,7 @@ def wonderbuild_script(project):
 
 	check_cfg = build_cfg.clone()
 
-	from wonderbuild.logger import silent
-	class StdMathCheckTask(BuildCheckTask):
-		def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'c++-std-math', base_cfg)
-
-		def apply_to(self, cfg):
-			self.result
-			if self.m: cfg.libs.append('m')
-
-		class SubCheckTask(BuildCheckTask):
-			def __init__(self, m, name, base_cfg, silent):
-				BuildCheckTask.__init__(self, name, base_cfg, silent)
-				self.m = m
-
-			def apply_to(self, cfg):
-				if self.m: cfg.libs.append('m')
-
-			@property
-			def source_text(self):
-				return '''\
-					#include <cmath>
-					int main() {
-						float const f(std::sin(1.f));
-						return 0;
-					}
-					\n'''
-			
-		def __call__(self, sched_ctx):
-			self.t0 = StdMathCheckTask.SubCheckTask(False, self.name + '-without-libm', self.base_cfg, silent = True)
-			self.t1 = StdMathCheckTask.SubCheckTask(True, self.name + '-with-libm', self.base_cfg, silent = True)
-			yield (self.t0, self.t1)
-			if not silent:
-				self.cfg.print_desc('checking for ' + self.name)
-				if self.result: self.cfg.print_result_desc('yes with' + (self.m and '' or 'out') + ' libm\n', '32')
-				else: self.cfg.print_result_desc('no\n', '31')
-			raise StopIteration
-
-		@property
-		def result(self):
-			try: return self._result
-			except AttributeError:
-				self._result = self.t0.result or self.t1.result
-				if self.t0.result: self.m = False
-				elif self.t1.result: self.m = True
-				else: self.m = None
-
 	std_math_check = StdMathCheckTask(check_cfg)
-
 	if False and std_math_check.result: std_math_check.apply_to(build_cfg)
 
 	class Pch(PreCompileTask):

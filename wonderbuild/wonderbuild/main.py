@@ -73,7 +73,6 @@ else:
 			return 1
 
 		project.configure()
-		tasks = project.tasks_with_aliases()
 		try: project.process(tasks)
 		finally: project.dump()
 		return 0
