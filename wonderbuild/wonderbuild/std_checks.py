@@ -15,7 +15,7 @@ class StdMathCheckTask(BuildCheckTask):
 
 	class SubCheckTask(BuildCheckTask):
 		def __init__(self, name, base_cfg, m):
-			BuildCheckTask.__init__(self, name + '-with' + (m and '' or 'out') + '-libm', base_cfg, silent = True)
+			BuildCheckTask.__init__(self, name + '-with' + (not m and 'out' or '') + '-libm', base_cfg, silent = True)
 			self.m = m
 
 		def apply_to(self, cfg):
