@@ -14,23 +14,19 @@ class StdMathCheckTask(BuildCheckTask):
 		if self.m: cfg.libs.append('m')
 
 	class SubCheckTask(BuildCheckTask):
-		def __init__(self, m, name, base_cfg, silent):
-			BuildCheckTask.__init__(self, name, base_cfg, silent)
+		def __init__(self, name, base_cfg, m):
+			BuildCheckTask.__init__(self, name + '-with' + (m and '' or 'out') + '-libm', base_cfg, silent = True)
 			self.m = m
 
 		def apply_to(self, cfg):
 			if self.m: cfg.libs.append('m')
 
 		@property
-		def source_text(self):
-			return '''\
-				#include <cmath>
-				int main() {
-					float const f(std::sin(1.f));
-					return 0;
-				}
-				\n'''
+		def source_text(self): return '#include <cmath>\nvoid math() { float const f(std::sin(1.f)); }'
 		
+	def _make_t0(self): return StdMathCheckTask.SubCheckTask(self.name, self.base_cfg, False)
+	def _make_t1(self): return StdMathCheckTask.SubCheckTask(self.name, self.base_cfg, True)
+
 	def __call__(self, sched_ctx):
 		changed = False
 		try: old_sig, self._result, self.m = self.project.state_and_cache[self.uid]
@@ -40,23 +36,30 @@ class StdMathCheckTask(BuildCheckTask):
 		if not changed:
 			if __debug__ and is_debug: debug('task: skip: no change: ' + self.name)
 		else:
-			self.t0 = StdMathCheckTask.SubCheckTask(False, self.name + '-without-libm', self.base_cfg, silent = True)
-			self.t1 = StdMathCheckTask.SubCheckTask(True, self.name + '-with-libm', self.base_cfg, silent = True)
-			yield (self.t0, self.t1)
+			self._t0 = self._make_t0()
+			if sched_ctx.thread_count == 1:
+				yield (self._t0,)
+				if self._t0.result: self._t1 = self._t0
+				else:
+					self._t1 = self._make_t1()
+					yield (self._t1,)
+			else:
+				self._t1 = self._make_t1()
+				yield (self._t0, self._t1)
 			if not silent:
 				self.cfg.print_desc('checking for ' + self.name)
-				if self.result: self.cfg.print_result_desc('yes with' + (self.m and '' or 'out') + ' libm\n', '32')
+				if self.result: self.cfg.print_result_desc('yes with' + (not self.m and 'out' or '') + ' libm\n', '32')
 				else: self.cfg.print_result_desc('no\n', '31')
 			self.project.state_and_cache[self.uid] = self.sig, self.result, self.m
 		raise StopIteration
-
+		
 	@property
 	def result(self):
 		try: return self._result
 		except AttributeError:
-			self._result = self.t0.result or self.t1.result
-			if self.t0.result: self.m = False
-			elif self.t1.result: self.m = True
+			self._result = self._t0.result or self._t1.result
+			if self._t0.result: self.m = False
+			elif self._t1.result: self.m = True
 			else: self.m = None
 
 	@property

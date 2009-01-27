@@ -175,4 +175,4 @@ class Impl(object):
 		cfg = build_check_task.cfg
 		cfg.shared = cfg.pic = False
 		args = cfg.cxx_args + ['-xc++', '-', '-o', os.devnull] + cfg.ld_args[1:]
-		return exec_subprocess_pipe(args, input = build_check_task.source_text, silent = build_check_task.silent)
+		return exec_subprocess_pipe(args, input = build_check_task._prog_source_text, silent = build_check_task.silent)

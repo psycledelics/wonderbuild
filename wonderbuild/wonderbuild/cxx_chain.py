@@ -497,10 +497,10 @@ class BuildCheckTask(Task):
 	def apply_to(self, cfg): pass
 
 	@property
-	def source_text(self):
-		return \
-			'int main() { return 0; }\n' \
-			'#error default source text not redefined\n'
+	def source_text(self): return '#error ' + str(self.__class__) + ' did not redefine default source text.\n'
+
+	@property
+	def _prog_source_text(self): return self.source_text + '\nint main() { return 0; }\n'
 
 	@property
 	def cfg(self):
@@ -543,7 +543,7 @@ class BuildCheckTask(Task):
 				log = dir.node_path('build.log')
 				f = open(log.path, 'w')
 				try:
-					f.write(self.source_text); f.write('\n')
+					f.write(self._prog_source_text); f.write('\n')
 					f.write(str(self.cfg.cxx_args)); f.write('\n')
 					f.write(str(self.cfg.ld_args)); f.write('\n')
 					f.write(out); f.write('\n')

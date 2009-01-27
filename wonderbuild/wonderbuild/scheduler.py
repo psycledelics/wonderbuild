@@ -137,6 +137,7 @@ class Scheduler(object):
 					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': task pop: ' + str(task) + ' ' + str(task.out_tasks))
 					task.queued = False
 					if not task.processed:
+						task_gen = None
 						try:
 							try: task_gen = task.generator
 							except AttributeError: task_gen = task.generator = task(self._context)
