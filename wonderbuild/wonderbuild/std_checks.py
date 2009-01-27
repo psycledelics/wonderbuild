@@ -71,3 +71,31 @@ class StdMathCheckTask(BuildCheckTask):
 			sig.update(self.base_cfg.ld_sig)
 			sig = self._sig = sig.digest()
 			return sig
+
+class ThreadSupportCheckTask(BuildCheckTask):
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'thread-support', base_cfg)
+
+	def apply_to(self, cfg):
+		pass # TODO
+
+	def __call__(self, sched_ctx):
+		pass # TODO
+
+class DlfcnCheckTask(BuildCheckTask):
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'dlfcn', base_cfg)
+
+	def apply_to(self, cfg):
+		pass # TODO
+
+	def __call__(self, sched_ctx):
+		pass # TODO
+
+class BoostCheckTask(BuildCheckTask):
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'boost', base_cfg)
+
+	def apply_to(self, cfg):
+		pass # TODO
+
+	def __call__(self, sched_ctx):
+		pass # TODO
+

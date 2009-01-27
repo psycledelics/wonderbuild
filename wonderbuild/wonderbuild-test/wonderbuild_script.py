@@ -3,7 +3,8 @@
 # copyright 2008-2008 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 def wonderbuild_script(project):
-	from wonderbuild.cxx_chain import UserCfg, BuildCheckTask, PreCompileTask, ModTask
+
+	from wonderbuild.cxx_chain import UserCfg, PkgConfigCheckTask, BuildCheckTask, PreCompileTask, ModTask
 	from wonderbuild.std_checks import StdMathCheckTask
 	
 	tasks = []
@@ -14,6 +15,9 @@ def wonderbuild_script(project):
 	build_cfg.include_paths.append(src_dir)
 
 	check_cfg = build_cfg.clone()
+	
+	glibmm = PkgConfigCheckTask('glibmm-2.4 >= 2.4', check_cfg)
+	glibmm.result
 
 	std_math_check = StdMathCheckTask(check_cfg)
 	if False and std_math_check.result: std_math_check.apply_to(build_cfg)
