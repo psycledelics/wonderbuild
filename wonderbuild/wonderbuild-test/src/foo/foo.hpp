@@ -1,3 +1,7 @@
+#ifndef FOO__FOO_HPP
+#define FOO__FOO_HPP
+#pragma once
+
 #if !defined _WIN32 || FOO < 0
 	#define FOO_LINK
 #elif FOO
@@ -11,3 +15,5 @@
 #endif
 
 FOO_LINK void foo();
+
+#endif
