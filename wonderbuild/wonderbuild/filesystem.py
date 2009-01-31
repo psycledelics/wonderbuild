@@ -74,8 +74,8 @@ class Node(object):
 	def lock(self):
 		try: return self._lock
 		except AttributeError:
-			lock = self._lock = threading.Lock()
-			return lock
+			self._lock = threading.Lock()
+			return self._lock
 		
 	@property
 	def exists(self):
@@ -89,11 +89,17 @@ class Node(object):
 				else: self._exists = True
 			return self._exists
 	
-	def make_dir(self):
+	def make_dir(self, parent_node_to_lock = None):
 		if not self.exists:
 			if __debug__ and is_debug: debug('fs: os.makedirs: ' + self.path + os.sep)
-			os.makedirs(self.path)
-			self._exists = True
+			if parent_node_to_lock is None:
+				os.makedirs(self.path)
+			else:
+				lock = parent_node_to_lock.lock
+				lock.acquire()
+				try: os.makedirs(self.path)
+				finally: lock.release()
+			self._exists = self._is_dir = True
 
 	@property
 	def is_dir(self):

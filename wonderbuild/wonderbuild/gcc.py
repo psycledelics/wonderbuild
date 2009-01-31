@@ -38,26 +38,30 @@ class Impl(object):
 		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + v)
-		for i in cfg.includes: args += ['-include', os.path.join(os.pardir, os.pardir, i.rel_path(cfg.project.bld_node))]
 		for p in cfg.include_paths: args += ['-I', os.path.join(os.pardir, os.pardir, p.rel_path(cfg.project.bld_node))]
+		for i in cfg.includes: args += ['-include', os.path.join(os.pardir, os.pardir, i.rel_path(cfg.project.bld_node))]
 		args += cfg.cxx_flags
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: gcc: cxx: ' + str(args))
 		return args
 	
 	@staticmethod
 	def process_precompile_task(precompile_task):
-		dir = precompile_task.target
-		lock = dir.lock
-		lock.acquire()
-		try: dir.make_dir()
-		finally: lock.release()
-		path = os.path.join(dir.path, 'x')
-		 # -fpch-deps? -Wmissing-include-dirs -Winvalid-pch -H -Wp,-v
-		args = precompile_task.cfg.cxx_args + ['-xc++-header', '-MMD', precompile_task.header.path, '-o', path]
+		# some useful options: -Wmissing-include-dirs -Winvalid-pch -H -fpch-deps -Wp,-v
+		args = precompile_task.cfg.cxx_args + ['-xc++-header', '-MMD', precompile_task.header.path]
+		use_dir = False
+		if not use_dir:
+			path = precompile_task.header.path + '.d'
+			args += ['-MF', path]
+		else:
+			dir = precompile_task.target
+			dir.make_dir()
+			path = os.path.join(dir.path, 'x')
+			args += ['-o', path]
+			path += '.d'
 		r = exec_subprocess(args)
 		if r != 0: raise Exception, r
 		# reads deps from the .d files generated as side-effect of compilation by gcc's -MD or -MMD option
-		f = open(path + '.d', 'rb')
+		f = open(path, 'r')
 		try: deps = f.read().replace('\\\n', '')
 		finally: f.close()
 		cwd = precompile_task.project.fs.cur
@@ -65,8 +69,7 @@ class Impl(object):
 		if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
 		dep_sigs = [d.sig for d in deps]
 		dep_sigs.sort()
-		precompile_task.project.state_and_cache[precompile_task.uid] = precompile_task.cfg.cxx_sig, deps, Sig(''.join(dep_sigs)).digest()
-		# TODO create a file with a #error to ensure the pch is used
+		precompile_task.project.state_and_cache[precompile_task.uid] = precompile_task.sig, deps, Sig(''.join(dep_sigs)).digest()
 
 	@property
 	def precompile_task_target_ext(self): return '.gch'
@@ -81,7 +84,7 @@ class Impl(object):
 		for s in zip(cxx_task.sources, cxx_task._actual_sources):
 			# reads deps from the .d files generated as side-effect of compilation by gcc's -MD or -MMD option
 			path = s[1].path
-			f = open(path[:path.rfind('.')] + '.d', 'rb')
+			f = open(path[:path.rfind('.')] + '.d', 'r')
 			try: deps = f.read().replace('\\\n', '')
 			finally: f.close()
 			# note: we skip the first implicit dep, which is the dummy actual source

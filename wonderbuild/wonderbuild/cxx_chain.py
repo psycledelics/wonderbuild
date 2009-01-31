@@ -3,6 +3,7 @@
 # copyright 2007-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import os, threading
+from collections import deque
 
 from options import options, known_options, help
 from logger import out, is_debug, debug, colored, silent
@@ -15,9 +16,9 @@ class ClientCfg(object):
 	def __init__(self, project):
 		self.project = project
 		self.defines = {}
-		self.include_paths = []
+		self.include_paths = deque()
 		self.cxx_flags = []
-		self.lib_paths = []
+		self.lib_paths = deque()
 		self.libs = []
 		self.static_libs = []
 		self.shared_libs = []
@@ -292,27 +293,43 @@ class UserCfg(Cfg, BuildCfg):
 		return c
 
 class PreCompileTask(Task):
-	def __init__(self, header, cfg):
-		Task.__init__(self, cfg.project)
-		self.header = header
-		self.cfg = cfg
-
-	def apply_to(self, cfg):
-		cfg.include_paths.append(self.target_dir)
-		cfg.includes.append(self.header)
-
-	def __str__(self): return str(self.target)
+	def __init__(self, name, base_cfg):
+		Task.__init__(self, base_cfg.project)
+		self.name = name
+		self.base_cfg = base_cfg
 
 	@property
-	def uid(self): return self.header
+	def source_text(self): return '#error ' + str(self.__class__) + ' did not redefine default source text.\n'
+
+	@property
+	def cfg(self):
+		try: return self._cfg
+		except AttributeError:
+			self._cfg = self.base_cfg.clone()
+			#self._cfg.include_paths.appendleft(self.target_dir)
+			return self._cfg
+
+	def apply_to(self, cfg):
+		cfg.include_paths.appendleft(self.target_dir)
+		cfg.includes.append(self.header)
+
+	def __str__(self): return str(self.header)
+
+	@property
+	def uid(self): return self.name
+
+	@property
+	def header(self):
+		try: return self._header
+		except AttributeError:
+			self._header = self.project.bld_node.node_path('precompiled').node_path(self.name + '.private.hpp')
+			return self._header
 
 	@property
 	def target(self):
 		try: return self._target
 		except AttributeError:
-			self._target = self.project.bld_node.\
-				node_path('precompiled').\
-				node_path(self.header.rel_path(self.project.src_node) + self.cfg.impl.precompile_task_target_ext)
+			self._target = self.header.parent.node_path(self.header.name + self.cfg.impl.precompile_task_target_ext)
 			return self._target
 
 	@property
@@ -322,13 +339,13 @@ class PreCompileTask(Task):
 		sched_context.lock.release()
 		try:
 			changed = False
-			try: old_cfg_sig, deps, old_dep_sig = self.project.state_and_cache[self.uid]
+			try: old_sig, deps, old_dep_sig = self.project.state_and_cache[self.uid]
 			except KeyError:
 				if __debug__ and is_debug: debug('task: no state: ' + str(self))
 				changed = True
 			else:
-				if old_cfg_sig != self.cfg.cxx_sig:
-					if __debug__ and is_debug: debug('task: cxx sig changed: ' + str(self))
+				if old_sig != self.sig:
+					if __debug__ and is_debug: debug('task: sig changed: ' + str(self))
 					changed = True
 				else:
 					try: dep_sigs = [dep.sig for dep in deps]
@@ -342,13 +359,38 @@ class PreCompileTask(Task):
 							# The cached implicit deps changed.
 							if __debug__ and is_debug: debug('cpp: deps changed: ' + str(self.header))
 							changed = True
+						elif self.cfg.check_missing:
+							try: self.target_dir.actual_children # not needed, just an optimisation
+							except OSError: pass
+							if not self.target.exists:
+								if __debug__ and is_debug: debug('task: target removed: ' + str(self.target))
+								changed = True
 			if not changed:
 				if __debug__ and is_debug: debug('task: skip: no change: ' + str(self.header))
 			else:
 				if not silent: self.print_desc('pre-compiling c++ ' + str(self), color = '7;35')
+				dir = self.header.parent
+				dir.make_dir(dir.parent)
+				f = open(self.header.path, 'w')
+				try: f.write(self.source_text); f.write('\n')
+				finally: f.close()
 				self.cfg.impl.process_precompile_task(self)
+				if False:
+					# We create a file with a #error to ensure the pch is used.
+					f = open(self.header.path, 'w')
+					try: f.write('#error pre-compiled header missed\n');
+					finally: f.close()
 		finally: sched_context.lock.acquire()
 		raise StopIteration
+
+	@property
+	def sig(self):
+		try: return self._sig
+		except AttributeError:
+			sig = Sig(self.source_text)
+			sig.update(self.cfg.cxx_sig)
+			sig = self._sig = sig.digest()
+			return sig
 
 class BatchCompileTask(Task):
 	def __init__(self, mod_task, sources):
@@ -380,7 +422,7 @@ class BatchCompileTask(Task):
 			for s in self.sources:
 				node = self.target_dir.node_path(self.mod_task._unique_base_name(s))
 				if not node.exists:
-					f = open(node.path, 'wb')
+					f = open(node.path, 'w')
 					try: f.write('#include "%s"\n' % s.rel_path(self.target_dir))
 					finally: f.close()
 				self._actual_sources.append(node)
@@ -549,17 +591,16 @@ class ModTask(Task):
 		else: return self.cfg.ar_ranlib_sig
 
 class PkgConfigCheckTask(Task):
-	def __init__(self, name, cfg):
-		Task.__init__(self, cfg.project)
+	def __init__(self, name, project):
+		Task.__init__(self, project)
 		self.name = name
-		self.cfg = cfg
 
 	def apply_to(self, cfg): cfg.pkgs.append(self.name)
 
 	@property
 	def uid(self): return self.name
 
-	def __call__(self, sched_ctx):
+	def __call__(self, sched_context):
 		try: self._result
 		except AttributeError:
 			sched_context.lock.release()
@@ -623,6 +664,13 @@ class BuildCheckTask(Task):
 	@property
 	def uid(self): return self.name
 
+	@property
+	def bld_dir(self):
+		try: return self._bld_dir
+		except AttributeError:
+			self._bld_dir = self.project.bld_node.node_path('checks').node_path(self.name)
+			return self._bld_dir
+
 	def __call__(self, sched_context):
 		try: self._result
 		except AttributeError:
@@ -643,14 +691,11 @@ class BuildCheckTask(Task):
 			if not changed:
 				if __debug__ and is_debug: debug('task: skip: no change: ' + self.name)
 			else:
-				dir = self.project.bld_node.node_path('checks').node_path(self.name)
-				lock = dir.lock
-				lock.acquire()
-				try: dir.make_dir()
-				finally: lock.release()
 				if not silent:
 					desc = 'checking for ' + self.name
 					self.print_check(desc)
+				dir = self.bld_dir
+				dir.make_dir(dir.parent)
 				r, out, err = self.cfg.impl.process_build_check_task(self)
 				log = dir.node_path('build.log')
 				f = open(log.path, 'w')

@@ -13,8 +13,7 @@ class Task(object):
 		self.out_tasks = []
 		self.processed = False
 
-	def __call__(self, sched_context):
-		pass
+	def __call__(self, sched_context): raise StopIteration
 		# example:
 		#
 		# yield (sub_task_1, sub_task_2, ...)
