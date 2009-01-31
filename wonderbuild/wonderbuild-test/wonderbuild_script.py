@@ -54,7 +54,7 @@ def wonderbuild_script(project):
 		def __init__(self): ModTask.__init__(self, 'main', ModTask.Kinds.PROG, build_cfg)
 
 		def __call__(self, sched_ctx):
-			yield (prog_pch,)
+			yield (prog_pch, lib_foo)
 			prog_pch.apply_to(self.cfg)
 			self.dep_lib_tasks.append(lib_foo)
 			self.cfg.lib_paths.append(lib_foo.target.parent)
