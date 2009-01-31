@@ -164,17 +164,14 @@ class BuildCfg(ClientCfg):
 			if __debug__ and is_debug: debug('cfg: cxx: build: ar ranlib: ' + str(args))
 			return args
 
-	def print_desc(self, desc, color = '34'):
-		if silent: return
-		out.write(colored(color, 'wonderbuild: cfg: ' + desc + ':') + ' ')
-		if __debug__ and is_debug: out.write('\n')
+	def print_check(self, desc):
+		out.write(colored('34', 'wonderbuild: cfg: ' + desc + ' ...') + '\n')
 		out.flush()
 		
-	def print_result_desc(self, desc, color = '34'):
-		if silent: return
-		out.write(colored(color, desc))
+	def print_check_result(self, desc, result, color):
+		out.write(colored('34', 'wonderbuild: cfg: ' + desc + ': ') + colored(color, result) + '\n')
 		out.flush()
-		
+
 class UserCfg(Cfg, BuildCfg):
 	_options = set([
 		'--cxx=',
@@ -234,28 +231,13 @@ class UserCfg(Cfg, BuildCfg):
 				elif o.startswith('--cxx-mod-ar='): self.ar_prog = o[len('--cxx-mod-ar='):]; ar_prog = True
 				elif o.startswith('--cxx-mod-ranlib='): self.ranlib_prog = o[len('--cxx-mod-ranlib='):]; ranlib_prog = True
 				elif o.startswith('--cxx-check-missing='): self.check_missing = o[len('--cxx-check-missing='):]  == 'yes'
+
 			if self.pic is None:
 				if self.shared is None: self.shared = True
 				self.pic = False
 			elif self.shared is None: self.shared = self.pic
 
-			if not cxx_prog: self.cxx_prog = 'c++'
-
-			self.print_desc('checking for c++ compiler')
-			r, out, err = exec_subprocess_pipe([self.cxx_prog, '-dumpversion'], silent = True)
-			if r != 0:
-				if not silent: self.print_result_desc('not gcc\n', '31')
-				self.kind = None
-				self.version = None
-			else:
-				self.kind = 'gcc'
-				self.version = out.rstrip('\n')
-				if not ld_prog:
-					self.ld_prog = self.cxx_prog
-					ld_prog = True
-				import gcc
-				self.impl = gcc.Impl()
-			self.print_result_desc(str(self.kind) + ' version ' + str(self.version) + '\n', '32')
+			self._check_compiler(cxx_prog, ld_prog)
 
 			if not cxx_flags:
 				flags = os.environ.get('CXXFLAGS', None)
@@ -283,6 +265,26 @@ class UserCfg(Cfg, BuildCfg):
 			self.impl = gcc.Impl()
 
 		if self.impl is None: raise Exception, 'unsupported c++ compiler'
+
+	def _check_compiler(self, cxx_prog, ld_prog):
+		if not cxx_prog: self.cxx_prog = 'c++'
+		if not silent:
+			desc = 'checking for c++ compiler'
+			self.print_check(desc)
+		r, out, err = exec_subprocess_pipe([self.cxx_prog, '-dumpversion'], silent = True)
+		if r != 0:
+			if not silent: self.print_check_result(desc, 'not gcc', '31')
+			self.kind = None
+			self.version = None
+		else:
+			self.kind = 'gcc'
+			self.version = out.rstrip('\n')
+			if not ld_prog:
+				self.ld_prog = self.cxx_prog
+				ld_prog = True
+			import gcc
+			self.impl = gcc.Impl()
+		if not silent: self.print_check_result(desc, str(self.kind) + ' version ' + str(self.version), '32')
 
 	def clone(self):
 		c = BuildCfg(self.project)
@@ -577,12 +579,13 @@ class PkgConfigCheckTask(Task):
 			if not changed:
 				if __debug__ and is_debug: debug('task: skip: no change: ' + self.name)
 			else:
-				if not silent: self.cfg.print_desc('checking for ' + self.name)
+				desc = 'checking for ' + self.name
+				if not silent: self.print_check(desc)
 				self._result = 0 == exec_subprocess(args = ['pkg-config', '--exists', self.name])
 				self.project.state_and_cache[self.uid] = self.sig, self._result
 				if not silent:
-					if self._result: self.cfg.print_result_desc('yes\n', '32')
-					else: self.cfg.print_result_desc('no\n', '31')
+					if self._result: self.print_check_result(desc, 'yes', '32')
+					else: self.print_check_result(desc, 'no', '31')
 			return self._result
 
 	@property
@@ -596,11 +599,10 @@ class PkgConfigCheckTask(Task):
 			return sig
 
 class BuildCheckTask(Task):
-	def __init__(self, name, base_cfg, silent = False):
+	def __init__(self, name, base_cfg):
 		Task.__init__(self, base_cfg.project)
 		self.name = name
 		self.base_cfg = base_cfg
-		self.silent = silent
 
 	def apply_to(self, cfg): pass
 
@@ -646,7 +648,9 @@ class BuildCheckTask(Task):
 				lock.acquire()
 				try: dir.make_dir()
 				finally: lock.release()
-				if not silent and not self.silent: self.cfg.print_desc('checking for ' + self.name)
+				if not silent:
+					desc = 'checking for ' + self.name
+					self.print_check(desc)
 				r, out, err = self.cfg.impl.process_build_check_task(self)
 				log = dir.node_path('build.log')
 				f = open(log.path, 'w')
@@ -660,9 +664,9 @@ class BuildCheckTask(Task):
 				finally: f.close()
 				self._result = r == 0
 				self.project.state_and_cache[self.uid] = self.sig, self._result
-				if not silent and not self.silent:
-					if self._result: self.cfg.print_result_desc('yes\n', '32')
-					else: self.cfg.print_result_desc('no\n', '31')
+				if not silent:
+					if self._result: self.print_check_result(desc, 'yes', '32')
+					else: self.print_check_result(desc, 'no', '31')
 			return self._result
 
 	@property

@@ -15,7 +15,7 @@ class StdMathCheckTask(BuildCheckTask):
 
 	class SubCheckTask(BuildCheckTask):
 		def __init__(self, name, base_cfg, m):
-			BuildCheckTask.__init__(self, name + '-with' + (not m and 'out' or '') + '-libm', base_cfg, silent = True)
+			BuildCheckTask.__init__(self, name + '-with' + (not m and 'out' or '') + '-libm', base_cfg)
 			self.m = m
 
 		def apply_to(self, cfg):
@@ -36,6 +36,9 @@ class StdMathCheckTask(BuildCheckTask):
 		if not changed:
 			if __debug__ and is_debug: debug('task: skip: no change: ' + self.name)
 		else:
+			if not silent:
+				desc = 'checking for ' + self.name
+				self.print_check(desc)
 			self._t0 = self._make_t0()
 			if sched_ctx.thread_count == 1:
 				yield (self._t0,)
@@ -47,9 +50,8 @@ class StdMathCheckTask(BuildCheckTask):
 				self._t1 = self._make_t1()
 				yield (self._t0, self._t1)
 			if not silent:
-				self.cfg.print_desc('checking for ' + self.name)
-				if self.result: self.cfg.print_result_desc('yes with' + (not self.m and 'out' or '') + ' libm\n', '32')
-				else: self.cfg.print_result_desc('no\n', '31')
+				if self.result: self.print_check_result(desc, 'yes with' + (not self.m and 'out' or '') + ' libm', '32')
+				else: self.print_check_result(desc, 'no', '31')
 			self.project.state_and_cache[self.uid] = self.sig, self.result, self.m
 		raise StopIteration
 		
@@ -61,6 +63,7 @@ class StdMathCheckTask(BuildCheckTask):
 			if self._t0.result: self.m = False
 			elif self._t1.result: self.m = True
 			else: self.m = None
+			return self._result
 
 	@property
 	def sig(self):

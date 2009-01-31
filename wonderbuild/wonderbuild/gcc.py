@@ -31,7 +31,7 @@ class Impl(object):
 
 	@staticmethod
 	def cfg_cxx_args(cfg):
-		args = [cfg.cxx_prog, '-pipe'] + cfg.cxx_flags
+		args = [cfg.cxx_prog, '-pipe']
 		if cfg.debug: args.append('-g')
 		if cfg.optim is not None: args.append('-O' + cfg.optim)
 		if cfg.pic: args.append('-fPIC')
@@ -40,6 +40,7 @@ class Impl(object):
 			else: args.append('-D' + k + '=' + v)
 		for i in cfg.includes: args += ['-include', os.path.join(os.pardir, os.pardir, i.rel_path(cfg.project.bld_node))]
 		for p in cfg.include_paths: args += ['-I', os.path.join(os.pardir, os.pardir, p.rel_path(cfg.project.bld_node))]
+		args += cfg.cxx_flags
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: gcc: cxx: ' + str(args))
 		return args
 	
@@ -118,7 +119,7 @@ class Impl(object):
 
 	@staticmethod
 	def cfg_ld_args(cfg):
-		args = [cfg.ld_prog] + cfg.ld_flags
+		args = [cfg.ld_prog]
 		if cfg.shared: args.append('-shared')
 		for p in cfg.lib_paths: args += ['-L', p.path]
 		for l in cfg.libs: args.append('-l' + l)
@@ -128,6 +129,7 @@ class Impl(object):
 		if len(cfg.static_libs):
 			args.append('-Wl,-Bdynamic')
 			for l in cfg.shared_libs: args.append('-l' + l)
+		args += cfg.ld_flags
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: gcc: ld: ' + str(args))
 		return args
 
@@ -175,4 +177,4 @@ class Impl(object):
 		cfg = build_check_task.cfg
 		cfg.shared = cfg.pic = False
 		args = cfg.cxx_args + ['-xc++', '-', '-o', os.devnull] + cfg.ld_args[1:]
-		return exec_subprocess_pipe(args, input = build_check_task._prog_source_text, silent = build_check_task.silent)
+		return exec_subprocess_pipe(args, input = build_check_task._prog_source_text, silent = True)

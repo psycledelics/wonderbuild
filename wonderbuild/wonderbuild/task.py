@@ -14,9 +14,33 @@ class Task(object):
 		self.processed = False
 
 	def __call__(self, sched_context):
-		yield []
-		raise StopIteration
+		pass
+		# example:
+		#
+		# yield (sub_task_1, sub_task_2, ...)
+		#
+		# sched_context.release()
+		# try: do something
+		# finally: sched_context.acquire()
+		#
+		# yield (more_sub_task_1, more_sub_task_2, ...)
+		#
+		# sched_context.release()
+		# try: do something more
+		# finally: sched_context.acquire()
+		#
+		# yield (again_more_sub_task_1, again_more_sub_task_2, ...)
+		#
+		# raise StopIteration
 
 	def print_desc(self, desc, color = '7;1'):
 		out.write(colored(color, 'wonderbuild: task: ' + desc) + '\n')
+		out.flush()
+		
+	def print_check(self, desc):
+		out.write(colored('34', 'wonderbuild: cfg: ' + desc + ' ...') + '\n')
+		out.flush()
+		
+	def print_check_result(self, desc, result, color):
+		out.write(colored('34', 'wonderbuild: cfg: ' + desc + ': ') + colored(color, result) + '\n')
 		out.flush()
