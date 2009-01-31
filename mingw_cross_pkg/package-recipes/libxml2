@@ -29,7 +29,7 @@
 
 set -eux
 
-VERSION_libxml2=2.6.32
+VERSION_libxml2=2.7.3
 
 case "$1" in
 
