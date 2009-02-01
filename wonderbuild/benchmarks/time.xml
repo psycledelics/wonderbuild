@@ -256,8 +256,8 @@
 					<bar name='wonderbuild'   value='4.640'>-MD gcc deps</bar>
 					<bar name='waf'           value='1.100'>waf deps <span style='color: red'>(missed deps!)</span></bar>
 					<bar-section>Using neither</bar-section>
-					<bar name='waf'           value='1.130'>waf deps</bar>
 					<bar name='waf'           value='1.130'>-MMD gcc deps</bar>
+					<bar name='waf'           value='1.130'>waf deps</bar>
 					<bar name='waf'           value='4.580'>-MD gcc deps</bar>
 				</bars>
 			</part>
