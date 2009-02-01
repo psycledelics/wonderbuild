@@ -4,7 +4,7 @@
 	<part caption='Results'>
 		<part caption='Times on a fast machine'>
 			All tests were run with 4 jobs on the same quad core system,
-			ext2 filesystem on lvm/dmraid0 device, linux 2.6.24, gcc's C++ compiler.
+			ext2 filesystem on a 4-disk lvm/dmraid0 device, linux 2.6.24, gcc's C++ compiler.
 			<part caption='Tool versions'>
 				<ul>
 					<li>Scons version was 1.2.0</li>
@@ -180,6 +180,48 @@
 					<bar name='toy makefiles' value='  202'>(recursive)</bar>
 					<bar name='scons'         value='  217'>(same with or without fast tuning options)</bar>
 					<bar name='waf'           value='  309'/>
+				</bars>
+			</part>
+		</part>
+		<part caption='Using pre-compiled headers' anchor='pch'>
+			Here the benchmark was modified to add a <code>#include &lt;boost/spirit.hpp></code> in every header.
+			<br/>
+			It clearly demonstrates the advantage of pre-compilation as soon as the size of the headers become significant.
+			<br/><br/>
+			All tests were run with 4 jobs on the same quad core system,
+			ext2 filesystem on a 4-disk lvm/dmraid0 device, linux 2.6.24, gcc's C++ compiler.
+			<part caption='Tool versions'>
+				<ul>
+					<li>Python version was 2.5.2</li>
+					<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
+				</ul>
+			</part>
+			<part caption='Initial full build'>
+				<bars scale='30.6' unit='m'>
+					<bar name='wonderbuild'   value='07.08'>using pre-compiled headers</bar>
+					<bar name='wonderbuild'   value='20.30'>not using pre-compiled headers</bar>
+				</bars>
+			</part>
+			<part caption='Big partial rebuild'>
+				After touch lib_17/*.hpp => rebuild of 585 object files from c++ and 33 static libs
+				<br/><br/>
+				<bars scale='4.23'>
+					<bar name='wonderbuild'   value=' 53.0'>using pre-compiled headers</bar>
+					<bar name='wonderbuild'   value='147.0'>not using pre-compiled headers</bar>
+				</bars>
+			</part>
+			<part caption='Small partial rebuild'>
+				After touch lib_17/class_17.hpp => rebuild of 26 object files from c++ and 8 static libs
+				<br/><br/>
+				<bars scale='82.5'>
+					<bar name='wonderbuild'   value='3.010'>using pre-compiled headers</bar>
+					<bar name='wonderbuild'   value='7.520'>not using pre-compiled headers</bar>
+				</bars>
+			</part>
+			<part caption='No-op rebuild'>
+				<bars scale='900'>
+					<bar name='wonderbuild'   value='0.690'>using pre-compiled headers</bar>
+					<bar name='wonderbuild'   value='0.690'>not using pre-compiled headers</bar>
 				</bars>
 			</part>
 		</part>

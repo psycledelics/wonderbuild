@@ -225,7 +225,7 @@
 		<tr>
 			<td align='right'><xsl:value-of select='@name'/></td>
 			<td>&#160;</td>
-			<td align='right'><xsl:value-of select='@value'/><xsl:value-of select='$unit'/></td>
+			<td align='right'><code><xsl:value-of select='@value'/><xsl:value-of select='$unit'/></code></td>
 			<xsl:choose>
 				<xsl:when test='@value * $scale > 10000'>
 					<td>

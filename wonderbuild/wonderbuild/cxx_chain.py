@@ -318,7 +318,7 @@ class PreCompileTask(Task):
 			return self._cfg
 
 	def apply_to(self, cfg):
-		cfg.include_paths.appendleft(self.target_dir)
+		#cfg.include_paths.appendleft(self.target_dir)
 		cfg.includes.append(self.header)
 
 	def __str__(self): return str(self.header)

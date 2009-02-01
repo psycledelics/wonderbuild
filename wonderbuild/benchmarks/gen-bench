@@ -78,6 +78,7 @@ def create_hpp(lib_number, name):
 	f.write('''\
 #ifndef %(guard)s
 #define %(guard)s
+//#include <boost/spirit.hpp>
 namespace %(namespace)s {
 	class %(name)s	{
 		public:
@@ -136,12 +137,16 @@ def wonderbuild_script(project):
 			def source_text(self):
 				try: return self._source_text
 				except AttributeError:
-					s = ''
-					for l in top_src_dir.find_iter(in_pats = ['lib_*'], prune_pats = ['*']):
-						for n in l.find_iter(in_pats = ['*.hpp']):
-							s += '#include <%s>\n' % n.rel_path(top_src_dir)
-					self._source_text = s
-					return s
+					if False:
+						s = []
+						for l in top_src_dir.find_iter(in_pats = ['lib_*'], prune_pats = ['*']):
+							for n in l.find_iter(in_pats = ['*.hpp']):
+								s.append('#include <%s>' % n.rel_path(top_src_dir))
+						s.sort()
+						self._source_text = '\n'.join(s)
+					else:
+						self._source_text = '#include <boost/spirit.hpp>\n'
+					return self._source_text
 		pch = Pch('pch', build_cfg)
 
 	class BenchLib(ModTask):
