@@ -34,23 +34,27 @@ class Node(object):
 	)
 
 	def __getstate__(self):
-		#if __debug__ and is_debug: debug('fs: getstate: ' + self.path + ' ' + str(self._time or self._old_time) + ' ' + str(self._children))
-		# TODO optim: minimal number of attributes if not a dir: no need to save self._children, self._actual_children or self._old_children, self._time or self._old_time
-		return self.parent, self.name, self._is_dir, self._children, self._actual_children or self._old_children, self._time or self._old_time, self._path
+		#if __debug__ and is_debug: debug('fs: state: get: ' + self.path)
+		if self._is_dir:
+			return self.parent, self.name, self._path, \
+				self._children, self._actual_children or self._old_children, self._time or self._old_time
+		else:
+			return self.parent, self.name, self._path
 
 	def __setstate__(self, data):
-		# TODO optim: minimal number of attributes if not a dir
-		self.parent, self.name, self._is_dir, self._children, self._old_children, self._old_time, self._path = data
-		self._actual_children = self._time = None
-		#if __debug__ and is_debug: debug('fs: setstate: ' + self.path + ' ' + str(self._old_time) + ' ' + str(self._old_children))
+		self._is_dir = len(data) != 3
+		if self._is_dir:
+			self.parent, self.name, self._path, self._children, self._old_children, self._old_time = data
+			self._actual_children = self._time = None
+		else:
+			self.parent, self.name, self._path = data
+			self._actual_children = self._time = self._children = self._old_children = self._old_time = None
+		#if __debug__ and is_debug: debug('fs: state: set: ' + self.path)
 
 	def __init__(self, parent, name):
 		self.parent = parent
 		self.name = name
-		self._path = None
-		self._is_dir = None
-		self._children = self._actual_children = self._old_children = None
-		self._old_time = self._time = None
+		self._path = self._is_dir = self._children = self._actual_children = self._old_children = self._time = self._old_time = None
 		if __debug__ and is_debug:
 			global all_abs_paths
 			assert parent is not None or name == os.sep, (parent, name)
