@@ -192,36 +192,69 @@
 			ext2 filesystem on a 4-disk lvm/dmraid0 device, linux 2.6.24, gcc's C++ compiler.
 			<part caption='Tool versions'>
 				<ul>
+					<li>Waf version was 1.5.3</li>
 					<li>Python version was 2.5.2</li>
 					<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
 				</ul>
 			</part>
 			<part caption='Initial full build'>
-				<bars scale='30.6' unit='m'>
-					<bar name='wonderbuild'   value='07.08'>using pre-compiled headers</bar>
-					<bar name='wonderbuild'   value='20.30'>not using pre-compiled headers</bar>
+				<bars scale='15' unit='m'>
+					<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
+					<bar name='wonderbuild'   value=' 7.13'>-MMD gcc deps</bar>
+					<bar name='wonderbuild'   value=' 7.38'>-MD gcc deps</bar>
+					<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
+					<bar name='wonderbuild'   value='20.50'>-MMD gcc deps</bar>
+					<bar name='wonderbuild'   value='20.93'>-MD gcc deps</bar>
+					<bar name='waf'           value='21.31'>waf deps</bar>
+					<bar-section>Using neither</bar-section>
+					<bar name='waf'           value='21.63'>-MMD gcc deps</bar>
+					<bar name='waf'           value='21.92'>-MD gcc deps</bar>
 				</bars>
 			</part>
 			<part caption='Big partial rebuild'>
 				After touch lib_17/*.hpp => rebuild of 585 object files from c++ and 33 static libs
 				<br/><br/>
-				<bars scale='4.23'>
-					<bar name='wonderbuild'   value=' 53.0'>using pre-compiled headers</bar>
-					<bar name='wonderbuild'   value='147.0'>not using pre-compiled headers</bar>
+				<bars scale='2'>
+					<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
+					<bar name='wonderbuild'   value=' 53.0'>-MMD gcc deps</bar>
+					<bar name='wonderbuild'   value=' 53.0'>-MD gcc deps</bar>
+					<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
+					<bar name='wonderbuild'   value='147.0'>-MMD gcc deps</bar>
+					<bar name='wonderbuild'   value='151.0'>-MD gcc deps</bar>
+					<bar name='waf'           value='  1.1'>waf deps <span style='color: red'>(nothing rebuilt!)</span></bar>
+					<bar-section>Using neither</bar-section>
+					<bar name='waf'           value='158.0'>-MMD gcc deps</bar>
+					<bar name='waf'           value='162.0'>-MD gcc deps</bar>
 				</bars>
 			</part>
 			<part caption='Small partial rebuild'>
 				After touch lib_17/class_17.hpp => rebuild of 26 object files from c++ and 8 static libs
 				<br/><br/>
-				<bars scale='82.5'>
-					<bar name='wonderbuild'   value='3.010'>using pre-compiled headers</bar>
-					<bar name='wonderbuild'   value='7.520'>not using pre-compiled headers</bar>
+				<bars scale='35.1'>
+					<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
+					<bar name='wonderbuild'   value=' 3.01'>-MMD gcc deps</bar>
+					<bar name='wonderbuild'   value=' 3.13'>-MD gcc deps</bar>
+					<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
+					<bar name='wonderbuild'   value=' 7.52'>-MMD gcc deps</bar>
+					<bar name='wonderbuild'   value='10.36'>-MD gcc deps</bar>
+					<bar name='waf'           value=' 1.10'>waf deps <span style='color: red'>(nothing rebuilt!)</span></bar>
+					<bar-section>Using neither</bar-section>
+					<bar name='waf'           value=' 8.65'>-MMD gcc deps</bar>
+					<bar name='waf'           value='12.02'>-MD gcc deps</bar>
 				</bars>
 			</part>
 			<part caption='No-op rebuild'>
-				<bars scale='900'>
-					<bar name='wonderbuild'   value='0.690'>using pre-compiled headers</bar>
-					<bar name='wonderbuild'   value='0.690'>not using pre-compiled headers</bar>
+				<bars scale='153'>
+					<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
+					<bar name='wonderbuild'   value='0.690'>-MMD gcc deps</bar>
+					<bar name='wonderbuild'   value='0.700'>-MD gcc deps</bar>
+					<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
+					<bar name='wonderbuild'   value='0.690'>-MMD gcc deps</bar>
+					<bar name='wonderbuild'   value='4.640'>-MD gcc deps</bar>
+					<bar name='waf'           value='1.100'>waf deps <span style='color: red'>(missed deps!)</span></bar>
+					<bar-section>Using neither</bar-section>
+					<bar name='waf'           value='1.130'>-MMD gcc deps</bar>
+					<bar name='waf'           value='4.580'>-MD gcc deps</bar>
 				</bars>
 			</part>
 		</part>
