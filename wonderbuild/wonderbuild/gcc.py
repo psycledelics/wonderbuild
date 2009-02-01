@@ -62,6 +62,7 @@ class Impl(object):
 	@staticmethod
 	def process_precompile_task(precompile_task):
 		# some useful options: -Wmissing-include-dirs -Winvalid-pch -H -fpch-deps -Wp,-v
+		# to print the include search path: g++ -xc++ /dev/null -E -Wp,-v 2>&1 1>/dev/null | sed -e '/^[^ ]/d' -e 's,^ ,-I,'
 		args = precompile_task.cfg.cxx_args_cwd + ['-xc++-header', '-MMD', precompile_task.header.path]
 		use_dir = False
 		if not use_dir:
@@ -113,7 +114,7 @@ class Impl(object):
 	def cxx_task_target_ext(self): return '.o'
 		
 	@property
-	def ld_prog(self): return 'g++'
+	def ld_prog(self): return 'g++' # TODO use g++ -print-prog-name=ld
 	
 	@property
 	def ar_prog(self): return 'ar'

@@ -299,6 +299,7 @@ def create_makefile_rec_sub(lib_number, classes):
 	f = open('Makefile', 'w')
 	f.write ('''\
 INCLUDE_PATHS = -I..
+STD_INCLUDE_PATHS = $(shell $(CXX) -xc++ /dev/null -E -Wp,-v 2>&1 1> /dev/null | sed -e '/^[^ ]/d' -e 's,^ ,-I,')
 DEFINES = -DBENCH -DBENCH_LIB=%(num)s
 DEPEND = makedepend
 CXX = g++
@@ -322,7 +323,7 @@ clean:
 	@rm -f $(objects) $(lib)
 	
 depend:
-	@$(DEPEND) $(DEFINES) $(INCLUDE_PATHS) $(src)
+	@$(DEPEND) $(DEFINES) $(INCLUDE_PATHS) $(STD_INCLUDE_PATHS) $(src)
 ''' % {
 	'num': str(lib_number),
 	'tgt': lib_name(lib_number),
