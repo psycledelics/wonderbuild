@@ -205,8 +205,9 @@
 					<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
 					<bar name='wonderbuild'   value='20.50'>-MMD gcc deps</bar>
 					<bar name='wonderbuild'   value='20.93'>-MD gcc deps</bar>
-					<bar name='waf'           value='21.31'>waf deps</bar>
+					<bar name='waf'           value='21.51'>waf deps</bar>
 					<bar-section>Using neither</bar-section>
+					<bar name='waf'           value='21.63'>waf deps</bar>
 					<bar name='waf'           value='21.63'>-MMD gcc deps</bar>
 					<bar name='waf'           value='21.92'>-MD gcc deps</bar>
 				</bars>
@@ -224,6 +225,7 @@
 					<bar name='waf'           value='  1.1'>waf deps <span style='color: red'>(nothing rebuilt!)</span></bar>
 					<bar-section>Using neither</bar-section>
 					<bar name='waf'           value='158.0'>-MMD gcc deps</bar>
+					<bar name='waf'           value='159.0'>waf deps</bar>
 					<bar name='waf'           value='162.0'>-MD gcc deps</bar>
 				</bars>
 			</part>
@@ -239,6 +241,7 @@
 					<bar name='wonderbuild'   value='10.36'>-MD gcc deps</bar>
 					<bar name='waf'           value=' 1.10'>waf deps <span style='color: red'>(nothing rebuilt!)</span></bar>
 					<bar-section>Using neither</bar-section>
+					<bar name='waf'           value=' 8.57'>waf deps</bar>
 					<bar name='waf'           value=' 8.65'>-MMD gcc deps</bar>
 					<bar name='waf'           value='12.02'>-MD gcc deps</bar>
 				</bars>
@@ -253,6 +256,7 @@
 					<bar name='wonderbuild'   value='4.640'>-MD gcc deps</bar>
 					<bar name='waf'           value='1.100'>waf deps <span style='color: red'>(missed deps!)</span></bar>
 					<bar-section>Using neither</bar-section>
+					<bar name='waf'           value='1.130'>waf deps</bar>
 					<bar name='waf'           value='1.130'>-MMD gcc deps</bar>
 					<bar name='waf'           value='4.580'>-MD gcc deps</bar>
 				</bars>
