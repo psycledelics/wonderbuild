@@ -30,7 +30,13 @@ class Impl(object):
 		return sig.digest()
 
 	@staticmethod
-	def cfg_cxx_args(cfg):
+	def cfg_cxx_args_cwd(cfg): return Impl._cfg_cxx_args(cfg, Impl._cfg_cxx_args_include_cwd)
+
+	@staticmethod
+	def cfg_cxx_args_bld(cfg): return Impl._cfg_cxx_args(cfg, Impl._cfg_cxx_args_include_bld)
+	
+	@staticmethod
+	def _cfg_cxx_args(cfg, include_func):
 		args = [cfg.cxx_prog, '-pipe']
 		if cfg.debug: args.append('-g')
 		if cfg.optim is not None: args.append('-O' + cfg.optim)
@@ -38,16 +44,25 @@ class Impl(object):
 		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + v)
-		for p in cfg.include_paths: args += ['-I', os.path.join(os.pardir, os.pardir, p.rel_path(cfg.project.bld_node))]
-		for i in cfg.includes: args += ['-include', os.path.join(os.pardir, os.pardir, i.rel_path(cfg.project.bld_node))]
+		include_func(cfg, args)
 		args += cfg.cxx_flags
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: gcc: cxx: ' + str(args))
 		return args
-	
+
+	@staticmethod
+	def _cfg_cxx_args_include_cwd(cfg, args):
+		for p in cfg.include_paths: args += ['-I', p.path]
+		for i in cfg.includes: args += ['-include', i.path]
+
+	@staticmethod
+	def _cfg_cxx_args_include_bld(cfg, args):
+		for p in cfg.include_paths: args += ['-I', os.path.join(os.pardir, os.pardir, p.rel_path(cfg.project.bld_node))]
+		for i in cfg.includes: args += ['-include', os.path.join(os.pardir, os.pardir, i.rel_path(cfg.project.bld_node))]
+
 	@staticmethod
 	def process_precompile_task(precompile_task):
 		# some useful options: -Wmissing-include-dirs -Winvalid-pch -H -fpch-deps -Wp,-v
-		args = precompile_task.cfg.cxx_args + ['-xc++-header', '-MMD', precompile_task.header.path]
+		args = precompile_task.cfg.cxx_args_cwd + ['-xc++-header', '-MMD', precompile_task.header.path]
 		use_dir = False
 		if not use_dir:
 			path = precompile_task.header.path + '.d'
@@ -76,7 +91,7 @@ class Impl(object):
 
 	@staticmethod
 	def process_cxx_task(cxx_task):
-		args = cxx_task.cfg.cxx_args + ['-c', '-MMD'] + [s.name for s in cxx_task._actual_sources]
+		args = cxx_task.cfg.cxx_args_bld + ['-c', '-MMD'] + [s.name for s in cxx_task._actual_sources]
 		cwd = cxx_task.target_dir
 		r = exec_subprocess(args, cwd = cwd.path)
 		if r != 0: raise Exception, r
@@ -179,5 +194,5 @@ class Impl(object):
 	def process_build_check_task(build_check_task):
 		cfg = build_check_task.cfg
 		cfg.shared = cfg.pic = False
-		args = cfg.cxx_args + ['-xc++', '-', '-o', os.devnull] + cfg.ld_args[1:]
+		args = cfg.cxx_args_cwd + ['-xc++', '-', '-o', os.devnull] + cfg.ld_args[1:]
 		return exec_subprocess_pipe(args, input = build_check_task._prog_source_text, silent = True)

@@ -135,7 +135,6 @@ class Scheduler(object):
 					if self._joining and self._todo_count == 0 or self._stop_requested: break
 					task = self._task_queue.pop()
 					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': task pop: ' + str(task) + ' ' + str(task.out_tasks))
-					task.queued = False
 					if not task.processed:
 						task_gen = None
 						try:
@@ -151,6 +150,7 @@ class Scheduler(object):
 								except: pass # we only want the original exception
 							raise
 						else:
+							task.queued = False
 							notify = 0
 							task.in_task_todo_count += len(in_tasks)
 							for in_task in in_tasks:
@@ -163,6 +163,7 @@ class Scheduler(object):
 							self._todo_count += notify
 							if notify > 1: self._condition.notify(notify - 1)
 							continue
+					task.queued = False
 					self._todo_count -= 1
 					notify = -1
 					for out_task in task.out_tasks:

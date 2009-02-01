@@ -142,11 +142,19 @@ class BuildCfg(ClientCfg):
 			return sig
 
 	@property
-	def cxx_args(self):
-		try: return self._cxx_args
+	def cxx_args_cwd(self):
+		try: return self._cxx_args_cwd
 		except AttributeError:
-			args = self._cxx_args = self.impl.cfg_cxx_args(self)
-			if __debug__ and is_debug: debug('cfg: cxx: build: cxx: ' + str(args))
+			args = self._cxx_args_cwd = self.impl.cfg_cxx_args_cwd(self)
+			if __debug__ and is_debug: debug('cfg: cxx: build: cxx cwd: ' + str(args))
+			return args
+
+	@property
+	def cxx_args_bld(self):
+		try: return self._cxx_args_bld
+		except AttributeError:
+			args = self._cxx_args_bld = self.impl.cfg_cxx_args_bld(self)
+			if __debug__ and is_debug: debug('cfg: cxx: build: cxx bld: ' + str(args))
 			return args
 
 	@property
@@ -701,7 +709,7 @@ class BuildCheckTask(Task):
 				f = open(log.path, 'w')
 				try:
 					f.write(self._prog_source_text); f.write('\n')
-					f.write(str(self.cfg.cxx_args)); f.write('\n')
+					f.write(str(self.cfg.cxx_args_cwd)); f.write('\n')
 					f.write(str(self.cfg.ld_args)); f.write('\n')
 					f.write(out); f.write('\n')
 					f.write(err); f.write('\n')
