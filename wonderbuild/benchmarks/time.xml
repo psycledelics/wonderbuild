@@ -216,6 +216,7 @@
 					<bar name='waf'           value=' 21.63'>-MMD gcc deps</bar>
 					<bar name='waf'           value=' 21.63'>waf deps</bar>
 					<bar name='waf'           value=' 21.92'>-MD gcc deps</bar>
+					<bar name='scons'         value=' 23.25'>with fast tuning options</bar>
 					<bar name='autotools'     value=' 26.75'>-MMD gcc deps (non recursive)</bar>
 					<bar name='autotools'     value=' 26.61'>-MD gcc deps (non recursive)</bar>
 					<bar name='toy makefiles' value='180.00'><span style='color: red'>UNFINISHED: did not manage to complete within several hours, due to makedepend being extremely slow!</span> (recursive)</bar>
@@ -236,6 +237,7 @@
 					<bar name='waf'           value='158'>-MMD gcc deps</bar>
 					<bar name='waf'           value='159'>waf deps</bar>
 					<bar name='waf'           value='162'>-MD gcc deps</bar>
+					<bar name='scons'         value='185'>with fast tuning options</bar>
 					<bar name='autotools'     value='197'>-MMD gcc deps (non recursive)</bar>
 					<bar name='autotools'     value='241'>-MD gcc deps (non recursive)</bar>
 				</bars>
@@ -256,6 +258,7 @@
 					<bar name='waf'           value=' 8.65'>-MMD gcc deps</bar>
 					<bar name='autotools'     value='11.92'>-MMD gcc deps (non recursive)</bar>
 					<bar name='waf'           value='12.02'>-MD gcc deps</bar>
+					<bar name='scons'         value='33.85'>with fast tuning options</bar>
 					<bar name='autotools'     value='50.44'>-MD gcc deps (non recursive)</bar>
 				</bars>
 			</part>
@@ -273,6 +276,7 @@
 					<bar name='waf'           value=' 1.13'>waf deps</bar>
 					<bar name='autotools'     value=' 2.05'>-MMD gcc deps (non recursive)</bar>
 					<bar name='waf'           value=' 4.58'>-MD gcc deps</bar>
+					<bar name='scons'         value='27.48'>with fast tuning options</bar>
 					<bar name='autotools'     value='41.54'>-MD gcc deps (non recursive)</bar>
 				</bars>
 			</part>
