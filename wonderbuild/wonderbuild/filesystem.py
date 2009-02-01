@@ -34,7 +34,6 @@ class Node(object):
 	)
 
 	def __getstate__(self):
-		#if __debug__ and is_debug: debug('fs: state: get: ' + self.path)
 		if self._is_dir:
 			return self.parent, self.name, self._path, \
 				self._children, self._actual_children or self._old_children, self._time or self._old_time
@@ -49,7 +48,6 @@ class Node(object):
 		else:
 			self.parent, self.name, self._path = data
 			self._actual_children = self._time = self._children = self._old_children = self._old_time = None
-		#if __debug__ and is_debug: debug('fs: state: set: ' + self.path)
 
 	def __init__(self, parent, name):
 		self.parent = parent
@@ -63,7 +61,7 @@ class Node(object):
 			assert parent is None or os.path.join(parent.abs_path, name) not in all_abs_paths, (parent.abs_path, name)
 			debug('fs: new node: ' + self.abs_path)
 			all_abs_paths.add(self.abs_path)
-		#if parent is not None: parent.children[name] = self
+		# no need: if parent is not None: parent.children[name] = self
 	
 	def __str__(self): return self.path
 	
