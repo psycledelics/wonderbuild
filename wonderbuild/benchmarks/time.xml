@@ -203,42 +203,44 @@
 				</ul>
 			</part>
 			<part caption='Initial full build'>
-				<bars scale='15' unit='m'>
+				<bars scale='20' unit='m'>
 					<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
-					<bar name='wonderbuild'   value=' 7.13'>-MMD gcc deps</bar>
-					<bar name='wonderbuild'   value=' 7.38'>-MD gcc deps</bar>
+					<bar name='wonderbuild'   value='  7.13'>-MMD gcc deps</bar>
+					<bar name='wonderbuild'   value='  7.38'>-MD gcc deps</bar>
 					<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
-					<bar name='wonderbuild'   value='20.50'>-MMD gcc deps</bar>
-					<bar name='wonderbuild'   value='20.93'>-MD gcc deps</bar>
-					<bar name='waf'           value='21.51'>waf deps</bar>
+					<bar name='wonderbuild'   value=' 20.50'>-MMD gcc deps</bar>
+					<bar name='wonderbuild'   value=' 20.93'>-MD gcc deps</bar>
+					<bar name='waf'           value=' 21.51'>waf deps</bar>
 					<bar-section>Using neither</bar-section>
-					<bar name='waf'           value='21.63'>-MMD gcc deps</bar>
-					<bar name='waf'           value='21.63'>waf deps</bar>
-					<bar name='waf'           value='21.92'>-MD gcc deps</bar>
+					<bar name='waf'           value=' 21.63'>-MMD gcc deps</bar>
+					<bar name='waf'           value=' 21.63'>waf deps</bar>
+					<bar name='waf'           value=' 21.92'>-MD gcc deps</bar>
+					<bar name='autotools'     value=' 26.61'>-MD gcc deps (non recursive)</bar>
 					<bar name='toy makefiles' value='180.00'><span style='color: red'>UNFINISHED: did not manager to complete within several hours, due to makedepend being extremly slow!</span> (recursive)</bar>
 				</bars>
 			</part>
 			<part caption='Big partial rebuild'>
 				After touch lib_17/*.hpp => rebuild of 585 object files from c++ and 33 static libs
 				<br/><br/>
-				<bars scale='2'>
+				<bars scale='4'>
 					<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
-					<bar name='wonderbuild'   value=' 53.0'>-MMD gcc deps</bar>
-					<bar name='wonderbuild'   value=' 53.0'>-MD gcc deps</bar>
+					<bar name='wonderbuild'   value=' 53'>-MMD gcc deps</bar>
+					<bar name='wonderbuild'   value=' 53'>-MD gcc deps</bar>
 					<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
-					<bar name='wonderbuild'   value='147.0'>-MMD gcc deps</bar>
-					<bar name='wonderbuild'   value='151.0'>-MD gcc deps</bar>
-					<bar name='waf'           value='    0'>coming soon</bar>
+					<bar name='wonderbuild'   value='147'>-MMD gcc deps</bar>
+					<bar name='wonderbuild'   value='151'>-MD gcc deps</bar>
+					<bar name='waf'           value='  0'>coming soon</bar>
 					<bar-section>Using neither</bar-section>
-					<bar name='waf'           value='158.0'>-MMD gcc deps</bar>
-					<bar name='waf'           value='159.0'>waf deps</bar>
-					<bar name='waf'           value='162.0'>-MD gcc deps</bar>
+					<bar name='waf'           value='158'>-MMD gcc deps</bar>
+					<bar name='waf'           value='159'>waf deps</bar>
+					<bar name='waf'           value='162'>-MD gcc deps</bar>
+					<bar name='autotools'     value='241'>-MD gcc deps (non recursive)</bar>
 				</bars>
 			</part>
 			<part caption='Small partial rebuild'>
 				After touch lib_17/class_17.hpp => rebuild of 26 object files from c++ and 8 static libs
 				<br/><br/>
-				<bars scale='35.1'>
+				<bars scale='50'>
 					<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
 					<bar name='wonderbuild'   value=' 3.01'>-MMD gcc deps</bar>
 					<bar name='wonderbuild'   value=' 3.13'>-MD gcc deps</bar>
@@ -250,21 +252,23 @@
 					<bar name='waf'           value=' 8.57'>waf deps</bar>
 					<bar name='waf'           value=' 8.65'>-MMD gcc deps</bar>
 					<bar name='waf'           value='12.02'>-MD gcc deps</bar>
+					<bar name='autotools'     value='50.44'>-MD gcc deps (non recursive)</bar>
 				</bars>
 			</part>
 			<part caption='No-op rebuild'>
-				<bars scale='153'>
+				<bars scale='50'>
 					<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
-					<bar name='wonderbuild'   value='0.690'>-MMD gcc deps</bar>
-					<bar name='wonderbuild'   value='0.700'>-MD gcc deps</bar>
+					<bar name='wonderbuild'   value=' 0.69'>-MMD gcc deps</bar>
+					<bar name='wonderbuild'   value=' 0.70'>-MD gcc deps</bar>
 					<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
-					<bar name='wonderbuild'   value='0.690'>-MMD gcc deps</bar>
-					<bar name='wonderbuild'   value='4.640'>-MD gcc deps</bar>
+					<bar name='wonderbuild'   value=' 0.69'>-MMD gcc deps</bar>
+					<bar name='wonderbuild'   value=' 4.64'>-MD gcc deps</bar>
 					<bar name='waf'           value='    0'>coming soon</bar>
 					<bar-section>Using neither</bar-section>
-					<bar name='waf'           value='1.130'>-MMD gcc deps</bar>
-					<bar name='waf'           value='1.130'>waf deps</bar>
-					<bar name='waf'           value='4.580'>-MD gcc deps</bar>
+					<bar name='waf'           value=' 1.13'>-MMD gcc deps</bar>
+					<bar name='waf'           value=' 1.13'>waf deps</bar>
+					<bar name='waf'           value=' 4.58'>-MD gcc deps</bar>
+					<bar name='autotools'     value='41.54'>-MD gcc deps (non recursive)</bar>
 				</bars>
 			</part>
 		</part>
