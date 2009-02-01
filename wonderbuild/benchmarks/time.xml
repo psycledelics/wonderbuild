@@ -13,6 +13,7 @@
 					<li>Jam version was 2.5</li>
 					<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
 					<li>Make version was gnu make 3.81</li>
+					<li>Makedepend was version 1.0.1</li>
 					<li>Shell was dash (not bash) version 0.5.4</li>
 					<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
 				</ul>
@@ -87,6 +88,7 @@
 					<li>Jam version was 2.5</li>
 					<li>Autotools versions were autoconf 2.61, automake 1.10, libtool 1.5.22</li>
 					<li>Make version was gnu make 3.81</li>
+					<li>Makedepend was version 1.0.0</li>
 					<li>Shell was bash version 3.1.17</li>
 					<li>Compiler tool chain versions were gcc 4.1.2, binutils 2.17</li>
 				</ul>
@@ -194,6 +196,9 @@
 				<ul>
 					<li>Waf version was 1.5.3</li>
 					<li>Python version was 2.5.2</li>
+					<li>Make version was gnu make 3.81</li>
+					<li>Makedepend was version 1.0.1</li>
+					<li>Shell was dash (not bash) version 0.5.4</li>
 					<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
 				</ul>
 			</part>
@@ -210,7 +215,7 @@
 					<bar name='waf'           value='21.63'>-MMD gcc deps</bar>
 					<bar name='waf'           value='21.63'>waf deps</bar>
 					<bar name='waf'           value='21.92'>-MD gcc deps</bar>
-					<bar name='toy makefiles' value='180'>(recursive) <span style='color: red'>did not manager to complete within several hours, due to makedepend being extremly slow!</span></bar>
+					<bar name='toy makefiles' value='180.00'><span style='color: red'>UNFINISHED: did not manager to complete within several hours, due to makedepend being extremly slow!</span> (recursive)</bar>
 				</bars>
 			</part>
 			<part caption='Big partial rebuild'>
