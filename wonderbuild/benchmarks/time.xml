@@ -210,6 +210,7 @@
 					<bar name='waf'           value='21.63'>-MMD gcc deps</bar>
 					<bar name='waf'           value='21.63'>waf deps</bar>
 					<bar name='waf'           value='21.92'>-MD gcc deps</bar>
+					<bar name='toy makefiles' value='180'>(recursive) <span style='color: red'>did not manager to complete within several hours, due to makedepend being extremly slow!</span></bar>
 				</bars>
 			</part>
 			<part caption='Big partial rebuild'>
