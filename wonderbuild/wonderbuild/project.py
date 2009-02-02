@@ -65,9 +65,6 @@ class Project(object):
 	def help(self):
 		for c in self.cfgs: c.help()
 
-	def configure(self):
-		for c in self.cfgs: c.configure()
-
 	def add_task_aliases(self, task, aliases = None):
 		if self.processsing: return # no need to add aliases during processing
 		aliases = aliases is None and (None,) or (None,) + aliases

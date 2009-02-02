@@ -72,7 +72,6 @@ else:
 			print_help(sys.stderr)
 			return 1
 
-		project.configure()
 		try: project.process(tasks)
 		finally: project.dump()
 		return 0

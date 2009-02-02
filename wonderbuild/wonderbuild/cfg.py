@@ -12,7 +12,6 @@ class Cfg(object):
 	def __init__(self, project):
 		self.project = project
 		project.cfgs.append(self)
-		self.lock = threading.Lock()
 
 	_options = set()
 	
@@ -33,5 +32,3 @@ class Cfg(object):
 			return sig
 
 	def help(self): pass
-
-	def configure(self): pass
