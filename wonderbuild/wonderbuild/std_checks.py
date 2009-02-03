@@ -40,15 +40,11 @@ class StdMathCheckTask(BuildCheckTask):
 				desc = 'checking for ' + self.name
 				self.print_check(desc)
 			self._t0 = self._make_t0()
-			if sched_ctx.thread_count == 1:
-				yield (self._t0,)
-				if self._t0.result: self._t1 = self._t0
-				else:
-					self._t1 = self._make_t1()
-					yield (self._t1,)
+			yield (self._t0,)
+			if self._t0.result: self._t1 = self._t0
 			else:
 				self._t1 = self._make_t1()
-				yield (self._t0, self._t1)
+				yield (self._t1,)
 			if not silent:
 				if self.result: self.print_check_result(desc, 'yes with' + (not self.m and 'out' or '') + ' libm', '32')
 				else: self.print_check_result(desc, 'no', '31')

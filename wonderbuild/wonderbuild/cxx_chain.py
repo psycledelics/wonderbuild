@@ -8,7 +8,7 @@ from collections import deque
 from options import options, known_options, help
 from logger import out, is_debug, debug, colored, silent
 from signature import Sig
-from cfg import Cfg
+from option_cfg import OptionCfg
 from task import Task
 from subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 
@@ -27,14 +27,14 @@ class ClientCfg(object):
 		
 	def apply(self, other):
 		self.defines.update(other.defines)
-		for i in other.include_paths: self.include_paths.append(i)
-		for f in other.cxx_flags: self.cxx_flags.append(f)
-		for i in other.lib_paths: self.lib_paths.append(i)
-		for l in other.libs: self.libs.append(l)
-		for l in other.static_libs: self.static_libs.append(l)
-		for l in other.shared_libs: self.shared_libs.append(l)
-		for f in other.ld_flags: self.ld_flags.append(f)
-		for p in other.pkgs: self.pkgs.append(p)
+		self.include_paths += other.include_paths
+		self.cxx_flags += other.cxx_flags
+		self.lib_paths += other.lib_paths
+		self.libs += other.libs
+		self.static_libs += other.static_libs
+		self.shared_libs += other.shared_libs
+		self.ld_flags += other.ld_flags
+		self.pkgs += other.pkgs
 
 	def clone(self):
 		c = self.__class__(self.project)
@@ -61,7 +61,7 @@ class BuildCfg(ClientCfg):
 		ClientCfg.apply(self, other)
 		self.cxx_prog = other.cxx_prog
 		self.pic = other.pic
-		for i in other.includes: self.includes.append(i)
+		self.includes += other.includes
 		self.ld_prog = other.ld_prog
 		self.ar_prog = other.ar_prog
 		self.ranlib_prog = other.ranlib_prog
@@ -181,7 +181,7 @@ class BuildCfg(ClientCfg):
 		out.write(colored('34', 'wonderbuild: cfg: ' + desc + ': ') + colored(color, result) + '\n')
 		out.flush()
 
-class UserCfg(Cfg, BuildCfg):
+class UserCfg(OptionCfg, BuildCfg):
 	_options = set([
 		'--cxx=',
 		'--cxx-flags=',
@@ -210,7 +210,7 @@ class UserCfg(Cfg, BuildCfg):
 		help['--cxx-check-missing=']    = ('--cxx-check-missing=<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'no')
 
 	def __init__(self, project):
-		Cfg.__init__(self, project)
+		OptionCfg.__init__(self, project)
 		BuildCfg.__init__(self, project)
 
 		try:
@@ -598,15 +598,54 @@ class ModTask(Task):
 		if self.ld: return self.cfg.ld_sig
 		else: return self.cfg.ar_ranlib_sig
 
-class PkgConfigCheckTask(Task):
+class PkgTask(Task):
 	def __init__(self, name, project):
 		Task.__init__(self, project)
 		self.name = name
+	
+	@property
+	def exists(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
+	
+	@property
+	def cxx_flags(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
+	
+	@property
+	def shared_ld_flags(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
+	
+	@property
+	def static_ld_flags(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
 
-	def apply_to(self, cfg): cfg.pkgs.append(self.name)
+	def apply_to(self, cfg): raise Exception, str(self.__class__) + ' did not redefine the method.'
 
 	@property
-	def uid(self): return self.name
+	def sig(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
+
+class PkgConfigTask(PkgTask):
+	@property
+	def prog(self): return 'pkg-config'
+
+	@property
+	def desc(self):
+		try: return self._desc
+		except AttributeError:
+			self._desc = 'checking for ' + self.prog + ' ' + self.name + ' ' + self.what_desc
+			return self._desc
+
+	@property
+	def what_desc(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
+	
+	@property
+	def args(self): return [self.prog, self.name] + self.what_args
+
+	@property
+	def what_args(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
+
+	@property
+	def uid(self):
+		try: return self._uid
+		except AttributeError:
+			self._uid = self.name + ' '.join(self.what_args) #XXX
+			return self._uid
 
 	def __call__(self, sched_context):
 		try: self._result
@@ -628,24 +667,81 @@ class PkgConfigCheckTask(Task):
 			if not changed:
 				if __debug__ and is_debug: debug('task: skip: no change: ' + self.name)
 			else:
-				desc = 'checking for ' + self.name
-				if not silent: self.print_check(desc)
-				self._result = 0 == exec_subprocess(args = ['pkg-config', '--exists', self.name])
+				if not silent: self.print_check(self.desc)
+				self.do_result()
 				self.project.state_and_cache[self.uid] = self.sig, self._result
-				if not silent:
-					if self._result: self.print_check_result(desc, 'yes', '32')
-					else: self.print_check_result(desc, 'no', '31')
 			return self._result
 
 	@property
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
-			sig = Sig()
+			sig = Sig(self.name)
 			e = os.environ.get('PKG_CONFIG_PATH', None)
 			if e is not None: sig.update(e)
 			sig = self._sig = sig.digest()
 			return sig
+
+class PkgConfigCheckTask(PkgConfigTask):
+	@property
+	def what_desc(self): return 'existance'
+	
+	@property
+	def what_args(self): return ['--exists']
+
+	def apply_to(self, cfg): cfg.pkgs.append(self.name)
+	
+	def do_result(self):
+		self._result = 0 == exec_subprocess(self.args)
+		if not silent:
+			if self._result: self.print_check_result(self.desc, 'yes', '32')
+			else: self.print_check_result(self.desc, 'no', '31')
+
+	@property
+	def cxx_flags_task(self):
+		try: return self._cxx_flags_task
+		except AttributeError:
+			self._cxx_flags_task = PkgConfigCxxFlagsTask(self.name, self.project)
+			return self._cxx_flags_task
+
+	def ld_flags_task(self, cfg):
+		try: return self._ld_flags_task
+		except AttributeError:
+			self._ld_flags_task = PkgConfigLdFlagsTask(cfg)
+			return self._ld_flags_task
+
+class _PkgConfigFlagsTask(PkgConfigTask):
+	def do_result(self):
+			r, out, err = exec_subprocess_pipe(self.args)
+			if r != 0: raise Exception, r
+			if not silent: self.print_check_result(self.desc, 'ok', '32')
+			self._result = out.split()
+
+class PkgConfigCxxFlagsTask(_PkgConfigFlagsTask):
+	@property
+	def what_desc(self): return 'cxx flags'
+	
+	@property
+	def what_args(self): return ['--cflags']
+
+	def apply_to(self, cfg): cfg.cxx_flags += self.result
+
+class PkgConfigLdFlagsTask(_PkgConfigFlagsTask):
+	def __init__(self, name, cfg):
+		_PkgConfigFlagsTask.__init__(self, name, cfg.project)
+		self.cfg = cfg
+
+	@property
+	def what_desc(self):
+		if self.cfg.shared: return 'shared ld flags'
+		else: return 'static ld flags'
+	
+	@property
+	def what_args(self):
+		if self.cfg.shared: return ['--libs']
+		else: return ['--static', '--libs']
+
+	def apply_to(self, cfg): cfg.ld_flags += self.result
 
 class BuildCheckTask(Task):
 	def __init__(self, name, base_cfg):

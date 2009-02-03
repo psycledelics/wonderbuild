@@ -5,7 +5,7 @@
 from options import options, known_options
 from signature import Sig
 
-class Cfg(object):
+class OptionCfg(object):
 	def __init__(self, project):
 		self.project = project
 		project.cfgs.append(self)
