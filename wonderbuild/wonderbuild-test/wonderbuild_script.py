@@ -46,6 +46,8 @@ def wonderbuild_script(project):
 			yield (glibmm, std_math_check, lib_pch)
 			lib_pch.apply_to(self.cfg)
 			if std_math_check.result: std_math_check.apply_to(self.cfg)
+			#if glibmm.result: yield (glibmm.cxx_flags_task, glibmm.ld_flags_task(self.cfg))
+			if glibmm.result: yield (glibmm.cxx_flags_task,)
 			for s in src_dir.node_path('foo').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 			for t in ModTask.__call__(self, sched_ctx): yield t
 	lib_foo = LibFoo()
