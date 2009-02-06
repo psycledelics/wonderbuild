@@ -677,8 +677,9 @@ class PkgConfigTask(PkgTask):
 		try: return self._sig
 		except AttributeError:
 			sig = Sig(self.name)
-			e = os.environ.get('PKG_CONFIG_PATH', None)
-			if e is not None: sig.update(e)
+			for name in ('PKG_CONFIG_PATH', 'PKG_CONFIG_LIBDIR', 'PKG_CONFIG_DISABLE_UNINSTALLED'): # PKG_CONFIG_TOP_BUILD_DIR, PKG_CONFIG_ALLOW_SYSTEM_CFLAGS, PKG_CONFIG_ALLOW_SYSTEM_LIBS
+				e = os.environ.get(name, None)
+				if e is not None: sig.update(e)
 			sig = self._sig = sig.digest()
 			return sig
 
