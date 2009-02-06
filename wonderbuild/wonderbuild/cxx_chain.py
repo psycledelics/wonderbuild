@@ -27,9 +27,9 @@ class ClientCfg(object):
 		
 	def apply(self, other):
 		self.defines.update(other.defines)
-		self.include_paths += other.include_paths
+		self.include_paths.extend(other.include_paths)
 		self.cxx_flags += other.cxx_flags
-		self.lib_paths += other.lib_paths
+		self.lib_paths.extend(other.lib_paths)
 		self.libs += other.libs
 		self.static_libs += other.static_libs
 		self.shared_libs += other.shared_libs
