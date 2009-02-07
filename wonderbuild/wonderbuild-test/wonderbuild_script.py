@@ -36,8 +36,19 @@ def wonderbuild_script(project):
 		def __call__(self, sched_ctx):
 			self.cfg.pic = self.pic
 			for t in PreCompileTask.__call__(self, sched_ctx): yield t
-	lib_pch = Pch(pic = build_cfg.shared or build_cfg.pic)
-	prog_pch = Pch(pic = build_cfg.pic)
+	pic_pch = non_pic_pch = None
+	if build_cfg.shared or build_cfg.pic:
+		pic_pch = Pch(pic = True)
+		lib_pch = pic_pch
+	else:
+		non_pic_pch = Pch(pic = False)
+		lib_pch = non_pic_pch
+	if build_cfg.pic:
+		if pic_pch is None: pic_pch = Pch(pic = True)
+		prog_pch = pic_pch
+	else:
+		if non_pic_pch is None: non_pic_pch = Pch(pic = False)
+		prog_pch = non_pic_pch
 
 	class LibFoo(ModTask):
 		def __init__(self): ModTask.__init__(self, 'foo', ModTask.Kinds.LIB, build_cfg)

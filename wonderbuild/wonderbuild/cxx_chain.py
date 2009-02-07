@@ -376,7 +376,10 @@ class PreCompileTask(Task):
 			if not changed:
 				if __debug__ and is_debug: debug('task: skip: no change: ' + str(self.header))
 			else:
-				if not silent: self.print_desc('pre-compiling c++ ' + str(self), color = '7;35')
+				if not silent: 
+					if self.cfg.pic: pic = 'pic'; color = '7;1;35'
+					else: pic = 'non-pic'; color = '7;35'
+					self.print_desc('pre-compiling ' + pic + ' c++ ' + str(self), color)
 				dir = self.header.parent
 				dir.make_dir(dir.parent)
 				f = open(self.header.path, 'w')
