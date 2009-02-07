@@ -16,7 +16,7 @@ def wonderbuild_script(project):
 
 	check_cfg = build_cfg.clone()
 	
-	glibmm = PkgConfigCheckTask('glibmm-2.4 >= 2.4', project)
+	glibmm = PkgConfigCheckTask(project, ['glibmm-2.4 >= 2.4'])
 	if False: glibmm.apply_to(build_cfg)
 
 	std_math_check = StdMathCheckTask(check_cfg)
@@ -46,8 +46,7 @@ def wonderbuild_script(project):
 			yield (glibmm, std_math_check, lib_pch)
 			lib_pch.apply_to(self.cfg)
 			if std_math_check.result: std_math_check.apply_to(self.cfg)
-			#if glibmm.result: yield (glibmm.cxx_flags_task, glibmm.ld_flags_task(self.cfg))
-			if glibmm.result: yield (glibmm.cxx_flags_task,)
+			if glibmm.result: glibmm.apply_to(self.cfg)
 			for s in src_dir.node_path('foo').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 			for t in ModTask.__call__(self, sched_ctx): yield t
 	lib_foo = LibFoo()

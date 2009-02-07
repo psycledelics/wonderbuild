@@ -45,7 +45,6 @@ class Impl(object):
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + v)
 		include_func(cfg, args)
-		#args += cfg.pkg_cxx_flags
 		args += cfg.cxx_flags
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: gcc: cxx: ' + str(args))
 		return args
@@ -149,7 +148,6 @@ class Impl(object):
 		if len(cfg.static_libs):
 			args.append('-Wl,-Bdynamic')
 			for l in cfg.shared_libs: args.append('-l' + l)
-		#args += cfg.pkg_ld_flags
 		args += cfg.ld_flags
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: gcc: ld: ' + str(args))
 		return args
