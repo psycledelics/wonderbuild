@@ -68,7 +68,7 @@
 			</part>
 			<part caption='No-op rebuild'>
 				<bars scale='60'>
-					<bar name='wonderbuild'   value=' 0.69'/>
+					<bar name='wonderbuild'   value=' 0.63'/>
 					<bar name='jam'           value=' 0.71'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 0.79'>(recursive)</bar>
 					<bar name='waf'           value=' 1.15'/>

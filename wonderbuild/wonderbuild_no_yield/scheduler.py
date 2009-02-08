@@ -35,18 +35,49 @@ class Scheduler(object):
 		def wait(self, tasks): self._scheduler._wait(tasks)
 
 	def process(self, tasks):
+		self._task_queue = tasks
+		self._todo_count = len(tasks)
+		for task in tasks:
+			task._queued = True
+			if __debug__ and is_debug: debug('sched: tasks queued ' + str(self._todo_count) + ' ' + str(len(self._task_queue)) + ' ' + str(task))
+
 		if self.thread_count == 1:
 			self._lock = Scheduler._DummyLock()
 			self._condition = Scheduler._DummyCondition()
-			self._pre_start()
-			self.add_tasks(tasks)
-			self._joining = True
-			self._thread_function(0) # XXX need a way to handle timeout
-			self._post_join()
 		else:
-			self.start() # TODO add the tasks to the queue before starting all the threads
-			self.add_tasks(tasks)
-			self.join()
+			self._lock = threading.Lock()
+			self._condition = threading.Condition(self._lock)
+		self._context = Scheduler.Context(self)
+
+		self._stop_requested = False
+
+		if self.thread_count != 1:
+			if __debug__ and is_debug: debug('sched: starting threads: ' + str(self.thread_count))
+			self._joining = False
+			self._threads = []
+			remaining_start_count = self.thread_count - 1
+			remaining_start_condition = threading.Condition(threading.Lock())
+			remaining_start_condition.acquire()
+			try:
+				t = threading.Thread(target = self._thread_function, args = (0, remaining_start_count - 1, remaining_start_condition), name = 'scheduler-thread-' + str(0))
+				t.setDaemon(True)
+				t.start()
+				self._threads.append(t)
+				while len(self._threads) != remaining_start_count: remaining_start_condition.wait(timeout = self.timeout)
+			finally: remaining_start_condition.release()
+
+		self._joining = True
+		self._thread_function(-1, 0, None) # XXX need a way to handle timeout
+
+		if self.thread_count != 1:
+			if __debug__ and is_debug: debug('sched: joining threads')
+			self._condition.acquire()
+			try:
+				self._joining = True
+				self._condition.notifyAll()
+			finally: self._condition.release()
+			for t in self._threads: t.join(timeout = self.timeout)
+		if hasattr(self, 'exception'): raise self.exception
 		
 	class _DummyLock(object):
 		def acquire(self): pass
@@ -57,63 +88,18 @@ class Scheduler(object):
 		def notify(self, count = 1): pass
 		def notifyAll(self): pass
 
-	def _pre_start(self):
-		self._task_queue = []
-		self._todo_count = 0
-		self._stop_requested = self._joining = False
-		self._context = Scheduler.Context(self)
-
-	def start(self):
-		if __debug__ and is_debug: debug('sched: starting threads: ' + str(self.thread_count))
-		self._lock = threading.Lock()
-		self._condition = threading.Condition(self._lock)
-		self._pre_start()
-		self._threads = []
-		for i in xrange(self.thread_count):
-			t = threading.Thread(target = self._thread_function, args = (i,), name = 'scheduler-thread-' + str(i))
-			t.setDaemon(True)
-			t.start()
-			self._threads.append(t)
-
-	def add_tasks(self, tasks):
-		self._condition.acquire()
-		try:
-			notify = len(tasks)
-			self._todo_count += notify
-			self._task_queue += tasks
-			for task in tasks:
-				task._queued = True
-				if __debug__ and is_debug: debug('sched: tasks queued ' + str(self._todo_count) + ' ' + str(len(self._task_queue)) + ' ' + str(task))
-			self._condition.notify(notify)
-		finally: self._condition.release()
-
-	def stop(self):
-		if __debug__ and is_debug: debug('sched: stopping threads')
-		self._condition.acquire()
-		try:
-			self._stop_requested = True
-			self._condition.notifyAll()
-		finally: self._condition.release()
-		self.join()
-		
-	def join(self):
-		if __debug__ and is_debug: debug('sched: joining threads')
-		self._condition.acquire()
-		try:
-			self._joining = True
-			self._condition.notifyAll()
-		finally: self._condition.release()
-		for t in self._threads: t.join(timeout = self.timeout)
-		del self._threads
-		self._post_join()
-	
-	def _post_join(self):
-		del self._condition
-		del self._task_queue
-		if hasattr(self, 'exception'): raise self.exception
-	
-	def _thread_function(self, i):
+	def _thread_function(self, i, remaining_start_count, remaining_start_condition):
 		if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': started')
+		if remaining_start_condition is not None:
+			remaining_start_condition.acquire()
+			try:
+				if remaining_start_count == 0: remaining_start_condition.notify()
+				else:
+					t = threading.Thread(target = self._thread_function, args = (i + 1, remaining_start_count - 1, remaining_start_condition), name = 'scheduler-thread-' + str(i + 1))
+					t.setDaemon(True)
+					t.start()
+					self._threads.append(t)
+			finally: remaining_start_condition.release()
 		self._condition.acquire()
 		try:
 			try:
