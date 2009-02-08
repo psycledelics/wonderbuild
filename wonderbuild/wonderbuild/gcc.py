@@ -51,23 +51,23 @@ class Impl(object):
 
 	@staticmethod
 	def _cfg_cxx_args_include_cwd(cfg, args):
-		for p in cfg.include_paths: args += ['-I', p.path]
+		for p in cfg.include_paths: args.append('-I' + p.path)
 		for i in cfg.includes: args += ['-include', i.path]
 
 	@staticmethod
 	def _cfg_cxx_args_include_bld(cfg, args):
-		for p in cfg.include_paths: args += ['-I', os.path.join(os.pardir, os.pardir, p.rel_path(cfg.project.bld_node))]
+		for p in cfg.include_paths: args.append('-I' + os.path.join(os.pardir, os.pardir, p.rel_path(cfg.project.bld_node)))
 		for i in cfg.includes: args += ['-include', os.path.join(os.pardir, os.pardir, i.rel_path(cfg.project.bld_node))]
 
 	@staticmethod
 	def process_precompile_task(precompile_task):
 		# some useful options: -Wmissing-include-dirs -Winvalid-pch -H -fpch-deps -Wp,-v
 		# to print the include search path: g++ -xc++ /dev/null -E -Wp,-v 2>&1 1>/dev/null | sed -e '/^[^ ]/d' -e 's,^ ,-I,'
-		args = precompile_task.cfg.cxx_args_cwd + ['-xc++-header', '-MMD', precompile_task.header.path]
+		args = precompile_task.cfg.cxx_args_cwd + ['-xc++-header', precompile_task.header.path, '-MMD']
 		use_dir = False
 		if not use_dir:
 			path = precompile_task.header.path + '.d'
-			args += ['-MF', path]
+			args.append('-MF' + path)
 		else:
 			dir = precompile_task.target
 			dir.make_dir()
@@ -140,7 +140,7 @@ class Impl(object):
 	def cfg_ld_args(cfg):
 		args = [cfg.ld_prog]
 		if cfg.shared: args.append('-shared')
-		for p in cfg.lib_paths: args += ['-L', p.path]
+		for p in cfg.lib_paths: args.append('-L' + p.path)
 		for l in cfg.libs: args.append('-l' + l)
 		if len(cfg.static_libs):
 			args.append('-Wl,-Bstatic')
@@ -168,7 +168,7 @@ class Impl(object):
 		obj_paths = [os.path.join(path, o) for o in obj_names]
 		if mod_task.ld:
 			args = mod_task.cfg.ld_args[:]
-			args = [args[0], '-o', mod_task.target.path] + obj_paths + args[1:]
+			args = [args[0], '-o' + mod_task.target.path] + obj_paths + args[1:]
 			r = exec_subprocess(args)
 			if r != 0: raise Exception, r
 		else:

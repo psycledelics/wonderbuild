@@ -25,20 +25,18 @@ class ClientCfg(object):
 		self.ld_flags = []
 		self.pkg_config = []
 		
-	def apply(self, other):
-		self.defines.update(other.defines)
-		self.include_paths.extend(other.include_paths)
-		self.cxx_flags += other.cxx_flags
-		self.lib_paths.extend(other.lib_paths)
-		self.libs += other.libs
-		self.static_libs += other.static_libs
-		self.shared_libs += other.shared_libs
-		self.ld_flags += other.ld_flags
-		self.pkg_config += other.pkg_config
-
-	def clone(self):
-		c = self.__class__(self.project)
-		c.apply(self)
+	def clone(self, class_ = None):
+		if class_ is None: class_ = self.__class__
+		c = class_(self.project)
+		c.defines.update(self.defines)
+		c.include_paths.extend(self.include_paths)
+		c.cxx_flags += self.cxx_flags
+		c.lib_paths.extend(self.lib_paths)
+		c.libs += self.libs
+		c.static_libs += self.static_libs
+		c.shared_libs += self.shared_libs
+		c.ld_flags += self.ld_flags
+		c.pkg_config += self.pkg_config
 		return c
 		
 class BuildCfg(ClientCfg):
@@ -46,7 +44,7 @@ class BuildCfg(ClientCfg):
 		ClientCfg.__init__(self, project)
 		self.cxx_prog = None
 		self.pic = None
-		self.includes = []
+		self.includes = deque()
 		self.ld_prog = None
 		self.ar_prog = None
 		self.ranlib_prog = None
@@ -56,21 +54,23 @@ class BuildCfg(ClientCfg):
 		self.debug = False
 		self.optim = None
 		self.check_missing = False
-	
-	def apply(self, other):
-		ClientCfg.apply(self, other)
-		self.cxx_prog = other.cxx_prog
-		self.pic = other.pic
-		self.includes += other.includes
-		self.ld_prog = other.ld_prog
-		self.ar_prog = other.ar_prog
-		self.ranlib_prog = other.ranlib_prog
-		self.shared = other.shared
-		self.impl = other.impl
-		self.kind = other.kind
-		self.version = other.version
-		self.debug = other.debug
-		self.optim = other.optim
+
+	def clone(self, class_ = None):
+		if class_ is None: class_ = self.__class__
+		c = ClientCfg.clone(self, class_)
+		c.cxx_prog = self.cxx_prog
+		c.pic = self.pic
+		c.includes.extend(self.includes)
+		c.ld_prog = self.ld_prog
+		c.ar_prog = self.ar_prog
+		c.ranlib_prog = self.ranlib_prog
+		c.shared = self.shared
+		c.impl = self.impl
+		c.kind = self.kind
+		c.version = self.version
+		c.debug = self.debug
+		c.optim = self.optim
+		return c
 
 	@property
 	def _common_sig(self):
@@ -84,7 +84,7 @@ class BuildCfg(ClientCfg):
 			sig.update(self.version)
 			sig.update(str(self.debug))
 			sig.update(str(self.optim))
-			for p in self.pkg_config: sig.update(p)
+			if len(self.pkg_config): sig.update(_PkgConfigTask.env_sig())
 			sig = self.__common_sig = sig.digest()
 			return sig
 		
@@ -222,7 +222,7 @@ class UserCfg(OptionCfg, BuildCfg):
 				self.project.state_and_cache[self.__class__.__name__]
 		except KeyError: parse = True
 		else: parse = old_sig != self.options_sig
-
+		
 		if parse:
 			if __debug__ and is_debug: debug('cfg: cxx: user: parsing options')
 			self.shared = self.pic = self.optim = None
@@ -275,6 +275,10 @@ class UserCfg(OptionCfg, BuildCfg):
 
 		if self.impl is None: raise Exception, 'unsupported c++ compiler'
 
+	def clone(self, class_ = None):
+		if class_ is None: class_ = BuildCfg
+		return class_.clone(self, class_)
+
 	def _check_compiler(self, cxx_prog, ld_prog):
 		if not cxx_prog: self.cxx_prog = 'c++'
 		if not silent:
@@ -295,11 +299,6 @@ class UserCfg(OptionCfg, BuildCfg):
 			self.impl = gcc.Impl()
 		if not silent: self.print_check_result(desc, str(self.kind) + ' version ' + str(self.version), '32')
 
-	def clone(self):
-		c = BuildCfg(self.project)
-		c.apply(self)
-		return c
-
 class PreCompileTask(Task):
 	def __init__(self, name, base_cfg):
 		Task.__init__(self, base_cfg.project)
@@ -314,12 +313,9 @@ class PreCompileTask(Task):
 		try: return self._cfg
 		except AttributeError:
 			self._cfg = self.base_cfg.clone()
-			#self._cfg.include_paths.appendleft(self.target_dir)
 			return self._cfg
 
-	def apply_to(self, cfg):
-		#cfg.include_paths.appendleft(self.target_dir)
-		cfg.includes.append(self.header)
+	def apply_to(self, cfg): cfg.includes.append(self.header)
 
 	def __str__(self): return str(self.header)
 
@@ -449,18 +445,30 @@ class ModTask(Task):
 		Task.__init__(self, base_cfg.project, aliases or (name,))
 		self.name = name
 		self.kind = kind
-		self.cfg = base_cfg.clone()
-		if self.kind == ModTask.Kinds.PROG:
-			self.cfg.shared = False
-			self.ld = True
-		else:
-			if self.kind == ModTask.Kinds.LOADABLE: self.cfg.shared = True
-			self.ld = self.cfg.shared
-			if self.cfg.shared and not self.cfg.pic:
-				debug('cfg: cxx: mod: shared lib => overriding cfg to pic')
-				self.cfg.pic = True
+		self.base_cfg = base_cfg
 		self.sources = []
 		self.dep_lib_tasks = []
+
+	@property
+	def ld(self):
+		try: return self._ld
+		except AttributeError:
+			if self.kind == ModTask.Kinds.PROG: self._ld = True
+			else: self._ld = self.cfg.shared
+			return self._ld
+
+	@property
+	def cfg(self):
+		try: return self._cfg
+		except AttributeError:
+			cfg = self._cfg = self.base_cfg.clone()
+			if self.kind == ModTask.Kinds.PROG: cfg.shared = False
+			else:
+				if self.kind == ModTask.Kinds.LOADABLE: cfg.shared = True
+				if cfg.shared and not cfg.pic:
+					debug('cfg: cxx: mod: shared lib => overriding cfg to pic')
+					cfg.pic = True
+			return cfg
 
 	def __str__(self): return str(self.target)
 
@@ -483,12 +491,15 @@ class ModTask(Task):
 	def __call__(self, sched_context):
 		sub_tasks = []
 		if len(self.cfg.pkg_config) != 0:
-			pkg_config_ld_flags_task = PkgConfigLdFlagsTask(self.project, self.cfg.pkg_config, self.cfg.shared)
-			sched_context.parallel_no_wait((pkg_config_ld_flags_task,))
-			pkg_config_cxx_task = PkgConfigCxxFlagsTask(self.project, self.cfg.pkg_config)
-			sub_tasks.append(pkg_config_cxx_task)
+			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask(self.project, self.cfg.pkg_config)
+			sub_tasks.append(pkg_config_cxx_flags_task)
+			if self.ld:
+				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask(self.project, self.cfg.pkg_config, self.cfg.shared)
+				sched_context.parallel_no_wait((pkg_config_ld_flags_task,))
 		if len(self.dep_lib_tasks) != 0: sub_tasks += self.dep_lib_tasks
-		if len(sub_tasks) != 0: sched_context.parallel_wait(sub_tasks)
+		if len(sub_tasks) != 0:
+			sched_context.parallel_wait(sub_tasks)
+			if len(self.cfg.pkg_config) != 0: self.cfg.cxx_flags += pkg_config_cxx_flags_task.result
 		changed_sources = []
 		try: state = self.project.state_and_cache[self.uid]
 		except KeyError:
@@ -546,7 +557,10 @@ class ModTask(Task):
 			if __debug__ and is_debug: debug('task: target removed: ' + str(self))
 			changed_sources = sources
 			need_process = True
-		else:
+		if self.ld and len(self.cfg.pkg_config) != 0:
+			sched_context.wait((pkg_config_ld_flags_task,))
+			self.cfg.ld_flags += pkg_config_ld_flags_task.result
+		if not need_process:
 			state = self.project.state_and_cache[self.uid]
 			if state[0] != self._mod_sig:
 				if __debug__ and is_debug: debug('task: mod sig changed: ' + str(self))
@@ -569,7 +583,6 @@ class ModTask(Task):
 		if not need_process:
 			if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 		else:
-			if len(self.cfg.pkg_config) != 0: sched_context.wait((pkg_config_ld_flags_task,))
 			sched_context.lock.release()
 			try:
 				if not silent:
@@ -606,7 +619,7 @@ class ModTask(Task):
 		if self.ld: return self.cfg.ld_sig
 		else: return self.cfg.ar_ranlib_sig
 
-class PkgConfigTask(Task):
+class _PkgConfigTask(Task):
 	def __init__(self, project, pkgs):
 		Task.__init__(self, project)
 		self.pkgs = pkgs
@@ -629,6 +642,8 @@ class PkgConfigTask(Task):
 
 	@property
 	def args(self): return [self.prog] + self.pkgs + self.what_args
+
+	def __str__(self): return ' '.join(self.pkgs) + ' ' + ' '.join(self.what_args)
 
 	@property
 	def uid(self):
@@ -665,16 +680,22 @@ class PkgConfigTask(Task):
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
-			sig = Sig(' '.join(self.pkgs))
-			for name in ('PKG_CONFIG_PATH', 'PKG_CONFIG_LIBDIR', 'PKG_CONFIG_DISABLE_UNINSTALLED'): # PKG_CONFIG_TOP_BUILD_DIR, PKG_CONFIG_ALLOW_SYSTEM_CFLAGS, PKG_CONFIG_ALLOW_SYSTEM_LIBS
-				e = os.environ.get(name, None)
-				if e is not None: sig.update(e)
+			sig = Sig(_PkgConfigTask.env_sig())
+			for p in self.pkgs: sig.update(p)
 			sig = self._sig = sig.digest()
 			return sig
 
-class PkgConfigCheckTask(PkgConfigTask):
+	@staticmethod
+	def env_sig():
+		sig = Sig()
+		for name in ('PKG_CONFIG_PATH', 'PKG_CONFIG_LIBDIR', 'PKG_CONFIG_DISABLE_UNINSTALLED'): # PKG_CONFIG_TOP_BUILD_DIR, PKG_CONFIG_ALLOW_SYSTEM_CFLAGS, PKG_CONFIG_ALLOW_SYSTEM_LIBS
+			e = os.environ.get(name, None)
+			if e is not None: sig.update(e)
+		return sig.digest()
+
+class PkgConfigCheckTask(_PkgConfigTask):
 	@property
-	def what_desc(self): return 'existance'
+	def what_desc(self): return 'existence'
 	
 	@property
 	def what_args(self): return ['--exists']
@@ -687,14 +708,14 @@ class PkgConfigCheckTask(PkgConfigTask):
 			if self._result: self.print_check_result(self.desc, 'yes', '32')
 			else: self.print_check_result(self.desc, 'no', '31')
 
-class _PkgConfigFlagsTask(PkgConfigTask):
+class _PkgConfigFlagsTask(_PkgConfigTask):
 	def do_result(self):
 			r, out, err = exec_subprocess_pipe(self.args, silent = True)
 			if r != 0: raise Exception, r
 			if not silent: self.print_check_result(self.desc, out.rstrip('\n'), '32')
 			self._result = out.split()
 
-class PkgConfigCxxFlagsTask(_PkgConfigFlagsTask):
+class _PkgConfigCxxFlagsTask(_PkgConfigFlagsTask):
 	@property
 	def what_desc(self): return 'cxx flags'
 	
@@ -703,7 +724,7 @@ class PkgConfigCxxFlagsTask(_PkgConfigFlagsTask):
 
 	def apply_to(self, cfg): cfg.cxx_flags += self.result
 
-class PkgConfigLdFlagsTask(_PkgConfigFlagsTask):
+class _PkgConfigLdFlagsTask(_PkgConfigFlagsTask):
 	def __init__(self, project, pkgs, shared):
 		_PkgConfigFlagsTask.__init__(self, project, pkgs)
 		self.shared = shared
@@ -725,6 +746,8 @@ class BuildCheckTask(Task):
 		Task.__init__(self, base_cfg.project)
 		self.name = name
 		self.base_cfg = base_cfg
+
+	def __str__(self): return self.name
 
 	def apply_to(self, cfg): pass
 

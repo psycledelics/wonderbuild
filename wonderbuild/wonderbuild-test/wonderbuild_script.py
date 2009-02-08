@@ -66,11 +66,12 @@ def wonderbuild_script(project):
 		def __init__(self): ModTask.__init__(self, 'main', ModTask.Kinds.PROG, build_cfg)
 
 		def __call__(self, sched_ctx):
-			sched_ctx.parallel_wait((prog_pch, lib_foo))
+			sched_ctx.parallel_wait((prog_pch, lib_foo, glibmm))
 			prog_pch.apply_to(self.cfg)
 			self.dep_lib_tasks.append(lib_foo)
 			self.cfg.lib_paths.append(lib_foo.target.parent)
 			self.cfg.libs.append(lib_foo.name)
+			if glibmm.result: glibmm.apply_to(self.cfg)
 			for s in src_dir.node_path('main').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 			ModTask.__call__(self, sched_ctx)
 	main_prog = MainProg()
