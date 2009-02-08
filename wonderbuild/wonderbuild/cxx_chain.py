@@ -493,17 +493,13 @@ class ModTask(Task):
 	def target_dir(self): return self.target.parent
 
 	def __call__(self, sched_context):
-		sub_tasks = []
 		if len(self.cfg.pkg_config) != 0:
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask(self.project, self.cfg.pkg_config)
-			sub_tasks.append(pkg_config_cxx_flags_task)
+			pkg_config_cxx_flags_task(sched_context)
+			pkg_config_cxx_flags_task.apply_to(self.cfg)
 			if self.ld:
 				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask(self.project, self.cfg.pkg_config, self.cfg.shared)
 				sched_context.parallel_no_wait((pkg_config_ld_flags_task,))
-		if len(self.dep_lib_tasks) != 0: sub_tasks += self.dep_lib_tasks
-		if len(sub_tasks) != 0:
-			sched_context.parallel_wait(sub_tasks)
-			if len(self.cfg.pkg_config) != 0: pkg_config_cxx_flags_task.apply_to(self.cfg)
 		changed_sources = []
 		try: state = self.project.state_and_cache[self.uid]
 		except KeyError:
@@ -561,9 +557,15 @@ class ModTask(Task):
 			if __debug__ and is_debug: debug('task: target removed: ' + str(self))
 			changed_sources = sources
 			need_process = True
-		if self.ld and len(self.cfg.pkg_config) != 0:
-			sched_context.wait((pkg_config_ld_flags_task,))
-			pkg_config_ld_flags_task.apply_to(self.cfg)
+		if self.ld:
+			if len(self.cfg.pkg_config) != 0:
+				sched_context.wait((pkg_config_ld_flags_task,))
+				pkg_config_ld_flags_task.apply_to(self.cfg)
+			if len(self.dep_lib_tasks) != 0:
+				sched_context.parallel_wait(self.dep_lib_tasks)
+				for l in self.dep_lib_tasks:
+					self.cfg.lib_paths.append(l.target.parent)
+					self.cfg.libs.append(l.name)
 		if not need_process:
 			state = self.project.state_and_cache[self.uid]
 			if state[0] != self._mod_sig:
