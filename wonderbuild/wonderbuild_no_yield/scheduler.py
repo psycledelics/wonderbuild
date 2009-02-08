@@ -118,10 +118,12 @@ class Scheduler(object):
 		try:
 			try:
 				while True:
-					while self._wait_condition(): self._condition.wait(timeout = self.timeout)
-					if self._break_condition(): break
+					while not self._done_or_break_condition() and len(self._task_queue) == 0: self._condition.wait(timeout = self.timeout)
+					if self._done_or_break_condition(): break
 					self._process_one(self._task_queue.pop())
-					if self._done_condition(): break
+					if self._done_condition():
+						self._condition.notifyAll()
+						break
 			except StopIteration: pass
 			except Exception, e:
 				self.exception = e
@@ -132,37 +134,30 @@ class Scheduler(object):
 			if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': terminated')
 			self._condition.release()
 
-	def _basic_common_condition(self): return self._joining and self._todo_count == 0
+	def _done_condition(self): return self._joining and self._todo_count == 0
 	
-	def _full_common_condition(self): return self._basic_common_condition() or self._stop_requested
+	def _done_or_break_condition(self): return self._done_condition() or self._stop_requested
 
-	def _wait_condition(self): return not self._full_common_condition() and len(self._task_queue) == 0
-
-	def _break_condition(self): return self._full_common_condition()
-
-	def _done_condition(self):
-		self._todo_count -= 1
-		if self._basic_common_condition():
-			self._condition.notifyAll()
-			return True
-		return False
-		
 	def _process_one(self, task):
-		if task._processed: return
-		task._queued = True
+		assert not task._processed
 		if __debug__ and is_debug: debug('sched: processing task: ' + str(task))
 		task(self._context)
 		if __debug__ and is_debug: debug('sched: task processed: ' + str(task))
 		task._processed = True
+		self._todo_count -= 1
 		self._condition.notifyAll()
 			
 	def _parallel(self, tasks):
 		if __debug__ and is_debug: debug('sched: parallel tasks: ' + str([str(t) for t in tasks]))
-		self._background(tasks[1:])
+		if len(tasks) != 1: self._background(tasks[1:])
 		if tasks[0]._queued: self._wait(tasks)
 		else:
+			self._todo_count += 1
+			tasks[0]._queued = True
 			self._process_one(tasks[0])
-			self._wait(tasks[1:])
+			if len(tasks) != 1: self._wait(tasks[1:])
+		if __debug__:
+			for task in tasks: assert task._processed, task
 	
 	def _background(self, tasks):
 		if __debug__ and is_debug: debug('sched: background tasks: ' + str([str(t) for t in tasks]))
@@ -179,8 +174,10 @@ class Scheduler(object):
 	def _wait(self, tasks):
 		if __debug__ and is_debug: debug('sched: waiting for tasks: ' + str([str(t) for t in tasks]))
 		for task in tasks:
-			while not task._processed and self._wait_condition(): self._condition.wait(timeout = self.timeout)
-			if self._break_condition(): raise StopIteration
-			if task._processed: continue
-			self._process_one(self._task_queue.pop())
-			if self._done_condition(): raise StopIteration
+			while True:
+				while not task._processed and not self._stop_requested and len(self._task_queue) == 0: self._condition.wait(timeout = self.timeout)
+				if self._stop_requested: raise StopIteration
+				if task._processed: break
+				self._process_one(self._task_queue.pop())
+		if __debug__:
+			for task in tasks: assert task._processed, task

@@ -92,14 +92,14 @@ class Node(object):
 			return self._exists
 	
 	def make_dir(self, parent_node_to_lock = None):
-		if not self.exists:
 			if __debug__ and is_debug: debug('fs: os.makedirs: ' + self.path + os.sep)
 			if parent_node_to_lock is None:
-				os.makedirs(self.path)
+				if not self.exists: os.makedirs(self.path)
 			else:
 				lock = parent_node_to_lock.lock
 				lock.acquire()
-				try: os.makedirs(self.path)
+				try:
+					if not self.exists: os.makedirs(self.path)
 				finally: lock.release()
 			self._exists = self._is_dir = True
 
