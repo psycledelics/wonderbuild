@@ -130,7 +130,7 @@ def wonderbuild_no_yield_script(project):
 		def __init__(self): ModTask.__init__(self, 'foo', ModTask.Kinds.LIB, build_cfg)
 
 		def __call__(self, sched_ctx):
-			sched_ctx.parallel((glibmm, std_math_check, lib_pch))
+			sched_ctx.parallel_wait((glibmm, std_math_check, lib_pch))
 			lib_pch.apply_to(self.cfg)
 			if std_math_check.result: std_math_check.apply_to(self.cfg)
 			if glibmm.result: glibmm.apply_to(self.cfg)
@@ -142,7 +142,7 @@ def wonderbuild_no_yield_script(project):
 		def __init__(self): ModTask.__init__(self, 'main', ModTask.Kinds.PROG, build_cfg)
 
 		def __call__(self, sched_ctx):
-			sched_ctx.parallel((prog_pch, lib_foo))
+			sched_ctx.parallel_wait((prog_pch, lib_foo))
 			prog_pch.apply_to(self.cfg)
 			self.dep_lib_tasks.append(lib_foo)
 			self.cfg.lib_paths.append(lib_foo.target.parent)

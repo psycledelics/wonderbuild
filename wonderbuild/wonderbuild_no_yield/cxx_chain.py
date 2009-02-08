@@ -484,11 +484,11 @@ class ModTask(Task):
 		sub_tasks = []
 		if len(self.cfg.pkg_config) != 0:
 			pkg_config_ld_flags_task = PkgConfigLdFlagsTask(self.project, self.cfg.pkg_config, self.cfg.shared)
-			sched_context.background((pkg_config_ld_flags_task,))
+			sched_context.parallel_no_wait((pkg_config_ld_flags_task,))
 			pkg_config_cxx_task = PkgConfigCxxFlagsTask(self.project, self.cfg.pkg_config)
 			sub_tasks.append(pkg_config_cxx_task)
 		if len(self.dep_lib_tasks) != 0: sub_tasks += self.dep_lib_tasks
-		if len(sub_tasks) != 0: sched_context.parallel(sub_tasks)
+		if len(sub_tasks) != 0: sched_context.parallel_wait(sub_tasks)
 		changed_sources = []
 		try: state = self.project.state_and_cache[self.uid]
 		except KeyError:
@@ -541,7 +541,7 @@ class ModTask(Task):
 			for b in batches:
 				if len(b) == 0: break
 				tasks.append(BatchCompileTask(self, b))
-			sched_context.parallel(tasks)
+			sched_context.parallel_wait(tasks)
 		elif self.cfg.check_missing and not self.target.exists:
 			if __debug__ and is_debug: debug('task: target removed: ' + str(self))
 			changed_sources = sources

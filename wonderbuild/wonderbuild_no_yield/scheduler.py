@@ -30,8 +30,8 @@ class Scheduler(object):
 			self.thread_count = scheduler.thread_count
 			self.lock = scheduler._lock
 
-		def parallel(self, tasks): self._scheduler._parallel(tasks)
-		def background(self, tasks): self._scheduler._background(tasks)
+		def parallel_wait(self, tasks): self._scheduler._parallel_wait(tasks)
+		def parallel_no_wait(self, tasks): self._scheduler._parallel_no_wait(tasks)
 		def wait(self, tasks): self._scheduler._wait(tasks)
 
 	def process(self, tasks):
@@ -147,9 +147,9 @@ class Scheduler(object):
 		self._todo_count -= 1
 		self._condition.notifyAll()
 			
-	def _parallel(self, tasks):
-		if __debug__ and is_debug: debug('sched: parallel tasks: ' + str([str(t) for t in tasks]))
-		if len(tasks) != 1: self._background(tasks[1:])
+	def _parallel_wait(self, tasks):
+		if __debug__ and is_debug: debug('sched: parallel_wait: ' + str([str(t) for t in tasks]))
+		if len(tasks) != 1: self._parallel_no_wait(tasks[1:])
 		if tasks[0]._queued: self._wait(tasks)
 		else:
 			self._todo_count += 1
@@ -159,8 +159,8 @@ class Scheduler(object):
 		if __debug__:
 			for task in tasks: assert task._processed, task
 	
-	def _background(self, tasks):
-		if __debug__ and is_debug: debug('sched: background tasks: ' + str([str(t) for t in tasks]))
+	def _parallel_no_wait(self, tasks):
+		if __debug__ and is_debug: debug('sched: parallel_no_wait: ' + str([str(t) for t in tasks]))
 		notify = 0
 		for task in tasks:
 			if not task._processed and not task._queued:
