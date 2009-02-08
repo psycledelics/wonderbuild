@@ -482,11 +482,12 @@ class ModTask(Task):
 
 	def __call__(self, sched_context):
 		sub_tasks = []
-		if len(self.dep_lib_tasks) != 0: sub_tasks += self.dep_lib_tasks
 		if len(self.cfg.pkg_config) != 0:
-			sub_tasks.append(PkgConfigCxxFlagsTask(self.project, self.cfg.pkg_config))
-			sub_tasks.append(PkgConfigLdFlagsTask(self.project, self.cfg.pkg_config, self.cfg.shared)
-		)
+			pkg_config_ld_flags_task = PkgConfigLdFlagsTask(self.project, self.cfg.pkg_config, self.cfg.shared)
+			sched_context.background((pkg_config_ld_flags_task,))
+			pkg_config_cxx_task = PkgConfigCxxFlagsTask(self.project, self.cfg.pkg_config)
+			sub_tasks.append(pkg_config_cxx_task)
+		if len(self.dep_lib_tasks) != 0: sub_tasks += self.dep_lib_tasks
 		if len(sub_tasks) != 0: sched_context.parallel(sub_tasks)
 		changed_sources = []
 		try: state = self.project.state_and_cache[self.uid]
@@ -568,6 +569,7 @@ class ModTask(Task):
 		if not need_process:
 			if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 		else:
+			if len(self.cfg.pkg_config) != 0: sched_context.wait((pkg_config_ld_flags_task,))
 			sched_context.lock.release()
 			try:
 				if not silent:

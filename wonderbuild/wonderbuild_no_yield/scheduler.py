@@ -171,14 +171,15 @@ class Scheduler(object):
 			if not task._processed and not task._queued:
 				self._task_queue.append(task)
 				task._queued = True
-				self._todo_count += 1
 				notify += 1
-		if notify > 0: self._condition.notify(notify)
+		if notify != 0:
+			self._todo_count += notify
+			self._condition.notify(notify)
 
 	def _wait(self, tasks):
 		if __debug__ and is_debug: debug('sched: waiting for tasks: ' + str([str(t) for t in tasks]))
 		for task in tasks:
-			while self._wait_condition() and not task._processed: self._condition.wait(timeout = self.timeout)
+			while not task._processed and self._wait_condition(): self._condition.wait(timeout = self.timeout)
 			if self._break_condition(): raise StopIteration
 			if task._processed: continue
 			self._process_one(self._task_queue.pop())

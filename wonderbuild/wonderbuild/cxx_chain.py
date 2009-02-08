@@ -487,8 +487,7 @@ class ModTask(Task):
 		if len(self.dep_lib_tasks) != 0: sub_tasks += self.dep_lib_tasks
 		if len(self.cfg.pkg_config) != 0:
 			sub_tasks.append(PkgConfigCxxFlagsTask(self.project, self.cfg.pkg_config))
-			sub_tasks.append(PkgConfigLdFlagsTask(self.project, self.cfg.pkg_config, self.cfg.shared)
-		)
+			sub_tasks.append(PkgConfigLdFlagsTask(self.project, self.cfg.pkg_config, self.cfg.shared))
 		if len(sub_tasks) != 0: yield sub_tasks
 		changed_sources = []
 		try: state = self.project.state_and_cache[self.uid]
