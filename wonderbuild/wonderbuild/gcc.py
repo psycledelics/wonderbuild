@@ -72,7 +72,7 @@ class Impl(object):
 			dir = precompile_task.target
 			dir.make_dir()
 			path = os.path.join(dir.path, 'x')
-			args += ['-o', path]
+			args.append('-o' + path)
 			path += '.d'
 		r = exec_subprocess(args)
 		if r != 0: raise Exception, r
