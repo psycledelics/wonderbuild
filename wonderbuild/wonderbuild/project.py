@@ -82,7 +82,7 @@ class Project(object):
 	def process(self, tasks):
 		if self.list_aliases:
 			for k, v in self.task_aliases.iteritems():
-				print k, v
+				print k, [str(v) for v in v]
 		else:
 			if self.requested_task_aliases is not None: tasks = self.tasks_with_aliases(self.requested_task_aliases)
 			self.processsing = True
