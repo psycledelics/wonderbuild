@@ -675,7 +675,7 @@ class _PkgConfigTask(Task):
 			else:
 				if old_sig != self.sig: changed = True
 			if not changed:
-				if __debug__ and is_debug: debug('task: skip: no change: ' + ' '.join(self.pkgs))
+				if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 			else:
 				if not silent: self.print_check(self.desc)
 				self.do_result()
@@ -743,7 +743,7 @@ class _PkgConfigLdFlagsTask(_PkgConfigFlagsTask):
 	@property
 	def what_args(self):
 		if self.shared: return ['--libs']
-		else: return ['--static', '--libs']
+		else: return ['--libs', '--static']
 
 	def apply_to(self, cfg): cfg.ld_flags += self.result
 
