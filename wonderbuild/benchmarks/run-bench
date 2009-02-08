@@ -25,8 +25,8 @@ main() {
 			$measure ../../wonderbuild.py --bld-dir=build-$tool --cxx=g++ --jobs=$jobs "$@"
 		;;
 	
-		wonderbuild_no_yield)
-			$measure ../../wonderbuild_no_yield.py --bld-dir=build-$tool --cxx=g++ --jobs=$jobs "$@"
+		wonderbuild_yield)
+			$measure ../../wonderbuild_yield.py --bld-dir=build-$tool --cxx=g++ --jobs=$jobs "$@"
 		;;
 
 		waf)

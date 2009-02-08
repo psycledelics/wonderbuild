@@ -7,10 +7,10 @@ import sys, os
 if __name__ == '__main__':
 	dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 	if dir not in sys.path: sys.path.append(dir)
-	from wonderbuild_no_yield.main import main
+	from wonderbuild.main import main
 	main()
 else:
-	from wonderbuild_no_yield.options import options, validate_options, known_options, help, print_help
+	from wonderbuild.options import options, validate_options, known_options, help, print_help
 
 	def main():
 		import gc
@@ -31,7 +31,7 @@ else:
 				import cProfile
 				# cProfile is only able to profile one thread
 				options.append('--jobs=1') # overrides possible previous --jobs options
-				cProfile.run('from wonderbuild_no_yield.main import run; run()', profile)
+				cProfile.run('from wonderbuild.main import run; run()', profile)
 				import pstats
 				s = pstats.Stats(profile)
 				#s.sort_stats('time').print_stats(45)
@@ -40,14 +40,14 @@ else:
 			if gc_enabled: gc.enable()
 
 	def run():
-		from wonderbuild_no_yield.project import Project
+		from wonderbuild.project import Project
 		project = Project()
 
 		script = project.src_node.node_path('wonderbuild_script.py')
 		if script.exists:
 			d = {}
 			execfile('wonderbuild_script.py', d)
-			tasks = d['wonderbuild_no_yield_script'](project)
+			tasks = d['wonderbuild_script'](project)
 			usage = False
 		else:
 			print >> sys.stderr, 'no ' + script.path + ' found'
@@ -61,7 +61,7 @@ else:
 			return 0
 
 		if '--version' in options:
-			print 'wonderbuild 0.1-no-yield'
+			print 'wonderbuild 0.1'
 			return 0
 	
 		project.options()
