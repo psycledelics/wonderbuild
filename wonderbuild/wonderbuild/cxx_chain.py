@@ -392,7 +392,6 @@ class PreCompileTask(Task):
 					try: f.write('#error pre-compiled header missed\n');
 					finally: f.close()
 		finally: sched_context.lock.acquire()
-		raise StopIteration
 
 	@property
 	def sig(self):
@@ -439,7 +438,6 @@ class BatchCompileTask(Task):
 				self._actual_sources.append(node)
 			self.cfg.impl.process_cxx_task(self)
 		finally: sched_context.lock.acquire()
-		raise StopIteration
 
 class ModTask(Task):
 	class Kinds(object):
@@ -489,7 +487,7 @@ class ModTask(Task):
 			sub_tasks.append(PkgConfigCxxFlagsTask(self.project, self.cfg.pkg_config))
 			sub_tasks.append(PkgConfigLdFlagsTask(self.project, self.cfg.pkg_config, self.cfg.shared)
 		)
-		if len(sub_tasks) != 0: yield sub_tasks
+		if len(sub_tasks) != 0: sched_context.parallel(sub_tasks)
 		changed_sources = []
 		try: state = self.project.state_and_cache[self.uid]
 		except KeyError:
@@ -542,7 +540,7 @@ class ModTask(Task):
 			for b in batches:
 				if len(b) == 0: break
 				tasks.append(BatchCompileTask(self, b))
-			yield tasks
+			sched_context.parallel(tasks)
 		elif self.cfg.check_missing and not self.target.exists:
 			if __debug__ and is_debug: debug('task: target removed: ' + str(self))
 			changed_sources = sources
@@ -593,7 +591,6 @@ class ModTask(Task):
 			finally: sched_context.lock.acquire()
 		if not self.cfg.check_missing: self.target_dir.forget()
 		self._needed_process = need_process
-		raise StopIteration
 
 	def _unique_base_name(self, source):
 		return source.rel_path(self.project.src_node).replace(os.pardir, '_').replace(os.sep, ',')
@@ -607,29 +604,11 @@ class ModTask(Task):
 		if self.ld: return self.cfg.ld_sig
 		else: return self.cfg.ar_ranlib_sig
 
-class PkgTask(Task):
+class PkgConfigTask(Task):
 	def __init__(self, project, pkgs):
 		Task.__init__(self, project)
 		self.pkgs = pkgs
-	
-	@property
-	def exists(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
-	
-	@property
-	def cxx_flags(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
-	
-	@property
-	def shared_ld_flags(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
-	
-	@property
-	def static_ld_flags(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
 
-	def apply_to(self, cfg): raise Exception, str(self.__class__) + ' did not redefine the method.'
-
-	@property
-	def sig(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
-
-class PkgConfigTask(PkgTask):
 	@property
 	def prog(self): return 'pkg-config'
 
@@ -662,7 +641,6 @@ class PkgConfigTask(PkgTask):
 			sched_context.lock.release()
 			try: self.result
 			finally: sched_context.lock.acquire()
-		raise StopIteration
 
 	@property
 	def result(self):
@@ -778,7 +756,6 @@ class BuildCheckTask(Task):
 			sched_context.lock.release()
 			try: self.result
 			finally: sched_context.lock.acquire()
-		raise StopIteration
 
 	@property
 	def result(self):

@@ -168,6 +168,59 @@ def wonderbuild_script(project):
 		bench_libs.append(BenchLib(n.name, n.name[len('lib_'):]))
 
 	return bench_libs
+
+def wonderbuild_no_yield_script(project):
+	from wonderbuild_no_yield.cxx_chain import UserCfg, PreCompileTask, ModTask
+
+	top_src_dir = project.src_node
+
+	class CustomUserCfg(UserCfg):
+		def __init__(self, project):
+			UserCfg.__init__(self, project)
+			self.cxx_flags = ['-g', '-O0', '-Wall']
+			self.shared = self.pic = False
+			self.defines['BENCH'] = None
+			self.include_paths.append(top_src_dir)
+	build_cfg = CustomUserCfg(project)
+
+	use_pch = False
+	if use_pch:
+		class Pch(PreCompileTask):
+			@property
+			def source_text(self):
+				try: return self._source_text
+				except AttributeError:
+					if False:
+						s = []
+						for l in top_src_dir.find_iter(in_pats = ['lib_*'], prune_pats = ['*']):
+							for n in l.find_iter(in_pats = ['*.hpp']):
+								s.append('#include <%s>' % n.rel_path(top_src_dir))
+						s.sort()
+						self._source_text = '\n'.join(s)
+					else:
+						self._source_text = '#include <boost/spirit.hpp>\n'
+					return self._source_text
+		pch = Pch('pch', build_cfg)
+
+	class BenchLib(ModTask):
+		def __init__(self, name, i):
+			ModTask.__init__(self, name, ModTask.Kinds.LIB, build_cfg)
+			self.i = i
+	
+		def __call__(self, sched_ctx):
+			if use_pch:
+				pch(sched_ctx)
+				pch.apply_to(self.cfg)
+			self.cfg.defines['BENCH_LIB'] = self.i
+			src_dir = top_src_dir.node_path(self.name)
+			for s in src_dir.find_iter(in_pats = ['*.cpp']): self.sources.append(s)
+			ModTask.__call__(self, sched_ctx)
+
+	bench_libs = []
+	for n in top_src_dir.find_iter(in_pats = ['lib_*'], prune_pats = ['*']):
+		bench_libs.append(BenchLib(n.name, n.name[len('lib_'):]))
+
+	return bench_libs
 ''')
 
 def create_waf(libs):

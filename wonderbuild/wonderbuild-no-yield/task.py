@@ -8,29 +8,9 @@ class Task(object):
 	def __init__(self, project, aliases = None):
 		self.project = project
 		project.add_task_aliases(self, aliases)
-		self.queued = False
-		self.in_task_todo_count = 0
-		self.out_tasks = []
-		self.processed = False
+		self._queued = self._processed = False
 
-	def __call__(self, sched_context): raise StopIteration
-		# example:
-		#
-		# yield (sub_task_1, sub_task_2, ...)
-		#
-		# sched_context.release()
-		# try: do something
-		# finally: sched_context.acquire()
-		#
-		# yield (more_sub_task_1, more_sub_task_2, ...)
-		#
-		# sched_context.release()
-		# try: do something more
-		# finally: sched_context.acquire()
-		#
-		# yield (again_more_sub_task_1, again_more_sub_task_2, ...)
-		#
-		# raise StopIteration
+	def __call__(self, sched_context): pass
 
 	def print_desc(self, desc, color = '7;1'):
 		out.write(colored(color, 'wonderbuild: task: ' + desc) + '\n')
