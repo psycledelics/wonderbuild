@@ -517,7 +517,7 @@ class ModTask(Task):
 			else:
 				implicit_deps = state[2]
 				for s in self.sources:
-					try: deps, old_dep_sig = implicit_deps[s] # TODO also put self.cfg.cxx_sig
+					try: deps, old_dep_sig = implicit_deps[s] # TODO also put self.cfg.cxx_sig, and -include in implicit_deps
 					except KeyError:
 						# This is a new source.
 						changed_sources.append(s)
