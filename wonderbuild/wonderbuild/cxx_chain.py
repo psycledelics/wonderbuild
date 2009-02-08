@@ -181,7 +181,11 @@ class BuildCfg(ClientCfg):
 		out.write(colored('34', 'wonderbuild: cfg: ' + desc + ': ') + colored(color, result) + '\n')
 		out.flush()
 
-class UserCfg(OptionCfg, BuildCfg):
+class UserCfg(BuildCfg, OptionCfg):
+	def clone(self, class_ = None):
+		if class_ is None: class_ = BuildCfg
+		return class_.clone(self, class_)
+
 	_options = set([
 		'--cxx=',
 		'--cxx-flags=',
@@ -210,8 +214,8 @@ class UserCfg(OptionCfg, BuildCfg):
 		help['--cxx-check-missing=']    = ('--cxx-check-missing=<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'no')
 
 	def __init__(self, project):
-		OptionCfg.__init__(self, project)
 		BuildCfg.__init__(self, project)
+		OptionCfg.__init__(self, project)
 
 		try:
 			old_sig, self.check_missing, \
@@ -275,10 +279,6 @@ class UserCfg(OptionCfg, BuildCfg):
 
 		if self.impl is None: raise Exception, 'unsupported c++ compiler'
 
-	def clone(self, class_ = None):
-		if class_ is None: class_ = BuildCfg
-		return class_.clone(self, class_)
-
 	def _check_compiler(self, cxx_prog, ld_prog):
 		if not cxx_prog: self.cxx_prog = 'c++'
 		if not silent:
@@ -340,6 +340,10 @@ class PreCompileTask(Task):
 	def target_dir(self): return self.target.parent
 
 	def __call__(self, sched_context):
+		if len(self.cfg.pkg_config) != 0:
+			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask(self.project, self.cfg.pkg_config)
+			pkg_config_cxx_flags_task(sched_context)
+			pkg_config_cxx_flags_task.apply_to(self.cfg)
 		sched_context.lock.release()
 		try:
 			changed = False
@@ -499,7 +503,7 @@ class ModTask(Task):
 		if len(self.dep_lib_tasks) != 0: sub_tasks += self.dep_lib_tasks
 		if len(sub_tasks) != 0:
 			sched_context.parallel_wait(sub_tasks)
-			if len(self.cfg.pkg_config) != 0: self.cfg.cxx_flags += pkg_config_cxx_flags_task.result
+			if len(self.cfg.pkg_config) != 0: pkg_config_cxx_flags_task.apply_to(self.cfg)
 		changed_sources = []
 		try: state = self.project.state_and_cache[self.uid]
 		except KeyError:
@@ -559,7 +563,7 @@ class ModTask(Task):
 			need_process = True
 		if self.ld and len(self.cfg.pkg_config) != 0:
 			sched_context.wait((pkg_config_ld_flags_task,))
-			self.cfg.ld_flags += pkg_config_ld_flags_task.result
+			pkg_config_ld_flags_task.apply_to(self.cfg)
 		if not need_process:
 			state = self.project.state_and_cache[self.uid]
 			if state[0] != self._mod_sig:
@@ -639,6 +643,8 @@ class _PkgConfigTask(Task):
 	
 	@property
 	def what_args(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
+
+	def apply_to(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
 
 	@property
 	def args(self): return [self.prog] + self.pkgs + self.what_args
