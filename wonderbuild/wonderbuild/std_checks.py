@@ -40,15 +40,16 @@ class StdMathCheckTask(BuildCheckTask):
 				desc = 'checking for ' + self.name
 				self.print_check(desc)
 			self._t0 = self._make_t0()
-			self._t0(sched_ctx)
+			yield (self._t0,)
 			if self._t0.result: self._t1 = self._t0
 			else:
 				self._t1 = self._make_t1()
-				self._t1(sched_ctx)
+				yield (self._t1,)
 			if not silent:
 				if self.result: self.print_check_result(desc, 'yes with' + (not self.m and 'out' or '') + ' libm', '32')
 				else: self.print_check_result(desc, 'no', '31')
 			self.project.state_and_cache[self.uid] = self.sig, self.result, self.m
+		raise StopIteration
 		
 	@property
 	def result(self):

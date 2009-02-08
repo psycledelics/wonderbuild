@@ -26,13 +26,8 @@ class Scheduler(object):
 
 	class Context(object):
 		def __init__(self, scheduler):
-			self._scheduler = scheduler			
 			self.thread_count = scheduler.thread_count
 			self.lock = scheduler._lock
-
-		def parallel(self, tasks): self._scheduler._parallel(tasks)
-		def background(self, tasks): self._scheduler._background(tasks)
-		def wait(self, tasks): self._scheduler._wait(tasks)
 
 	def process(self, tasks):
 		if self.thread_count == 1:
@@ -82,7 +77,7 @@ class Scheduler(object):
 			self._todo_count += notify
 			self._task_queue += tasks
 			for task in tasks:
-				task._queued = True
+				task.queued = True
 				if __debug__ and is_debug: debug('sched: tasks queued ' + str(self._todo_count) + ' ' + str(len(self._task_queue)) + ' ' + str(task))
 			self._condition.notify(notify)
 		finally: self._condition.release()
@@ -112,17 +107,77 @@ class Scheduler(object):
 		del self._task_queue
 		if hasattr(self, 'exception'): raise self.exception
 	
+	if __debug__:
+		def _debug_state(self, i, event):
+			debug(
+				'sched: thread: ' + \
+				str(i) + ': ' + \
+				event + ': ' + \
+				str(self._joining) + ' ' + \
+				str(self._stop_requested) + ' ' + \
+				str(self._todo_count) + ' ' + \
+				str(len(self._task_queue)) + ' ' + \
+				str(self._task_queue)
+			)
+			assert self._todo_count >= len(self._task_queue)
+	
 	def _thread_function(self, i):
 		if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': started')
 		self._condition.acquire()
 		try:
 			try:
 				while True:
-					while self._wait_condition(): self._condition.wait(timeout = self.timeout)
-					if self._break_condition(): break
-					self._process_one(self._task_queue.pop())
-					if self._done_condition(): break
-			except StopIteration: pass
+					while (not self._joining or self._todo_count != 0) and not self._stop_requested and len(self._task_queue) == 0:
+						if __debug__ and is_debug: self._debug_state(i, 'waiting')
+						self._condition.wait(timeout = self.timeout)
+						if __debug__ and is_debug: self._debug_state(i, 'notified')
+					if __debug__ and is_debug: self._debug_state(i, 'condition met')
+					if self._joining and self._todo_count == 0 or self._stop_requested: break
+					task = self._task_queue.pop()
+					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': task pop: ' + str(task) + ' ' + str(task.out_tasks))
+					if not task.processed:
+						task_gen = None
+						try:
+							try: task_gen = task.generator
+							except AttributeError: task_gen = task.generator = task(self._context)
+							in_tasks = task_gen.next()
+						except StopIteration:
+							if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': task processed: ' + str(task) + ' ' + str(task.out_tasks))
+							task.processed = True
+						except:
+							if task_gen is not None:
+								try: task_gen.close() # note: no close() on python 2.4
+								except: pass # we only want the original exception
+							raise
+						else:
+							task.queued = False
+							notify = 0
+							task.in_task_todo_count += len(in_tasks)
+							for in_task in in_tasks:
+								in_task.out_tasks.append(task)
+								if not in_task.queued and in_task.in_task_todo_count == 0:
+									if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': in task queued: ' + str(in_task))
+									self._task_queue.append(in_task)
+									in_task.queued = True
+								 	notify += 1
+							self._todo_count += notify
+							if notify > 1: self._condition.notify(notify - 1)
+							continue
+					task.queued = False
+					self._todo_count -= 1
+					notify = -1
+					for out_task in task.out_tasks:
+						out_task.in_task_todo_count -= 1
+						if not out_task.queued and out_task.in_task_todo_count == 0:
+							if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': out task queued: ' + str(out_task))
+							self._task_queue.append(out_task)
+							out_task.queued = True
+							notify += 1
+					task.out_tasks = []
+					if notify > 0: self._condition.notify(notify)
+					elif notify < 0 and self._todo_count == 0 and self._joining:
+						self._condition.notifyAll()
+						break
 			except Exception, e:
 				self.exception = e
 				self._stop_requested = True
@@ -131,55 +186,3 @@ class Scheduler(object):
 		finally:
 			if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': terminated')
 			self._condition.release()
-
-	def _basic_common_condition(self): return self._joining and self._todo_count == 0
-	
-	def _full_common_condition(self): return self._basic_common_condition() or self._stop_requested
-
-	def _wait_condition(self): return not self._full_common_condition() and len(self._task_queue) == 0
-
-	def _break_condition(self): return self._full_common_condition()
-
-	def _done_condition(self):
-		self._todo_count -= 1
-		if self._basic_common_condition():
-			self._condition.notifyAll()
-			return True
-		return False
-		
-	def _process_one(self, task):
-		if task._processed: return
-		task._queued = True
-		if __debug__ and is_debug: debug('sched: processing task: ' + str(task))
-		task(self._context)
-		if __debug__ and is_debug: debug('sched: task processed: ' + str(task))
-		task._processed = True
-		self._condition.notifyAll()
-			
-	def _parallel(self, tasks):
-		if __debug__ and is_debug: debug('sched: parallel tasks: ' + str([str(t) for t in tasks]))
-		self._background(tasks[1:])
-		if tasks[0]._queued: self._wait(tasks)
-		else:
-			self._process_one(tasks[0])
-			self._wait(tasks[1:])
-	
-	def _background(self, tasks):
-		if __debug__ and is_debug: debug('sched: background tasks: ' + str([str(t) for t in tasks]))
-		notify = 0
-		for task in tasks:
-			if not task._processed and not task._queued:
-				self._task_queue.append(task)
-				task._queued = True
-				self._todo_count += 1
-				notify += 1
-		if notify > 0: self._condition.notify(notify)
-
-	def _wait(self, tasks):
-		if __debug__ and is_debug: debug('sched: waiting for tasks: ' + str([str(t) for t in tasks]))
-		for task in tasks:
-			while self._wait_condition() and not task._processed: self._condition.wait(timeout = self.timeout)
-			if self._break_condition(): raise StopIteration
-			if task._processed: continue
-			self._process_one(self._task_queue.pop())
-			if self._done_condition(): raise StopIteration
