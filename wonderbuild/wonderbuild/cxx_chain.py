@@ -493,6 +493,7 @@ class ModTask(Task):
 	def target_dir(self): return self.target.parent
 
 	def __call__(self, sched_context):
+		if len(self.dep_lib_tasks) != 0: sched_context.parallel_no_wait(self.dep_lib_tasks)
 		if len(self.cfg.pkg_config) != 0:
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask(self.project, self.cfg.pkg_config)
 			pkg_config_cxx_flags_task(sched_context)
@@ -562,7 +563,7 @@ class ModTask(Task):
 				sched_context.wait((pkg_config_ld_flags_task,))
 				pkg_config_ld_flags_task.apply_to(self.cfg)
 			if len(self.dep_lib_tasks) != 0:
-				sched_context.parallel_wait(self.dep_lib_tasks)
+				sched_context.wait(self.dep_lib_tasks)
 				for l in self.dep_lib_tasks:
 					self.cfg.lib_paths.append(l.target.parent)
 					self.cfg.libs.append(l.name)
