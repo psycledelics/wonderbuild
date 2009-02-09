@@ -76,6 +76,7 @@ def wonderbuild_script(project):
 		def __init__(self): ModTask.__init__(self, 'main', ModTask.Kinds.PROG, build_cfg)
 
 		def __call__(self, sched_ctx):
+			sched_ctx.parallel_no_wait((lib_foo,))
 			sched_ctx.parallel_wait((prog_pch, glibmm))
 			prog_pch.apply_to(self.cfg)
 			if glibmm.result: glibmm.apply_to(self.cfg)
