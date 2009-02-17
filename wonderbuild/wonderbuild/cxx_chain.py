@@ -658,7 +658,9 @@ class _PkgConfigTask(Task):
 	def uid(self):
 		try: return self._uid
 		except AttributeError:
-			self._uid = ' '.join(self.pkgs) + ' '.join(self.what_args) #XXX
+			pkgs = self.pkgs
+			pkgs.sort()
+			self._uid = ' '.join(pkgs) + ' '.join(self.what_args) #XXX
 			return self._uid
 
 	def __call__(self, sched_context):
@@ -690,7 +692,9 @@ class _PkgConfigTask(Task):
 		try: return self._sig
 		except AttributeError:
 			sig = Sig(_PkgConfigTask.env_sig())
-			for p in self.pkgs: sig.update(p)
+			pkgs = self.pkgs
+			pkgs.sort()
+			for p in pkgs: sig.update(p)
 			sig = self._sig = sig.digest()
 			return sig
 
