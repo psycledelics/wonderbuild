@@ -342,7 +342,7 @@ class PreCompileTask(Task):
 	def __call__(self, sched_context):
 		if len(self.cfg.pkg_config) != 0:
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask(self.project, self.cfg.pkg_config)
-			pkg_config_cxx_flags_task(sched_context)
+			sched_context.parallel_wait((pkg_config_cxx_flags_task,))
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
 		sched_context.lock.release()
 		try:
@@ -496,7 +496,7 @@ class ModTask(Task):
 		if len(self.dep_lib_tasks) != 0: sched_context.parallel_no_wait(self.dep_lib_tasks)
 		if len(self.cfg.pkg_config) != 0:
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask(self.project, self.cfg.pkg_config)
-			pkg_config_cxx_flags_task(sched_context)
+			sched_context.parallel_wait((pkg_config_cxx_flags_task,))
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
 			if self.ld:
 				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask(self.project, self.cfg.pkg_config, self.cfg.shared)
