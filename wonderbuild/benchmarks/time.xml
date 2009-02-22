@@ -211,7 +211,7 @@
 					<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
 					<bar name='wonderbuild'   value=' 20.50'>-MMD gcc deps</bar>
 					<bar name='wonderbuild'   value=' 20.93'>-MD gcc deps</bar>
-					<bar name='waf'           value=' 21.51'>waf deps</bar>
+					<bar name='waf'           value=' 21.51'>waf deps (batch-compilation currently has broken dependency-handling)</bar>
 					<bar-section>Using neither</bar-section>
 					<bar name='waf'           value=' 21.63'>-MMD gcc deps</bar>
 					<bar name='waf'           value=' 21.63'>waf deps</bar>
