@@ -668,6 +668,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\SeqView.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\SeqView.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\SeqView.private.hpp"
 					>
 				</File>
