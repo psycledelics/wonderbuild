@@ -636,10 +636,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\PatViewNew.private.hpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\src\psycle\host\Psycle.cpp"
 					>
 				</File>
