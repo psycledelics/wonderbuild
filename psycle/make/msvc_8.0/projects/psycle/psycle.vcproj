@@ -692,10 +692,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\SeqView.private.hpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\src\psycle\host\SInstance.cpp"
 					>
 				</File>
