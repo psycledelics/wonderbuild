@@ -51,7 +51,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/DLL"
 				AdditionalDependencies="htmlhelp.lib"
 				SubSystem="2"
 			/>
@@ -166,6 +165,10 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{15447E72-E8B4-4545-AC7B-091E68221C41}"
 			RelativePathToProject=".\projects\universalis\universalis.unit-tests.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{B78DFE59-051A-43FD-B489-785A3982541C}"
+			RelativePathToProject=".\projects\psycle-core\psycle-core.vcproj"
 		/>
 	</References>
 	<Files>
@@ -1186,6 +1189,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\Dsp.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\FFT.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\FFT.hpp"
 					>
 				</File>
 				<File
