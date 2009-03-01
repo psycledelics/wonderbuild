@@ -2,11 +2,11 @@ Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle", "projects\psycle\psycle.vcproj", "{C6292BF4-9E87-4176-9101-A3D29D074B35}"
 	ProjectSection(ProjectDependencies) = postProject
-		{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01} = {21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}
 		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1} = {29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}
 		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1} = {69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}
 		{C6292BF4-9E87-4176-9101-A3D29D163B35} = {C6292BF4-9E87-4176-9101-A3D29D163B35}
 		{28C015FB-3BDA-4B32-8D85-C652E9892216} = {28C015FB-3BDA-4B32-8D85-C652E9892216}
+		{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01} = {21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pre_compiled_headers", "projects\pre_compiled_headers\pre_compiled_headers.vcproj", "{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
@@ -163,12 +163,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.vd.fastverb"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "boost", "projects\boost\boost.vcproj", "{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.voskomo.gamefx", "projects\psycle-plugins\gamefx.vcproj", "{485B9E85-CBC7-4B27-8AD2-5DD97234FBED}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.gamefx", "projects\psycle-plugins\gamefx.vcproj", "{485B9E85-CBC7-4B27-8AD2-5DD97234FBED}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.voskomo.blitz", "projects\psycle-plugins\blitz.vcproj", "{C55834ED-9038-4D48-AE49-122834E68B25}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.blitz", "projects\psycle-plugins\blitz.vcproj", "{C55834ED-9038-4D48-AE49-122834E68B25}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
