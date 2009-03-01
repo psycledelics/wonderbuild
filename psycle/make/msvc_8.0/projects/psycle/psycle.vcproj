@@ -51,6 +51,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalOptions="/DLL"
 				AdditionalDependencies="htmlhelp.lib"
 				SubSystem="2"
 			/>

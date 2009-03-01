@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="psycle-core"
 	ProjectGUID="{B78DFE59-051A-43FD-B489-785A3982541C}"
 	RootNamespace="psycle.core"
@@ -16,7 +16,7 @@
 	<Configurations>
 		<Configuration
 			Name="debug|Win32"
-			ConfigurationType="2"
+			ConfigurationType="4"
 			InheritedPropertySheets="..\debug.vsprops"
 			>
 			<Tool
@@ -48,13 +48,10 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLinkerTool"
+				Name="VCLibrarianTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -64,12 +61,6 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -272,14 +263,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\misc.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\misc.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\instpreview.cpp"
 					>
 				</File>
@@ -296,19 +279,19 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\internalhost.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\internalhost.hpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\internal_machines.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\internal_machines.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\internalhost.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\internalhost.hpp"
 					>
 				</File>
 				<File
@@ -340,19 +323,19 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\machinehost.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\machinehost.hpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\machinefactory.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\machinefactory.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\machinehost.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\machinehost.hpp"
 					>
 				</File>
 				<File
@@ -369,6 +352,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\mersennetwister.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\misc.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\misc.h"
 					>
 				</File>
 				<File
@@ -540,19 +531,19 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\songserializer.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\songserializer.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\song.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\song.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\songserializer.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\songserializer.h"
 					>
 				</File>
 				<File
@@ -569,6 +560,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\xminstrument.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\xml.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\xml.h"
 					>
 				</File>
 				<File
@@ -601,14 +600,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\zipwriterstream.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\xml.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\xml.h"
 					>
 				</File>
 				<Filter
