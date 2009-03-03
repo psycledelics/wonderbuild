@@ -512,6 +512,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\configuration_options.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\Registry.cpp"
 					>
 				</File>
