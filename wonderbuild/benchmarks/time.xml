@@ -22,13 +22,13 @@
 				<bars scale='5'>
 					<bar-section>Using batch compilation</bar-section>
 					<bar name='wonderbuild'   value=' 29.4'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
-					<bar name='waf'           value=' 38.2'>max 50 srcs/batch, waf cpp, shutil</bar>
-					<bar name='waf'           value=' 39.7'>max 50 srcs/batch, waf cpp, mv</bar>
+					<bar name='waf'           value=' 38.2'>max 50 srcs/batch, waf cpp, shutil, timestamp signatures</bar>
+					<bar name='waf'           value=' 39.7'>max 50 srcs/batch, waf cpp, mv, timestamp signatures</bar>
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='toy makefiles' value=' 34.1'>(recursive)</bar>
 					<bar name='jam'           value=' 35.6'><span style='color: red'>missed header deps!</span></bar>
-					<bar name='waf'           value=' 42.8'>gcc deps</bar>
-					<bar name='waf'           value=' 45.6'>waf cpp</bar>
+					<bar name='waf'           value=' 42.8'>gcc deps, timestamp signatures</bar>
+					<bar name='waf'           value=' 45.6'>waf cpp, timestamp signatures</bar>
 					<bar name='scons'         value='131.0'>with fast tuning options</bar>
 					<bar name='scons'         value='137.7'>with default options</bar>
 					<bar name='autotools'     value='188.0'>(non recursive)</bar>
@@ -40,13 +40,13 @@
 				<bars scale='20'>
 					<bar-section>Using batch compilation</bar-section>
 					<bar name='wonderbuild'   value=' 4.28'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
-					<bar name='waf'           value=' 6.42'>max 50 srcs/batch, waf cpp, shutil</bar>
-					<bar name='waf'           value=' 6.64'>max 50 srcs/batch, waf cpp, mv</bar>
+					<bar name='waf'           value=' 6.42'>max 50 srcs/batch, waf cpp, shutil, timestamp signatures</bar>
+					<bar name='waf'           value=' 6.64'>max 50 srcs/batch, waf cpp, mv, timestamp signatures</bar>
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='jam'           value=' 4.25'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 4.81'>(recursive)</bar>
-					<bar name='waf'           value=' 6.75'>gcc deps</bar>
-					<bar name='waf'           value=' 6.89'>waf cpp</bar>
+					<bar name='waf'           value=' 6.75'>gcc deps, timestamp signatures</bar>
+					<bar name='waf'           value=' 6.89'>waf cpp, timestamp signatures</bar>
 					<bar name='autotools'     value='29.64'>(non recursive)</bar>
 					<bar name='scons'         value='39.58'>(with fast tuning options)</bar>
 				</bars>
@@ -57,11 +57,11 @@
 				<bars scale='60'>
 					<bar-section>Using batch compilation</bar-section>
 					<bar name='wonderbuild'   value=' 0.84'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
-					<bar name='waf'           value=' 1.90'>max 50 srcs/batch, waf cpp (same with shutil or mv)</bar>
+					<bar name='waf'           value=' 1.90'>max 50 srcs/batch, waf cpp (same with shutil or mv), timestamp signatures</bar>
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='jam'           value=' 0.81'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 1.01'>(recursive)</bar>
-					<bar name='waf'           value=' 1.92'>(same with gcc deps and waf cpp)</bar>
+					<bar name='waf'           value=' 1.92'>(same with gcc deps and waf cpp), timestamp signatures</bar>
 					<bar name='autotools'     value=' 4.63'>(non recursive)</bar>
 					<bar name='scons'         value='24.37'>(with fast tuning options)</bar>
 				</bars>
@@ -71,7 +71,7 @@
 					<bar name='wonderbuild'   value=' 0.63'/>
 					<bar name='jam'           value=' 0.71'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 0.79'>(recursive)</bar>
-					<bar name='waf'           value=' 1.15'/>
+					<bar name='waf'           value=' 1.15'>(timestamp signatures)</bar>
 					<bar name='autotools'     value=' 2.05'>(non recursive)</bar>
 					<bar name='scons'         value='23.25'>with fast tuning options</bar>
 					<bar name='scons'         value='35.97'>with default options</bar>
@@ -100,7 +100,7 @@
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='toy makefiles' value=' 189'>(recursive)</bar>
 					<bar name='jam'           value=' 203'><span style='color: red'>missed header deps!</span></bar>
-					<bar name='waf'           value=' 251'>waf cpp</bar>
+					<bar name='waf'           value=' 251'>waf cpp, timestamp signatures</bar>
 					<bar name='scons'         value=' 445'/>
 					<bar name='autotools'     value='1336'>(non recursive)</bar>
 				</bars>
@@ -114,7 +114,7 @@
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='jam'           value=' 22.6'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 24.4'>(recursive)</bar>
-					<bar name='waf'           value=' 36.2'>waf cpp</bar>
+					<bar name='waf'           value=' 36.2'>waf cpp, timestamp signatures</bar>
 					<bar name='scons'         value='122.8'/>
 					<bar name='autotools'     value='203.8'>(non recursive)</bar>
 				</bars>
@@ -128,7 +128,7 @@
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='jam'           value=' 2.58'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 3.33'>(recursive)</bar>
-					<bar name='waf'           value=' 6.22'>waf cpp</bar>
+					<bar name='waf'           value=' 6.22'>waf cpp, timestamp signatures</bar>
 					<bar name='autotools'     value='26.25'>(non recursive)</bar>
 					<bar name='scons'         value='77.1 '/>
 				</bars>
@@ -138,7 +138,7 @@
 					<bar name='wonderbuild'   value=' 1.75'>gcc deps</bar>
 					<bar name='jam'           value=' 2.02'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 2.25'>(recursive)</bar>
-					<bar name='waf'           value=' 3.12'>waf cpp</bar>
+					<bar name='waf'           value=' 3.12'>waf cpp, timestamp signatures</bar>
 					<bar name='autotools'     value=' 7.11'>(non recursive)</bar>
 					<bar name='scons'         value='73.12'/>
 				</bars>
@@ -154,7 +154,7 @@
 					<bar name='jam'           value=' 9252'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='wonderbuild'   value='10343'>without check of missing built files</bar>
 					<bar name='wonderbuild'   value='10393'>with check of missing built files (including intermediate object files)</bar>
-					<bar name='waf'           value='10442'/>
+					<bar name='waf'           value='10442'>timestamp signatures</bar>
 					<bar name='scons'         value='46693'>with fast tuning options</bar>
 					<bar name='toy makefiles' value='61996'>(recursive)</bar>
 					<bar name='scons'         value='67190'>with default options</bar>
@@ -162,14 +162,14 @@
 				<bars unit='' scale='0.02'>
 					<bar-section>Number of fstat() calls</bar-section>
 					<bar name='wonderbuild'   value='  215'>(same with or without check of missing built files)</bar>
-					<bar name='waf'           value='  514'/>
+					<bar name='waf'           value='  514'>timestamp signatures</bar>
 					<bar name='scons'         value='  780'>with fast tuning options</bar>
 					<bar name='jam'           value='10560'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value='32014'>(recursive)</bar>
 					<bar name='scons'         value='60780'>with default options</bar>
 					<bar-section>Number of open() calls</bar-section>
 					<bar name='wonderbuild'   value='  749'>(same with or without check of missing built files)</bar>
-					<bar name='waf'           value=' 1547'/>
+					<bar name='waf'           value=' 1547'>timestamp signatures</bar>
 					<bar name='scons'         value=' 2433'>with fast tuning options</bar>
 					<bar name='jam'           value=' 9308'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='scons'         value='27433'>with default options</bar>
@@ -181,7 +181,7 @@
 					<bar name='jam'           value='  152'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value='  202'>(recursive)</bar>
 					<bar name='scons'         value='  217'>(same with or without fast tuning options)</bar>
-					<bar name='waf'           value='  309'/>
+					<bar name='waf'           value='  309'>timestamp signatures</bar>
 				</bars>
 			</part>
 		</part>
@@ -211,11 +211,11 @@
 					<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
 					<bar name='wonderbuild'   value=' 20.50'>-MMD gcc deps</bar>
 					<bar name='wonderbuild'   value=' 20.93'>-MD gcc deps</bar>
-					<bar name='waf'           value=' 21.51'>waf deps (batch-compilation currently has broken dependency-handling)</bar>
+					<bar name='waf'           value=' 21.51'>waf deps (batch-compilation currently has broken dependency-handling), timestamp signatures</bar>
 					<bar-section>Using neither</bar-section>
-					<bar name='waf'           value=' 21.63'>-MMD gcc deps</bar>
-					<bar name='waf'           value=' 21.63'>waf deps</bar>
-					<bar name='waf'           value=' 21.92'>-MD gcc deps</bar>
+					<bar name='waf'           value=' 21.63'>-MMD gcc deps, timestamp signatures</bar>
+					<bar name='waf'           value=' 21.63'>waf deps, timestamp signatures</bar>
+					<bar name='waf'           value=' 21.92'>-MD gcc deps, timestamp signatures</bar>
 					<bar name='scons'         value=' 23.25'>with fast tuning options</bar>
 					<bar name='autotools'     value=' 26.75'>-MMD gcc deps (non recursive)</bar>
 					<bar name='autotools'     value=' 26.61'>-MD gcc deps (non recursive)</bar>
@@ -233,9 +233,9 @@
 					<bar name='wonderbuild'   value='147'>-MMD gcc deps</bar>
 					<bar name='wonderbuild'   value='151'>-MD gcc deps</bar>
 					<bar-section>Using neither</bar-section>
-					<bar name='waf'           value='158'>-MMD gcc deps</bar>
-					<bar name='waf'           value='159'>waf deps</bar>
-					<bar name='waf'           value='162'>-MD gcc deps</bar>
+					<bar name='waf'           value='158'>-MMD gcc deps, timestamp signatures</bar>
+					<bar name='waf'           value='159'>waf deps, timestamp signatures</bar>
+					<bar name='waf'           value='162'>-MD gcc deps, timestamp signatures</bar>
 					<bar name='scons'         value='185'>with fast tuning options</bar>
 					<bar name='autotools'     value='197'>-MMD gcc deps (non recursive)</bar>
 					<bar name='autotools'     value='241'>-MD gcc deps (non recursive)</bar>
@@ -252,10 +252,10 @@
 					<bar name='wonderbuild'   value=' 7.52'>-MMD gcc deps</bar>
 					<bar name='wonderbuild'   value='10.36'>-MD gcc deps</bar>
 					<bar-section>Using neither</bar-section>
-					<bar name='waf'           value=' 8.57'>waf deps</bar>
-					<bar name='waf'           value=' 8.65'>-MMD gcc deps</bar>
+					<bar name='waf'           value=' 8.57'>waf deps, timestamp signatures</bar>
+					<bar name='waf'           value=' 8.65'>-MMD gcc deps, timestamp signatures</bar>
 					<bar name='autotools'     value='11.92'>-MMD gcc deps (non recursive)</bar>
-					<bar name='waf'           value='12.02'>-MD gcc deps</bar>
+					<bar name='waf'           value='12.02'>-MD gcc deps, timestamp signatures</bar>
 					<bar name='scons'         value='33.85'>with fast tuning options</bar>
 					<bar name='autotools'     value='50.44'>-MD gcc deps (non recursive)</bar>
 				</bars>
@@ -269,10 +269,10 @@
 					<bar name='wonderbuild'   value=' 0.69'>-MMD gcc deps</bar>
 					<bar name='wonderbuild'   value=' 4.64'>-MD gcc deps</bar>
 					<bar-section>Using neither</bar-section>
-					<bar name='waf'           value=' 1.13'>-MMD gcc deps</bar>
-					<bar name='waf'           value=' 1.13'>waf deps</bar>
+					<bar name='waf'           value=' 1.13'>-MMD gcc deps, timestamp signatures</bar>
+					<bar name='waf'           value=' 1.13'>waf deps, timestamp signatures</bar>
 					<bar name='autotools'     value=' 2.05'>-MMD gcc deps (non recursive)</bar>
-					<bar name='waf'           value=' 4.58'>-MD gcc deps</bar>
+					<bar name='waf'           value=' 4.58'>-MD gcc deps, timestamp signatures</bar>
 					<bar name='scons'         value='27.48'>with fast tuning options</bar>
 					<bar name='autotools'     value='41.54'>-MD gcc deps (non recursive)</bar>
 				</bars>
