@@ -378,14 +378,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\patternpool.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\patternpool.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\patternsequence.cpp"
 					>
 				</File>
