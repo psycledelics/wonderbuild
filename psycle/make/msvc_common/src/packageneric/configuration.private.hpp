@@ -6,4 +6,3 @@
 #include <packageneric/package.private.hpp>
 
 #define BOOST_THREAD_USE_DLL
-
