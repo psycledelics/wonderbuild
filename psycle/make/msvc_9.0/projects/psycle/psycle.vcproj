@@ -659,10 +659,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\SeqView.private.hpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\src\psycle\host\SInstance.cpp"
 					>
 				</File>
@@ -1187,11 +1183,35 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\patternview.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\patternview.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\Player.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\Player.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\ProjectData.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\ProjectData.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\SeqView.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\SeqView.hpp"
 					>
 				</File>
 				<File
