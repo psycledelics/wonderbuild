@@ -1,4 +1,3 @@
-// -*- mode:c++; indent-tabs-mode:t -*-
 ///\file
 ///\brief packageneric configuration for the psycle-core module 
 #pragma once
@@ -9,3 +8,4 @@
 #define PACKAGENERIC__MODULE__VERSION__INTERFACE__MININUM_COMPATIBLE 1
 #define PACKAGENERIC__MODULE__VERSION__IMPLEMENTATION 1
 #define PACKAGENERIC__MODULE__DESCRIPTION "psycle core audio engine"
+#define PACKAGENERIC__MODULE__SOURCE__PSYCLE__CORE 1

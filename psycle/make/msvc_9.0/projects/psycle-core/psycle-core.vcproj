@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="psycle-core"
 	ProjectGUID="{B78DFE59-051A-43FD-B489-785A3982541C}"
 	RootNamespace="psycle.core"
@@ -140,15 +140,19 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
+			RelativePathToProject=".\projects\pre_compiled_headers\pre_compiled_headers.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{B78DFE59-051A-43FD-B489-775A4982581C}"
+			RelativePathToProject=".\projects\universalis\universalis.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{15447E72-E8B4-4545-AC7B-091E68221C41}"
+			RelativePathToProject=".\projects\universalis\universalis.unit-tests.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{C6292BF4-9E87-4176-9101-A3D29D163B35}"
+			RelativePathToProject=".\projects\psycle-helpers\psycle-helpers.unit-tests.vcproj"
 		/>
 	</References>
 	<Files>
@@ -184,6 +188,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\commands.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\config.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\config.private.hpp"
 					>
 				</File>
 				<File
@@ -263,7 +275,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\fwd.h"
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\fwd.hpp"
 					>
 				</File>
 				<File
@@ -347,7 +359,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\machinekey.h"
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\machinekey.hpp"
 					>
 				</File>
 				<File
@@ -379,7 +391,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\nativehostr.h"
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\nativehost.hpp"
 					>
 				</File>
 				<File
@@ -388,22 +400,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\patternevent.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\patternline.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\patternline.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\patternpool.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\patternpool.h"
 					>
 				</File>
 				<File
@@ -436,10 +432,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\plugin.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\plugin_interface.h"
 					>
 				</File>
 				<File
@@ -523,10 +515,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\sigslot.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\singlepattern.cpp"
 					>
 				</File>
@@ -606,22 +594,6 @@
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\zipwriterstream.h"
 					>
 				</File>
-				<Filter
-					Name="helpers"
-					>
-					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\scale.hpp"
-						>
-					</File>
-					<Filter
-						Name="math"
-						>
-						<File
-							RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\pi.hpp"
-							>
-						</File>
-					</Filter>
-				</Filter>
 			</Filter>
 			<Filter
 				Name="audiodrivers"
@@ -702,6 +674,22 @@
 					RelativePath="..\..\..\..\..\psycle-audiodrivers\src\psycle\audiodrivers\wavefileout.h"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="helpers"
+				>
+				<File
+					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\scale.hpp"
+					>
+				</File>
+				<Filter
+					Name="math"
+					>
+					<File
+						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\pi.hpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 	</Files>

@@ -1,4 +1,3 @@
-// -*- mode:c++; indent-tabs-mode:t -*-
 ///\file
 ///\brief description of a fake source package (there's no notion of source package in msvc).
 #pragma once
@@ -21,5 +20,5 @@
 	/// origin
 	#define PACKAGENERIC__PACKAGE__ORIGIN "psycle project http://psycle.sourceforge.net"
 	/// copyright
-	#define PACKAGENERIC__PACKAGE__COPYRIGHT "copyright 2000-2008 members of the psycle project http://psycle.sourceforge.net ; see the AUTHORS file"
+	#define PACKAGENERIC__PACKAGE__COPYRIGHT "copyright 2000-2009 members of the psycle project http://psycle.sourceforge.net ; see the AUTHORS file"
 ///\}
