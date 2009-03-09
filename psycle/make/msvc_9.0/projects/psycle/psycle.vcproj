@@ -507,6 +507,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\configuration_options.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\Registry.cpp"
 					>
 				</File>
@@ -536,6 +540,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\ChildView.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\DummyGui.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\DummyGui.hpp"
 					>
 				</File>
 				<File
@@ -591,10 +603,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\MachineView.private.hpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\src\psycle\host\MainFrm.cpp"
 					>
 				</File>
@@ -623,7 +631,27 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\PatViewNew.private.hpp"
+					RelativePath="..\..\..\..\src\psycle\host\patternview.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\patternview.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\Project.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\Project.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\ProjectData.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\ProjectData.hpp"
 					>
 				</File>
 				<File
@@ -656,6 +684,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\SaveWavDlg.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\SeqView.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\SeqView.hpp"
 					>
 				</File>
 				<File
@@ -1139,10 +1175,6 @@
 				Name="host"
 				>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\configuration_options.hpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\src\psycle\host\Dither.cpp"
 					>
 				</File>
@@ -1156,6 +1188,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\Dsp.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\FFT.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\FFT.hpp"
 					>
 				</File>
 				<File
@@ -1183,35 +1223,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\patternview.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\patternview.hpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\src\psycle\host\Player.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\Player.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\ProjectData.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\ProjectData.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\SeqView.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\SeqView.hpp"
 					>
 				</File>
 				<File
