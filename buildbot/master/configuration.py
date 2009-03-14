@@ -148,7 +148,7 @@ append_standard_builders(
 
 ##################################### psycle.msvc builder ######################################
 
-psycle_msvc_deps = ['psycle/'] + psycle_helpers_deps + psycle_plugins_deps
+psycle_msvc_deps = ['psycle/'] + psycle_core_deps + psycle_plugins_deps
 
 append_standard_builders(
 	name = 'psycle.msvc',
