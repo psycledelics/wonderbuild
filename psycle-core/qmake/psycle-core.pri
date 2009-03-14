@@ -10,8 +10,8 @@ isEmpty(psycle_core_included) {
 	PSYCLE_CORE_DIR = $$TOP_SRC_DIR/psycle-core
 	PSYCLE_CORE_BUILD_DIR = $$PSYCLE_CORE_DIR/++build
 
-	INCLUDEPATH *= $$PSYCLE_CORE_DIR/src
-	DEPENDPATH  *= $$PSYCLE_CORE_DIR/src
+	INCLUDEPATH *= $$PSYCLE_CORE_DIR/src $$TOP_SRC_DIR/psycle-plugins/src
+	DEPENDPATH  *= $$PSYCLE_CORE_DIR/src $$TOP_SRC_DIR/psycle-plugins/src
 
 	!contains(TARGET, psycle-core) {
 		CONFIG *= link_prl

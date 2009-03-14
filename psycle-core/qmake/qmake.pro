@@ -69,12 +69,12 @@ sources_or_headers = \
 	$$PSYCLE_CORE_DIR/src/psycle/core/preset \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psy2filter \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psy3filter \
-	$$PSYCLE_CORE_DIR/src/psycle/core/psy4filter \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psyfilterbase \
 	$$PSYCLE_CORE_DIR/src/psycle/core/riff \
 	$$PSYCLE_CORE_DIR/src/psycle/core/sampler \
 	$$PSYCLE_CORE_DIR/src/psycle/core/signalslib \
 	$$PSYCLE_CORE_DIR/src/psycle/core/singlepattern \
+	$$PSYCLE_CORE_DIR/src/psycle/core/sequencer \
 	$$PSYCLE_CORE_DIR/src/psycle/core/song \
 	$$PSYCLE_CORE_DIR/src/psycle/core/songserializer \
 	$$PSYCLE_CORE_DIR/src/psycle/core/timesignature \
