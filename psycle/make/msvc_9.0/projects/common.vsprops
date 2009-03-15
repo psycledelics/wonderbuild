@@ -15,7 +15,6 @@
 		MinimalRebuild="true"
 		ExceptionHandling="2"
 		WarningLevel="4"
-		Detect64BitPortabilityProblems="true"
 	/>
 	<Tool
 		Name="VCLibrarianTool"
