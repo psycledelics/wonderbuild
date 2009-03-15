@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="psycle.plugins.jaz.drum (aka Josep-Maria Drum, or JMDrum)"
 	ProjectGUID="{28D6932C-A980-4A38-AAA0-EDCE59682766}"
 	TargetFrameworkVersion="131072"
@@ -48,8 +48,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -108,8 +106,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -137,6 +133,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
+			RelativePathToProject=".\projects\pre_compiled_headers\pre_compiled_headers.vcproj"
 		/>
 	</References>
 	<Files>

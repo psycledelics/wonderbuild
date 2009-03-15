@@ -50,8 +50,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -111,8 +109,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -896,11 +892,11 @@
 			Name="packageneric"
 			>
 			<File
-				RelativePath="..\..\..\msvc_common\src\packageneric\configuration.private.hpp"
+				RelativePath="..\..\..\msvc_common\src\universalis\detail\configuration.private.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\msvc_common\src\universalis\detail\configuration.private.hpp"
+				RelativePath="..\..\..\msvc_common\src\packageneric\configuration.private.hpp"
 				>
 			</File>
 			<File

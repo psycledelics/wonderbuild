@@ -4,26 +4,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "psycle-plugins", "psycle-pl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "properties", "properties", "{776C8571-9FCC-4B32-82DF-7D634E51B05A}"
 	ProjectSection(SolutionItems) = preProject
-		projects\debug.vsprops = projects\debug.vsprops
-		projects\psycle-plugins\plugins.vsprops = projects\psycle-plugins\plugins.vsprops
-		projects\release.vsprops = projects\release.vsprops
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pre_compiled_headers", "pre_compiled_headers", "{5ACF0567-C4BB-41C2-B2F3-D8E89825CFBD}"
-	ProjectSection(SolutionItems) = preProject
-		projects\pre_compiled_headers\create.vsprops = projects\pre_compiled_headers\create.vsprops
-		projects\pre_compiled_headers\use.mfc.vsprops = projects\pre_compiled_headers\use.mfc.vsprops
-		projects\pre_compiled_headers\use.vsprops = projects\pre_compiled_headers\use.vsprops
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{C0AA2193-5F21-4DEA-A747-BE9BDCB8469B}"
-	ProjectSection(SolutionItems) = preProject
-		projects\common.vsprops = projects\common.vsprops
-		projects\defines.vsprops = projects\defines.vsprops
-		projects\include_path.vsprops = projects\include_path.vsprops
-		projects\lib_path.vsprops = projects\lib_path.vsprops
-		projects\top_output_dir.vsprops = projects\top_output_dir.vsprops
-		projects\top_src_dir.vsprops = projects\top_src_dir.vsprops
+		properties\common.vsprops = properties\common.vsprops
+		properties\create_pre_compiled_header.vsprops = properties\create_pre_compiled_header.vsprops
+		properties\debug.vsprops = properties\debug.vsprops
+		properties\defines.vsprops = properties\defines.vsprops
+		properties\include_path.vsprops = properties\include_path.vsprops
+		properties\lib_path.vsprops = properties\lib_path.vsprops
+		properties\plugin.vsprops = properties\plugin.vsprops
+		properties\program.vsprops = properties\program.vsprops
+		properties\release.vsprops = properties\release.vsprops
+		properties\top_output_dir.vsprops = properties\top_output_dir.vsprops
+		properties\top_src_dir.vsprops = properties\top_src_dir.vsprops
+		properties\use_pre_compiled_header.vsprops = properties\use_pre_compiled_header.vsprops
+		properties\use_pre_compiled_header_with_mfc.vsprops = properties\use_pre_compiled_header_with_mfc.vsprops
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "generators", "generators", "{63702975-A2DD-4193-9C1D-7FF2AEC8F671}"
@@ -931,8 +924,6 @@ Global
 		{63702975-A2DD-4193-9C1D-7FF2AEC8F671} = {51505DD3-DD2B-40E4-AA3A-7BE6B650A240}
 		{A328F49A-8455-4A71-A1BD-A2456EC3A6E5} = {51505DD3-DD2B-40E4-AA3A-7BE6B650A240}
 		{1E56DD4E-1AB4-4C55-A587-8AEC0D063E2A} = {51505DD3-DD2B-40E4-AA3A-7BE6B650A240}
-		{C0AA2193-5F21-4DEA-A747-BE9BDCB8469B} = {776C8571-9FCC-4B32-82DF-7D634E51B05A}
-		{5ACF0567-C4BB-41C2-B2F3-D8E89825CFBD} = {C0AA2193-5F21-4DEA-A747-BE9BDCB8469B}
 		{4F58513B-F7E3-46CD-8196-9B3E4A07AF20} = {63702975-A2DD-4193-9C1D-7FF2AEC8F671}
 		{28D6932C-A980-4A38-AAA0-EDCE59682766} = {63702975-A2DD-4193-9C1D-7FF2AEC8F671}
 		{B7B85261-D124-4CF6-B12A-91D4105B3CDC} = {63702975-A2DD-4193-9C1D-7FF2AEC8F671}

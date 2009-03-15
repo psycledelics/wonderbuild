@@ -54,8 +54,6 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="htmlhelp.lib"
 				SubSystem="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -118,8 +116,6 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="htmlhelp.lib"
 				SubSystem="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 			/>
 			<Tool
 				Name="VCALinkTool"

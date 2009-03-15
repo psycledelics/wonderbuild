@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="psycle.plugins.druttis.sublime"
 	ProjectGUID="{A5BF47C9-76B0-454D-8564-804E42CA3315}"
 	TargetFrameworkVersion="131072"
@@ -48,8 +48,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -108,8 +106,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -137,12 +133,15 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{984A85EE-BA08-473F-9ADB-1C1692DFD77F}"
+			RelativePathToProject=".\projects\psycle-plugins\blwtbl.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{F46EC0F9-8440-418D-91E7-41176165E294}"
+			RelativePathToProject=".\projects\psycle-plugins\dsp.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
+			RelativePathToProject=".\projects\pre_compiled_headers\pre_compiled_headers.vcproj"
 		/>
 	</References>
 	<Files>
