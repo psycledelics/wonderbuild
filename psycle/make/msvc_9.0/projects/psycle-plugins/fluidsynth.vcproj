@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="psycle.plugins.fluidsynth (dynamic library)"
 	ProjectGUID="{923A9CFD-C2B2-4A53-952B-EC9CD8413704}"
 	RootNamespace="psycle.plugins.fluidsynth (dynamic library)"
@@ -37,7 +37,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_DEPRECATE;_M_IX86;_WINDOWS;_USRDLL;FLUIDSYNTH_DLL_EXPORTS;FLUIDSYNTH_SEQ_DLL_EXPORTS"
+				PreprocessorDefinitions="WIN32;_M_IX86;_WINDOWS;_USRDLL;FLUIDSYNTH_DLL_EXPORTS;FLUIDSYNTH_SEQ_DLL_EXPORTS"
 				UsePrecompiledHeader="0"
 				CompileAs="1"
 			/>
@@ -100,7 +100,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="NDEBUG;WIN32;_CRT_SECURE_NO_DEPRECATE;_M_IX86;_WINDOWS;_USRDLL;FLUIDSYNTH_DLL_EXPORTS;FLUIDSYNTH_SEQ_DLL_EXPORTS"
+				PreprocessorDefinitions="NDEBUG;WIN32;_M_IX86;_WINDOWS;_USRDLL;FLUIDSYNTH_DLL_EXPORTS;FLUIDSYNTH_SEQ_DLL_EXPORTS"
 				UsePrecompiledHeader="0"
 				CompileAs="1"
 			/>

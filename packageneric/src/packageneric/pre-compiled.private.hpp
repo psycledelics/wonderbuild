@@ -4,6 +4,7 @@
 ///\file \brief inclusions of headers to be pre-compiled.
 
 #pragma once
+
 #include <diversalis/compiler.hpp>
 #if defined DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION // if the compiler supports pre-compilation
 
