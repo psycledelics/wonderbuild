@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="universalis"
 	ProjectGUID="{B78DFE59-051A-43FD-B489-775A4982581C}"
 	RootNamespace="universalis"
@@ -140,6 +140,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
+			RelativePathToProject=".\projects\pre_compiled_headers\pre_compiled_headers.vcproj"
 		/>
 	</References>
 	<Files>
@@ -278,6 +279,30 @@
 						Name="universalis/compiler/detail/pragmatic"
 						>
 						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\align.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\asm.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\attribute.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\auto_link.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\calling_convention.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\const_function.hpp"
+							>
+						</File>
+						<File
 							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\demangle.cpp"
 							>
 							<FileConfiguration
@@ -298,6 +323,90 @@
 								/>
 							</FileConfiguration>
 						</File>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\demangle.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\deprecated.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\dynamic_link.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\finally.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\hardware_exception.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\pack.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\pragmas.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\thread_local_storage.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\virtual.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\pragmatic\weak.hpp"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="universalis/compiler/detail/gnu"
+						>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\gnu\diagnostics.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\gnu\typeof.hpp"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="universalis/compiler/detail/microsoft"
+						>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\microsoft\assume.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\microsoft\namespace.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\microsoft\optimizations.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\microsoft\warnings.hpp"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="universalis/compiler/detail/standard"
+						>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\standard\restrict.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\..\universalis\src\universalis\compiler\detail\standard\wchar_t.hpp"
+							>
+						</File>
 					</Filter>
 				</Filter>
 			</Filter>
@@ -305,11 +414,11 @@
 				Name="universalis/detail"
 				>
 				<File
-					RelativePath="..\..\src\universalis\detail\configuration.hpp"
+					RelativePath="..\..\..\msvc_common\src\universalis\detail\configuration.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\src\universalis\detail\configuration.private.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\detail\configuration.private.hpp"
 					>
 				</File>
 				<File
@@ -787,11 +896,11 @@
 			Name="packageneric"
 			>
 			<File
-				RelativePath="..\..\..\msvc_common\src\universalis\detail\configuration.private.hpp"
+				RelativePath="..\..\..\msvc_common\src\packageneric\configuration.private.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\msvc_common\src\packageneric\configuration.private.hpp"
+				RelativePath="..\..\..\msvc_common\src\universalis\detail\configuration.private.hpp"
 				>
 			</File>
 			<File
