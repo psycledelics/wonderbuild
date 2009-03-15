@@ -20,7 +20,7 @@
 			OutputDirectory="$(TopOutputDir)/doc"
 			IntermediateDirectory="$(TopOutputDir)/intermediate"
 			ConfigurationType="0"
-			InheritedPropertySheets="..\top_output_dir.vsprops"
+			InheritedPropertySheets="..\..\properties\top_output_dir.vsprops"
 			>
 			<Tool
 				Name="VCNMakeTool"

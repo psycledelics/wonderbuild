@@ -17,7 +17,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\debug.vsprops;.\create.vsprops"
+			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\create_pre_compiled_header.vsprops"
 			UseOfMFC="0"
 			>
 			<Tool
@@ -77,7 +77,7 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\release.vsprops;.\create.vsprops"
+			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\create_pre_compiled_header.vsprops"
 			WholeProgramOptimization="1"
 			>
 			<Tool

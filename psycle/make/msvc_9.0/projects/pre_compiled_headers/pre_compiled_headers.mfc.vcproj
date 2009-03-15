@@ -17,7 +17,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\debug.vsprops;.\use.mfc.vsprops;.\create.vsprops"
+			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\use_pre_compiled_header_with_mfc.vsprops;..\..\properties\create_pre_compiled_header.vsprops"
 			UseOfMFC="2"
 			ManagedExtensions="0"
 			>
@@ -80,7 +80,7 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\release.vsprops;.\use.mfc.vsprops;.\create.vsprops"
+			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\use_pre_compiled_header_with_mfc.vsprops;..\..\properties\create_pre_compiled_header.vsprops"
 			UseOfMFC="2"
 			ManagedExtensions="0"
 			WholeProgramOptimization="1"
