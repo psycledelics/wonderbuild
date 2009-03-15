@@ -18,7 +18,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\plugins.vsprops"
+			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\plugin.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -80,7 +80,7 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\plugins.vsprops"
+			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\plugin.vsprops"
 			WholeProgramOptimization="1"
 			>
 			<Tool

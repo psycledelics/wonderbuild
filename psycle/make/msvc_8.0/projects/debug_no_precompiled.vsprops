@@ -2,7 +2,7 @@
 <VisualStudioPropertySheet
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="debug"
+	Name="debug_no_precompiled"
 	InheritedPropertySheets=".\common_no_precompiled.vsprops"
 	>
 	<Tool

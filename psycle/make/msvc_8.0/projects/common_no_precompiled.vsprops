@@ -2,7 +2,7 @@
 <VisualStudioPropertySheet
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="common"
+	Name="common_no_precompiled"
 	InheritedPropertySheets=".\top_output_dir.vsprops;.\lib_path.vsprops;.\include_path.vsprops;.\defines.vsprops"
 	>
 	<Tool
