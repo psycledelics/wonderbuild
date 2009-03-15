@@ -2,8 +2,8 @@
 <VisualStudioPropertySheet
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="plugins"
+	Name="plugin"
 	OutputDirectory="$(TopOutputDir)/bin/psycle.plugins"
-	InheritedPropertySheets="..\top_output_dir.vsprops"
+	InheritedPropertySheets=".\top_output_dir.vsprops"
 	>
 </VisualStudioPropertySheet>

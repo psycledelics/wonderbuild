@@ -2,8 +2,8 @@
 <VisualStudioPropertySheet
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="pre_compiled_headers/use"
-	InheritedPropertySheets="..\top_output_dir.vsprops"
+	Name="use_pre_compiled_header"
+	InheritedPropertySheets=".\top_output_dir.vsprops"
 	>
 	<Tool
 		Name="VCCLCompilerTool"

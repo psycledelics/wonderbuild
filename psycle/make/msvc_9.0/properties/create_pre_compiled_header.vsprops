@@ -2,9 +2,9 @@
 <VisualStudioPropertySheet
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="pre_compiled_headers/create"
+	Name="create_pre_compiled_header"
 	OutputDirectory="$(TopOutputDir)/intermediate/"
-	InheritedPropertySheets="..\top_output_dir.vsprops"
+	InheritedPropertySheets=".\top_output_dir.vsprops"
 	>
 	<Tool
 		Name="VCCLCompilerTool"

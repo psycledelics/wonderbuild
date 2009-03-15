@@ -2,8 +2,8 @@
 <VisualStudioPropertySheet
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="pre_compiled_headers/use/mfc"
-	InheritedPropertySheets=".\use.vsprops"
+	Name="use_pre_compiled_header_with_mfc"
+	InheritedPropertySheets=".\use_pre_compiled_header.vsprops"
 	>
 	<Tool
 		Name="VCCLCompilerTool"
