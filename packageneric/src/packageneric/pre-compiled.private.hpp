@@ -9,7 +9,7 @@
 #if defined DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION // if the compiler supports pre-compilation
 
 	#if defined DIVERSALIS__COMPILER__MICROSOFT
-		#pragma message("packageneric::pre_compiled:: parsing " __FILE__)
+		#pragma message("pre-compiling " __FILE__ " ...")
 	#endif
 
 	#include <diversalis/diversalis.hpp>
@@ -20,6 +20,6 @@
 	#include "pre-compiled/boost.private.hpp"
 
 	#if defined DIVERSALIS__COMPILER__MICROSOFT
-		#pragma message("packageneric::pre_compiled:: done parsing " __FILE__)
+		#pragma message("pre-compiling " __FILE__ " ... done")
 	#endif
 #endif

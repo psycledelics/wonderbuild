@@ -11,13 +11,13 @@
 	#if defined DIVERSALIS__OPERATING_SYSTEM__POSIX
 
 		#if defined DIVERSALIS__COMPILER__MICROSOFT
-			#pragma message("packageneric::pre_compiled:: parsing " __FILE__)
+			#pragma message("pre-compiling " __FILE__ " ...")
 		#endif
 
 		#include <sys/unistd.h>
 
 		#if defined DIVERSALIS__COMPILER__MICROSOFT
-			#pragma message("packageneric::pre_compiled:: done parsing " __FILE__)
+			#pragma message("pre-compiling " __FILE__ " ... done")
 		#endif
 	#endif
 #endif

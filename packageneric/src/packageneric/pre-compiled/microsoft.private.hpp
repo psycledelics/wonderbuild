@@ -11,7 +11,7 @@
 	#if defined DIVERSALIS__OPERATING_SYSTEM__MICROSOFT
 
 		#if defined DIVERSALIS__COMPILER__MICROSOFT
-			#pragma message("packageneric::pre_compiled:: parsing " __FILE__)
+			#pragma message("pre-compiling " __FILE__ " ...")
 		#endif
 
 		#if defined DIVERSALIS__COMPILER__MICROSOFT
@@ -38,7 +38,7 @@
 
 		#if defined _AFXDLL // when mfc is used
 			#if defined DIVERSALIS__COMPILER__MICROSOFT
-				#pragma message("packageneric::pre_compiled:: parsing mfc headers")
+				#pragma message("pre-compiling " __FILE__ " ... mfc ...")
 			#endif
 			#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS // some CString constructors will be explicit
 			#define _AFX_ALL_WARNINGS // turns off mfc's hiding of some common and often safely ignored warning messages
@@ -51,7 +51,7 @@
 			#endif
 			#include <afxmt.h> // multithreading?
 			#if defined DIVERSALIS__COMPILER__MICROSOFT
-				#pragma message("packageneric::pre_compiled:: done parsing mfc headers")
+				#pragma message("pre-compiling " __FILE__ " ... mfc ... done")
 			#endif
 		#else
 			#if !defined WIN32_EXTRA_LEAN
@@ -96,7 +96,7 @@
 		#endif
 
 		#if defined DIVERSALIS__COMPILER__MICROSOFT
-			#pragma message("packageneric::pre_compiled:: done parsing " __FILE__)
+			#pragma message("pre-compiling " __FILE__ " ... done")
 		#endif
 	#endif
 #endif

@@ -8,7 +8,7 @@
 #if defined DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION // if the compiler supports pre-compilation
 
 	#if defined DIVERSALIS__COMPILER__MICROSOFT
-		#pragma message("packageneric::pre_compiled:: parsing " __FILE__)
+		#pragma message("pre-compiling " __FILE__ " ...")
 	#endif
 
 	#if defined DIVERSALIS__COMPILER__MICROSOFT
@@ -71,6 +71,6 @@
 	//#include <cwctype>
 
 	#if defined DIVERSALIS__COMPILER__MICROSOFT
-		#pragma message("packageneric::pre_compiled:: done parsing " __FILE__)
+		#pragma message("pre-compiling " __FILE__ " ... done")
 	#endif
 #endif
