@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="zlib"
 	ProjectGUID="{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}"
 	Keyword="MakeFileProj"
@@ -11,12 +11,36 @@
 		<Platform
 			Name="Win32"
 		/>
+		<Platform
+			Name="x64"
+		/>
 	</Platforms>
 	<ToolFiles>
 	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="unpack|Win32"
+			ConfigurationType="0"
+			InheritedPropertySheets="..\..\properties\top_output_dir.vsprops;..\..\properties\top_src_dir.vsprops"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="cmd.exe /c build.cmd"
+				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd &amp;&amp; build.cmd&quot;"
+				CleanCommandLine="cmd.exe /c clean.cmd"
+				Output=""
+				PreprocessorDefinitions=""
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="unpack|x64"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="0"
 			InheritedPropertySheets="..\..\properties\top_output_dir.vsprops;..\..\properties\top_src_dir.vsprops"
 			>
