@@ -35,6 +35,7 @@ class Scheduler(object):
 		def wait(self, tasks): self._scheduler._wait(tasks)
 
 	def process(self, tasks):
+		if isinstance(tasks, set): tasks = list(tasks)
 		self._task_queue = tasks
 		self._todo_count = len(tasks)
 		for task in tasks:
