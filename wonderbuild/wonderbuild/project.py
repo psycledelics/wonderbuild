@@ -84,7 +84,7 @@ class Project(object):
 			for k, v in self.task_aliases.iteritems():
 				print k, [str(v) for v in v]
 		else:
-			if self.requested_task_aliases is not None: tasks = self.tasks_with_aliases(self.requested_task_aliases)
+			if self.requested_task_aliases is not None: tasks = list(self.tasks_with_aliases(self.requested_task_aliases))
 			self.processsing = True
 			Scheduler().process(tasks)
 			self.processsing = False
