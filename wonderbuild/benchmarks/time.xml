@@ -301,7 +301,7 @@
 		<br/>
 		All tools were run with silent/quiet option and/or > /dev/null.
 		<br/>
-		The command lines used to run the tests can be seen in in this <a href='run-bench'/> script.
+		The command lines used to run the tests can be seen in this <a href='run-bench'/> script.
 		<part caption='Toy makefiles'>
 			The toy makefiles generated were recursive, and C++ dependencies were tracked using the makedepend X utility.
 		</part>
