@@ -16,14 +16,15 @@ def debug(s): pass
 
 def use_options(options):
 	global silent
-	silent = options.get('silent', False)
+	silent = 'silent' in options
 
 	if __debug__:
 		global is_debug
-		is_debug = options.get('verbose', False)
+		is_debug = 'verbose' in options
 
 		if is_debug:
 			zones = options['verbose'].split(',')
+			global debug
 			if len(zones) != 0:
 				def debug(s):
 					for z in zones:
