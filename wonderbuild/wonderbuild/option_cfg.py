@@ -4,16 +4,13 @@
 
 from signature import Sig
 
-class OptionCfg(object):
+from options import OptionDecl
+
+class OptionCfg(OptionDecl):
 	def __init__(self, project):
 		self.project = project
-		project.option_handler_classes.add(self.__class__)
+		project.option_collector.option_decls.add(self.__class__)
 
-	known_options = set()
-	
-	@staticmethod
-	def help(help): pass
-	
 	@property
 	def options(self): return self.project.options
 	

@@ -15,7 +15,7 @@ class Scheduler(object):
 	known_options = set(['jobs', 'timeout'])
 
 	@staticmethod
-	def help(help):
+	def generate_option_help(help):
 		help['jobs'] = ('<count>', 'use <count> threads in the scheduler to process the tasks', 'autodetected: ' + str(cpu_count))
 		help['timeout'] = ('<seconds>', 'wait at most <seconds> for a task to complete before considering it\'s busted', str(_default_timeout))
 

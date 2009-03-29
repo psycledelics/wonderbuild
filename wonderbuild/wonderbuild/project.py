@@ -13,17 +13,18 @@ if __debug__ and is_debug: import time
 class Project(object):
 	known_options = set(['src-dir', 'bld-dir', 'aliases', 'list-aliases'])
 
-	#@staticmethod
-	def help(self, help):
+	@staticmethod
+	def generate_option_help(help):
 		help['src-dir'] = ('<dir>', 'use <dir> as the source dir', 'current working dir: ' + os.getcwd())
 		help['bld-dir'] = ('<dir>', 'use <dir> as the build dir', '<src-dir>' + os.sep + '++wonderbuild')
 		help['aliases'] = ('<name,...>', 'build tasks with aliases <name,...>, comma-separated list')
 		help['list-aliases'] = (None, 'list the available task aliases')
-		for o in self.option_handler_classes: o.help(help)
 
-	def __init__(self, options):
-		self.option_handler_classes = set() #([Project, Scheduler])
+	def __init__(self, options, option_collector):
 		self.options = options
+		self.option_collector = option_collector
+		option_collector.option_decls.add(self.__class__)
+		option_collector.option_decls.add(Scheduler)
 
 		src_path = options.get('src-dir', None)
 		if src_path is None: src_path = os.getcwd()

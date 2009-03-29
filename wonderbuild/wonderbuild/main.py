@@ -10,7 +10,7 @@ if __name__ == '__main__':
 	from wonderbuild.main import main
 	main()
 else:
-	from wonderbuild.options import parse_args, validate_options, print_help
+	from wonderbuild.options import parse_args, validate_options, print_help, OptionCollector
 
 	def main():
 		import gc
@@ -18,25 +18,24 @@ else:
 		if gc_enabled: gc.disable()
 		try:
 			options = parse_args(sys.argv[1:])
-			option_handlers = set()
-			known_options = set()
-			help = {}
-			
+
 			import logger
-			option_handlers.add(logger)
 			logger.use_options(options)
 
-			known_options.add('profile')
-			if 'help' in options: help['profile'] = ('<file>', 'profile execution and put results in <file>')
+			option_collector = OptionCollector()
+			option_collector.option_decls.add(logger)
+
+			option_collector.known_options.add('profile')
+			if 'help' in options: option_collector.help['profile'] = ('<file>', 'profile execution and put results in <file>')
 
 			profile = options.get('profile', None)
 			
-			if profile is None: sys.exit(run(options, known_options, help))
+			if profile is None: sys.exit(run(options, option_collector))
 			else:
 				import cProfile
 				# cProfile is only able to profile one thread
 				options['jobs'] = 1 # overrides possible previous jobs options
-				cProfile.run('from wonderbuild.main import run; run(options, known_options, help)', profile)
+				cProfile.run('from wonderbuild.main import run; run(options, option_collector)', profile)
 				import pstats
 				s = pstats.Stats(profile)
 				#s.sort_stats('time').print_stats(45)
@@ -44,9 +43,9 @@ else:
 		finally:
 			if gc_enabled: gc.enable()
 
-	def run(options, known_options, help):
+	def run(options, option_collector):
 		from wonderbuild.project import Project
-		project = Project(options)
+		project = Project(options, option_collector)
 
 		script = project.src_node.node_path('wonderbuild_script.py')
 		if script.exists:
@@ -59,23 +58,24 @@ else:
 			usage = True
 
 		if usage or 'help' in options:
-			help['help'] = (None, 'show this help and exit')
-			help['version'] = (None, 'show the version of this tool and exit')
+			option_collector.help['help'] = (None, 'show this help and exit')
+			option_collector.help['version'] = (None, 'show the version of this tool and exit')
+			option_collector.consolidate_help()
 		
 		if 'help' in options:
-			project.help(help)
-			print_help(help, sys.stdout)
+			print_help(option_collector.help, sys.stdout)
 			return 0
 
 		if 'version' in options:
 			print 'wonderbuild 0.1'
 			return 0
 	
-		#XXX usage = usage or not validate_options(options, known_options)
+		if not usage:
+			option_collector.consolidate_known_options()
+			usage = not validate_options(options, option_collector.known_options)
 
 		if usage:
-			project.help(help)
-			print_help(help, sys.stderr)
+			print_help(option_collector.help, sys.stderr)
 			return 1
 
 		try: project.process(tasks)

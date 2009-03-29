@@ -200,7 +200,7 @@ class UserCfg(BuildCfg, OptionCfg):
 	])
 
 	@staticmethod
-	def help(help):
+	def generate_option_help(help):
 		help['cxx']                  = ('<prog>', 'use <prog> as c++ compiler')
 		help['cxx-flags']            = ('[flags]', 'use specific c++ compiler flags')
 		help['cxx-debug']            = ('<yes|no>', 'make the c++ compiler produce debugging information or not', 'no')

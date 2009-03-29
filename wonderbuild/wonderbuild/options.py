@@ -4,13 +4,23 @@
 
 import sys
 
-class OptionHandler(object):
+class OptionDecl(object):
 	known_options = set()
-
+	
 	@staticmethod
-	def help(help): pass
+	def generate_option_help(help): pass
 
-class Options(object): pass
+class OptionCollector(object):
+	def __init__(self):
+		self.known_options = set()
+		self.help = {}
+		self.option_decls = set()
+	
+	def consolidate_known_options(self):
+		for o in self.option_decls: self.known_options |= o.known_options
+
+	def consolidate_help(self):
+		for o in self.option_decls: o.generate_option_help(self.help)
 
 def parse_args(args = None):
 	if args is None: args = sys.argv[1:]
