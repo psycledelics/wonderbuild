@@ -5,24 +5,23 @@
 import os, threading
 
 from logger import is_debug, debug, colored, silent
-from options import options, known_options, help
 
 try: cpu_count = os.sysconf('SC_NPROCESSORS_ONLN')
 except: cpu_count = int(os.environ.get('NUMBER_OF_PROCESSORS', 1)) # env var defined on mswindows
 
-known_options |= set(['--jobs=', '--timeout=', '--progress'])
-help['--jobs='] = ('--jobs=<count>', 'use <count> threads in the scheduler to process the tasks', 'autodetected: ' + str(cpu_count))
-help['--timeout='] = ('--timeout=<seconds>', 'wait at most <seconds> for a task to complete before considering it\'s busted', '3600.0')
+_default_timeout = 3600.0
 
 class Scheduler(object):
-	def __init__(self):
-		self.thread_count = 0
-		self.timeout = 0
-		for o in options:
-			if o.startswith('--jobs='): self.thread_count = int(o[len('--jobs='):])
-			elif o.startswith('--timeout='): self.timeout = float(o[len('--timeout='):])
-		if self.thread_count == 0: self.thread_count = cpu_count
-		if self.timeout == 0: self.timeout = 3600.0
+	known_options = set(['jobs', 'timeout'])
+
+	@staticmethod
+	def help(help):
+		help['jobs'] = ('<count>', 'use <count> threads in the scheduler to process the tasks', 'autodetected: ' + str(cpu_count))
+		help['timeout'] = ('<seconds>', 'wait at most <seconds> for a task to complete before considering it\'s busted', str(_default_timeout))
+
+	def __init__(self, options):
+		self.thread_count = int(options.get('jobs', cpu_count))
+		self.timeout = float(options.get('timeout', _default_timeout))
 
 	class Context(object):
 		def __init__(self, scheduler):

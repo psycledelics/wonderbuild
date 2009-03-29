@@ -4,51 +4,36 @@
 
 import sys, os
 
-from options import options, known_options, help
+known_options = set(['silent', 'verbose'])
 
-known_options.add('--silent')
-help['--silent'] = ('--silent', 'suppress printing of informative messages (errors and debugging messages are still printed)')
+def help(help):
+	help['silent'] = (None, 'suppress printing of informative messages (errors and debugging messages are still printed)')
+	help['verbose'] = ('[zone,...]', 'wonderbuild debugging zones, comma-separated list, or no list for all zones. (example values: exec,cfg,task,sched,fs,project,cpp,...)')
 
-silent = '--silent' in options
+silent = True
+is_debug = False
+def debug(s): pass
 
-if not __debug__:
-	is_debug = False
-	def debug(s): pass
-else:
-	known_options.add('--zones')
-	help['--zones'] = ('--zones=[zone,...]', 'wonderbuild debugging zones, comma-separated list, or no list for all zones. (example values: exec,cfg,task,sched,fs,project,cpp,...)')
+def use_options(options):
+	global silent
+	silent = options.get('silent', False)
 
-	zones = None
-	for o in options:
-		if o == '--zones':
-			zones = []
-			break
-		if o.startswith('--zones='):
-			o = o[len('--zones='):]
-			if len(o): zones = o.split(',')
-			else: zones = []
-			break
-	is_debug = zones is not None
-	if not is_debug:
-		del zones
-		is_debug = False
-		def debug(s): pass
-	elif len(zones):
-		def debug(s):
-			for z in zones:
-				if s.startswith(z):
-					print >> sys.stderr, colored('35', 'wonderbuild: dbg:') + ' ' + s
-					break
-	else:
-		del zones
-		def debug(s): print >> sys.stderr, colored('35', 'wonderbuild: dbg:') + ' ' + s
+	if __debug__:
+		global is_debug
+		is_debug = options.get('verbose', False)
+
+		if is_debug:
+			zones = options['verbose'].split(',')
+			if len(zones) != 0:
+				def debug(s):
+					for z in zones:
+						if s.startswith(z):
+							print >> sys.stderr, colored('35', 'wonderbuild: dbg:') + ' ' + s
+							break
+			else:
+				def debug(s): print >> sys.stderr, colored('35', 'wonderbuild: dbg:') + ' ' + s
 
 out = sys.stdout
-
-if os.environ.get('TERM', 'dumb') in ('dumb', 'emacs') or not out.isatty():
-	def colored(color, s): return s
-else:
-	def colored(color, s): return '\33[' + color + 'm' + s + '\33[0m'
 
 @property
 def cols(): return 80
@@ -69,3 +54,9 @@ else:
 		try: _cols() # we try the function once to see if it is suitable
 		except IOError: pass
 		else: cols = property(_cols)
+
+if os.environ.get('TERM', 'dumb') in ('dumb', 'emacs') or not out.isatty():
+	def colored(color, s): return s
+else:
+	def colored(color, s): return '\33[' + color + 'm' + s + '\33[0m'
+

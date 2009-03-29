@@ -5,7 +5,6 @@
 import os, threading
 from collections import deque
 
-from options import options, known_options, help
 from logger import out, is_debug, debug, colored, silent
 from signature import Sig
 from option_cfg import OptionCfg
@@ -186,37 +185,38 @@ class UserCfg(BuildCfg, OptionCfg):
 		if class_ is None: class_ = BuildCfg
 		return class_.clone(self, class_)
 
-	_options = set([
-		'--cxx=',
-		'--cxx-flags=',
-		'--cxx-debug=',
-		'--cxx-optim=',
-		'--cxx-pic=',
-		'--cxx-mod-shared=',
-		'--cxx-mod-ld=',
-		'--cxx-mod-ld-flags=',
-		'--cxx-mod-ar=',
-		'--cxx-mod-ranlib=',
-		'--cxx-check-missing='
+	known_options = set([
+		'cxx',
+		'cxx-flags',
+		'cxx-debug',
+		'cxx-optim',
+		'cxx-pic',
+		'cxx-mod-shared',
+		'cxx-mod-ld',
+		'cxx-mod-ld-flags',
+		'cxx-mod-ar',
+		'cxx-mod-ranlib',
+		'cxx-check-missing'
 	])
-	
-	def help(self):
-		help['--cxx=']                  = ('--cxx=<prog>', 'use <prog> as c++ compiler')
-		help['--cxx-flags=']            = ('--cxx-flags=[flags]', 'use specific c++ compiler flags')
-		help['--cxx-debug=']            = ('--cxx-debug=<yes|no>', 'make the c++ compiler produce debugging information or not', 'no')
-		help['--cxx-optim=']            = ('--cxx-optim=<level>', 'use c++ compiler optimisation <level>')
-		help['--cxx-pic=']              = ('--cxx-pic=<yes|no>', 'make the c++ compiler emit pic code rather than non-pic code for static libs and programs (always pic for shared libs)', 'no (for static libs and programs)')
-		help['--cxx-mod-shared=']       = ('--cxx-mod-shared=<yes|no>', 'build and link shared libs (rather than static libs)', 'yes unless pic is set explicitly to no')
-		help['--cxx-mod-ld=']           = ('--cxx-mod-ld=<prog>', 'use <prog> as shared lib and program linker')
-		help['--cxx-mod-ld-flags=']     = ('--cxx-mod-ld-flags=[flags]', 'use specific linker flags')
-		help['--cxx-mod-ar=']           = ('--cxx-mod-ar=<prog>', 'use <prog> as static lib archiver', 'ar')
-		help['--cxx-mod-ranlib=']       = ('--cxx-mod-ranlib=<prog>', 'use <prog> as static lib archive indexer', 'ranlib (or via ar s flag for gnu ar)')
-		help['--cxx-check-missing=']    = ('--cxx-check-missing=<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'no')
+
+	@staticmethod
+	def help(help):
+		help['cxx']                  = ('<prog>', 'use <prog> as c++ compiler')
+		help['cxx-flags']            = ('[flags]', 'use specific c++ compiler flags')
+		help['cxx-debug']            = ('<yes|no>', 'make the c++ compiler produce debugging information or not', 'no')
+		help['cxx-optim']            = ('<level>', 'use c++ compiler optimisation <level>')
+		help['cxx-pic']              = ('<yes|no>', 'make the c++ compiler emit pic code rather than non-pic code for static libs and programs (always pic for shared libs)', 'no (for static libs and programs)')
+		help['cxx-mod-shared']       = ('<yes|no>', 'build and link shared libs (rather than static libs)', 'yes unless pic is set explicitly to no')
+		help['cxx-mod-ld']           = ('<prog>', 'use <prog> as shared lib and program linker')
+		help['cxx-mod-ld-flags']     = ('[flags]', 'use specific linker flags')
+		help['cxx-mod-ar']           = ('<prog>', 'use <prog> as static lib archiver', 'ar')
+		help['cxx-mod-ranlib']       = ('<prog>', 'use <prog> as static lib archive indexer', 'ranlib (or via ar s flag for gnu ar)')
+		help['cxx-check-missing']    = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'no')
 
 	def __init__(self, project):
 		BuildCfg.__init__(self, project)
 		OptionCfg.__init__(self, project)
-
+		
 		try:
 			old_sig, self.check_missing, \
 			self.kind, self.version, \
@@ -229,42 +229,45 @@ class UserCfg(BuildCfg, OptionCfg):
 		
 		if parse:
 			if __debug__ and is_debug: debug('cfg: cxx: user: parsing options')
-			self.shared = self.pic = self.optim = None
-			self.debug = self.check_missing = False
-			cxx_prog = cxx_flags = ld_prog = ld_flags = ar_prog = ranlib_prog = False
-			for o in options:
-				if o.startswith('--cxx='): self.cxx_prog = o[len('--cxx='):]; cxx_prog = True
-				elif o.startswith('--cxx-flags='): self.cxx_flags = o[len('--cxx-flags='):].split(); cxx_flags = True
-				elif o.startswith('--cxx-pic='): self.pic = o[len('--cxx-pic='):] != 'no'
-				elif o.startswith('--cxx-optim='): self.optim = o[len('--cxx-optim='):]
-				elif o.startswith('--cxx-debug='): self.debug = o[len('--cxx-debug='):] == 'yes'
-				elif o.startswith('--cxx-mod-shared'): self.shared = o[len('--cxx-mod-shared='):] != 'no'
-				elif o.startswith('--cxx-mod-ld='): self.ld_prog = o[len('--cxx-mod-ld='):]; ld = True
-				elif o.startswith('--cxx-mod-ld-flags='): self.ld_flags = o[len('--cxx-mod-ld-flags='):].split(); ld_flags = True
-				elif o.startswith('--cxx-mod-ar='): self.ar_prog = o[len('--cxx-mod-ar='):]; ar_prog = True
-				elif o.startswith('--cxx-mod-ranlib='): self.ranlib_prog = o[len('--cxx-mod-ranlib='):]; ranlib_prog = True
-				elif o.startswith('--cxx-check-missing='): self.check_missing = o[len('--cxx-check-missing='):]  == 'yes'
+			
+			o = self.options
+
+			if 'cxx' in o: self.cxx_prog = o['cxx']
+			if 'cxx-flags' in o: self.cxx_flags = o['cxx-flags'].split()
+			else:
+				flags = os.environ.get('CXXFLAGS', None)
+				if flags is not None: self.cxx_flags = flags.split()
+				else: self.cxx_flags = []
+
+			self.optim = o.get('cxx-optim', None)
+			self.debug = o.get('cxx-debug', False)
+
+			if 'cxx-pic' in o: self.pic = o['pic'] != 'no'
+			else: self.pic = None
+
+			if 'cxx-mod-shared' in o: self.shared = o['cxx-mod-shared'] != 'no'
+			else: self.shared = None
+			
+			if 'cxx-mod-ld' in o: self.ld_prog = o['cxx-mod-ld']
+			if 'cxx-mod-flags' in o: self.cxx_mod_flags = o['cxx-mod-flags'].split()
+			else:
+				flags = os.environ.get('LDFLAGS', None)
+				if flags is not None: self.ld_flags = flags.split()
+				else: self.ld_flags = []
+			if 'cxx-mod-ar' in o: self.ar_prog = o['cxx-mod-ar']
+			if 'cxx-mod-ranlib' in o: self.ranlib_prog = o['cxx-mod-ranlib']
+			self.check_missing = o.get('cxx-check-missing', False)
 
 			if self.pic is None:
 				if self.shared is None: self.shared = True
 				self.pic = False
 			elif self.shared is None: self.shared = self.pic
 
-			self._check_compiler(cxx_prog, ld_prog)
+			self._check_compiler()
 
-			if not cxx_flags:
-				flags = os.environ.get('CXXFLAGS', None)
-				if flags is not None: self.cxx_flags = flags.split()
-				else: self.cxx_flags = []
-
-			if not ld_prog: self.ld_prog = self.impl.ld_prog
-			if not ld_flags:
-				flags = os.environ.get('LDFLAGS', None)
-				if flags is not None: self.ld_flags = flags.split()
-				else: self.ld_flags = []
-
-			if not ar_prog: self.ar_prog = self.impl.ar_prog
-			if not ranlib_prog: self.ranlib_prog = self.impl.ranlib_prog
+			if 'cxx-mod-ld' not in o: self.ld_prog = self.impl.ld_prog
+			if 'cxx-mod-ar' not in o: self.ar_prog = self.impl.ar_prog
+			if 'cxx-mod-ranlib' not in o: self.ranlib_prog = self.impl.ranlib_prog
 			
 			self.project.state_and_cache[self.__class__.__name__] = \
 				self.options_sig, self.check_missing, \
@@ -279,8 +282,9 @@ class UserCfg(BuildCfg, OptionCfg):
 
 		if self.impl is None: raise Exception, 'unsupported c++ compiler'
 
-	def _check_compiler(self, cxx_prog, ld_prog):
-		if not cxx_prog: self.cxx_prog = 'c++'
+	def _check_compiler(self):
+		o = self.options
+		if 'cxx' not in o: self.cxx_prog = 'c++'
 		if not silent:
 			desc = 'checking for c++ compiler'
 			self.print_check(desc)
@@ -292,9 +296,7 @@ class UserCfg(BuildCfg, OptionCfg):
 		else:
 			self.kind = 'gcc'
 			self.version = out.rstrip('\n')
-			if not ld_prog:
-				self.ld_prog = self.cxx_prog
-				ld_prog = True
+			if 'cxx-mod-ld' not in o: self.ld_prog = self.cxx_prog
 			import gcc
 			self.impl = gcc.Impl()
 		if not silent: self.print_check_result(desc, str(self.kind) + ' version ' + str(self.version), '32')
@@ -493,7 +495,7 @@ class ModTask(Task):
 	def target_dir(self): return self.target.parent
 
 	def __call__(self, sched_context):
-		if len(self.dep_lib_tasks) != 0: sched_context.parallel_no_wait(self.dep_lib_tasks) # XXX come back to this: multiple tasks => release lock? check the code below...
+		if len(self.dep_lib_tasks) != 0: sched_context.parallel_no_wait(self.dep_lib_tasks) #XXX multiple tasks => release lock!
 		if len(self.cfg.pkg_config) != 0:
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask(self.project, self.cfg.pkg_config)
 			sched_context.parallel_wait((pkg_config_cxx_flags_task,))

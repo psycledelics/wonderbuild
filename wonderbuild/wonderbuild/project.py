@@ -6,33 +6,44 @@ import sys, os, gc, cPickle
 
 from scheduler import Scheduler
 from filesystem import FileSystem
-from options import options, known_options, help
 from logger import is_debug, debug
 
 if __debug__ and is_debug: import time
 
-known_options |= set(['--src-dir=', '--bld-dir=', '--aliases=', '--list-aliases'])
-help['--src-dir='] = ('--src-dir=<dir>', 'use <dir> as the source dir', os.getcwd())
-help['--bld-dir='] = ('--bld-dir=<dir>', 'use <dir> as the build dir', '<src-dir>' + os.sep + '++wonderbuild')
-help['--aliases='] = ('--aliases=<name,...>', 'build tasks with aliases <name,...>, comma-separated list')
-help['--list-aliases'] = ('--list-aliases', 'list the available task aliases')
-
 class Project(object):
-	def __init__(self):
-		src_path = bld_path = None
-		self.requested_task_aliases = None
-		self.list_aliases = False
-		for o in options:
-			if o.startswith('--src-dir='): src_path = o[len('--src-dir='):]
-			elif o.startswith('--bld-dir='): bld_path = o[len('--bld-dir='):]
-			elif o.startswith('--aliases='):
-				o = o[len('--aliases='):]
-				if len(o): self.requested_task_aliases = o.split(',')
-				else: self.requested_task_aliases = (None,)
-			elif o == '--list-aliases': self.list_aliases = True
-		if src_path is None: src_path = help['--src-dir='][2]
+	known_options = set(['src-dir', 'bld-dir', 'aliases', 'list-aliases'])
+
+	#@staticmethod
+	def help(self, help):
+		help['src-dir'] = ('<dir>', 'use <dir> as the source dir', 'current working dir: ' + os.getcwd())
+		help['bld-dir'] = ('<dir>', 'use <dir> as the build dir', '<src-dir>' + os.sep + '++wonderbuild')
+		help['aliases'] = ('<name,...>', 'build tasks with aliases <name,...>, comma-separated list')
+		help['list-aliases'] = (None, 'list the available task aliases')
+		for o in self.option_handler_classes: o.help(help)
+
+	def __init__(self, options):
+		self.option_handler_classes = set() #([Project, Scheduler])
+		self.options = options
+
+		src_path = options.get('src-dir', None)
+		if src_path is None: src_path = os.getcwd()
+		
+		bld_path = options.get('bld-dir', None)
 		if bld_path is None: bld_path = os.path.join(src_path, '++wonderbuild')
+		
 		if src_path == bld_path: raise Exception, 'build dir and source dir are the same'
+
+		self.list_aliases = 'list-aliases' in options
+
+		self.task_aliases = {} # {name: [tasks]}
+		aliases = options.get('aliases', None)
+		if aliases is not None:
+			if len(aliases): self.requested_task_aliases = aliases.split(',')
+			else: self.requested_task_aliases = (None,)
+		else: self.requested_task_aliases = None
+
+		self.processsing = False
+
 		gc_enabled = gc.isenabled()
 		if gc_enabled: gc.disable()
 		try:
@@ -52,19 +63,11 @@ class Project(object):
 			except: self.state_and_cache = {}
 		finally:
 			if gc_enabled: gc.enable()
-		self.cfgs = []
-		self.task_aliases = {} # {name: [tasks]}
+
 		self.fs = FileSystem(self.state_and_cache)
 		self.src_node = self.fs.cur.node_path(src_path)
 		self.bld_node = self.fs.cur.node_path(bld_path)
-		self.processsing = False
 		
-	def options(self):
-		for c in self.cfgs: c.options()
-
-	def help(self):
-		for c in self.cfgs: c.help()
-
 	def add_task_aliases(self, task, aliases = None):
 		if self.processsing: return # no need to add aliases during processing
 		aliases = aliases is None and (None,) or (None,) + aliases
@@ -86,7 +89,7 @@ class Project(object):
 		else:
 			if self.requested_task_aliases is not None: tasks = list(self.tasks_with_aliases(self.requested_task_aliases))
 			self.processsing = True
-			Scheduler().process(tasks)
+			Scheduler(self.options).process(tasks)
 			self.processsing = False
 
 	def dump(self):

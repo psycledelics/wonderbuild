@@ -3,39 +3,55 @@
 # copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import sys
-from optparse import OptionParser
 
-parser = OptionParser()
+class OptionHandler(object):
+	known_options = set()
 
-options = sys.argv[1:]
+	@staticmethod
+	def help(help): pass
 
-known_options = set()
+class Options(object): pass
 
-help = {}
+def parse_args(args = None):
+	if args is None: args = sys.argv[1:]
+	options = {}
+	for a in args:
+		if a.startswith('--'): d = 2
+		elif a.startswith('-'): d = 1
+		else: d = 0
+		e = a.find('=')
+		if e >= 0:
+			k = a[d:e]
+			v = a[e + 1:]
+		else:
+			k = a[d:]
+			v = ''
+		options[k] = v
+	return options
 
-def validate_options():
+def validate_options(options, known_options):
 	ok = True
 	for o in options:
-		if o.startswith('-'):
-			e = o.find('=')
-			if e >= 0:
-				if o[:e + 1] in known_options: continue
-				o = o[:e]
-			if o in known_options: continue
-			print >> sys.stderr, 'unknown option: ' + o
-			ok = False
+			if o not in known_options:
+				print >> sys.stderr, 'unknown option: ' + o
+				ok = False
 	return ok
 
-def print_help(out):
-	help['--help'] = ('--help', 'show this help and exit')
+def print_help(help, out):
 	keys = []
+	def name(k, v):
+		if v is None: v = k
+		else: v = k + '=' + v
+		v = '--' + v
+		return v
 	just = 0
 	for k, v in help.iteritems():
-		if len(v[0]) > just: just = len(v[0])
+		v = name(k, v[0])
+		if len(v) > just: just = len(v)
 		keys.append(k)
 	keys.sort()
 	just += 1
-	for h in keys:
-		h = help[h]
-		print h[0].ljust(just), h[1]
-		if len(h) >= 3: print >> out, ''.ljust(just), '(default: ' + h[2] + ')'
+	for k in keys:
+		v = help[k]
+		print >> out, name(k, v[0]).ljust(just), v[1]
+		if len(v) >= 3: print >> out, ''.ljust(just), '(default: ' + v[2] + ')'
