@@ -22,7 +22,7 @@ class StdMathCheckTask(BuildCheckTask):
 			if self.m: cfg.libs.append('m')
 
 		@property
-		def source_text(self): return '#include <cmath>\nvoid math() { float const f(std::sin(1.f)); }'
+		def source_text(self): return '#include <cmath>\nfloat math() { float const f(std::sin(1.f)); return f; }'
 		
 	def _make_t0(self): return StdMathCheckTask.SubCheckTask(self.name, self.base_cfg, False)
 	def _make_t1(self): return StdMathCheckTask.SubCheckTask(self.name, self.base_cfg, True)
