@@ -242,7 +242,7 @@ class UserCfg(BuildCfg, OptionCfg):
 			self.optim = o.get('cxx-optim', None)
 			self.debug = o.get('cxx-debug', False)
 
-			if 'cxx-pic' in o: self.pic = o['pic'] != 'no'
+			if 'cxx-pic' in o: self.pic = o['cxx-pic'] != 'no'
 			else: self.pic = None
 
 			if 'cxx-mod-shared' in o: self.shared = o['cxx-mod-shared'] != 'no'
