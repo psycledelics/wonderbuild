@@ -428,27 +428,11 @@
 				Name="file"
 				>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\AbstractIff.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\AbstractIff.hpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\src\psycle\host\DataCompression.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\DataCompression.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\Eaiff.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\Eaiff.hpp"
 					>
 				</File>
 				<File
@@ -1192,6 +1176,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\exceptions.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\FFT.cpp"
 					>
 				</File>
@@ -1241,6 +1229,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\SongStructs.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\Zap.hpp"
 					>
 				</File>
 				<Filter
@@ -1377,7 +1369,7 @@
 	<Globals>
 		<Global
 			Name="RESOURCE_FILE"
-			Value="\psycle_source\psycle\src\psycle\host\resources\resources.rc"
+			Value="\programacio\psycleSVN\psycle\src\psycle\host\resources\resources.rc"
 		/>
 	</Globals>
 </VisualStudioProject>
