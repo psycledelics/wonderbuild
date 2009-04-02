@@ -541,10 +541,10 @@ BuildmasterConfig['status'] = []
 
 categories = None #['psycle', 'sondar', 'armstrong']
 
-##################################### waterfall http status ######################################
+##################################### http status ######################################
 
-from buildbot.status.html import Waterfall
-BuildmasterConfig['status'].append(Waterfall(http_port = 8010, css = 'waterfall.css', robots_txt = 'robots.txt', allowForce=False, categories = categories))
+from buildbot.status.html import WebStatus
+BuildmasterConfig['status'].append(WebStatus(http_port = 8010, allowForce=False))
 
 ##################################### mail status ######################################
 
