@@ -20,66 +20,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\plugin.vsprops"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="SYNTH_LIGHT"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="release|Win32"
-			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\plugin.vsprops"
-			WholeProgramOptimization="1"
+			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\plugin.vsprops;..\..\properties\platform_win32.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -137,7 +78,7 @@
 		<Configuration
 			Name="debug|x64"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\plugin.vsprops"
+			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\plugin.vsprops;..\..\properties\platform_x64.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -158,7 +99,6 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="SYNTH_LIGHT"
-				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -171,7 +111,65 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				TargetMachine="17"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="release|Win32"
+			ConfigurationType="2"
+			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\plugin.vsprops;..\..\properties\platform_win32.vsprops"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="SYNTH_LIGHT"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -198,7 +196,7 @@
 		<Configuration
 			Name="release|x64"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\plugin.vsprops"
+			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\plugin.vsprops;..\..\properties\platform_x64.vsprops"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -232,7 +230,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				TargetMachine="17"
 			/>
 			<Tool
 				Name="VCALinkTool"

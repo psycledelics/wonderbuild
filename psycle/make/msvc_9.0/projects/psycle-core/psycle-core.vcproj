@@ -21,60 +21,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\..\properties\debug.vsprops"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				ForcedIncludeFiles="packageneric/pre-compiled.private.hpp"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLibrarianTool"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="release|Win32"
-			ConfigurationType="4"
-			InheritedPropertySheets="..\..\properties\release.vsprops"
-			WholeProgramOptimization="1"
+			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\platform_win32.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -126,7 +73,7 @@
 		<Configuration
 			Name="debug|x64"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\..\properties\debug.vsprops"
+			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\platform_x64.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -146,7 +93,59 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				DebugInformationFormat="3"
+				ForcedIncludeFiles="packageneric/pre-compiled.private.hpp"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="release|Win32"
+			ConfigurationType="4"
+			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\platform_win32.vsprops"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
 				ForcedIncludeFiles="packageneric/pre-compiled.private.hpp"
 			/>
 			<Tool
@@ -180,7 +179,7 @@
 		<Configuration
 			Name="release|x64"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\..\properties\release.vsprops"
+			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\platform_x64.vsprops"
 			WholeProgramOptimization="1"
 			>
 			<Tool

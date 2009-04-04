@@ -23,7 +23,7 @@
 			OutputDirectory="$(TopOutputDir)/doc"
 			IntermediateDirectory="$(TopOutputDir)/intermediate"
 			ConfigurationType="0"
-			InheritedPropertySheets="..\..\properties\top_output_dir.vsprops"
+			InheritedPropertySheets="..\..\properties\top_output_dir.vsprops;..\..\properties\platform_win32.vsprops"
 			>
 			<Tool
 				Name="VCNMakeTool"
@@ -42,7 +42,7 @@
 		<Configuration
 			Name="html|x64"
 			ConfigurationType="0"
-			InheritedPropertySheets="..\..\properties\top_output_dir.vsprops"
+			InheritedPropertySheets="..\..\properties\top_output_dir.vsprops;..\..\properties\platform_x64.vsprops"
 			>
 			<Tool
 				Name="VCNMakeTool"

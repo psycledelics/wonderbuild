@@ -21,66 +21,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\debug.vsprops"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="UNIVERSALIS__OPERATING_SYSTEM__LOGGERS__OWNED"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="release|Win32"
-			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\release.vsprops"
-			WholeProgramOptimization="1"
+			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\platform_win32.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -137,8 +78,9 @@
 		</Configuration>
 		<Configuration
 			Name="debug|x64"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\debug.vsprops"
+			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\platform_x64.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -159,7 +101,6 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="UNIVERSALIS__OPERATING_SYSTEM__LOGGERS__OWNED"
-				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -172,7 +113,65 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				TargetMachine="17"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="release|Win32"
+			ConfigurationType="2"
+			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\platform_win32.vsprops"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="UNIVERSALIS__OPERATING_SYSTEM__LOGGERS__OWNED"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -199,7 +198,7 @@
 		<Configuration
 			Name="release|x64"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\release.vsprops"
+			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\platform_x64.vsprops"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -233,7 +232,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				TargetMachine="17"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -285,20 +283,20 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)/$(ParentName)/"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="debug|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
 						ObjectFile="$(IntDir)/$(ParentName)/"
 						BrowseInformationFile="$(IntDir)/$(ParentName)/"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(ParentName)/"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -401,20 +399,20 @@
 							/>
 						</FileConfiguration>
 						<FileConfiguration
-							Name="release|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(ParentName)/"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
 							Name="debug|x64"
 							>
 							<Tool
 								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"
 								BrowseInformationFile="$(IntDir)/$(ParentName)/"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"
 							/>
 						</FileConfiguration>
 						<FileConfiguration
@@ -470,20 +468,20 @@
 								/>
 							</FileConfiguration>
 							<FileConfiguration
-								Name="release|Win32"
-								>
-								<Tool
-									Name="VCCLCompilerTool"
-									ObjectFile="$(IntDir)/$(ParentName)/"
-								/>
-							</FileConfiguration>
-							<FileConfiguration
 								Name="debug|x64"
 								>
 								<Tool
 									Name="VCCLCompilerTool"
 									ObjectFile="$(IntDir)/$(ParentName)/"
 									BrowseInformationFile="$(IntDir)/$(ParentName)/"
+								/>
+							</FileConfiguration>
+							<FileConfiguration
+								Name="release|Win32"
+								>
+								<Tool
+									Name="VCCLCompilerTool"
+									ObjectFile="$(IntDir)/$(ParentName)/"
 								/>
 							</FileConfiguration>
 							<FileConfiguration
@@ -618,20 +616,20 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
-						Name="release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(ParentName)/"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
 						Name="debug|x64"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)/$(ParentName)/"
 							BrowseInformationFile="$(IntDir)/$(ParentName)/"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -664,20 +662,20 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
-						Name="release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(ParentName)/"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
 						Name="debug|x64"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)/$(ParentName)/"
 							BrowseInformationFile="$(IntDir)/$(ParentName)/"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -706,20 +704,20 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
-						Name="release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(ParentName)/"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
 						Name="debug|x64"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)/$(ParentName)/"
 							BrowseInformationFile="$(IntDir)/$(ParentName)/"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -752,20 +750,20 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
-						Name="release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(ParentName)/"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
 						Name="debug|x64"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)/$(ParentName)/"
 							BrowseInformationFile="$(IntDir)/$(ParentName)/"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -794,20 +792,20 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
-						Name="release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(ParentName)/"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
 						Name="debug|x64"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)/$(ParentName)/"
 							BrowseInformationFile="$(IntDir)/$(ParentName)/"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -836,20 +834,20 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
-						Name="release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(ParentName)/"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
 						Name="debug|x64"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)/$(ParentName)/"
 							BrowseInformationFile="$(IntDir)/$(ParentName)/"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -881,20 +879,20 @@
 							/>
 						</FileConfiguration>
 						<FileConfiguration
-							Name="release|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(ParentName)/"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
 							Name="debug|x64"
 							>
 							<Tool
 								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"
 								BrowseInformationFile="$(IntDir)/$(ParentName)/"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"
 							/>
 						</FileConfiguration>
 						<FileConfiguration
@@ -939,20 +937,20 @@
 							/>
 						</FileConfiguration>
 						<FileConfiguration
-							Name="release|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(ParentName)/"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
 							Name="debug|x64"
 							>
 							<Tool
 								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"
 								BrowseInformationFile="$(IntDir)/$(ParentName)/"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"
 							/>
 						</FileConfiguration>
 						<FileConfiguration
@@ -985,20 +983,20 @@
 							/>
 						</FileConfiguration>
 						<FileConfiguration
-							Name="release|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(ParentName)/"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
 							Name="debug|x64"
 							>
 							<Tool
 								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"
 								BrowseInformationFile="$(IntDir)/$(ParentName)/"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"
 							/>
 						</FileConfiguration>
 						<FileConfiguration
@@ -1056,20 +1054,20 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
-						Name="release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(ParentName)/"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
 						Name="debug|x64"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)/$(ParentName)/"
 							BrowseInformationFile="$(IntDir)/$(ParentName)/"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(ParentName)/"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1105,20 +1103,20 @@
 							/>
 						</FileConfiguration>
 						<FileConfiguration
-							Name="release|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(ParentName)/"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
 							Name="debug|x64"
 							>
 							<Tool
 								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"
 								BrowseInformationFile="$(IntDir)/$(ParentName)/"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"
 							/>
 						</FileConfiguration>
 						<FileConfiguration
@@ -1187,20 +1185,20 @@
 							/>
 						</FileConfiguration>
 						<FileConfiguration
-							Name="release|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(ParentName)/"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
 							Name="debug|x64"
 							>
 							<Tool
 								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"
 								BrowseInformationFile="$(IntDir)/$(ParentName)/"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"
 							/>
 						</FileConfiguration>
 						<FileConfiguration
@@ -1253,20 +1251,20 @@
 							/>
 						</FileConfiguration>
 						<FileConfiguration
-							Name="release|Win32"
-							>
-							<Tool
-								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)/$(ParentName)/"
-							/>
-						</FileConfiguration>
-						<FileConfiguration
 							Name="debug|x64"
 							>
 							<Tool
 								Name="VCCLCompilerTool"
 								ObjectFile="$(IntDir)/$(ParentName)/"
 								BrowseInformationFile="$(IntDir)/$(ParentName)/"
+							/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="release|Win32"
+							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)/$(ParentName)/"
 							/>
 						</FileConfiguration>
 						<FileConfiguration
@@ -1289,11 +1287,11 @@
 			Name="packageneric"
 			>
 			<File
-				RelativePath="..\..\..\msvc_common\src\packageneric\configuration.private.hpp"
+				RelativePath="..\..\..\msvc_common\src\universalis\detail\configuration.private.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\msvc_common\src\universalis\detail\configuration.private.hpp"
+				RelativePath="..\..\..\msvc_common\src\packageneric\configuration.private.hpp"
 				>
 			</File>
 			<File

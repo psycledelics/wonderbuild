@@ -20,7 +20,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\use_pre_compiled_header_with_mfc.vsprops;..\..\properties\create_pre_compiled_header.vsprops"
+			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\use_pre_compiled_header_with_mfc.vsprops;..\..\properties\create_pre_compiled_header.vsprops;..\..\properties\platform_win32.vsprops"
 			UseOfMFC="2"
 			ManagedExtensions="0"
 			>
@@ -42,6 +42,67 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AssemblyDebug="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="debug|x64"
+			ConfigurationType="2"
+			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\use_pre_compiled_header_with_mfc.vsprops;..\..\properties\create_pre_compiled_header.vsprops;..\..\properties\platform_x64.vsprops"
+			UseOfMFC="2"
+			ManagedExtensions="0"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -81,7 +142,7 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\use_pre_compiled_header_with_mfc.vsprops;..\..\properties\create_pre_compiled_header.vsprops"
+			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\use_pre_compiled_header_with_mfc.vsprops;..\..\properties\create_pre_compiled_header.vsprops;..\..\properties\platform_win32.vsprops"
 			UseOfMFC="2"
 			ManagedExtensions="0"
 			WholeProgramOptimization="1"
@@ -115,69 +176,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="debug|x64"
-			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\use_pre_compiled_header_with_mfc.vsprops;..\..\properties\create_pre_compiled_header.vsprops"
-			UseOfMFC="2"
-			ManagedExtensions="0"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				TargetEnvironment="3"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AssemblyDebug="1"
-				TargetMachine="17"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -204,7 +202,7 @@
 		<Configuration
 			Name="release|x64"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\use_pre_compiled_header_with_mfc.vsprops;..\..\properties\create_pre_compiled_header.vsprops"
+			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\use_pre_compiled_header_with_mfc.vsprops;..\..\properties\create_pre_compiled_header.vsprops;..\..\properties\platform_x64.vsprops"
 			UseOfMFC="2"
 			ManagedExtensions="0"
 			WholeProgramOptimization="1"
@@ -239,7 +237,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				TargetMachine="17"
 			/>
 			<Tool
 				Name="VCALinkTool"
