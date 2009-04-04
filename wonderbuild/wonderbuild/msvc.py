@@ -168,11 +168,11 @@ class Impl(object):
 
 	@staticmethod
 	def mod_task_target(mod_task):
-		dir = mod_task.project.bld_node('modules')(mod_task.name)
+		dir = mod_task.project.bld_node / 'modules' / mod_task.name
 		if mod_task.cfg.kind == 'prog': name = mod_task.name
 		elif mod_task.cfg.shared: name = mod_task.name + '.dll'
 		else: name = 'lib' + mod_task.name + '.lib'
-		return dir(name)
+		return dir / name
 
 	@staticmethod
 	def process_mod_task(mod_task): pass
@@ -198,7 +198,7 @@ class Impl(object):
 				name.replace(os.sep, ',')
 				name.replace(os.pardir, '_')
 				args.append(name)
-				n = mod_task.target.parent(name)
+				n = mod_task.target.parent / name
 				if not n.exists:
 					f = open(n.path, 'w')
 					try:

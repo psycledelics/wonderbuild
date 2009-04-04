@@ -47,7 +47,7 @@ else:
 		from wonderbuild.project import Project
 		project = Project(options, option_collector)
 
-		script = project.src_node('wonderbuild_script.py')
+		script = project.src_node / 'wonderbuild_script.py'
 		if script.exists:
 			d = {}
 			execfile('wonderbuild_script.py', d)

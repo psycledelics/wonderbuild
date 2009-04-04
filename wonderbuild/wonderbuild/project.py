@@ -66,8 +66,8 @@ class Project(object):
 			if gc_enabled: gc.enable()
 
 		self.fs = FileSystem(self.state_and_cache)
-		self.src_node = self.fs.cur(src_path)
-		self.bld_node = self.fs.cur(bld_path)
+		self.src_node = self.fs.cur / src_path
+		self.bld_node = self.fs.cur / bld_path
 		
 	def add_task_aliases(self, task, aliases = None):
 		if self.processsing: return # no need to add aliases during processing

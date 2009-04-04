@@ -35,8 +35,8 @@ class FHSCfg(OptionCfg):
 			
 			o = self.options
 
-			if 'install-dest-dir' in o: self.dest = self.project.fs.cur(o['install-dest-dir'])
-			else: self.dest = self.project.bld_node('staged-install')
+			if 'install-dest-dir' in o: self.dest = self.project.fs.cur / o['install-dest-dir']
+			else: self.dest = self.project.bld_node / 'staged-install'
 			
 			if 'install-prefix-dir' in o: self.prefix_path = o['install-prefix-dir']
 			else: self.prefix_path = os.path.join('usr', 'local')
@@ -44,7 +44,7 @@ class FHSCfg(OptionCfg):
 			self.project.state_and_cache[self.__class__.__name__] = \
 				self.options_sig, self.dest, self.prefix_path
 
-		def dir(s): return self.dest(self.prefix_path)(s)
+		def dir(s): return self.dest / self.prefix_path / s
 		self.bin = dir('bin')
 		self.lib = dir('lib')
 		self.libexec = dir('libexec')

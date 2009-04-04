@@ -18,7 +18,7 @@ class FileSystem(object):
 		self.root._exists = True
 		self.root._height = 0
 		self.root._fs = self
-		self.cur = self.root(os.getcwd())
+		self.cur = self.root / os.getcwd()
 		self.cur._fs = self
 		self.cur._is_dir = True
 		self.cur._exists = True
@@ -204,8 +204,10 @@ class Node(object):
 						for node in node.find_iter(in_pats, ex_pats, prune_pats): yield node
 		raise StopIteration
 
-	def __call__(self, path):
-		if os.path.isabs(path) and self is not self.fs.root: return self.fs.root(path)
+	def __div__(self, path): return self.__truediv__(path) # truediv has become the default div in python 3.0
+
+	def __truediv__(self, path):
+		if os.path.isabs(path) and self is not self.fs.root: return self.fs.root / path
 		node = self
 		for name in path.split(os.sep):
 			if len(name) == 0: continue
@@ -216,7 +218,7 @@ class Node(object):
 					node._is_dir = True
 					node.children[name] = node = Node(node, name)
 		return node
-
+	
 	@property
 	def fs(self):
 		try: return self._fs

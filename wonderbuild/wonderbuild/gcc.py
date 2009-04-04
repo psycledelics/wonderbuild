@@ -82,7 +82,7 @@ class Impl(object):
 		finally: f.close()
 		cwd = precompile_task.project.fs.cur
 		lock.acquire()
-		try: deps = [cwd(d) for d in deps[deps.find(':') + 1:].split()]
+		try: deps = [cwd / d for d in deps[deps.find(':') + 1:].split()]
 		finally: lock.release()
 		if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
 		dep_sigs = [d.sig for d in deps]
@@ -107,7 +107,7 @@ class Impl(object):
 			finally: f.close()
 			# note: we skip the first implicit dep, which is the dummy actual source
 			lock.acquire()
-			try: deps = [cwd(d) for d in deps[deps.find(':') + 1:].split()[1:]]
+			try: deps = [cwd / d for d in deps[deps.find(':') + 1:].split()[1:]]
 			finally: lock.release()
 			if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
 			dep_sigs = [d.sig for d in deps]

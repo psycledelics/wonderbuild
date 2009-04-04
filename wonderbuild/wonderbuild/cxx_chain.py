@@ -331,14 +331,14 @@ class PreCompileTask(Task):
 	def header(self):
 		try: return self._header
 		except AttributeError:
-			self._header = self.project.bld_node('precompiled')(self.name + '.private.hpp')
+			self._header = self.project.bld_node / 'precompiled' / (self.name + '.private.hpp')
 			return self._header
 
 	@property
 	def target(self):
 		try: return self._target
 		except AttributeError:
-			self._target = self.header.parent(self.header.name + self.cfg.impl.precompile_task_target_ext)
+			self._target = self.header.parent / (self.header.name + self.cfg.impl.precompile_task_target_ext)
 			return self._target
 
 	@property
@@ -435,7 +435,7 @@ class BatchCompileTask(Task):
 			self._actual_sources = []
 			self.target_dir.actual_children # not needed, just an optimisation
 			for s in self.sources:
-				node = self.target_dir(self.mod_task._unique_base_name(s))
+				node = self.target_dir / self.mod_task._unique_base_name(s)
 				if not node.exists:
 					f = open(node.path, 'w')
 					try: f.write('#include "%s"\n' % s.rel_path(self.target_dir))
@@ -488,14 +488,14 @@ class ModTask(Task):
 	def target(self):
 		try: return self._target
 		except AttributeError:
-			self._target = self.cfg.impl.mod_task_target_dir(self)(self.cfg.impl.mod_task_target_name(self))
+			self._target = self.cfg.impl.mod_task_target_dir(self) / self.cfg.impl.mod_task_target_name(self)
 			return self._target
 
 	@property
 	def obj_dir(self):
 		try: return self._obj_dir
 		except AttributeError:
-			self._obj_dir = self.project.bld_node('modules')(self.name)
+			self._obj_dir = self.project.bld_node / 'modules' / self.name
 			return self._obj_dir
 
 	@property
@@ -543,7 +543,7 @@ class ModTask(Task):
 					if self.cfg.check_missing:
 						try: self.target_dir.actual_children # not needed, just an optimisation
 						except OSError: pass
-						o = self.target_dir(self._obj_name(s))
+						o = self.target_dir / self._obj_name(s)
 						if not o.exists:
 							if __debug__ and is_debug: debug('task: target removed: ' + str(o))
 							changed_sources.append(s)
@@ -795,7 +795,7 @@ class BuildCheckTask(Task):
 	def bld_dir(self):
 		try: return self._bld_dir
 		except AttributeError:
-			self._bld_dir = self.project.bld_node('checks')(self.name)
+			self._bld_dir = self.project.bld_node / 'checks' / self.name
 			return self._bld_dir
 
 	def __call__(self, sched_context):
@@ -823,7 +823,7 @@ class BuildCheckTask(Task):
 				dir = self.bld_dir
 				dir.make_dir(dir.parent)
 				r, out, err = self.cfg.impl.process_build_check_task(self)
-				log = dir('build.log')
+				log = dir / 'build.log'
 				f = open(log.path, 'w')
 				try:
 					f.write(self._prog_source_text); f.write('\n')
