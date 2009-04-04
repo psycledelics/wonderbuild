@@ -8,6 +8,7 @@ from collections import deque
 from logger import out, is_debug, debug, colored, silent
 from signature import Sig
 from option_cfg import OptionCfg
+from fhs_cfg import FHSCfg
 from task import Task
 from subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 
@@ -216,6 +217,7 @@ class UserCfg(BuildCfg, OptionCfg):
 	def __init__(self, project):
 		BuildCfg.__init__(self, project)
 		OptionCfg.__init__(self, project)
+		self.fhs = FHSCfg(project)
 		
 		try:
 			old_sig, self.check_missing, \
