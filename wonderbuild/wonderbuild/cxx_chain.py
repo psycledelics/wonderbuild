@@ -390,7 +390,7 @@ class PreCompileTask(Task):
 				f = open(self.header.path, 'w')
 				try: f.write(self.source_text); f.write('\n')
 				finally: f.close()
-				self.cfg.impl.process_precompile_task(self)
+				self.cfg.impl.process_precompile_task(self, sched_context.lock)
 				if False:
 					# We create a file with a #error to ensure the pch is used.
 					f = open(self.header.path, 'w')
@@ -441,7 +441,7 @@ class BatchCompileTask(Task):
 					try: f.write('#include "%s"\n' % s.rel_path(self.target_dir))
 					finally: f.close()
 				self._actual_sources.append(node)
-			self.cfg.impl.process_cxx_task(self)
+			self.cfg.impl.process_cxx_task(self, sched_context.lock)
 		finally: sched_context.lock.acquire()
 
 class ModTask(Task):

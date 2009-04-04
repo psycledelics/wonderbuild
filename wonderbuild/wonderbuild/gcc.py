@@ -60,7 +60,7 @@ class Impl(object):
 		for i in cfg.includes: args += ['-include', os.path.join(os.pardir, os.pardir, i.rel_path(cfg.project.bld_node))]
 
 	@staticmethod
-	def process_precompile_task(precompile_task):
+	def process_precompile_task(precompile_task, lock):
 		# some useful options: -Wmissing-include-dirs -Winvalid-pch -H -fpch-deps -Wp,-v
 		# to print the include search path: g++ -xc++ /dev/null -E -Wp,-v 2>&1 1>/dev/null | sed -e '/^[^ ]/d' -e 's,^ ,-I,'
 		args = precompile_task.cfg.cxx_args_cwd + ['-xc++-header', precompile_task.header.path, '-MD']
@@ -81,7 +81,9 @@ class Impl(object):
 		try: deps = f.read().replace('\\\n', '')
 		finally: f.close()
 		cwd = precompile_task.project.fs.cur
-		deps = [cwd.node_path(d) for d in deps[deps.find(':') + 1:].split()] #XXX concurrency in node creation
+		lock.acquire()
+		try: deps = [cwd.node_path(d) for d in deps[deps.find(':') + 1:].split()]
+		finally: lock.release()
 		if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
 		dep_sigs = [d.sig for d in deps]
 		dep_sigs.sort()
@@ -91,7 +93,7 @@ class Impl(object):
 	def precompile_task_target_ext(self): return '.gch'
 
 	@staticmethod
-	def process_cxx_task(cxx_task):
+	def process_cxx_task(cxx_task, lock):
 		args = cxx_task.cfg.cxx_args_bld + ['-c', '-MMD'] + [s.name for s in cxx_task._actual_sources]
 		cwd = cxx_task.target_dir
 		r = exec_subprocess(args, cwd = cwd.path)
@@ -104,7 +106,9 @@ class Impl(object):
 			try: deps = f.read().replace('\\\n', '')
 			finally: f.close()
 			# note: we skip the first implicit dep, which is the dummy actual source
-			deps = [cwd.node_path(d) for d in deps[deps.find(':') + 1:].split()[1:]]
+			lock.acquire()
+			try: deps = [cwd.node_path(d) for d in deps[deps.find(':') + 1:].split()[1:]]
+			finally: lock.release()
 			if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
 			dep_sigs = [d.sig for d in deps]
 			dep_sigs.sort()
