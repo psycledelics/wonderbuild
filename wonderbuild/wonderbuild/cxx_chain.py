@@ -54,6 +54,7 @@ class BuildCfg(ClientCfg):
 		self.debug = False
 		self.optim = None
 		self.check_missing = False
+		self.fhs = FHSCfg(project)
 
 	def clone(self, class_ = None):
 		if class_ is None: class_ = self.__class__
@@ -70,6 +71,7 @@ class BuildCfg(ClientCfg):
 		c.version = self.version
 		c.debug = self.debug
 		c.optim = self.optim
+		c.fhs = self.fhs
 		return c
 
 	@property
@@ -217,7 +219,6 @@ class UserCfg(BuildCfg, OptionCfg):
 	def __init__(self, project):
 		BuildCfg.__init__(self, project)
 		OptionCfg.__init__(self, project)
-		self.fhs = FHSCfg(project)
 		
 		try:
 			old_sig, self.check_missing, \
@@ -330,14 +331,14 @@ class PreCompileTask(Task):
 	def header(self):
 		try: return self._header
 		except AttributeError:
-			self._header = self.project.bld_node.node_path('precompiled').node_path(self.name + '.private.hpp')
+			self._header = self.project.bld_node('precompiled')(self.name + '.private.hpp')
 			return self._header
 
 	@property
 	def target(self):
 		try: return self._target
 		except AttributeError:
-			self._target = self.header.parent.node_path(self.header.name + self.cfg.impl.precompile_task_target_ext)
+			self._target = self.header.parent(self.header.name + self.cfg.impl.precompile_task_target_ext)
 			return self._target
 
 	@property
@@ -421,7 +422,7 @@ class BatchCompileTask(Task):
 	def uid(self): return self.mod_task.uid
 
 	@property
-	def target_dir(self): return self.mod_task.target_dir
+	def target_dir(self): return self.mod_task.obj_dir
 
 	def __call__(self, sched_context):
 		self.target_dir.make_dir()
@@ -487,11 +488,15 @@ class ModTask(Task):
 	def target(self):
 		try: return self._target
 		except AttributeError:
-			self._target = self.project.bld_node.\
-				node_path('modules').\
-				node_path(self.name).\
-				node_path(self.cfg.impl.mod_task_target_name(self))
+			self._target = self.cfg.impl.mod_task_target_dir(self)(self.cfg.impl.mod_task_target_name(self))
 			return self._target
+
+	@property
+	def obj_dir(self):
+		try: return self._obj_dir
+		except AttributeError:
+			self._obj_dir = self.project.bld_node('modules')(self.name)
+			return self._obj_dir
 
 	@property
 	def target_dir(self): return self.target.parent
@@ -594,6 +599,7 @@ class ModTask(Task):
 		if not need_process:
 			if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 		else:
+			self.target_dir.make_dir()
 			sched_context.lock.release()
 			try:
 				if not silent:

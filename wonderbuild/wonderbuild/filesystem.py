@@ -204,7 +204,9 @@ class Node(object):
 						for node in node.find_iter(in_pats, ex_pats, prune_pats): yield node
 		raise StopIteration
 
-	def node_path(self, path):
+	def node_path(self, path): return self(path)
+
+	def __call__(self, path):
 		if os.path.isabs(path) and self is not self.fs.root: return self.fs.root.node_path(path)
 		node = self
 		for name in path.split(os.sep):

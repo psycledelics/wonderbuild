@@ -81,7 +81,7 @@ class Impl(object):
 		try: deps = f.read().replace('\\\n', '')
 		finally: f.close()
 		cwd = precompile_task.project.fs.cur
-		deps = [cwd.node_path(d) for d in deps[deps.find(':') + 1:].split()]
+		deps = [cwd.node_path(d) for d in deps[deps.find(':') + 1:].split()] #XXX concurrency in node creation
 		if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
 		dep_sigs = [d.sig for d in deps]
 		dep_sigs.sort()
@@ -164,7 +164,7 @@ class Impl(object):
 
 	@staticmethod
 	def process_mod_task(mod_task, obj_names):
-		path = mod_task.target_dir.path
+		path = mod_task.obj_dir.path
 		obj_paths = [os.path.join(path, o) for o in obj_names]
 		if mod_task.ld:
 			args = mod_task.cfg.ld_args[:]
@@ -183,6 +183,12 @@ class Impl(object):
 				args.append(mod_task.target.path)
 				r = exec_subprocess(args)
 				if r != 0: raise Exception, r
+
+	@staticmethod
+	def mod_task_target_dir(mod_task):
+		if mod_task.kind == mod_task.Kinds.PROG: dir = mod_task.cfg.fhs.bin
+		else: dir = mod_task.cfg.fhs.lib
+		return dir
 
 	@staticmethod
 	def mod_task_target_name(mod_task):
