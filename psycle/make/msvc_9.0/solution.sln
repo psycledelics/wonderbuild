@@ -431,6 +431,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_iopan", "
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_tremolo", "projects\psycle-plugins\dw_tremolo.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05190}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-helpers", "projects\psycle-helpers\psycle-helpers.vcproj", "{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		debug|win32 = debug|win32
@@ -1375,6 +1377,20 @@ Global
 		{8ADD9C4A-378B-48D8-9853-4EA253F05190}.release|x64.Build.0 = release|x64
 		{8ADD9C4A-378B-48D8-9853-4EA253F05190}.unpack|win32.ActiveCfg = debug|Win32
 		{8ADD9C4A-378B-48D8-9853-4EA253F05190}.unpack|x64.ActiveCfg = release|x64
+		{16F2DEB9-8F35-45C9-B460-732615F0C8D5}.debug|win32.ActiveCfg = debug|Win32
+		{16F2DEB9-8F35-45C9-B460-732615F0C8D5}.debug|win32.Build.0 = debug|Win32
+		{16F2DEB9-8F35-45C9-B460-732615F0C8D5}.debug|x64.ActiveCfg = debug|x64
+		{16F2DEB9-8F35-45C9-B460-732615F0C8D5}.debug|x64.Build.0 = debug|x64
+		{16F2DEB9-8F35-45C9-B460-732615F0C8D5}.documentation|win32.ActiveCfg = debug|x64
+		{16F2DEB9-8F35-45C9-B460-732615F0C8D5}.documentation|x64.ActiveCfg = debug|x64
+		{16F2DEB9-8F35-45C9-B460-732615F0C8D5}.documentation|x64.Build.0 = debug|x64
+		{16F2DEB9-8F35-45C9-B460-732615F0C8D5}.release|win32.ActiveCfg = release|Win32
+		{16F2DEB9-8F35-45C9-B460-732615F0C8D5}.release|win32.Build.0 = release|Win32
+		{16F2DEB9-8F35-45C9-B460-732615F0C8D5}.release|x64.ActiveCfg = release|x64
+		{16F2DEB9-8F35-45C9-B460-732615F0C8D5}.release|x64.Build.0 = release|x64
+		{16F2DEB9-8F35-45C9-B460-732615F0C8D5}.unpack|win32.ActiveCfg = release|x64
+		{16F2DEB9-8F35-45C9-B460-732615F0C8D5}.unpack|x64.ActiveCfg = release|x64
+		{16F2DEB9-8F35-45C9-B460-732615F0C8D5}.unpack|x64.Build.0 = release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

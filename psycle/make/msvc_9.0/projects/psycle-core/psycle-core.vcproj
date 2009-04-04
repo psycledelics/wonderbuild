@@ -278,23 +278,7 @@
 				Name="core"
 				>
 				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\binread.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\binread.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\commands.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\config.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\config.private.hpp"
 					>
 				</File>
 				<File
@@ -314,35 +298,15 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\datacompression.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\datacompression.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\dither.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\dither.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\dsp.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\dsp.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\eventdriver.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\eventdriver.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\exceptions.h"
 					>
 				</File>
 				<File
@@ -362,19 +326,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\filter.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\filter.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\filterhelper.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\fwd.hpp"
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\fwd.h"
 					>
 				</File>
 				<File
@@ -459,22 +415,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\machinekey.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\mersennetwister.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\mersennetwister.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\misc.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\misc.h"
 					>
 				</File>
 				<File
@@ -594,14 +534,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\riff.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\riff.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\sampler.cpp"
 					>
 				</File>
@@ -619,6 +551,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\signalslib.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\sigslot.h"
 					>
 				</File>
 				<File
@@ -651,6 +587,22 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\timesignature.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\vsthost.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\vsthost.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\vstplugin.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-core\src\psycle\core\vstplugin.h"
 					>
 				</File>
 				<File
@@ -783,17 +735,25 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="helpers"
+				Name="seib"
 				>
-				<File
-					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\scale.hpp"
-					>
-				</File>
 				<Filter
-					Name="math"
+					Name="vst"
 					>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\pi.hpp"
+						RelativePath="..\..\..\..\..\psycle-core\src\seib\vst\CVSTHost.Seib.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\..\psycle-core\src\seib\vst\CVSTHost.Seib.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\..\psycle-core\src\seib\vst\EffectWnd.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\..\psycle-core\src\seib\vst\EffectWnd.hpp"
 						>
 					</File>
 				</Filter>
