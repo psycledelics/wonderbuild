@@ -7,9 +7,6 @@ def wonderbuild_script(project):
 	from wonderbuild.cxx_chain import UserCfg, PkgConfigCheckTask, BuildCheckTask, PreCompileTask, ModTask
 	from wonderbuild.std_checks import StdMathCheckTask
 	
-	from wonderbuild.fhs import FHSCfg
-	fhs_cfg = FHSCfg(project)
-
 	tasks = []
 
 	glibmm = PkgConfigCheckTask(project, ['glibmm-2.4 >= 2.4'])
