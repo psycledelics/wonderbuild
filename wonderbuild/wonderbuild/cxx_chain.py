@@ -497,7 +497,7 @@ class ModTask(Task):
 	def target_dir(self): return self.target.parent
 
 	def __call__(self, sched_context):
-		if len(self.dep_lib_tasks) != 0: sched_context.parallel_no_wait(self.dep_lib_tasks) #XXX multiple tasks => release lock!
+		if len(self.dep_lib_tasks) != 0: sched_context.parallel_no_wait(self.dep_lib_tasks)
 		if len(self.cfg.pkg_config) != 0:
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask(self.project, self.cfg.pkg_config)
 			sched_context.parallel_wait((pkg_config_cxx_flags_task,))
