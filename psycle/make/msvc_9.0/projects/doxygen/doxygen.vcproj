@@ -41,8 +41,6 @@
 		</Configuration>
 		<Configuration
 			Name="html|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="0"
 			InheritedPropertySheets="..\..\properties\top_output_dir.vsprops"
 			>

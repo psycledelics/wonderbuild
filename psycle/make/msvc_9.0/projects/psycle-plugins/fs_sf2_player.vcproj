@@ -136,8 +136,6 @@
 		</Configuration>
 		<Configuration
 			Name="debug|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\plugin.vsprops;..\..\properties\use_pre_compiled_header_with_mfc.vsprops"
 			>
@@ -198,8 +196,6 @@
 		</Configuration>
 		<Configuration
 			Name="release|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\plugin.vsprops;..\..\properties\use_pre_compiled_header_with_mfc.vsprops"
 			UseOfMFC="0"

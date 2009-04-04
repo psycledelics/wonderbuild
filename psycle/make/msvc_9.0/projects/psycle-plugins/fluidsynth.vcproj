@@ -141,8 +141,6 @@
 		</Configuration>
 		<Configuration
 			Name="debug|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\plugin.vsprops"
 			>
@@ -206,8 +204,6 @@
 		</Configuration>
 		<Configuration
 			Name="release|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\plugin.vsprops"
 			WholeProgramOptimization="1"
