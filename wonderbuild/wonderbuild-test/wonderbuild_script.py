@@ -13,7 +13,7 @@ def wonderbuild_script(project):
 
 	build_cfg = UserCfg(project)
 
-	src_dir = project.src_node.node_path('src')
+	src_dir = project.src_node('src')
 	build_cfg.include_paths.append(src_dir)
 
 	check_cfg = build_cfg.clone()
@@ -68,7 +68,7 @@ def wonderbuild_script(project):
 			lib_pch.apply_to(self.cfg)
 			if std_math_check.result: std_math_check.apply_to(self.cfg)
 			if glibmm.result: glibmm.apply_to(self.cfg)
-			for s in src_dir.node_path('foo').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
+			for s in src_dir('foo').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 			ModTask.__call__(self, sched_ctx)
 	lib_foo = LibFoo()
 	
@@ -81,7 +81,7 @@ def wonderbuild_script(project):
 			prog_pch.apply_to(self.cfg)
 			if glibmm.result: glibmm.apply_to(self.cfg)
 			self.dep_lib_tasks.append(lib_foo)
-			for s in src_dir.node_path('main').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
+			for s in src_dir('main').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 			ModTask.__call__(self, sched_ctx)
 	main_prog = MainProg()
 	tasks.append(main_prog)
@@ -97,7 +97,7 @@ def wonderbuild_yield_script(project):
 
 	build_cfg = UserCfg(project)
 
-	src_dir = project.src_node.node_path('src')
+	src_dir = project.src_node('src')
 	build_cfg.include_paths.append(src_dir)
 
 	check_cfg = build_cfg.clone()
@@ -144,7 +144,7 @@ def wonderbuild_yield_script(project):
 			lib_pch.apply_to(self.cfg)
 			if std_math_check.result: std_math_check.apply_to(self.cfg)
 			if glibmm.result: glibmm.apply_to(self.cfg)
-			for s in src_dir.node_path('foo').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
+			for s in src_dir('foo').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 			for t in ModTask.__call__(self, sched_ctx): yield t
 	lib_foo = LibFoo()
 	
@@ -157,7 +157,7 @@ def wonderbuild_yield_script(project):
 			self.dep_lib_tasks.append(lib_foo)
 			self.cfg.lib_paths.append(lib_foo.target.parent)
 			self.cfg.libs.append(lib_foo.name)
-			for s in src_dir.node_path('main').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
+			for s in src_dir('main').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 			for t in ModTask.__call__(self, sched_ctx): yield t
 	main_prog = MainProg()
 	tasks.append(main_prog)

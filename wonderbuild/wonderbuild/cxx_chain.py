@@ -435,7 +435,7 @@ class BatchCompileTask(Task):
 			self._actual_sources = []
 			self.target_dir.actual_children # not needed, just an optimisation
 			for s in self.sources:
-				node = self.target_dir.node_path(self.mod_task._unique_base_name(s))
+				node = self.target_dir(self.mod_task._unique_base_name(s))
 				if not node.exists:
 					f = open(node.path, 'w')
 					try: f.write('#include "%s"\n' % s.rel_path(self.target_dir))
@@ -543,7 +543,7 @@ class ModTask(Task):
 					if self.cfg.check_missing:
 						try: self.target_dir.actual_children # not needed, just an optimisation
 						except OSError: pass
-						o = self.target_dir.node_path(self._obj_name(s))
+						o = self.target_dir(self._obj_name(s))
 						if not o.exists:
 							if __debug__ and is_debug: debug('task: target removed: ' + str(o))
 							changed_sources.append(s)
@@ -795,7 +795,7 @@ class BuildCheckTask(Task):
 	def bld_dir(self):
 		try: return self._bld_dir
 		except AttributeError:
-			self._bld_dir = self.project.bld_node.node_path('checks').node_path(self.name)
+			self._bld_dir = self.project.bld_node('checks')(self.name)
 			return self._bld_dir
 
 	def __call__(self, sched_context):
@@ -823,7 +823,7 @@ class BuildCheckTask(Task):
 				dir = self.bld_dir
 				dir.make_dir(dir.parent)
 				r, out, err = self.cfg.impl.process_build_check_task(self)
-				log = dir.node_path('build.log')
+				log = dir('build.log')
 				f = open(log.path, 'w')
 				try:
 					f.write(self._prog_source_text); f.write('\n')

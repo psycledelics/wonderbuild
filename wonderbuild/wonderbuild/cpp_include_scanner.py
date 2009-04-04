@@ -71,7 +71,7 @@ class IncludeScanner(object):
 		return seen
 	
 	def search_rel(self, dir, include, paths, not_found):
-		n = dir.node_path(include)
+		n = dir(include)
 		if n in self.not_found:
 			not_found.add(n)
 			return None
@@ -92,7 +92,7 @@ class IncludeScanner(object):
 	def search_abs(self, include, paths, not_found):
 		if include in not_found: return None
 		for dir in paths:
-			n = dir.node_path(include)
+			n = dir(include)
 			if n.parent.exists:
 				n.parent.actual_children # not needed, just an optimisation
 				if n.exists: return n

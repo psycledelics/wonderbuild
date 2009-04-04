@@ -159,7 +159,7 @@ def wonderbuild_script(project):
 				pch(sched_ctx)
 				pch.apply_to(self.cfg)
 			self.cfg.defines['BENCH_LIB'] = self.i
-			src_dir = top_src_dir.node_path(self.name)
+			src_dir = top_src_dir(self.name)
 			for s in src_dir.find_iter(in_pats = ['*.cpp']): self.sources.append(s)
 			ModTask.__call__(self, sched_ctx)
 
@@ -212,7 +212,7 @@ def wonderbuild_yield_script(project):
 				yield (pch,)
 				pch.apply_to(self.cfg)
 			self.cfg.defines['BENCH_LIB'] = self.i
-			src_dir = top_src_dir.node_path(self.name)
+			src_dir = top_src_dir(self.name)
 			for s in src_dir.find_iter(in_pats = ['*.cpp']): self.sources.append(s)
 			for t in ModTask.__call__(self, sched_ctx): yield t
 

@@ -18,7 +18,7 @@ class FileSystem(object):
 		self.root._exists = True
 		self.root._height = 0
 		self.root._fs = self
-		self.cur = self.root.node_path(os.getcwd())
+		self.cur = self.root(os.getcwd())
 		self.cur._fs = self
 		self.cur._is_dir = True
 		self.cur._exists = True
@@ -204,10 +204,8 @@ class Node(object):
 						for node in node.find_iter(in_pats, ex_pats, prune_pats): yield node
 		raise StopIteration
 
-	def node_path(self, path): return self(path)
-
 	def __call__(self, path):
-		if os.path.isabs(path) and self is not self.fs.root: return self.fs.root.node_path(path)
+		if os.path.isabs(path) and self is not self.fs.root: return self.fs.root(path)
 		node = self
 		for name in path.split(os.sep):
 			if len(name) == 0: continue
