@@ -49,6 +49,7 @@ class BuildCfg(ClientCfg):
 		self.ar_prog = None
 		self.ranlib_prog = None
 		self.shared = None
+		self.static_prog = None
 		self.impl = None
 		self.kind = self.version = None
 		self.debug = False
@@ -66,6 +67,7 @@ class BuildCfg(ClientCfg):
 		c.ar_prog = self.ar_prog
 		c.ranlib_prog = self.ranlib_prog
 		c.shared = self.shared
+		c.static_prog = self.static_prog
 		c.impl = self.impl
 		c.kind = self.kind
 		c.version = self.version
@@ -113,6 +115,7 @@ class BuildCfg(ClientCfg):
 		except AttributeError:
 			sig = Sig(self._common_sig)
 			sig.update(str(self.shared))
+			sig.update(str(self.static_prog))
 			for p in self.lib_paths: sig.update(p.path)
 			for l in self.libs: sig.update(l)
 			for l in self.static_libs: sig.update(l)
@@ -194,7 +197,8 @@ class UserCfg(BuildCfg, OptionCfg):
 		'cxx-debug',
 		'cxx-optim',
 		'cxx-pic',
-		'cxx-mod-shared',
+		'cxx-mod-shared-libs',
+		'cxx-mod-static-progs',
 		'cxx-mod-ld',
 		'cxx-mod-ld-flags',
 		'cxx-mod-ar',
@@ -209,7 +213,9 @@ class UserCfg(BuildCfg, OptionCfg):
 		help['cxx-debug']            = ('<yes|no>', 'make the c++ compiler produce debugging information or not', 'no')
 		help['cxx-optim']            = ('<level>', 'use c++ compiler optimisation <level>')
 		help['cxx-pic']              = ('<yes|no>', 'make the c++ compiler emit pic code rather than non-pic code for static libs and programs (always pic for shared libs)', 'no (for static libs and programs)')
-		help['cxx-mod-shared']       = ('<yes|no>', 'build and link shared libs (rather than static libs)', 'yes unless pic is set explicitly to no')
+		#help['cxx-mod-static']      = ('<no|libs|all>', '...', 'no')
+		help['cxx-mod-shared-libs']  = ('<yes|no>', 'build shared libs (rather than static libs)', 'yes unless pic is set explicitly to no')
+		help['cxx-mod-static-progs'] = ('<yes|no>', 'statically link programs (rather than dynamically using shared libs)', 'no')
 		help['cxx-mod-ld']           = ('<prog>', 'use <prog> as shared lib and program linker')
 		help['cxx-mod-ld-flags']     = ('[flags]', 'use specific linker flags')
 		help['cxx-mod-ar']           = ('<prog>', 'use <prog> as static lib archiver', 'ar')
@@ -224,7 +230,7 @@ class UserCfg(BuildCfg, OptionCfg):
 			old_sig, self.check_missing, \
 			self.kind, self.version, \
 			self.cxx_prog, self.cxx_flags, self.pic, self.optim, self.debug, \
-			self.shared, self.ld_prog, self.ld_flags, \
+			self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
 			self.ar_prog, self.ranlib_prog = \
 				self.project.state_and_cache[self.__class__.__name__]
 		except KeyError: parse = True
@@ -248,9 +254,12 @@ class UserCfg(BuildCfg, OptionCfg):
 			if 'cxx-pic' in o: self.pic = o['cxx-pic'] != 'no'
 			else: self.pic = None
 
-			if 'cxx-mod-shared' in o: self.shared = o['cxx-mod-shared'] != 'no'
+			if 'cxx-mod-shared-libs' in o: self.shared = o['cxx-mod-shared-libs'] != 'no'
 			else: self.shared = None
 			
+			if 'cxx-mod-static-progs' in o: self.static_prog = o['cxx-mod-static-progs'] == 'yes'
+			else: self.static_prog = False
+
 			if 'cxx-mod-ld' in o: self.ld_prog = o['cxx-mod-ld']
 			if 'cxx-mod-flags' in o: self.cxx_mod_flags = o['cxx-mod-flags'].split()
 			else:
@@ -276,7 +285,7 @@ class UserCfg(BuildCfg, OptionCfg):
 				self.options_sig, self.check_missing, \
 				self.kind, self.version, \
 				self.cxx_prog, self.cxx_flags, self.pic, self.optim, self.debug, \
-				self.shared, self.ld_prog, self.ld_flags, \
+				self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
 				self.ar_prog, self.ranlib_prog
 
 		elif self.kind == 'gcc':
@@ -373,8 +382,11 @@ class PreCompileTask(Task):
 							if __debug__ and is_debug: debug('cpp: deps changed: ' + str(self.header))
 							changed = True
 						elif self.cfg.check_missing:
-							try: self.target_dir.actual_children # not needed, just an optimisation
-							except OSError: pass
+							self.target_dir.lock.acquire()
+							try:
+								try: self.target_dir.actual_children # not needed, just an optimisation
+								except OSError: pass
+							finally: self.target_dir.lock.release()
 							if not self.target.exists:
 								if __debug__ and is_debug: debug('task: target removed: ' + str(self.target))
 								changed = True
@@ -426,6 +438,7 @@ class BatchCompileTask(Task):
 
 	def __call__(self, sched_context):
 		self.target_dir.make_dir()
+		self.target_dir.actual_children # not needed, just an optimisation
 		sched_context.lock.release()
 		try:
 			if not silent:
@@ -433,7 +446,6 @@ class BatchCompileTask(Task):
 				else: pic = 'non-pic'; color = '7;34'
 				self.print_desc('batch-compiling ' + pic + ' objects from c++ ' + str(self), color)
 			self._actual_sources = []
-			self.target_dir.actual_children # not needed, just an optimisation
 			for s in self.sources:
 				node = self.target_dir / self.mod_task._unique_base_name(s)
 				if not node.exists:
@@ -508,7 +520,7 @@ class ModTask(Task):
 			sched_context.parallel_wait((pkg_config_cxx_flags_task,))
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
 			if self.ld:
-				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask(self.project, self.cfg.pkg_config, self.cfg.shared)
+				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask(self.project, self.cfg.pkg_config, self.cfg.shared or not self.cfg.static_prog)
 				sched_context.parallel_no_wait((pkg_config_ld_flags_task,))
 		changed_sources = []
 		try: state = self.project.state_and_cache[self.uid]
@@ -544,8 +556,11 @@ class ModTask(Task):
 						changed_sources.append(s)
 						continue
 					if self.cfg.check_missing:
-						try: self.target_dir.actual_children # not needed, just an optimisation
-						except OSError: pass
+						self.target_dir.lock.acquire()
+						try:
+							try: self.target_dir.actual_children # not needed, just an optimisation
+							except OSError: pass
+						finally: self.target_dir.lock.release()
 						o = self.target_dir / self._obj_name(s)
 						if not o.exists:
 							if __debug__ and is_debug: debug('task: target removed: ' + str(o))
@@ -602,8 +617,11 @@ class ModTask(Task):
 				if not silent:
 					if not self.ld: desc = 'archiving and indexing static lib'; color = '7;36'
 					elif self.kind == ModTask.Kinds.PROG:
-						if not self.cfg.pic: desc = 'linking non-pic program'; color = '7;32'
-						else: desc = 'linking pic program'; color = '7;1;32'
+						if self.cfg.pic: pic = 'pic'; color = '7;1'
+						else: pic = 'non-pic'; color = '7'
+						if self.cfg.static_prog: shared = 'static'; color += ';37;40'
+						else: shared = 'dynamic'; color += ';32'
+						desc = 'linking ' + shared + ' ' + pic + ' program'
 					elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = '7;1;34'
 					else: desc = 'linking shared lib'; color = '7;1;33'
 					self.print_desc(desc + ' ' + str(self), color)

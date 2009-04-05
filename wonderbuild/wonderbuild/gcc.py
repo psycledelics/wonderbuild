@@ -144,6 +144,7 @@ class Impl(object):
 	def cfg_ld_args(cfg):
 		args = [cfg.ld_prog]
 		if cfg.shared: args.append('-shared')
+		elif cfg.static_prog: args.append('-static') # we can have both -shared and -static but that's not very useful
 		for p in cfg.lib_paths: args.append('-L' + p.path)
 		for l in cfg.libs: args.append('-l' + l)
 		if len(cfg.static_libs):
