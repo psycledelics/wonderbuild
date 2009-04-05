@@ -172,7 +172,7 @@ BuildmasterConfig['schedulers'].append(
 		branch = None,
 		treeStableTimer = bunch_timer,
 		builderNames = ['freepsycle'],
-		fileIsImportant = lambda change: filter(change, ['freepsycle/', 'universalis/', 'diversalis/', 'packageneric/'])
+		fileIsImportant = lambda change: filter(change, ['freepsycle/', 'psycle-helpers/', 'universalis/', 'diversalis/', 'packageneric/'])
 	)
 )
 
@@ -197,7 +197,7 @@ BuildmasterConfig['schedulers'].append(
 		branch = None,
 		treeStableTimer = bunch_timer,
 		builderNames = ['freepsycle.mingw'],
-		fileIsImportant = lambda change: filter(change, ['freepsycle/', 'universalis/', 'diversalis/', 'packageneric/'])
+		fileIsImportant = lambda change: filter(change, ['freepsycle/', 'psycle-helpers/', 'universalis/', 'diversalis/', 'packageneric/'])
 	)
 )
 
@@ -240,7 +240,7 @@ BuildmasterConfig['schedulers'].append(
 		branch = None,
 		treeStableTimer = bunch_timer,
 		builderNames = ['psycle-core'],
-		fileIsImportant = lambda change: filter(change, ['psycle-core/', 'psycle-audiodrivers/'])
+		fileIsImportant = lambda change: filter(change, ['psycle-core/', 'psycle-helpers/', 'psycle-audiodrivers/'])
 	)
 )
 
@@ -265,7 +265,7 @@ if False: BuildmasterConfig['schedulers'].append(
 		branch = None,
 		treeStableTimer = bunch_timer,
 		builderNames = ['psycle-core.mingw'],
-		fileIsImportant = lambda change: filter(change, ['psycle-core/', 'psycle-audiodrivers/'])
+		fileIsImportant = lambda change: filter(change, ['psycle-core/', 'psycle-helpers/', 'psycle-audiodrivers/'])
 	)
 )
 
@@ -411,7 +411,7 @@ BuildmasterConfig['schedulers'].append(
 		branch = None,
 		treeStableTimer = bunch_timer,
 		builderNames = ['psycle-plugins'],
-		fileIsImportant = lambda change: filter(change, ['psycle-plugins/', 'universalis/', 'diversalis/', 'packageneric/'])
+		fileIsImportant = lambda change: filter(change, ['psycle-plugins/', 'psycle-helpers/', 'universalis/', 'diversalis/', 'packageneric/'])
 	)
 )
 
@@ -435,7 +435,7 @@ BuildmasterConfig['schedulers'].append(
 		branch = None,
 		treeStableTimer = bunch_timer,
 		builderNames = ['psycle-plugins.mingw'],
-		fileIsImportant = lambda change: filter(change, ['psycle-plugins/', 'universalis/', 'diversalis/', 'packageneric/'])
+		fileIsImportant = lambda change: filter(change, ['psycle-plugins/', 'psycle-helpers/', 'universalis/', 'diversalis/', 'packageneric/'])
 	)
 )
 
