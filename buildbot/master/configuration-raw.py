@@ -671,6 +671,7 @@ if True:
 	microsoft_slaves_sondar = ['winux']
 	
 	svn_sondar = 'https://sondar.svn.sourceforge.net/svnroot/sondar/trunk'
+	BuildmasterConfig['sources'].append(SVNPoller(svnurl = svn_sondar, pollinterval = poll_interval, histmax = poll_interval  * 2 // 60))
 	
 	class CompileSondar(Compile):
 		name = 'compile-sondar'
