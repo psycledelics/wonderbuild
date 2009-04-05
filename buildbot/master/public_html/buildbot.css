@@ -1,10 +1,38 @@
+/*
+	A stylesheet for the waterfall status delivery of the master buildbot
+	(originally comes from fluendo's buildbot)
+*/
+
+* {
+	font-family: Verdana, Cursor;
+	font-size: 10px;
+	font-weight: bold;
+}
+
+/*
 a:visited {
 	color: #800080;
 }
+*/
+a:link,a:visited,a:active {
+	color: #666666;
+}
+a:hover {
+	color: #FFFFFF;
+}
+
+.table {
+	border-spacing: 2px;
+}
 
 td.Event, td.BuildStep, td.Activity, td.Change, td.Time, td.Builder {
+    /*
     border-top: 1px solid;
     border-right: 1px solid;
+    */
+	color: #333333;
+	border: 1px solid #666666;
+	background-color: #CCCCCC;
 }
 
 td.box {
@@ -13,33 +41,68 @@ td.box {
 
 /* Activity states */
 .offline { 
-        background-color: red;
+	/*
+	background-color: red;
+	*/
+	color: #FFFFFF;
+	border: 1px solid #8000c0;
+	background-color: #e0b0ff;
 }
 .idle {
 	background-color: white;
 }
 .waiting { 
-        background-color: yellow;
+	background-color: yellow;
 }
-.building { 
-        background-color: yellow;
+.building {
+	/*
+	background-color: yellow;
+	*/
+	color: #666666;
+	border: 1px solid #ffff00;
+	background-color: #fffc6c;
 }
 
 /* LastBuild, BuildStep states */
 .success {
+	/*
 	background-color: #72ff75;
+	*/
+	color: #FFFFFF;
+	border: 1px solid #2f8f0f;
+	background-color: #8fdf5f;
 }
 .failure {
+	/*
 	background-color: red;
+	*/
+	color: #FFFFFF;
+	border: 1px solid #f33636;
+	background-color: #e98080;
 }
 .warnings {
+	/*
 	background-color: #ff8000;
+	*/
+	color: #FFFFFF;
+	border: 1px solid #fc901f;
+	background-color: #ffc343;
 }
 .exception {
+	/*
 	background-color: #c000c0;
+	*/
+	color: #FFFFFF;
+	border: 1px solid #8000c0;
+	background-color: #e0b0ff;
 }
 .start,.running {
+	/*
 	background-color: yellow;
+	*/
+	color: #666666;
+	border: 1px solid #ffff00;
+	background-color: #fffc6c;
 }
 
 /* grid styles */
