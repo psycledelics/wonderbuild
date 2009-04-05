@@ -13,7 +13,7 @@ a:link, a:visited, a:active {
 	color: #666666;
 }
 a:hover {
-	color: #FFFFFF;
+	color: #000066;
 }
 
 td.Event, td.Change, td.Time, td.Builder {
