@@ -514,14 +514,17 @@ class ModTask(Task):
 		try: state = self.project.state_and_cache[self.uid]
 		except KeyError:
 			if __debug__ and is_debug: debug('task: no state: ' + str(self))
-			self.project.state_and_cache[self.uid] = None, None, {}
+			state = self.project.state_and_cache[self.uid] = None, None, None, {}
+			self._type_changed = False
 			changed_sources = self.sources
 		else:
-			if state[1] != self.cfg.cxx_sig:
+			self._type_changed = state[1] != self.ld
+			if __debug__ and is_debug and self._type_changed: debug('task: mod type changed: ' + str(self))
+			if state[2] != self.cfg.cxx_sig:
 				if __debug__ and is_debug: debug('task: cxx sig changed: ' + str(self))
 				changed_sources = self.sources
 			else:
-				implicit_deps = state[2]
+				implicit_deps = state[3]
 				for s in self.sources:
 					try: deps, old_dep_sig = implicit_deps[s] # TODO also put self.cfg.cxx_sig, and -include in implicit_deps
 					except KeyError:
@@ -577,25 +580,18 @@ class ModTask(Task):
 					self.cfg.lib_paths.append(l.target.parent)
 					self.cfg.libs.append(l.name)
 		if not need_process:
-			state = self.project.state_and_cache[self.uid]
 			if state[0] != self._mod_sig:
 				if __debug__ and is_debug: debug('task: mod sig changed: ' + str(self))
 				changed_sources = self.sources
 				need_process = True
 			else:
 				for t in self.dep_lib_tasks:
-					try: processed = t._needed_process
+					# when a dependant lib is a static archive, or changes its type from static to shared, we need to relink.
+					try: need_process = t._needed_process and (not t.ld or t._type_changed)
 					except AttributeError: continue # not a lib task
-					if processed:
-							try: ld = t.ld
-							except AttributeError: continue # not a lib task
-							if True:#if not ld: when a dependant lib changes its kind from static to shared, we actually need to relink.
-								# TODO To be able to detect when a dependant lib changes its kind,
-								# we'd need to store these kinds in the task state.
-								# For now, we always relink, even when the dependent lib was already a shared lib before.
-								if __debug__ and is_debug: debug('task: in task changed: ' + str(self) + ' ' + str(t))
-								need_process = True
-								break
+					if need_process:
+						if __debug__ and is_debug: debug('task: in lib task changed: ' + str(self) + ' ' + str(t))
+						break
 		if not need_process:
 			if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 		else:
@@ -613,13 +609,13 @@ class ModTask(Task):
 				if self.ld: sources = self.sources
 				else: sources = changed_sources
 				self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources])
-				implicit_deps = self.project.state_and_cache[self.uid][2]
+				implicit_deps = self.project.state_and_cache[self.uid][3]
 				if len(implicit_deps) > len(self.sources):
 					# remove old sources from implicit deps dictionary
 					sources_states = {}
 					for s in self.sources: sources_states[s] = implicit_deps[s]
 				else: sources_states = implicit_deps
-				self.project.state_and_cache[self.uid] = self._mod_sig, self.cfg.cxx_sig, sources_states #XXX move cxx_sig into obj sig
+				self.project.state_and_cache[self.uid] = self._mod_sig, self.ld, self.cfg.cxx_sig, sources_states # TODO move cxx_sig into obj sig
 			finally: sched_context.lock.acquire()
 		if not self.cfg.check_missing: self.obj_dir.forget()
 		self._needed_process = need_process

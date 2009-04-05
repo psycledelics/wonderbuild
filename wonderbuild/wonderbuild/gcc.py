@@ -98,7 +98,7 @@ class Impl(object):
 		cwd = cxx_task.target_dir
 		r = exec_subprocess(args, cwd = cwd.path)
 		if r != 0: raise Exception, r
-		implicit_deps = cxx_task.project.state_and_cache[cxx_task.uid][2]
+		implicit_deps = cxx_task.project.state_and_cache[cxx_task.uid][3]
 		for s in zip(cxx_task.sources, cxx_task._actual_sources):
 			# reads deps from the .d files generated as side-effect of compilation by gcc's -MD or -MMD option
 			path = s[1].path

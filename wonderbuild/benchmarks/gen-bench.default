@@ -10,7 +10,6 @@ rm -Rf bench bench-* &&
 cp -R bench bench-make &&
 cp -R bench bench-jam &&
 cp -R bench bench-wonderbuild &&
-cp -R bench bench-wonderbuild_yield &&
 cp -R bench bench-waf &&
 cp -R bench bench-scons &&
 
