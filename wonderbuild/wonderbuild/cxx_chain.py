@@ -587,7 +587,8 @@ class ModTask(Task):
 			else:
 				for t in self.dep_lib_tasks:
 					# when a dependant lib is a static archive, or changes its type from static to shared, we need to relink.
-					try: need_process = t._needed_process and (not t.ld or t._type_changed)
+					# when the check-missing option is on, we also relink to check that external symbols still exist.
+					try: need_process = t._needed_process and (not t.ld or t._type_changed or self.cfg.check_missing)
 					except AttributeError: continue # not a lib task
 					if need_process:
 						if __debug__ and is_debug: debug('task: in lib task changed: ' + str(self) + ' ' + str(t))
