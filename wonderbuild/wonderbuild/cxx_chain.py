@@ -621,7 +621,7 @@ class ModTask(Task):
 				else: sources_states = implicit_deps
 				self.project.state_and_cache[self.uid] = self._mod_sig, self.cfg.cxx_sig, sources_states #XXX move cxx_sig into obj sig
 			finally: sched_context.lock.acquire()
-		if not self.cfg.check_missing: self.target_dir.forget()
+		if not self.cfg.check_missing: self.obj_dir.forget()
 		self._needed_process = need_process
 
 	def _unique_base_name(self, source):
