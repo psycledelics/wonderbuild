@@ -3,10 +3,6 @@ TARGET = psycle-core
 # include the base stuff shared amongst all qmake projects.
 include(../../packageneric/qmake/common.pri)
 
-# this include defines a dependency on the universalis lib.
-include($$TOP_SRC_DIR/universalis/qmake/universalis.pri)
-
-# this include defines a dependency on the psycle-core lib.
 include(psycle-core.pri)
 
 TEMPLATE = lib # This project builds a library.

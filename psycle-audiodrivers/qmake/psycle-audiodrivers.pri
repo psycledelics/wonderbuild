@@ -2,9 +2,7 @@ isEmpty(psycle_audiodrivers_included) {
 	psycle_audiodrivers_included = 1
 	verbose: message("psycle-audiodrivers included")
 	
-	include($$TOP_SRC_DIR/universalis/qmake/universalis.pri)
-	INCLUDEPATH *= $$TOP_SRC_DIR/psycle-helpers/src
-	DEPENDPATH  *= $$TOP_SRC_DIR/psycle-helpers/src
+	include($$TOP_SRC_DIR/psycle-helpers/qmake/psycle-helpers.pri)
 
 	unix {
 		CONFIG *= link_pkgconfig # adds support for pkg-config via the PKG_CONFIG var

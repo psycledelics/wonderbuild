@@ -4,7 +4,6 @@ isEmpty(psycle_core_included) {
 
 	include(libxml++.pri)
 	include(zlib.pri)
-	include($$TOP_SRC_DIR/universalis/qmake/universalis.pri)
 	include($$TOP_SRC_DIR/psycle-audiodrivers/qmake/psycle-audiodrivers.pri)
 
 	PSYCLE_CORE_DIR = $$TOP_SRC_DIR/psycle-core
