@@ -7,8 +7,8 @@ isEmpty(psycle_helpers_included) {
 	PSYCLE_HELPERS_DIR = $$TOP_SRC_DIR/psycle-helpers
 	PSYCLE_HELPERS_BUILD_DIR = $$PSYCLE_HELPERS_DIR/++build
 	
-	INCLUDEPATH *= $$PSYCLE_HELPERS_DIR/src
-	DEPENDPATH  *= $$PSYCLE_HELPERS_DIR/src
+	INCLUDEPATH += $$PSYCLE_HELPERS_DIR/src
+	DEPENDPATH  += $$PSYCLE_HELPERS_DIR/src
 
 	!contains(TARGET, psycle-helpers) {
 		CONFIG *= link_prl
