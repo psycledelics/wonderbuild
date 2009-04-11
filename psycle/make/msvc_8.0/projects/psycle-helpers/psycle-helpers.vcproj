@@ -266,7 +266,7 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\filter.h"
+						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\filter.hpp"
 						>
 					</File>
 					<File
@@ -302,7 +302,7 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\binread.h"
+						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\binread.hpp"
 						>
 					</File>
 					<File
