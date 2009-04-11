@@ -213,6 +213,7 @@ class UserCfg(BuildCfg, OptionCfg):
 		help['cxx-debug']            = ('<yes|no>', 'make the c++ compiler produce debugging information or not', 'no')
 		help['cxx-optim']            = ('<level>', 'use c++ compiler optimisation <level>')
 		help['cxx-pic']              = ('<yes|no>', 'make the c++ compiler emit pic code rather than non-pic code for static libs and programs (always pic for shared libs)', 'no (for static libs and programs)')
+		#help['cxx-mod-shared']      = ('<yes|no|progs-only>', '...', 'yes')
 		#help['cxx-mod-static']      = ('<no|libs|all>', '...', 'no')
 		help['cxx-mod-shared-libs']  = ('<yes|no>', 'build shared libs (rather than static libs)', 'yes unless pic is set explicitly to no')
 		help['cxx-mod-static-progs'] = ('<yes|no>', 'statically link programs (rather than dynamically using shared libs)', 'no')
@@ -617,13 +618,13 @@ class ModTask(Task):
 				if not silent:
 					if not self.ld: desc = 'archiving and indexing static lib'; color = '7;36'
 					elif self.kind == ModTask.Kinds.PROG:
-						if self.cfg.pic: pic = 'pic'; color = '7;1'
+						if self.cfg.pic: pic = 'pic'; color = '1;7'
 						else: pic = 'non-pic'; color = '7'
 						if self.cfg.static_prog: shared = 'static'; color += ';37;40'
 						else: shared = 'dynamic'; color += ';32'
 						desc = 'linking ' + shared + ' ' + pic + ' program'
-					elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = '7;1;34'
-					else: desc = 'linking shared lib'; color = '7;1;33'
+					elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = '1;7;34'
+					else: desc = 'linking shared lib'; color = '1;7;33'
 					self.print_desc(desc + ' ' + str(self), color)
 				if self.ld: sources = self.sources
 				else: sources = changed_sources
