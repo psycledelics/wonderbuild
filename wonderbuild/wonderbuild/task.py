@@ -17,9 +17,9 @@ class Task(object):
 		out.flush()
 		
 	def print_check(self, desc):
-		out.write(colored('34', 'wonderbuild: cfg: ' + desc + ' ...') + '\n')
+		out.write(colored('34', 'wonderbuild: task: ' + desc + ' ...') + '\n')
 		out.flush()
 		
 	def print_check_result(self, desc, result, color):
-		out.write(colored('34', 'wonderbuild: cfg: ' + desc + ': ') + colored(color, result) + '\n')
+		out.write(colored('34', 'wonderbuild: task: ' + desc + ': ') + colored(color, result) + '\n')
 		out.flush()

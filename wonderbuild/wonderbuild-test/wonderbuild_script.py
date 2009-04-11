@@ -62,6 +62,16 @@ def wonderbuild_script(project):
 
 	from wonderbuild.task import Task
 	from wonderbuild.signature import Sig
+	from wonderbuild.logger import silent
+
+	import sys, os, shutil
+	if sys.platform.startswith('win'):
+		def install(src, dst): shutil.copy2(src, dst)
+	else:
+		def install(src, dst):
+			try: os.link(src, dst)
+			except OSError: shutil.copy2(src, dst)
+
 	class LibFooInstallTask(Task):
 		def __init__(self):
 			Task.__init__(self, project)
@@ -80,35 +90,47 @@ def wonderbuild_script(project):
 			try: return self._sources
 			except AttributeError:
 				self._sources = []
-				for s in (self.trim_prefix / 'foo').find_iter(in_pats = ['*.hpp'], prune_pats = ['todo']): self._sources.append(s)
+				for s in (self.trim_prefix / 'foo').find_iter(in_pats = ['*.hpp'], ex_pats = ['*.private.hpp'], prune_pats = ['todo']): self._sources.append(s)
 				return self._sources
 		
 		def __call__(self, sched_ctx):
 			try: old_sig = self.project.state_and_cache[self.uid]
 			except KeyError: old_sig = None
-			sig = Sig()
-			for s in self.sources: sig.update(s.sig) # TODO sort
-			sig = sig.digest()
-			if sig != old_sig:
-				self.print_desc('installing to ' + str(self.dest_dir) + ':\n\t' + '\n\t'.join([str(s) for s in self.sources]), '47;34')
-				for s in self.sources:
-					dest = self.dest_dir / s.rel_path(self.trim_prefix)
-					print str(s), '\n', str(dest)
+			sigs = [s.sig for s in self.sources]
+			sigs.sort()
+			sig = Sig(''.join(sigs)).digest()
+			if old_sig != sig:
+				sched_ctx.lock.release()
+				try:
+					self.dest_dir.lock.acquire()
+					try:
+						if not silent: self.print_desc(
+							'installing from ' + str(self.trim_prefix) +
+							' to ' + str(self.dest_dir) +
+							':\n\t' + '\n\t'.join([s.rel_path(self.trim_prefix) for s in self.sources]),
+							'47;34'
+						)
+						for s in self.sources:
+							dest = self.dest_dir / s.rel_path(self.trim_prefix)
+							if dest.exists: os.remove(dest.path)
+							else: dest.parent.make_dir()
+							install(s.path, dest.path)
+					finally: self.dest_dir.lock.release()
+				finally: sched_ctx.lock.acquire()
 			self.project.state_and_cache[self.uid] = sig
-	lib_foo_install = LibFooInstallTask()
-	
 
 	class LibFoo(ModTask):
 		def __init__(self): ModTask.__init__(self, 'foo', ModTask.Kinds.LIB, build_cfg)
 
 		def __call__(self, sched_ctx):
+			lib_foo_install = LibFooInstallTask()
+			sched_ctx.parallel_no_wait((lib_foo_install,))
 			sched_ctx.parallel_wait((glibmm, std_math_check, lib_pch))
 			lib_pch.apply_to(self.cfg)
 			if std_math_check.result: std_math_check.apply_to(self.cfg)
 			if glibmm.result: glibmm.apply_to(self.cfg)
 			for s in (src_dir / 'foo').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 			ModTask.__call__(self, sched_ctx)
-			sched_ctx.parallel_wait((lib_foo_install,))
 	lib_foo = LibFoo()
 	
 	class MainProg(ModTask):
