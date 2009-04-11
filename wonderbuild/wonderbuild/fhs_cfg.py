@@ -29,17 +29,17 @@ class FHSCfg(OptionCfg):
 				self.project.state_and_cache[self.__class__.__name__]
 		except KeyError: parse = True
 		else: parse = old_sig != self.options_sig
-		
 		if parse:
 			if __debug__ and is_debug: debug('cfg: fhs: parsing options')
-			
 			o = self.options
 
 			if 'install-dest-dir' in o: self.dest = self.project.fs.cur / o['install-dest-dir']
 			else: self.dest = self.project.bld_node / 'staged-install'
 			
 			if 'install-prefix-dir' in o: self.prefix_path = o['install-prefix-dir']
-			else: self.prefix_path = os.path.join('usr', 'local')
+			else: self.prefix_path = os.path.join(os.sep, 'usr', 'local')
+			if self.prefix_path.startswith(os.sep): self.prefix_path = self.prefix_path[len(os.sep):]
+			else: raise Exception, 'invalid install-prefix-dir option: prefix must be an absolute path. got: ' + self.prefix_path
 			
 			self.project.state_and_cache[self.__class__.__name__] = \
 				self.options_sig, self.dest, self.prefix_path
