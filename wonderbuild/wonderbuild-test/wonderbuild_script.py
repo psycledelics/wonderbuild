@@ -62,7 +62,7 @@ def wonderbuild_script(project):
 
 	from wonderbuild.task import Task
 	from wonderbuild.signature import Sig
-	from wonderbuild.logger import silent
+	from wonderbuild.logger import silent, is_debug, debug
 
 	import sys, os, shutil
 	if sys.platform.startswith('win'):
@@ -86,6 +86,9 @@ def wonderbuild_script(project):
 		def dest_dir(self): return build_cfg.fhs.include
 		
 		@property
+		def check_missing(self): return build_cfg.check_missing
+		
+		@property
 		def sources(self):
 			try: return self._sources
 			except AttributeError:
@@ -99,7 +102,15 @@ def wonderbuild_script(project):
 			sigs = [s.sig for s in self.sources]
 			sigs.sort()
 			sig = Sig(''.join(sigs)).digest()
-			if old_sig != sig:
+			need_process = old_sig != sig
+			if not need_process and self.check_missing:
+					for s in self.sources:
+						dest = self.dest_dir / s.rel_path(self.trim_prefix)
+						if not dest.exists:
+							if __debug__ and is_debug: debug('task: destination removed: ' + str(dest))
+							need_process = True
+							break
+			if need_process:
 				sched_ctx.lock.release()
 				try:
 					self.dest_dir.lock.acquire()

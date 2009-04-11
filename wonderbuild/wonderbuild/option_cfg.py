@@ -22,6 +22,8 @@ class OptionCfg(OptionDecl):
 			options = self.options
 			for name in self.__class__.known_options:
 				value = options.get(name, None)
-				if value is not None: sig.update(value)
+				if value is not None:
+					if len(value) != 0: sig.update(value)
+					else: sig.update('\0')
 			sig = self._options_sig = sig.digest()
 			return sig

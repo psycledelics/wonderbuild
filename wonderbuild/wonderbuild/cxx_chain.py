@@ -73,6 +73,7 @@ class BuildCfg(ClientCfg):
 		c.version = self.version
 		c.debug = self.debug
 		c.optim = self.optim
+		c.check_missing = self.check_missing
 		c.fhs = self.fhs
 		return c
 
@@ -88,6 +89,7 @@ class BuildCfg(ClientCfg):
 			sig.update(self.version)
 			sig.update(str(self.debug))
 			sig.update(str(self.optim))
+			sig.update(str(self.check_missing))
 			if len(self.pkg_config): sig.update(_PkgConfigTask.env_sig())
 			sig = self.__common_sig = sig.digest()
 			return sig
@@ -221,7 +223,7 @@ class UserCfg(BuildCfg, OptionCfg):
 		help['cxx-mod-ld-flags']     = ('[flags]', 'use specific linker flags')
 		help['cxx-mod-ar']           = ('<prog>', 'use <prog> as static lib archiver', 'ar')
 		help['cxx-mod-ranlib']       = ('<prog>', 'use <prog> as static lib archive indexer', 'ranlib (or via ar s flag for gnu ar)')
-		help['cxx-check-missing']    = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'no')
+		help['cxx-check-missing']    = (None, 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'do not check')
 
 	def __init__(self, project):
 		BuildCfg.__init__(self, project)
@@ -269,7 +271,8 @@ class UserCfg(BuildCfg, OptionCfg):
 				else: self.ld_flags = []
 			if 'cxx-mod-ar' in o: self.ar_prog = o['cxx-mod-ar']
 			if 'cxx-mod-ranlib' in o: self.ranlib_prog = o['cxx-mod-ranlib']
-			self.check_missing = o.get('cxx-check-missing', False)
+
+			self.check_missing = 'cxx-check-missing' in o
 
 			if self.pic is None:
 				if self.shared is None: self.shared = True
@@ -562,7 +565,7 @@ class ModTask(Task):
 							try: self.target_dir.actual_children # not needed, just an optimisation
 							except OSError: pass
 						finally: self.target_dir.lock.release()
-						o = self.target_dir / self._obj_name(s)
+						o = self.obj_dir / self._obj_name(s)
 						if not o.exists:
 							if __debug__ and is_debug: debug('task: target removed: ' + str(o))
 							changed_sources.append(s)
@@ -584,7 +587,7 @@ class ModTask(Task):
 			sched_context.parallel_wait(tasks)
 		elif self.cfg.check_missing and not self.target.exists:
 			if __debug__ and is_debug: debug('task: target removed: ' + str(self))
-			changed_sources = sources
+			changed_sources = self.sources
 			need_process = True
 		if self.ld:
 			if len(self.cfg.pkg_config) != 0:
