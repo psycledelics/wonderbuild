@@ -7,13 +7,19 @@ from task import Task
 from option_cfg import OptionCfg
 from signature import Sig
 
-import sys, os, shutil
-if sys.platform.startswith('win'):
-	def install(src, dst): shutil.copy2(src, dst)
-else:
+import os, errno, shutil
+if os.name == 'posix':
 	def install(src, dst):
+		# try to do a hard link
 		try: os.link(src, dst)
-		except OSError: shutil.copy2(src, dst)
+		except OSError, e:
+			if e.errno == errno.EXDEV: # error: cross-device link
+				# dst is on another filesystem than src, fallback to copying
+				shutil.copy2(src, dst)
+			else: raise
+else:
+	# hard links unavailable, do a copy instead
+	def install(src, dst): shutil.copy2(src, dst)
 
 class InstallTask(Task, OptionCfg):
 	known_options = set(['check-missing'])
