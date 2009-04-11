@@ -159,6 +159,7 @@ class project_root:
 			SCons.Tool.Tool('substituted_file', toolpath = toolpath)(scons)
 
 			scons.SetOption('implicit_cache', True)
+			scons.SetOption('implicit_deps_changed', True) # workaround for bug in scons version 1.0.0.r3266: there seem to be a problem (in the buildbot builds), related with cached implicit deps
 
 			try: scons.Decider('timestamp-newer')
 			except: pass # timestamp are bogus on some pre-1.0 versions of scons: scons.SourceSignatures('timestamp')
