@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2007-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2009-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 from logger import silent, is_debug, debug
 from task import Task
@@ -16,16 +16,18 @@ else:
 		except OSError: shutil.copy2(src, dst)
 
 class InstallTask(Task, OptionCfg):
+	known_options = set(['check-missing'])
+
+	@staticmethod
+	def generate_option_help(help): help['check-missing'] = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'no')
+	
 	def __init__(self, project):
 		Task.__init__(self, project)
 		OptionCfg.__init__(self, project)
 
-		try:
-			old_sig, self.check_missing = \
-				self.project.state_and_cache[self.__class__.__name__]
+		try: old_sig, self.check_missing = self.project.state_and_cache[self.__class__.__name__]
 		except KeyError: parse = True
 		else: parse = old_sig != self.options_sig
-		
 		if parse:
 			if __debug__ and is_debug: debug('cfg: install: user: parsing options')
 			o = self.options
@@ -33,14 +35,8 @@ class InstallTask(Task, OptionCfg):
 			if 'check-missing' in o: self.check_missing = o['check-missing'] == 'yes'
 			else: self.check_missing = False
 
-	known_options = set([
-		'check-missing'
-	])
+			self.project.state_and_cache[self.__class__.__name__] = self.options_sig, self.check_missing
 
-	@staticmethod
-	def generate_option_help(help):
-		help['check-missing'] = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'no')
-	
 	@property
 	def uid(self):
 		try: return self._uid

@@ -237,10 +237,10 @@ class Node(object):
 
 	@property
 	def path(self):
-		if self._path is None: self._path = self.rel_path(self.fs.cur)
+		if self._path is None: self._path = self.rel_path(self.fs.cur, allow_abs = True)
 		return self._path
 
-	def rel_path(self, from_node):
+	def rel_path(self, from_node, allow_abs = False):
 		path = []
 		node1 = self
 		node2 = from_node
@@ -252,6 +252,9 @@ class Node(object):
 			node1 = node1.parent
 			node2 = node2.parent
 		ancestor = node1
+		if allow_abs and ancestor._height == 0:
+			# If we need to go up to the root, it's a bit useless to use a relative dir because the absolute path is then simpler.
+			return self.abs_path
 		for i in xrange(from_node._height - ancestor._height): path.append(os.pardir)
 		down = self._height - ancestor._height
 		if down > 0:

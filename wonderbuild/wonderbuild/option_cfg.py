@@ -16,7 +16,7 @@ class OptionCfg(OptionDecl):
 	
 	@property
 	def options_sig(self):
-		try: return self._options_sig
+		try: return self._options_sig # TODO this could actually be stored in the project since it's per (project, class)
 		except AttributeError:
 			sig = Sig()
 			options = self.options
