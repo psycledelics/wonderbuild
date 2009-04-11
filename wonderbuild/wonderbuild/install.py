@@ -31,7 +31,7 @@ class InstallTask(Task, OptionCfg):
 		Task.__init__(self, project)
 		OptionCfg.__init__(self, project)
 
-		try: old_sig, self.check_missing = self.project.state_and_cache[self.__class__.__name__]
+		try: old_sig, self.check_missing = self.project.state_and_cache[str(self.__class__)]
 		except KeyError: parse = True
 		else: parse = old_sig != self.options_sig
 		if parse:
@@ -41,13 +41,13 @@ class InstallTask(Task, OptionCfg):
 			if 'check-missing' in o: self.check_missing = o['check-missing'] == 'yes'
 			else: self.check_missing = False
 
-			self.project.state_and_cache[self.__class__.__name__] = self.options_sig, self.check_missing
+			self.project.state_and_cache[str(self.__class__)] = self.options_sig, self.check_missing
 
 	@property
 	def uid(self):
 		try: return self._uid
 		except AttributeError:
-			self._uid = self.__class__.__name__ + '#' + str(self.sources[0])
+			self._uid = str(self.__class__) + '#' + str(self.sources[0])
 			return self._uid
 	
 	@property

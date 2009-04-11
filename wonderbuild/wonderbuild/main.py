@@ -50,7 +50,7 @@ else:
 		script = project.src_node / 'wonderbuild_script.py'
 		if script.exists:
 			d = {}
-			execfile('wonderbuild_script.py', d)
+			execfile(script.path, d)
 			tasks = d['wonderbuild_script'](project)
 			usage = False
 		else:

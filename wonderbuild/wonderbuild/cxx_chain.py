@@ -235,7 +235,7 @@ class UserCfg(BuildCfg, OptionCfg):
 			self.cxx_prog, self.cxx_flags, self.pic, self.optim, self.debug, \
 			self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
 			self.ar_prog, self.ranlib_prog = \
-				self.project.state_and_cache[self.__class__.__name__]
+				self.project.state_and_cache[str(self.__class__)]
 		except KeyError: parse = True
 		else: parse = old_sig != self.options_sig
 		
@@ -287,7 +287,7 @@ class UserCfg(BuildCfg, OptionCfg):
 			if 'cxx-mod-ar' not in o: self.ar_prog = self.impl.ar_prog
 			if 'cxx-mod-ranlib' not in o: self.ranlib_prog = self.impl.ranlib_prog
 			
-			self.project.state_and_cache[self.__class__.__name__] = \
+			self.project.state_and_cache[str(self.__class__)] = \
 				self.options_sig, self.check_missing, \
 				self.kind, self.version, \
 				self.cxx_prog, self.cxx_flags, self.pic, self.optim, self.debug, \
@@ -319,7 +319,7 @@ class UserCfg(BuildCfg, OptionCfg):
 			self.impl = gcc.Impl()
 		if not silent: self.print_check_result(desc, str(self.kind) + ' version ' + str(self.version), '32')
 
-class PreCompileTask(Task):
+class _PreCompileTask(Task):
 	def __init__(self, name, base_cfg):
 		Task.__init__(self, base_cfg.project)
 		self.name = name
@@ -424,6 +424,65 @@ class PreCompileTask(Task):
 			sig.update(self.cfg.cxx_sig)
 			sig = self._sig = sig.digest()
 			return sig
+
+class PreCompileTasks(Task):
+	def __init__(self, name, base_cfg):
+		Task.__init__(self, base_cfg.project)
+		self.name = name
+		self.base_cfg = base_cfg
+
+	@property
+	def source_text(self): return '#error ' + str(self.__class__) + ' did not redefine default source text.\n'
+
+	@property
+	def cfg(self):
+		try: return self._cfg
+		except AttributeError:
+			self._cfg = self.base_cfg.clone()
+			return self._cfg
+
+	@property
+	def lib_task(self):
+		try: return self._lib_task
+		except AttributeError:
+			self._create_tasks()
+			return self._lib_task
+
+	@property
+	def prog_task(self):
+		try: return self._prog_task
+		except AttributeError:
+			self._create_tasks()
+			return self._prog_task
+
+	def _create_tasks(self):
+		pic_task = non_pic_task = None
+		if self.cfg.shared or self.cfg.pic:
+			pic_task = PreCompileTasks.OneTask(self, pic = True)
+			self._lib_task = pic_task
+		else:
+			non_pic_task = PreCompileTasks.OneTask(self, pic = False)
+			self._lib_task = non_pic_task
+		if self.cfg.pic:
+			if pic_task is None: pic_task = PreCompileTasks.OneTask(self, pic = True)
+			self._prog_task = pic_task
+		else:
+			if non_pic_task is None: non_pic_task = PreCompileTasks.OneTask(self, pic = False)
+			self._prog_task = non_pic_task
+
+	class OneTask(_PreCompileTask):
+		def __init__(self, parent_task, pic):
+			_PreCompileTask.__init__(self, parent_task.name + (not pic and '-non' or '') + '-pic', parent_task.cfg)
+			self.parent_task = parent_task
+			self.pic = pic
+
+		@property
+		def source_text(self): return self.parent_task.source_text
+
+		def __call__(self, sched_ctx):
+			sched_ctx.parallel_wait((self.parent_task,))
+			self.cfg.pic = self.pic
+			_PreCompileTask.__call__(self, sched_ctx)
 
 class BatchCompileTask(Task):
 	def __init__(self, mod_task, sources):

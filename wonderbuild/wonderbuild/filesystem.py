@@ -2,7 +2,7 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import sys, os, stat, threading
+import sys, os, errno, stat, threading
 from collections import deque
 from fnmatch import fnmatchcase as match
 
@@ -10,15 +10,28 @@ from logger import is_debug, debug
 
 class FileSystem(object):
 	def __init__(self, state_and_cache):
-		try: self.root = state_and_cache[self.__class__.__name__]
+		cwd = os.getcwd()
+		try: self.root, old_cwd = state_and_cache[str(self.__class__)]
 		except KeyError:
 			if  __debug__ and is_debug: debug('fs: all anew')
-			self.root = state_and_cache[self.__class__.__name__] = Node(None, os.sep)
+			self.root = Node(None, os.sep)
 			self.root._is_dir = True
+			state_and_cache[str(self.__class__)] = self.root, cwd
+		else:
+			if old_cwd != cwd:
+				if  __debug__ and is_debug: debug('fs: cwd changed')
+				def recurse(node):
+					node._path = None # delete previously computed path since cwd changed
+					if node._children is not None:
+						for child in node._children.itervalues(): recurse(child)
+					if node._old_children is not None:
+						for child in node._old_children.itervalues(): recurse(child)
+				recurse(self.root)
+				state_and_cache[str(self.__class__)] = self.root, cwd
 		self.root._exists = True
 		self.root._height = 0
 		self.root._fs = self
-		self.cur = self.root / os.getcwd()
+		self.cur = self.root / cwd
 		self.cur._fs = self
 		self.cur._is_dir = True
 		self.cur._exists = True
@@ -68,7 +81,11 @@ class Node(object):
 	def _do_stat(self):
 		if __debug__ and is_debug: debug('fs: os.stat    : ' + self.path)
 		try: st = os.stat(self.path)
-		except OSError: st = os.lstat(self.path) # may be a broken symlink
+		except OSError, e:
+			if e.errno == errno.ENOENT:
+				# may be a broken symlink
+				st = os.lstat(self.path)
+			else: raise 
 		self._is_dir = stat.S_ISDIR(st.st_mode)
 		self._time = st.st_mtime
 
@@ -277,6 +294,7 @@ class Node(object):
 
 	def forget(self):
 		"detach the node from its parent. This is used to cut from the tree the branches we don't want to dump in the pickle"
+		if __debug__ and is_debug: debug('fs: forget: ' + str(self))
 		name = self.name
 		parent = self.parent
 		if parent._children is not None and name in parent._children: del parent._children[name]
