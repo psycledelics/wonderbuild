@@ -7,7 +7,7 @@ import sys, os
 known_options = set(['silent', 'verbose'])
 
 def generate_option_help(help):
-	help['silent'] = (None, 'suppress printing of informative messages (errors and debugging messages are still printed)')
+	help['silent'] = ('<yes|no>', 'suppress printing of informative messages (errors and verbose messages are still printed)', 'no')
 	help['verbose'] = ('[zone,...]', 'wonderbuild debugging zones, comma-separated list, or no list for all zones. (example values: exec,cfg,task,sched,fs,project,cpp,...)')
 
 silent = True
@@ -16,7 +16,8 @@ def debug(s): pass
 
 def use_options(options):
 	global silent
-	silent = 'silent' in options
+	if 'silent' in options: silent = options['silent'] != 'no'
+	else: silent = False
 
 	if __debug__:
 		global is_debug

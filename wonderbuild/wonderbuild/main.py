@@ -26,7 +26,7 @@ else:
 			option_collector.option_decls.add(logger)
 
 			option_collector.known_options.add('profile')
-			if 'help' in options: option_collector.help['profile'] = ('<file>', 'profile execution and put results in <file>')
+			if 'help' in options: option_collector.help['profile'] = ('<file>', 'profile execution and put results in <file> (implies --jobs=1)')
 
 			profile = options.get('profile', None)
 			
@@ -67,7 +67,7 @@ else:
 			return 0
 
 		if 'version' in options:
-			print 'wonderbuild 0.1'
+			print 'wonderbuild 0.2'
 			return 0
 	
 		if not usage:

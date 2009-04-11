@@ -205,25 +205,25 @@ class UserCfg(BuildCfg, OptionCfg):
 		'cxx-mod-ld-flags',
 		'cxx-mod-ar',
 		'cxx-mod-ranlib',
-		'cxx-check-missing'
+		'check-missing'
 	])
 
 	@staticmethod
 	def generate_option_help(help):
 		help['cxx']                  = ('<prog>', 'use <prog> as c++ compiler')
 		help['cxx-flags']            = ('[flags]', 'use specific c++ compiler flags')
-		help['cxx-debug']            = ('<yes|no>', 'make the c++ compiler produce debugging information or not', 'no')
+		help['cxx-debug']            = ('<yes|no>', 'whether to make the c++ compiler produce debugging information', 'no')
 		help['cxx-optim']            = ('<level>', 'use c++ compiler optimisation <level>')
-		help['cxx-pic']              = ('<yes|no>', 'make the c++ compiler emit pic code rather than non-pic code for static libs and programs (always pic for shared libs)', 'no (for static libs and programs)')
+		help['cxx-pic']              = ('<yes|no>', 'whether to make the c++ compiler emit pic code rather than non-pic code for static libs and programs (always pic for shared libs)', 'no (for static libs and programs)')
 		#help['cxx-mod-shared']      = ('<yes|no|progs-only>', '...', 'yes')
-		#help['cxx-mod-static']      = ('<no|libs|all>', '...', 'no')
-		help['cxx-mod-shared-libs']  = ('<yes|no>', 'build shared libs (rather than static libs)', 'yes unless pic is set explicitly to no')
-		help['cxx-mod-static-progs'] = ('<yes|no>', 'statically link programs (rather than dynamically using shared libs)', 'no')
+		#help['cxx-mod-static']      = ('<no|libs|libs-and-progs>', '...', 'no')
+		help['cxx-mod-shared-libs']  = ('<yes|no>', 'whether to build shared libs (rather than static libs)', 'yes unless cxx-pic is set explicitly to no or cxx-mod-static-progs is set to yes')
+		help['cxx-mod-static-progs'] = ('<yes|no>', 'whether to statically link programs (rather than dynamically using shared libs)', 'no')
 		help['cxx-mod-ld']           = ('<prog>', 'use <prog> as shared lib and program linker')
 		help['cxx-mod-ld-flags']     = ('[flags]', 'use specific linker flags')
 		help['cxx-mod-ar']           = ('<prog>', 'use <prog> as static lib archiver', 'ar')
 		help['cxx-mod-ranlib']       = ('<prog>', 'use <prog> as static lib archive indexer', 'ranlib (or via ar s flag for gnu ar)')
-		help['cxx-check-missing']    = (None, 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'do not check')
+		help['check-missing']        = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'no')
 
 	def __init__(self, project):
 		BuildCfg.__init__(self, project)
@@ -241,8 +241,10 @@ class UserCfg(BuildCfg, OptionCfg):
 		
 		if parse:
 			if __debug__ and is_debug: debug('cfg: cxx: user: parsing options')
-			
 			o = self.options
+
+			if 'check-missing' in o: self.check_missing = o['check-missing'] == 'yes'
+			else: self.check_missing = False
 
 			if 'cxx' in o: self.cxx_prog = o['cxx']
 			if 'cxx-flags' in o: self.cxx_flags = o['cxx-flags'].split()
@@ -261,7 +263,14 @@ class UserCfg(BuildCfg, OptionCfg):
 			else: self.shared = None
 			
 			if 'cxx-mod-static-progs' in o: self.static_prog = o['cxx-mod-static-progs'] == 'yes'
-			else: self.static_prog = False
+			else:
+				self.static_prog = False
+				if self.shared is None: self.shared = False
+
+			if self.pic is None:
+				if self.shared is None: self.shared = True
+				self.pic = False # this is for programs only
+			elif self.shared is None: self.shared = self.pic
 
 			if 'cxx-mod-ld' in o: self.ld_prog = o['cxx-mod-ld']
 			if 'cxx-mod-flags' in o: self.cxx_mod_flags = o['cxx-mod-flags'].split()
@@ -271,13 +280,6 @@ class UserCfg(BuildCfg, OptionCfg):
 				else: self.ld_flags = []
 			if 'cxx-mod-ar' in o: self.ar_prog = o['cxx-mod-ar']
 			if 'cxx-mod-ranlib' in o: self.ranlib_prog = o['cxx-mod-ranlib']
-
-			self.check_missing = 'cxx-check-missing' in o
-
-			if self.pic is None:
-				if self.shared is None: self.shared = True
-				self.pic = False
-			elif self.shared is None: self.shared = self.pic
 
 			self._check_compiler()
 
@@ -392,7 +394,7 @@ class PreCompileTask(Task):
 								except OSError: pass
 							finally: self.target_dir.lock.release()
 							if not self.target.exists:
-								if __debug__ and is_debug: debug('task: target removed: ' + str(self.target))
+								if __debug__ and is_debug: debug('task: target missing: ' + str(self.target))
 								changed = True
 			if not changed:
 				if __debug__ and is_debug: debug('task: skip: no change: ' + str(self.header))
@@ -567,7 +569,7 @@ class ModTask(Task):
 						finally: self.target_dir.lock.release()
 						o = self.obj_dir / self._obj_name(s)
 						if not o.exists:
-							if __debug__ and is_debug: debug('task: target removed: ' + str(o))
+							if __debug__ and is_debug: debug('task: target missing: ' + str(o))
 							changed_sources.append(s)
 							continue
 					if __debug__ and is_debug: debug('task: skip: no change: ' + str(s))
@@ -586,7 +588,7 @@ class ModTask(Task):
 				tasks.append(BatchCompileTask(self, b))
 			sched_context.parallel_wait(tasks)
 		elif self.cfg.check_missing and not self.target.exists:
-			if __debug__ and is_debug: debug('task: target removed: ' + str(self))
+			if __debug__ and is_debug: debug('task: target missing: ' + str(self))
 			changed_sources = self.sources
 			need_process = True
 		if self.ld:
