@@ -262,10 +262,10 @@ class UserCfg(BuildCfg, OptionCfg):
 			if 'cxx-mod-shared-libs' in o: self.shared = o['cxx-mod-shared-libs'] != 'no'
 			else: self.shared = None
 			
-			if 'cxx-mod-static-progs' in o: self.static_prog = o['cxx-mod-static-progs'] == 'yes'
-			else:
-				self.static_prog = False
-				if self.shared is None: self.shared = False
+			if 'cxx-mod-static-progs' in o:
+				self.static_prog = o['cxx-mod-static-progs'] == 'yes'
+				if self.static_prog and self.shared is None: self.shared = False
+			else: self.static_prog = False
 
 			if self.pic is None:
 				if self.shared is None: self.shared = True
@@ -654,8 +654,13 @@ class ModTask(Task):
 
 	@property
 	def _mod_sig(self):
-		if self.ld: return self.cfg.ld_sig
-		else: return self.cfg.ar_ranlib_sig
+		try: return self.__mod_sig
+		except AttributeError:
+			sig = Sig(self.target_dir.abs_path)
+			if self.ld: sig.update(self.cfg.ld_sig)
+			else: sig.update(self.cfg.ar_ranlib_sig)
+			self.__mod_sig = sig = sig.digest()
+			return sig
 
 class _PkgConfigTask(Task):
 	def __init__(self, project, pkgs):

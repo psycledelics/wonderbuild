@@ -62,7 +62,9 @@ class InstallTask(Task, OptionCfg):
 		except KeyError: old_sig = None
 		sigs = [s.sig for s in self.sources]
 		sigs.sort()
-		sig = Sig(''.join(sigs)).digest()
+		sig = Sig(''.join(sigs))
+		sig.update(self.dest_dir.abs_path)
+		sig = sig.digest()
 		need_process = old_sig != sig
 		if not need_process and self.check_missing:
 				for s in self.sources:
