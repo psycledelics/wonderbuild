@@ -116,10 +116,8 @@ namespace %(namespace)s {
 def create_wonderbuild(libs):
     f = open('wonderbuild_script.py', 'w')
     f.write(r'''
-def wonderbuild_script(project):
+def wonderbuild_script(project, src_dir):
 	from wonderbuild.cxx_chain import UserCfg, PreCompileTasks, ModTask
-
-	top_src_dir = project.src_node
 
 	class CustomUserCfg(UserCfg):
 		def __init__(self, project):
@@ -127,7 +125,7 @@ def wonderbuild_script(project):
 			self.cxx_flags = ['-g', '-O0', '-Wall']
 			self.shared = self.pic = False
 			self.defines['BENCH'] = None
-			self.include_paths.append(top_src_dir)
+			self.include_paths.append(src_dir)
 	build_cfg = CustomUserCfg(project)
 
 	use_pch = False
@@ -139,9 +137,9 @@ def wonderbuild_script(project):
 				except AttributeError:
 					if False:
 						s = []
-						for l in top_src_dir.find_iter(in_pats = ['lib_*'], prune_pats = ['*']):
+						for l in src_dir.find_iter(in_pats = ['lib_*'], prune_pats = ['*']):
 							for n in l.find_iter(in_pats = ['*.hpp']):
-								s.append('#include <%s>' % n.rel_path(top_src_dir))
+								s.append('#include <%s>' % n.rel_path(src_dir))
 						s.sort()
 						self._source_text = '\n'.join(s)
 					else:
@@ -159,12 +157,12 @@ def wonderbuild_script(project):
 				sched_ctx.parallel_wait((pch.lib_task,))
 				pch.lib_task.apply_to(self.cfg)
 			self.cfg.defines['BENCH_LIB'] = self.i
-			src_dir = top_src_dir / self.name
-			for s in src_dir.find_iter(in_pats = ['*.cpp']): self.sources.append(s)
+			sub_src_dir = src_dir / self.name
+			for s in sub_src_dir.find_iter(in_pats = ['*.cpp']): self.sources.append(s)
 			ModTask.__call__(self, sched_ctx)
 
 	bench_libs = []
-	for n in top_src_dir.find_iter(in_pats = ['lib_*'], prune_pats = ['*']):
+	for n in src_dir.find_iter(in_pats = ['lib_*'], prune_pats = ['*']):
 		bench_libs.append(BenchLib(n.name, n.name[len('lib_'):]))
 
 	return bench_libs

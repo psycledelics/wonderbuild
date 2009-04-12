@@ -51,7 +51,7 @@ else:
 		if script.exists:
 			d = {}
 			execfile(script.path, d)
-			tasks = d['wonderbuild_script'](project)
+			tasks = d['wonderbuild_script'](project, script.parent)
 			usage = False
 		else:
 			print >> sys.stderr, 'no ' + script.path + ' found'

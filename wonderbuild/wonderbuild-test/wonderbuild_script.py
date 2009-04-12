@@ -2,7 +2,9 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-def wonderbuild_script(project):
+def wonderbuild_script(project, src_dir):
+
+	src_dir = src_dir / 'src'
 
 	from wonderbuild.cxx_chain import UserCfg, PkgConfigCheckTask, BuildCheckTask, PreCompileTasks, ModTask
 	from wonderbuild.std_checks import StdMathCheckTask
@@ -14,7 +16,6 @@ def wonderbuild_script(project):
 
 	build_cfg = UserCfg(project)
 
-	src_dir = project.src_node / 'src'
 	build_cfg.include_paths.append(src_dir)
 
 	check_cfg = build_cfg.clone()
