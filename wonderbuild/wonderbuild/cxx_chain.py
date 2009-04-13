@@ -5,7 +5,7 @@
 import os, threading
 from collections import deque
 
-from logger import out, is_debug, debug, colored, silent
+from logger import out, dumb_out, is_debug, debug, colored, silent
 from signature import Sig
 from option_cfg import OptionCfg
 from fhs import FHS
@@ -310,7 +310,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 			self.kind = None
 			self.version = None
 		else:
-			self.cxx_prog = ((self.project.fs.cur / __file__).parent / 'colorgcc').abs_path
+			if not dumb_out: self.cxx_prog = ((self.project.fs.cur / __file__).parent / 'colorgcc').abs_path
 			self.kind = 'gcc'
 			self.version = out.rstrip('\n')
 			if 'cxx-mod-ld' not in o: self.ld_prog = self.cxx_prog

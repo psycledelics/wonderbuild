@@ -57,7 +57,8 @@ else:
 		except IOError: pass
 		else: cols = property(_cols)
 
-if os.environ.get('TERM', 'dumb') in ('dumb', 'emacs') or not out.isatty():
+dumb_out = os.environ.get('TERM', 'dumb') in ('dumb', 'emacs') or not out.isatty()
+if dumb_out:
 	def colored(color, s): return s
 else:
 	def colored(color, s): return '\33[' + color + 'm' + s + '\33[0m'
