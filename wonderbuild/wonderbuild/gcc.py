@@ -13,7 +13,7 @@ class Impl(object):
 	@staticmethod
 	def progs(cfg):
 		if not out_is_dumb: cxx_prog = ld_prog = ((cfg.project.fs.cur / __file__).parent / 'colorgcc').abs_path
-		else: cxx_prog = ld_prog = cfg.cxx_prog, cfg.ld_prog
+		else: cxx_prog, ld_prog = cfg.cxx_prog, cfg.ld_prog or cfg.cxx_prog
 		return cxx_prog, ld_prog, 'ar', 'ranlib'
 		# see also g++ -print-prog-name=ld
 		# for gnu ar, 'ar s' is used instead of ranlib
