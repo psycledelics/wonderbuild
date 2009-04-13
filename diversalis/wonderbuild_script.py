@@ -7,12 +7,7 @@ def wonderbuild_script(project, src_dir):
 	src_dir = src_dir / 'src'
 
 	from wonderbuild.install import InstallTask
-	from wonderbuild.fhs_cfg import FHSCfg
 	
-	tasks = []
-
-	fhs_cfg = FHSCfg(project)
-
 	class Diversalis(InstallTask):
 		def __init__(self): InstallTask.__init__(self, project)
 
@@ -28,9 +23,6 @@ def wonderbuild_script(project, src_dir):
 				return self._sources
 	
 		@property
-		def dest_dir(self): return fhs_cfg.include
-	diversalis = Diversalis()
+		def dest_dir(self): return self.fhs.include
 	
-	tasks.append(diversalis)
-
-	return tasks
+	return [Diversalis()]
