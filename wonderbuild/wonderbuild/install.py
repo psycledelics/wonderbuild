@@ -3,7 +3,7 @@
 # copyright 2009-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 from logger import silent, is_debug, debug
-from task import Task
+from task import ProjectTask
 from option_cfg import OptionCfg
 from fhs import FHS
 from signature import Sig
@@ -19,14 +19,14 @@ if os.name == 'posix':
 else: # hard links unavailable, do a copy instead
 	def install(src, dst): shutil.copy2(src, dst)
 
-class InstallTask(Task, OptionCfg):
+class InstallTask(ProjectTask, OptionCfg):
 	known_options = set(['check-missing'])
 
 	@staticmethod
 	def generate_option_help(help): help['check-missing'] = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'no')
 	
 	def __init__(self, project):
-		Task.__init__(self, project)
+		ProjectTask.__init__(self, project)
 		OptionCfg.__init__(self, project)
 		self.fhs = FHS(project)
 
@@ -40,6 +40,11 @@ class InstallTask(Task, OptionCfg):
 			else: self.check_missing = False
 
 			self.project.persistent[str(self.__class__)] = self.options_sig, self.check_missing
+
+	def __str__(self): return \
+		'installing from ' + str(self.trim_prefix) + \
+		' to ' + str(self.dest_dir) + \
+		': ' + ' '.join([s.rel_path(self.trim_prefix) for s in self.sources])
 
 	@property
 	def uid(self):

@@ -9,7 +9,7 @@ from logger import out, is_debug, debug, colored, silent
 from signature import Sig
 from option_cfg import OptionCfg
 from fhs import FHS
-from task import Task
+from task import ProjectTask
 from subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 
 class ClientCfg(object):
@@ -317,9 +317,9 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 			self.impl = gcc.Impl()
 		if not silent: self.print_check_result(desc, str(self.kind) + ' version ' + str(self.version), '32')
 
-class _PreCompileTask(Task):
+class _PreCompileTask(ProjectTask):
 	def __init__(self, name, base_cfg):
-		Task.__init__(self, base_cfg.project)
+		ProjectTask.__init__(self, base_cfg.project)
 		self.name = name
 		self.base_cfg = base_cfg
 
@@ -423,11 +423,13 @@ class _PreCompileTask(Task):
 			sig = self._sig = sig.digest()
 			return sig
 
-class PreCompileTasks(Task):
+class PreCompileTasks(ProjectTask):
 	def __init__(self, name, base_cfg):
-		Task.__init__(self, base_cfg.project)
+		ProjectTask.__init__(self, base_cfg.project)
 		self.name = name
 		self.base_cfg = base_cfg
+
+	def __str__(self): return self.name
 
 	@property
 	def source_text(self): return '#error ' + str(self.__class__) + ' did not redefine default source text.\n'
@@ -482,9 +484,9 @@ class PreCompileTasks(Task):
 			self.cfg.pic = self.pic
 			_PreCompileTask.__call__(self, sched_ctx)
 
-class BatchCompileTask(Task):
+class BatchCompileTask(ProjectTask):
 	def __init__(self, mod_task, sources):
-		Task.__init__(self, mod_task.project)
+		ProjectTask.__init__(self, mod_task.project)
 		self.mod_task = mod_task
 		self.sources = sources
 
@@ -519,14 +521,15 @@ class BatchCompileTask(Task):
 			self.cfg.impl.process_cxx_task(self, sched_context.lock)
 		finally: sched_context.lock.acquire()
 
-class ModTask(Task):
+class ModTask(ProjectTask):
 	class Kinds(object):
 		PROG = 0
 		LIB = 1
 		LOADABLE = 2
 
-	def __init__(self, name, kind, base_cfg, aliases = None):
-		Task.__init__(self, base_cfg.project, aliases or (name,))
+	def __init__(self, name, kind, base_cfg, *aliases):
+		if len(aliases) == 0: aliases = (name,)
+		ProjectTask.__init__(self, base_cfg.project, *aliases)
 		self.name = name
 		self.kind = kind
 		self.base_cfg = base_cfg
@@ -719,9 +722,9 @@ class ModTask(Task):
 			self.__mod_sig = sig = sig.digest()
 			return sig
 
-class _PkgConfigTask(Task):
+class _PkgConfigTask(ProjectTask):
 	def __init__(self, project, pkgs):
-		Task.__init__(self, project)
+		ProjectTask.__init__(self, project)
 		self.pkgs = pkgs
 
 	@property
@@ -847,9 +850,9 @@ class _PkgConfigLdFlagsTask(_PkgConfigFlagsTask):
 
 	def apply_to(self, cfg): cfg.ld_flags += self.result
 
-class BuildCheckTask(Task):
+class BuildCheckTask(ProjectTask):
 	def __init__(self, name, base_cfg):
-		Task.__init__(self, base_cfg.project)
+		ProjectTask.__init__(self, base_cfg.project)
 		self.name = name
 		self.base_cfg = base_cfg
 

@@ -5,11 +5,9 @@
 from logger import out, colored
 
 class Task(object):
-	def __init__(self, project, aliases = None):
-		self.project = project
-		project.add_task_aliases(self, aliases)
+	def __init__(self):
 		self._queued = self._processed = False
-
+	
 	def __call__(self, sched_context): pass
 
 	def print_desc(self, desc, color = '7;1'):
@@ -23,3 +21,9 @@ class Task(object):
 	def print_check_result(self, desc, result, color):
 		out.write(colored('34', 'wonderbuild: task: ' + desc + ': ') + colored(color, result) + '\n')
 		out.flush()
+
+class ProjectTask(Task):
+	def __init__(self, project, *aliases):
+		Task.__init__(self)
+		self.project = project
+		project.add_task_aliases(self, *aliases)

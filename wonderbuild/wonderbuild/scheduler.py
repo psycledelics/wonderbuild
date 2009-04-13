@@ -130,7 +130,7 @@ class Scheduler(object):
 		task._processed = True
 		self._todo_count -= 1
 		self._condition.notifyAll()
-			
+	
 	def _parallel_wait(self, *tasks):
 		if __debug__ and is_debug: debug('sched: parallel_wait: ' + str([str(t) for t in tasks]))
 		count = len(tasks)

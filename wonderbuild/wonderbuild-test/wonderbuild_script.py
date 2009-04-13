@@ -85,13 +85,13 @@ class Wonderbuild(ScriptTask):
 			def __init__(self): ModTask.__init__(self, 'main', ModTask.Kinds.PROG, build_cfg)
 
 			def __call__(self, sched_ctx):
-				sched_ctx.parallel_no_wait(lib_foo)
+				self.dep_lib_tasks.append(lib_foo)
+				sched_ctx.parallel_no_wait(*self.dep_lib_tasks)
 				sched_ctx.parallel_wait(pch.prog_task, glibmm)
 				pch.prog_task.apply_to(self.cfg)
 				if glibmm.result: glibmm.apply_to(self.cfg)
-				self.dep_lib_tasks.append(lib_foo)
 				for s in (src_dir / 'main').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 				ModTask.__call__(self, sched_ctx)
 		main_prog = MainProg()
 		
-		self.project.build_tasks.append(main_prog)
+		self.project.add_task_aliases(main_prog, 'all')

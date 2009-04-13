@@ -47,17 +47,20 @@ else:
 
 		from wonderbuild.task import Task
 		class MainTask(Task):
+			def __init__(self, project):
+				Task.__init__(self)
+				self.project = project
+				
 			def __call__(self, sched_context):
-				self.project.sched_context = sched_context
+				sched_context.parallel_wait(self.project)
 				
 				from wonderbuild.script import default_script_file
 				script = self.project.top_src_dir / default_script_file
 				if script.exists:
-					script_task = self.project.script_task(script)
-					script_tasks = (script_task,)
+					script_tasks = (self.project.script_task(script),)
 					usage_error = False
 				else:
-					print >> sys.stderr, 'no ' + script.path + ' found'
+					print >> sys.stderr, 'wonderbuild: no ' + script.path + ' found'
 					script_tasks = ()
 					usage_error = True
 
@@ -75,17 +78,14 @@ else:
 					self.result = usage_error and 1 or 0
 					return
 
-				try: self.project.process_build_tasks()
-				finally: project.dump()
+				self.project.process_tasks_by_aliases()
 				self.result = 0
+
+		from wonderbuild.project import Project
+		main_task = MainTask(Project(options, option_collector))
 
 		from wonderbuild.scheduler import Scheduler
 		option_collector.option_decls.add(Scheduler)
-		scheduler = Scheduler(options)
+		Scheduler(options).process([main_task])
 
-		from wonderbuild.project import Project
-		project = Project(options, option_collector)
-		main_task = MainTask(project)
-
-		scheduler.process([main_task])
 		return main_task.result
