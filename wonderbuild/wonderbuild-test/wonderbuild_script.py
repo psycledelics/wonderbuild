@@ -39,7 +39,7 @@ class Wonderbuild(ScriptTask):
 					return self._source_text
 
 			def __call__(self, sched_ctx):
-				sched_ctx.parallel_wait((std_math_check, glibmm))
+				sched_ctx.parallel_wait(std_math_check, glibmm)
 				if std_math_check.result:
 					std_math_check.apply_to(self.cfg)
 					self.source_text
@@ -56,14 +56,14 @@ class Wonderbuild(ScriptTask):
 
 			def __call__(self, sched_ctx):
 				install = LibFoo.Install(self.project)
-				sched_ctx.parallel_no_wait((install,))
-				sched_ctx.parallel_wait((glibmm, std_math_check, pch.lib_task))
+				sched_ctx.parallel_no_wait(install)
+				sched_ctx.parallel_wait(glibmm, std_math_check, pch.lib_task)
 				pch.lib_task.apply_to(self.cfg)
 				if std_math_check.result: std_math_check.apply_to(self.cfg)
 				if glibmm.result: glibmm.apply_to(self.cfg)
 				for s in (src_dir / 'foo').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 				ModTask.__call__(self, sched_ctx)
-				sched_ctx.wait((install,))
+				sched_ctx.wait(install)
 
 			class Install(InstallTask):
 				@property
@@ -85,11 +85,13 @@ class Wonderbuild(ScriptTask):
 			def __init__(self): ModTask.__init__(self, 'main', ModTask.Kinds.PROG, build_cfg)
 
 			def __call__(self, sched_ctx):
-				sched_ctx.parallel_no_wait((lib_foo,))
-				sched_ctx.parallel_wait((pch.prog_task, glibmm))
+				sched_ctx.parallel_no_wait(lib_foo)
+				sched_ctx.parallel_wait(pch.prog_task, glibmm)
 				pch.prog_task.apply_to(self.cfg)
 				if glibmm.result: glibmm.apply_to(self.cfg)
 				self.dep_lib_tasks.append(lib_foo)
 				for s in (src_dir / 'main').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 				ModTask.__call__(self, sched_ctx)
 		main_prog = MainProg()
+		
+		self.project.build_tasks.append(main_prog)

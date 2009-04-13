@@ -360,7 +360,7 @@ class _PreCompileTask(Task):
 	def __call__(self, sched_context):
 		if len(self.cfg.pkg_config) != 0:
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask(self.project, self.cfg.pkg_config)
-			sched_context.parallel_wait((pkg_config_cxx_flags_task,))
+			sched_context.parallel_wait(pkg_config_cxx_flags_task)
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
 		sched_context.lock.release()
 		try:
@@ -478,7 +478,7 @@ class PreCompileTasks(Task):
 		def source_text(self): return self.parent_task.source_text
 
 		def __call__(self, sched_ctx):
-			sched_ctx.parallel_wait((self.parent_task,))
+			sched_ctx.parallel_wait(self.parent_task)
 			self.cfg.pic = self.pic
 			_PreCompileTask.__call__(self, sched_ctx)
 
@@ -577,14 +577,14 @@ class ModTask(Task):
 	def target_dir(self): return self.target.parent
 
 	def __call__(self, sched_context):
-		if len(self.dep_lib_tasks) != 0: sched_context.parallel_no_wait(self.dep_lib_tasks)
+		if len(self.dep_lib_tasks) != 0: sched_context.parallel_no_wait(*self.dep_lib_tasks)
 		if len(self.cfg.pkg_config) != 0:
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask(self.project, self.cfg.pkg_config)
-			sched_context.parallel_wait((pkg_config_cxx_flags_task,))
+			sched_context.parallel_wait(pkg_config_cxx_flags_task)
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
 			if self.ld:
 				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask(self.project, self.cfg.pkg_config, self.cfg.shared or not self.cfg.static_prog)
-				sched_context.parallel_no_wait((pkg_config_ld_flags_task,))
+				sched_context.parallel_no_wait(pkg_config_ld_flags_task)
 		changed_sources = []
 		try: state = self.project.persistent[self.uid]
 		except KeyError:
@@ -643,17 +643,17 @@ class ModTask(Task):
 			for b in batches:
 				if len(b) == 0: break
 				tasks.append(BatchCompileTask(self, b))
-			sched_context.parallel_wait(tasks)
+			sched_context.parallel_wait(*tasks)
 		elif self.cfg.check_missing and not self.target.exists:
 			if __debug__ and is_debug: debug('task: target missing: ' + str(self))
 			changed_sources = self.sources
 			need_process = True
 		if self.ld:
 			if len(self.cfg.pkg_config) != 0:
-				sched_context.wait((pkg_config_ld_flags_task,))
+				sched_context.wait(pkg_config_ld_flags_task)
 				pkg_config_ld_flags_task.apply_to(self.cfg)
 			if len(self.dep_lib_tasks) != 0:
-				sched_context.wait(self.dep_lib_tasks)
+				sched_context.wait(*self.dep_lib_tasks)
 				for l in self.dep_lib_tasks:
 					self.cfg.lib_paths.append(l.target.parent)
 					self.cfg.libs.append(l.name)

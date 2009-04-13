@@ -82,7 +82,7 @@ class Project(object):
 	
 	def script_task(self, *scripts):
 		script_tasks = [self.deferred_script_task(script) for script in scripts]
-		self.sched_context.parallel_wait(script_tasks)
+		self.sched_context.parallel_wait(*script_tasks)
 		if len(scripts) == 1: return script_tasks[0].task
 		else: return (script_task.task for script_task in script_tasks)
 		
@@ -108,7 +108,7 @@ class Project(object):
 			if self.requested_task_aliases is not None: tasks = list(self.tasks_with_aliases(self.requested_task_aliases))
 			else: tasks = self.build_tasks
 			self.processsing = True
-			self.sched_context.parallel_wait(tasks)
+			self.sched_context.parallel_wait(*tasks)
 			self.processsing = False
 
 	def dump(self):

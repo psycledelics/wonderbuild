@@ -28,16 +28,9 @@ class Scheduler(object):
 			self._scheduler = scheduler			
 			self.thread_count = scheduler.thread_count
 			self.lock = scheduler._lock
-
-		#@property
-		#def thread_count(self): return self._scheduler.thread_count
-		
-		#@property
-		#def lock(self): return self._scheduler._lock
-		
-		def parallel_wait(self, tasks): self._scheduler._parallel_wait(tasks)
-		def parallel_no_wait(self, tasks): self._scheduler._parallel_no_wait(tasks)
-		def wait(self, tasks): self._scheduler._wait(tasks)
+		def parallel_wait(self, *tasks): self._scheduler._parallel_wait(*tasks)
+		def parallel_no_wait(self, *tasks): self._scheduler._parallel_no_wait(*tasks)
+		def wait(self, *tasks): self._scheduler._wait(*tasks)
 
 	def process(self, tasks):
 		self._task_queue = tasks
@@ -138,21 +131,21 @@ class Scheduler(object):
 		self._todo_count -= 1
 		self._condition.notifyAll()
 			
-	def _parallel_wait(self, tasks):
+	def _parallel_wait(self, *tasks):
 		if __debug__ and is_debug: debug('sched: parallel_wait: ' + str([str(t) for t in tasks]))
 		count = len(tasks)
 		if count == 0: return
-		if count != 1: self._parallel_no_wait(tasks[1:])
-		if tasks[0]._queued: self._wait(tasks)
+		if count != 1: self._parallel_no_wait(*tasks[1:])
+		if tasks[0]._queued: self._wait(*tasks)
 		else:
 			self._todo_count += 1
 			tasks[0]._queued = True
 			self._process_one(tasks[0])
-			if len(tasks) != 1: self._wait(tasks[1:])
+			if len(tasks) != 1: self._wait(*tasks[1:])
 		if __debug__:
 			for task in tasks: assert task._processed, task
 	
-	def _parallel_no_wait(self, tasks):
+	def _parallel_no_wait(self, *tasks):
 		if __debug__ and is_debug: debug('sched: parallel_no_wait: ' + str([str(t) for t in tasks]))
 		notify = 0
 		for task in tasks:
@@ -164,7 +157,7 @@ class Scheduler(object):
 			self._todo_count += notify
 			self._condition.notify(notify)
 
-	def _wait(self, tasks):
+	def _wait(self, *tasks):
 		if __debug__ and is_debug: debug('sched: waiting for tasks: ' + str([str(t) for t in tasks]))
 		for task in tasks:
 			while True:

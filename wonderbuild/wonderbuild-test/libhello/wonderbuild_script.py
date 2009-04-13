@@ -15,4 +15,3 @@ class Wonderbuild(ScriptTask):
 		print 'libhello script task executing'
 		self.dummy = Dummy(self.project)
 		self.project.build_tasks.append(self.dummy)
-

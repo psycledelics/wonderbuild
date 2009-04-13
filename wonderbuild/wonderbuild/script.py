@@ -18,7 +18,7 @@ class ProjectScriptTask(Task):
 		d = {}
 		execfile(self.script.path, d)
 		self.task = d['Wonderbuild'](self.project, self.script.parent)
-		sched_context.parallel_wait((self.task,))
+		sched_context.parallel_wait(self.task)
 
 class ScriptTask(Task):
 	def __init__(self, project, src_dir):

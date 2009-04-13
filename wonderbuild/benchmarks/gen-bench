@@ -158,7 +158,7 @@ class Wonderbuild(ScriptTask):
 	
 			def __call__(self, sched_ctx):
 				if use_pch:
-					sched_ctx.parallel_wait((pch.lib_task,))
+					sched_ctx.parallel_wait(pch.lib_task)
 					pch.lib_task.apply_to(self.cfg)
 				self.cfg.defines['BENCH_LIB'] = self.i
 				sub_src_dir = src_dir / self.name
