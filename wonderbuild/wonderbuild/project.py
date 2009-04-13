@@ -4,7 +4,7 @@
 
 import sys, os, gc, cPickle
 
-from scheduler import Scheduler
+from task import Task
 from filesystem import FileSystem
 from logger import is_debug, debug
 
@@ -24,8 +24,7 @@ class Project(object):
 		self.options = options
 		self.option_collector = option_collector
 		option_collector.option_decls.add(self.__class__)
-		option_collector.option_decls.add(Scheduler)
-
+	
 		src_path = options.get('src-dir', None)
 		if src_path is None: src_path = os.getcwd()
 		
@@ -68,6 +67,24 @@ class Project(object):
 		self.fs = FileSystem(self.persistent)
 		self.top_src_dir = self.fs.cur / src_path
 		self.bld_dir = self.fs.cur / bld_path
+		self.build_tasks = []
+
+	def deferred_script_task(self, script):
+		try: script_tasks = self.script_tasks
+		except AttributeError: script_tasks = self.script_tasks = {}
+		else:
+			try: script_task = script_tasks[script]
+			except KeyError: pass
+			else: return script_task
+		from script import ProjectScriptTask
+		script_task = script_tasks[script] = ProjectScriptTask(self, script)
+		return script_task
+	
+	def script_task(self, *scripts):
+		script_tasks = [self.deferred_script_task(script) for script in scripts]
+		self.sched_context.parallel_wait(script_tasks)
+		if len(scripts) == 1: return script_tasks[0].task
+		else: return (script_task.task for script_task in script_tasks)
 		
 	def add_task_aliases(self, task, aliases = None):
 		if self.processsing: return # no need to add aliases during processing
@@ -83,14 +100,15 @@ class Project(object):
 		for a in task_aliases: tasks |= set(self.task_aliases[a])
 		return tasks
 		
-	def process(self, tasks):
+	def process_build_tasks(self):
 		if self.list_aliases:
 			for k, v in self.task_aliases.iteritems():
 				print k, [str(v) for v in v]
 		else:
 			if self.requested_task_aliases is not None: tasks = list(self.tasks_with_aliases(self.requested_task_aliases))
+			else: tasks = self.build_tasks
 			self.processsing = True
-			Scheduler(self.options).process(tasks)
+			self.sched_context.parallel_wait(tasks)
 			self.processsing = False
 
 	def dump(self):

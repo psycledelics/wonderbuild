@@ -18,18 +18,15 @@ else:
 		if gc_enabled: gc.disable()
 		try:
 			options = parse_args(sys.argv[1:])
+			option_collector = OptionCollector()
 
 			import logger
 			logger.use_options(options)
-
-			option_collector = OptionCollector()
 			option_collector.option_decls.add(logger)
 
 			option_collector.known_options.add('profile')
 			if 'help' in options: option_collector.help['profile'] = ('<file>', 'profile execution and put results in <file> (implies --jobs=1)')
-
 			profile = options.get('profile', None)
-			
 			if profile is None: sys.exit(run(options, option_collector))
 			else:
 				import cProfile
@@ -44,39 +41,51 @@ else:
 			if gc_enabled: gc.enable()
 
 	def run(options, option_collector):
+		if 'version' in options:
+			print 'wonderbuild 0.3'
+			return 0
+
+		from wonderbuild.task import Task
+		class MainTask(Task):
+			def __call__(self, sched_context):
+				self.project.sched_context = sched_context
+				
+				from wonderbuild.script import default_script_file
+				script = self.project.top_src_dir / default_script_file
+				if script.exists:
+					script_task = self.project.script_task(script)
+					script_tasks = (script_task,)
+					usage_error = False
+				else:
+					print >> sys.stderr, 'no ' + script.path + ' found'
+					script_tasks = ()
+					usage_error = True
+
+				if not usage_error and 'help' not in options:
+					sched_context.parallel_wait(script_tasks)
+					option_collector.consolidate_known_options()
+					usage_error = not validate_options(options, option_collector.known_options)
+
+				if usage_error or 'help' in options:
+					sched_context.parallel_wait(script_tasks)
+					option_collector.help['help'] = (None, 'show this help and exit')
+					option_collector.help['version'] = (None, 'show the version of this tool and exit')
+					option_collector.consolidate_help()
+					print_help(option_collector.help, sys.stdout)
+					self.result = usage_error and 1 or 0
+					return
+
+				try: self.project.process_build_tasks()
+				finally: project.dump()
+				self.result = 0
+
+		from wonderbuild.scheduler import Scheduler
+		option_collector.option_decls.add(Scheduler)
+		scheduler = Scheduler(options)
+
 		from wonderbuild.project import Project
 		project = Project(options, option_collector)
+		main_task = MainTask(project)
 
-		from wonderbuild.script import Script, default_script_file
-		script = project.top_src_dir / default_script_file
-		if script.exists:
-			tasks = Script(project, script)()
-			usage = False
-		else:
-			print >> sys.stderr, 'no ' + script.path + ' found'
-			usage = True
-
-		if usage or 'help' in options:
-			option_collector.help['help'] = (None, 'show this help and exit')
-			option_collector.help['version'] = (None, 'show the version of this tool and exit')
-			option_collector.consolidate_help()
-		
-		if 'help' in options:
-			print_help(option_collector.help, sys.stdout)
-			return 0
-
-		if 'version' in options:
-			print 'wonderbuild 0.2'
-			return 0
-	
-		if not usage:
-			option_collector.consolidate_known_options()
-			usage = not validate_options(options, option_collector.known_options)
-
-		if usage:
-			print_help(option_collector.help, sys.stderr)
-			return 1
-
-		try: project.process(tasks)
-		finally: project.dump()
-		return 0
+		scheduler.process([main_task])
+		return main_task.result

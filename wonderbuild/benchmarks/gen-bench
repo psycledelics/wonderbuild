@@ -116,56 +116,57 @@ namespace %(namespace)s {
 def create_wonderbuild(libs):
     f = open('wonderbuild_script.py', 'w')
     f.write(r'''
-def wonderbuild_script(project, src_dir):
-	from wonderbuild.cxx_chain import UserBuildCfg, PreCompileTasks, ModTask
+from wonderbuild.script import ScriptTask
+class Wonderbuild(ScriptTask):
+	def __call__(self, sched_ctx):
+		from wonderbuild.cxx_chain import UserBuildCfg, PreCompileTasks, ModTask
 
-	class CustomBuildCfg(UserBuildCfg):
-		def __init__(self, project):
-			UserBuildCfg.__init__(self, project)
-			self.cxx_flags = ['-g', '-O0', '-Wall']
-			self.shared = self.pic = False
-			self.defines['BENCH'] = None
-			self.include_paths.append(src_dir)
-	build_cfg = CustomBuildCfg(project)
+		src_dir = self.src_dir
+		
+		class CustomBuildCfg(UserBuildCfg):
+			def __init__(self, project):
+				UserBuildCfg.__init__(self, project)
+				self.cxx_flags = ['-g', '-O0', '-Wall']
+				self.shared = self.pic = False
+				self.defines['BENCH'] = None
+				self.include_paths.append(src_dir)
+		build_cfg = CustomBuildCfg(self.project)
 
-	use_pch = False
-	if use_pch:
-		class Pch(PreCompileTasks):
-			@property
-			def source_text(self):
-				try: return self._source_text
-				except AttributeError:
-					if False:
-						s = []
-						for l in src_dir.find_iter(in_pats = ['lib_*'], prune_pats = ['*']):
-							for n in l.find_iter(in_pats = ['*.hpp']):
-								s.append('#include <%s>' % n.rel_path(src_dir))
-						s.sort()
-						self._source_text = '\n'.join(s)
-					else:
-						self._source_text = '#include <boost/spirit.hpp>\n'
-					return self._source_text
-		pch = Pch('pch', build_cfg)
+		use_pch = False
+		if use_pch:
+			class Pch(PreCompileTasks):
+				@property
+				def source_text(self):
+					try: return self._source_text
+					except AttributeError:
+						if False:
+							s = []
+							for l in src_dir.find_iter(in_pats = ['lib_*'], prune_pats = ['*']):
+								for n in l.find_iter(in_pats = ['*.hpp']):
+									s.append('#include <%s>' % n.rel_path(src_dir))
+							s.sort()
+							self._source_text = '\n'.join(s)
+						else:
+							self._source_text = '#include <boost/spirit.hpp>\n'
+						return self._source_text
+			pch = Pch('pch', build_cfg)
 
-	class BenchLib(ModTask):
-		def __init__(self, name, i):
-			ModTask.__init__(self, name, ModTask.Kinds.LIB, build_cfg)
-			self.i = i
+		class BenchLib(ModTask):
+			def __init__(self, name, i):
+				ModTask.__init__(self, name, ModTask.Kinds.LIB, build_cfg)
+				self.i = i
 	
-		def __call__(self, sched_ctx):
-			if use_pch:
-				sched_ctx.parallel_wait((pch.lib_task,))
-				pch.lib_task.apply_to(self.cfg)
-			self.cfg.defines['BENCH_LIB'] = self.i
-			sub_src_dir = src_dir / self.name
-			for s in sub_src_dir.find_iter(in_pats = ['*.cpp']): self.sources.append(s)
-			ModTask.__call__(self, sched_ctx)
+			def __call__(self, sched_ctx):
+				if use_pch:
+					sched_ctx.parallel_wait((pch.lib_task,))
+					pch.lib_task.apply_to(self.cfg)
+				self.cfg.defines['BENCH_LIB'] = self.i
+				sub_src_dir = src_dir / self.name
+				for s in sub_src_dir.find_iter(in_pats = ['*.cpp']): self.sources.append(s)
+				ModTask.__call__(self, sched_ctx)
 
-	bench_libs = []
-	for n in src_dir.find_iter(in_pats = ['lib_*'], prune_pats = ['*']):
-		bench_libs.append(BenchLib(n.name, n.name[len('lib_'):]))
-
-	return bench_libs
+		for n in src_dir.find_iter(in_pats = ['lib_*'], prune_pats = ['*']):
+			self.project.build_tasks.append(BenchLib(n.name, n.name[len('lib_'):]))
 ''')
 
 def create_waf(libs):

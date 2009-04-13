@@ -29,6 +29,12 @@ class Scheduler(object):
 			self.thread_count = scheduler.thread_count
 			self.lock = scheduler._lock
 
+		#@property
+		#def thread_count(self): return self._scheduler.thread_count
+		
+		#@property
+		#def lock(self): return self._scheduler._lock
+		
 		def parallel_wait(self, tasks): self._scheduler._parallel_wait(tasks)
 		def parallel_no_wait(self, tasks): self._scheduler._parallel_no_wait(tasks)
 		def wait(self, tasks): self._scheduler._wait(tasks)
@@ -134,7 +140,9 @@ class Scheduler(object):
 			
 	def _parallel_wait(self, tasks):
 		if __debug__ and is_debug: debug('sched: parallel_wait: ' + str([str(t) for t in tasks]))
-		if len(tasks) != 1: self._parallel_no_wait(tasks[1:])
+		count = len(tasks)
+		if count == 0: return
+		if count != 1: self._parallel_no_wait(tasks[1:])
 		if tasks[0]._queued: self._wait(tasks)
 		else:
 			self._todo_count += 1
