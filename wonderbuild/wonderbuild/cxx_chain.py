@@ -310,6 +310,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 			self.kind = None
 			self.version = None
 		else:
+			self.cxx_prog = ((self.project.fs.cur / __file__).parent / 'colorgcc').abs_path
 			self.kind = 'gcc'
 			self.version = out.rstrip('\n')
 			if 'cxx-mod-ld' not in o: self.ld_prog = self.cxx_prog
