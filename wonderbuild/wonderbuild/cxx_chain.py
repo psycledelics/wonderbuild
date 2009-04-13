@@ -8,7 +8,7 @@ from collections import deque
 from logger import out, is_debug, debug, colored, silent
 from signature import Sig
 from option_cfg import OptionCfg
-from fhs_cfg import FHSCfg
+from fhs import FHS
 from task import Task
 from subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 
@@ -55,7 +55,7 @@ class BuildCfg(ClientCfg):
 		self.debug = False
 		self.optim = None
 		self.check_missing = False
-		self.fhs = FHSCfg(project)
+		self.fhs = FHS(project)
 
 	def clone(self, class_ = None):
 		if class_ is None: class_ = self.__class__
@@ -188,7 +188,7 @@ class BuildCfg(ClientCfg):
 		out.write(colored('34', 'wonderbuild: cfg: ' + desc + ': ') + colored(color, result) + '\n')
 		out.flush()
 
-class UserCfg(BuildCfg, OptionCfg):
+class UserBuildCfg(BuildCfg, OptionCfg):
 	def clone(self, class_ = None):
 		if class_ is None: class_ = BuildCfg
 		return class_.clone(self, class_)
@@ -235,11 +235,9 @@ class UserCfg(BuildCfg, OptionCfg):
 			self.cxx_prog, self.cxx_flags, self.pic, self.optim, self.debug, \
 			self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
 			self.ar_prog, self.ranlib_prog = \
-				self.project.state_and_cache[str(self.__class__)]
-		except KeyError: parse = True
-		else: parse = old_sig != self.options_sig
-		
-		if parse:
+				self.project.persistent[str(self.__class__)]
+		except KeyError: old_sig = None
+		if old_sig != self.options_sig:
 			if __debug__ and is_debug: debug('cfg: cxx: user: parsing options')
 			o = self.options
 
@@ -287,7 +285,7 @@ class UserCfg(BuildCfg, OptionCfg):
 			if 'cxx-mod-ar' not in o: self.ar_prog = self.impl.ar_prog
 			if 'cxx-mod-ranlib' not in o: self.ranlib_prog = self.impl.ranlib_prog
 			
-			self.project.state_and_cache[str(self.__class__)] = \
+			self.project.persistent[str(self.__class__)] = \
 				self.options_sig, self.check_missing, \
 				self.kind, self.version, \
 				self.cxx_prog, self.cxx_flags, self.pic, self.optim, self.debug, \
@@ -346,7 +344,7 @@ class _PreCompileTask(Task):
 	def header(self):
 		try: return self._header
 		except AttributeError:
-			self._header = self.project.bld_node / 'precompiled' / (self.name + '.private.hpp')
+			self._header = self.project.bld_dir / 'precompiled' / (self.name + '.private.hpp')
 			return self._header
 
 	@property
@@ -367,7 +365,7 @@ class _PreCompileTask(Task):
 		sched_context.lock.release()
 		try:
 			changed = False
-			try: old_sig, deps, old_dep_sig = self.project.state_and_cache[self.uid]
+			try: old_sig, deps, old_dep_sig = self.project.persistent[self.uid]
 			except KeyError:
 				if __debug__ and is_debug: debug('task: no state: ' + str(self))
 				changed = True
@@ -572,7 +570,7 @@ class ModTask(Task):
 	def obj_dir(self):
 		try: return self._obj_dir
 		except AttributeError:
-			self._obj_dir = self.project.bld_node / 'modules' / self.name
+			self._obj_dir = self.project.bld_dir / 'modules' / self.name
 			return self._obj_dir
 
 	@property
@@ -588,10 +586,10 @@ class ModTask(Task):
 				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask(self.project, self.cfg.pkg_config, self.cfg.shared or not self.cfg.static_prog)
 				sched_context.parallel_no_wait((pkg_config_ld_flags_task,))
 		changed_sources = []
-		try: state = self.project.state_and_cache[self.uid]
+		try: state = self.project.persistent[self.uid]
 		except KeyError:
 			if __debug__ and is_debug: debug('task: no state: ' + str(self))
-			state = self.project.state_and_cache[self.uid] = None, None, None, {}
+			state = self.project.persistent[self.uid] = None, None, None, {}
 			self._type_changed = False
 			changed_sources = self.sources
 		else:
@@ -693,19 +691,19 @@ class ModTask(Task):
 				if self.ld: sources = self.sources
 				else: sources = changed_sources
 				self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources])
-				implicit_deps = self.project.state_and_cache[self.uid][3]
+				implicit_deps = self.project.persistent[self.uid][3]
 				if len(implicit_deps) > len(self.sources):
 					# remove old sources from implicit deps dictionary
 					sources_states = {}
 					for s in self.sources: sources_states[s] = implicit_deps[s]
 				else: sources_states = implicit_deps
-				self.project.state_and_cache[self.uid] = self._mod_sig, self.ld, self.cfg.cxx_sig, sources_states # TODO move cxx_sig into obj sig
+				self.project.persistent[self.uid] = self._mod_sig, self.ld, self.cfg.cxx_sig, sources_states # TODO move cxx_sig into obj sig
 			finally: sched_context.lock.acquire()
 		if not self.cfg.check_missing: self.obj_dir.forget()
 		self._needed_process = need_process
 
 	def _unique_base_name(self, source):
-		return source.rel_path(self.project.src_node).replace(os.pardir, '_').replace(os.sep, ',')
+		return source.rel_path(self.project.top_src_dir).replace(os.pardir, '_').replace(os.sep, ',')
 
 	def _obj_name(self, source):
 		name = self._unique_base_name(source)
@@ -770,7 +768,7 @@ class _PkgConfigTask(Task):
 		try: return self._result
 		except AttributeError:
 			changed = False
-			try: old_sig, self._result = self.project.state_and_cache[self.uid]
+			try: old_sig, self._result = self.project.persistent[self.uid]
 			except KeyError: changed = True
 			else:
 				if old_sig != self.sig: changed = True
@@ -779,7 +777,7 @@ class _PkgConfigTask(Task):
 			else:
 				if not silent: self.print_check(self.desc)
 				self.do_result()
-				self.project.state_and_cache[self.uid] = self.sig, self._result
+				self.project.persistent[self.uid] = self.sig, self._result
 			return self._result
 
 	@property
@@ -880,7 +878,7 @@ class BuildCheckTask(Task):
 	def bld_dir(self):
 		try: return self._bld_dir
 		except AttributeError:
-			self._bld_dir = self.project.bld_node / 'checks' / self.name
+			self._bld_dir = self.project.bld_dir / 'checks' / self.name
 			return self._bld_dir
 
 	def __call__(self, sched_context):
@@ -895,7 +893,7 @@ class BuildCheckTask(Task):
 		try: return self._result
 		except AttributeError:
 			changed = False
-			try: old_sig, self._result = self.project.state_and_cache[self.uid]
+			try: old_sig, self._result = self.project.persistent[self.uid]
 			except KeyError: changed = True
 			else:
 				if old_sig != self.sig: changed = True
@@ -919,7 +917,7 @@ class BuildCheckTask(Task):
 					f.write('return code: '); f.write(str(r)); f.write('\n')
 				finally: f.close()
 				self._result = r == 0
-				self.project.state_and_cache[self.uid] = self.sig, self._result
+				self.project.persistent[self.uid] = self.sig, self._result
 				if not silent:
 					if self._result: self.print_check_result(desc, 'yes', '32')
 					else: self.print_check_result(desc, 'no', '31')

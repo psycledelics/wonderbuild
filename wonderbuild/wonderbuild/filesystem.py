@@ -9,14 +9,14 @@ from fnmatch import fnmatchcase as match
 from logger import is_debug, debug
 
 class FileSystem(object):
-	def __init__(self, state_and_cache):
+	def __init__(self, persistent):
 		cwd = os.getcwd()
-		try: self.root, old_cwd = state_and_cache[str(self.__class__)]
+		try: self.root, old_cwd = persistent[str(self.__class__)]
 		except KeyError:
 			if  __debug__ and is_debug: debug('fs: all anew')
 			self.root = Node(None, os.sep)
 			self.root._is_dir = True
-			state_and_cache[str(self.__class__)] = self.root, cwd
+			persistent[str(self.__class__)] = self.root, cwd
 		else:
 			if old_cwd != cwd:
 				if  __debug__ and is_debug: debug('fs: cwd changed')
@@ -27,7 +27,7 @@ class FileSystem(object):
 					if node._old_children is not None:
 						for child in node._old_children.itervalues(): recurse(child)
 				recurse(self.root)
-				state_and_cache[str(self.__class__)] = self.root, cwd
+				persistent[str(self.__class__)] = self.root, cwd
 		self.root._exists = True
 		self.root._height = 0
 		self.root._fs = self

@@ -49,25 +49,25 @@ class Project(object):
 		if gc_enabled: gc.disable()
 		try:
 			try:
-				try: f = open(os.path.join(bld_path, 'state-and-cache'), 'rb')
+				try: f = open(os.path.join(bld_path, 'persistent.pickle'), 'rb')
 				except IOError: raise
 				else:
 					try:
 						try:
 							if __debug__ and is_debug: t0 = time.time()
-							self.state_and_cache = cPickle.load(f)
+							self.persistent = cPickle.load(f)
 							if __debug__ and is_debug: debug('project: pickle: load time: ' + str(time.time() - t0) + ' s')
 						except Exception, e:
 							print >> sys.stderr, 'could not load pickle:', e
 							raise
 					finally: f.close()
-			except: self.state_and_cache = {}
+			except: self.persistent = {}
 		finally:
 			if gc_enabled: gc.enable()
 
-		self.fs = FileSystem(self.state_and_cache)
-		self.src_node = self.fs.cur / src_path
-		self.bld_node = self.fs.cur / bld_path
+		self.fs = FileSystem(self.persistent)
+		self.top_src_dir = self.fs.cur / src_path
+		self.bld_dir = self.fs.cur / bld_path
 		
 	def add_task_aliases(self, task, aliases = None):
 		if self.processsing: return # no need to add aliases during processing
@@ -94,18 +94,18 @@ class Project(object):
 			self.processsing = False
 
 	def dump(self):
-		#self.bld_node.forget()
-		if False and __debug__ and is_debug: print self.state_and_cache
+		#self.bld_dir.forget()
+		if False and __debug__ and is_debug: print self.persistent
 		gc_enabled = gc.isenabled()
 		if gc_enabled: gc.disable()
 		try:
-			path = os.path.join(self.bld_node.path, 'state-and-cache')
+			path = os.path.join(self.bld_dir.path, 'persistent.pickle')
 			if __debug__ and is_debug: t0 = time.time()
 			try: f = open(path, 'wb')
 			except IOError:
-				self.bld_node.make_dir()
+				self.bld_dir.make_dir()
 				f = open(path, 'wb')
-			try: cPickle.dump(self.state_and_cache, f, cPickle.HIGHEST_PROTOCOL)
+			try: cPickle.dump(self.persistent, f, cPickle.HIGHEST_PROTOCOL)
 			finally: f.close()
 			if __debug__ and is_debug:
 				debug('project: pickle: dump time: ' + str(time.time() - t0) + ' s')

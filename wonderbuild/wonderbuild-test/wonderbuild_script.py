@@ -6,7 +6,7 @@ def wonderbuild_script(project, src_dir):
 
 	src_dir = src_dir / 'src'
 
-	from wonderbuild.cxx_chain import UserCfg, PkgConfigCheckTask, BuildCheckTask, PreCompileTasks, ModTask
+	from wonderbuild.cxx_chain import UserBuildCfg, PkgConfigCheckTask, BuildCheckTask, PreCompileTasks, ModTask
 	from wonderbuild.std_checks import StdMathCheckTask
 	from wonderbuild.install import InstallTask
 	
@@ -14,7 +14,7 @@ def wonderbuild_script(project, src_dir):
 
 	glibmm = PkgConfigCheckTask(project, ['glibmm-2.4 >= 2.4'])
 
-	build_cfg = UserCfg(project)
+	build_cfg = UserBuildCfg(project)
 
 	build_cfg.include_paths.append(src_dir)
 

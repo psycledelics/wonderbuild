@@ -117,16 +117,16 @@ def create_wonderbuild(libs):
     f = open('wonderbuild_script.py', 'w')
     f.write(r'''
 def wonderbuild_script(project, src_dir):
-	from wonderbuild.cxx_chain import UserCfg, PreCompileTasks, ModTask
+	from wonderbuild.cxx_chain import UserBuildCfg, PreCompileTasks, ModTask
 
-	class CustomUserCfg(UserCfg):
+	class CustomBuildCfg(UserBuildCfg):
 		def __init__(self, project):
-			UserCfg.__init__(self, project)
+			UserBuildCfg.__init__(self, project)
 			self.cxx_flags = ['-g', '-O0', '-Wall']
 			self.shared = self.pic = False
 			self.defines['BENCH'] = None
 			self.include_paths.append(src_dir)
-	build_cfg = CustomUserCfg(project)
+	build_cfg = CustomBuildCfg(project)
 
 	use_pch = False
 	if use_pch:

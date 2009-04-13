@@ -5,20 +5,18 @@
 from logger import silent, is_debug, debug
 from task import Task
 from option_cfg import OptionCfg
+from fhs import FHS
 from signature import Sig
 
 import os, errno, shutil
 if os.name == 'posix':
 	def install(src, dst):
-		# try to do a hard link
-		try: os.link(src, dst)
+		try: os.link(src, dst) # try to do a hard link
 		except OSError, e:
-			if e.errno == errno.EXDEV: # error: cross-device link
-				# dst is on another filesystem than src, fallback to copying
-				shutil.copy2(src, dst)
-			else: raise
-else:
-	# hard links unavailable, do a copy instead
+			if e.errno != errno.EXDEV: raise 
+			# error: cross-device link: dst is on another filesystem than src
+			shutil.copy2(src, dst) # fallback to copying
+else: # hard links unavailable, do a copy instead
 	def install(src, dst): shutil.copy2(src, dst)
 
 class InstallTask(Task, OptionCfg):
@@ -30,18 +28,18 @@ class InstallTask(Task, OptionCfg):
 	def __init__(self, project):
 		Task.__init__(self, project)
 		OptionCfg.__init__(self, project)
+		self.fhs = FHS(project)
 
-		try: old_sig, self.check_missing = self.project.state_and_cache[str(self.__class__)]
-		except KeyError: parse = True
-		else: parse = old_sig != self.options_sig
-		if parse:
+		try: old_sig, self.check_missing = self.project.persistent[str(self.__class__)]
+		except KeyError: old_sig = None
+		if old_sig != self.options_sig:
 			if __debug__ and is_debug: debug('cfg: install: user: parsing options')
 			o = self.options
 
 			if 'check-missing' in o: self.check_missing = o['check-missing'] == 'yes'
 			else: self.check_missing = False
 
-			self.project.state_and_cache[str(self.__class__)] = self.options_sig, self.check_missing
+			self.project.persistent[str(self.__class__)] = self.options_sig, self.check_missing
 
 	@property
 	def uid(self):
@@ -59,8 +57,8 @@ class InstallTask(Task, OptionCfg):
 	@property
 	def dest_dir(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
 	
-	def __call__(self, sched_ctx):
-		try: old_sig = self.project.state_and_cache[self.uid]
+	def __call__(self, sched_context):
+		try: old_sig = self.project.persistent[self.uid]
 		except KeyError: old_sig = None
 		sigs = [s.sig for s in self.sources]
 		sigs.sort()
@@ -76,7 +74,7 @@ class InstallTask(Task, OptionCfg):
 						need_process = True
 						break
 		if need_process:
-			sched_ctx.lock.release()
+			sched_context.lock.release()
 			try:
 				self.dest_dir.lock.acquire()
 				try:
@@ -91,6 +89,6 @@ class InstallTask(Task, OptionCfg):
 						if dest.exists: os.remove(dest.path)
 						else: dest.parent.make_dir()
 						install(s.path, dest.path)
-					self.project.state_and_cache[self.uid] = sig
+					self.project.persistent[self.uid] = sig
 				finally: self.dest_dir.lock.release()
-			finally: sched_ctx.lock.acquire()
+			finally: sched_context.lock.acquire()

@@ -47,11 +47,10 @@ else:
 		from wonderbuild.project import Project
 		project = Project(options, option_collector)
 
-		script = project.src_node / 'wonderbuild_script.py'
+		from wonderbuild.script import Script, default_script_file
+		script = project.top_src_dir / default_script_file
 		if script.exists:
-			d = {}
-			execfile(script.path, d)
-			tasks = d['wonderbuild_script'](project, script.parent)
+			tasks = Script(project, script)()
 			usage = False
 		else:
 			print >> sys.stderr, 'no ' + script.path + ' found'

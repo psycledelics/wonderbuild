@@ -56,8 +56,8 @@ class Impl(object):
 
 	@staticmethod
 	def _cfg_cxx_args_include_bld(cfg, args):
-		for p in cfg.include_paths: args.append('-I' + os.path.join(os.pardir, os.pardir, p.rel_path(cfg.project.bld_node)))
-		for i in cfg.includes: args += ['-include', os.path.join(os.pardir, os.pardir, i.rel_path(cfg.project.bld_node))]
+		for p in cfg.include_paths: args.append('-I' + os.path.join(os.pardir, os.pardir, p.rel_path(cfg.project.bld_dir)))
+		for i in cfg.includes: args += ['-include', os.path.join(os.pardir, os.pardir, i.rel_path(cfg.project.bld_dir))]
 
 	@staticmethod
 	def process_precompile_task(precompile_task, lock):
@@ -87,7 +87,7 @@ class Impl(object):
 		if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
 		dep_sigs = [d.sig for d in deps]
 		dep_sigs.sort()
-		precompile_task.project.state_and_cache[precompile_task.uid] = precompile_task.sig, deps, Sig(''.join(dep_sigs)).digest()
+		precompile_task.project.persistent[precompile_task.uid] = precompile_task.sig, deps, Sig(''.join(dep_sigs)).digest()
 
 	@property
 	def precompile_task_target_ext(self): return '.gch'
@@ -98,7 +98,7 @@ class Impl(object):
 		cwd = cxx_task.target_dir
 		r = exec_subprocess(args, cwd = cwd.path)
 		if r != 0: raise Exception, r
-		implicit_deps = cxx_task.project.state_and_cache[cxx_task.uid][3]
+		implicit_deps = cxx_task.project.persistent[cxx_task.uid][3]
 		for s in zip(cxx_task.sources, cxx_task._actual_sources):
 			# reads deps from the .d files generated as side-effect of compilation by gcc's -MD or -MMD option
 			path = s[1].path

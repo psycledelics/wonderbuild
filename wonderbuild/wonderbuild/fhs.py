@@ -8,7 +8,7 @@ from logger import is_debug, debug
 from signature import Sig
 from option_cfg import OptionCfg
 
-class FHSCfg(OptionCfg):
+class FHS(OptionCfg):
 	'options for the Filesystem Hierarchy Standard'
 
 	known_options = set([
@@ -26,7 +26,7 @@ class FHSCfg(OptionCfg):
 		
 		try:
 			old_sig, self.dest, self.prefix_path = \
-				self.project.state_and_cache[str(self.__class__)]
+				self.project.persistent[str(self.__class__)]
 		except KeyError: parse = True
 		else: parse = old_sig != self.options_sig
 		if parse:
@@ -34,14 +34,14 @@ class FHSCfg(OptionCfg):
 			o = self.options
 
 			if 'install-dest-dir' in o: self.dest = self.project.fs.cur / o['install-dest-dir']
-			else: self.dest = self.project.bld_node / 'staged-install'
+			else: self.dest = self.project.bld_dir / 'staged-install'
 			
 			if 'install-prefix-dir' in o: self.prefix_path = o['install-prefix-dir']
 			else: self.prefix_path = os.path.join(os.sep, 'usr', 'local')
 			if self.prefix_path.startswith(os.sep): self.prefix_path = self.prefix_path[len(os.sep):]
 			else: raise Exception, 'invalid install-prefix-dir option: prefix must be an absolute path. got: ' + self.prefix_path
 			
-			self.project.state_and_cache[str(self.__class__)] = \
+			self.project.persistent[str(self.__class__)] = \
 				self.options_sig, self.dest, self.prefix_path
 
 		def dir(s): return self.dest / self.prefix_path / s

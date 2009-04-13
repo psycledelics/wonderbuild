@@ -13,14 +13,14 @@ _include = re.compile(r'^[ \t]*#[ \t]*include[ \t]*(["<])([^">]*)[">].*$', re.MU
 class IncludeScanner(object):
 	'C/C++ dependency scanner. #include statements, and nothing else, no #if, no #define (dumb)'
 	
-	def __init__(self, state_and_cache):
+	def __init__(self, persistent):
 		if False: # a tiny bit slower due to slight pickle size increase
-			try: self.contents, self.not_found = state_and_cache[str(self.__class__)]
+			try: self.contents, self.not_found = persistent[str(self.__class__)]
 			except KeyError:
 				if  __debug__ and is_debug: debug('cpp: all anew')
 				self.contents = {} # {node: (rel_includes, abs_includes)}
 				self.not_found = set() # of nodes collected from #include "" but not from #include <>
-				state_and_cache[str(self.__class__)] = self.contents, self.not_found
+				persistent[str(self.__class__)] = self.contents, self.not_found
 		else:
 			self.contents = {} # {node: (rel_includes, abs_includes)}
 			self.not_found = set() # of nodes collected from #include "" but not from #include <>

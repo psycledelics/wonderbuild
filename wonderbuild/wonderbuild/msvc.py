@@ -9,8 +9,8 @@ from signature import Sig
 from cpp_include_scanner import IncludeScanner
 
 class Impl(object):
-	def __init__(self, state_and_cache):
-		self.cpp = IncludeScanner(state_and_cache)
+	def __init__(self, persistent):
+		self.cpp = IncludeScanner(persistent)
 
 	@property
 	def cxx_prog(self): return 'cl'
@@ -44,14 +44,14 @@ class Impl(object):
 
 	if True: # faster
 		@staticmethod
-		def post_process_cxx_task(cxx_task): cxx_task.project.task_states[cxx_task.uid] = (cxx_task.sig, cxx_task._implicit_deps)
+		def post_process_cxx_task(cxx_task): cxx_task.project.persistent[cxx_task.uid] = (cxx_task.sig, cxx_task._implicit_deps)
 
 		@staticmethod
 		def cxx_task_sig(cxx_task):
 			sig = Sig(cxx_task.cfg.sig)
 			sig.update(cxx_task.source.sig)
 			new_implicit_deps = False
-			try: old_sig, cxx_task._implicit_deps = cxx_task.project.task_states[cxx_task.uid]
+			try: old_sig, cxx_task._implicit_deps = cxx_task.project.persistent[cxx_task.uid]
 			except KeyError:
 				old_sig = None
 				cxx_task._implicit_deps, not_found = cxx_task.cfg.user_cfg.cpp.scan_deps(cxx_task.source, cxx_task.cfg.include_paths)
@@ -86,12 +86,12 @@ class Impl(object):
 			return sig
 	else: # slower
 		@staticmethod
-		def post_process_cxx_task(cxx_task): cxx_task.project.task_states[cxx_task.uid] = (cxx_task.sig, cxx_task._implicit_deps, cxx_task._implicit_deps_sig)
+		def post_process_cxx_task(cxx_task): cxx_task.project.persistent[cxx_task.uid] = (cxx_task.sig, cxx_task._implicit_deps, cxx_task._implicit_deps_sig)
 
 		@staticmethod
 		def cxx_task_sig(cxx_task):
 			scan_implicit_deps = False
-			try: old_sig, cxx_task._implicit_deps, cxx_task._implicit_deps_sig = cxx_task.project.task_states[cxx_task.uid]
+			try: old_sig, cxx_task._implicit_deps, cxx_task._implicit_deps_sig = cxx_task.project.persistent[cxx_task.uid]
 			except KeyError:
 				old_sig = None
 				scan_implicit_deps = True
@@ -168,7 +168,7 @@ class Impl(object):
 
 	@staticmethod
 	def mod_task_target(mod_task):
-		dir = mod_task.project.bld_node / 'modules' / mod_task.name
+		dir = mod_task.project.bld_dir / 'modules' / mod_task.name
 		if mod_task.cfg.kind == 'prog': name = mod_task.name
 		elif mod_task.cfg.shared: name = mod_task.name + '.dll'
 		else: name = 'lib' + mod_task.name + '.lib'
@@ -186,7 +186,7 @@ class Impl(object):
 		for s in mod_task.sources:
 			if s.changed: inputs.append(s)
 			else:
-				old_sig, implicit_deps = mod_task.project.task_states[s.uid]
+				old_sig, implicit_deps = mod_task.project.persistent[s.uid]
 				for d in implicit_deps:
 					if d.changed: inputs.append(s)
 
@@ -194,7 +194,7 @@ class Impl(object):
 		for i in inputs:
 			if i.name not in base_names: args.append(i.rel_path(mod_task.target.parent))
 			else:
-				name = i.rel_path(mod_task.project.src_node)
+				name = i.rel_path(mod_task.project.top_src_dir)
 				name.replace(os.sep, ',')
 				name.replace(os.pardir, '_')
 				args.append(name)

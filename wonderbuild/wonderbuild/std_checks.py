@@ -29,7 +29,7 @@ class StdMathCheckTask(BuildCheckTask):
 
 	def __call__(self, sched_ctx):
 		changed = False
-		try: old_sig, self._result, self.m = self.project.state_and_cache[self.uid]
+		try: old_sig, self._result, self.m = self.project.persistent[self.uid]
 		except KeyError: changed = True
 		else:
 			if old_sig != self.sig: changed = True
@@ -48,7 +48,7 @@ class StdMathCheckTask(BuildCheckTask):
 			if not silent:
 				if self.result: self.print_check_result(desc, 'yes with' + (not self.m and 'out' or '') + ' libm', '32')
 				else: self.print_check_result(desc, 'no', '31')
-			self.project.state_and_cache[self.uid] = self.sig, self.result, self.m
+			self.project.persistent[self.uid] = self.sig, self.result, self.m
 		
 	@property
 	def result(self):
