@@ -5,7 +5,7 @@
 import os, threading
 from collections import deque
 
-from logger import out, dumb_out, is_debug, debug, colored, silent
+from logger import out, is_debug, debug, colored, silent
 from signature import Sig
 from option_cfg import OptionCfg
 from fhs import FHS
@@ -281,10 +281,6 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 
 			self._check_compiler()
 
-			if 'cxx-mod-ld' not in o: self.ld_prog = self.impl.ld_prog
-			if 'cxx-mod-ar' not in o: self.ar_prog = self.impl.ar_prog
-			if 'cxx-mod-ranlib' not in o: self.ranlib_prog = self.impl.ranlib_prog
-			
 			self.project.persistent[str(self.__class__)] = \
 				self.options_sig, self.check_missing, \
 				self.kind, self.version, \
@@ -310,13 +306,17 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 			self.kind = None
 			self.version = None
 		else:
-			if not dumb_out: self.cxx_prog = ((self.project.fs.cur / __file__).parent / 'colorgcc').abs_path
 			self.kind = 'gcc'
 			self.version = out.rstrip('\n')
-			if 'cxx-mod-ld' not in o: self.ld_prog = self.cxx_prog
 			import gcc
 			self.impl = gcc.Impl()
 		if not silent: self.print_check_result(desc, str(self.kind) + ' version ' + str(self.version), '32')
+		if self.impl is not None:
+			cxx_prog, ld_prog, ar_prog, ranlib_prog = self.impl.progs(self)
+			if 'cxx' not in o: self.cxx_prog = cxx_prog
+			if 'cxx-mod-ld' not in o: self.ld_prog = ld_prog
+			if 'cxx-mod-ar' not in o: self.ar_prog = ar_prog
+			if 'cxx-mod-ranlib' not in o: self.ranlib_prog = ranlib_prog
 
 class _PreCompileTask(ProjectTask):
 	def __init__(self, name, base_cfg):

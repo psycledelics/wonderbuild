@@ -4,12 +4,20 @@
 
 import os
 
-from logger import is_debug, debug, colored
+from logger import is_debug, debug, colored, out_is_dumb
 from signature import Sig
 from subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 
 class Impl(object):
 
+	@staticmethod
+	def progs(cfg):
+		if not out_is_dumb: cxx_prog = ld_prog = ((cfg.project.fs.cur / __file__).parent / 'colorgcc').abs_path
+		else: cxx_prog = ld_prog = cfg.cxx_prog, cfg.ld_prog
+		return cxx_prog, ld_prog, 'ar', 'ranlib'
+		# see also g++ -print-prog-name=ld
+		# for gnu ar, 'ar s' is used instead of ranlib
+		
 	@property
 	def common_env_sig(self):
 		sig = Sig()
@@ -17,9 +25,6 @@ class Impl(object):
 			e = os.environ.get(name, None)
 			if e is not None: sig.update(e)
 		return sig.digest()
-
-	@property
-	def cxx_prog(self): return 'g++'
 
 	@property
 	def cxx_env_sig(self):
@@ -117,15 +122,6 @@ class Impl(object):
 	@property
 	def cxx_task_target_ext(self): return '.o'
 		
-	@property
-	def ld_prog(self): return 'g++' # TODO use g++ -print-prog-name=ld
-	
-	@property
-	def ar_prog(self): return 'ar'
-	
-	@property
-	def ranlib_prog(self): return 'ranlib' # for gnu ar, 'ar s' is used instead of ranlib
-	
 	@property
 	def common_mod_env_sig(self): return ''
 
