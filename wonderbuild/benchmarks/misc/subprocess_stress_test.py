@@ -12,8 +12,8 @@ if __name__ == '__main__':
 	
 	def thread_function(input, args):
 		while True:
-			if input is not None: # workaround for bug still present in python 2.5.2
-				lock.acquire()
+			if input is not None:
+				lock.acquire() # workaround for bug still present in python 2.5.2
 				try: p = subprocess.Popen(
 						args = args,
 						bufsize = -1,
