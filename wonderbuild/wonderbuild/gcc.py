@@ -196,7 +196,7 @@ class Impl(object):
 	def mod_task_target_name(mod_task):
 		if mod_task.kind == mod_task.Kinds.PROG: name = mod_task.name
 		elif mod_task.cfg.shared:
-			if mod_task.target_platform.startswith('win'): name = mod_task.name + '.dll'
+			if mod_task.cfg.target_platform.startswith('win'): name = mod_task.name + '.dll'
 			else: name = 'lib' + mod_task.name + '.so'
 		else: name = 'lib' + mod_task.name + '.a'
 		return name
