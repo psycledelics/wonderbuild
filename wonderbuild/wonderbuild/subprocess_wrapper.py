@@ -17,8 +17,8 @@ def exec_subprocess(args, env = None, cwd = None):
 
 def exec_subprocess_pipe(args, input = None, env = None, cwd = None, silent = False):
 	if __debug__ and is_debug: debug('exec: pipe: ' + str(cwd) + ' ' + str(env) + ' ' + str(args))
-	if input is not None: # workaround for bug still present in python 2.5.2
-		_lock.acquire()
+	if input is not None:
+		_lock.acquire() # workaround for bug still present in python 2.5.2
 		try: p = subprocess.Popen(
 				args = args,
 				bufsize = -1,

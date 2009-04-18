@@ -2,7 +2,7 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2007-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import os, threading
+import sys, os, threading
 from collections import deque
 
 from logger import out, is_debug, debug, colored, silent
@@ -42,6 +42,7 @@ class ClientCfg(object):
 class BuildCfg(ClientCfg):
 	def __init__(self, project):
 		ClientCfg.__init__(self, project)
+		self.target_platform = None
 		self.cxx_prog = None
 		self.pic = None
 		self.includes = deque()
@@ -60,6 +61,7 @@ class BuildCfg(ClientCfg):
 	def clone(self, class_ = None):
 		if class_ is None: class_ = self.__class__
 		c = ClientCfg.clone(self, class_)
+		c.target_platform = self.target_platform
 		c.cxx_prog = self.cxx_prog
 		c.pic = self.pic
 		c.includes.extend(self.includes)
@@ -194,6 +196,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		return class_.clone(self, class_)
 
 	known_options = set([
+		'cxx-target-platform'
 		'cxx',
 		'cxx-flags',
 		'cxx-debug',
@@ -210,6 +213,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 
 	@staticmethod
 	def generate_option_help(help):
+		help['cxx-target-platform']  = ('<platform>', 'compiler target platform is <platform>')
 		help['cxx']                  = ('<prog>', 'use <prog> as c++ compiler')
 		help['cxx-flags']            = ('[flags]', 'use specific c++ compiler flags')
 		help['cxx-debug']            = ('<yes|no>', 'whether to make the c++ compiler produce debugging information', 'no')
@@ -230,7 +234,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		OptionCfg.__init__(self, project)
 		
 		try:
-			old_sig, self.check_missing, \
+			old_sig, self.target_platform, self.check_missing, \
 			self.kind, self.version, \
 			self.cxx_prog, self.cxx_flags, self.pic, self.optim, self.debug, \
 			self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
@@ -279,10 +283,13 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 			if 'cxx-mod-ar' in o: self.ar_prog = o['cxx-mod-ar']
 			if 'cxx-mod-ranlib' in o: self.ranlib_prog = o['cxx-mod-ranlib']
 
+			if 'cxx_target-platform' in o: self.target_platform = o['cxx-target-platform']
+			else: self.target_platform = sys.platform
+
 			self._check_compiler()
 
 			self.project.persistent[str(self.__class__)] = \
-				self.options_sig, self.check_missing, \
+				self.options_sig, self.target_platform, self.check_missing, \
 				self.kind, self.version, \
 				self.cxx_prog, self.cxx_flags, self.pic, self.optim, self.debug, \
 				self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
@@ -300,7 +307,8 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		if not silent:
 			desc = 'checking for c++ compiler'
 			self.print_check(desc)
-		r, out, err = exec_subprocess_pipe([self.cxx_prog, '-dumpversion'], silent = True)
+		try: r, out, err = exec_subprocess_pipe([self.cxx_prog, '-dumpversion'], silent = True)
+		except: r = 1
 		if r != 0:
 			if not silent: self.print_check_result(desc, 'not gcc', '31')
 			self.kind = None
