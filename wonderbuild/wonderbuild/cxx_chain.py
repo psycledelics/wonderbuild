@@ -79,6 +79,20 @@ class BuildCfg(ClientCfg):
 		c.fhs = self.fhs
 		return c
 
+	def _get_target_platform(self): return self._target_platform
+	def _set_target_platform(self, value):
+		self._target_platform = value
+		try: del self._target_platform_is_mswindows
+		except AttributeError: pass
+	target_platform = property(_get_target_platform, _set_target_platform)
+	
+	@property
+	def target_platform_is_mswindows(self):
+		try: return self._target_platform_is_mswindows
+		except AttributeError:
+			self._target_platform_is_mswindows = self.target_platform.startswith('win')
+			return self._target_platform_is_mswindows
+
 	@property
 	def _common_sig(self):
 		try: return self.__common_sig
@@ -283,7 +297,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 			if 'cxx-mod-ar' in o: self.ar_prog = o['cxx-mod-ar']
 			if 'cxx-mod-ranlib' in o: self.ranlib_prog = o['cxx-mod-ranlib']
 
-			if 'cxx_target-platform' in o: self.target_platform = o['cxx-target-platform']
+			if 'cxx-target-platform' in o: self.target_platform = o['cxx-target-platform']
 			else: self.target_platform = sys.platform
 
 			self._check_compiler()
