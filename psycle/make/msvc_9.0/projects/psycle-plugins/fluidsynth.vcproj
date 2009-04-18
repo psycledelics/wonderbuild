@@ -42,7 +42,9 @@
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="WIN32;_M_IX86;_WINDOWS;_USRDLL;FLUIDSYNTH_DLL_EXPORTS;FLUIDSYNTH_SEQ_DLL_EXPORTS"
 				UsePrecompiledHeader="0"
+				ProgramDataBaseFileName=""
 				CompileAs="1"
+				ForcedIncludeFiles="$(NOINHERIT)"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -55,6 +57,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="$(NOINHERIT)"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -103,7 +106,9 @@
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="WIN32;_M_IX86;_WINDOWS;_USRDLL;FLUIDSYNTH_DLL_EXPORTS;FLUIDSYNTH_SEQ_DLL_EXPORTS"
 				UsePrecompiledHeader="0"
+				ProgramDataBaseFileName=""
 				CompileAs="1"
+				ForcedIncludeFiles="$(NOINHERIT)"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -116,6 +121,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="$(NOINHERIT)"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -164,7 +170,9 @@
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="NDEBUG;WIN32;_M_IX86;_WINDOWS;_USRDLL;FLUIDSYNTH_DLL_EXPORTS;FLUIDSYNTH_SEQ_DLL_EXPORTS"
 				UsePrecompiledHeader="0"
+				ProgramDataBaseFileName=""
 				CompileAs="1"
+				ForcedIncludeFiles="$(NOINHERIT)"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -177,6 +185,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="$(NOINHERIT)"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -226,7 +235,9 @@
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="NDEBUG;WIN32;_M_IX86;_WINDOWS;_USRDLL;FLUIDSYNTH_DLL_EXPORTS;FLUIDSYNTH_SEQ_DLL_EXPORTS"
 				UsePrecompiledHeader="0"
+				ProgramDataBaseFileName=""
 				CompileAs="1"
+				ForcedIncludeFiles="$(NOINHERIT)"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -239,6 +250,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="$(NOINHERIT)"
 			/>
 			<Tool
 				Name="VCALinkTool"

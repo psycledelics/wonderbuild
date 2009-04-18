@@ -258,7 +258,15 @@
 	</References>
 	<Files>
 		<File
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\y_midi\gmnames.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\y_midi\y_midi.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\y_midi\y_midi.hpp"
 			>
 		</File>
 	</Files>
