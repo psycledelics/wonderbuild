@@ -4,8 +4,10 @@ set -x &&
 
 jobs=4 &&
 
-measure=time &&
-#measure='strace -fF' &&
+measure() {
+	time "$@"
+	strace -fF "$@"
+} &&
 
 main() {
 	op=$1 && shift &&
@@ -22,7 +24,7 @@ main() {
 
 	case $tool in
 		wonderbuild)
-			$measure ../../wonderbuild.py --bld-dir=build-$tool --cxx=g++ --jobs=$jobs "$@"
+			measure ../../wonderbuild.py --bld-dir=build-$tool --cxx=g++ --jobs=$jobs "$@"
 		;;
 	
 		waf)
@@ -30,7 +32,7 @@ main() {
 			then
 				../../waf/waf-light configure
 			fi &&
-			$measure ../../waf/waf-light --jobs=$jobs "$@"
+			measure ../../waf/waf-light --jobs=$jobs "$@"
 		;;
 	
 		scons)
@@ -43,7 +45,7 @@ main() {
 			then
 				make -r clean --silent
 			fi &&
-			$measure make -r --jobs=$jobs "$@"
+			measure make -r --jobs=$jobs "$@"
 		;;
 
 		jam)
@@ -51,7 +53,7 @@ main() {
 			then
 				jam clean
 			fi &&
-			$measure jam -j$jobs "$@"
+			measure jam -j$jobs "$@"
 		;;
 
 		autotools)
@@ -64,7 +66,7 @@ main() {
 				mkdir build-$tool &&
 				(cd build-$tool && ../configure --disable-shared CXXFLAGS=)
 			fi &&
-			$measure make -C build-$tool -r --jobs=$jobs "$@"
+			measure make -C build-$tool -r --jobs=$jobs "$@"
 		;;
 	esac
 } &&
