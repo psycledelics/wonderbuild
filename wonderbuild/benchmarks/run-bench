@@ -6,7 +6,7 @@ jobs=4 &&
 
 measure() {
 	time "$@"
-	strace -fF "$@"
+	#strace -fF "$@"
 } &&
 
 main() {
