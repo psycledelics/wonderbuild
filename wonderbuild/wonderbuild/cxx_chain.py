@@ -90,7 +90,7 @@ class BuildCfg(ClientCfg):
 	def target_platform_is_mswindows(self):
 		try: return self._target_platform_is_mswindows
 		except AttributeError:
-			self._target_platform_is_mswindows = self.target_platform.startswith('win')
+			self._target_platform_is_mswindows = self._target_platform.startswith('win') or self._target_platform == 'cygwin'
 			return self._target_platform_is_mswindows
 
 	@property
