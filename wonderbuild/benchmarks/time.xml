@@ -144,6 +144,51 @@
 				</bars>
 			</part>
 		</part>
+		<part caption='Times on ms-windows, on yet a slower machine'>
+			All tests were run with 1 job on the same system, cygwin running on ms-windows-xp inside virtualbox, gcc's C++ compiler.
+			<part caption='Tool versions'>
+				<ul>
+					<li>Waf version was somewhere after 1.5.4 (svn rev 6104)</li>
+					<li>Python version was 2.5.2</li>
+					<li>Shell was bash version 3.2.48</li>
+					<li>Compiler tool chain versions were gcc 4.3.2, binutils 2.18.50</li>
+				</ul>
+			</part>
+			<part caption='Initial full build'>
+				<bars scale='7.45' unit='m'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='wonderbuild' value='30.55'>gcc deps</bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='waf'         value='86.25'>waf cpp, timestamp signatures</bar>
+				</bars>
+			</part>
+			<part caption='Big partial rebuild'>
+				After touch lib_17/*.hpp => rebuild of 585 object files from c++ and 33 static libs
+				<br/><br/>
+				<bars scale='1.115'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='wonderbuild' value='237'>gcc deps</bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='waf'         value='589'>waf cpp, timestamp signatures</bar>
+				</bars>
+			</part>
+			<part caption='Small partial rebuild'>
+				After touch lib_17/class_17.hpp => rebuild of 26 object files from c++ and 8 static libs
+				<br/><br/>
+				<bars scale='19.6'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='wonderbuild' value='17.0'>gcc deps</bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='waf'         value='33.1'>waf cpp, timestamp signatures</bar>
+				</bars>
+			</part>
+			<part caption='No-op rebuild'>
+				<bars scale='150'>
+					<bar name='wonderbuild' value='2.28'>gcc deps</bar>
+					<bar name='waf'         value='4.32'>waf cpp, timestamp signatures</bar>
+				</bars>
+			</part>
+		</part>
 		<part caption='Number of system calls' anchor='strace'>
 			The following numbers were obtained with <code>strace -fF</code>
 			<br/><br/>
