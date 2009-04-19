@@ -838,7 +838,11 @@ class PkgConfigCheckTask(_PkgConfigTask):
 	def apply_to(self, cfg): cfg.pkg_config += self.pkgs
 	
 	def do_result(self):
-		self._result = 0 == exec_subprocess(self.args)
+		try: r = exec_subprocess(self.args)
+		except Exception, e:
+			if __debug__ and is_debug: debug('cfg: ' + self.desc + ': exception: ' + str(e))
+			r = 1
+		self._result = r == 0
 		if not silent:
 			if self._result: self.print_check_result(self.desc, 'yes', '32')
 			else: self.print_check_result(self.desc, 'no', '31')
