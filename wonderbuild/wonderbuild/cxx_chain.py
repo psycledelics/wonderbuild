@@ -101,6 +101,7 @@ class BuildCfg(ClientCfg):
 			for name in ('PATH',):
 				e = os.environ.get(name, None)
 				if e is not None: sig.update(e)
+			sig.update(self.target_platform)
 			sig.update(self.kind)
 			sig.update(self.version)
 			sig.update(str(self.debug))
@@ -210,7 +211,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		return class_.clone(self, class_)
 
 	known_options = set([
-		'cxx-target-platform'
+		'cxx-target-platform',
 		'cxx',
 		'cxx-flags',
 		'cxx-debug',
@@ -322,7 +323,9 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 			desc = 'checking for c++ compiler'
 			self.print_check(desc)
 		try: r, out, err = exec_subprocess_pipe([self.cxx_prog, '-dumpversion'], silent = True)
-		except: r = 1
+		except Exception, e:
+			if __debug__ and is_debug: debug('cfg: ' + desc + ': ' + str(e))
+			r = 1
 		if r != 0:
 			if not silent: self.print_check_result(desc, 'not gcc', '31')
 			self.kind = None

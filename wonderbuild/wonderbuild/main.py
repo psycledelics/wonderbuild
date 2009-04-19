@@ -13,7 +13,8 @@ else:
 	from wonderbuild.options import parse_args, validate_options, print_help, OptionCollector
 
 	def main():
-		import gc
+		import time, gc
+		t = time.time()
 		gc_enabled = gc.isenabled()
 		if gc_enabled: gc.disable()
 		try:
@@ -38,6 +39,8 @@ else:
 				#s.sort_stats('time').print_stats(45)
 				s.sort_stats('cumulative').reverse_order().print_stats()
 		finally:
+			t = time.time() - t
+			print 'wonderbuild: build time: ' + str(t) + 's'
 			if gc_enabled: gc.enable()
 
 	def run(options, option_collector):
