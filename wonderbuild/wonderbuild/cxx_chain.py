@@ -88,6 +88,7 @@ class BuildCfg(ClientCfg):
 	
 	@property
 	def target_platform_is_mswindows(self):
+		# TODO check the preprocessor macros __ELF__ and _WIN32 to autodetect the target platform binary format
 		try: return self._target_platform_is_mswindows
 		except AttributeError:
 			self._target_platform_is_mswindows = self._target_platform.startswith('win') or self._target_platform == 'cygwin'
@@ -211,6 +212,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		return class_.clone(self, class_)
 
 	known_options = set([
+		# TODO check the preprocessor macros __ELF__ and _WIN32 to autodetect the target platform binary format
 		'cxx-target-platform',
 		'cxx',
 		'cxx-flags',
@@ -228,6 +230,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 
 	@staticmethod
 	def generate_option_help(help):
+		# TODO check the preprocessor macros __ELF__ and _WIN32 to autodetect the target platform binary format
 		help['cxx-target-platform']  = ('<platform>', 'compiler target platform is <platform>')
 		help['cxx']                  = ('<prog>', 'use <prog> as c++ compiler')
 		help['cxx-flags']            = ('[flags]', 'use specific c++ compiler flags')
