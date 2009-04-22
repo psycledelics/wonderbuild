@@ -155,7 +155,7 @@
 				</ul>
 			</part>
 			<part caption='Initial full build'>
-				<bars scale='43' unit='m'>
+				<bars scale='24.95' unit='m'>
 					<bar-section>Using batch compilation</bar-section>
 					<bar name='wonderbuild' value='12.60'>gcc deps</bar>
 					<bar-section>Not using batch compilation</bar-section>
@@ -166,7 +166,7 @@
 			<part caption='Big partial rebuild'>
 				After touch lib_17/*.hpp => rebuild of 585 object files from c++ and 33 static libs
 				<br/><br/>
-				<bars scale='5.18'>
+				<bars scale='3.32'>
 					<bar-section>Using batch compilation</bar-section>
 					<bar name='wonderbuild' value=' 95.8'>gcc deps</bar>
 					<bar-section>Not using batch compilation</bar-section>
@@ -177,7 +177,7 @@
 			<part caption='Small partial rebuild'>
 				After touch lib_17/class_17.hpp => rebuild of 26 object files from c++ and 8 static libs
 				<br/><br/>
-				<bars scale='48.9'>
+				<bars scale='14.6'>
 					<bar-section>Using batch compilation</bar-section>
 					<bar name='wonderbuild' value=' 7.8'>gcc deps</bar>
 					<bar-section>Not using batch compilation</bar-section>
@@ -186,7 +186,7 @@
 				</bars>
 			</part>
 			<part caption='No-op rebuild'>
-				<bars scale='106'>
+				<bars scale='19.1'>
 					<bar name='wonderbuild' value=' 2.6'>gcc deps</bar>
 					<bar name='waf'         value=' 6.2'>waf cpp</bar>
 					<bar name='scons'       value='42.0'>with fast tuning options</bar>
