@@ -148,6 +148,7 @@
 			All tests were run with 1 job on the same system, ms-windows-xp inside virtualbox, gcc's C++ compiler.
 			<part caption='Tool versions'>
 				<ul>
+					<li>Scons version was 1.2.0</li>
 					<li>Waf version was somewhere after 1.5.4 (svn rev 6104)</li>
 					<li>Python version was 2.6.1</li>
 					<li>Compiler tool chain versions were gcc 3.4.5, binutils 2.17.50</li>
@@ -159,6 +160,7 @@
 					<bar name='wonderbuild' value='12.60'>gcc deps</bar>
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='waf'         value='15.03'>waf cpp</bar>
+					<bar name='scons'       value='31.98'>with fast tuning options</bar>
 				</bars>
 			</part>
 			<part caption='Big partial rebuild'>
@@ -169,6 +171,7 @@
 					<bar name='wonderbuild' value=' 95.8'>gcc deps</bar>
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='waf'         value='124.4'>waf cpp</bar>
+					<bar name='scons'       value='240.0'>with fast tuning options</bar>
 				</bars>
 			</part>
 			<part caption='Small partial rebuild'>
@@ -179,12 +182,14 @@
 					<bar name='wonderbuild' value=' 7.8'>gcc deps</bar>
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='waf'         value='13.3'>waf cpp</bar>
+					<bar name='scons'       value='55.0'>with fast tuning options</bar>
 				</bars>
 			</part>
 			<part caption='No-op rebuild'>
 				<bars scale='106'>
-					<bar name='wonderbuild' value='2.6'>gcc deps</bar>
-					<bar name='waf'         value='6.2'>waf cpp</bar>
+					<bar name='wonderbuild' value=' 2.6'>gcc deps</bar>
+					<bar name='waf'         value=' 6.2'>waf cpp</bar>
+					<bar name='scons'       value='42.0'>with fast tuning options</bar>
 				</bars>
 			</part>
 		</part>
