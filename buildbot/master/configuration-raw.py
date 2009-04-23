@@ -20,8 +20,8 @@ BuildmasterConfig['buildbotURL'] = 'http://' + master_host_fqdn + ':' + str(mast
 
 BuildmasterConfig['sources'] = []
 
-from buildbot.changes.pb import PBChangeSource
-BuildmasterConfig['sources'].append(PBChangeSource()) # prefix = branch_filter
+#from buildbot.changes.pb import PBChangeSource
+#BuildmasterConfig['sources'].append(PBChangeSource()) # prefix = branch_filter
 
 branch = 'trunk'
 svn_url = 'https://' + project_name + '.svn.sourceforge.net/svnroot/' + project_name + '/' + branch
