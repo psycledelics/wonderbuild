@@ -10,8 +10,7 @@ from logger import is_debug, debug
 
 # define to True to use hash sum (e.g. md5 sum) instead of timestamps for signatures
 USE_HASH_SUM = False
-if USE_HASH_SUM:
-	from signature import Sig
+if USE_HASH_SUM: from signature import Sig
 
 class FileSystem(object):
 	def __init__(self, persistent):
