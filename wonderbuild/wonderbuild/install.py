@@ -17,7 +17,7 @@ if os.name == 'posix':
 			# error: cross-device link: dst is on another filesystem than src
 			shutil.copy2(src, dst) # fallback to copying
 else: # hard links unavailable, do a copy instead
-	def install(src, dst): shutil.copy2(src, dst)
+	install = shutil.copy2
 
 class InstallTask(ProjectTask, OptionCfg):
 	known_options = set(['check-missing'])
@@ -70,30 +70,39 @@ class InstallTask(ProjectTask, OptionCfg):
 		sig = Sig(''.join(sigs))
 		sig.update(self.dest_dir.abs_path)
 		sig = sig.digest()
-		need_process = old_sig != sig
-		if not need_process and self.check_missing:
+		if old_sig != sig or self.check_missing:
+			if False: # TODO This is needed on mswindows were timestamps cannot reliably be copied
+				changed_sources = []
 				for s in self.sources:
-					dest = self.dest_dir / s.rel_path(self.trim_prefix)
-					if not dest.exists:
-						if __debug__ and is_debug: debug('task: destination missing: ' + str(dest))
-						need_process = True
-						break
-		if need_process:
+					try: old_source_sig = old_source_sigs[s]
+					except KeyError:
+						# This is a new source.
+						changed_sources.append(s)
+						continue
+					if old_source_sig != s.sig:
+						# The source changed.
+						changed_sources.append(s)
 			sched_context.lock.release()
 			try:
 				self.dest_dir.lock.acquire()
 				try:
-					if not silent: self.print_desc(
-						'installing from ' + str(self.trim_prefix) +
-						' to ' + str(self.dest_dir) +
-						':\n\t' + '\n\t'.join([s.rel_path(self.trim_prefix) for s in self.sources]),
-						'47;34'
-					)
+					install_tuples = []
 					for s in self.sources:
-						dest = self.dest_dir / s.rel_path(self.trim_prefix)
-						if dest.exists: os.remove(dest.path)
-						else: dest.parent.make_dir()
-						install(s.path, dest.path)
+						rel_path = s.rel_path(self.trim_prefix)
+						dest = self.dest_dir / rel_path
+						if not dest.exists or dest.time != s.time: install_tuples.append((s, dest, rel_path))
+					if len(install_tuples) != 0:
+						if not silent: self.print_desc(
+							'installing from ' + str(self.trim_prefix) +
+							' to ' + str(self.dest_dir) +
+							':\n\t' + '\n\t'.join((t[2] for t in install_tuples)),
+							'47;34'
+						)
+						for t in install_tuples:
+							s, dest = t[0], t[1]
+							if dest.exists: os.remove(dest.path)
+							else: dest.parent.make_dir()
+							install(s.path, dest.path)
 					self.project.persistent[self.uid] = sig
 				finally: self.dest_dir.lock.release()
 			finally: sched_context.lock.acquire()
