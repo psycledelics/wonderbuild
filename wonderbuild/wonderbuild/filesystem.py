@@ -8,6 +8,11 @@ from fnmatch import fnmatchcase as match
 
 from logger import is_debug, debug
 
+# define to True to use hash sum (e.g. md5 sum) instead of timestamps for signatures
+USE_HASH_SUM = False
+if USE_HASH_SUM:
+	from signature import Sig
+
 class FileSystem(object):
 	def __init__(self, persistent):
 		cwd = os.getcwd()
@@ -130,22 +135,41 @@ class Node(object):
 		if self._time is None: self._do_stat()
 		return self._time
 
-	def _deep_time(self):
-		time = self.time
-		if self._is_dir:
-			for n in self.actual_children.itervalues():
-				sub_time = n._deep_time()
-				if sub_time > time: time = sub_time
-		return time
+	if not USE_HASH_SUM: # use timestamp sig
+		def _deep_time(self):
+			time = self.time
+			if self._is_dir:
+				for n in self.actual_children.itervalues():
+					sub_time = n._deep_time()
+					if sub_time > time: time = sub_time
+			return time
 
-	@property
-	def sig(self):
-		try: return self._sig
-		except AttributeError:
-			if __debug__ and is_debug: debug('fs: sig        : ' + self.path)
-			sig = self._sig = str(self._deep_time())
-			return sig
+		@property
+		def sig(self):
+			try: return self._sig
+			except AttributeError:
+				if __debug__ and is_debug: debug('fs: sig        : ' + self.path)
+				sig = self._sig = str(self._deep_time())
+				return sig
 
+	else: # use hash sum sig
+		@property
+		def sig(self):
+			try: return self._sig
+			except AttributeError:
+				if __debug__ and is_debug: debug('fs: sig        : ' + self.path)
+				if self.is_dir:
+					sigs = [n.sig for n in self.actual_children.itervalues()]
+					sigs.sort()
+					sig = Sig(''.join(sigs))
+				else:
+					try:
+						f = open(self.path, 'rb')
+						sig = Sig(f.read())
+					finally: f.close()
+				sig = self._sig = sig.digest()
+				return sig
+	
 	@property
 	def actual_children(self):
 		if self._actual_children is None:

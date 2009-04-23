@@ -27,6 +27,7 @@ class ClientCfg(object):
 		
 	def clone(self, class_ = None):
 		if class_ is None: class_ = self.__class__
+		if __debug__ and is_debug: debug('cfg: clone: ' + str(class_))
 		c = class_(self.project)
 		c.defines.update(self.defines)
 		c.include_paths.extend(self.include_paths)
