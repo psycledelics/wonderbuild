@@ -2,7 +2,7 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2007-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import sys, os, threading
+import os, threading
 from collections import deque
 
 from logger import out, is_debug, debug, colored, silent
@@ -42,7 +42,7 @@ class ClientCfg(object):
 class BuildCfg(ClientCfg):
 	def __init__(self, project):
 		ClientCfg.__init__(self, project)
-		self.target_platform = None
+		self.target_platform_binary_format_is_pe = None
 		self.cxx_prog = None
 		self.pic = None
 		self.includes = deque()
@@ -61,7 +61,7 @@ class BuildCfg(ClientCfg):
 	def clone(self, class_ = None):
 		if class_ is None: class_ = self.__class__
 		c = ClientCfg.clone(self, class_)
-		c.target_platform = self.target_platform
+		c.target_platform_binary_format_is_pe = self.target_platform_binary_format_is_pe
 		c.cxx_prog = self.cxx_prog
 		c.pic = self.pic
 		c.includes.extend(self.includes)
@@ -79,21 +79,6 @@ class BuildCfg(ClientCfg):
 		c.fhs = self.fhs
 		return c
 
-	def _get_target_platform(self): return self._target_platform
-	def _set_target_platform(self, value):
-		self._target_platform = value
-		try: del self._target_platform_is_mswindows
-		except AttributeError: pass
-	target_platform = property(_get_target_platform, _set_target_platform)
-	
-	@property
-	def target_platform_is_mswindows(self):
-		# TODO check the preprocessor macros __ELF__ and _WIN32 to autodetect the target platform binary format
-		try: return self._target_platform_is_mswindows
-		except AttributeError:
-			self._target_platform_is_mswindows = self._target_platform.startswith('win') or self._target_platform == 'cygwin'
-			return self._target_platform_is_mswindows
-
 	@property
 	def _common_sig(self):
 		try: return self.__common_sig
@@ -102,7 +87,7 @@ class BuildCfg(ClientCfg):
 			for name in ('PATH',):
 				e = os.environ.get(name, None)
 				if e is not None: sig.update(e)
-			sig.update(self.target_platform)
+			if self.target_platform_binary_format_is_pe is not None: sig.update(str(self.target_platform_binary_format_is_pe))
 			sig.update(self.kind)
 			sig.update(self.version)
 			sig.update(str(self.debug))
@@ -212,8 +197,6 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		return class_.clone(self, class_)
 
 	known_options = set([
-		# TODO check the preprocessor macros __ELF__ and _WIN32 to autodetect the target platform binary format
-		'cxx-target-platform',
 		'cxx',
 		'cxx-flags',
 		'cxx-debug',
@@ -230,8 +213,6 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 
 	@staticmethod
 	def generate_option_help(help):
-		# TODO check the preprocessor macros __ELF__ and _WIN32 to autodetect the target platform binary format
-		help['cxx-target-platform']  = ('<platform>', 'compiler target platform is <platform>')
 		help['cxx']                  = ('<prog>', 'use <prog> as c++ compiler')
 		help['cxx-flags']            = ('[flags]', 'use specific c++ compiler flags')
 		help['cxx-debug']            = ('<yes|no>', 'whether to make the c++ compiler produce debugging information', 'no')
@@ -252,7 +233,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		OptionCfg.__init__(self, project)
 		
 		try:
-			old_sig, self.target_platform, self.check_missing, \
+			old_sig, self.target_platform_binary_format_is_pe, self.check_missing, \
 			self.kind, self.version, \
 			self.cxx_prog, self.cxx_flags, self.pic, self.optim, self.debug, \
 			self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
@@ -301,13 +282,10 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 			if 'cxx-mod-ar' in o: self.ar_prog = o['cxx-mod-ar']
 			if 'cxx-mod-ranlib' in o: self.ranlib_prog = o['cxx-mod-ranlib']
 
-			if 'cxx-target-platform' in o: self.target_platform = o['cxx-target-platform']
-			else: self.target_platform = sys.platform
-
 			self._check_compiler()
 
 			self.project.persistent[str(self.__class__)] = \
-				self.options_sig, self.target_platform, self.check_missing, \
+				self.options_sig, self.target_platform_binary_format_is_pe, self.check_missing, \
 				self.kind, self.version, \
 				self.cxx_prog, self.cxx_flags, self.pic, self.optim, self.debug, \
 				self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
@@ -345,6 +323,10 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 			if 'cxx-mod-ld' not in o: self.ld_prog = ld_prog
 			if 'cxx-mod-ar' not in o: self.ar_prog = ar_prog
 			if 'cxx-mod-ranlib' not in o: self.ranlib_prog = ranlib_prog
+			from std_checks import BinaryFormatPeCheckTask
+			pe = BinaryFormatPeCheckTask(self)
+			self.project.sched_context.parallel_wait(pe)
+			self.target_platform_binary_format_is_pe = pe.result
 
 class _PreCompileTask(ProjectTask):
 	def __init__(self, name, base_cfg):

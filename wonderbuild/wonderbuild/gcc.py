@@ -189,17 +189,17 @@ class Impl(object):
 	@staticmethod
 	def mod_task_target_dir(mod_task):
 		if mod_task.kind == mod_task.Kinds.PROG or \
-			mod_task.cfg.shared and mod_task.cfg.target_platform_is_mswindows: dir = mod_task.cfg.fhs.bin
+			mod_task.cfg.shared and mod_task.cfg.target_platform_binary_format_is_pe: dir = mod_task.cfg.fhs.bin
 		else: dir = mod_task.cfg.fhs.lib
 		return dir
 
 	@staticmethod
 	def mod_task_target_name(mod_task):
 		if mod_task.kind == mod_task.Kinds.PROG:
-			if mod_task.cfg.target_platform_is_mswindows: name = mod_task.name + '.exe'
+			if mod_task.cfg.target_platform_binary_format_is_pe: name = mod_task.name + '.exe'
 			else: name = mod_task.name
 		elif mod_task.cfg.shared:
-			if mod_task.cfg.target_platform_is_mswindows: name = mod_task.name + '.dll'
+			if mod_task.cfg.target_platform_binary_format_is_pe: name = mod_task.name + '.dll'
 			else: name = 'lib' + mod_task.name + '.so'
 		else: name = 'lib' + mod_task.name + '.a'
 		return name
