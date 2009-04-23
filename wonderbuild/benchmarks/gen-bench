@@ -80,7 +80,7 @@ def create_hpp(lib_number, name):
 #define %(guard)s
 //#include <boost/spirit.hpp>
 namespace %(namespace)s {
-	class %(name)s	{
+	class %(name)s {
 		public:
 			%(name)s();
 			~%(name)s();

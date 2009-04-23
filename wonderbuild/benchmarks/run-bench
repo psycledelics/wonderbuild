@@ -2,7 +2,7 @@
 
 set -x &&
 
-jobs=4 &&
+jobs=1 &&
 
 measure() {
 	time "$@"
@@ -37,7 +37,7 @@ main() {
 	
 		scons)
 			SCONS_LIB_DIR=$(pwd)/../../scons/src/engine \
-				$measure python ../../scons/src/script/scons.py --no-cache --jobs=$jobs "$@"
+				measure python ../../scons/src/script/scons.py --no-cache --jobs=$jobs "$@"
 		;;
 
 		make)
