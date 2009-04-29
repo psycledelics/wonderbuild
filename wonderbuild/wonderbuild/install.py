@@ -63,35 +63,36 @@ class InstallTask(ProjectTask, OptionCfg):
 	def dest_dir(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
 	
 	def __call__(self, sched_context):
-		try: old_sig = self.project.persistent[self.uid]
+		try: old_sig, sigs = self.project.persistent[self.uid]
 		except KeyError: old_sig = None
-		sigs = [s.sig for s in self.sources]
-		sigs.sort()
-		sig = Sig(''.join(sigs))
+		sig = [s.sig for s in self.sources]
+		sig.sort()
+		sig = Sig(''.join(sig))
 		sig.update(self.dest_dir.abs_path)
 		sig = sig.digest()
-		if old_sig != sig or self.check_missing:
-			if False: # TODO This is needed on mswindows were timestamps cannot reliably be copied
+		if old_sig != sig:
+			if old_sig is None:
+				sigs = {}
+				changed_sources = self.sources
+			else:
 				changed_sources = []
 				for s in self.sources:
-					try: old_source_sig = old_source_sigs[s]
-					except KeyError:
-						# This is a new source.
-						changed_sources.append(s)
-						continue
-					if old_source_sig != s.sig:
-						# The source changed.
-						changed_sources.append(s)
-			sched_context.lock.release()
-			try:
-				self.dest_dir.lock.acquire()
+					try: source_sig = sigs[s]
+					except KeyError: changed_sources.append(s) # This is a new source.
+					else:
+						if source_sig != s.sig: changed_sources.append(s) # The source changed.							
+						elif self.check_missing and not dest.exists: changed_sources.append(s)
+			if len(changed_sources) != 0:
+				for s in changed_sources: sigs[s] = s.sig
+				sched_context.lock.release()
 				try:
-					install_tuples = []
-					for s in self.sources:
-						rel_path = s.rel_path(self.trim_prefix)
-						dest = self.dest_dir / rel_path
-						if not dest.exists or dest.time != s.time: install_tuples.append((s, dest, rel_path))
-					if len(install_tuples) != 0:
+					self.dest_dir.lock.acquire()
+					try:
+						install_tuples = []
+						for s in changed_sources:
+							rel_path = s.rel_path(self.trim_prefix)
+							dest = self.dest_dir / rel_path
+							install_tuples.append((s, dest, rel_path))
 						if not silent: self.print_desc(
 							'installing from ' + str(self.trim_prefix) +
 							' to ' + str(self.dest_dir) +
@@ -103,6 +104,6 @@ class InstallTask(ProjectTask, OptionCfg):
 							if dest.exists: os.remove(dest.path)
 							else: dest.parent.make_dir()
 							install(s.path, dest.path)
-					self.project.persistent[self.uid] = sig
-				finally: self.dest_dir.lock.release()
-			finally: sched_context.lock.acquire()
+						self.project.persistent[self.uid] = sig, sigs
+					finally: self.dest_dir.lock.release()
+				finally: sched_context.lock.acquire()
