@@ -70,7 +70,7 @@ class InstallTask(ProjectTask, OptionCfg):
 		sig = Sig(''.join(sig))
 		sig.update(self.dest_dir.abs_path)
 		sig = sig.digest()
-		if old_sig != sig:
+		if old_sig != sig or self.check_missing:
 			if old_sig is None:
 				sigs = {}
 				changed_sources = self.sources
