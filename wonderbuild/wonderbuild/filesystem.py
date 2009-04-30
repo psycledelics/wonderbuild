@@ -162,9 +162,8 @@ class Node(object):
 					sigs.sort()
 					sig = Sig(''.join(sigs))
 				else:
-					try:
-						f = open(self.path, 'rb')
-						sig = Sig(f.read())
+					f = open(self.path, 'rb')
+					try: sig = Sig(f.read())
 					finally: f.close()
 				sig = self._sig = sig.digest()
 				return sig
