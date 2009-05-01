@@ -377,7 +377,7 @@ class _PreCompileTask(ProjectTask):
 		sched_context.lock.release()
 		try:
 			changed = False
-			try: old_sig, deps, old_dep_sig = self.project.persistent[self.uid]
+			try: old_sig, deps, old_dep_sig = self.persistent
 			except KeyError:
 				if __debug__ and is_debug: debug('task: no state: ' + str(self))
 				changed = True
@@ -601,10 +601,10 @@ class ModTask(ProjectTask):
 				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask(self.project, self.cfg.pkg_config, self.cfg.shared or not self.cfg.static_prog)
 				sched_context.parallel_no_wait(pkg_config_ld_flags_task)
 		changed_sources = []
-		try: state = self.project.persistent[self.uid]
+		try: state = self.persistent
 		except KeyError:
 			if __debug__ and is_debug: debug('task: no state: ' + str(self))
-			state = self.project.persistent[self.uid] = None, None, None, {}
+			state = self.persistent = None, None, None, {}
 			self._type_changed = False
 			changed_sources = self.sources
 		else:
@@ -706,13 +706,13 @@ class ModTask(ProjectTask):
 				if self.ld: sources = self.sources
 				else: sources = changed_sources
 				self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources])
-				implicit_deps = self.project.persistent[self.uid][3]
+				implicit_deps = self.persistent[3]
 				if len(implicit_deps) > len(self.sources):
 					# remove old sources from implicit deps dictionary
 					sources_states = {}
 					for s in self.sources: sources_states[s] = implicit_deps[s]
 				else: sources_states = implicit_deps
-				self.project.persistent[self.uid] = self._mod_sig, self.ld, self.cfg.cxx_sig, sources_states # TODO move cxx_sig into obj sig
+				self.persistent = self._mod_sig, self.ld, self.cfg.cxx_sig, sources_states # TODO move cxx_sig into obj sig
 			finally: sched_context.lock.acquire()
 		if not self.cfg.check_missing: self.obj_dir.forget()
 		self._needed_process = need_process
@@ -783,7 +783,7 @@ class _PkgConfigTask(ProjectTask):
 		try: return self._result
 		except AttributeError:
 			changed = False
-			try: old_sig, self._result = self.project.persistent[self.uid]
+			try: old_sig, self._result = self.persistent
 			except KeyError: changed = True
 			else:
 				if old_sig != self.sig: changed = True
@@ -792,7 +792,7 @@ class _PkgConfigTask(ProjectTask):
 			else:
 				if not silent: self.print_check(self.desc)
 				self.do_result()
-				self.project.persistent[self.uid] = self.sig, self._result
+				self.persistent = self.sig, self._result
 			return self._result
 
 	@property
@@ -912,7 +912,7 @@ class BuildCheckTask(ProjectTask):
 		try: return self._result
 		except AttributeError:
 			changed = False
-			try: old_sig, self._result = self.project.persistent[self.uid]
+			try: old_sig, self._result = self.persistent
 			except KeyError: changed = True
 			else:
 				if old_sig != self.sig: changed = True
@@ -936,7 +936,7 @@ class BuildCheckTask(ProjectTask):
 					f.write('return code: '); f.write(str(r)); f.write('\n')
 				finally: f.close()
 				self._result = r == 0
-				self.project.persistent[self.uid] = self.sig, self._result
+				self.persistent = self.sig, self._result
 				if not silent:
 					if self._result: self.print_check_result(desc, 'yes', '32')
 					else: self.print_check_result(desc, 'no', '31')

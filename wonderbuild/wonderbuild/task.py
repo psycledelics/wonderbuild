@@ -27,3 +27,10 @@ class ProjectTask(Task):
 		Task.__init__(self)
 		self.project = project
 		project.add_task_aliases(self, *aliases)
+	
+	@property
+	def uid(self): pass
+	
+	def _get_persistent(self): return self.project.persistent[self.uid]
+	def _set_persistent(self, value): self.project.persistent[self.uid] = value
+	persistent = property(_get_persistent, _set_persistent)
