@@ -21,7 +21,7 @@ class Impl(object):
 	@property
 	def common_env_sig(self):
 		sig = Sig()
-		for name in ('LD_LIBRARY_PATH', 'GCC_EXEC_PREFIX'): # hpux SHLIB_PATH, aix LIBPATH, solaris LD_LIBRARY_PATH, macosx DYLD_LIBRARY_PATH
+		for name in ('LD_LIBRARY_PATH', 'GCC_EXEC_PREFIX', 'COMPILER_PATH'): # hpux SHLIB_PATH, aix LIBPATH, solaris LD_LIBRARY_PATH, macosx DYLD_LIBRARY_PATH
 			e = os.environ.get(name, None)
 			if e is not None: sig.update(e)
 		return sig.digest()
@@ -73,7 +73,7 @@ class Impl(object):
 		args = precompile_task.cfg.cxx_args_cwd + ['-xc++-header', precompile_task.header.path, '-MD']
 		use_dir = False
 		if not use_dir:
-			path = precompile_task.header.path + '.d'
+			path = (precompile_task.target_dir / (precompile_task.header.name + '.d')).path
 			args.append('-MF' + path)
 		else:
 			dir = precompile_task.target
@@ -95,6 +95,8 @@ class Impl(object):
 		dep_sigs = [d.sig for d in deps]
 		dep_sigs.sort()
 		precompile_task.persistent = precompile_task.sig, deps, Sig(''.join(dep_sigs)).digest()
+
+	def precompile_task_target_name(self, header_name): return header_name + self.precompile_task_target_ext
 
 	@property
 	def precompile_task_target_ext(self): return '.gch'
@@ -131,9 +133,9 @@ class Impl(object):
 	def ar_ranlib_env_sig(self): return ''
 
 	@property
-	def ld_env_sig(self): # ld --verbose | grep SEARCH_DIR | tr -s ' ;' \\012
+	def ld_env_sig(self): # gcc -print-search-dirs ; ld --verbose | grep SEARCH_DIR | tr -s ' ;' \\012
 		sig = Sig()
-		for name in ('GNUTARGET', 'LDEMULATION', 'COLLECT_NO_DEMANGLE'):
+		for name in ('LIBRARY_PATH', 'GNUTARGET', 'LDEMULATION', 'COLLECT_NO_DEMANGLE'):
 			e = os.environ.get(name, None)
 			if e is not None: sig.update(e)
 		return sig.digest()
@@ -189,22 +191,31 @@ class Impl(object):
 				if r != 0: raise Exception, r
 
 	@staticmethod
+	def mod_task_targets(mod_task): return (mod_task.target,)
+
+	@staticmethod
+	def mod_task_target_dev_dir(mod_task):
+		if mod_task.cfg.shared and mod_task.cfg.target_platform_binary_format_is_pe: return mod_task.cfg.fhs.bin
+		else: return mod_task.cfg.fhs.lib
+
+	@staticmethod
+	def mod_task_target_dev_name(mod_task): return mod_task.name
+
+	@staticmethod
 	def mod_task_target_dir(mod_task):
 		if mod_task.kind == mod_task.Kinds.PROG or \
-			mod_task.cfg.shared and mod_task.cfg.target_platform_binary_format_is_pe: dir = mod_task.cfg.fhs.bin
-		else: dir = mod_task.cfg.fhs.lib
-		return dir
+			mod_task.cfg.shared and mod_task.cfg.target_platform_binary_format_is_pe: return mod_task.cfg.fhs.bin
+		else: return mod_task.cfg.fhs.lib
 
 	@staticmethod
 	def mod_task_target_name(mod_task):
 		if mod_task.kind == mod_task.Kinds.PROG:
-			if mod_task.cfg.target_platform_binary_format_is_pe: name = mod_task.name + '.exe'
-			else: name = mod_task.name
+			if mod_task.cfg.target_platform_binary_format_is_pe: return mod_task.name + '.exe'
+			else: return mod_task.name
 		elif mod_task.cfg.shared:
-			if mod_task.cfg.target_platform_binary_format_is_pe: name = mod_task.name + '.dll'
-			else: name = 'lib' + mod_task.name + '.so'
-		else: name = 'lib' + mod_task.name + '.a'
-		return name
+			if mod_task.cfg.target_platform_binary_format_is_pe: return mod_task.name + '.dll'
+			else: return 'lib' + mod_task.name + '.so'
+		else: return 'lib' + mod_task.name + '.a'
 
 	@staticmethod
 	def process_build_check_task(build_check_task):

@@ -404,7 +404,7 @@ class _PreCompileTask(ProjectTask):
 	def target(self):
 		try: return self._target
 		except AttributeError:
-			self._target = self.header.parent / (self.header.name + self.cfg.impl.precompile_task_target_ext)
+			self._target = self.header.parent / self.cfg.impl.precompile_task_target_name(self.header.name)
 			return self._target
 
 	@property
@@ -619,13 +619,6 @@ class ModTask(ProjectTask):
 	def uid(self): return self.name
 
 	@property
-	def target(self):
-		try: return self._target
-		except AttributeError:
-			self._target = self.cfg.impl.mod_task_target_dir(self) / self.cfg.impl.mod_task_target_name(self)
-			return self._target
-
-	@property
 	def obj_dir(self):
 		try: return self._obj_dir
 		except AttributeError:
@@ -633,7 +626,35 @@ class ModTask(ProjectTask):
 			return self._obj_dir
 
 	@property
+	def targets(self):
+		try: return self._targets
+		except AttributeError:
+			self._targets = self.cfg.impl.mod_task_targets(self)
+			return self._targets
+	
+	@property
+	def target(self):
+		try: return self._target
+		except AttributeError:
+			self._target = self.cfg.impl.mod_task_target_dir(self) / self.cfg.impl.mod_task_target_name(self)
+			return self._target
+
+	@property
 	def target_dir(self): return self.target.parent
+	
+	@property
+	def target_dev_dir(self):
+		try: return self._target_dev_dir
+		except AttributeError:
+			self._target_dev_dir = self.cfg.impl.mod_task_target_dev_dir(self)
+			return self._target_dev_dir
+
+	@property
+	def target_dev_name(self):
+		try: return self._target_dev_name
+		except AttributeError:
+			self._target_dev_name = self.cfg.impl.mod_task_target_dev_name(self)
+			return self._target_dev_name
 
 	@property
 	def persistent_implicit_deps(self): return self.persistent[3]
@@ -681,11 +702,11 @@ class ModTask(ProjectTask):
 						changed_sources.append(s)
 						continue
 					if self.cfg.check_missing:
-						self.target_dir.lock.acquire()
+						self.obj_dir.lock.acquire()
 						try:
-							try: self.target_dir.actual_children # not needed, just an optimisation
+							try: self.obj_dir.actual_children # not needed, just an optimisation
 							except OSError: pass
-						finally: self.target_dir.lock.release()
+						finally: self.obj_dir.lock.release()
 						o = self.obj_dir / self._obj_name(s)
 						if not o.exists:
 							if __debug__ and is_debug: debug('task: target missing: ' + str(o))
@@ -706,20 +727,22 @@ class ModTask(ProjectTask):
 				if len(b) == 0: break
 				tasks.append(BatchCompileTask(self, b))
 			sched_context.parallel_wait(*tasks)
-		elif self.cfg.check_missing and not self.target.exists:
-			if __debug__ and is_debug: debug('task: target missing: ' + str(self))
-			changed_sources = self.sources
-			need_process = True
+		elif self.cfg.check_missing:
+			for t in self.targets:
+				if not t.exists:
+					if __debug__ and is_debug: debug('task: target missing: ' + str(self))
+					changed_sources = self.sources
+					need_process = True
+					break
 		if self.ld:
 			if len(self.cfg.pkg_config) != 0:
 				sched_context.wait(pkg_config_ld_flags_task)
 				pkg_config_ld_flags_task.apply_to(self.cfg)
 			if len(self.dep_lib_tasks) != 0:
 				sched_context.wait(*self.dep_lib_tasks)
-				if self.cfg.kind == 'msvc': self.cfg.lib_paths.append(self.cfg.fhs.lib) # import lib for msvc
 				for l in self.dep_lib_tasks:
-					self.cfg.lib_paths.append(l.target.parent)
-					self.cfg.libs.append(l.name)
+					self.cfg.lib_paths.append(l.target_dev_dir)
+					self.cfg.libs.append(l.target_dev_name)
 		if not need_process:
 			if state[0] != self._mod_sig:
 				if __debug__ and is_debug: debug('task: mod sig changed: ' + str(self))
@@ -738,6 +761,7 @@ class ModTask(ProjectTask):
 			if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 		else:
 			self.target_dir.make_dir()
+			if self.kind != ModTask.Kinds.PROG and self.target_dir is not self.target_dev_dir: self.target_dev_dir.make_dir()
 			sched_context.lock.release()
 			try:
 				if not silent:
@@ -777,6 +801,7 @@ class ModTask(ProjectTask):
 		try: return self.__mod_sig
 		except AttributeError:
 			sig = Sig(self.target_dir.abs_path)
+			if self.kind != ModTask.Kinds.PROG and self.target_dir is not self.target_dev_dir: sig.update(self.target_dev_dir.abs_path)
 			if self.ld: sig.update(self.cfg.ld_sig)
 			else: sig.update(self.cfg.ar_ranlib_sig)
 			self.__mod_sig = sig = sig.digest()
@@ -816,7 +841,7 @@ class _PkgConfigTask(ProjectTask):
 		except AttributeError:
 			pkgs = self.pkgs
 			pkgs.sort()
-			self._uid = ' '.join(pkgs) + ' '.join(self.what_args) #XXX
+			self._uid = ' '.join(pkgs) + ' ' + ' '.join(self.what_args)
 			return self._uid
 
 	def __call__(self, sched_context):

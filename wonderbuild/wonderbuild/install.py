@@ -81,7 +81,10 @@ class InstallTask(ProjectTask, OptionCfg):
 					except KeyError: changed_sources.append(s) # This is a new source.
 					else:
 						if source_sig != s.sig: changed_sources.append(s) # The source changed.							
-						elif self.check_missing and not dest.exists: changed_sources.append(s)
+						elif self.check_missing:
+							rel_path = s.rel_path(self.trim_prefix)
+							dest = self.dest_dir / rel_path
+							if not dest.exists: changed_sources.append(s)
 			if len(changed_sources) != 0:
 				for s in changed_sources: sigs[s] = s.sig
 				sched_context.lock.release()

@@ -43,7 +43,7 @@ class Impl(object):
 
 	def _cfg_cxx_args_include_cwd(self, cfg, args):
 		if cfg.pch is not None:
-			pch = cfg.pch.parent / (cfg.pch.name[:cfg.pch.name.rfind('.')] + self.precompile_task_target_ext)
+			pch = cfg.pch.parent / self.precompile_task_target_name(cfg.pch.name)
 			args += [
 				'-FI' + cfg.pch.name,
 				'-Yu' + cfg.pch.name,
@@ -54,7 +54,7 @@ class Impl(object):
 
 	def _cfg_cxx_args_include_bld(self, cfg, args):
 		if cfg.pch is not None:
-			pch = cfg.pch.parent / (cfg.pch.name[:cfg.pch.name.rfind('.')] + self.precompile_task_target_ext)
+			pch = cfg.pch.parent / self.precompile_task_target_name(cfg.pch.name)
 			args += [
 				'-FI' + cfg.pch.name,
 				'-Yu' + cfg.pch.name,
@@ -65,13 +65,11 @@ class Impl(object):
 	
 	def process_precompile_task(self, precompile_task, lock):
 		cwd = precompile_task.target_dir
-		#basename =  precompile_task.header.name[:precompile_task.header.name.rfind('.')]
-		#obj = precompile_task.header.parent / (basename +  self.cxx_task_target_ext)
-		#pch = precompile_task.header.parent / (basename +  self.precompile_task_target_ext)
+		#obj = cwd / (precompile_task.header.name[:precompile_task.header.name.rfind('.')] + self.cxx_task_target_ext)
 		args = precompile_task.cfg.cxx_args_bld + [
 			'-c', '-Yc',
 			'-Tp', precompile_task.header.rel_path(cwd),
-			#'-Fp' + pch.rel_path(cwd), # -Fp option defaults to input file with ext changed to .pch
+			#'-Fp' + precompile_task.target.rel_path(cwd), # -Fp option defaults to input file with ext changed to .pch
 			#'-Fo' + obj.rel_path(cwd), # -Fo option defaults to input file with ext changed to .obj
 		]
 		r = exec_subprocess(args, cwd = cwd.path)
@@ -85,6 +83,8 @@ class Impl(object):
 		dep_sigs = [d.sig for d in deps]
 		dep_sigs.sort()
 		precompile_task.persistent = precompile_task.sig, deps, Sig(''.join(dep_sigs)).digest()
+
+	def precompile_task_target_name(self, header_name): return header_name[:header_name.rfind('.')] + self.precompile_task_target_ext
 
 	@property
 	def precompile_task_target_ext(self): return '.pch'
@@ -118,9 +118,8 @@ class Impl(object):
 	@property
 	def ld_env_sig(self):
 		sig = Sig()
-		for name in ('LIB'):
-			e = os.environ.get(name, None)
-			if e is not None: sig.update(e)
+		e = os.environ.get('LIB', None)
+		if e is not None: sig.update(e)
 		return sig.digest()
 
 	@staticmethod
@@ -144,19 +143,13 @@ class Impl(object):
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: msvc: ar: ' + str(ar_args))
 		if True: return ar_args, None # no ranlib with msvc
 
-	@staticmethod
-	def process_mod_task(mod_task, obj_names):
+	def process_mod_task(self, mod_task, obj_names):
 		path = mod_task.obj_dir.path
 		obj_paths = [os.path.join(path, o) for o in obj_names]
 		if mod_task.ld:
 			args = mod_task.cfg.ld_args
 			args = [args[0], '-out:' + mod_task.target.path] + obj_paths + args[1:]
-			if mod_task.cfg.shared:
-				implib = mod_task.target.name
-				implib = implib[:implib.rfind('.')] + '.lib'
-				implib = mod_task.cfg.fhs.lib / implib
-				mod_task.cfg.fhs.lib.make_dir()
-				args.append('-implib:' + implib.path)
+			if mod_task.cfg.shared: args.append('-implib:' + (mod_task.target_dev_dir / mod_task.target_dev_name).path)
 		else:
 			ar_args, ranlib_args = mod_task.cfg.ar_ranlib_args
 			args = ar_args[:]
@@ -167,17 +160,33 @@ class Impl(object):
 		# no ranlib with msvc
 
 	@staticmethod
+	def mod_task_targets(mod_task):
+		if mod_task.kind == mod_task.Kinds.PROG or not mod_task.ld: return (mod_task.target,)
+		else:
+			implib = mod_task.target_dev_dir / mod_task.target_dev_name
+			#exp = mod_task.target_dev_dir / mod_task.name + '.exp'
+			#pdb = mod_task.target_dev_dir / mod_task.name + '.pdb'
+			#ilk = mod_task.target_dev_dir / mod_task.name + '.ilk'
+			return (mod_task.target, implib)
+
+	@staticmethod
+	def mod_task_target_dev_dir(mod_task): return mod_task.cfg.fhs.lib
+
+	@staticmethod
+	def mod_task_target_dev_name(mod_task):
+		if mod_task.ld: return mod_task.name + '.lib'
+		else: return 'lib' + mod_task.name + '.lib'
+
+	@staticmethod
 	def mod_task_target_dir(mod_task):
-		if mod_task.kind == mod_task.Kinds.PROG or mod_task.cfg.shared: dir = mod_task.cfg.fhs.bin
-		else: dir = mod_task.cfg.fhs.lib
-		return dir
+		if mod_task.ld: return mod_task.cfg.fhs.bin
+		else: return mod_task.cfg.fhs.lib
 
 	@staticmethod
 	def mod_task_target_name(mod_task):
-		if mod_task.kind == mod_task.Kinds.PROG: name = mod_task.name + '.exe'
-		elif mod_task.cfg.shared: name = mod_task.name + '.dll'
-		else: name = 'lib' + mod_task.name + '.lib'
-		return name
+		if mod_task.kind == mod_task.Kinds.PROG: return mod_task.name + '.exe'
+		elif mod_task.ld: return mod_task.name + '.dll'
+		else: return 'lib' + mod_task.name + '.lib'
 
 	@staticmethod
 	def process_build_check_task(build_check_task):
