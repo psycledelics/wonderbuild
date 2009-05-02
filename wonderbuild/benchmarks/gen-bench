@@ -43,6 +43,7 @@ def main(argv):
 		create_waf,
 		create_scons,
 		create_autotools,
+		create_cmake,
 		create_makefile_rec,
 		create_jam,
 		create_msvc
@@ -59,6 +60,7 @@ def create_lib(lib_number, classes, internal_includes, external_includes):
 	for sub in (
 		create_waf_sub,
 		create_scons_sub,
+		create_cmake_sub,
 		create_autotools_sub,
 		create_makefile_rec_sub,
 		create_jam_sub,
@@ -359,6 +361,27 @@ Library %(tgt)s :
 	'dir': lib_dir(lib_number),
 	'tgt': lib_name(lib_number),
 	'src': '\n'.join(['	class_%s.cpp' % str(i) for i in xrange(classes)])
+})
+
+def create_cmake(libs):
+	f = open('CMakeLists.txt', 'w')
+	f.write('''\
+project(build-bench)
+cmake_minimum_required(VERSION 2.6)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+%(subs)s
+''' % {
+	'subs': '\n'.join(['add_subdirectory(%s)' % lib_dir(i) for i in xrange(libs)])
+})
+
+def create_cmake_sub(lib_number, classes):
+	f = open('CMakeLists.txt', 'w')
+	f.write('''\
+add_library(%(tgt)s STATIC %(src)s)
+''' % {
+	'num': str(lib_number),
+	'tgt': str(lib_number),
+	'src': ' '.join(['class_' + str(i) + '.cpp' for i in xrange(classes)])
 })
 
 def create_msvc(libs):

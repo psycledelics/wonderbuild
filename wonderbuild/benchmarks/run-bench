@@ -2,7 +2,7 @@
 
 set -x &&
 
-jobs=1 &&
+jobs=4 &&
 
 measure() {
 	time "$@"
@@ -65,6 +65,15 @@ main() {
 			then
 				mkdir build-$tool &&
 				(cd build-$tool && ../configure --disable-shared CXXFLAGS=)
+			fi &&
+			measure make -C build-$tool -r --jobs=$jobs "$@"
+		;;
+
+		cmake)
+			if ! test -d build-$tool
+			then
+				mkdir build-$tool &&
+				(cd build-$tool && cmake ..)
 			fi &&
 			measure make -C build-$tool -r --jobs=$jobs "$@"
 		;;

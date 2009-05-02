@@ -12,11 +12,15 @@ cp -R bench bench-make &&
 cp -R bench bench-jam &&
 cp -R bench bench-waf &&
 cp -R bench bench-scons &&
-
+cp -R bench bench-cmake &&
 cp -R bench bench-autotools && 
+
 cd bench-autotools &&
 find . -type f -name Makefile -exec rm {} \; &&
-autoreconf --install --symlink &&
-mkdir build-autotools &&
-cd build-autotools &&
-../configure --disable-shared CXXFLAGS=
+if false
+then
+	autoreconf --install --symlink &&
+	mkdir build-autotools &&
+	cd build-autotools &&
+	../configure --disable-shared CXXFLAGS=
+fi

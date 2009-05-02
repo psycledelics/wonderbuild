@@ -12,6 +12,7 @@
 					<li>Python version was 2.5.2</li>
 					<li>Jam version was 2.5</li>
 					<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
+					<li>CMake version was gnu make 2.4.7</li>
 					<li>Make version was gnu make 3.81</li>
 					<li>Makedepend was version 1.0.1</li>
 					<li>Shell was dash (not bash) version 0.5.4</li>
@@ -27,6 +28,7 @@
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='toy makefiles' value=' 34.1'>(recursive)</bar>
 					<bar name='jam'           value=' 35.6'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='cmake'         value=' 37.5'/>
 					<bar name='waf'           value=' 42.8'>gcc deps, timestamp signatures</bar>
 					<bar name='waf'           value=' 45.6'>waf cpp, timestamp signatures</bar>
 					<bar name='scons'         value='131.0'>with fast tuning options</bar>
@@ -45,6 +47,7 @@
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='jam'           value=' 4.25'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 4.81'>(recursive)</bar>
+					<bar name='cmake'         value=' 6.15'/>
 					<bar name='waf'           value=' 6.75'>gcc deps, timestamp signatures</bar>
 					<bar name='waf'           value=' 6.89'>waf cpp, timestamp signatures</bar>
 					<bar name='autotools'     value='29.64'>(non recursive)</bar>
@@ -61,6 +64,7 @@
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='jam'           value=' 0.81'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 1.01'>(recursive)</bar>
+					<bar name='cmake'         value=' 1.70'/>
 					<bar name='waf'           value=' 1.92'>(same with gcc deps and waf cpp), timestamp signatures</bar>
 					<bar name='autotools'     value=' 4.63'>(non recursive)</bar>
 					<bar name='scons'         value='24.37'>(with fast tuning options)</bar>
@@ -72,6 +76,7 @@
 					<bar name='jam'           value=' 0.71'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 0.79'>(recursive)</bar>
 					<bar name='waf'           value=' 1.15'>(timestamp signatures)</bar>
+					<bar name='cmake'         value=' 1.39'/>
 					<bar name='autotools'     value=' 2.05'>(non recursive)</bar>
 					<bar name='scons'         value='23.25'>with fast tuning options</bar>
 					<bar name='scons'         value='35.97'>with default options</bar>
