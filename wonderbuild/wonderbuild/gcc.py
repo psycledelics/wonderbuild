@@ -92,7 +92,7 @@ class Impl(object):
 		if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
 		dep_sigs = [d.sig for d in deps]
 		dep_sigs.sort()
-		precompile_task.project.persistent[precompile_task.uid] = precompile_task.sig, deps, Sig(''.join(dep_sigs)).digest()
+		precompile_task.persistent = precompile_task.sig, deps, Sig(''.join(dep_sigs)).digest()
 
 	@property
 	def precompile_task_target_ext(self): return '.gch'
@@ -103,7 +103,7 @@ class Impl(object):
 		cwd = cxx_task.target_dir
 		r = exec_subprocess(args, cwd = cwd.path)
 		if r != 0: raise Exception, r
-		implicit_deps = cxx_task.project.persistent[cxx_task.uid][3]
+		implicit_deps = cxx_task.persistent_implicit_deps
 		for s in zip(cxx_task.sources, cxx_task._actual_sources):
 			# reads deps from the .d files generated as side-effect of compilation by gcc's -MD or -MMD option
 			path = s[1].path
@@ -147,7 +147,7 @@ class Impl(object):
 		if len(cfg.static_libs):
 			args.append('-Wl,-Bstatic')
 			for l in cfg.static_libs: args.append('-l' + l)
-		if len(cfg.static_libs):
+		if len(cfg.shared_libs):
 			args.append('-Wl,-Bdynamic')
 			for l in cfg.shared_libs: args.append('-l' + l)
 		args += cfg.ld_flags

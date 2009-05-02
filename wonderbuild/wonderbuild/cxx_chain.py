@@ -79,7 +79,7 @@ class BuildCfg(ClientCfg):
 		c.check_missing = self.check_missing
 		c.fhs = self.fhs
 		return c
-
+		
 	@property
 	def _common_sig(self):
 		try: return self.__common_sig
@@ -295,6 +295,9 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		elif self.kind == 'gcc':
 			import gcc
 			self.impl = gcc.Impl()
+		elif self.kind == 'msvc':
+			import msvc
+			self.impl = msvc.Impl(self.project.persistent)
 
 		if self.impl is None: raise Exception, 'unsupported c++ compiler'
 
@@ -512,6 +515,9 @@ class BatchCompileTask(ProjectTask):
 
 	@property
 	def target_dir(self): return self.mod_task.obj_dir
+	
+	@property
+	def persistent_implicit_deps(self): return self.mod_task.persistent_implicit_deps
 
 	def __call__(self, sched_context):
 		self.target_dir.make_dir()
@@ -590,6 +596,9 @@ class ModTask(ProjectTask):
 
 	@property
 	def target_dir(self): return self.target.parent
+
+	@property
+	def persistent_implicit_deps(self): return self.persistent[3]
 
 	def __call__(self, sched_context):
 		if len(self.dep_lib_tasks) != 0: sched_context.parallel_no_wait(*self.dep_lib_tasks)

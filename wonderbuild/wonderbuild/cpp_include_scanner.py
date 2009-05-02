@@ -2,7 +2,7 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import sys, os.path, re, cPickle, gc
+import sys, os, re
 
 from logger import is_debug, debug
 
@@ -43,15 +43,15 @@ class IncludeScanner(object):
 		except KeyError: parse = True
 		else:
 			if not up_to_date:
-				if source.changed:
-					if __debug__ and is_debug: debug('cpp: changed   : ' + source.path)
+				if source.changed: #XXX
+					if __debug__ and is_debug: debug('cpp: changed   : ' + str(source))
 					parse = True
 				else: self.contents[source] = True, rel_includes, abs_includes
 		if parse:
-			if __debug__ and is_debug: debug('cpp: parsing   : ' + source.path)
+			if __debug__ and is_debug: debug('cpp: parsing   : ' + str(source))
 			try: f = open(source.path, 'rb')
 			except IOError:
-				if __debug__ and is_debug: debug('cpp: not found : ' + source.path)
+				if __debug__ and is_debug: debug('cpp: not found : ' + str(source))
 				self.not_found.add(source)
 				return seen
 			try: s = f.read()
@@ -204,5 +204,5 @@ class IncludeScanner(object):
 		
 	def display(self):
 		print 'cpp:'
-		for source, includes in self.contents.iteritems(): print source.path, includes
+		for source, includes in self.contents.iteritems(): print str(source), includes
 		print 'not found:', self.not_found
