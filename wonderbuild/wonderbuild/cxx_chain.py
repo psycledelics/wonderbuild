@@ -46,6 +46,7 @@ class BuildCfg(ClientCfg):
 		self.target_platform_binary_format_is_pe = None
 		self.cxx_prog = None
 		self.pic = None
+		self.pch = None
 		self.includes = deque()
 		self.ld_prog = None
 		self.ar_prog = None
@@ -65,6 +66,7 @@ class BuildCfg(ClientCfg):
 		c.target_platform_binary_format_is_pe = self.target_platform_binary_format_is_pe
 		c.cxx_prog = self.cxx_prog
 		c.pic = self.pic
+		c.pch = self.pch
 		c.includes.extend(self.includes)
 		c.ld_prog = self.ld_prog
 		c.ar_prog = self.ar_prog
@@ -109,6 +111,7 @@ class BuildCfg(ClientCfg):
 				sig.update(k)
 				if v is not None: sig.update(v)
 			for i in self.include_paths: sig.update(i.abs_path)
+			if self.pch is not None: sig.update(self.pch.path)
 			for i in self.includes: sig.update(i.abs_path)
 			for f in self.cxx_flags: sig.update(f)
 			sig.update(self.impl.cxx_env_sig)
@@ -303,34 +306,69 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 
 	def _check_compiler(self):
 		o = self.options
-		if 'cxx' not in o: self.cxx_prog = 'c++'
-		if not silent:
-			desc = 'checking for c++ compiler'
-			self.print_check(desc)
-		try: r, out, err = exec_subprocess_pipe([self.cxx_prog, '-dumpversion'], silent = True)
-		except Exception, e:
-			if __debug__ and is_debug: debug('cfg: ' + desc + ': ' + str(e))
-			r = 1
-		if r != 0:
-			if not silent: self.print_check_result(desc, 'not gcc', '31')
-			self.kind = None
-			self.version = None
+		if self.cxx_prog is not None:
+			if not silent:
+				desc = 'checking for c++ compiler: ' + self.cxx_prog
+				self.print_check(desc)
+			try: r, out, err = exec_subprocess_pipe([self.cxx_prog, '-dumpversion'], silent = True)
+			except Exception, e:
+				if __debug__ and is_debug: debug('cfg: ' + desc + ': ' + str(e))
+				r = 1
+			if r == 0: self.kind = 'gcc'
+			else:
+				try: r, out, err = exec_subprocess_pipe([self.cxx_prog, '/?'], input = '', silent = True)
+				except Exception, e:
+					if __debug__ and is_debug: debug('cfg: ' + desc + ': ' + str(e))
+					r = 1
+				if r == 0: self.kind = 'msvc'
+				else: self.kind = None
 		else:
-			self.kind = 'gcc'
+			if not silent:
+				desc = 'checking for c++ compiler'
+				self.print_check(desc)
+				self.print_check(desc + ': g++')
+			try: r, out, err = exec_subprocess_pipe(['g++', '-dumpversion'], silent = True)
+			except Exception, e:
+				if __debug__ and is_debug: debug('cfg: ' + desc + ': ' + str(e))
+				r = 1
+			if r == 0:
+				self.kind = 'gcc'
+				self.cxx_prog = 'g++'
+			else:
+				if not silent: self.print_check(desc + ': msvc')
+				try: r, out, err = exec_subprocess_pipe(['cl'], silent = True)
+				except Exception, e:
+					if __debug__ and is_debug: debug('cfg: ' + desc + ': ' + str(e))
+					r = 1
+				if r == 0:
+					self.kind = 'msvc'
+					self.cxx_prog = 'cl'
+				else: self.kind = None
+		if self.kind == 'gcc':
 			self.version = out.rstrip('\n')
 			import gcc
 			self.impl = gcc.Impl()
+		elif self.kind == 'msvc':
+			self.version = err[:err.find('\n')]
+			x = 'Version '
+			self.version = self.version[self.version.find(x) + len(x):]
+			x = self.version.rfind(' for')
+			if x >= 0: self.version = self.version[:x]
+			import msvc
+			self.impl = msvc.Impl(self.project.persistent)
+		else:
+			if not silent: self.print_check_result(desc, 'not found', '31')
+			return
 		if not silent: self.print_check_result(desc, str(self.kind) + ' version ' + str(self.version), '32')
-		if self.impl is not None:
-			cxx_prog, ld_prog, ar_prog, ranlib_prog = self.impl.progs(self)
-			if 'cxx' not in o: self.cxx_prog = cxx_prog
-			if 'cxx-mod-ld' not in o: self.ld_prog = ld_prog
-			if 'cxx-mod-ar' not in o: self.ar_prog = ar_prog
-			if 'cxx-mod-ranlib' not in o: self.ranlib_prog = ranlib_prog
-			from std_checks import BinaryFormatPeCheckTask
-			pe = BinaryFormatPeCheckTask(self)
-			self.project.sched_context.parallel_wait(pe)
-			self.target_platform_binary_format_is_pe = pe.result
+		cxx_prog, ld_prog, ar_prog, ranlib_prog = self.impl.progs(self)
+		if 'cxx' not in o: self.cxx_prog = cxx_prog
+		if 'cxx-mod-ld' not in o: self.ld_prog = ld_prog
+		if 'cxx-mod-ar' not in o: self.ar_prog = ar_prog
+		if 'cxx-mod-ranlib' not in o: self.ranlib_prog = ranlib_prog
+		from std_checks import BinaryFormatPeCheckTask
+		pe = BinaryFormatPeCheckTask(self)
+		self.project.sched_context.parallel_wait(pe)
+		self.target_platform_binary_format_is_pe = pe.result
 
 class _PreCompileTask(ProjectTask):
 	def __init__(self, name, base_cfg):
@@ -348,7 +386,7 @@ class _PreCompileTask(ProjectTask):
 			self._cfg = self.base_cfg.clone()
 			return self._cfg
 
-	def apply_to(self, cfg): cfg.includes.append(self.header)
+	def apply_to(self, cfg): cfg.pch = self.header
 
 	def __str__(self): return str(self.header)
 
@@ -678,6 +716,7 @@ class ModTask(ProjectTask):
 				pkg_config_ld_flags_task.apply_to(self.cfg)
 			if len(self.dep_lib_tasks) != 0:
 				sched_context.wait(*self.dep_lib_tasks)
+				if self.cfg.kind == 'msvc': self.cfg.lib_paths.append(self.cfg.fhs.lib) # import lib for msvc
 				for l in self.dep_lib_tasks:
 					self.cfg.lib_paths.append(l.target.parent)
 					self.cfg.libs.append(l.name)

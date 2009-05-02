@@ -3,5 +3,7 @@
 
 void foo() {
 	std::cout << "foo\n";
-	#warning foo
+	#if defined __GNUG__
+		#warning foo
+	#endif
 }
