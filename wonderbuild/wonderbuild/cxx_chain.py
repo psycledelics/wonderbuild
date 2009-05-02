@@ -743,7 +743,7 @@ class ModTask(ProjectTask):
 				sched_context.wait(*self.dep_lib_tasks)
 				for l in self.dep_lib_tasks:
 					self.cfg.lib_paths.append(l.target_dev_dir)
-					self.cfg.libs.append(l.target_dev_name)
+					self.cfg.libs.append(l.name) #l.target_dev_name
 		if not need_process:
 			if state[0] != self._mod_sig:
 				if __debug__ and is_debug: debug('task: mod sig changed: ' + str(self))
