@@ -160,7 +160,7 @@ class Impl(object):
 		else:
 			ar_args, ranlib_args = mod_task.cfg.ar_ranlib_args
 			args = ar_args[:]
-			args.append(mod_task.target.path)
+			args.append('-out:' + mod_task.target.path)
 			args += obj_paths
 		r = exec_subprocess(args)
 		if r != 0: raise Exception, r

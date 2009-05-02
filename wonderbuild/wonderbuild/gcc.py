@@ -57,13 +57,13 @@ class Impl(object):
 	@staticmethod
 	def _cfg_cxx_args_include_cwd(cfg, args):
 		for p in cfg.include_paths: args.append('-I' + p.path)
-		if cfg.pch is not None: args += ['include', cfg.pch.path]
+		if cfg.pch is not None: args += ['-include', cfg.pch.path]
 		for i in cfg.includes: args += ['-include', i.path]
 
 	@staticmethod
 	def _cfg_cxx_args_include_bld(cfg, args):
 		for p in cfg.include_paths: args.append('-I' + os.path.join(os.pardir, os.pardir, p.rel_path(cfg.project.bld_dir)))
-		if cfg.pch is not None: args += ['include', os.path.join(os.pardir, os.pardir, cfg.pch.rel_path(cfg.project.bld_dir))]
+		if cfg.pch is not None: args += ['-include', os.path.join(os.pardir, os.pardir, cfg.pch.rel_path(cfg.project.bld_dir))]
 		for i in cfg.includes: args += ['-include', os.path.join(os.pardir, os.pardir, i.rel_path(cfg.project.bld_dir))]
 
 	@staticmethod
