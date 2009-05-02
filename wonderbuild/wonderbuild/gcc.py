@@ -21,7 +21,7 @@ class Impl(object):
 	@property
 	def common_env_sig(self):
 		sig = Sig()
-		for name in ('LD_LIBRARY_PATH', 'GCC_EXEC_PREFIX'):
+		for name in ('LD_LIBRARY_PATH', 'GCC_EXEC_PREFIX'): # hpux SHLIB_PATH, aix LIBPATH, solaris LD_LIBRARY_PATH, macosx DYLD_LIBRARY_PATH
 			e = os.environ.get(name, None)
 			if e is not None: sig.update(e)
 		return sig.digest()
