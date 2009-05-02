@@ -28,7 +28,8 @@ class InstallTask(ProjectTask, OptionCfg):
 	def __init__(self, project):
 		ProjectTask.__init__(self, project)
 		OptionCfg.__init__(self, project)
-		self.fhs = FHS(project)
+		try: self.fhs = project.fhs
+		except AttributeError: self.fhs = project.fhs = FHS(project)
 
 		try: old_sig, self.check_missing = self.project.persistent[str(self.__class__)]
 		except KeyError: old_sig = None

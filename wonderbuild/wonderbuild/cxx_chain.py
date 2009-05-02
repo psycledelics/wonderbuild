@@ -58,7 +58,8 @@ class BuildCfg(ClientCfg):
 		self.debug = False
 		self.optim = None
 		self.check_missing = False
-		self.fhs = FHS(project)
+		try: self.fhs = project.fhs
+		except AttributeError: self.fhs = project.fhs = FHS(project)
 
 	def clone(self, class_ = None):
 		if class_ is None: class_ = self.__class__
