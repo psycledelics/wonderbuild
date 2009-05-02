@@ -131,7 +131,7 @@ class Impl(object):
 	def ar_ranlib_env_sig(self): return ''
 
 	@property
-	def ld_env_sig(self):
+	def ld_env_sig(self): # ld --verbose | grep SEARCH_DIR | tr -s ' ;' \\012
 		sig = Sig()
 		for name in ('GNUTARGET', 'LDEMULATION', 'COLLECT_NO_DEMANGLE'):
 			e = os.environ.get(name, None)
