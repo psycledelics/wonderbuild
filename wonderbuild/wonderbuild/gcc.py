@@ -8,6 +8,8 @@ from logger import is_debug, debug, colored, out_is_dumb
 from signature import Sig
 from subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 
+need_sep_fix = os.sep != '/'
+
 class Impl(object):
 
 	@staticmethod
@@ -88,6 +90,7 @@ class Impl(object):
 		try: deps = f.read().replace('\\\n', '')
 		finally: f.close()
 		cwd = precompile_task.project.fs.cur
+		if need_sep_fix: deps = deps.replace('/', os.sep)
 		lock.acquire()
 		try: deps = [cwd / d for d in deps[deps.find(':') + 1:].split()]
 		finally: lock.release()
@@ -114,6 +117,7 @@ class Impl(object):
 			f = open(path[:path.rfind('.')] + '.d', 'r')
 			try: deps = f.read().replace('\\\n', '')
 			finally: f.close()
+			if need_sep_fix: deps = deps.replace('/', os.sep)
 			# note: we skip the first implicit dep, which is the dummy actual source
 			lock.acquire()
 			try: deps = [cwd / d for d in deps[deps.find(':') + 1:].split()[1:]]
