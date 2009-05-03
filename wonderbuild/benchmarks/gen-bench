@@ -428,7 +428,6 @@ def create_msvc_sub(lib_number, classes):
 				RuntimeLibrary="5"
 				UsePrecompiledHeader="0"
 				WarningLevel="4"
-				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="4"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
