@@ -458,6 +458,9 @@
 			The parallel algorithm was set to "normal" (faster than "max parallel").
 			<br/>
 		</part>
+		<part caption='CMake'>
+			The CMake part of the gen-bench script was contributed by Richard Quirk.
+		</part>
 		<part caption='Wonderbuild'>
 			Wonderbuild used either gcc's generated deps as a side-effect of compilation (-MMD option),
 			or a custom dumb include scanner, with no condition nor macro evaluation.
