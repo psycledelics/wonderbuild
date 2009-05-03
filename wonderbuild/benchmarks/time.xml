@@ -326,7 +326,7 @@
 				</bars>
 			</part>
 		</part>
-		<part caption='Using big headers (and pre-compilation)' anchor='pch'>
+		<part caption='Times with big headers (and pre-compilation)' anchor='pch'>
 			Here the benchmark was modified to add a <code>#include &lt;boost/spirit.hpp></code> in every header.
 			<br/>
 			It clearly demonstrates the advantage of pre-compilation as soon as the size of the headers become significant.
