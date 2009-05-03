@@ -92,6 +92,7 @@
 					<li>Python version was 2.4.4</li>
 					<li>Jam version was 2.5</li>
 					<li>Autotools versions were autoconf 2.61, automake 1.10, libtool 1.5.22</li>
+					<li>CMake version was 2.6.0</li>
 					<li>Make version was gnu make 3.81</li>
 					<li>Makedepend was version 1.0.0</li>
 					<li>Shell was bash version 3.1.17</li>
@@ -106,6 +107,7 @@
 					<bar name='toy makefiles' value=' 189'>(recursive)</bar>
 					<bar name='jam'           value=' 203'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='waf'           value=' 251'>waf cpp, timestamp signatures</bar>
+					<bar name='cmake'         value=' 253'/>
 					<bar name='scons'         value=' 445'/>
 					<bar name='autotools'     value='1336'>(non recursive)</bar>
 				</bars>
@@ -120,6 +122,7 @@
 					<bar name='jam'           value=' 22.6'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 24.4'>(recursive)</bar>
 					<bar name='waf'           value=' 36.2'>waf cpp, timestamp signatures</bar>
+					<bar name='cmake'         value=' 42.8'/>
 					<bar name='scons'         value='122.8'/>
 					<bar name='autotools'     value='203.8'>(non recursive)</bar>
 				</bars>
@@ -134,6 +137,7 @@
 					<bar name='jam'           value=' 2.58'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 3.33'>(recursive)</bar>
 					<bar name='waf'           value=' 6.22'>waf cpp, timestamp signatures</bar>
+					<bar name='cmake'         value='10.18'/>
 					<bar name='autotools'     value='26.25'>(non recursive)</bar>
 					<bar name='scons'         value='77.1 '/>
 				</bars>
@@ -144,6 +148,7 @@
 					<bar name='jam'           value=' 2.02'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 2.25'>(recursive)</bar>
 					<bar name='waf'           value=' 3.12'>waf cpp, timestamp signatures</bar>
+					<bar name='cmake'         value=' 7.01'/>
 					<bar name='autotools'     value=' 7.11'>(non recursive)</bar>
 					<bar name='scons'         value='73.12'/>
 				</bars>
@@ -156,6 +161,7 @@
 					<li>Scons version was 1.2.0</li>
 					<li>Waf version was somewhere after 1.5.4 (svn rev 6104)</li>
 					<li>Python version was 2.6.1</li>
+					<li>CMake version was 2.6.4</li>
 					<li>Compiler tool chain versions were gcc 3.4.5, binutils 2.17.50</li>
 				</ul>
 			</part>
@@ -165,6 +171,7 @@
 					<bar name='wonderbuild' value='12.60'>gcc deps</bar>
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='waf'         value='15.03'>waf cpp</bar>
+					<bar name='cmake'       value='28.98'/>
 					<bar name='scons'       value='31.98'>with fast tuning options</bar>
 				</bars>
 			</part>
@@ -177,6 +184,7 @@
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='waf'         value='124.4'>waf cpp</bar>
 					<bar name='scons'       value='240.0'>with fast tuning options</bar>
+					<bar name='cmake'       value='248.7'/>
 				</bars>
 			</part>
 			<part caption='Small partial rebuild'>
@@ -187,6 +195,7 @@
 					<bar name='wonderbuild' value=' 7.8'>gcc deps</bar>
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='waf'         value='13.3'>waf cpp</bar>
+					<bar name='cmake'       value='43.7'/>
 					<bar name='scons'       value='55.0'>with fast tuning options</bar>
 				</bars>
 			</part>
@@ -194,6 +203,7 @@
 				<bars scale='19.1'>
 					<bar name='wonderbuild' value=' 2.6'>gcc deps</bar>
 					<bar name='waf'         value=' 6.2'>waf cpp</bar>
+					<bar name='cmake'       value='29.5'/>
 					<bar name='scons'       value='42.0'>with fast tuning options</bar>
 				</bars>
 			</part>
@@ -296,6 +306,7 @@
 					<li>Waf version was 1.5.3</li>
 					<li>Python version was 2.5.2</li>
 					<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
+					<li>CMake version was 2.4.7</li>
 					<li>Make version was gnu make 3.81</li>
 					<li>Makedepend was version 1.0.1</li>
 					<li>Shell was dash (not bash) version 0.5.4</li>
@@ -312,6 +323,7 @@
 					<bar name='wonderbuild'   value=' 20.93'>-MD gcc deps</bar>
 					<bar name='waf'           value=' 21.51'>waf deps (batch-compilation currently has broken dependency-handling), timestamp signatures</bar>
 					<bar-section>Using neither</bar-section>
+					<bar name='cmake'         value=' 19.42'/>
 					<bar name='waf'           value=' 21.63'>-MMD gcc deps, timestamp signatures</bar>
 					<bar name='waf'           value=' 21.63'>waf deps, timestamp signatures</bar>
 					<bar name='waf'           value=' 21.92'>-MD gcc deps, timestamp signatures</bar>
@@ -332,6 +344,7 @@
 					<bar name='wonderbuild'   value='147'>-MMD gcc deps</bar>
 					<bar name='wonderbuild'   value='151'>-MD gcc deps</bar>
 					<bar-section>Using neither</bar-section>
+					<bar name='cmake'         value='138'/>
 					<bar name='waf'           value='158'>-MMD gcc deps, timestamp signatures</bar>
 					<bar name='waf'           value='159'>waf deps, timestamp signatures</bar>
 					<bar name='waf'           value='162'>-MD gcc deps, timestamp signatures</bar>
@@ -351,6 +364,7 @@
 					<bar name='wonderbuild'   value=' 7.52'>-MMD gcc deps</bar>
 					<bar name='wonderbuild'   value='10.36'>-MD gcc deps</bar>
 					<bar-section>Using neither</bar-section>
+					<bar name='cmake'         value=' 7.82'/>
 					<bar name='waf'           value=' 8.57'>waf deps, timestamp signatures</bar>
 					<bar name='waf'           value=' 8.65'>-MMD gcc deps, timestamp signatures</bar>
 					<bar name='autotools'     value='11.92'>-MMD gcc deps (non recursive)</bar>
@@ -370,6 +384,7 @@
 					<bar-section>Using neither</bar-section>
 					<bar name='waf'           value=' 1.13'>-MMD gcc deps, timestamp signatures</bar>
 					<bar name='waf'           value=' 1.13'>waf deps, timestamp signatures</bar>
+					<bar name='cmake'         value=' 1.39'/>
 					<bar name='autotools'     value=' 2.05'>-MMD gcc deps (non recursive)</bar>
 					<bar name='waf'           value=' 4.58'>-MD gcc deps, timestamp signatures</bar>
 					<bar name='scons'         value='27.48'>with fast tuning options</bar>
