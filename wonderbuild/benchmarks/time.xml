@@ -481,10 +481,10 @@
 	cd wonderbuild/benchmarks
 	./gen-bench bench 50 100 15 5
 	cd bench
-	time ../../wonderbuild.py --cxx-pic=no --silent # initial full build
-	time ../../wonderbuild.py --cxx-pic=no --silent # no-op rebuild
-	touch lib_17/class_17.h &amp;&amp; time ../../wonderbuild.py --cxx-pic=no --silent # small partial rebuild
-	touch lib_17/*.h &amp;&amp; time ../../wonderbuild.py --cxx-pic=no --silent # big partial rebuild
+	time ../../wonderbuild.py --cxx=g++ --silent # initial full build
+	time ../../wonderbuild.py --cxx=g++ --silent # no-op rebuild
+	touch lib_17/class_17.hpp &amp;&amp; time ../../wonderbuild.py --cxx=g++ --silent # small partial rebuild
+	touch lib_17/*.hpp &amp;&amp; time ../../wonderbuild.py --cxx=g++ --silent # big partial rebuild
 				</pre>
 			</code>
 		</part>
