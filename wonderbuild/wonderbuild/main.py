@@ -40,7 +40,7 @@ else:
 				s.sort_stats('cumulative').reverse_order().print_stats()
 		finally:
 			t = time.time() - t
-			print 'wonderbuild: build time: ' + str(t) + 's'
+			print >> sys.stderr, 'wonderbuild: build time: ' + str(t) + 's'
 			if gc_enabled: gc.enable()
 
 	def run(options, option_collector):

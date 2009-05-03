@@ -140,7 +140,7 @@ class BuildCfg(ClientCfg):
 		except AttributeError:
 			sig = Sig(self._common_mod_sig)
 			sig.update(self.ar_prog)
-			sig.update(self.ranlib_prog)
+			if self.ranlib_prog is not None: sig.update(self.ranlib_prog)
 			sig.update(self.impl.ar_ranlib_env_sig)
 			sig = self._ar_ranlib_sig = sig.digest()
 			return sig

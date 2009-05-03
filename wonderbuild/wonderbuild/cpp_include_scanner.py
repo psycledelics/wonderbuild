@@ -10,20 +10,14 @@ _line_continuations = re.compile(r'\\\r*\n', re.MULTILINE)
 _cpp = re.compile(r'''(/\*[^*]*\*+([^/*][^*]*\*+)*/)|//[^\n]*|("(\\.|[^"\\])*"|'(\\.|[^'\\])*'|.[^/"'\\]*)''', re.MULTILINE)
 _include = re.compile(r'^[ \t]*#[ \t]*include[ \t]*(["<])([^">]*)[">].*$', re.MULTILINE)
 
+need_sep_fix = os.sep != '/'
+
 class IncludeScanner(object):
 	'C/C++ dependency scanner. #include statements, and nothing else, no #if, no #define (dumb)'
 	
 	def __init__(self, persistent):
-		if False: # a tiny bit slower due to slight pickle size increase
-			try: self.contents, self.not_found = persistent[str(self.__class__)]
-			except KeyError:
-				if  __debug__ and is_debug: debug('cpp: all anew')
-				self.contents = {} # {node: (rel_includes, abs_includes)}
-				self.not_found = set() # of nodes collected from #include "" but not from #include <>
-				persistent[str(self.__class__)] = self.contents, self.not_found
-		else:
-			self.contents = {} # {node: (rel_includes, abs_includes)}
-			self.not_found = set() # of nodes collected from #include "" but not from #include <>
+		self.contents = {} # {node: (rel_includes, abs_includes)}
+		self.not_found = set() # of nodes collected from #include "" but not from #include <>
 		if False and __debug__ and is_debug: self.display()
 	
 	def scan_deps(self, source, paths):
@@ -38,16 +32,8 @@ class IncludeScanner(object):
 			if source in seen: return seen
 			seen.add(source)
 
-		parse = False
-		try: up_to_date, rel_includes, abs_includes = self.contents[source]
-		except KeyError: parse = True
-		else:
-			if not up_to_date:
-				if source.changed: #XXX
-					if __debug__ and is_debug: debug('cpp: changed   : ' + str(source))
-					parse = True
-				else: self.contents[source] = True, rel_includes, abs_includes
-		if parse:
+		try: rel_includes, abs_includes = self.contents[source]
+		except KeyError:
 			if __debug__ and is_debug: debug('cpp: parsing   : ' + str(source))
 			try: f = open(source.path, 'rb')
 			except IOError:
@@ -57,7 +43,7 @@ class IncludeScanner(object):
 			try: s = f.read()
 			finally: f.close()
 			rel_includes, abs_includes = self.parse_string(s)
-			self.contents[source] = True, rel_includes, abs_includes
+			self.contents[source] = rel_includes, abs_includes
 
 		if len(rel_includes) != 0:
 			dir = source.parent
@@ -71,6 +57,7 @@ class IncludeScanner(object):
 		return seen
 	
 	def search_rel(self, dir, include, paths, not_found):
+		if need_sep_fix: include = include.replace('/', os.sep)
 		n = dir / include
 		if n in self.not_found:
 			not_found.add(n)
@@ -90,6 +77,7 @@ class IncludeScanner(object):
 		return None
 		
 	def search_abs(self, include, paths, not_found):
+		if need_sep_fix: include = include.replace('/', os.sep)
 		if include in not_found: return None
 		for dir in paths:
 			n = dir / include

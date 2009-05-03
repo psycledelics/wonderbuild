@@ -78,8 +78,8 @@ class Impl(object):
 		try: deps, not_found = self.cpp.scan_deps(precompile_task.header, precompile_task.cfg.include_paths)
 		finally: lock.release()
 		if __debug__ and is_debug:
-			debug('cpp: deps found: ' + str(precompile_task.header) + ': ' + str((str(d) for d in deps)))
-			if len(not_found) != 0: debug('cpp: deps not found: ' + str(precompile_task.header) + ': '+ str((str(x) for x in not_found)))
+			debug('cpp: deps found: ' + str(precompile_task.header) + ': ' + str([str(d) for d in deps]))
+			if len(not_found) != 0: debug('cpp: deps not found: ' + str(precompile_task.header) + ': '+ str([str(x) for x in not_found]))
 		dep_sigs = [d.sig for d in deps]
 		dep_sigs.sort()
 		precompile_task.persistent = precompile_task.sig, deps, Sig(''.join(dep_sigs)).digest()
@@ -100,8 +100,8 @@ class Impl(object):
 			try: deps, not_found = self.cpp.scan_deps(s, cxx_task.cfg.include_paths)
 			finally: lock.release()
 			if __debug__ and is_debug:
-				debug('cpp: deps found: ' + str(s) + ': ' + str((str(d) for d in deps)))
-				if len(not_found) != 0: debug('cpp: deps not found: ' + str(s) + ': '+ str((str(x) for x in not_found)))
+				debug('cpp: deps found: ' + str(s) + ': ' + str([str(d) for d in deps]))
+				if len(not_found) != 0: debug('cpp: deps not found: ' + str(s) + ': '+ str([str(x) for x in not_found]))
 			dep_sigs = [d.sig for d in deps]
 			dep_sigs.sort()
 			implicit_deps[s] = deps, Sig(''.join(dep_sigs)).digest()
@@ -139,7 +139,7 @@ class Impl(object):
 
 	@staticmethod
 	def cfg_ar_ranlib_args(cfg):
-		ar_args = [cfg.ar_prog]
+		ar_args = [cfg.ar_prog, '-nologo']
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: msvc: ar: ' + str(ar_args))
 		if True: return ar_args, None # no ranlib with msvc
 
