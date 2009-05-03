@@ -219,7 +219,7 @@
 				</ul>
 			</part>
 			<part caption='Initial full build'>
-				<bars scale='24.95' unit='m'>
+				<bars scale='29.3' unit='m'>
 					<bar-section>Using batch compilation</bar-section>
 					<bar name='wonderbuild'    value=' 5.15'/>
 					<bar name='cmake/vcbuild'  value=' 6.26'/>
@@ -236,7 +236,7 @@
 			<part caption='Big partial rebuild'>
 				After touch lib_17/*.hpp => rebuild of 585 object files from c++ and 33 static libs
 				<br/><br/>
-				<bars scale='3.32'>
+				<bars scale='3.19'>
 					<bar-section>Using batch compilation</bar-section>
 					<bar name='wonderbuild'    value=' 42.07'/>
 					<bar name='cmake/msvc-ide' value=' 65.00'>(roughly)</bar>
