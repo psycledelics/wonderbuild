@@ -212,6 +212,7 @@
 			All tests were run with 1 job on the same system, ms-windows-xp inside virtualbox, microsoft's C++ compiler.
 			<part caption='Tool versions'>
 				<ul>
+					<li>Waf version was 1.5.6</li>
 					<li>Python version was 2.6.1</li>
 					<li>CMake version was 2.6.4</li>
 					<li>Compiler was MS Visual C++ version 15 (Visual Studio 9.0 aka 2008)</li>
