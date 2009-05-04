@@ -86,10 +86,9 @@ class Node(object):
 		if __debug__ and is_debug: debug('fs: os.stat    : ' + self.path)
 		try: st = os.stat(self.path)
 		except OSError, e:
-			if e.errno == errno.ENOENT:
-				# may be a broken symlink
-				st = os.lstat(self.path)
-			else: raise 
+			if e.errno != errno.ENOENT: raise
+			# may be a broken symlink
+			st = os.lstat(self.path)
 		self._is_dir = stat.S_ISDIR(st.st_mode)
 		self._time = st.st_mtime
 
