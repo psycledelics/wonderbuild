@@ -179,8 +179,9 @@ class Node(object):
 					self._children.update(self._actual_children)
 				else:
 					for name, node in self._actual_children.iteritems():
-						if name in self._children: self._merge(self._children[name], node)
-						else: self._children[name] = node
+						try: child = self._children[name]
+						except KeyError: self._children[name] = node
+						else: self._merge(child, node)
 			else:
 				self._actual_children = {}
 				if __debug__ and is_debug: debug('fs: os.listdir : ' + self.path + os.sep)
@@ -191,8 +192,9 @@ class Node(object):
 				else:
 					for name in os.listdir(self.path):
 						if name not in ignore:
-							if name in self._children: self._actual_children[name] = self._children[name]
-							else: self._children[name] = self._actual_children[name] = Node(self, name)
+							try: child = self._children[name]
+							except KeyError: self._children[name] = self._actual_children[name] = Node(self, name)
+							else: self._actual_children[name] = child
 		return self._actual_children
 	
 	def _merge(self, cur, old):
@@ -214,8 +216,9 @@ class Node(object):
 			if old._path is not None: cur._path = old._path
 		else:
 			for name, node in old._old_children.iteritems():
-				if name in cur._children: self._merge(cur._children[name], node)
-				else: cur._children[name] = node
+				try: child = cur._children[name]
+				except KeyError: cur._children[name] = node
+				else: self._merge(child, node)
 	
 	@property
 	def children(self):
