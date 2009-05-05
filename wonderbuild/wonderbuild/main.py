@@ -63,7 +63,9 @@ else:
 					script_tasks = (self.project.script_task(script),)
 					usage_error = False
 				else:
-					print >> sys.stderr, 'wonderbuild: no ' + script.path + ' found'
+					option_collector.consolidate_known_options()
+					validate_options(options, option_collector.known_options)
+					print >> sys.stderr, 'wonderbuild: error: no ' + script.path + ' found'
 					script_tasks = ()
 					usage_error = True
 
@@ -84,11 +86,17 @@ else:
 				self.project.process_tasks_by_aliases()
 				self.result = 0
 
-		from wonderbuild.project import Project
-		main_task = MainTask(Project(options, option_collector))
-
 		from wonderbuild.scheduler import Scheduler
 		option_collector.option_decls.add(Scheduler)
+
+		try:
+			from wonderbuild.project import Project
+			main_task = MainTask(Project(options, option_collector))
+		except:
+			option_collector.consolidate_known_options()
+			validate_options(options, option_collector.known_options)
+			raise
+
 		Scheduler(options).process([main_task])
 
 		return main_task.result

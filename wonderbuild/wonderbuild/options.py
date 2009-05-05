@@ -43,7 +43,7 @@ def validate_options(options, known_options):
 	ok = True
 	for o in options:
 			if o not in known_options:
-				print >> sys.stderr, 'unknown option: ' + o
+				print >> sys.stderr, 'wonderbuild: error: unknown option: ' + o
 				ok = False
 	return ok
 
