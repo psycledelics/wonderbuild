@@ -97,12 +97,14 @@ class InstallTask(ProjectTask, OptionCfg):
 							rel_path = s.rel_path(self.trim_prefix)
 							dest = self.dest_dir / rel_path
 							install_tuples.append((s, dest, rel_path))
-						if not silent: self.print_desc_multi_column_format(
-							'installing from ' + str(self.trim_prefix) +
-							' to ' + str(self.dest_dir),
-							[t[2] for t in install_tuples],
-							'47;34'
-						)
+						if not silent:
+							list = [t[2] for t in install_tuples]
+							list.sort()
+							self.print_desc_multi_column_format(
+ 								'installing from ' + str(self.trim_prefix) +
+								' to ' + str(self.dest_dir),
+								list, '47;34'
+							)
 						for t in install_tuples:
 							s, dest = t[0], t[1]
 							if dest.exists: os.remove(dest.path)
