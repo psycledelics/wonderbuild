@@ -14,21 +14,19 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.std_checks import StdMathCheckTask
 		from wonderbuild.install import InstallTask
 		
-		glibmm = PkgConfigCheckTask(self.project, ['glibmm-2.4 >= 2.4'])
+		glibmm = PkgConfigCheckTask.shared(self.project, ['glibmm-2.4 >= 2.4'])
 
-		try: build_cfg = project.build_cfg
-		except AttributeError: build_cfg = project.build_cfg = UserBuildCfg(project)
-		else: build_cfg = build_cfg.clone()
+		build_cfg = UserBuildCfg.new_or_clone(project)
+
 		build_cfg.include_paths.append(src_dir)
 
 		check_cfg = build_cfg.clone()
 		std_math_check = StdMathCheckTask(check_cfg)
 
-		diversalis = self.project.script_task(src_dir.parent.parent / 'diversalis')
+		diversalis = ScriptTask.shared(project, src_dir.parent.parent / 'diversalis')
 		
 		class Universalis(ModTask):
-			def __init__(self):
-				ModTask.__init__(self, 'universalis', ModTask.Kinds.LIB, build_cfg)
+			def __init__(self): ModTask.__init__(self, 'universalis', ModTask.Kinds.LIB, build_cfg)
 
 			def __call__(self, sched_ctx):
 				install = Universalis.Install(self.project)
