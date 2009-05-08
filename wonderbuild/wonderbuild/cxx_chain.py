@@ -797,7 +797,8 @@ class ModTask(ProjectTask):
 				else: sources = None
 				if sources is not None: self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources])
 				implicit_deps = state[3]
-				if len(implicit_deps) > len(self.sources):
+				if len(implicit_deps) == len(self.sources): source_states = implicit_deps
+				else:
 					# remove old sources from implicit deps dictionary
 					source_states = {}
 					for s in self.sources: source_states[s] = implicit_deps[s]
@@ -807,7 +808,6 @@ class ModTask(ProjectTask):
 						for s in implicit_deps:
 							if not s in self.sources: removed_obj_names.append(self._obj_name(s))
 						self.cfg.impl.remove_objects_from_archive(self, removed_obj_names)
-				else: source_states = implicit_deps
 				self.persistent = self._mod_sig, self.ld, self.cfg.cxx_sig, source_states # TODO move cxx_sig into obj sig
 			finally: sched_context.lock.acquire()
 		if not self.cfg.check_missing: self.obj_dir.forget()
