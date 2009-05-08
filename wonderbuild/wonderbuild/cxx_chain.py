@@ -110,9 +110,7 @@ class BuildCfg(ClientCfg):
 			sig = Sig(self.impl.common_env_sig)
 			e = os.environ.get('PATH', None)
 			if e is not None: sig.update(e)
-			try: pe = self._target_platform_binary_format_is_pe
-			except AttributeError: pass
-			else: sig.update(str(pe))
+			#sig.update(str(self.target_platform_binary_format_is_pe))
 			sig.update(self.kind)
 			sig.update(self.version)
 			sig.update(str(self.debug))
@@ -588,8 +586,8 @@ class BatchCompileTask(ProjectTask):
 		sched_context.lock.release()
 		try:
 			if not silent:
-				if self.cfg.pic: pic = 'pic'; color = '7;1;34'
-				else: pic = 'non-pic'; color = '7;34'
+				if self.cfg.pic: pic = 'pic'; color = '1;44;37'
+				else: pic = 'non-pic'; color = '44;37'
 				s = [str(s) for s in self.sources]
 				s.sort()
 				self.print_desc_multi_column_format('batch-compiling ' + pic + ' objects from c++', s, color)
