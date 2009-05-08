@@ -7,7 +7,7 @@ from wonderbuild.script import ScriptTask
 class Wonderbuild(ScriptTask):
 	def __call__(self, sched_ctx):
 
-		lib_hello = self.project.script_task(self.src_dir / 'libhello')
+		lib_hello = ScriptTask.shared(self.project, self.src_dir / 'libhello')
 		print 'sub script tasks:', lib_hello.dummy
 
 		src_dir = self.src_dir / 'src'

@@ -37,8 +37,7 @@ def use_options(options):
 
 out = sys.stdout
 
-@property
-def cols(): return 80
+cols = 80
 try: import struct, fcntl, termios
 except ImportError: pass
 else:
@@ -53,9 +52,8 @@ else:
 					)
 				)[:2]
 			return cols
-		try: _cols() # we try the function once to see if it is suitable
+		try: cols = _cols()
 		except IOError: pass
-		else: cols = property(_cols)
 
 out_is_dumb = os.environ.get('TERM', 'dumb') in ('dumb', 'emacs') or not out.isatty()
 if out_is_dumb:
