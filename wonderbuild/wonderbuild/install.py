@@ -100,7 +100,7 @@ class InstallTask(ProjectTask, OptionCfg):
 						if not silent: self.print_desc(
 							'installing from ' + str(self.trim_prefix) +
 							' to ' + str(self.dest_dir) +
-							':\n\t' + '\n\t'.join((t[2] for t in install_tuples)),
+							': ' + ' '.join((t[2] for t in install_tuples)),
 							'47;34'
 						)
 						for t in install_tuples:
