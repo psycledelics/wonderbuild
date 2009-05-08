@@ -23,10 +23,19 @@ class Wonderbuild(ScriptTask):
 				try: return self._sources
 				except AttributeError:
 					self._sources = []
-					for s in (self.trim_prefix / 'diversalis').find_iter(in_pats = ['*.hpp'], ex_pats = ['*.private.hpp'], prune_pats = ['todo']): self._sources.append(s)
+					for s in (self.trim_prefix / 'diversalis').find_iter(in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)): self._sources.append(s)
 					return self._sources
 	
 			@property
 			def dest_dir(self): return self.fhs.include
 		
 		self.project.add_task_aliases(Diversalis(), 'all')
+	
+	@property
+	def client_cfg(self):
+		try: return self._client_cfg
+		except AttributeError:
+			from wonderbuild.cxx_chain import ClientCfg
+			self._client_cfg = ClientCfg(self.project)
+			self._client_cfg.include_paths.append(self.src_dir / 'src')
+			return self._client_cfg
