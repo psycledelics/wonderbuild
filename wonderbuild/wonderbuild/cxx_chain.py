@@ -792,22 +792,23 @@ class ModTask(ProjectTask):
 					elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = '1;7;34'
 					else: desc = 'linking shared lib'; color = '1;7;33'
 					self.print_desc(desc + ' ' + str(self), color)
-				if self.ld: sources = self.sources
-				elif len(changed_sources) != 0: sources = changed_sources
-				else: sources = None
-				if sources is not None: self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources])
 				implicit_deps = state[3]
-				if len(implicit_deps) == len(self.sources): source_states = implicit_deps
+				if len(implicit_deps) == len(self.sources):
+					source_states = implicit_deps
+					removed_obj_names = None
 				else:
 					# remove old sources from implicit deps dictionary
 					source_states = {}
 					for s in self.sources: source_states[s] = implicit_deps[s]
-					if not self.ld:
+					if self.ld: removed_obj_names = None
+					else:
 						# remove old objects from static archive
 						removed_obj_names = []
 						for s in implicit_deps:
 							if not s in self.sources: removed_obj_names.append(self._obj_name(s))
-						self.cfg.impl.remove_objects_from_archive(self, removed_obj_names)
+				if self.ld: sources = self.sources
+				else: sources = changed_sources
+				self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources], removed_obj_names)
 				self.persistent = self._mod_sig, self.ld, self.cfg.cxx_sig, source_states # TODO move cxx_sig into obj sig
 			finally: sched_context.lock.acquire()
 		if not self.cfg.check_missing: self.obj_dir.forget()

@@ -143,7 +143,7 @@ class Impl(object):
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: msvc: ar: ' + str(ar_args))
 		if True: return ar_args, None # no ranlib with msvc
 
-	def process_mod_task(self, mod_task, obj_names):
+	def process_mod_task(self, mod_task, obj_names, removed_obj_names):
 		path = mod_task.obj_dir.path
 		obj_paths = [os.path.join(path, o) for o in obj_names]
 		if mod_task.ld:
@@ -155,13 +155,11 @@ class Impl(object):
 			args = ar_args[:]
 			args.append('-out:' + mod_task.target.path)
 			args += obj_paths
+			if removed_obj_names is not None:
+				for o in removed_obj_names: args.append('-remove:' + o)
 		r = exec_subprocess(args)
 		if r != 0: raise Exception, r
 		# no ranlib with msvc
-
-	@staticmethod
-	def remove_objects_from_archive(mod_task, obj_names):
-		pass # TODO
 
 	@staticmethod
 	def mod_task_targets(mod_task):

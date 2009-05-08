@@ -173,7 +173,7 @@ class Impl(object):
 			return ar_args, ranlib_args
 
 	@staticmethod
-	def process_mod_task(mod_task, obj_names):
+	def process_mod_task(mod_task, obj_names, removed_obj_names):
 		path = mod_task.obj_dir.path
 		obj_paths = [os.path.join(path, o) for o in obj_names]
 		if mod_task.ld:
@@ -183,28 +183,22 @@ class Impl(object):
 			if r != 0: raise Exception, r
 		else:
 			ar_args, ranlib_args = mod_task.cfg.ar_ranlib_args
-			args = ar_args[:]
-			args.append(mod_task.target.path)
-			args += obj_paths
-			r = exec_subprocess(args)
-			if r != 0: raise Exception, r
+			if len(obj_names) != 0:
+				args = ar_args[:]
+				if removed_obj_names is not None: args[1] = args[1].replace('s', '')
+				args.append(mod_task.target.path)
+				args += obj_paths
+				r = exec_subprocess(args)
+				if r != 0: raise Exception, r
+			if removed_obj_names is not None:
+				args = [ar_args[0], ranlib_args is None and 'ds' or 'd', mod_task.target.path] + removed_obj_names
+				r = exec_subprocess(args)
+				if r != 0: raise Exception, r
 			if ranlib_args is not None: # 's' not in ar_args[1]
 				args = ranlib_args[:]
 				args.append(mod_task.target.path)
 				r = exec_subprocess(args)
 				if r != 0: raise Exception, r
-
-	@staticmethod
-	def remove_objects_from_archive(mod_task, obj_names):
-		ar_args, ranlib_args = mod_task.cfg.ar_ranlib_args
-		args = [ar_args[0], ranlib_args is None and 'ds' or 'd', mod_task.target.name] + obj_names
-		r = exec_subprocess(args, cwd = mod_task.target_dir.path)
-		if r != 0: raise Exception, r
-		if ranlib_args is not None: # 's' not in ar_args[1]
-			args = ranlib_args[:]
-			args.append(mod_task.target.path)
-			r = exec_subprocess(args)
-			if r != 0: raise Exception, r
 
 	@staticmethod
 	def mod_task_targets(mod_task): return (mod_task.target,)
