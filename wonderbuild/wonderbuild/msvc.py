@@ -21,10 +21,13 @@ class Impl(object):
 
 	@property
 	def cxx_env_sig(self):
-		sig = Sig()
-		e = os.environ.get('INCLUDE', None)
-		if e is not None: sig.update(e)
-		return sig.digest()
+		try: return self._cxx_env_sig
+		except AttributeError:
+			sig = Sig()
+			e = os.environ.get('INCLUDE', None)
+			if e is not None: sig.update(e)
+			sig = self._cxx_env_sig = sig.digest()
+			return sig
 
 	def cfg_cxx_args_cwd(self, cfg): return self._cfg_cxx_args(cfg, self._cfg_cxx_args_include_cwd)
 
@@ -117,10 +120,13 @@ class Impl(object):
 
 	@property
 	def ld_env_sig(self):
-		sig = Sig()
-		e = os.environ.get('LIB', None)
-		if e is not None: sig.update(e)
-		return sig.digest()
+		try: return self._ld_env_sig
+		except AttributeError:
+			sig = Sig()
+			e = os.environ.get('LIB', None)
+			if e is not None: sig.update(e)
+			sig = self._ld_env_sig = sig.digest()
+			return sig
 
 	@staticmethod
 	def cfg_ld_args(cfg):

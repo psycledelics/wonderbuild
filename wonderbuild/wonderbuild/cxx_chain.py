@@ -54,7 +54,6 @@ class ClientCfg(object):
 class BuildCfg(ClientCfg):
 	def __init__(self, project):
 		ClientCfg.__init__(self, project)
-		self.target_platform_binary_format_is_pe = None
 		self.cxx_prog = None
 		self.pic = None
 		self.pch = None
@@ -75,7 +74,8 @@ class BuildCfg(ClientCfg):
 	def clone(self, class_ = None):
 		if class_ is None: class_ = self.__class__
 		c = ClientCfg.clone(self, class_)
-		c.target_platform_binary_format_is_pe = self.target_platform_binary_format_is_pe
+		try: c._target_platform_binary_format_is_pe = self._target_platform_binary_format_is_pe
+		except AttributeError: pass
 		c.cxx_prog = self.cxx_prog
 		c.pic = self.pic
 		c.pch = self.pch
@@ -93,16 +93,26 @@ class BuildCfg(ClientCfg):
 		c.check_missing = self.check_missing
 		c.fhs = self.fhs
 		return c
+
+	@property
+	def target_platform_binary_format_is_pe(self):
+		try: return self._target_platform_binary_format_is_pe
+		except AttributeError:
+			from std_checks import BinaryFormatPeCheckTask
+			pe = BinaryFormatPeCheckTask.shared(self)
+			self._target_platform_binary_format_is_pe = pe.result
+			return pe.result
 		
 	@property
 	def _common_sig(self):
 		try: return self.__common_sig
 		except AttributeError:
 			sig = Sig(self.impl.common_env_sig)
-			for name in ('PATH',):
-				e = os.environ.get(name, None)
-				if e is not None: sig.update(e)
-			if self.target_platform_binary_format_is_pe is not None: sig.update(str(self.target_platform_binary_format_is_pe))
+			e = os.environ.get('PATH', None)
+			if e is not None: sig.update(e)
+			try: pe = self._target_platform_binary_format_is_pe
+			except AttributeError: pass
+			else: sig.update(str(pe))
 			sig.update(self.kind)
 			sig.update(self.version)
 			sig.update(str(self.debug))
@@ -256,7 +266,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		OptionCfg.__init__(self, project)
 		
 		try:
-			old_sig, self.target_platform_binary_format_is_pe, self.check_missing, \
+			old_sig, self.check_missing, \
 			self.kind, self.version, \
 			self.cxx_prog, self.cxx_flags, self.pic, self.optim, self.debug, \
 			self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
@@ -308,7 +318,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 			self._check_compiler()
 
 			self.project.persistent[str(self.__class__)] = \
-				self.options_sig, self.target_platform_binary_format_is_pe, self.check_missing, \
+				self.options_sig, self.check_missing, \
 				self.kind, self.version, \
 				self.cxx_prog, self.cxx_flags, self.pic, self.optim, self.debug, \
 				self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
@@ -384,10 +394,6 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		if 'cxx-mod-ld' not in o: self.ld_prog = ld_prog
 		if 'cxx-mod-ar' not in o: self.ar_prog = ar_prog
 		if 'cxx-mod-ranlib' not in o: self.ranlib_prog = ranlib_prog
-		from std_checks import BinaryFormatPeCheckTask
-		pe = BinaryFormatPeCheckTask(self)
-		self.project.sched_context.parallel_wait(pe)
-		self.target_platform_binary_format_is_pe = pe.result
 
 class _PreCompileTask(ProjectTask):
 	def __init__(self, name, base_cfg):
@@ -925,9 +931,10 @@ class PkgConfigCheckTask(_PkgConfigTask):
 		try: pkg_configs = project.cxx_pkg_configs
 		except AttributeError: pkg_configs = project.cxx_pkg_configs = {}
 		key = ' '.join(pkgs)
-		try: task = pkg_configs[key]
-		except KeyError: task = pkg_configs[key] = class_(project, pkgs)
-		return task
+		try: return pkg_configs[key]
+		except KeyError:
+			task = pkg_configs[key] = class_(project, pkgs)
+			return task
 
 	@property
 	def what_desc(self): return 'existence'
@@ -960,9 +967,10 @@ class _PkgConfigCxxFlagsTask(_PkgConfigFlagsTask):
 		try: pkg_configs = project.cxx_pkg_configs
 		except AttributeError: pkg_configs = project.cxx_pkg_configs = {}
 		key = '--cflags ' + ' '.join(pkgs)
-		try: task = pkg_configs[key]
-		except KeyError: task = pkg_configs[key] = class_(project, pkgs)
-		return task
+		try: return pkg_configs[key]
+		except KeyError:
+			task = pkg_configs[key] = class_(project, pkgs)
+			return task
 
 	@property
 	def what_desc(self): return 'cxx flags'
@@ -978,9 +986,10 @@ class _PkgConfigLdFlagsTask(_PkgConfigFlagsTask):
 		try: pkg_configs = project.cxx_pkg_configs
 		except AttributeError: pkg_configs = project.cxx_pkg_configs = {}
 		key = '--libs' + (shared and ' ' or '--static ') + ' '.join(pkgs)
-		try: task = pkg_configs[key]
-		except KeyError: task = pkg_configs[key] = class_(project, pkgs, shared)
-		return task
+		try: return pkg_configs[key]
+		except KeyError:
+			task = pkg_configs[key] = class_(project, pkgs, shared)
+			return task
 
 	def __init__(self, project, pkgs, shared):
 		_PkgConfigFlagsTask.__init__(self, project, pkgs)

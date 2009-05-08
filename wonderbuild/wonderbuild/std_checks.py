@@ -26,7 +26,15 @@ class BinaryFormatElfCheckTask(BuildCheckTask):
 			sig.update(self.base_cfg.ld_sig)
 			sig = self._sig = sig.digest()
 			return sig
+
 class BinaryFormatPeCheckTask(BuildCheckTask):
+	@staticmethod
+	def shared(base_cfg):
+		try: return base_cfg.project.target_platform_binary_format_is_pe
+		except AttributeError:
+			task = base_cfg.project.target_platform_binary_format_is_pe = BinaryFormatPeCheckTask(base_cfg)
+			return task
+		
 	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'binary-format-pe', base_cfg)
 
 	@property
