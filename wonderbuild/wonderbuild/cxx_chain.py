@@ -5,11 +5,7 @@
 import os, threading
 from collections import deque
 
-from logger import out, is_debug, debug, cols, colored, silent
-
-from multi_column_formatting import format as base_format
-def format(list): return base_format(list, out, cols)
-
+from logger import out, is_debug, debug, colored, silent
 from signature import Sig
 from option_cfg import OptionCfg
 from fhs import FHS
@@ -594,7 +590,9 @@ class BatchCompileTask(ProjectTask):
 			if not silent:
 				if self.cfg.pic: pic = 'pic'; color = '7;1;34'
 				else: pic = 'non-pic'; color = '7;34'
-				self.print_desc('batch-compiling ' + pic + ' objects from c++:\n' + format([str(s) for s in self.sources]), color)
+				s = [str(s) for s in self.sources]
+				s.sort()
+				self.print_desc_multi_column_format('batch-compiling ' + pic + ' objects from c++', s, color)
 			self._actual_sources = []
 			for s in self.sources:
 				node = self.target_dir / self.mod_task._unique_base_name(s)

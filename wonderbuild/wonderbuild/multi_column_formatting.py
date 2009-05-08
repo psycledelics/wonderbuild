@@ -2,7 +2,7 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2009-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-def format(list, out, max_width):
+def format(list, max_width):
 	min_col_width = 3
 	list_len = len(list)
 	max_cols = min(max(1, max_width / min_col_width), list_len)
@@ -43,17 +43,18 @@ def format(list, out, max_width):
 	#print rows
 
 	col_info = col_infos[cols - 1]
-	result = ''
+	result = []
 	for row in xrange(rows):
 		col = 0
 		f = row
+		line = ''
 		while True: # print the next row
 			e = list[f]
 			name_len = len(e)
 			max_name_len = col_info.col_arr[col]
 			col += 1
-			result += e.ljust(max_name_len)
+			line += e.ljust(max_name_len)
 			f += rows
 			if f >= list_len: break
-		result += '\n'
+		result.append(line)
 	return result

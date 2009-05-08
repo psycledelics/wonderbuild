@@ -2,7 +2,8 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-from logger import out, colored
+from logger import out, cols, colored
+import multi_column_formatting
 
 class Task(object):
 	def __init__(self):
@@ -12,6 +13,13 @@ class Task(object):
 
 	def print_desc(self, desc, color = '7;1'):
 		out.write(colored(color, 'wonderbuild: task: ' + desc) + '\n')
+		out.flush()
+		
+	def print_desc_multi_column_format(self, desc, list, color = '7;1'):
+		desc = 'wonderbuild: task: ' + desc + ':'
+		line = desc + ' ' + ' '.join(list)
+		if len(line) > cols: line = desc + '\n\t' + '\n\t'.join(multi_column_formatting.format(list, cols - 8)) # less 8 because of the tab
+		out.write(colored(color, line) + '\n')
 		out.flush()
 		
 	def print_check(self, desc):
