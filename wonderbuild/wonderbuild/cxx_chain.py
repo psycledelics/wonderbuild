@@ -244,6 +244,13 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		help['cxx-mod-ranlib']       = ('<prog>', 'use <prog> as static lib archive indexer', 'ranlib (or via ar s flag for gnu ar)')
 		help['check-missing']        = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'no')
 
+	@staticmethod
+	def new_or_clone(project):
+		try: build_cfg = project.cxx_user_build_cfg
+		except AttributeError: build_cfg = project.cxx_user_build_cfg = UserBuildCfg(project)
+		else: build_cfg = build_cfg.clone()
+		return build_cfg
+	
 	def __init__(self, project):
 		BuildCfg.__init__(self, project)
 		OptionCfg.__init__(self, project)
@@ -424,7 +431,7 @@ class _PreCompileTask(ProjectTask):
 
 	def __call__(self, sched_context):
 		if len(self.cfg.pkg_config) != 0:
-			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask(self.project, self.cfg.pkg_config)
+			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.project, self.cfg.pkg_config)
 			sched_context.parallel_wait(pkg_config_cxx_flags_task)
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
 		sched_context.lock.release()
@@ -674,11 +681,11 @@ class ModTask(ProjectTask):
 	def __call__(self, sched_context):
 		if len(self.dep_lib_tasks) != 0: sched_context.parallel_no_wait(*self.dep_lib_tasks)
 		if len(self.cfg.pkg_config) != 0:
-			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask(self.project, self.cfg.pkg_config)
+			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.project, self.cfg.pkg_config)
 			sched_context.parallel_wait(pkg_config_cxx_flags_task)
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
 			if self.ld:
-				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask(self.project, self.cfg.pkg_config, self.cfg.shared or not self.cfg.static_prog)
+				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask.shared(self.project, self.cfg.pkg_config, self.cfg.shared or not self.cfg.static_prog)
 				sched_context.parallel_no_wait(pkg_config_ld_flags_task)
 		try: state = self.persistent
 		except KeyError:
@@ -913,6 +920,15 @@ class _PkgConfigTask(ProjectTask):
 		return sig.digest()
 
 class PkgConfigCheckTask(_PkgConfigTask):
+	@classmethod
+	def shared(class_, project, pkgs):
+		try: pkg_configs = project.cxx_pkg_configs
+		except AttributeError: pkg_configs = project.cxx_pkg_configs = {}
+		key = ' '.join(pkgs)
+		try: task = pkg_configs[key]
+		except KeyError: task = pkg_configs[key] = class_(project, pkgs)
+		return task
+
 	@property
 	def what_desc(self): return 'existence'
 	
@@ -939,6 +955,15 @@ class _PkgConfigFlagsTask(_PkgConfigTask):
 			self._result = out.split()
 
 class _PkgConfigCxxFlagsTask(_PkgConfigFlagsTask):
+	@classmethod
+	def shared(class_, project, pkgs):
+		try: pkg_configs = project.cxx_pkg_configs
+		except AttributeError: pkg_configs = project.cxx_pkg_configs = {}
+		key = '--cflags ' + ' '.join(pkgs)
+		try: task = pkg_configs[key]
+		except KeyError: task = pkg_configs[key] = class_(project, pkgs)
+		return task
+
 	@property
 	def what_desc(self): return 'cxx flags'
 	
@@ -948,6 +973,15 @@ class _PkgConfigCxxFlagsTask(_PkgConfigFlagsTask):
 	def apply_to(self, cfg): cfg.cxx_flags += self.result
 
 class _PkgConfigLdFlagsTask(_PkgConfigFlagsTask):
+	@classmethod
+	def shared(class_, project, pkgs, shared):
+		try: pkg_configs = project.cxx_pkg_configs
+		except AttributeError: pkg_configs = project.cxx_pkg_configs = {}
+		key = '--libs' + (shared and ' ' or '--static ') + ' '.join(pkgs)
+		try: task = pkg_configs[key]
+		except KeyError: task = pkg_configs[key] = class_(project, pkgs, shared)
+		return task
+
 	def __init__(self, project, pkgs, shared):
 		_PkgConfigFlagsTask.__init__(self, project, pkgs)
 		self.shared = shared

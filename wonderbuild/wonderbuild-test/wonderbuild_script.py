@@ -16,9 +16,9 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.std_checks import StdMathCheckTask
 		from wonderbuild.install import InstallTask
 	
-		glibmm = PkgConfigCheckTask(self.project, ['glibmm-2.4 >= 2.4'])
+		glibmm = PkgConfigCheckTask.shared(self.project, ['glibmm-2.4 >= 2.4'])
 
-		build_cfg = UserBuildCfg(self.project)
+		build_cfg = UserBuildCfg.new_or_clone(self.project)
 
 		build_cfg.include_paths.append(src_dir)
 
