@@ -73,7 +73,7 @@ class Project(Task):
 	def __call__(self, sched_context):
 		self.sched_context = sched_context
 
-	def deferred_script_task(self, script):
+	def _script_loader_task(self, script):
 		try: script_tasks = self.script_tasks
 		except AttributeError: script_tasks = self.script_tasks = {}
 		else:
@@ -84,7 +84,7 @@ class Project(Task):
 		return script_task
 	
 	def script_task(self, *scripts):
-		script_tasks = [self.deferred_script_task(script) for script in scripts]
+		script_tasks = [self._script_loader_task(script) for script in scripts]
 		self.sched_context.parallel_wait(*script_tasks)
 		if len(scripts) == 1: return script_tasks[0].task
 		else: return (script_task.task for script_task in script_tasks)

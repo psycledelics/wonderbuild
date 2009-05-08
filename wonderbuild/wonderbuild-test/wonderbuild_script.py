@@ -61,7 +61,7 @@ class Wonderbuild(ScriptTask):
 				pch.lib_task.apply_to(self.cfg)
 				if std_math_check.result: std_math_check.apply_to(self.cfg)
 				if glibmm.result: glibmm.apply_to(self.cfg)
-				for s in (src_dir / 'foo').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
+				for s in (src_dir / 'foo').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 				ModTask.__call__(self, sched_ctx)
 				sched_ctx.wait(install)
 
@@ -74,11 +74,11 @@ class Wonderbuild(ScriptTask):
 					try: return self._sources
 					except AttributeError:
 						self._sources = []
-						for s in (self.trim_prefix / 'foo').find_iter(in_pats = ['*.hpp'], ex_pats = ['*.private.hpp'], prune_pats = ['todo']): self._sources.append(s)
+						for s in (self.trim_prefix / 'foo').find_iter(in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)): self._sources.append(s)
 						return self._sources
 		
 				@property
-				def dest_dir(self): return build_cfg.fhs.include
+				def dest_dir(self): return self.fhs.include
 		lib_foo = LibFoo()
 	
 		class MainProg(ModTask):

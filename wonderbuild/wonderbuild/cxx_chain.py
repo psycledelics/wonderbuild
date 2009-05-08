@@ -39,6 +39,17 @@ class ClientCfg(object):
 		c.ld_flags += self.ld_flags
 		c.pkg_config += self.pkg_config
 		return c
+	
+	def apply_to(self, cfg):
+		cfg.defines.update(self.defines)
+		cfg.include_paths.extend(self.include_paths)
+		cfg.cxx_flags += self.cxx_flags
+		cfg.lib_paths.extend(self.lib_paths)
+		cfg.libs += self.libs
+		cfg.static_libs += self.static_libs
+		cfg.shared_libs += self.shared_libs
+		cfg.ld_flags += self.ld_flags
+		cfg.pkg_config += self.pkg_config
 		
 class BuildCfg(ClientCfg):
 	def __init__(self, project):
@@ -669,7 +680,6 @@ class ModTask(ProjectTask):
 			if self.ld:
 				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask(self.project, self.cfg.pkg_config, self.cfg.shared or not self.cfg.static_prog)
 				sched_context.parallel_no_wait(pkg_config_ld_flags_task)
-		changed_sources = []
 		try: state = self.persistent
 		except KeyError:
 			if __debug__ and is_debug: debug('task: no state: ' + str(self))
@@ -683,6 +693,7 @@ class ModTask(ProjectTask):
 				if __debug__ and is_debug: debug('task: cxx sig changed: ' + str(self))
 				changed_sources = self.sources
 			else:
+				changed_sources = []
 				implicit_deps = state[3]
 				for s in self.sources:
 					try: deps, old_dep_sig = implicit_deps[s] # TODO also put self.cfg.cxx_sig, and -include in implicit_deps
@@ -731,7 +742,7 @@ class ModTask(ProjectTask):
 		elif self.cfg.check_missing:
 			for t in self.targets:
 				if not t.exists:
-					if __debug__ and is_debug: debug('task: target missing: ' + str(self))
+					if __debug__ and is_debug: debug('task: target missing: ' + str(t))
 					changed_sources = self.sources
 					need_process = True
 					break
@@ -759,6 +770,11 @@ class ModTask(ProjectTask):
 						if __debug__ and is_debug: debug('task: in lib task changed: ' + str(self) + ' ' + str(t))
 						break
 		if not need_process:
+			implicit_deps = state[3]
+			if len(implicit_deps) > len(self.sources):
+				# some source has been removed from the list of sources to build
+				need_process = True
+		if not need_process:
 			if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 		else:
 			self.target_dir.make_dir()
@@ -777,15 +793,22 @@ class ModTask(ProjectTask):
 					else: desc = 'linking shared lib'; color = '1;7;33'
 					self.print_desc(desc + ' ' + str(self), color)
 				if self.ld: sources = self.sources
-				else: sources = changed_sources
-				self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources])
-				implicit_deps = self.persistent[3]
+				elif len(changed_sources) != 0: sources = changed_sources
+				else: sources = None
+				if sources is not None: self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources])
+				implicit_deps = state[3]
 				if len(implicit_deps) > len(self.sources):
 					# remove old sources from implicit deps dictionary
-					sources_states = {}
-					for s in self.sources: sources_states[s] = implicit_deps[s]
-				else: sources_states = implicit_deps
-				self.persistent = self._mod_sig, self.ld, self.cfg.cxx_sig, sources_states # TODO move cxx_sig into obj sig
+					source_states = {}
+					for s in self.sources: source_states[s] = implicit_deps[s]
+					if not self.ld:
+						# remove old objects from static archive
+						removed_obj_names = []
+						for s in implicit_deps:
+							if not s in self.sources: removed_obj_names.append(self._obj_name(s))
+						self.cfg.impl.remove_objects_from_archive(self, removed_obj_names)
+				else: source_states = implicit_deps
+				self.persistent = self._mod_sig, self.ld, self.cfg.cxx_sig, source_states # TODO move cxx_sig into obj sig
 			finally: sched_context.lock.acquire()
 		if not self.cfg.check_missing: self.obj_dir.forget()
 		self._needed_process = need_process

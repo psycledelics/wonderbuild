@@ -188,11 +188,23 @@ class Impl(object):
 			args += obj_paths
 			r = exec_subprocess(args)
 			if r != 0: raise Exception, r
-			if ranlib_args is not None:
+			if ranlib_args is not None: # 's' not in ar_args[1]
 				args = ranlib_args[:]
 				args.append(mod_task.target.path)
 				r = exec_subprocess(args)
 				if r != 0: raise Exception, r
+
+	@staticmethod
+	def remove_objects_from_archive(mod_task, obj_names):
+		ar_args, ranlib_args = mod_task.cfg.ar_ranlib_args
+		args = [ar_args[0], ranlib_args is None and 'ds' or 'd', mod_task.target.name] + obj_names
+		r = exec_subprocess(args, cwd = mod_task.target_dir.path)
+		if r != 0: raise Exception, r
+		if ranlib_args is not None: # 's' not in ar_args[1]
+			args = ranlib_args[:]
+			args.append(mod_task.target.path)
+			r = exec_subprocess(args)
+			if r != 0: raise Exception, r
 
 	@staticmethod
 	def mod_task_targets(mod_task): return (mod_task.target,)

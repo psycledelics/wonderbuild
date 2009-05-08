@@ -160,6 +160,10 @@ class Impl(object):
 		# no ranlib with msvc
 
 	@staticmethod
+	def remove_objects_from_archive(mod_task, obj_names):
+		pass # TODO
+
+	@staticmethod
 	def mod_task_targets(mod_task):
 		if mod_task.kind == mod_task.Kinds.PROG or not mod_task.ld: return (mod_task.target,)
 		else:
