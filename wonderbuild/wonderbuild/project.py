@@ -70,25 +70,8 @@ class Project(Task):
 		self.top_src_dir = self.fs.cur / src_path
 		self.bld_dir = self.fs.cur / bld_path
 
-	def __call__(self, sched_context):
-		self.sched_context = sched_context
+	def __call__(self, sched_context): self.sched_context = sched_context
 
-	def _script_loader_task(self, script):
-		try: script_tasks = self.script_tasks
-		except AttributeError: script_tasks = self.script_tasks = {}
-		else:
-			try: script_task = script_tasks[script]
-			except KeyError: pass
-			else: return script_task
-		script_task = script_tasks[script] = ScriptLoaderTask(self, script)
-		return script_task
-	
-	def script_task(self, *scripts):
-		script_tasks = [self._script_loader_task(script) for script in scripts]
-		self.sched_context.parallel_wait(*script_tasks)
-		if len(scripts) == 1: return script_tasks[0].task
-		else: return (script_task.task for script_task in script_tasks)
-		
 	def add_task_aliases(self, task, *aliases):
 		if self.processsing: return # no need to add aliases during processing
 		if len(aliases) == 0: aliases = (None,)

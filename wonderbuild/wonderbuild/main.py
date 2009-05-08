@@ -57,10 +57,10 @@ else:
 			def __call__(self, sched_context):
 				sched_context.parallel_wait(self.project)
 				
-				from wonderbuild.script import default_script_file
+				from wonderbuild.script import ScriptTask, default_script_file
 				script = self.project.top_src_dir / default_script_file
 				if script.exists:
-					script_tasks = (self.project.script_task(script),)
+					script_tasks = (ScriptTask.shared(self.project, script),)
 					usage_error = False
 				else:
 					option_collector.consolidate_known_options()

@@ -7,6 +7,17 @@ from task import ProjectTask
 default_script_file = 'wonderbuild_script.py'
 
 class ScriptLoaderTask(ProjectTask):
+	@staticmethod
+	def shared(project, script):
+		try: script_tasks = project.script_tasks
+		except AttributeError: script_tasks = project.script_tasks = {}
+		else:
+			try: script_task = script_tasks[script]
+			except KeyError: pass
+			else: return script_task
+		script_task = script_tasks[script] = ScriptLoaderTask(project, script)
+		return script_task
+
 	def __init__(self, project, script):
 		ProjectTask.__init__(self, project)
 		if script.is_dir: script = script / default_script_file
@@ -21,8 +32,16 @@ class ScriptLoaderTask(ProjectTask):
 		sched_context.parallel_wait(self.task)
 
 class ScriptTask(ProjectTask):
+	@staticmethod	
+	def shared(project, *scripts):
+		script_tasks = [ScriptLoaderTask.shared(project, script) for script in scripts]
+		project.sched_context.parallel_wait(*script_tasks)
+		if len(scripts) == 1: return script_tasks[0].task
+		else: return (script_task.task for script_task in script_tasks)
+
 	def __init__(self, project, src_dir):
 		ProjectTask.__init__(self, project)
 		self.src_dir = src_dir
 
 	def __str__(self): return str(self.__class__) + ' in src dir ' + str(self.src_dir)
+
