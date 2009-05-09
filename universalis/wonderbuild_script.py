@@ -18,13 +18,13 @@ class Wonderbuild(ScriptTask):
 
 		build_cfg = UserBuildCfg.new_or_clone(project)
 
-		build_cfg.include_paths.append(src_dir)
-
 		check_cfg = build_cfg.clone()
 		std_math_check = StdMathCheckTask(check_cfg)
 		boost_check = BoostCheckTask(103300, ['signals', 'thread', 'filesystem'], check_cfg)
 
 		diversalis = ScriptTask.shared(project, src_dir.parent.parent / 'diversalis')
+
+		build_cfg.include_paths.append(src_dir)
 		
 		class Universalis(ModTask):
 			def __init__(self): ModTask.__init__(self, 'universalis', ModTask.Kinds.LIB, build_cfg)
