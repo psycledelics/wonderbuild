@@ -40,7 +40,15 @@ class FileSystem(object):
 		self.cur._is_dir = True
 		self.cur._exists = True
 	
-ignore = set(['.svn'])
+ignore = set(['.git', '.bzr', '.hg', '_MTN', '_darcs', '.svn'])
+if False: # old stuff not widely used anymore, so it's not enabled by default
+	ignore.add('{arch}')
+	ignore.add('.arch-ids')
+	ignore.add('CVS')
+	ignore.add('RCS')
+	ignore.add('SCCS')
+if False: # TODO ignoring backup files needs patterns
+	ignore_pats = set(['*~', '#*#'])
 
 if __debug__ and is_debug: all_abs_paths = set()
 
