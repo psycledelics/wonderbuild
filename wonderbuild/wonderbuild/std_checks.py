@@ -162,9 +162,9 @@ class BoostCheckTask(BuildCheckTask):
 		self._libraries = libraries
 
 	def apply_to(self, cfg):
-		cfg.includes.append(self.include_path)
-		cfg.lib_path.append(self.lib_path)
-		cfg.libs.append(self.libs)
+		if self.include_path is not None: cfg.include_paths.append(self.include_path)
+		if self.lib_path is not None: cfg.lib_path.append(self.lib_path)
+		cfg.libs.extend(self.libs)
 
 	def __call__(self, sched_ctx):
 		source_texts = {}
@@ -266,16 +266,16 @@ class BoostCheckTask(BuildCheckTask):
 				void wave() { /* todo do something with it for a complete check */ }
 			""" + auto_link('wave', dynamic = False)
 
-		cxx_compiler_paths = []
+		include_path = None
 		libraries = self._libraries[:]
 
-		if self.project.platform == 'posix':
+		if True: # posix
 			for library in self._libraries:
 				library_select = library + '-mt'
 				source_texts[library_select] = source_texts[library]
 				libraries.remove(library)
 				libraries.append(library_select)
-		elif self.project.platform == 'cygwin': # todo and no -mno-cygwin passed to the compiler
+		elif False: # cygwin
 			# damn cygwin installs boost headers in e.g. /usr/include/boost-1_33_1/ and doesn't give symlinks for library files
 			import os
 			dir = self.project.fs.root / 'usr' / 'include'
@@ -304,10 +304,13 @@ class BoostCheckTask(BuildCheckTask):
 						libraries.remove(library)
 						libraries.append(library_select)
 
+		lib_path = None
 		link_libraries = libraries
 		
+		outer = self
+		
 	 	class AutoLinkSupportCheckTask(BuildCheckTask):
-	 		def __init__(self): BuildCheckTask.__init__(self, 'auto-link', base_cfg)
+	 		def __init__(self): BuildCheckTask.__init__(self, 'auto-link', outer.base_cfg)
 	 		
 	 		@property
 	 		def source_text(self):
@@ -327,6 +330,7 @@ class BoostCheckTask(BuildCheckTask):
 								#error no auto link
 							#endif
 						"""
+					return self._source_text
 						
 		auto_link_support_check_taks = AutoLinkSupportCheckTask()
 		sched_ctx.parallel_wait(auto_link_support_check_taks)
@@ -335,33 +339,36 @@ class BoostCheckTask(BuildCheckTask):
 		cfg_link_libraries = ['boost_' + library for library in link_libraries]
 
 		class AllInOneCheckTask(BuildCheckTask):
-			def __init__(self): BuildCheckTask.__init__(self, 'boost ' + ' '.join(link_libraries) + ' >= ' + self._version_wanted, base_cfg)
+			def __init__(self): BuildCheckTask.__init__(self, 'boost ' + ' '.join(link_libraries) + ' >= ' + outer._version_wanted, outer.base_cfg)
 			
 	 		@property
 	 		def source_text(self):
 	 			try: return self._source_text
 	 			except AttributeError:
 	 				self._source_text = source_texts['version'] + '\n' + '\n'.join([source_texts[library] for library in link_libraries])
+	 				return self._source_text
 	 		
 	 		def __call__(self, sched_ctx):
-	 			cfg.include_path.append(include_path)
-	 			cfg.libs += cfg_link_libraries
+	 			if include_path is not None: self.cfg.include_paths.append(include_path)
+	 			self.cfg.libs += cfg_link_libraries
 	 			BuildCheckTask.__call__(self, sched_ctx)			
 
 		all_in_one = AllInOneCheckTask()
 		sched_ctx.parallel_wait(all_in_one)
 		if all_in_one.result:
-			self.result = True
+			self._result = True
 			self.include_path = include_path
+			self.lib_path = lib_path
 			self.libs = cfg_link_libraries
-		elif self.project.platform == 'posix':
+		elif True: # posix
 			link_libraries = self._libraries
 			cfg_link_libraries = ['boost_' + library for library in link_libraries]
 			all_in_one = AllInOneCheckTask()
 			sched_ctx.parallel_wait(all_in_one)
 			if all_in_one.result:
-				self.result = True
+				self._result = True
 				self.include_path = include_path
+				self.lib_path = lib_path
 				self.libs = cfg_link_libraries
-			else: self.result = False
-		else: self.result = False
+			else: self._result = False
+		else: self._result = False

@@ -126,6 +126,8 @@ class Scheduler(object):
 		assert not task._processed
 		if __debug__ and is_debug: debug('sched: processing task: ' + str(task))
 		task(self._context)
+		#try: task(self._context)
+		#except Exception, e: raise Exception, '\nin task: ' + str(task) + ': ' + str(e)
 		if __debug__ and is_debug: debug('sched: task processed: ' + str(task))
 		task._processed = True
 		self._todo_count -= 1
