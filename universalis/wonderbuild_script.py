@@ -11,7 +11,7 @@ class Wonderbuild(ScriptTask):
 		src_dir = self.src_dir / 'src'
 		
 		from wonderbuild.cxx_chain import UserBuildCfg, PkgConfigCheckTask, ModTask
-		from wonderbuild.std_checks import StdMathCheckTask
+		from wonderbuild.std_checks import StdMathCheckTask, BoostCheckTask
 		from wonderbuild.install import InstallTask
 		
 		glibmm = PkgConfigCheckTask.shared(self.project, ['glibmm-2.4 >= 2.4'])
@@ -22,6 +22,7 @@ class Wonderbuild(ScriptTask):
 
 		check_cfg = build_cfg.clone()
 		std_math_check = StdMathCheckTask(check_cfg)
+		boost_check = BoostCheckTask(103300, ['signals', 'thread', 'filesystem'], check_cfg)
 
 		diversalis = ScriptTask.shared(project, src_dir.parent.parent / 'diversalis')
 		
@@ -31,8 +32,9 @@ class Wonderbuild(ScriptTask):
 			def __call__(self, sched_ctx):
 				install = Universalis.Install(self.project)
 				sched_ctx.parallel_no_wait(install)
-				sched_ctx.parallel_wait(glibmm, std_math_check)
+				sched_ctx.parallel_wait(glibmm, std_math_check, boost_check)
 				if std_math_check.result: std_math_check.apply_to(self.cfg)
+				if boost_check.result: boost_check.apply_to(self.cfg)
 				if glibmm.result: glibmm.apply_to(self.cfg)
 				diversalis.client_cfg.apply_to(self.cfg)
 				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
