@@ -32,19 +32,22 @@ def build(bld):
 		if d.startswith('src-'): src_dirs.add(d)
 
 	for src in src_dirs:
-		bld.lib(
-			target = 'foo-' + src,
-			types = ['static', 'shared'],
-			sources = [src + '/foo'],
-			includes = [src]
-		)
-		bld.program(
-			target = 'main-' + src,
-			types = ['static', 'shared'],
-			sources = [src + '/main'],
-			includes = [src],
-			uselib_local = ['foo-' + src]
-		)
+		for type in ('static', 'shared'):
+			bld.lib(
+				target = 'foo-' + src,
+				types = (type,),
+				sources = [src + '/foo'],
+				includes = [src],
+				defines = ['FOO=' + (type == 'shared' and '1' or '-1')]
+			)
+			bld.program(
+				target = 'main-' + src + '-' + type,
+				types = (type,),
+				sources = [src + '/main'],
+				includes = [src],
+				defines = ['FOO=' + (type == 'shared' and '0' or '-1')],
+				uselib_local = ['foo-' + src]
+			)
 		bld.install_headers(
 			includes = [src],
 			headers = [src + '/bar']
@@ -52,15 +55,15 @@ def build(bld):
 	
 def shutdown(): pass
 
-def program(bld, target, types = ['static', 'shared'], sources = None, includes = None, uselib_local = None, uselib = None):
-	module(bld, target, 'program', types, sources, includes, None, uselib_local)
+def program(bld, target, types = ('static', 'shared',), sources = None, includes = None, defines = None, uselib_local = None, uselib = None):
+	module(bld, target, 'program', types, sources, includes, None, defines, uselib_local)
 Build.BuildContext.program = program
 
-def lib(bld, target, types = ['static', 'shared'], sources = None, includes = None, headers = None, uselib_local = None, uselib = None):
-	module(bld, target, 'lib', types, sources, includes, headers, uselib_local)
+def lib(bld, target, types = ('static', 'shared'), sources = None, includes = None, headers = None, defines = None, uselib_local = None, uselib = None):
+	module(bld, target, 'lib', types, sources, includes, headers, defines, uselib_local)
 Build.BuildContext.lib = lib
 
-def module(bld, target, kind, types = ['static', 'shared'], sources = None, includes = None, headers = None, uselib_local = None, uselib = None):
+def module(bld, target, kind, types = ('static', 'shared'), sources = None, includes = None, headers = None, defines = None, uselib_local = None, uselib = None):
 	for type in types:
 		if kind == 'program':
 			obj = bld.new_task_gen('cxx', 'program')
@@ -80,6 +83,7 @@ def module(bld, target, kind, types = ['static', 'shared'], sources = None, incl
 				for f in node.find_iter(in_pat = ['*.cpp']): obj.source.append(f.relpath_gen(bld.path))
 			else: obj.source.append(s)
 		obj.includes = includes
+		if defines is not None: obj.defines = defines
 		if type != 'static': obj.rpath = '\\$ORIGIN:\\$ORIGIN/../lib'
 		if uselib_local: obj.uselib_local = [u + '-' + type for u in uselib_local]
 		if uselib: obj.uselib = [u + '-' + type for u in uselib]
