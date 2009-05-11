@@ -794,17 +794,6 @@ class ModTask(ProjectTask):
 			if self.kind != ModTask.Kinds.PROG and self.target_dir is not self.target_dev_dir: self.target_dev_dir.make_dir()
 			sched_context.lock.release()
 			try:
-				if not silent:
-					if not self.ld: desc = 'archiving and indexing static lib'; color = '7;36'
-					elif self.kind == ModTask.Kinds.PROG:
-						if self.cfg.pic: pic = 'pic'; color = '1;7'
-						else: pic = 'non-pic'; color = '7'
-						if self.cfg.static_prog: shared = 'static'; color += ';37;40'
-						else: shared = 'dynamic'; color += ';32'
-						desc = 'linking ' + shared + ' ' + pic + ' program'
-					elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = '1;7;34'
-					else: desc = 'linking shared lib'; color = '1;7;33'
-					self.print_desc(desc + ' ' + str(self), color)
 				implicit_deps = state[3]
 				if len(implicit_deps) == len(self.sources):
 					source_states = implicit_deps
@@ -821,6 +810,20 @@ class ModTask(ProjectTask):
 							if not s in self.sources: removed_obj_names.append(self._obj_name(s))
 				if self.ld: sources = self.sources
 				else: sources = changed_sources
+				if not silent:
+					if not self.ld: desc = 'archiving and indexing static lib'; color = '7;36'#'37;46'
+					elif self.kind == ModTask.Kinds.PROG:
+						if self.cfg.pic: pic = 'pic'; color = '1;7'
+						else: pic = 'non-pic'; color = '7'
+						if self.cfg.static_prog: shared = 'static'; color += ';37;40'
+						else: shared = 'dynamic'; color += ';32'
+						desc = 'linking ' + shared + ' ' + pic + ' program'
+					elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = '1;7;34'
+					else: desc = 'linking shared lib'; color = '1;7;33'
+					s = ['+' + self._obj_name(s) + '(' + str(s) + ')' for s in sources]
+					if removed_obj_names is not None: s += ['-' + o for o in removed_obj_names]
+					s.sort()
+					self.print_desc_multi_column_format(desc + ' ' + str(self) + ' from objects', s, color)
 				self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources], removed_obj_names)
 				self.persistent = self._mod_sig, self.ld, self.cfg.cxx_sig, source_states # TODO move cxx_sig into obj sig
 			finally: sched_context.lock.acquire()
