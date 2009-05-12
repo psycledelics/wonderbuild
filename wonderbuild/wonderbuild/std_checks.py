@@ -2,6 +2,8 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2006-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
+import sys
+
 from cxx_chain import BuildCheckTask
 from signature import Sig
 from logger import silent, is_debug, debug
@@ -269,40 +271,39 @@ class BoostCheckTask(BuildCheckTask):
 		include_path = None
 		libraries = self._libraries[:]
 
-		if True: # posix
+		if sys.platform == 'cygwin':
+			# damn cygwin installs boost headers in e.g. /usr/include/boost-1_33_1/ and doesn't give symlinks for library files
+			import os
+			dir = self.project.fs.root / 'usr' / 'include'
+			if dir.exists and dir.is_dir:
+				boost_dir = dir / 'boost'
+				if not boost_dir.exists or not boost_dir.is_dir:
+					for entry in dir.actual_children.itervalues():
+						if entry.name.startswith('boost-'):
+							if __debug__ and is_debug: debug('cfg: found boost headers in ' + str(entry))
+							# TODO better version comparion
+							if entry.name >= 'boost-' + self._version_wanted_major + '_' + self._version_wanted_minor + '_' + self._version_wanted_patch:
+								if __debug__ and is_debug: debug('cfg: selecting boost headers in ' + str(entry))
+								include_path = entry
+								break
+			dir = self.project.fs.root / 'usr' / 'lib'
+			if dir.exists and dir.is_dir:
+				children = dir.actual_children
+				libraries = self._libraries[:]
+				for library in self._libraries:
+					library_select = library + '-gcc-mt' # TODO the version could even differ from the headers we selected above
+					library_search = 'libboost_' + library_select + '.a'
+					if library_search in children:
+						if __debug__ and is_debug: debug('cfg: selecting boost library ' + library_select + ' as name ' + library + ' (found ' + str(library_search) + ')')
+						source_texts[library_select] = source_texts[library]
+						libraries.remove(library)
+						libraries.append(library_select)
+		else:
 			for library in self._libraries:
 				library_select = library + '-mt'
 				source_texts[library_select] = source_texts[library]
 				libraries.remove(library)
 				libraries.append(library_select)
-		elif False: # cygwin
-			# damn cygwin installs boost headers in e.g. /usr/include/boost-1_33_1/ and doesn't give symlinks for library files
-			import os
-			dir = self.project.fs.root / 'usr' / 'include'
-			if dir.is_dir:
-				boost_dir = dir / 'boost'
-				if not boost_dir.is_dir:
-					for entry in dir.actual_children:
-						if entry.startswith('boost-'):
-							path = dir / entry
-							if __debug__ and is_debug: debug('cfg: found boost headers in ' + str(path))
-							# TODO better version comparion
-							if entry >= 'boost-' + self._version_wanted_major + '_' + self._version_wanted_minor + '_' + self._version_wanted_patch:
-								if __debug__ and is_debug: debug('cfg: selecting boost headers in ' + str(path))
-								include_path = path
-								break
-			dir = self.project.fs.root / 'usr' / 'lib'
-			if dir.is_dir:
-				children = dir.actual_children
-				libraries = self._libraries[:]
-				for library in self._libraries:
-					library_select = library + '-gcc-mt-s' # in e.g. cygwin, always static :-(. todo the version could even differ from the headers we selected above
-					library_search = 'libboost_' + library_select + '.a' # in e.g. cygwin, always static :-( but if there's also a .dll.a, the linker will still pick it :)
-					if library_search in children:
-						if __debug__ and is_debug: debug('cfg: selecting boost library ' + library_select + ' as name ' + library + ' (found ' + os.path.join(dir, library_search) + ')')
-						source_texts[library_select] = source_texts[library]
-						libraries.remove(library)
-						libraries.append(library_select)
 
 		lib_path = None
 		link_libraries = libraries
@@ -360,7 +361,7 @@ class BoostCheckTask(BuildCheckTask):
 			self.include_path = include_path
 			self.lib_path = lib_path
 			self.libs = cfg_link_libraries
-		elif True: # posix
+		elif True: # posix?
 			link_libraries = self._libraries
 			cfg_link_libraries = ['boost_' + library for library in link_libraries]
 			all_in_one = AllInOneCheckTask()

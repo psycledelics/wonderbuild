@@ -600,6 +600,9 @@ class BatchCompileTask(ProjectTask):
 					finally: f.close()
 				self._actual_sources.append(node)
 			self.cfg.impl.process_cxx_task(self, sched_context.lock)
+			# TODO If the compilation fails, compare each object timestamp with its source timestamp
+			# to determine which ones were compiled successfully,
+			# so that they are not rebuilt the next time.
 		finally: sched_context.lock.acquire()
 
 class ModTask(ProjectTask):
