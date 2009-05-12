@@ -34,7 +34,9 @@ class Wonderbuild(ScriptTask):
 				sched_ctx.parallel_no_wait(install)
 				sched_ctx.parallel_wait(glibmm, std_math_check, boost_check)
 				if std_math_check.result: std_math_check.apply_to(self.cfg)
+				else: raise Exception, 'need std math'
 				if boost_check.result: boost_check.apply_to(self.cfg)
+				else: raise Exception, 'need boost'
 				if glibmm.result: glibmm.apply_to(self.cfg)
 				diversalis.client_cfg.apply_to(self.cfg)
 				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
