@@ -19,7 +19,7 @@ def configure(conf):
 def build(bld):
 
 	#for f in bld.srcnode.find_iter(in_pat = '*', dir=True): print str(f)
-	for f in bld.srcnode.ant_glob('**/foo/*', src=False, bld=False, dir=True, flat=False): print str(f)
+	#for f in bld.srcnode.ant_glob('**', src=False, bld=False, dir=True, flat=False): print str(f)
 	
 	#for f in bld.srcnode.find_iter(in_pat = '*.cpp', dir=True): print str(f)
 	#for f in bld.srcnode.ant_glob('**/*.cpp', dir=True, flat=False): print str(f)
