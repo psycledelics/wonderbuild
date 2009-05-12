@@ -37,7 +37,7 @@ def format(list, max_width):
 	# find maximum allowed columns
 	cols = max_cols
 	while 1 < cols:
-		if col_infos[cols -1].valid_len: break
+		if col_infos[cols - 1].valid_len: break
 		cols -= 1
 	#print cols
 
