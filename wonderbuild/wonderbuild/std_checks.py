@@ -153,7 +153,7 @@ class DlfcnCheckTask(BuildCheckTask):
 
 class BoostCheckTask(BuildCheckTask):
 	def __init__(self, version_wanted_raw, libraries, base_cfg):
-	 	BuildCheckTask.__init__(self, 'boost' + ' '.join(libraries), base_cfg)
+		BuildCheckTask.__init__(self, 'boost' + ' '.join(libraries), base_cfg)
 		self._version_wanted_raw = version_wanted_raw
 		self._version_wanted_major = str(version_wanted_raw / 100000)
 		self._version_wanted_minor = str(version_wanted_raw / 100 % 1000)
@@ -309,14 +309,14 @@ class BoostCheckTask(BuildCheckTask):
 		
 		outer = self
 		
-	 	class AutoLinkSupportCheckTask(BuildCheckTask):
-	 		def __init__(self): BuildCheckTask.__init__(self, 'auto-link', outer.base_cfg)
-	 		
-	 		@property
-	 		def source_text(self):
-	 			try: return self._source_text
-	 			except AttributeError:
-	 				self._source_text = \
+		class AutoLinkSupportCheckTask(BuildCheckTask):
+			def __init__(self): BuildCheckTask.__init__(self, 'auto-link', outer.base_cfg)
+		
+			@property
+			def source_text(self):
+				try: return self._source_text
+				except AttributeError:
+					self._source_text = \
 						"""
 							// text below copied from <boost/config/auto_link.hpp>
 							#include <boost/config.hpp>
@@ -339,19 +339,19 @@ class BoostCheckTask(BuildCheckTask):
 		cfg_link_libraries = ['boost_' + library for library in link_libraries]
 
 		class AllInOneCheckTask(BuildCheckTask):
-			def __init__(self): BuildCheckTask.__init__(self, 'boost ' + ' '.join(link_libraries) + ' >= ' + outer._version_wanted, outer.base_cfg)
+			def __init__(self): BuildCheckTask.__init__(self, 'boost,' + ','.join(link_libraries) + ',' + outer._version_wanted, outer.base_cfg)
 			
-	 		@property
-	 		def source_text(self):
-	 			try: return self._source_text
-	 			except AttributeError:
-	 				self._source_text = source_texts['version'] + '\n' + '\n'.join([source_texts[library] for library in link_libraries])
-	 				return self._source_text
-	 		
-	 		def __call__(self, sched_ctx):
-	 			if include_path is not None: self.cfg.include_paths.append(include_path)
-	 			self.cfg.libs += cfg_link_libraries
-	 			BuildCheckTask.__call__(self, sched_ctx)			
+			@property
+			def source_text(self):
+				try: return self._source_text
+				except AttributeError:
+					self._source_text = source_texts['version'] + '\n' + '\n'.join([source_texts[library] for library in link_libraries])
+					return self._source_text
+			
+			def __call__(self, sched_ctx):
+				if include_path is not None: self.cfg.include_paths.append(include_path)
+				self.cfg.libs += cfg_link_libraries
+				BuildCheckTask.__call__(self, sched_ctx)			
 
 		all_in_one = AllInOneCheckTask()
 		sched_ctx.parallel_wait(all_in_one)
