@@ -1,21 +1,24 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2009-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+#
+# based on the 'ls' directory listing program for GNU:
+#   http://www.gnu.org/software/coreutils
+#   http://git.savannah.gnu.org/cgit/coreutils.git/tree/src/ls.c
+#   copyright 1985, 1988, 1990, 1991, 1995-2009 Free Software Foundation, Inc.
 
 def format(list, max_width):
 	min_col_width = 3
 	list_len = len(list)
 	max_cols = min(max(1, max_width / min_col_width), list_len)
 
-	class ColInfo(object): pass
+	class ColInfo(object):
+		def __init__(self, i):
+			self.valid_len = True
+			self.line_len = i * min_col_width
+			self.col_arr = [min_col_width] * i
 	col_infos = []
-	for i in xrange(max_cols):
-		col_info = ColInfo()
-		col_infos.append(col_info)
-		col_info.valid_len = True;
-		col_info.line_len = (i + 1) * min_col_width
-		col_info.col_arr = []
-		for j in xrange(i + 1): col_info.col_arr.append(min_col_width)
+	for i in xrange(max_cols): col_infos.append(ColInfo(i + 1))
 
 	# compute the maximum number of possible columns
 	for f in xrange(list_len):
