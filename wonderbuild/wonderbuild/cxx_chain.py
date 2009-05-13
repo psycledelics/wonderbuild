@@ -323,11 +323,11 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 				self.ar_prog, self.ranlib_prog
 
 		elif self.kind == 'gcc':
-			import gcc
-			self.impl = gcc.Impl()
+			from cxx_chain_gcc_impl import Impl
+			self.impl = Impl()
 		elif self.kind == 'msvc':
-			import msvc
-			self.impl = msvc.Impl(self.project.persistent)
+			from cxx_chain_msvc_impl import Impl
+			self.impl = Impl(self.project.persistent)
 
 		if self.impl is None: raise Exception, 'unsupported c++ compiler'
 
