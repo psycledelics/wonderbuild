@@ -610,7 +610,7 @@ class BatchCompileTask(ProjectTask):
 class ModTask(ProjectTask):
 	class Kinds(object):
 		PROG = 0
-		LIB = 1
+		LIB = 1 # TODO allow the developer to specify that a lib is not dll-aware
 		LOADABLE = 2
 
 	def __init__(self, name, kind, base_cfg, *aliases):

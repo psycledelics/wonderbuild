@@ -190,6 +190,10 @@ class Impl(object):
 		if mod_task.ld:
 			args = mod_task.cfg.ld_args
 			args = [args[0], '-o' + mod_task.target.path] + obj_paths + args[1:]
+			if mod_task.cfg.target_platform_binary_format_is_pe:
+				args.append('-Wl,--enable-auto-import') # supress informational messages
+				if False and mod_task.cfg.shared: # mingw doesn't need import libs
+					args.append('-Wl,--out-implib,' + (mod_task.cfg.fhs.lib / 'lib' + mod_task.target.name + '.dll.a').path)
 			r = exec_subprocess(args)
 			if r != 0: raise Exception, r
 		else:
@@ -216,7 +220,7 @@ class Impl(object):
 
 	@staticmethod
 	def mod_task_target_dev_dir(mod_task):
-		if mod_task.cfg.shared and mod_task.cfg.target_platform_binary_format_is_pe: return mod_task.cfg.fhs.bin
+		if mod_task.cfg.shared and mod_task.cfg.target_platform_binary_format_is_pe: return mod_task.cfg.fhs.bin # mingw doesn't need import libs
 		else: return mod_task.cfg.fhs.lib
 
 	@staticmethod
