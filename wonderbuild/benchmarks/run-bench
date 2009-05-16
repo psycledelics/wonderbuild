@@ -27,7 +27,7 @@ main() {
 			measure ../../wonderbuild.py --bld-dir=build-$tool --cxx=g++ --jobs=$jobs "$@"
 		;;
 	
-		waf-dev-null)
+		waf)
 			if ! test -d build-$tool
 			then
 				../../waf/waf-light configure
@@ -39,14 +39,6 @@ main() {
 			fi
 		;;
 
-		waf)
-			if ! test -d build-$tool
-			then
-				../../waf/waf-light configure
-			fi &&
-			measure ../../waf/waf-light --jobs=$jobs "$@"
-		;;
-	
 		scons)
 			SCONS_LIB_DIR=$(pwd)/../../scons/src/engine \
 				measure python ../../scons/src/script/scons.py --no-cache --jobs=$jobs "$@"
