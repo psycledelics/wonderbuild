@@ -54,6 +54,7 @@ class ClientCfg(object):
 class BuildCfg(ClientCfg):
 	def __init__(self, project):
 		ClientCfg.__init__(self, project)
+		self.lang = 'c++'
 		self.cxx_prog = None
 		self.pic = None
 		self.pch = None
@@ -76,6 +77,7 @@ class BuildCfg(ClientCfg):
 		c = ClientCfg.clone(self, class_)
 		try: c._target_platform_binary_format_is_pe = self._target_platform_binary_format_is_pe
 		except AttributeError: pass
+		c.lang = self.lang
 		c.cxx_prog = self.cxx_prog
 		c.pic = self.pic
 		c.pch = self.pch
@@ -420,7 +422,7 @@ class _PreCompileTask(ProjectTask):
 	def header(self):
 		try: return self._header
 		except AttributeError:
-			self._header = self.project.bld_dir / 'precompiled' / (self.name + '.private.hpp')
+			self._header = self.project.bld_dir / 'precompiled' / (self.name + '.private.hpp') # TODO .h for C
 			return self._header
 
 	@property

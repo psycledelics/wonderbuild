@@ -25,7 +25,8 @@ class Impl(object):
 		try: return self._common_env_sig
 		except AttributeError:
 			sig = Sig()
-			for name in ('LD_LIBRARY_PATH', 'GCC_EXEC_PREFIX', 'COMPILER_PATH'): # hpux SHLIB_PATH, aix LIBPATH, solaris LD_LIBRARY_PATH, macosx DYLD_LIBRARY_PATH
+			# linux/solaris LD_LIBRARY_PATH, macosx DYLD_LIBRARY_PATH, hpux SHLIB_PATH, aix LIBPATH
+			for name in ('LD_LIBRARY_PATH', 'DYLD_LIBRARY_PATH', 'SHLIB_PATH', 'LIBPATH', 'GCC_EXEC_PREFIX', 'COMPILER_PATH'):
 				e = os.environ.get(name, None)
 				if e is not None: sig.update(e)
 			sig = self._common_env_sig = sig.digest()
@@ -36,7 +37,7 @@ class Impl(object):
 		try: return self._cxx_env_sig
 		except AttributeError:
 			sig = Sig()
-			for name in ('CPATH', 'CPLUS_INCLUDE_PATH'):
+			for name in ('CPATH', 'CPLUS_INCLUDE_PATH'): # TODO C_INCLUDE_PATH for C
 				e = os.environ.get(name, None)
 				if e is not None: sig.update(e)
 			sig = self._cxx_env_sig = sig.digest()
@@ -78,6 +79,7 @@ class Impl(object):
 	def process_precompile_task(precompile_task, lock):
 		# some useful options: -Wmissing-include-dirs -Winvalid-pch -H -fpch-deps -Wp,-v
 		# to print the include search path: g++ -xc++ /dev/null -E -Wp,-v 2>&1 1>/dev/null | sed -e '/^[^ ]/d' -e 's,^ ,-I,'
+		# TODO -xc-header for C
 		args = precompile_task.cfg.cxx_args_cwd + ['-xc++-header', precompile_task.header.path, '-MD']
 		use_dir = False
 		if not use_dir:
@@ -242,5 +244,6 @@ class Impl(object):
 		cfg.shared = cfg.pic = False
 		if os.name != 'posix': o = (build_check_task.bld_dir / 'a').path
 		else: o = os.devnull
+		# TODO -xc for C
 		args = cfg.cxx_args_cwd + ['-xc++', '-', '-o', o] + cfg.ld_args[1:]
 		return exec_subprocess_pipe(args, input = build_check_task._prog_source_text, silent = True)

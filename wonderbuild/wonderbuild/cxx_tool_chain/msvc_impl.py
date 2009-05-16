@@ -201,7 +201,7 @@ class Impl(object):
 		cfg = build_check_task.cfg
 		cfg.shared = cfg.pic = False
 		cwd = build_check_task.bld_dir
-		i = cwd / 'a.cpp'
+		i = cwd / 'a.cpp' # TODO a.c for C
 		f = open(i.path, 'w')
 		try: f.write(build_check_task._prog_source_text)
 		finally: f.close()
