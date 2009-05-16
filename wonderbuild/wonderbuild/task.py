@@ -57,6 +57,8 @@ class CheckTask(ProjectTask):
 
 	def do_check_and_set_result(self, sched_context): raise Exception, str(self.__class__) + ' did not redefine the method.'
 
+	def __str__(self): return self.desc
+	
 	@property
 	def result_display(self):
 		if self.result: return 'yes', '32'
@@ -78,6 +80,8 @@ class CheckTask(ProjectTask):
 	@property
 	def result(self): return self.results
 
-	def _get_results(self): return self._results
+	def _get_results(self):
+		try: return self._results
+		except AttributeError: raise Exception, 'did you forget to process the ' + str(self) + ' task?'
 	def _set_results(self, value): self._results = value
-	results = property(_get_results, _set_results)	
+	results = property(_get_results, _set_results)

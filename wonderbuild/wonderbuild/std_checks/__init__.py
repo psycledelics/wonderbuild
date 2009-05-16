@@ -2,11 +2,7 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2006-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import sys, os
-
 from wonderbuild.cxx_tool_chain import BuildCheckTask
-from wonderbuild.signature import Sig
-from wonderbuild.logger import silent, is_debug, debug
 
 # gcc -E -dM -std=c++98 -x c++-header /dev/null | sort
 
@@ -85,15 +81,7 @@ class AutoLinkSupportCheckTask(BuildCheckTask):
 				"""
 			return self._source_text
 
-class ThreadSupportCheckTask(BuildCheckTask):
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'thread-support', base_cfg)
-
-	def apply_to(self, cfg):
-		pass # TODO
-
-	def __call__(self, sched_ctx):
-		pass # TODO
-
+from pthread import PThreadCheckTask
 from std_math import StdMathCheckTask
 from dlfcn import DlfcnCheckTask
 from boost import BoostCheckTask
