@@ -32,7 +32,11 @@ main() {
 			then
 				../../waf/waf-light configure
 			fi &&
-			measure ../../waf/waf-light --jobs=$jobs "$@"
+			# waf lacks a silent option!
+			if test -x ../../waf/waf-light.dev-null
+			then measure ../../waf/waf-light.dev-null --jobs=$jobs "$@"
+			else measure ../../waf/waf-light --jobs=$jobs "$@"
+			fi
 		;;
 	
 		scons)
