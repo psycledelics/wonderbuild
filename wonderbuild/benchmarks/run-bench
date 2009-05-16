@@ -27,7 +27,7 @@ main() {
 			measure ../../wonderbuild.py --bld-dir=build-$tool --cxx=g++ --jobs=$jobs "$@"
 		;;
 	
-		waf)
+		waf-dev-null)
 			if ! test -d build-$tool
 			then
 				../../waf/waf-light configure
@@ -37,6 +37,14 @@ main() {
 			then measure ../../waf/waf-light.dev-null --jobs=$jobs "$@"
 			else measure ../../waf/waf-light --jobs=$jobs "$@"
 			fi
+		;;
+
+		waf)
+			if ! test -d build-$tool
+			then
+				../../waf/waf-light configure
+			fi &&
+			measure ../../waf/waf-light --jobs=$jobs "$@"
 		;;
 	
 		scons)
