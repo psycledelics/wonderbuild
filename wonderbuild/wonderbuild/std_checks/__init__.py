@@ -22,16 +22,6 @@ class BinaryFormatElfCheckTask(BuildCheckTask):
 		'	#error the target platform binary format is not elf\n' \
 		'#endif'
 
-	@property
-	def sig(self):
-		try: return self._sig
-		except AttributeError:
-			sig = Sig(self.source_text)
-			sig.update(self.base_cfg.cxx_sig)
-			sig.update(self.base_cfg.ld_sig)
-			sig = self._sig = sig.digest()
-			return sig
-
 class BinaryFormatPeCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared(base_cfg):
@@ -44,7 +34,7 @@ class BinaryFormatPeCheckTask(BuildCheckTask):
 
 	@property
 	def source_text(self): return \
-		'#if !defined _WIN64 && !defined _WIN32 && !defined __CYGWIN__\n' \
+		'#if !defined _WIN32 && !defined __CYGWIN__\n' \
 		'	#error the target platform binary format is not pe\n' \
 		'#endif'
 
@@ -53,7 +43,7 @@ class MSWindowsCheckTask(BuildCheckTask):
 
 	@property
 	def source_text(self): return \
-		'#if !defined _WIN64 && !defined _WIN32\n' \
+		'#if !defined _WIN32\n' \
 		'	#error the target platform is not mswindows\n' \
 		'#endif'
 
@@ -62,7 +52,7 @@ class CygwinCheckTask(BuildCheckTask):
 
 	@property
 	def source_text(self): return \
-		'#if !defined __CYGWIN64__ && !defined __CYGWIN32__\n' \
+		'#if !defined __CYGWIN__\n' \
 		'	#error the target platform is not cygwin\n' \
 		'#endif'
 
@@ -71,10 +61,9 @@ class MingwCheckTask(BuildCheckTask):
 
 	@property
 	def source_text(self): return \
-		'#if !defined __MINGW64__ && !defined __MINGW32__\n' \
-		'	#error this is not gcc mingw\n' \
+		'#if defined __MINGW32__\n' \
+		'	#error this is not mingw gcc\n' \
 		'#endif'
-
 
 class ThreadSupportCheckTask(BuildCheckTask):
 	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'thread-support', base_cfg)
