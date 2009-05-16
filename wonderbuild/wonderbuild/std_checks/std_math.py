@@ -14,13 +14,19 @@ class StdMathCheckTask(MultiBuildCheckTask):
 	def do_check_and_set_result(self, sched_ctx):
 		t = StdMathCheckTask.SubCheckTask(self, False)
 		sched_ctx.parallel_wait(t)
-		if t.result: self.m, self.result = t.m, t.result
+		if t.result: self.results = t.result, t.m
 		else:
 			t = StdMathCheckTask.SubCheckTask(self, True)
 			sched_ctx.parallel_wait(t)
-			if t.result: self.m, self.result = t.m, t.result
-			else: self.result = False
+			if t.result: self.results = t.result, t.m
+			else: self.results = False, None
 	
+	@property
+	def result(self): return self.results[0]
+	
+	@property
+	def m(self): return self.results[1]
+
 	@property
 	def result_display(self):
 		if self.result: return 'yes with' + (not self.m and 'out' or '') + ' libm', '32'

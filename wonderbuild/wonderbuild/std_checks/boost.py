@@ -20,6 +20,18 @@ class BoostCheckTask(MultiBuildCheckTask):
 		self._version_wanted = self._version_wanted_major + '.' + self._version_wanted_minor + '.' + self._version_wanted_patch
 		self._libraries = libraries
 
+	@property
+	def result(self): return self.results[0]
+
+	@property
+	def include_path(self): return self.results[1]
+
+	@property
+	def lib_path(self): return self.results[2]
+	
+	@property
+	def libs(self): return self.results[3]
+
 	def apply_to(self, cfg):
 		if self.include_path is not None: cfg.include_paths.append(self.include_path)
 		if self.lib_path is not None: cfg.lib_path.append(self.lib_path)
@@ -193,19 +205,13 @@ class BoostCheckTask(MultiBuildCheckTask):
 		all_in_one = AllInOneCheckTask()
 		sched_ctx.parallel_wait(all_in_one)
 		if all_in_one.result:
-			self.result = True
-			self.include_path = include_path
-			self.lib_path = lib_path
-			self.libs = cfg_link_libraries
+			self.results = True, include_path, lib_path, cfg_link_libraries
 		elif True: # posix?
 			link_libraries = self._libraries
 			cfg_link_libraries = ['boost_' + library for library in link_libraries]
 			all_in_one = AllInOneCheckTask()
 			sched_ctx.parallel_wait(all_in_one)
 			if all_in_one.result:
-				self.result = True
-				self.include_path = include_path
-				self.lib_path = lib_path
-				self.libs = cfg_link_libraries
-			else: self.result = False
-		else: self.result = False
+				self.results = True, include_path, lib_path, cfg_link_libraries
+			else: self.results = False, None, None, None
+		else: self.results = False, None, None, None

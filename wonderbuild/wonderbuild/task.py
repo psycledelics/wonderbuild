@@ -63,7 +63,7 @@ class CheckTask(ProjectTask):
 		else: return 'no', '31'
 
 	def __call__(self, sched_context):
-		try: old_sig, self._result = self.persistent
+		try: old_sig, self._results = self.persistent
 		except KeyError: old_sig = None
 		if old_sig == self.sig:
 			if __debug__ and is_debug: debug('task: skip: no change: ' + self.name)
@@ -72,9 +72,12 @@ class CheckTask(ProjectTask):
 				desc = 'checking for ' + self.desc
 				self.print_check(desc)
 			self.do_check_and_set_result(sched_context)
-			self.persistent = self.sig, self.result
+			self.persistent = self.sig, self.results
 			if not silent: self.print_check_result(desc, *self.result_display)
-	
-	def _get_result(self): return self._result
-	def _set_result(self, value): self._result = value
-	result = property(_get_result, _set_result)
+
+	@property
+	def result(self): return self.results
+
+	def _get_results(self): return self._results
+	def _set_results(self, value): self._results = value
+	results = property(_get_results, _set_results)	

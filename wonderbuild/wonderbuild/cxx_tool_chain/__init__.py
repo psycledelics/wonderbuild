@@ -869,13 +869,13 @@ class PkgConfigCheckTask(_PkgConfigTask):
 		except Exception, e:
 			if __debug__ and is_debug: debug('cfg: ' + self.desc + ': exception: ' + str(e))
 			r = 1
-		self.result = r == 0
+		self.results = r == 0
 
 class _PkgConfigFlagsTask(_PkgConfigTask):
 	def do_check_and_set_result(self, sched_context):
 			r, out, err = exec_subprocess_pipe(self.args, silent = True)
 			if r != 0: raise Exception, r
-			self.result = out.split()
+			self.results = out.split()
 
 	@property
 	def result_display(self): return ' '.join(self.result), '32'
@@ -992,5 +992,5 @@ class BuildCheckTask(MultiBuildCheckTask):
 				f.write(err); f.write('\n')
 				f.write('return code: '); f.write(str(r)); f.write('\n')
 			finally: f.close()
-			self.result = r == 0
+			self.results = r == 0
 		finally: sched_context.lock.acquire()

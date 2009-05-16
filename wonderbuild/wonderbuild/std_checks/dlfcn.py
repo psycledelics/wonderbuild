@@ -14,13 +14,19 @@ class DlfcnCheckTask(MultiBuildCheckTask):
 	def do_check_and_set_result(self, sched_ctx):
 		t = DlfcnCheckTask.SubCheckTask(self, True)
 		sched_ctx.parallel_wait(t)
-		if t.result: self.dl, self.result = t.dl, t.result
+		if t.result: self.results = t.result, t.dl
 		else:
 			t = DlfcnCheckTask.SubCheckTask(self, False)
 			sched_ctx.parallel_wait(t)
-			if t.result: self.dl, self.result = t.dl, t.result
-			else: self.result = False
+			if t.result: self.results = t.result, t.dl
+			else: self.results = False, None
 	
+	@property
+	def result(self): return self.results[0]
+	
+	@property
+	def dl(self): return self.results[1]
+
 	@property
 	def result_display(self):
 		if self.result: return 'yes with' + (not self.dl and 'out' or '') + ' libdl', '32'
