@@ -9,7 +9,7 @@ from wonderbuild.logger import out, is_debug, debug, colored, silent
 from wonderbuild.signature import Sig
 from wonderbuild.option_cfg import OptionCfg
 from wonderbuild.fhs import FHS
-from wonderbuild.task import ProjectTask
+from wonderbuild.task import ProjectTask, CheckTask
 from wonderbuild.subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 
 class ClientCfg(object):
@@ -102,6 +102,7 @@ class BuildCfg(ClientCfg):
 		except AttributeError:
 			from wonderbuild.std_checks import BinaryFormatPeCheckTask
 			pe = BinaryFormatPeCheckTask.shared(self)
+			self.project.sched_context.parallel_wait(pe)
 			self._target_platform_binary_format_is_pe = pe.result
 			return pe.result
 		
@@ -223,17 +224,17 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		return class_.clone(self, class_)
 
 	known_options = set([
-		'cxx',
-		'cxx-flags',
+		'cxx', # cxx-compiler
+		'cxx-flags', # cxx-compiler-flags
 		'cxx-debug',
 		'cxx-optim',
 		'cxx-pic',
-		'cxx-mod-shared-libs',
-		'cxx-mod-static-progs',
-		'cxx-mod-ld',
-		'cxx-mod-ld-flags',
-		'cxx-mod-ar',
-		'cxx-mod-ranlib',
+		'cxx-mod-shared-libs', # cxx-shared-libs
+		'cxx-mod-static-progs', # cxx-static-progs
+		'cxx-mod-ld', # cxx-linker
+		'cxx-mod-ld-flags', # cxx-linker-flags
+		'cxx-mod-ar', # cxx-archiver
+		'cxx-mod-ranlib', # cxx-archive-indexer
 		'check-missing'
 	])
 
@@ -788,9 +789,9 @@ class ModTask(ProjectTask):
 			self.__mod_sig = sig = sig.digest()
 			return sig
 
-class _PkgConfigTask(ProjectTask):
+class _PkgConfigTask(CheckTask):
 	def __init__(self, project, pkgs):
-		ProjectTask.__init__(self, project)
+		CheckTask.__init__(self, project)
 		self.pkgs = pkgs
 
 	@property
@@ -824,30 +825,6 @@ class _PkgConfigTask(ProjectTask):
 			pkgs.sort()
 			self._uid = ' '.join(pkgs) + ' ' + ' '.join(self.what_args)
 			return self._uid
-
-	def __call__(self, sched_context):
-		try: self._result
-		except AttributeError:
-			sched_context.lock.release()
-			try: self.result
-			finally: sched_context.lock.acquire()
-
-	@property
-	def result(self):
-		try: return self._result
-		except AttributeError:
-			changed = False
-			try: old_sig, self._result = self.persistent
-			except KeyError: changed = True
-			else:
-				if old_sig != self.sig: changed = True
-			if not changed:
-				if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
-			else:
-				if not silent: self.print_check(self.desc)
-				self.do_result()
-				self.persistent = self.sig, self._result
-			return self._result
 
 	@property
 	def sig(self):
@@ -887,22 +864,21 @@ class PkgConfigCheckTask(_PkgConfigTask):
 
 	def apply_to(self, cfg): cfg.pkg_config += self.pkgs
 	
-	def do_result(self):
+	def do_check_and_set_result(self, sched_context):
 		try: r = exec_subprocess(self.args)
 		except Exception, e:
 			if __debug__ and is_debug: debug('cfg: ' + self.desc + ': exception: ' + str(e))
 			r = 1
-		self._result = r == 0
-		if not silent:
-			if self._result: self.print_check_result(self.desc, 'yes', '32')
-			else: self.print_check_result(self.desc, 'no', '31')
+		self.result = r == 0
 
 class _PkgConfigFlagsTask(_PkgConfigTask):
-	def do_result(self):
+	def do_check_and_set_result(self, sched_context):
 			r, out, err = exec_subprocess_pipe(self.args, silent = True)
 			if r != 0: raise Exception, r
-			if not silent: self.print_check_result(self.desc, out.rstrip('\n'), '32')
-			self._result = out.split()
+			self.result = out.split()
+
+	@property
+	def result_display(self): return ' '.join(self.result), '32'
 
 class _PkgConfigCxxFlagsTask(_PkgConfigFlagsTask):
 	@classmethod
@@ -950,21 +926,17 @@ class _PkgConfigLdFlagsTask(_PkgConfigFlagsTask):
 
 	def apply_to(self, cfg): cfg.ld_flags += self.result
 
-class BuildCheckTask(ProjectTask):
-	def __init__(self, name, base_cfg):
-		ProjectTask.__init__(self, base_cfg.project)
+class MultiBuildCheckTask(CheckTask):
+	def __init__(self, name, base_cfg, compile=True, link=True):
+		CheckTask.__init__(self, base_cfg.project)
 		self.name = name
 		self.base_cfg = base_cfg
+		self.compile = compile
+		self.link = link
 
 	def __str__(self): return self.name
 
 	def apply_to(self, cfg): pass
-
-	@property
-	def source_text(self): return '#error ' + str(self.__class__) + ' did not redefine default source text.\n'
-
-	@property
-	def _prog_source_text(self): return self.source_text + '\nint main() { return 0; }\n'
 
 	@property
 	def cfg(self):
@@ -973,9 +945,29 @@ class BuildCheckTask(ProjectTask):
 			self._cfg = self.base_cfg.clone()
 			self.apply_to(self._cfg)
 			return self._cfg
-	
+
+	@property
+	def source_text(self): return '#error ' + str(self.__class__) + ' did not redefine default source text.\n'
+
+	@property
+	def sig(self):
+		try: return self._sig
+		except AttributeError:
+			sig = Sig(self.source_text)
+			sig.update(self.base_cfg.cxx_sig)
+			if self.link: sig.update(self.base_cfg.ld_sig)
+			sig = self._sig = sig.digest()
+			return sig
+
 	@property
 	def uid(self): return self.name
+
+	@property
+	def desc(self): return self.name
+
+class BuildCheckTask(MultiBuildCheckTask):
+	@property
+	def _prog_source_text(self): return self.source_text + '\nint main() { return 0; }\n'
 
 	@property
 	def bld_dir(self):
@@ -984,54 +976,21 @@ class BuildCheckTask(ProjectTask):
 			self._bld_dir = self.project.bld_dir / 'checks' / self.name
 			return self._bld_dir
 
-	def __call__(self, sched_context):
-		try: self._result
-		except AttributeError:
-			sched_context.lock.release()
-			try: self.result
-			finally: sched_context.lock.acquire()
-
-	@property
-	def result(self):
-		try: return self._result
-		except AttributeError:
-			changed = False
-			try: old_sig, self._result = self.persistent
-			except KeyError: changed = True
-			else:
-				if old_sig != self.sig: changed = True
-			if not changed:
-				if __debug__ and is_debug: debug('task: skip: no change: ' + self.name)
-			else:
-				if not silent:
-					desc = 'checking for ' + self.name
-					self.print_check(desc)
-				dir = self.bld_dir
-				dir.make_dir(dir.parent)
-				r, out, err = self.cfg.impl.process_build_check_task(self)
-				log = dir / 'build.log'
-				f = open(log.path, 'w')
-				try:
-					f.write(self._prog_source_text); f.write('\n')
-					f.write(str(self.cfg.cxx_args_cwd)); f.write('\n')
-					f.write(str(self.cfg.ld_args)); f.write('\n')
-					f.write(out); f.write('\n')
-					f.write(err); f.write('\n')
-					f.write('return code: '); f.write(str(r)); f.write('\n')
-				finally: f.close()
-				self._result = r == 0
-				self.persistent = self.sig, self._result
-				if not silent:
-					if self._result: self.print_check_result(desc, 'yes', '32')
-					else: self.print_check_result(desc, 'no', '31')
-			return self._result
-
-	@property
-	def sig(self):
-		try: return self._sig
-		except AttributeError:
-			sig = Sig(self.source_text)
-			sig.update(self.base_cfg.cxx_sig)
-			sig.update(self.base_cfg.ld_sig)
-			sig = self._sig = sig.digest()
-			return sig
+	def do_check_and_set_result(self, sched_context):
+		sched_context.lock.release()
+		try:
+			dir = self.bld_dir
+			dir.make_dir(dir.parent)
+			r, out, err = self.cfg.impl.process_build_check_task(self)
+			log = dir / 'build.log'
+			f = open(log.path, 'w')
+			try:
+				f.write(self._prog_source_text); f.write('\n')
+				f.write(str(self.cfg.cxx_args_cwd)); f.write('\n')
+				f.write(str(self.cfg.ld_args)); f.write('\n')
+				f.write(out); f.write('\n')
+				f.write(err); f.write('\n')
+				f.write('return code: '); f.write(str(r)); f.write('\n')
+			finally: f.close()
+			self.result = r == 0
+		finally: sched_context.lock.acquire()

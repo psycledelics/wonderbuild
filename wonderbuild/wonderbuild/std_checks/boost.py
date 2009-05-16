@@ -4,15 +4,15 @@
 
 import sys, os
 
-from wonderbuild.cxx_tool_chain import BuildCheckTask
+from wonderbuild.cxx_tool_chain import MultiBuildCheckTask, BuildCheckTask
 from wonderbuild.signature import Sig
 from wonderbuild.logger import silent, is_debug, debug
 
 from wonderbuild.std_checks import AutoLinkSupportCheckTask
 
-class BoostCheckTask(BuildCheckTask):
+class BoostCheckTask(MultiBuildCheckTask):
 	def __init__(self, version_wanted_raw, libraries, base_cfg):
-		BuildCheckTask.__init__(self, 'boost' + ' '.join(libraries), base_cfg)
+		MultiBuildCheckTask.__init__(self, 'boost' + ' ' + ' '.join(libraries), base_cfg)
 		self._version_wanted_raw = version_wanted_raw
 		self._version_wanted_major = str(version_wanted_raw // 100000)
 		self._version_wanted_minor = str(version_wanted_raw // 100 % 1000)
@@ -25,7 +25,10 @@ class BoostCheckTask(BuildCheckTask):
 		if self.lib_path is not None: cfg.lib_path.append(self.lib_path)
 		cfg.libs.extend(self.libs)
 
-	def __call__(self, sched_ctx):
+	@property
+	def source_text(self): return '' # TODO see property in AllInOneCheckTask class
+	
+	def do_check_and_set_result(self, sched_ctx):
 		source_texts = {}
 		source_texts['version'] = \
 			"""
@@ -182,15 +185,15 @@ class BoostCheckTask(BuildCheckTask):
 					self._source_text = source_texts['version'] + '\n' + '\n'.join([source_texts[library] for library in link_libraries])
 					return self._source_text
 			
-			def __call__(self, sched_ctx):
+			def do_check_and_set_result(self, sched_ctx):
 				if include_path is not None: self.cfg.include_paths.append(include_path)
 				self.cfg.libs += cfg_link_libraries
-				BuildCheckTask.__call__(self, sched_ctx)			
+				BuildCheckTask.do_check_and_set_result(self, sched_ctx)			
 
 		all_in_one = AllInOneCheckTask()
 		sched_ctx.parallel_wait(all_in_one)
 		if all_in_one.result:
-			self._result = True
+			self.result = True
 			self.include_path = include_path
 			self.lib_path = lib_path
 			self.libs = cfg_link_libraries
@@ -200,9 +203,9 @@ class BoostCheckTask(BuildCheckTask):
 			all_in_one = AllInOneCheckTask()
 			sched_ctx.parallel_wait(all_in_one)
 			if all_in_one.result:
-				self._result = True
+				self.result = True
 				self.include_path = include_path
 				self.lib_path = lib_path
 				self.libs = cfg_link_libraries
-			else: self._result = False
-		else: self._result = False
+			else: self.result = False
+		else: self.result = False

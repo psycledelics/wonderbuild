@@ -2,7 +2,7 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-from logger import out, cols, colored
+from logger import is_debug, debug, silent, out, cols, colored
 import multi_column_formatting
 
 class Task(object):
@@ -21,7 +21,7 @@ class Task(object):
 		if len(line) > cols: line = desc + '\n\t' + '\n\t'.join(multi_column_formatting.format(list, cols - 8)) # less 8 because of the tab
 		out.write(colored(color, line) + '\n')
 		out.flush()
-		
+
 	def print_check(self, desc):
 		out.write(colored('34', 'wonderbuild: task: ' + desc + ' ...') + '\n')
 		out.flush()
@@ -42,3 +42,39 @@ class ProjectTask(Task):
 	def _get_persistent(self): return self.project.persistent[self.uid]
 	def _set_persistent(self, value): self.project.persistent[self.uid] = value
 	persistent = property(_get_persistent, _set_persistent)
+
+class CheckTask(ProjectTask):
+	def __init__(self, project): ProjectTask.__init__(self, project)
+
+	@property
+	def sig(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
+
+	@property
+	def uid(self): Exception, str(self.__class__) + ' did not redefine the property.'
+
+	@property
+	def desc(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
+
+	def do_check_and_set_result(self, sched_context): raise Exception, str(self.__class__) + ' did not redefine the method.'
+
+	@property
+	def result_display(self):
+		if self.result: return 'yes', '32'
+		else: return 'no', '31'
+
+	def __call__(self, sched_context):
+		try: old_sig, self._result = self.persistent
+		except KeyError: old_sig = None
+		if old_sig == self.sig:
+			if __debug__ and is_debug: debug('task: skip: no change: ' + self.name)
+		else:
+			if not silent:
+				desc = 'checking for ' + self.desc
+				self.print_check(desc)
+			self.do_check_and_set_result(sched_context)
+			self.persistent = self.sig, self.result
+			if not silent: self.print_check_result(desc, *self.result_display)
+	
+	def _get_result(self): return self._result
+	def _set_result(self, value): self._result = value
+	result = property(_get_result, _set_result)

@@ -8,44 +8,45 @@ from wonderbuild.cxx_tool_chain import MultiBuildCheckTask, BuildCheckTask
 from wonderbuild.signature import Sig
 from wonderbuild.logger import silent, is_debug, debug
 
-class StdMathCheckTask(MultiBuildCheckTask):
-	def __init__(self, base_cfg): MultiBuildCheckTask.__init__(self, 'c++-std-math', base_cfg)
+class DlfcnCheckTask(MultiBuildCheckTask):
+	def __init__(self, base_cfg): MultiBuildCheckTask.__init__(self, 'posix-dlfcn', base_cfg)
 		
 	def do_check_and_set_result(self, sched_ctx):
-		t = StdMathCheckTask.SubCheckTask(self, False)
+		t = DlfcnCheckTask.SubCheckTask(self, True)
 		sched_ctx.parallel_wait(t)
-		if t.result: self.m, self.result = t.m, t.result
+		if t.result: self.dl, self.result = t.dl, t.result
 		else:
-			t = StdMathCheckTask.SubCheckTask(self, True)
+			t = DlfcnCheckTask.SubCheckTask(self, False)
 			sched_ctx.parallel_wait(t)
-			if t.result: self.m, self.result = t.m, t.result
+			if t.result: self.dl, self.result = t.dl, t.result
 			else: self.result = False
 	
 	@property
 	def result_display(self):
-		if self.result: return 'yes with' + (not self.m and 'out' or '') + ' libm', '32'
+		if self.result: return 'yes with' + (not self.dl and 'out' or '') + ' libdl', '32'
 		else: return 'no', '31'
 		
 	def apply_to(self, cfg):
-		if self.m: cfg.libs.append('m')
+		if self.dl: cfg.libs.append('dl')
 
 	@property
 	def source_text(self): return \
-		'#include <cmath>\n' \
-		'double math() {\n' \
-		'	float  const f(std::sin(1.f));\n' \
-		'	double const d(std::sin(1. ));\n' \
-		'	return d + f;\n' \
+		'#include <dlfcn.h>\n' \
+		'void dlfcn() {\n' \
+		'	void * lib(dlopen("lib", RTLD_LAZY));\n' \
+		'	void * sym(dlsym(lib, "sym"));\n' \
+		'	char * error(dlerror());\n' \
+		'	int result(dlclose(lib));\n' \
 		'}'
-		
+	
 	class SubCheckTask(BuildCheckTask):
-		def __init__(self, outer, m):
-			BuildCheckTask.__init__(self, outer.name + '-with' + (not m and 'out' or '') + '-libm', outer.base_cfg)
+		def __init__(self, outer, dl):
+			BuildCheckTask.__init__(self, outer.name + '-with' + (not dl and 'out' or '') + '-libdl', outer.base_cfg)
 			self.outer = outer
-			self.m = m
+			self.dl = dl
 
 		def apply_to(self, cfg):
-			if self.m: cfg.libs.append('m')
+			if self.dl: cfg.libs.append('dl')
 
 		@property
 		def source_text(self): return self.outer.source_text
