@@ -26,7 +26,7 @@ class Wonderbuild(ScriptTask):
 		diversalis = ScriptTask.shared(project, src_dir.parent.parent / 'diversalis')
 
 		build_cfg.include_paths.append(src_dir)
-		build_cfg.include_paths.append(src_dir / 'standard_library' / 'future_std_include')
+		build_cfg.include_paths.append(src_dir / 'universalis', 'standard_library' / 'future_std_include')
 		
 		class Universalis(ModTask):
 			def __init__(self): ModTask.__init__(self, 'universalis', ModTask.Kinds.LIB, build_cfg)

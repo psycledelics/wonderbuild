@@ -845,23 +845,23 @@
 			Name="standard headers"
 			>
 			<File
-				RelativePath="..\..\..\..\..\universalis\src\condition"
+				RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\future_std_include\condition"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\universalis\src\cstdint"
+				RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\future_std_include\cstdint"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\universalis\src\date_time"
+				RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\future_std_include\date_time"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\universalis\src\mutex"
+				RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\future_std_include\mutex"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\universalis\src\thread"
+				RelativePath="..\..\..\..\..\universalis\src\universalis\standard_library\future_std_include\thread"
 				>
 			</File>
 		</Filter>
