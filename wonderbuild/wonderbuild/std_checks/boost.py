@@ -2,156 +2,11 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2006-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import sys
+import sys, os
 
-from cxx_chain import BuildCheckTask
-from signature import Sig
-from logger import silent, is_debug, debug
-
-# gcc -E -dM -std=c++98 -x c++-header /dev/null | sort
-
-class BinaryFormatElfCheckTask(BuildCheckTask):
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'binary-format-elf', base_cfg)
-
-	@property
-	def source_text(self): return \
-		'#if !defined __ELF__\n' \
-		'	#error the target platform binary format is not elf\n' \
-		'#endif'
-
-	@property
-	def sig(self):
-		try: return self._sig
-		except AttributeError:
-			sig = Sig(self.source_text)
-			sig.update(self.base_cfg.cxx_sig)
-			sig.update(self.base_cfg.ld_sig)
-			sig = self._sig = sig.digest()
-			return sig
-
-class BinaryFormatPeCheckTask(BuildCheckTask):
-	@staticmethod
-	def shared(base_cfg):
-		try: return base_cfg.project.target_platform_binary_format_is_pe
-		except AttributeError:
-			task = base_cfg.project.target_platform_binary_format_is_pe = BinaryFormatPeCheckTask(base_cfg)
-			return task
-		
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'binary-format-pe', base_cfg)
-
-	@property
-	def source_text(self): return \
-		'#if !defined _WIN64 && !defined _WIN32 && !defined __CYGWIN__\n' \
-		'	#error the target platform binary format is not pe\n' \
-		'#endif'
-
-class MSWindowsCheckTask(BuildCheckTask):
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'mswindows', base_cfg)
-
-	@property
-	def source_text(self): return \
-		'#if !defined _WIN64 && !defined _WIN32\n' \
-		'	#error the target platform is not mswindows\n' \
-		'#endif'
-
-class CygwinCheckTask(BuildCheckTask):
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'cygwin', base_cfg)
-
-	@property
-	def source_text(self): return \
-		'#if !defined __CYGWIN64__ && !defined __CYGWIN32__\n' \
-		'	#error the target platform is not cygwin\n' \
-		'#endif'
-
-class MingwCheckTask(BuildCheckTask):
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'mingw', base_cfg)
-
-	@property
-	def source_text(self): return \
-		'#if !defined __MINGW64__ && !defined __MINGW32__\n' \
-		'	#error this is not gcc mingw\n' \
-		'#endif'
-
-class StdMathCheckTask(BuildCheckTask):
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'c++-std-math', base_cfg)
-
-	def apply_to(self, cfg):
-		self.result
-		if self.m: cfg.libs.append('m')
-
-	class SubCheckTask(BuildCheckTask):
-		def __init__(self, name, base_cfg, m):
-			BuildCheckTask.__init__(self, name + '-with' + (not m and 'out' or '') + '-libm', base_cfg)
-			self.m = m
-
-		def apply_to(self, cfg):
-			if self.m: cfg.libs.append('m')
-
-		@property
-		def source_text(self): return '#include <cmath>\nfloat math() { float const f(std::sin(1.f)); return f; }'
-		
-	def _make_t0(self): return StdMathCheckTask.SubCheckTask(self.name, self.base_cfg, False)
-	def _make_t1(self): return StdMathCheckTask.SubCheckTask(self.name, self.base_cfg, True)
-
-	def __call__(self, sched_ctx):
-		changed = False
-		try: old_sig, self._result, self.m = self.project.persistent[self.uid]
-		except KeyError: changed = True
-		else:
-			if old_sig != self.sig: changed = True
-		if not changed:
-			if __debug__ and is_debug: debug('task: skip: no change: ' + self.name)
-		else:
-			if not silent:
-				desc = 'checking for ' + self.name
-				self.print_check(desc)
-			self._t0 = self._make_t0()
-			self._t0(sched_ctx)
-			if self._t0.result: self._t1 = self._t0
-			else:
-				self._t1 = self._make_t1()
-				self._t1(sched_ctx)
-			if not silent:
-				if self.result: self.print_check_result(desc, 'yes with' + (not self.m and 'out' or '') + ' libm', '32')
-				else: self.print_check_result(desc, 'no', '31')
-			self.project.persistent[self.uid] = self.sig, self.result, self.m
-		
-	@property
-	def result(self):
-		try: return self._result
-		except AttributeError:
-			self._result = self._t0.result or self._t1.result
-			if self._t0.result: self.m = False
-			elif self._t1.result: self.m = True
-			else: self.m = None
-			return self._result
-
-	@property
-	def sig(self):
-		try: return self._sig
-		except AttributeError:
-			sig = Sig(self.base_cfg.cxx_sig)
-			sig.update(self.base_cfg.ld_sig)
-			sig = self._sig = sig.digest()
-			return sig
-
-class ThreadSupportCheckTask(BuildCheckTask):
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'thread-support', base_cfg)
-
-	def apply_to(self, cfg):
-		pass # TODO
-
-	def __call__(self, sched_ctx):
-		pass # TODO
-
-class DlfcnCheckTask(BuildCheckTask):
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'dlfcn', base_cfg)
-
-	def apply_to(self, cfg):
-		pass # TODO
-
-	def __call__(self, sched_ctx):
-		pass # TODO
+from wonderbuild.cxx_chain import BuildCheckTask
+from wonderbuild.signature import Sig
+from wonderbuild.logger import silent, is_debug, debug
 
 class BoostCheckTask(BuildCheckTask):
 	def __init__(self, version_wanted_raw, libraries, base_cfg):
@@ -273,7 +128,6 @@ class BoostCheckTask(BuildCheckTask):
 
 		if sys.platform == 'cygwin':
 			# damn cygwin installs boost headers in e.g. /usr/include/boost-1_33_1/ and doesn't give symlinks for library files
-			import os
 			dir = self.project.fs.root / 'usr' / 'include'
 			if dir.exists and dir.is_dir:
 				boost_dir = dir / 'boost'

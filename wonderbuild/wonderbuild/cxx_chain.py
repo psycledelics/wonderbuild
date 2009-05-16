@@ -5,12 +5,12 @@
 import os, threading
 from collections import deque
 
-from logger import out, is_debug, debug, colored, silent
-from signature import Sig
-from option_cfg import OptionCfg
-from fhs import FHS
-from task import ProjectTask
-from subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
+from wonderbuild.logger import out, is_debug, debug, colored, silent
+from wonderbuild.signature import Sig
+from wonderbuild.option_cfg import OptionCfg
+from wonderbuild.fhs import FHS
+from wonderbuild.task import ProjectTask
+from wonderbuild.subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 
 class ClientCfg(object):
 	def __init__(self, project):
@@ -98,7 +98,7 @@ class BuildCfg(ClientCfg):
 	def target_platform_binary_format_is_pe(self):
 		try: return self._target_platform_binary_format_is_pe
 		except AttributeError:
-			from std_checks import BinaryFormatPeCheckTask
+			from wonderbuild.std_checks import BinaryFormatPeCheckTask
 			pe = BinaryFormatPeCheckTask.shared(self)
 			self._target_platform_binary_format_is_pe = pe.result
 			return pe.result
@@ -323,10 +323,10 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 				self.ar_prog, self.ranlib_prog
 
 		elif self.kind == 'gcc':
-			from cxx_chain_gcc_impl import Impl
+			from wonderbuild.cxx_chain_gcc_impl import Impl
 			self.impl = Impl()
 		elif self.kind == 'msvc':
-			from cxx_chain_msvc_impl import Impl
+			from wonderbuild.cxx_chain_msvc_impl import Impl
 			self.impl = Impl(self.project.persistent)
 
 		if self.impl is None: raise Exception, 'unsupported c++ compiler'
@@ -373,15 +373,15 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 				else: self.kind = None
 		if self.kind == 'gcc':
 			self.version = out.rstrip('\n')
-			import gcc
-			self.impl = gcc.Impl()
+			from cxx_chain_gcc_impl import Impl
+			self.impl = Impl()
 		elif self.kind == 'msvc':
 			self.version = err[:err.find('\n')]
 			x = 'Version '
 			self.version = self.version[self.version.find(x) + len(x):]
 			x = self.version.rfind(' for')
 			if x >= 0: self.version = self.version[:x]
-			import msvc
+			from cxx_chain_msvc_impl import Impl
 			self.impl = msvc.Impl(self.project.persistent)
 		else:
 			if not silent: self.print_check_result(desc, 'not found', '31')
