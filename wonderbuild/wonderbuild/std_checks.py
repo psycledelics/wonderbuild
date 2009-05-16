@@ -157,8 +157,8 @@ class BoostCheckTask(BuildCheckTask):
 	def __init__(self, version_wanted_raw, libraries, base_cfg):
 		BuildCheckTask.__init__(self, 'boost' + ' '.join(libraries), base_cfg)
 		self._version_wanted_raw = version_wanted_raw
-		self._version_wanted_major = str(version_wanted_raw / 100000)
-		self._version_wanted_minor = str(version_wanted_raw / 100 % 1000)
+		self._version_wanted_major = str(version_wanted_raw // 100000)
+		self._version_wanted_minor = str(version_wanted_raw // 100 % 1000)
 		self._version_wanted_patch = str(version_wanted_raw % 100)
 		self._version_wanted = self._version_wanted_major + '.' + self._version_wanted_minor + '.' + self._version_wanted_patch
 		self._libraries = libraries
