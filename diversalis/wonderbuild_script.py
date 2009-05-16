@@ -35,7 +35,7 @@ class Wonderbuild(ScriptTask):
 	def client_cfg(self):
 		try: return self._client_cfg
 		except AttributeError:
-			from wonderbuild.cxx_chain import ClientCfg
+			from wonderbuild.cxx_tool_chain import ClientCfg
 			self._client_cfg = ClientCfg(self.project)
 			self._client_cfg.include_paths.append(self.src_dir / 'src')
 			return self._client_cfg

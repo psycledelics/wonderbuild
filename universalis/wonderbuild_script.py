@@ -10,7 +10,7 @@ class Wonderbuild(ScriptTask):
 		project = self.project
 		src_dir = self.src_dir / 'src'
 		
-		from wonderbuild.cxx_chain import UserBuildCfg, PkgConfigCheckTask, ModTask
+		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, ModTask
 		from wonderbuild.std_checks import StdMathCheckTask, BoostCheckTask
 		from wonderbuild.install import InstallTask
 		
