@@ -68,7 +68,7 @@ def detect_impl(user_build_cfg):
 		x = self.version.rfind(' for')
 		if x >= 0: self.version = self.version[:x]
 		from msvc_impl import Impl
-		self.impl = msvc.Impl(self.project.persistent)
+		self.impl = Impl(self.project.persistent)
 	else:
 		if not silent: self.print_check_result(desc, 'not found', '31')
 		return
