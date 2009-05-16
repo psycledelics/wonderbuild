@@ -323,10 +323,10 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 				self.ar_prog, self.ranlib_prog
 
 		elif self.kind == 'gcc':
-			from wonderbuild.cxx_chain_gcc_impl import Impl
+			from gcc_impl import Impl
 			self.impl = Impl()
 		elif self.kind == 'msvc':
-			from wonderbuild.cxx_chain_msvc_impl import Impl
+			from msvc_impl import Impl
 			self.impl = Impl(self.project.persistent)
 
 		if self.impl is None: raise Exception, 'unsupported c++ compiler'
@@ -373,7 +373,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 				else: self.kind = None
 		if self.kind == 'gcc':
 			self.version = out.rstrip('\n')
-			from cxx_chain_gcc_impl import Impl
+			from gcc_impl import Impl
 			self.impl = Impl()
 		elif self.kind == 'msvc':
 			self.version = err[:err.find('\n')]
@@ -381,7 +381,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 			self.version = self.version[self.version.find(x) + len(x):]
 			x = self.version.rfind(' for')
 			if x >= 0: self.version = self.version[:x]
-			from cxx_chain_msvc_impl import Impl
+			from msvc_impl import Impl
 			self.impl = msvc.Impl(self.project.persistent)
 		else:
 			if not silent: self.print_check_result(desc, 'not found', '31')

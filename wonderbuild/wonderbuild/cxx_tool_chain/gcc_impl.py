@@ -4,9 +4,9 @@
 
 import os
 
-from logger import is_debug, debug, colored, out_is_dumb
-from signature import Sig
-from subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
+from wonderbuild.logger import is_debug, debug, colored, out_is_dumb
+from wonderbuild.signature import Sig
+from wonderbuild.subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 
 need_sep_fix = os.sep != '/'
 

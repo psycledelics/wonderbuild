@@ -4,7 +4,7 @@
 
 import sys, os, re
 
-from logger import is_debug, debug
+from wonderbuild.logger import is_debug, debug
 
 _line_continuations = re.compile(r'\\\r*\n', re.MULTILINE)
 _cpp = re.compile(r'''(/\*[^*]*\*+([^/*][^*]*\*+)*/)|//[^\n]*|("(\\.|[^"\\])*"|'(\\.|[^'\\])*'|.[^/"'\\]*)''', re.MULTILINE)

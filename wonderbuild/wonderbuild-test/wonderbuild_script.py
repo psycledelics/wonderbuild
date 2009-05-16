@@ -12,7 +12,7 @@ class Wonderbuild(ScriptTask):
 
 		src_dir = self.src_dir / 'src'
 
-		from wonderbuild.cxx_chain import UserBuildCfg, PkgConfigCheckTask, BuildCheckTask, PreCompileTasks, ModTask
+		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, BuildCheckTask, PreCompileTasks, ModTask
 		from wonderbuild.std_checks import StdMathCheckTask
 		from wonderbuild.install import InstallTask
 	

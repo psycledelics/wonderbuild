@@ -4,9 +4,9 @@
 
 import os
 
-from logger import is_debug, debug, colored
-from signature import Sig
-from subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
+from wonderbuild.logger import is_debug, debug, colored
+from wonderbuild.signature import Sig
+from wonderbuild.subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 from cpp_include_scanner import IncludeScanner
 
 class Impl(object):

@@ -4,7 +4,7 @@
 
 import sys, os
 
-from wonderbuild.cxx_chain import BuildCheckTask
+from wonderbuild.cxx_tool_chain import BuildCheckTask
 from wonderbuild.signature import Sig
 from wonderbuild.logger import silent, is_debug, debug
 
@@ -166,7 +166,7 @@ class BoostCheckTask(BuildCheckTask):
 		
 		outer = self
 		
-		auto_link_support_check_task = AutoLinkSupportCheckTask()
+		auto_link_support_check_task = AutoLinkSupportCheckTask(outer.base_cfg)
 		sched_ctx.parallel_wait(auto_link_support_check_task)
 		if auto_link_support_check_task.result: link_libraries = []
 

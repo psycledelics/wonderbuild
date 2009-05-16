@@ -4,7 +4,7 @@
 
 import sys, os
 
-from wonderbuild.cxx_chain import BuildCheckTask
+from wonderbuild.cxx_tool_chain import BuildCheckTask
 from wonderbuild.signature import Sig
 from wonderbuild.logger import silent, is_debug, debug
 
@@ -63,7 +63,7 @@ class MingwCheckTask(BuildCheckTask):
 		'#endif'
 
 class AutoLinkSupportCheckTask(BuildCheckTask):
-	def __init__(self): BuildCheckTask.__init__(self, 'auto-link', outer.base_cfg)
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'auto-link', base_cfg)
 
 	@property
 	def source_text(self):
