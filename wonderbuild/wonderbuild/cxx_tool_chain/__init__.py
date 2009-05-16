@@ -797,11 +797,13 @@ class _PkgConfigTask(CheckTask):
 	@property
 	def prog(self): return 'pkg-config'
 
+	def __str__(self): return ' '.join(self.pkgs) + ' ' + ' '.join(self.what_args)
+
 	@property
 	def desc(self):
 		try: return self._desc
 		except AttributeError:
-			self._desc = 'checking for ' + self.prog + ' ' + ' '.join(self.pkgs) + ' ' + self.what_desc
+			self._desc = self.prog + ' ' + ' '.join(self.pkgs) + ' ' + self.what_desc
 			return self._desc
 
 	@property
@@ -814,8 +816,6 @@ class _PkgConfigTask(CheckTask):
 
 	@property
 	def args(self): return [self.prog] + self.pkgs + self.what_args
-
-	def __str__(self): return ' '.join(self.pkgs) + ' ' + ' '.join(self.what_args)
 
 	@property
 	def uid(self):
@@ -933,8 +933,6 @@ class MultiBuildCheckTask(CheckTask):
 		self.base_cfg = base_cfg
 		self.compile = compile
 		self.link = link
-
-	def __str__(self): return self.name
 
 	def apply_to(self, cfg): pass
 
