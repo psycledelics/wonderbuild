@@ -11,7 +11,7 @@ class Wonderbuild(ScriptTask):
 		src_dir = self.src_dir / 'src'
 		
 		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, ModTask
-		from wonderbuild.std_checks import StdMathCheckTask, BoostCheckTask, DlfcnCheckTask
+		from wonderbuild.std_checks import StdMathCheckTask, BoostCheckTask, DlfcnCheckTask, PThreadCheckTask
 		from wonderbuild.install import InstallTask
 		
 		glibmm = PkgConfigCheckTask.shared(self.project, ['glibmm-2.4 >= 2.4'])
@@ -22,11 +22,12 @@ class Wonderbuild(ScriptTask):
 		std_math_check = StdMathCheckTask(check_cfg)
 		boost_check = BoostCheckTask(103300, ['signals', 'thread', 'filesystem'], check_cfg)
 		dlfcn_check = DlfcnCheckTask(check_cfg)
+		pthread_check = PThreadCheckTask(check_cfg)
 
 		diversalis = ScriptTask.shared(project, src_dir.parent.parent / 'diversalis')
 
 		build_cfg.include_paths.append(src_dir)
-		build_cfg.include_paths.append(src_dir / 'universalis', 'standard_library' / 'future_std_include')
+		build_cfg.include_paths.append(src_dir / 'universalis' / 'standard_library' / 'future_std_include')
 		
 		class Universalis(ModTask):
 			def __init__(self): ModTask.__init__(self, 'universalis', ModTask.Kinds.LIB, build_cfg)
@@ -34,8 +35,9 @@ class Wonderbuild(ScriptTask):
 			def __call__(self, sched_ctx):
 				install = Universalis.Install(self.project)
 				sched_ctx.parallel_no_wait(install)
-				sched_ctx.parallel_wait(glibmm, std_math_check, boost_check, dlfcn_check)
+				sched_ctx.parallel_wait(glibmm, std_math_check, boost_check, dlfcn_check, pthread_check)
 				if dlfcn_check.result: dlfcn_check.apply_to(self.cfg)
+				if pthread_check.result: pthread_check.apply_to(self.cfg)
 				if std_math_check.result: std_math_check.apply_to(self.cfg)
 				else: raise Exception, 'need std math'
 				if boost_check.result: boost_check.apply_to(self.cfg)
