@@ -8,9 +8,6 @@ from wonderbuild.cxx_chain import BuildCheckTask
 from wonderbuild.signature import Sig
 from wonderbuild.logger import silent, is_debug, debug
 
-from std_math import StdMathCheckTask
-from boost import BoostCheckTask
-
 # gcc -E -dM -std=c++98 -x c++-header /dev/null | sort
 
 class BinaryFormatElfCheckTask(BuildCheckTask):
@@ -65,6 +62,29 @@ class MingwCheckTask(BuildCheckTask):
 		'	#error this is not mingw gcc\n' \
 		'#endif'
 
+class AutoLinkSupportCheckTask(BuildCheckTask):
+	def __init__(self): BuildCheckTask.__init__(self, 'auto-link', outer.base_cfg)
+
+	@property
+	def source_text(self):
+		try: return self._source_text
+		except AttributeError:
+			# TODO don't include <boost/config.hpp>
+			self._source_text = \
+				"""
+					// text below copied from <boost/config/auto_link.hpp>
+					#include <boost/config.hpp>
+					#if !( \\
+							defined BOOST_MSVC || \\
+							defined __BORLANDC__ || \\
+							__MWERKS__ >= 0x3000 && _WIN32 || \\
+							defined __ICL && defined _MSC_EXTENSIONS && _MSC_VER >= 1200 \\
+					)
+						#error no auto link support
+					#endif
+				"""
+			return self._source_text
+
 class ThreadSupportCheckTask(BuildCheckTask):
 	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'thread-support', base_cfg)
 
@@ -82,3 +102,6 @@ class DlfcnCheckTask(BuildCheckTask):
 
 	def __call__(self, sched_ctx):
 		pass # TODO
+
+from std_math import StdMathCheckTask
+from boost import BoostCheckTask

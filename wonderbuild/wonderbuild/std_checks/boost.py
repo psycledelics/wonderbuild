@@ -8,6 +8,8 @@ from wonderbuild.cxx_chain import BuildCheckTask
 from wonderbuild.signature import Sig
 from wonderbuild.logger import silent, is_debug, debug
 
+from wonderbuild.std_checks import AutoLinkSupportCheckTask
+
 class BoostCheckTask(BuildCheckTask):
 	def __init__(self, version_wanted_raw, libraries, base_cfg):
 		BuildCheckTask.__init__(self, 'boost' + ' '.join(libraries), base_cfg)
@@ -164,32 +166,9 @@ class BoostCheckTask(BuildCheckTask):
 		
 		outer = self
 		
-		class AutoLinkSupportCheckTask(BuildCheckTask):
-			def __init__(self): BuildCheckTask.__init__(self, 'auto-link', outer.base_cfg)
-		
-			@property
-			def source_text(self):
-				try: return self._source_text
-				except AttributeError:
-					self._source_text = \
-						"""
-							// text below copied from <boost/config/auto_link.hpp>
-							#include <boost/config.hpp>
-							#if \\
-								!( \\
-									defined(BOOST_MSVC) || \\
-									defined(__BORLANDC__) || \\
-									(defined(__MWERKS__) && defined(_WIN32) && (__MWERKS__ >= 0x3000)) || \\
-									(defined(__ICL) && defined(_MSC_EXTENSIONS) && (_MSC_VER >= 1200)) \\
-								)
-								#error no auto link
-							#endif
-						"""
-					return self._source_text
-						
-		auto_link_support_check_taks = AutoLinkSupportCheckTask()
-		sched_ctx.parallel_wait(auto_link_support_check_taks)
-		if auto_link_support_check_taks.result: link_libraries = []
+		auto_link_support_check_task = AutoLinkSupportCheckTask()
+		sched_ctx.parallel_wait(auto_link_support_check_task)
+		if auto_link_support_check_task.result: link_libraries = []
 
 		cfg_link_libraries = ['boost_' + library for library in link_libraries]
 
