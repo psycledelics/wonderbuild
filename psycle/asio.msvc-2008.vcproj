@@ -20,7 +20,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\platform_win32.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc-2008\properties\debug.vsprops;..\build-systems\msvc-2008\properties\platform_win32.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -71,7 +71,7 @@
 		<Configuration
 			Name="debug|x64"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\platform_x64.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc-2008\properties\debug.vsprops;..\build-systems\msvc-2008\properties\platform_x64.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -122,7 +122,7 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\platform_win32.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc-2008\properties\release.vsprops;..\build-systems\msvc-2008\properties\platform_win32.vsprops"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -174,7 +174,7 @@
 		<Configuration
 			Name="release|x64"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\platform_x64.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc-2008\properties\release.vsprops;..\build-systems\msvc-2008\properties\platform_x64.vsprops"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -227,7 +227,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
-			RelativePathToProject=".\projects\pre_compiled_headers\pre_compiled_headers.vcproj"
+			RelativePathToProject="..\build-systems\msvc-2008\projects\pre_compiled_headers\pre_compiled_headers.vcproj"
 		/>
 	</References>
 	<Files>
@@ -235,7 +235,7 @@
 			Name="asio"
 			>
 			<File
-				RelativePath="..\..\..\..\src\asio\asio.cpp"
+				RelativePath="src\asio\asio.cpp"
 				>
 				<FileConfiguration
 					Name="debug|Win32"
@@ -275,11 +275,11 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\asio\asio.private.hpp"
+				RelativePath="src\asio\asio.private.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\asio\asiodrivers.cpp"
+				RelativePath="src\asio\asiodrivers.cpp"
 				>
 				<FileConfiguration
 					Name="debug|Win32"
@@ -319,7 +319,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\asio\asiolist.cpp"
+				RelativePath="src\asio\asiolist.cpp"
 				>
 				<FileConfiguration
 					Name="debug|Win32"
