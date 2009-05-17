@@ -15,6 +15,7 @@
 		MinimalRebuild="true"
 		ExceptionHandling="2"
 		WarningLevel="4"
+		ObjectFile="$(TopOutputDir)/intermediate/$(ProjectName)/xxx/$(ParentName)/zzz/$(InputName).obj"
 	/>
 	<Tool
 		Name="VCLibrarianTool"
