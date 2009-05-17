@@ -20,7 +20,7 @@
 	<Configurations>
 		<Configuration
 			Name="debug|Win32"
-			ConfigurationType="2"
+			ConfigurationType="4"
 			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\platform_win32.vsprops"
 			>
 			<Tool
@@ -130,7 +130,7 @@
 		</Configuration>
 		<Configuration
 			Name="release|Win32"
-			ConfigurationType="2"
+			ConfigurationType="4"
 			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\platform_win32.vsprops"
 			WholeProgramOptimization="1"
 			>

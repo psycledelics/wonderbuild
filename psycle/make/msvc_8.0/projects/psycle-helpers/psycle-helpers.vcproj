@@ -88,7 +88,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="UNIVERSALIS__OPERATING_SYSTEM__LOGGERS__OWNED"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
