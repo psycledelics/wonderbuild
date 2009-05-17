@@ -598,7 +598,7 @@
 			you can try wonderbuild with this benchmark with:
 			<code>
 				<pre>
-	svn co https://psycle.svn.sourceforge.net/svnroot/psycle/branches/bohan/wonderbuild --ignore-externals
+	svn co https://psycle.svn.sourceforge.net/svnroot/psycle/branches/bohan/wonderbuild
 	cd wonderbuild/benchmarks
 	./gen-bench bench 50 100 15 5
 	cd bench
