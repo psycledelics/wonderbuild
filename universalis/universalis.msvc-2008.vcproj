@@ -602,7 +602,7 @@
 				<File
 					RelativePath="src\universalis\operating_system\clocks.cpp"
 					>
-					<FileConfiguration
+					<!--FileConfiguration
 						Name="debug|Win32"
 						>
 						<Tool
@@ -635,7 +635,7 @@
 							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)/$(ParentName)/"
 						/>
-					</FileConfiguration>
+					</FileConfiguration-->
 				</File>
 				<File
 					RelativePath="src\universalis\operating_system\clocks.hpp"
