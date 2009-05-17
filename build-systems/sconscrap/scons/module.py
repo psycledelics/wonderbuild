@@ -159,7 +159,7 @@ class module(projected, builder): # todo decide whether this can be derived from
 					result.append(re.sub('[^A-Z0-9_]', '_', os.path.splitext(source.relative())[0].replace(os.path.sep, '__').upper()))
 				return result
 			scons.FileFromValue(
-				os.path.join(self.project().build_variant_intermediate_dir(), 'modules', self.name(), 'src', 'sconscrap-module.private.hpp'),
+				os.path.join(self.project().build_variant_intermediate_dir(), 'modules', self.name(), 'src', 'packageneric.private.hpp'),
 				''.join(
 					['#include <sconscrap-source-package.private.hpp>\n'] +
 					['#define PACKAGENERIC__MODULE__%s %s\n' % (n, v) for n, v in
