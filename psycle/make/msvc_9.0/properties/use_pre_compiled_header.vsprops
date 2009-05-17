@@ -19,13 +19,7 @@
 	/>
 	<UserMacro
 		Name="PreCompiledHeader"
-		Value="packageneric/pre-compiled.private.hpp"
-	/>
-	<UserMacro
-		Name="Defines"
-		Value="PACKAGENERIC__PRE_COMPILED=&lt;$(PreCompiledHeader)&gt;"
-		InheritsFromParent="true"
-		Delimiter=";"
+		Value="pre-compiled.private.hpp"
 	/>
 	<UserMacro
 		Name="PreCompiledObject"

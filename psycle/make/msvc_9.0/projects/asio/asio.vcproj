@@ -235,7 +235,7 @@
 			Name="asio"
 			>
 			<File
-				RelativePath="..\..\..\msvc_common\src\asio\asio.cpp"
+				RelativePath="..\..\..\..\src\asio\asio.cpp"
 				>
 				<FileConfiguration
 					Name="debug|Win32"
@@ -275,11 +275,11 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\msvc_common\src\asio\asio.private.hpp"
+				RelativePath="..\..\..\..\src\asio\asio.private.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\msvc_common\src\asio\asiodrivers.cpp"
+				RelativePath="..\..\..\..\src\asio\asiodrivers.cpp"
 				>
 				<FileConfiguration
 					Name="debug|Win32"
@@ -319,7 +319,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\msvc_common\src\asio\asiolist.cpp"
+				RelativePath="..\..\..\..\src\asio\asiolist.cpp"
 				>
 				<FileConfiguration
 					Name="debug|Win32"

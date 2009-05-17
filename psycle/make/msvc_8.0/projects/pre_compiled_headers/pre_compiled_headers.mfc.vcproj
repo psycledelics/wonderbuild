@@ -145,7 +145,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\packageneric\src\packageneric\pre-compiled.private.hpp"
+			RelativePath="..\..\..\..\..\build-systems\src\pre-compiled.private.hpp"
 			>
 		</File>
 		<File
