@@ -298,88 +298,88 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.pooplog.fm.u
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.alk.muter", "..\..\pyscle-plugins\msvc-2008\alk muter.vcproj", "{47AA9119-8F87-4B37-A5D1-AA4EA234CAAE}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.alk.muter", "..\..\psycle-plugins\msvc-2008\alk muter.vcproj", "{47AA9119-8F87-4B37-A5D1-AA4EA234CAAE}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.bexter.bexphase", "..\..\pyscle-plugins\msvc-2008\bexphase.vcproj", "{47AA9119-8F87-4B37-A5D1-AA4EA2346565}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.bexter.bexphase", "..\..\psycle-plugins\msvc-2008\bexphase.vcproj", "{47AA9119-8F87-4B37-A5D1-AA4EA2346565}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.thunderpalace_softsat", "..\..\pyscle-plugins\msvc-2008\thunderpalace softsat.vcproj", "{CDD9BC26-289D-4558-A22D-500F0BB76828}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.thunderpalace_softsat", "..\..\psycle-plugins\msvc-2008\thunderpalace softsat.vcproj", "{CDD9BC26-289D-4558-A22D-500F0BB76828}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.audacity.compressor", "..\..\pyscle-plugins\msvc-2008\audacity compressor.vcproj", "{A5CED440-30E1-4B72-B1EC-62C752B8A1E4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.audacity.compressor", "..\..\psycle-plugins\msvc-2008\audacity compressor.vcproj", "{A5CED440-30E1-4B72-B1EC-62C752B8A1E4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.audacity.phaser", "..\..\pyscle-plugins\msvc-2008\audacity phaser.vcproj", "{D9481658-10F2-4007-905A-0873271C6045}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.audacity.phaser", "..\..\psycle-plugins\msvc-2008\audacity phaser.vcproj", "{D9481658-10F2-4007-905A-0873271C6045}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.ladspa.gverb", "..\..\pyscle-plugins\msvc-2008\ladspa gverb.vcproj", "{1EDE3137-50AB-4565-AA60-1E8F7C11164F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.ladspa.gverb", "..\..\psycle-plugins\msvc-2008\ladspa gverb.vcproj", "{1EDE3137-50AB-4565-AA60-1E8F7C11164F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.stk.reverbs (stk wrapper by sartorius)", "..\..\pyscle-plugins\msvc-2008\stk Rev.vcproj", "{9BD0D570-BD65-4CA6-8D82-F55311A160BD}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.stk.reverbs (stk wrapper by sartorius)", "..\..\psycle-plugins\msvc-2008\stk Rev.vcproj", "{9BD0D570-BD65-4CA6-8D82-F55311A160BD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.sublime", "..\..\pyscle-plugins\msvc-2008\sublime.vcproj", "{A5BF47C9-76B0-454D-8564-804E42CA3315}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
-		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {984A85EE-BA08-473F-9ADB-1C1692DFD77F}
-		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.dsp (static build)", "..\..\pyscle-plugins\msvc-2008\dsp.vcproj", "{F46EC0F9-8440-418D-91E7-41176165E294}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.blwtbl (wavetable)", "..\..\pyscle-plugins\msvc-2008\blwtbl.vcproj", "{984A85EE-BA08-473F-9ADB-1C1692DFD77F}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.slicit", "..\..\pyscle-plugins\msvc-2008\Slicit.vcproj", "{6C83DB3F-10C7-4488-A20D-8C6985AFFC03}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.sublime", "..\..\psycle-plugins\msvc-2008\sublime.vcproj", "{A5BF47C9-76B0-454D-8564-804E42CA3315}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {984A85EE-BA08-473F-9ADB-1C1692DFD77F}
 		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.eq3", "..\..\pyscle-plugins\msvc-2008\EQ3.vcproj", "{1C7E86D5-7D35-4C8F-BDF0-6BE89FD0C58F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.dsp (static build)", "..\..\psycle-plugins\msvc-2008\dsp.vcproj", "{F46EC0F9-8440-418D-91E7-41176165E294}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.blwtbl (wavetable)", "..\..\psycle-plugins\msvc-2008\blwtbl.vcproj", "{984A85EE-BA08-473F-9ADB-1C1692DFD77F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.slicit", "..\..\psycle-plugins\msvc-2008\Slicit.vcproj", "{6C83DB3F-10C7-4488-A20D-8C6985AFFC03}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {984A85EE-BA08-473F-9ADB-1C1692DFD77F}
 		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.plucked string", "..\..\pyscle-plugins\msvc-2008\PluckedString.vcproj", "{CCBCA650-988B-4454-954E-3F25121AE411}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.eq3", "..\..\psycle-plugins\msvc-2008\EQ3.vcproj", "{1C7E86D5-7D35-4C8F-BDF0-6BE89FD0C58F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {984A85EE-BA08-473F-9ADB-1C1692DFD77F}
+		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.plucked string", "..\..\psycle-plugins\msvc-2008\PluckedString.vcproj", "{CCBCA650-988B-4454-954E-3F25121AE411}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.phantom", "..\..\pyscle-plugins\msvc-2008\Phantom.vcproj", "{A517216B-EE2E-4473-B342-2842C5F5BCBC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.phantom", "..\..\psycle-plugins\msvc-2008\Phantom.vcproj", "{A517216B-EE2E-4473-B342-2842C5F5BCBC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.feedme", "..\..\pyscle-plugins\msvc-2008\FeedMe.vcproj", "{49BA720B-BEB2-42F6-9168-C6EEA8C8BE30}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.feedme", "..\..\psycle-plugins\msvc-2008\FeedMe.vcproj", "{49BA720B-BEB2-42F6-9168-C6EEA8C8BE30}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.koruz", "..\..\pyscle-plugins\msvc-2008\Koruz.vcproj", "{C233B433-2D3A-41BD-ABAB-F92B569E95EA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.druttis.koruz", "..\..\psycle-plugins\msvc-2008\Koruz.vcproj", "{C233B433-2D3A-41BD-ABAB-F92B569E95EA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
@@ -392,9 +392,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "universalis", "..\..\univer
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "direct_sound", "projects\direct_sound\direct_sound.msvc-2008.vcproj", "{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.fluidsynth (dynamic library)", "..\..\pyscle-plugins\msvc-2008\fluidsynth.vcproj", "{923A9CFD-C2B2-4A53-952B-EC9CD8413704}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.fluidsynth (dynamic library)", "..\..\psycle-plugins\msvc-2008\fluidsynth.vcproj", "{923A9CFD-C2B2-4A53-952B-EC9CD8413704}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.fluidsynth.sf2.player", "..\..\pyscle-plugins\msvc-2008\fs_sf2_player.vcproj", "{E6905023-50A7-49E0-A5DE-5C0D26414B8D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.fluidsynth.sf2.player", "..\..\psycle-plugins\msvc-2008\fs_sf2_player.vcproj", "{E6905023-50A7-49E0-A5DE-5C0D26414B8D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{28C015FB-3BDA-4B32-8D85-C652E9892216} = {28C015FB-3BDA-4B32-8D85-C652E9892216}
 		{923A9CFD-C2B2-4A53-952B-EC9CD8413704} = {923A9CFD-C2B2-4A53-952B-EC9CD8413704}
@@ -423,15 +423,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "universalis.unit-tests", ".
 		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1} = {29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_eq", "..\..\pyscle-plugins\msvc-2008\dw_eq.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F0A000}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_eq", "..\..\psycle-plugins\msvc-2008\dw_eq.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F0A000}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_granulizer", "..\..\pyscle-plugins\msvc-2008\dw_granulizer.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05187}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_granulizer", "..\..\psycle-plugins\msvc-2008\dw_granulizer.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05187}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_guitremolo", "..\..\pyscle-plugins\msvc-2008\dw_guitremolo.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05188}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_guitremolo", "..\..\psycle-plugins\msvc-2008\dw_guitremolo.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05188}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_iopan", "..\..\pyscle-plugins\msvc-2008\dw_iopan.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05189}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_iopan", "..\..\psycle-plugins\msvc-2008\dw_iopan.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05189}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_tremolo", "..\..\pyscle-plugins\msvc-2008\dw_tremolo.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05190}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_tremolo", "..\..\psycle-plugins\msvc-2008\dw_tremolo.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05190}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-helpers", "..\..\psycle-helpers\psycle-helpers.msvc-2008.vcproj", "{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
 EndProject
