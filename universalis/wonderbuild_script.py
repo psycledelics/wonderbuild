@@ -28,6 +28,8 @@ class Wonderbuild(ScriptTask):
 
 		build_cfg.include_paths.append(src_dir)
 		build_cfg.include_paths.append(src_dir / 'universalis' / 'standard_library' / 'future_std_include')
+		build_cfg.defines['UNIVERSALIS__SOURCE'] = build_cfg.shared and '1' or '-1'
+		build_cfg.defines['UNIVERSALIS__OPERATING_SYSTEM__LOGGER_OWNED'] = None
 		
 		class Universalis(ModTask):
 			def __init__(self): ModTask.__init__(self, 'universalis', ModTask.Kinds.LIB, build_cfg)
@@ -55,6 +57,8 @@ class Wonderbuild(ScriptTask):
 					from wonderbuild.cxx_chain import ClientCfg
 					self._client_cfg = ClientCfg(self.project)
 					self._client_cfg.include_paths.append(src_dir)
+					self._client_cfg.include_paths.append(src_dir / 'universalis' / 'standard_library' / 'future_std_include')
+					if not self.cfg.shared: self._client_cfg.defines['UNIVERSALIS__SOURCE'] = '0'
 					diversalis.client_cfg.apply_to(self._client_cfg)
 					return self._client_cfg
 			
@@ -67,7 +71,15 @@ class Wonderbuild(ScriptTask):
 					try: return self._sources
 					except AttributeError:
 						self._sources = []
-						for s in (self.trim_prefix / 'universalis').find_iter(in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)): self._sources.append(s)
+						for s in (self.trim_prefix / 'universalis').find_iter(
+								in_pats = ('*.hpp',),
+								ex_pats = ('*.private.hpp',),
+								prune_pats = ('todo',)
+							): self._sources.append(s)
+						for s in (self.trim_prefix / 'universalis' / 'standard_library' / 'future_std_include').find_iter(
+								in_pats = ('condition', 'cstdint', 'date_time', 'mutex', 'thread'),
+								prune_pats = ('*',)
+							): self._sources.append(s)
 						return self._sources
 		
 				@property
