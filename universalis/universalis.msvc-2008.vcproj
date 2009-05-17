@@ -273,22 +273,6 @@
 			<File
 				RelativePath="src\universalis\exception.cpp"
 				>
-				<FileConfiguration
-					Name="debug|Win32"
-					>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="debug|x64"
-					>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="release|Win32"
-					>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="release|x64"
-					>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\universalis\exception.hpp"
@@ -311,7 +295,7 @@
 				>
 			</File>
 			<Filter
-				Name="universalis/compiler"
+				Name="compiler"
 				>
 				<File
 					RelativePath="src\universalis\compiler\cast.hpp"
@@ -354,7 +338,7 @@
 					>
 				</File>
 				<Filter
-					Name="universalis/compiler/dynamic_link"
+					Name="dynamic_link"
 					>
 					<File
 						RelativePath="src\universalis\compiler\dynamic_link\begin.hpp"
@@ -366,34 +350,18 @@
 					</File>
 				</Filter>
 				<Filter
-					Name="universalis/compiler/exceptions"
+					Name="exceptions"
 					>
 					<File
 						RelativePath="src\universalis\compiler\exceptions\ellipsis.cpp"
 						>
-						<FileConfiguration
-							Name="debug|Win32"
-							>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="debug|x64"
-							>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="release|Win32"
-							>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="release|x64"
-							>
-						</FileConfiguration>
 					</File>
 				</Filter>
 				<Filter
-					Name="universalis/compiler/detail"
+					Name="detail"
 					>
 					<Filter
-						Name="universalis/compiler/detail/pragmatic"
+						Name="pragmatic"
 						>
 						<File
 							RelativePath="src\universalis\compiler\detail\pragmatic\align.hpp"
@@ -422,22 +390,6 @@
 						<File
 							RelativePath="src\universalis\compiler\detail\pragmatic\demangle.cpp"
 							>
-							<FileConfiguration
-								Name="debug|Win32"
-								>
-							</FileConfiguration>
-							<FileConfiguration
-								Name="debug|x64"
-								>
-							</FileConfiguration>
-							<FileConfiguration
-								Name="release|Win32"
-								>
-							</FileConfiguration>
-							<FileConfiguration
-								Name="release|x64"
-								>
-							</FileConfiguration>
 						</File>
 						<File
 							RelativePath="src\universalis\compiler\detail\pragmatic\demangle.hpp"
@@ -481,7 +433,7 @@
 						</File>
 					</Filter>
 					<Filter
-						Name="universalis/compiler/detail/gnu"
+						Name="gnu"
 						>
 						<File
 							RelativePath="src\universalis\compiler\detail\gnu\diagnostics.hpp"
@@ -493,7 +445,7 @@
 						</File>
 					</Filter>
 					<Filter
-						Name="universalis/compiler/detail/microsoft"
+						Name="microsoft"
 						>
 						<File
 							RelativePath="src\universalis\compiler\detail\microsoft\assume.hpp"
@@ -513,7 +465,7 @@
 						</File>
 					</Filter>
 					<Filter
-						Name="universalis/compiler/detail/standard"
+						Name="standard"
 						>
 						<File
 							RelativePath="src\universalis\compiler\detail\standard\restrict.hpp"
@@ -527,7 +479,7 @@
 				</Filter>
 			</Filter>
 			<Filter
-				Name="universalis/detail"
+				Name="detail"
 				>
 				<File
 					RelativePath="src\universalis\detail\configuration.private.hpp"
@@ -543,27 +495,11 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="universalis/operating_system"
+				Name="operating_system"
 				>
 				<File
 					RelativePath="src\universalis\operating_system\clocks.cpp"
 					>
-					<FileConfiguration
-						Name="debug|Win32"
-						>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="debug|x64"
-						>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="release|Win32"
-						>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="release|x64"
-						>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="src\universalis\operating_system\clocks.hpp"
@@ -578,18 +514,22 @@
 					>
 					<FileConfiguration
 						Name="debug|Win32"
+						ObjectFile="$(IntDir)\universalis,operating_system,exception.obj"
 						>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="debug|x64"
+						ObjectFile="$(IntDir)\universalis,operating_system,exception.obj"
 						>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="release|Win32"
+						ObjectFile="$(IntDir)\universalis,operating_system,exception.obj"
 						>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="release|x64"
+						ObjectFile="$(IntDir)\universalis,operating_system,exception.obj"
 						>
 					</FileConfiguration>
 				</File>
@@ -600,22 +540,6 @@
 				<File
 					RelativePath="src\universalis\operating_system\loggers.cpp"
 					>
-					<FileConfiguration
-						Name="debug|Win32"
-						>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="debug|x64"
-						>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="release|Win32"
-						>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="release|x64"
-						>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="src\universalis\operating_system\loggers.hpp"
@@ -628,22 +552,6 @@
 				<File
 					RelativePath="src\universalis\operating_system\paths.cpp"
 					>
-					<FileConfiguration
-						Name="debug|Win32"
-						>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="debug|x64"
-						>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="release|Win32"
-						>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="release|x64"
-						>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="src\universalis\operating_system\paths.hpp"
@@ -652,22 +560,6 @@
 				<File
 					RelativePath="src\universalis\operating_system\terminal.cpp"
 					>
-					<FileConfiguration
-						Name="debug|Win32"
-						>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="debug|x64"
-						>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="release|Win32"
-						>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="release|x64"
-						>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="src\universalis\operating_system\terminal.hpp"
@@ -676,49 +568,17 @@
 				<File
 					RelativePath="src\universalis\operating_system\thread_name.cpp"
 					>
-					<FileConfiguration
-						Name="debug|Win32"
-						>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="debug|x64"
-						>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="release|Win32"
-						>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="release|x64"
-						>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="src\universalis\operating_system\thread_name.hpp"
 					>
 				</File>
 				<Filter
-					Name="universalis/operating_system/detail"
+					Name="detail"
 					>
 					<File
 						RelativePath="src\universalis\operating_system\detail\check_version.cpp"
 						>
-						<FileConfiguration
-							Name="debug|Win32"
-							>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="debug|x64"
-							>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="release|Win32"
-							>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="release|x64"
-							>
-						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="src\universalis\operating_system\detail\check_version.hpp"
@@ -730,7 +590,7 @@
 					</File>
 				</Filter>
 				<Filter
-					Name="universalis/operating_system/dynamic_link"
+					Name="dynamic_link"
 					>
 					<File
 						RelativePath="src\universalis\operating_system\dynamic_link\main.hpp"
@@ -743,22 +603,6 @@
 					<File
 						RelativePath="src\universalis\operating_system\dynamic_link\resolver.cpp"
 						>
-						<FileConfiguration
-							Name="debug|Win32"
-							>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="debug|x64"
-							>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="release|Win32"
-							>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="release|x64"
-							>
-						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="src\universalis\operating_system\dynamic_link\resolver.hpp"
@@ -773,18 +617,22 @@
 						>
 						<FileConfiguration
 							Name="debug|Win32"
+							ObjectFile="$(IntDir)\universalis,operating_system,exceptions,code_description.obj"
 							>
 						</FileConfiguration>
 						<FileConfiguration
 							Name="debug|x64"
+							ObjectFile="$(IntDir)\universalis,operating_system,exceptions,code_description.obj"
 							>
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release|Win32"
+							ObjectFile="$(IntDir)\universalis,operating_system,exceptions,code_description.obj"
 							>
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release|x64"
+							ObjectFile="$(IntDir)\universalis,operating_system,exceptions,code_description.obj"
 							>
 						</FileConfiguration>
 					</File>
@@ -794,7 +642,7 @@
 					</File>
 				</Filter>
 				<Filter
-					Name="universalis/operating_system/paths"
+					Name="paths"
 					>
 					<File
 						RelativePath="src\universalis\operating_system\paths\implementation.hpp"
@@ -819,25 +667,29 @@
 				</Filter>
 			</Filter>
 			<Filter
-				Name="universalis/processor"
+				Name="processor"
 				>
 				<File
 					RelativePath="src\universalis\processor\exception.cpp"
 					>
 					<FileConfiguration
 						Name="debug|Win32"
+						ObjectFile="$(IntDir)\universalis,processor,exception.obj"
 						>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="debug|x64"
+						ObjectFile="$(IntDir)\universalis,processor,exception.obj"
 						>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="release|Win32"
+						ObjectFile="$(IntDir)\universalis,processor,exception.obj"
 						>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="release|x64"
+						ObjectFile="$(IntDir)\universalis,processor,exception.obj"
 						>
 					</FileConfiguration>
 				</File>
@@ -850,32 +702,36 @@
 					>
 				</File>
 				<Filter
-					Name="universalis/processor/exceptions"
+					Name="exceptions"
 					>
 					<File
 						RelativePath="src\universalis\processor\exceptions\code_description.cpp"
 						>
 						<FileConfiguration
 							Name="debug|Win32"
+							ObjectFile="$(IntDir)\universalis,processor,exceptions,code_description.obj"
 							>
 						</FileConfiguration>
 						<FileConfiguration
 							Name="debug|x64"
+							ObjectFile="$(IntDir)\universalis,processor,exceptions,code_description.obj"
 							>
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release|Win32"
+							ObjectFile="$(IntDir)\universalis,processor,exceptions,code_description.obj"
 							>
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release|x64"
+							ObjectFile="$(IntDir)\universalis,processor,exceptions,code_description.obj"
 							>
 						</FileConfiguration>
 					</File>
 				</Filter>
 			</Filter>
 			<Filter
-				Name="universalis/standard_library"
+				Name="standard_library"
 				>
 				<File
 					RelativePath="src\universalis\standard_library\allocators.hpp"
@@ -919,22 +775,6 @@
 					<File
 						RelativePath="src\universalis\standard_library\detail\allocators.cpp"
 						>
-						<FileConfiguration
-							Name="debug|Win32"
-							>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="debug|x64"
-							>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="release|Win32"
-							>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="release|x64"
-							>
-						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="src\universalis\standard_library\detail\allocators.hpp"
@@ -962,25 +802,29 @@
 					</File>
 				</Filter>
 				<Filter
-					Name="universalis/standard_library/exceptions"
+					Name="exceptions"
 					>
 					<File
 						RelativePath="src\universalis\standard_library\exceptions\code_description.cpp"
 						>
 						<FileConfiguration
 							Name="debug|Win32"
+							ObjectFile="$(IntDir)\universalis,standard_library,exception.obj"
 							>
 						</FileConfiguration>
 						<FileConfiguration
 							Name="debug|x64"
+							ObjectFile="$(IntDir)\universalis,standard_library,exception.obj"
 							>
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release|Win32"
+							ObjectFile="$(IntDir)\universalis,standard_library,exception.obj"
 							>
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release|x64"
+							ObjectFile="$(IntDir)\universalis,standard_library,exception.obj"
 							>
 						</FileConfiguration>
 					</File>
@@ -1015,7 +859,7 @@
 				>
 			</File>
 			<Filter
-				Name="diversalis/detail"
+				Name="detail"
 				>
 				<File
 					RelativePath="..\diversalis\src\diversalis\detail\configuration.hpp"
@@ -1056,6 +900,4 @@
 			</File>
 		</Filter>
 	</Files>
-	<Globals>
-	</Globals>
 </VisualStudioProject>

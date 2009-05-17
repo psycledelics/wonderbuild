@@ -15,7 +15,6 @@
 		MinimalRebuild="true"
 		ExceptionHandling="2"
 		WarningLevel="4"
-		ObjectFile="$(IntDir)/obj/$(ParentName)/$(InputName).obj"
 	/>
 	<Tool
 		Name="VCLibrarianTool"
@@ -31,6 +30,5 @@
 	/>
 	<Tool
 		Name="VCResourceCompilerTool"
-		ResourceOutputFileName="$(IntDir)/$(ParentName)/$(InputName).res"
 	/>
 </VisualStudioPropertySheet>
