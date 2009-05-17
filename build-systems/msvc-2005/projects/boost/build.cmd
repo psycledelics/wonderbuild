@@ -4,7 +4,7 @@
 cd %~p0
 
 set output=..\..\output
-set pkgdir=..\..\..\..\..\external-packages\boost-1.33.1
+set pkgdir=..\..\..\..\external-packages\boost-1.33.1
 set libdir=lib-mswindows-msvc-8.0-cxxabi-1400
 
 if not exist %pkgdir%\include\boost (

@@ -4,7 +4,7 @@
 cd %~p0
 
 set output=..\..\output
-set pkgdir=..\..\..\..\..\external-packages\zlib-1.2.3
+set pkgdir=..\..\..\..\external-packages\zlib-1.2.3
 set libdir=lib-mswindows-cabi
 
 if not exist %output%\zlib_stamp (
