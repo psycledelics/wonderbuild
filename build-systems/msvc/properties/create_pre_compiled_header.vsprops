@@ -11,6 +11,7 @@
 		UsePrecompiledHeader="1"
 		PrecompiledHeaderFile="$(OutDir)/$(ProjectName).pch"
 		ProgramDataBaseFileName="$(OutDir)/$(ProjectName).pdb"
+		ObjectFile="$(IntDir)/$(InputName).obj"
 	/>
 	<Tool
 		Name="VCLinkerTool"

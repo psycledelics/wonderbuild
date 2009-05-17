@@ -265,7 +265,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\build-systems\src\pre-compiled.private.hpp"
+			RelativePath="$(TopSrcDir)\build-systems\src\pre-compiled.private.hpp"
 			>
 		</File>
 		<File
