@@ -21,8 +21,8 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="cmd.exe /c build.cmd"
-				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd &amp;&amp; build.cmd&quot;"
+				BuildCommandLine="cmd.exe /c build.cmd 1.33.1 8.0-cxxabi-1400"
+				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd &amp;&amp; build.cmd 1.33.1 8.0-cxxabi-1400&quot;"
 				CleanCommandLine="cmd.exe /c clean.cmd"
 				Output=""
 				PreprocessorDefinitions=""

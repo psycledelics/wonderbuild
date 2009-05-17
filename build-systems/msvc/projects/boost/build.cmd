@@ -4,8 +4,8 @@
 cd %~p0
 
 set output=..\..\output
-set pkgdir=..\..\..\..\external-packages\boost-1.38.0
-set libdir=lib-mswindows-msvc-9.0-cxxabi-1500
+set pkgdir=..\..\..\..\external-packages\boost-%1
+set libdir=lib-mswindows-msvc-%2
 
 if not exist %pkgdir%\include\boost (
 	pushd %pkgdir% || exit /b 1
