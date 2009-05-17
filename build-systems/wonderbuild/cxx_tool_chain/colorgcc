@@ -202,7 +202,7 @@ elsif(-f '/etc/colorgcc/colorgccrc')
 # Figure out which compiler to invoke based on our program name.
 $0 =~ m%.*/(.*)$%;
 # <bohan>
-$progName = $ENV{"WONDERBUILD__GCC"} || $1 || $0;
+$progName = $ENV{"COLORGCC"} || $1 || $0;
 
 # See if the user asked for a specific compiler.
 if($progName eq $0)
@@ -257,7 +257,7 @@ $terminal = $ENV{"TERM"} || "dumb";
 # If it's in the list of terminal types not to color, or if
 # we're writing to something that's not a tty terminal, don't do color.
 # <bohan>
-if(!($terminal eq "wonderbuild--color-pipe") && (! -t STDOUT || $nocolor{$terminal}))
+if(!($terminal eq "colorgcc") && (! -t STDOUT || $nocolor{$terminal}))
 {
 	print "(no gcc colorization";
 	if(! -t STDOUT)
