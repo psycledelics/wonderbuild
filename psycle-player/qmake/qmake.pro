@@ -1,7 +1,7 @@
 TARGET = psycle-player
 
 # include the base stuff shared amongst all qmake projects.
-include(../../packageneric/qmake/common.pri)
+include(../../build-systems/qmake/common.pri)
 
 # this include defines a dependency on the psycle-core lib.
 include($$TOP_SRC_DIR/psycle-core/qmake/psycle-core.pri)

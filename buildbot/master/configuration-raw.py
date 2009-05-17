@@ -107,7 +107,7 @@ BuildmasterConfig['builders'].append(
 				factory.s(SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis', locks = [compile_lock]),
 				factory.s(Compile, command = 'scons --directory=universalis', locks = [compile_lock]),
-				factory.s(Test, command = './++packageneric/variants/default/stage-install/usr/local/bin/universalis_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
+				factory.s(Test, command = './++sconscrap/variants/default/stage-install/usr/local/bin/universalis_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
 			]
 		)
 	}
@@ -118,7 +118,7 @@ BuildmasterConfig['schedulers'].append(
 		branch = None,
 		treeStableTimer = bunch_timer,
 		builderNames = ['universalis'],
-		fileIsImportant = lambda change: filter(change, ['universalis/', 'diversalis/', 'packageneric/'])
+		fileIsImportant = lambda change: filter(change, ['universalis/', 'diversalis/', 'build-systems/'])
 	)
 )
 
@@ -133,7 +133,7 @@ BuildmasterConfig['builders'].append(
 				factory.s(SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy diversalis universalis', locks = [compile_lock]),
 				factory.s(Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=universalis', locks = [compile_lock]),
-				factory.s(Test, command = 'call ..\\..\\..\\dev-pack && .\\++packageneric\\variants\\default\\stage-install\\usr\\local\\bin\\universalis_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
+				factory.s(Test, command = 'call ..\\..\\..\\dev-pack && .\\++sconscrap\\variants\\default\\stage-install\\usr\\local\\bin\\universalis_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
 			]
 		)
 	}
@@ -144,7 +144,7 @@ BuildmasterConfig['schedulers'].append(
 		branch = None,
 		treeStableTimer = bunch_timer,
 		builderNames = ['universalis.mingw'],
-		fileIsImportant = lambda change: filter(change, ['universalis/', 'diversalis/', 'packageneric/'])
+		fileIsImportant = lambda change: filter(change, ['universalis/', 'diversalis/', 'build-systems/'])
 	)
 )
 
@@ -172,7 +172,7 @@ BuildmasterConfig['schedulers'].append(
 		branch = None,
 		treeStableTimer = bunch_timer,
 		builderNames = ['freepsycle'],
-		fileIsImportant = lambda change: filter(change, ['freepsycle/', 'psycle-helpers/', 'universalis/', 'diversalis/', 'packageneric/'])
+		fileIsImportant = lambda change: filter(change, ['freepsycle/', 'psycle-helpers/', 'universalis/', 'diversalis/', 'build-systems/'])
 	)
 )
 
@@ -197,7 +197,7 @@ BuildmasterConfig['schedulers'].append(
 		branch = None,
 		treeStableTimer = bunch_timer,
 		builderNames = ['freepsycle.mingw'],
-		fileIsImportant = lambda change: filter(change, ['freepsycle/', 'psycle-helpers/', 'universalis/', 'diversalis/', 'packageneric/'])
+		fileIsImportant = lambda change: filter(change, ['freepsycle/', 'psycle-helpers/', 'universalis/', 'diversalis/', 'build-systems/'])
 	)
 )
 
@@ -211,7 +211,7 @@ BuildmasterConfig['builders'].append(
 			[
 				factory.s(SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(Compile, command = 'call ..\\..\\..\\dev-pack && cd freepsycle && sh -c ./make-microsoft-raw-package', locks = [compile_lock]),
-				factory.s(Upload, command = 'scp -F ../../../../.ssh/config freepsycle/++packageneric/variants/default/install/freepsycle.tar.bz2 upload.buildborg.retropaganda.info:psycle/htdocs/packages/microsoft/ && echo download the package at http://psycle.sourceforge.net/packages/microsoft/freepsycle.tar.bz2', locks = [svn_lock])
+				factory.s(Upload, command = 'scp -F ../../../../.ssh/config freepsycle/++sconscrap/variants/default/install/freepsycle.tar.bz2 upload.buildborg.retropaganda.info:psycle/htdocs/packages/microsoft/ && echo download the package at http://psycle.sourceforge.net/packages/microsoft/freepsycle.tar.bz2', locks = [svn_lock])
 			]
 		)
 	}
@@ -411,7 +411,7 @@ BuildmasterConfig['schedulers'].append(
 		branch = None,
 		treeStableTimer = bunch_timer,
 		builderNames = ['psycle-plugins'],
-		fileIsImportant = lambda change: filter(change, ['psycle-plugins/', 'psycle-helpers/', 'universalis/', 'diversalis/', 'packageneric/'])
+		fileIsImportant = lambda change: filter(change, ['psycle-plugins/', 'psycle-helpers/', 'universalis/', 'diversalis/', 'build-systems/'])
 	)
 )
 
@@ -435,7 +435,7 @@ BuildmasterConfig['schedulers'].append(
 		branch = None,
 		treeStableTimer = bunch_timer,
 		builderNames = ['psycle-plugins.mingw'],
-		fileIsImportant = lambda change: filter(change, ['psycle-plugins/', 'psycle-helpers/', 'universalis/', 'diversalis/', 'packageneric/'])
+		fileIsImportant = lambda change: filter(change, ['psycle-plugins/', 'psycle-helpers/', 'universalis/', 'diversalis/', 'build-systems/'])
 	)
 )
 
@@ -449,7 +449,7 @@ BuildmasterConfig['builders'].append(
 			[
 				factory.s(SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(Compile, command = 'call ..\\..\\..\\dev-pack && cd psycle-plugins && sh -c ./make-microsoft-raw-package', locks = [compile_lock]),
-				factory.s(Upload, command = 'scp -F ../../../../.ssh/config psycle-plugins/++packageneric/variants/default/install/psycle-plugins.tar.bz2 upload.buildborg.retropaganda.info:psycle/htdocs/packages/microsoft/ && echo download the package at http://psycle.sourceforge.net/packages/microsoft/psycle-plugins.tar.bz2', locks = [svn_lock])
+				factory.s(Upload, command = 'scp -F ../../../../.ssh/config psycle-plugins/++sconscrap/variants/default/install/psycle-plugins.tar.bz2 upload.buildborg.retropaganda.info:psycle/htdocs/packages/microsoft/ && echo download the package at http://psycle.sourceforge.net/packages/microsoft/psycle-plugins.tar.bz2', locks = [svn_lock])
 			]
 		)
 	}
@@ -468,7 +468,7 @@ BuildmasterConfig['builders'].append(
 				factory.s(SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis psycle-helpers', locks = [compile_lock]),
 				factory.s(Compile, command = 'scons --directory=psycle-helpers', locks = [compile_lock]),
-				factory.s(Test, command = './++packageneric/variants/default/stage-install/usr/local/bin/psycle-helpers_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
+				factory.s(Test, command = './++sconscrap/variants/default/stage-install/usr/local/bin/psycle-helpers_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
 			]
 		)
 	}
@@ -479,7 +479,7 @@ BuildmasterConfig['schedulers'].append(
 		branch = None,
 		treeStableTimer = bunch_timer,
 		builderNames = ['psycle-helpers'],
-		fileIsImportant = lambda change: filter(change, ['psycle-helpers/', 'universalis/', 'diversalis/', 'packageneric/'])
+		fileIsImportant = lambda change: filter(change, ['psycle-helpers/', 'universalis/', 'diversalis/', 'build-systems/'])
 	)
 )
 
@@ -494,7 +494,7 @@ BuildmasterConfig['builders'].append(
 				factory.s(SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = 'call ..\\..\\..\\dev-pack && python .\\tools\\check-policy diversalis universalis psycle-helpers', locks = [compile_lock]),
 				factory.s(Compile, command = 'call ..\\..\\..\\dev-pack && scons --directory=psycle-helpers', locks = [compile_lock]),
-				factory.s(Test, command = 'call ..\\..\\..\\dev-pack && .\\++packageneric\\variants\\default\\stage-install\\usr\\local\\bin\\psycle-helpers_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
+				factory.s(Test, command = 'call ..\\..\\..\\dev-pack && .\\++sconscrap\\variants\\default\\stage-install\\usr\\local\\bin\\psycle-helpers_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
 			]
 		)
 	}
@@ -505,7 +505,7 @@ BuildmasterConfig['schedulers'].append(
 		branch = None,
 		treeStableTimer = bunch_timer,
 		builderNames = ['psycle-helpers.mingw'],
-		fileIsImportant = lambda change: filter(change, ['psycle-helpers/', 'universalis/', 'diversalis/', 'packageneric/'])
+		fileIsImportant = lambda change: filter(change, ['psycle-helpers/', 'universalis/', 'diversalis/', 'build-systems/'])
 	)
 )
 
@@ -531,7 +531,7 @@ BuildmasterConfig['schedulers'].append(
 		branch = None,
 		treeStableTimer = bunch_timer,
 		builderNames = ['psycle.msvc'],
-		fileIsImportant = lambda change: filter(change, ['psycle/', 'psycle-helpers/', 'psycle-core/', 'psycle-audiodrivers/', 'universalis/', 'diversalis/', 'packageneric/'])
+		fileIsImportant = lambda change: filter(change, ['psycle/', 'psycle-helpers/', 'psycle-core/', 'psycle-audiodrivers/', 'universalis/', 'diversalis/', 'build-systems/'])
 	)
 )
 
@@ -721,7 +721,7 @@ if False:
 		'branches/', 'tags/',
 		'/trunk/dependencies.dot', '/trunk/dependencies.png', '/README', 'tools/', 'freepsycle/', 'qpsycle/', 'psycle-core/',
 		'psycle-player/', 'psycle-helpers', 'psycle-audiodrivers/', 'psycle-plugins/', 'psycle/',
-		'universalis/', 'diversalis/', 'packageneric/', 'buildbot/', 'external-packages/', 'www/'
+		'universalis/', 'diversalis/', 'build-systems/', 'buildbot/', 'external-packages/', 'www/'
 	]
 
 	BuildmasterConfig['builders'].append(

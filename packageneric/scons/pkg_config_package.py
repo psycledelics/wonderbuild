@@ -104,13 +104,13 @@ class pkg_config_package(projected, builder):
 			self._local_package = local_package(self)
 			return self._local_package
 	
-	def alias_names(self): return ['packageneric:pkg-config-package', self.name()]
+	def alias_names(self): return ['sconscrap:pkg-config-package', self.name()]
 
 	def targets(self):
 		try: return self._targets
 		except AttributeError:
 			#uninstalled_file_name = os.path.join(self.project().build_variant_intermediate_dir(), 'pkgconfig', self.name() + '-uninstalled.pc')
-			installed_file_name = os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib', 'pkgconfig', self.name() + '.pc')
+			installed_file_name = os.path.join('$sconscrap__install__stage_destination', '$sconscrap__install__lib', 'pkgconfig', self.name() + '.pc')
 
 			# todo: when the dependency is a shared lib, we can avoid unneeded relinking of
 			#       the target(s) by depending only on the header files, not the lib file itself. 
@@ -132,9 +132,9 @@ class pkg_config_package(projected, builder):
 			
 			# add the install lib path to the library path
 			if self.modules():
-				env.linker().paths().add([os.path.join('$packageneric__install__stage_destination', '$packageneric__install__lib')])
+				env.linker().paths().add([os.path.join('$sconscrap__install__stage_destination', '$sconscrap__install__lib')])
 				if self.project().platform_executable_format() == 'pe':
-					env.linker().paths().add([os.path.join('$packageneric__install__stage_destination', '$packageneric__install__bin')])
+					env.linker().paths().add([os.path.join('$sconscrap__install__stage_destination', '$sconscrap__install__bin')])
 
 			scons = self.project()._scons()
 			self._targets = [

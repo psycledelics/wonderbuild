@@ -27,18 +27,18 @@ isEmpty(platform_included) {
 	# Colors can be disabled either with "qmake CONFIG+=nocolor", or "make TERM=dumb".
 	#
 	# Note that colors are automatically disabled when output is not a tty terminal
-	# (e.g. piped or redirected to files), unless TERM is set to packageneric--color-pipe.
+	# (e.g. piped or redirected to files), unless TERM is set to color-pipe.
 	#
 	# On windows, msys's rxvt terminal is not seen as a tty terminal from the non-msys mingw32-make,
-	# so you will need to use "mingw32-make TERM=packageneric--color-pipe" to enable colors.
+	# so you will need to use "mingw32-make TERM=colorgcc" to enable colors.
 	# Cygwin's rxvt terminal (either in windows or X11 mode) doesn't have this problem since you would use cygwin's make,
 	# and it even works in cygwin's bash shell running inside microsoft's ugly and non-ansi "console".
 	#
 	# If you also use colormake, the output won't be a tty terminal anymore but a pipe,
-	# so you will need to use "colormake TERM=packageneric--color-pipe" to enable colorisation of gcc's output.
+	# so you will need to use "colormake TERM=colorgcc" to enable colorisation of gcc's output.
 	#
 	!CONFIG(nocolor): exists(/usr/bin/env) { # /usr/bin/env is a good indication we have a posix system and shell (as opposed to microsoft's cmd.exe shell). A better test would be to test the SHELL env var.
-		colorgcc = $$TOP_SRC_DIR/packageneric/colorgcc
+		colorgcc = $$TOP_SRC_DIR/build-systems/colorgcc
 		exists($$colorgcc) {
 			contains(QMAKE_CXX,  g++): QMAKE_CXX  = $$colorgcc
 			contains(QMAKE_LINK, g++): QMAKE_LINK = $$colorgcc

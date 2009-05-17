@@ -50,9 +50,9 @@ class source_package(projected, named):
 			env = self._contexes.build()
 			env.compilers().cxx().paths().add([os.path.join(self.project().build_variant_intermediate_dir(), 'source-packages', self.name(), 'src')])
 			self.project().file_from_value(
-				os.path.join('source-packages', self.name(), 'src', 'packageneric', 'source-package.private.hpp'),
+				os.path.join('source-packages', self.name(), 'src', 'sconscrap-source-package.private.hpp'),
 				''.join(
-						['#include <packageneric/configuration.private.hpp>\n'] +
+						['#include <sconscrap-configuration.private.hpp>\n'] +
 						['#define PACKAGENERIC__PACKAGE__%s %s\n' % (n, v) for n, v in
 							[	('NAME', '"%s"' % self.name()),
 								('VERSION', '"%s"' % str(self.version()))

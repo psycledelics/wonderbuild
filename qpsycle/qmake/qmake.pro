@@ -1,7 +1,7 @@
 TARGET = qpsycle
 
 # include the base stuff shared amongst all qmake projects.
-include(../../packageneric/qmake/common.pri)
+include(../../build-systems/qmake/common.pri)
 
 # this include defines a dependency on the qt-xml lib.
 include(qt-xml.pri)

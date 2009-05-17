@@ -2,7 +2,7 @@
 # copyright 2006-2008 members of the psycle project http://psycle.pastnotecut.org ; johan boule <bohan@jabber.org>
 
 def detect(chain):
-	from packageneric.std_checks.gnug import gnug
+	from sconscrap.std_checks.gnug import gnug
 	gnug = gnug(chain.project())
 	if gnug.result():
 		chain_os_env_paths_vars = [
@@ -113,7 +113,7 @@ def detect(chain):
 				# $ORIGIN works on gnu, sun and irix linkers.
 				'-Wl,--rpath=\\$$ORIGIN', # makes it more easy for plugins to use helper libs 
 				'-Wl,--rpath=\\$$ORIGIN/../lib',
-				'-Wl,--rpath=$packageneric__install__lib'
+				'-Wl,--rpath=$sconscrap__install__lib'
 			])
 			if gnug.version().major() >= 4:
 				chain.linker().flags().add([
@@ -196,7 +196,7 @@ def detect(chain):
 				'-mthreads' # links with -lmingwthrd for thread-safe exception handling
 			])
 		else:			
-			from packageneric.std_checks.pthread import pthread
+			from sconscrap.std_checks.pthread import pthread
 			pthread = pthread(chain.project())
 			if pthread.result():
 				if chain.project().platform() == 'cygwin':
@@ -216,25 +216,25 @@ def detect(chain):
 
 		if chain.project()._scons().Detect('perl'): # todo we have to check for perl until our colorgcc is rewritten in python
 			import tty_font
-			if tty_font.ansi_term(): chain.os_env().add({'TERM': 'packageneric--color-pipe'}) # tells our colorgcc that the pipe eventually ends up being displayed on a tty
+			if tty_font.ansi_term(): chain.os_env().add({'TERM': 'colorgcc'}) # tells our colorgcc that the pipe eventually ends up being displayed on a tty
 			# We use colorgcc on the command line regardless of whether the output is a tty (teletype) terminal, where we can colorise the output.
-			# This is harmless since colorgcc will check again for tty (which is always false since it's piped) and for the TERM env var to see if it's 'packageneric--color-pipe',
+			# This is harmless since colorgcc will check again for tty (which is always false since it's piped) and for the TERM env var to see if it's 'colorgcc',
 			# and this avoids uneeded rebuild by keeping signatures of command lines the same with and without a tty.
 			gcc = chain.compilers().cxx().command().get()
 			if gcc is None: gcc = chain.project()._scons().subst('$CXX')
-			chain.os_env().add({'PACKAGENERIC__GCC': gcc})
+			chain.os_env().add({'COLORGCC': gcc})
 			chain.os_env().add_inherited(['HOME']) # colorgcc reads a config file in home dir.
 			import os
-			colorgcc = os.path.join(chain.project().packageneric_dir(), 'colorgcc')
+			colorgcc = os.path.join(chain.project().sconscrap_dir(), 'colorgcc')
 			chain.compilers().cxx().command().set(colorgcc)
 			chain.linker().command().set(colorgcc)
 
 		if False: # we can't do that without handling deletion of objects too
 			chain.archiver().flags().add(['u', 's'])
-			chain.archiver().message().set(chain.project().message('packageneric: ', 'updating objects in archive $TARGET', font = '1;35'))
+			chain.archiver().message().set(chain.project().message('sconscrap: ', 'updating objects in archive $TARGET', font = '1;35'))
 			def ranlib(*args, **kw): return 'true'
 			chain.archiver().indexer().command().set(ranlib)
-			chain.archiver().indexer().message().set(chain.project().message('packageneric: ', 'updated symbol index table in archive $TARGET', font = '1;35'))
+			chain.archiver().indexer().message().set(chain.project().message('sconscrap: ', 'updated symbol index table in archive $TARGET', font = '1;35'))
 
 	return gnug.result()
 

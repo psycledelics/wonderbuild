@@ -25,13 +25,13 @@ def template(base):
 					log_file = self.project().check_log(),
 					config_h = None
 				)
-				scons_sconf.AddTest('packageneric__execute', lambda scons_sconf_context, self = self: self._execute_(scons_sconf_context))
-				result = scons_sconf.packageneric__execute()
+				scons_sconf.AddTest('sconscrap__execute', lambda scons_sconf_context, self = self: self._execute_(scons_sconf_context))
+				result = scons_sconf.sconscrap__execute()
 				scons_sconf.Finish()
 				return result
 			
 			def _execute_(self, scons_sconf_context):
-				scons_sconf_context.Message(self.project().root().message('packageneric: ', 'checking for ' + self.name() + ' ... ', font = '1;34'))
+				scons_sconf_context.Message(self.project().root().message('sconscrap: ', 'checking for ' + self.name() + ' ... ', font = '1;34'))
 				result, output = self._scons_sconf_execute(scons_sconf_context)
 				if result:
 					if not output: output = 'yes'
@@ -39,7 +39,7 @@ def template(base):
 				else:
 					if not output: output = 'no'
 					font = '1;31'
-				from packageneric.scons.tty_font import tty_font
+				from sconscrap.scons.tty_font import tty_font
 				scons_sconf_context.Result(tty_font(font, output))
 				return result
 				

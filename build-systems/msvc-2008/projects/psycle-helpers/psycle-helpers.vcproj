@@ -92,7 +92,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				ForcedIncludeFiles="packageneric/pre-compiled.private.hpp"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -198,7 +197,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				ForcedIncludeFiles="packageneric/pre-compiled.private.hpp"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"

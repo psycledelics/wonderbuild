@@ -3,7 +3,7 @@
 # copyright 2006-2007 psycledelics http://psycle.pastnotecut.org
 
 import detail.scons as scons
-from packageneric.scons.check import check
+from sconscrap.scons.check import check
 
 base = scons.template(check)
 

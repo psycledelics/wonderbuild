@@ -111,7 +111,7 @@ class debian(builder):
 			return self._control
 
 	def name(self): return 'debian'
-	def alias_names(self): return ['packageneric:debian', self.name()]
+	def alias_names(self): return ['sconscrap:debian', self.name()]
 		
 	def targets(self):
 		try: return self._targets

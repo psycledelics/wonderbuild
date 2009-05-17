@@ -1,7 +1,7 @@
 TARGET = universalis
 
 # include the base stuff shared amongst all qmake projects.
-include(../../packageneric/qmake/common.pri)
+include(../../build-systems/qmake/common.pri)
 
 include(universalis.pri)
 
@@ -17,7 +17,7 @@ OBJECTS_DIR = $$BUILD_DIR # Where the .o files go.
 DESTDIR = $$BUILD_DIR # Where the final executable goes.
 
 #CONFIG *= precompile_header
-#PRECOMPILED_HEADER = $$TOP_SRC_DIR/packageneric/src/packageneric/pre-compiled.private.hpp
+#PRECOMPILED_HEADER = $$TOP_SRC_DIR/build-systems/src/pre-compiled.private.hpp
 
 sources_or_headers = \
 	$$UNIVERSALIS_DIR/src/universalis/compiler/cast \

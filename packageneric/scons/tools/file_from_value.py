@@ -13,15 +13,15 @@ def generate(env, **kw):
 			finally: f.close()
 		except:
 			import SCons.Errors
-			raise SCons.Errors.UserError, 'packageneric: cannot write to target file %s' % file_name
+			raise SCons.Errors.UserError, 'sconscrap: cannot write to target file %s' % file_name
 		return 0 # success
 
 	def action(target, source, env): return do(str(target[0]), source[0].get_contents())
 
 	def string(target, source, env):
 		"""This is what gets printed on the console."""
-		from packageneric.scons.tty_font import tty_font
-		return tty_font(font = '32', text = 'packageneric: writing ' + str(target[0]))
+		from sconscrap.scons.tty_font import tty_font
+		return tty_font(font = '32', text = 'sconscrap: writing ' + str(target[0]))
 
 	import SCons.Builder, SCons.Action
 	env['BUILDERS']['FileFromValueBuilder'] = SCons.Builder.Builder(action = SCons.Action.Action(action, string))

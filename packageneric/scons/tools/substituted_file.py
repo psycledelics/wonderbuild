@@ -37,7 +37,7 @@ def generate(env, **kw):
 			finally: f.close()
 		except:
 			import SCons.Errors
-			raise SCons.Errors.UserError, 'packageneric: cannot write target file %s' % target_file_name
+			raise SCons.Errors.UserError, 'sconscrap: cannot write target file %s' % target_file_name
 		return 0 # success
 
 	def action(target, source, env):
@@ -45,8 +45,8 @@ def generate(env, **kw):
 
 	def string(target, source, env):
 		"""This is what gets printed on the console."""
-		from packageneric.scons.tty_font import tty_font
-		return tty_font(font = '33', text = 'packageneric: substituting ' + str(source[0]))
+		from sconscrap.scons.tty_font import tty_font
+		return tty_font(font = '33', text = 'sconscrap: substituting ' + str(source[0]))
 
 	def emitter(target, source, env):
 		"""
@@ -56,7 +56,7 @@ def generate(env, **kw):
 		try: d = dict(env[dictionary_name]) # copy it
 		except KeyError:
 			import SCons.Errors
-			raise SCons.Errors.UserError, 'packageneric: ' + name + ' requires ' + dictionary_name + ' to be set in environment.'
+			raise SCons.Errors.UserError, 'sconscrap: ' + name + ' requires ' + dictionary_name + ' to be set in environment.'
 		for (k,v) in d.iteritems():
 			if callable(v): d[k] = env.subst(v())
 			else:
@@ -64,7 +64,7 @@ def generate(env, **kw):
 				if SCons.Util.is_String(v): d[k] = env.subst(v)
 				else:
 					import SCons.Errors
-					raise SCons.Errors.UserError, 'packageneric: in environment dictionary ' + dictionary_name + ', key %s: %s must be a string or callable' % (k, repr(v))
+					raise SCons.Errors.UserError, 'sconscrap: in environment dictionary ' + dictionary_name + ', key %s: %s must be a string or callable' % (k, repr(v))
 		env['_' + dictionary_name + '_EXPANDED'] = d
 		import SCons.Node.Python
 		env.Depends(target, SCons.Node.Python.Value(d))

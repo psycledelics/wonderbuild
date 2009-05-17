@@ -38,7 +38,7 @@ class project:
 			self._source_dir = self._scons().Dir('.').get_abspath()
 			return self._source_dir
 
-	def packageneric_dir(self): return self.root().packageneric_dir()
+	def sconscrap_dir(self): return self.root().sconscrap_dir()
 	def build_dir(self): return self.root().build_dir()
 	def build_variant(self): return self.root().build_variant()
 
@@ -78,7 +78,7 @@ class project:
 			contexes.build().compilers().cxx().defines().add({'PACKAGENERIC': None}) # todo make that shared amongst projects
 			scons = self._scons()
 			self.file_from_value( # todo make that shared amongst projects
-				os.path.join('project', 'src', 'packageneric', 'configuration.private.hpp'),
+				os.path.join('project', 'src', 'sconscrap-configuration.private.hpp'),
 				''.join(['#define PACKAGENERIC__CONFIGURATION__%s %s\n' % (n, v) for n, v in
 					[('INSTALL_PATH__BIN_TO_%s' % n, '"%s"' % v) for n, v in
 						('LIB', '../lib'), # todo from options, function to compute a relative path

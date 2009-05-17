@@ -4,7 +4,7 @@
 
 class projected:
 	def __init__(self, project):
-		from packageneric.scons.project import project as project_
+		from sconscrap.scons.project import project as project_
 		assert isinstance(project, project_)
 		self._project = project
 		

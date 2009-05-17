@@ -97,7 +97,7 @@ class module(projected, builder): # todo decide whether this can be derived from
 			self._contexes = self.source_package().contexes().attached()
 			return self._contexes
 			
-	def alias_names(self): return ['packageneric:module', self.name()]
+	def alias_names(self): return ['sconscrap:module', self.name()]
 	
 	def target_type(self): return self._target_type
 	
@@ -134,7 +134,7 @@ class module(projected, builder): # todo decide whether this can be derived from
 				for dependency_list in dependency_lists: dependencies.extend(dependency_list)
 
 			# add include path for pre-compiled headers of std lib
-			self.contexes().build().compilers().cxx().paths().add([os.path.join(self.project().packageneric_dir(), 'src')])
+			self.contexes().build().compilers().cxx().paths().add([os.path.join(self.project().sconscrap_dir(), 'src')])
 
 			# for each include path, we add the same path in the build dir
 			# note that we could just use build dir paths only since scons makes the src path a vpath like make
@@ -159,9 +159,9 @@ class module(projected, builder): # todo decide whether this can be derived from
 					result.append(re.sub('[^A-Z0-9_]', '_', os.path.splitext(source.relative())[0].replace(os.path.sep, '__').upper()))
 				return result
 			scons.FileFromValue(
-				os.path.join(self.project().build_variant_intermediate_dir(), 'modules', self.name(), 'src', 'packageneric', 'module.private.hpp'),
+				os.path.join(self.project().build_variant_intermediate_dir(), 'modules', self.name(), 'src', 'sconscrap-module.private.hpp'),
 				''.join(
-					['#include <packageneric/source-package.private.hpp>\n'] +
+					['#include <sconscrap-source-package.private.hpp>\n'] +
 					['#define PACKAGENERIC__MODULE__%s %s\n' % (n, v) for n, v in
 						[
 							('NAME', '"%s"' % self.name()),
@@ -183,12 +183,12 @@ class module(projected, builder): # todo decide whether this can be derived from
 			else: self.project().abort("unknown binary type for module '%s'" % self.name())
 			if self.target_type() == self.target_types.program or \
 				(target_type in (self.target_types.shared, self.target_types.loadable) and self.project().platform_executable_format() == 'pe'):
-				destination = os.path.join('$packageneric__install__bin')
+				destination = os.path.join('$sconscrap__install__bin')
 				# todo the .dll file needs to go to bin dir ; the .lib, .pdb, .exp still need to go to the lib dir (and .ilk kept in intermediate dir)
 			else:
-				destination = os.path.join('$packageneric__install__lib')
+				destination = os.path.join('$sconscrap__install__lib')
 			self._targets = [
-				builder(os.path.join('$packageneric__install__stage_destination', destination, self._target_name()), [os.path.join(self.project().intermediate_target_dir(), x.full()) for x in self.sources()])
+				builder(os.path.join('$sconscrap__install__stage_destination', destination, self._target_name()), [os.path.join(self.project().intermediate_target_dir(), x.full()) for x in self.sources()])
 			]
 			for target_list in self._targets:
 				for target in target_list:

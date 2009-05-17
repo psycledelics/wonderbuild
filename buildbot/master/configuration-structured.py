@@ -34,7 +34,7 @@ def append_standard_builders(
 		factory_steps.append(factory.s(Compile, microsoft = microsoft, mingw = mingw, msvc = msvc, command = compile_command))
 
 		if boost_test and build_system == 'scons': test_command =
-			'./++packageneric/variants/default/stage-install/usr/local/bin/' + name + '_unit_tests' +
+			'./++sconscrap/variants/default/stage-install/usr/local/bin/' + name + '_unit_tests' +
 			' --log_level=test_suite --report_level=detailed'
 		if test_command: factory_steps.append(factory.s(Test, microsoft = microsoft, command = test_command))
 
@@ -55,7 +55,7 @@ def append_standard_builders(
 	if msvc:  append(name, '.msvc', microsoft_slaves_msvc, compile_command, msvc = True)
 	if mingw_pkg:
 		if isinstance(ming_pkg, bool) and build_system:
-			if   build_system == 'scons': mingw_pkg = '++packageneric/variants/default/install'
+			if   build_system == 'scons': mingw_pkg = '++sconscrap/variants/default/install'
 			elif build_system == 'qmake': mingw_pkg = '++install'
 		mingw_pkg_command = mingw_pkg_command or ('cd ' + name + ' && sh -c make-microsoft-raw-package')
 		BuildmasterConfig['builders'].append({
@@ -71,7 +71,7 @@ def append_standard_builders(
 
 ##################################### universalis builders ######################################
 
-universalis_deps = ['universalis/', 'diversalis/', 'packageneric/']
+universalis_deps = ['universalis/', 'diversalis/', 'build-systems/']
 
 append_standard_builders(
 	name = 'universalis',
@@ -205,7 +205,7 @@ if False: ##################################### armstrong builders #############
 		'branches/', 'tags/',
 		'/trunk/dependencies.dot', '/trunk/dependencies.png', '/README', 'tools/', 'freepsycle/', 'qpsycle/', 'psycle-core/',
 		'psycle-player/', 'psycle-helpers', 'psycle-audiodrivers/', 'psycle-plugins/', 'psycle/',
-		'universalis/', 'diversalis/', 'packageneric/', 'buildbot/', 'external-packages/', 'www/'
+		'universalis/', 'diversalis/', 'build-systems/', 'buildbot/', 'external-packages/', 'www/'
 	]
 
 	def append_armstrong_builder(variant, slaves, microsoft = False, mingw = True, msvc = False):

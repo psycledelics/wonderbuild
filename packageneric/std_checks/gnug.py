@@ -2,9 +2,9 @@
 # copyright 2006-2007 johan boule <bohan@jabber.org>
 # copyright 2006-2007 psycledelics http://psycle.pastnotecut.org
 
-from packageneric.scons.check.external_package import external_package
-from packageneric.scons.check.cxx_build import cxx_build
-from packageneric.scons.version import version
+from sconscrap.scons.check.external_package import external_package
+from sconscrap.scons.check.cxx_build import cxx_build
+from sconscrap.scons.version import version
 
 class gnug(external_package):
 	def __init__(self, project):
