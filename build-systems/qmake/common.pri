@@ -101,11 +101,8 @@ isEmpty(common_included) {
 
 	include(platform.pri)
 
-	COMMON_DIR = $$TOP_SRC_DIR/packageneric/qmake
+	COMMON_DIR = $$TOP_SRC_DIR/build-systems/qmake
 	
-	INCLUDEPATH *= $$TOP_SRC_DIR/packageneric/qmake/src
-	DEPENDPATH  *= $$TOP_SRC_DIR/packageneric/qmake/src
-
-	INCLUDEPATH *= $$TOP_SRC_DIR/packageneric/src
-	DEPENDPATH  *= $$TOP_SRC_DIR/packageneric/src
+	INCLUDEPATH *= $$TOP_SRC_DIR/build-systems/src
+	DEPENDPATH  *= $$TOP_SRC_DIR/build-systems/src
 }
