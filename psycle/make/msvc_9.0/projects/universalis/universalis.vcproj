@@ -21,7 +21,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\platform_win32.vsprops;universalis.vsprops"
+			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\platform_win32.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -40,6 +40,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="UNIVERSALIS__SOURCE=1;UNIVERSALIS__QUAQUAVERSALIS"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -79,7 +80,7 @@
 			Name="debug|x64"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\platform_x64.vsprops;universalis.vsprops"
+			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\platform_x64.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -99,6 +100,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="UNIVERSALIS__SOURCE=1;UNIVERSALIS__QUAQUAVERSALIS"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -137,7 +139,7 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\platform_win32.vsprops;universalis.vsprops"
+			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\platform_win32.vsprops"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -157,6 +159,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="UNIVERSALIS__SOURCE=1;UNIVERSALIS__QUAQUAVERSALIS"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -195,7 +198,7 @@
 		<Configuration
 			Name="release|x64"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\platform_x64.vsprops;universalis.vsprops"
+			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\platform_x64.vsprops"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -216,6 +219,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="UNIVERSALIS__SOURCE=1;UNIVERSALIS__QUAQUAVERSALIS"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"

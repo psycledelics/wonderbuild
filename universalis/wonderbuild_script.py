@@ -29,7 +29,6 @@ class Wonderbuild(ScriptTask):
 		build_cfg.include_paths.append(src_dir)
 		build_cfg.include_paths.append(src_dir / 'universalis' / 'standard_library' / 'future_std_include')
 		build_cfg.defines['UNIVERSALIS__SOURCE'] = build_cfg.shared and '1' or '-1'
-		build_cfg.defines['UNIVERSALIS__OPERATING_SYSTEM__LOGGER_OWNED'] = None
 		
 		class Universalis(ModTask):
 			def __init__(self): ModTask.__init__(self, 'universalis', ModTask.Kinds.LIB, build_cfg)

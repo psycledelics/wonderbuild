@@ -17,7 +17,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\debug.vsprops;universalis.vsprops"
+			InheritedPropertySheets="..\debug.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -36,6 +36,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="UNIVERSALIS__SOURCE=1;UNIVERSALIS__QUAQUAVERSALIS"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -77,7 +78,7 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\release.vsprops;universalis.vsprops"
+			InheritedPropertySheets="..\release.vsprops"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -97,6 +98,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="UNIVERSALIS__SOURCE=1;UNIVERSALIS__QUAQUAVERSALIS"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
