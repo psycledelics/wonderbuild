@@ -59,8 +59,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.arguru.synth
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "doxygen", "projects\doxygen\doxygen.vcproj", "{7C2EC99A-E859-4DF0-B21F-40F81E97735C}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.arguru.reverb", "projects\psycle-plugins\arguru reverb.vcproj", "{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
@@ -512,11 +510,6 @@ Global
 		{4F58513B-F7E3-46CD-8196-9B3E4A07AF20}.release|win32.ActiveCfg = release|Win32
 		{4F58513B-F7E3-46CD-8196-9B3E4A07AF20}.release|win32.Build.0 = release|Win32
 		{4F58513B-F7E3-46CD-8196-9B3E4A07AF20}.unpack|win32.ActiveCfg = debug|Win32
-		{7C2EC99A-E859-4DF0-B21F-40F81E97735C}.debug|win32.ActiveCfg = html|Win32
-		{7C2EC99A-E859-4DF0-B21F-40F81E97735C}.documentation|win32.ActiveCfg = html|Win32
-		{7C2EC99A-E859-4DF0-B21F-40F81E97735C}.documentation|win32.Build.0 = html|Win32
-		{7C2EC99A-E859-4DF0-B21F-40F81E97735C}.release|win32.ActiveCfg = html|Win32
-		{7C2EC99A-E859-4DF0-B21F-40F81E97735C}.unpack|win32.ActiveCfg = html|Win32
 		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.debug|win32.ActiveCfg = debug|Win32
 		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.debug|win32.Build.0 = debug|Win32
 		{09671FE7-F7F8-41E2-B12F-910A7CBACE5A}.documentation|win32.ActiveCfg = debug|Win32

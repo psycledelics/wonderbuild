@@ -26,11 +26,6 @@ pushd projects\zlib && (
 	popd
 )
 
-pushd projects\doxygen && (
-	call clean
-	popd
-)
-
 rem ============================================
 rem safely recursively removes empty directories
 rem ============================================
