@@ -80,7 +80,7 @@
 			Name="debug|x64"
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\build-systems\msvc\properties\\debug.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -139,7 +139,7 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\build-systems\msvc\properties\\release.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -198,7 +198,7 @@
 		<Configuration
 			Name="release|x64"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\build-systems\msvc\properties\\release.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -514,23 +514,35 @@
 					>
 					<FileConfiguration
 						Name="debug|Win32"
-						ObjectFile="$(IntDir)\universalis,operating_system,exception.obj"
 						>
-					</FileConfiguration>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\universalis,operating_system,exception.obj"
+						/>
+						</FileConfiguration>
 					<FileConfiguration
 						Name="debug|x64"
-						ObjectFile="$(IntDir)\universalis,operating_system,exception.obj"
 						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\universalis,operating_system,exception.obj"
+						/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="release|Win32"
-						ObjectFile="$(IntDir)\universalis,operating_system,exception.obj"
 						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\universalis,operating_system,exception.obj"
+						/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="release|x64"
-						ObjectFile="$(IntDir)\universalis,operating_system,exception.obj"
 						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\universalis,operating_system,exception.obj"
+						/>
 					</FileConfiguration>
 				</File>
 				<File
@@ -617,23 +629,35 @@
 						>
 						<FileConfiguration
 							Name="debug|Win32"
-							ObjectFile="$(IntDir)\universalis,operating_system,exceptions,code_description.obj"
 							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)\universalis,operating_system,exceptions,code_description.obj"
+							/>
 						</FileConfiguration>
 						<FileConfiguration
 							Name="debug|x64"
-							ObjectFile="$(IntDir)\universalis,operating_system,exceptions,code_description.obj"
 							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)\universalis,operating_system,exceptions,code_description.obj"
+							/>
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release|Win32"
-							ObjectFile="$(IntDir)\universalis,operating_system,exceptions,code_description.obj"
 							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)\universalis,operating_system,exceptions,code_description.obj"
+							/>
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release|x64"
-							ObjectFile="$(IntDir)\universalis,operating_system,exceptions,code_description.obj"
 							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)\universalis,operating_system,exceptions,code_description.obj"
+							/>
 						</FileConfiguration>
 					</File>
 					<File
@@ -674,23 +698,35 @@
 					>
 					<FileConfiguration
 						Name="debug|Win32"
-						ObjectFile="$(IntDir)\universalis,processor,exception.obj"
 						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\universalis,processor,exception.obj"
+						/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="debug|x64"
-						ObjectFile="$(IntDir)\universalis,processor,exception.obj"
 						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\universalis,processor,exception.obj"
+						/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="release|Win32"
-						ObjectFile="$(IntDir)\universalis,processor,exception.obj"
 						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\universalis,processor,exception.obj"
+						/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="release|x64"
-						ObjectFile="$(IntDir)\universalis,processor,exception.obj"
 						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\universalis,processor,exception.obj"
+						/>
 					</FileConfiguration>
 				</File>
 				<File
@@ -709,23 +745,35 @@
 						>
 						<FileConfiguration
 							Name="debug|Win32"
-							ObjectFile="$(IntDir)\universalis,processor,exceptions,code_description.obj"
 							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)\universalis,processor,exceptions,code_description.obj"
+							/>
 						</FileConfiguration>
 						<FileConfiguration
 							Name="debug|x64"
-							ObjectFile="$(IntDir)\universalis,processor,exceptions,code_description.obj"
 							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)\universalis,processor,exceptions,code_description.obj"
+							/>
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release|Win32"
-							ObjectFile="$(IntDir)\universalis,processor,exceptions,code_description.obj"
 							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)\universalis,processor,exceptions,code_description.obj"
+							/>
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release|x64"
-							ObjectFile="$(IntDir)\universalis,processor,exceptions,code_description.obj"
 							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)\universalis,processor,exceptions,code_description.obj"
+							/>
 						</FileConfiguration>
 					</File>
 				</Filter>
@@ -809,23 +857,35 @@
 						>
 						<FileConfiguration
 							Name="debug|Win32"
-							ObjectFile="$(IntDir)\universalis,standard_library,exception.obj"
 							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)\universalis,standard_library,exception.obj"
+							/>
 						</FileConfiguration>
 						<FileConfiguration
 							Name="debug|x64"
-							ObjectFile="$(IntDir)\universalis,standard_library,exception.obj"
 							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)\universalis,standard_library,exception.obj"
+							/>
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release|Win32"
-							ObjectFile="$(IntDir)\universalis,standard_library,exception.obj"
 							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)\universalis,standard_library,exception.obj"
+							/>
 						</FileConfiguration>
 						<FileConfiguration
 							Name="release|x64"
-							ObjectFile="$(IntDir)\universalis,standard_library,exception.obj"
 							>
+							<Tool
+								Name="VCCLCompilerTool"
+								ObjectFile="$(IntDir)\universalis,standard_library,exception.obj"
+							/>
 						</FileConfiguration>
 					</File>
 					<File
