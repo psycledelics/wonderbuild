@@ -15,6 +15,7 @@
 	/>
 	<Tool
 		Name="VCLinkerTool"
+		AdditionalDependencies="$(PreCompiledObject)"
 	/>
 	<UserMacro
 		Name="PreCompiledHeader"
@@ -22,6 +23,6 @@
 	/>
 	<UserMacro
 		Name="PreCompiledObject"
-		Value="&quot;$(TopOutputDir)/intermediate/pre_compiled_headers.vcproj/pre_compiled_headers.obj&quot;"
+		Value="&quot;$(TopOutputDir)/intermediate/pre_compiled_headers.msvc-2008.vcproj/pre_compiled_headers.obj&quot;"
 	/>
 </VisualStudioPropertySheet>
