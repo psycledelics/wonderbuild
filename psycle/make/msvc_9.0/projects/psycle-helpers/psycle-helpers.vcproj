@@ -249,14 +249,6 @@
 	</References>
 	<Files>
 		<Filter
-			Name="packageneric"
-			>
-			<File
-				RelativePath=".\src\packageneric\module.private.hpp"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="psycle"
 			>
 			<Filter

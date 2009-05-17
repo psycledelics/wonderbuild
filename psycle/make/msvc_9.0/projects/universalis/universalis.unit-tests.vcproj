@@ -280,14 +280,6 @@
 		/>
 	</References>
 	<Files>
-		<Filter
-			Name="packageneric"
-			>
-			<File
-				RelativePath=".\src\packageneric\module.private.hpp"
-				>
-			</File>
-		</Filter>
 		<File
 			RelativePath="..\..\..\..\..\universalis\src\unit_tests.cpp"
 			>

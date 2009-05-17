@@ -1280,26 +1280,6 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="packageneric"
-			>
-			<File
-				RelativePath="..\..\..\msvc_common\src\universalis\detail\configuration.private.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\msvc_common\src\packageneric\configuration.private.hpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\packageneric\module.private.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\msvc_common\src\packageneric\package.private.hpp"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="diversalis"
 			>
 			<File

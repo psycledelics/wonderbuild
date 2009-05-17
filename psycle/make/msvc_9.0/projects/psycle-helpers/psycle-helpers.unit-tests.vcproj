@@ -380,14 +380,6 @@
 				</Filter>
 			</Filter>
 		</Filter>
-		<Filter
-			Name="packageneric"
-			>
-			<File
-				RelativePath=".\src\packageneric\module.private.hpp"
-				>
-			</File>
-		</Filter>
 		<File
 			RelativePath="..\..\..\..\..\psycle-helpers\src\unit_tests.cpp"
 			>
