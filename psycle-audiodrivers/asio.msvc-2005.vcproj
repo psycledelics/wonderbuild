@@ -172,7 +172,7 @@
 		<Configuration
 			Name="release|x64"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\build-systems\msvc-2005\properties\release.vsprops;..\build-systems\msvc-2008\properties\platform_x64.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
