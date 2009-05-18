@@ -2,13 +2,15 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="universalis.unit-tests"
+	Name="universalis-unit-tests"
 	ProjectGUID="{15447E72-E8B4-4545-AC7B-091E68221C41}"
-	RootNamespace="universalis.unit-tests"
 	>
 	<Platforms>
 		<Platform
 			Name="Win32"
+		/>
+		<Platform
+			Name="x64"
 		/>
 	</Platforms>
 	<ToolFiles>
@@ -17,7 +19,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\debug.vsprops;..\pre_compiled_headers\use.vsprops;..\program.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\program.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
 			UseOfMFC="0"
 			ManagedExtensions="0"
 			ExcludeBuckets="5;6;8;15;16;18;20"
@@ -72,19 +74,16 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 				CommandLine="$(TargetPath) --log_level=test_suite --report_level=detailed"
 			/>
 		</Configuration>
 		<Configuration
-			Name="release|Win32"
+			Name="debug|x64"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\release.vsprops;..\pre_compiled_headers\use.vsprops;..\program.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\program.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
 			UseOfMFC="0"
-			WholeProgramOptimization="1"
+			ManagedExtensions="0"
 			ExcludeBuckets="5;6;8;15;16;18;20"
 			>
 			<Tool
@@ -137,7 +136,128 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
+				Name="VCPostBuildEventTool"
+				CommandLine="$(TargetPath) --log_level=test_suite --report_level=detailed"
+			/>
+		</Configuration>
+		<Configuration
+			Name="release|Win32"
+			ConfigurationType="1"
+			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\program.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
+			UseOfMFC="0"
+			ManagedExtensions="0"
+			ExcludeBuckets="5;6;8;15;16;18;20"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				SubSystem="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				CommandLine="$(TargetPath) --log_level=test_suite --report_level=detailed"
+			/>
+		</Configuration>
+		<Configuration
+			Name="release|x64"
+			ConfigurationType="1"
+			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\program.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
+			UseOfMFC="0"
+			ManagedExtensions="0"
+			ExcludeBuckets="5;6;8;15;16;18;20"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				SubSystem="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -147,17 +267,13 @@
 	</Configurations>
 	<References>
 		<ProjectReference
-			ReferencedProjectIdentifier="{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
-			RelativePathToProject=".\projects\pre_compiled_headers\pre_compiled_headers.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{B78DFE59-051A-43FD-B489-775A4982581C}"
-			RelativePathToProject=".\projects\universalis\universalis.vcproj"
+			RelativePathToProject=".\universalis.msvc-2005.vcproj"
 		/>
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\universalis\src\unit_tests.cpp"
+			RelativePath="src\unit_tests.cpp"
 			>
 		</File>
 	</Files>

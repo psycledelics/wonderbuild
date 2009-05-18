@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="psycle-core"
 	ProjectGUID="{B78DFE59-051A-43FD-B489-785A3982541C}"
 	>
 	<Platforms>
 		<Platform
 			Name="Win32"
+		/>
+		<Platform
+			Name="x64"
 		/>
 	</Platforms>
 	<ToolFiles>
@@ -16,7 +19,58 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="debug|x64"
+			ConfigurationType="4"
+			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -67,7 +121,58 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="release|x64"
+			ConfigurationType="4"
+			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -118,16 +223,8 @@
 	</Configurations>
 	<References>
 		<ProjectReference
-			ReferencedProjectIdentifier="{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
-			RelativePathToProject="..\psycle-helpers\psycle-helpers.msvc-2005.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
-			RelativePathToProject="..\build-systems\msvc\projects\pre_compiled_headers\pre_compiled_headers.msvc-2005.vcproj"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
-			RelativePathToProject="..\psycle-helpers\psycle-helpers.msvc-2005.vcproj"
+			ReferencedProjectIdentifier="{1d7f6f39-323d-4d7d-8bd9-4304fd6a2791}"
+			RelativePathToProject="..\psycle-audiodrivers.msvc-2005.vcproj"
 		/>
 	</References>
 	<Files>
@@ -511,86 +608,6 @@
 				</File>
 				<File
 					RelativePath="src\psycle\core\zipwriterstream.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="audiodrivers"
-				>
-				<File
-					RelativePath="src\psycle\audiodrivers\alsaout.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\alsaout.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\audiodriver.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\audiodriver.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\dsound.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\esoundout.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\esoundout.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\gstreamerout.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\gstreamerout.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\jackout.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\jackout.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\microsoftdirectsoundout.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\microsoftdirectsoundout.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\microsoftmmewaveout.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\microsoftmmewaveout.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\netaudioout.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\netaudioout.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\wavefileout.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\wavefileout.h"
 					>
 				</File>
 			</Filter>

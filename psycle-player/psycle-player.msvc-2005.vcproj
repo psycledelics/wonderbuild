@@ -143,6 +143,7 @@
 			ConfigurationType="1"
 			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\program.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
 			UseOfMFC="0"
+			ManagedExtensions="0"
 			ExcludeBuckets="5;6;8;15;16;18;20"
 			>
 			<Tool
@@ -203,6 +204,7 @@
 			ConfigurationType="1"
 			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\program.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
 			UseOfMFC="0"
+			ManagedExtensions="0"
 			ExcludeBuckets="5;6;8;15;16;18;20"
 			>
 			<Tool
@@ -262,11 +264,11 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{B78DFE59-051A-43FD-B489-785A3982541C}"
-			RelativePathToProject="..\psycle-core.msvc-2008.vcproj"
+			RelativePathToProject="..\psycle-core.msvc-2005.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{1d7f6f39-323d-4d7d-8bd9-4304fd6a2791}"
-			RelativePathToProject="..\psycle-audiodrivers.msvc-2008.vcproj"
+			RelativePathToProject="..\psycle-audiodrivers.msvc-2005.vcproj"
 		/>
 	</References>
 	<Files>

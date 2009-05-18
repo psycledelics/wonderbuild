@@ -19,7 +19,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\build-systems\msvc-2008\properties\debug.vsprops;..\build-systems\msvc-2008\properties\platform_win32.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc-2005\properties\debug.vsprops;..\build-systems\msvc-2008\properties\platform_win32.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -70,7 +70,7 @@
 		<Configuration
 			Name="debug|x64"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\build-systems\msvc-2008\properties\debug.vsprops;..\build-systems\msvc-2008\properties\platform_x64.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc-2005\properties\debug.vsprops;..\build-systems\msvc-2008\properties\platform_x64.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -121,7 +121,7 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\build-systems\msvc-2008\properties\release.vsprops;..\build-systems\msvc-2008\properties\platform_win32.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc-2005\properties\release.vsprops;..\build-systems\msvc-2008\properties\platform_win32.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -172,7 +172,7 @@
 		<Configuration
 			Name="release|x64"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\build-systems\msvc-2008\properties\release.vsprops;..\build-systems\msvc-2008\properties\platform_x64.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc-2005\properties\release.vsprops;..\build-systems\msvc-2008\properties\platform_x64.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -224,7 +224,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
-			RelativePathToProject="..\build-systems\msvc-2008\projects\pre_compiled_headers\pre_compiled_headers.vcproj"
+			RelativePathToProject="..\build-systems\msvc-2005\projects\pre_compiled_headers\pre_compiled_headers.vcproj"
 		/>
 	</References>
 	<Files>
