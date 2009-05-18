@@ -3,11 +3,14 @@
 	ProjectType="Visual C++"
 	Version="8,00"
 	Name="psycle-helpers"
-	ProjectGUID="{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
+	ProjectGUID="{1d7f6f39-323d-4d7d-8bd9-4304fd6a2791}"
 	>
 	<Platforms>
 		<Platform
 			Name="Win32"
+		/>
+		<Platform
+			Name="x64"
 		/>
 	</Platforms>
 	<ToolFiles>

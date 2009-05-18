@@ -4,7 +4,6 @@
 	Version="8,00"
 	Name="universalis"
 	ProjectGUID="{B78DFE59-051A-43FD-B489-775A4982581C}"
-	RootNamespace="universalis"
 	>
 	<Platforms>
 		<Platform
@@ -79,7 +78,6 @@
 			Name="release|Win32"
 			ConfigurationType="2"
 			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops"
-			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"

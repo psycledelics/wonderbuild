@@ -4,8 +4,6 @@
 	Version="9.00"
 	Name="psycle-helpers"
 	ProjectGUID="{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
-	RootNamespace="psycle.helpers"
-	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -21,7 +19,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\platform_win32.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -72,7 +70,7 @@
 		<Configuration
 			Name="debug|x64"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\platform_x64.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -88,7 +86,6 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TargetEnvironment="3"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -124,8 +121,7 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\platform_win32.vsprops"
-			WholeProgramOptimization="1"
+			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -176,8 +172,7 @@
 		<Configuration
 			Name="release|x64"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\platform_x64.vsprops"
-			WholeProgramOptimization="1"
+			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -193,7 +188,6 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TargetEnvironment="3"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -229,8 +223,8 @@
 	</Configurations>
 	<References>
 		<ProjectReference
-			ReferencedProjectIdentifier="{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
-			RelativePathToProject=".\projects\pre_compiled_headers\pre_compiled_headers.vcproj"
+			ReferencedProjectIdentifier="{B78DFE59-051A-43FD-B489-775A4982581C}"
+			RelativePathToProject="..\universalis\universalis.msvc-2008.vcproj"
 		/>
 	</References>
 	<Files>
@@ -241,78 +235,78 @@
 				Name="helpers"
 				>
 				<File
-					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\helpers.cpp"
+					RelativePath="src\psycle\helpers\helpers.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\helpers.hpp"
+					RelativePath="src\psycle\helpers\helpers.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math.hpp"
+					RelativePath="src\psycle\helpers\math.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\ring_buffer.hpp"
+					RelativePath="src\psycle\helpers\ring_buffer.hpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\scale.hpp"
+					RelativePath="src\psycle\helpers\scale.hpp"
 					>
 				</File>
 				<Filter
 					Name="math"
 					>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\clip.hpp"
+						RelativePath="src\psycle\helpers\math\clip.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\erase_all_nans_infinities_and_denormals.hpp"
+						RelativePath="src\psycle\helpers\math\erase_all_nans_infinities_and_denormals.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\erase_denormals.hpp"
+						RelativePath="src\psycle\helpers\math\erase_denormals.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\fast_unspecified_round_to_integer.hpp"
+						RelativePath="src\psycle\helpers\math\fast_unspecified_round_to_integer.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\log.hpp"
+						RelativePath="src\psycle\helpers\math\log.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\math.hpp"
+						RelativePath="src\psycle\helpers\math\math.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\pi.hpp"
+						RelativePath="src\psycle\helpers\math\pi.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\remainder.hpp"
+						RelativePath="src\psycle\helpers\math\remainder.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\round.hpp"
+						RelativePath="src\psycle\helpers\math\round.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\sine.hpp"
+						RelativePath="src\psycle\helpers\math\sine.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\sine_cosine.hpp"
+						RelativePath="src\psycle\helpers\math\sine_cosine.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\sine_sequence.hpp"
+						RelativePath="src\psycle\helpers\math\sine_sequence.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\math\truncate.hpp"
+						RelativePath="src\psycle\helpers\math\truncate.hpp"
 						>
 					</File>
 				</Filter>
@@ -320,43 +314,43 @@
 					Name="dsp"
 					>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\dither.cpp"
+						RelativePath="src\psycle\helpers\dither.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\dither.hpp"
+						RelativePath="src\psycle\helpers\dither.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\dsp.cpp"
+						RelativePath="src\psycle\helpers\dsp.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\dsp.hpp"
+						RelativePath="src\psycle\helpers\dsp.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\fft.cpp"
+						RelativePath="src\psycle\helpers\fft.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\fft.hpp"
+						RelativePath="src\psycle\helpers\fft.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\filter.cpp"
+						RelativePath="src\psycle\helpers\filter.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\filter.h"
+						RelativePath="src\psycle\helpers\filter.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\mersennetwister.cpp"
+						RelativePath="src\psycle\helpers\mersennetwister.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\mersennetwister.hpp"
+						RelativePath="src\psycle\helpers\mersennetwister.hpp"
 						>
 					</File>
 				</Filter>
@@ -364,67 +358,67 @@
 					Name="file"
 					>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\abstractiff.cpp"
+						RelativePath="src\psycle\helpers\abstractiff.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\abstractiff.hpp"
+						RelativePath="src\psycle\helpers\abstractiff.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\appleaiff.cpp"
+						RelativePath="src\psycle\helpers\appleaiff.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\appleaiff.hpp"
+						RelativePath="src\psycle\helpers\appleaiff.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\binread.cpp"
+						RelativePath="src\psycle\helpers\binread.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\binread.h"
+						RelativePath="src\psycle\helpers\binread.h"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\datacompression.cpp"
+						RelativePath="src\psycle\helpers\datacompression.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\datacompression.hpp"
+						RelativePath="src\psycle\helpers\datacompression.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\eaiff.cpp"
+						RelativePath="src\psycle\helpers\eaiff.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\eaiff.hpp"
+						RelativePath="src\psycle\helpers\eaiff.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\msriff.cpp"
+						RelativePath="src\psycle\helpers\msriff.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\msriff.hpp"
+						RelativePath="src\psycle\helpers\msriff.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\riff.cpp"
+						RelativePath="src\psycle\helpers\riff.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\riff.hpp"
+						RelativePath="src\psycle\helpers\riff.hpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\riffwave.cpp"
+						RelativePath="src\psycle\helpers\riffwave.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\riffwave.hpp"
+						RelativePath="src\psycle\helpers\riffwave.hpp"
 						>
 					</File>
 				</Filter>
