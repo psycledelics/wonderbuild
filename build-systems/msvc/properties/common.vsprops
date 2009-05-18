@@ -18,15 +18,15 @@
 	/>
 	<Tool
 		Name="VCLibrarianTool"
-		OutputFile="$(TopOutputDir)/lib/$(InputName).lib"
+		OutputFile="$(TopOutputDir)/lib/$(ProjectName).lib"
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		OutputFile="$(OutDir)/$(InputName).dll"
+		OutputFile="$(OutDir)/$(ProjectName).dll"
 		GenerateDebugInformation="true"
-		ProgramDatabaseFile="$(OutDir)/$(InputName).pdb"
+		ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
 		TurnOffAssemblyGeneration="true"
-		ImportLibrary="$(TopOutputDir)/lib/$(InputName).lib"
+		ImportLibrary="$(TopOutputDir)/lib/$(ProjectName).lib"
 	/>
 	<Tool
 		Name="VCResourceCompilerTool"
