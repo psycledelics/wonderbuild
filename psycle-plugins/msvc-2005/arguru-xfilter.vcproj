@@ -4,10 +4,14 @@
 	Version="8.00"
 	Name="psycle.plugins.arguru.xfilter (aka cross-delay)"
 	ProjectGUID="{1B5F9342-46EE-4359-8178-DAB8BB37E979}"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
 			Name="Win32"
+		/>
+		<Platform
+			Name="x64"
 		/>
 	</Platforms>
 	<ToolFiles>
@@ -16,7 +20,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\debug.vsprops;.\plugins.vsprops"
+			InheritedPropertySheets="..\..\build-systems\msvc\properties\debug.vsprops;..\..\build-systems\msvc\properties\plugin.vsprops;..\..\build-systems\msvc\properties\platform_win32.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -67,7 +71,62 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="debug|x64"
+			ConfigurationType="2"
+			InheritedPropertySheets="..\..\build-systems\msvc\properties\debug.vsprops;..\..\build-systems\msvc\properties\plugin.vsprops;..\..\build-systems\msvc\properties\platform_x64.vsprops"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -76,7 +135,7 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\release.vsprops;.\plugins.vsprops"
+			InheritedPropertySheets="..\..\build-systems\msvc\properties\release.vsprops;..\..\build-systems\msvc\properties\plugin.vsprops;..\..\build-systems\msvc\properties\platform_win32.vsprops"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -128,7 +187,63 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="release|x64"
+			ConfigurationType="2"
+			InheritedPropertySheets="..\..\build-systems\msvc\properties\release.vsprops;..\..\build-systems\msvc\properties\plugin.vsprops;..\..\build-systems\msvc\properties\platform_x64.vsprops"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -143,11 +258,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\arguru_xfilter\arguru_xfilter.cpp"
+			RelativePath="..\src\psycle\plugins\arguru_xfilter\arguru_xfilter.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\arguru_xfilter\filter_x.cpp"
+			RelativePath="..\src\psycle\plugins\arguru_xfilter\filter_x.cpp"
 			>
 		</File>
 	</Files>

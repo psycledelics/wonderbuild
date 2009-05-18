@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="psycle.plugins.fluidsynth (dynamic library)"
 	ProjectGUID="{923A9CFD-C2B2-4A53-952B-EC9CD8413704}"
 	RootNamespace="psycle.plugins.fluidsynth (dynamic library)"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
 			Name="Win32"
+		/>
+		<Platform
+			Name="x64"
 		/>
 	</Platforms>
 	<ToolFiles>
@@ -17,7 +21,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\debug_no_precompiled.vsprops;.\plugins.vsprops"
+			InheritedPropertySheets="..\..\build-systems\msvc\properties\debug.vsprops;..\..\build-systems\msvc\properties\plugin.vsprops;..\..\build-systems\msvc\properties\platform_win32.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -38,7 +42,9 @@
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="WIN32;_M_IX86;_WINDOWS;_USRDLL;FLUIDSYNTH_DLL_EXPORTS;FLUIDSYNTH_SEQ_DLL_EXPORTS"
 				UsePrecompiledHeader="0"
+				ProgramDataBaseFileName=""
 				CompileAs="1"
+				ForcedIncludeFiles="$(NOINHERIT)"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -51,6 +57,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="$(NOINHERIT)"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -71,7 +78,68 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="debug|x64"
+			ConfigurationType="2"
+			InheritedPropertySheets="..\..\build-systems\msvc\properties\debug.vsprops;..\..\build-systems\msvc\properties\plugin.vsprops;..\..\build-systems\msvc\properties\platform_x64.vsprops"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="WIN32;_M_IX86;_WINDOWS;_USRDLL;FLUIDSYNTH_DLL_EXPORTS;FLUIDSYNTH_SEQ_DLL_EXPORTS"
+				UsePrecompiledHeader="0"
+				ProgramDataBaseFileName=""
+				CompileAs="1"
+				ForcedIncludeFiles="$(NOINHERIT)"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="$(NOINHERIT)"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -80,7 +148,7 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\release_no_precompiled.vsprops;.\plugins.vsprops"
+			InheritedPropertySheets="..\..\build-systems\msvc\properties\release.vsprops;..\..\build-systems\msvc\properties\plugin.vsprops;..\..\build-systems\msvc\properties\platform_win32.vsprops"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -102,7 +170,9 @@
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="NDEBUG;WIN32;_M_IX86;_WINDOWS;_USRDLL;FLUIDSYNTH_DLL_EXPORTS;FLUIDSYNTH_SEQ_DLL_EXPORTS"
 				UsePrecompiledHeader="0"
+				ProgramDataBaseFileName=""
 				CompileAs="1"
+				ForcedIncludeFiles="$(NOINHERIT)"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -115,6 +185,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="$(NOINHERIT)"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -135,7 +206,69 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="release|x64"
+			ConfigurationType="2"
+			InheritedPropertySheets="..\..\build-systems\msvc\properties\release.vsprops;..\..\build-systems\msvc\properties\plugin.vsprops;..\..\build-systems\msvc\properties\platform_x64.vsprops"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="NDEBUG;WIN32;_M_IX86;_WINDOWS;_USRDLL;FLUIDSYNTH_DLL_EXPORTS;FLUIDSYNTH_SEQ_DLL_EXPORTS"
+				UsePrecompiledHeader="0"
+				ProgramDataBaseFileName=""
+				CompileAs="1"
+				ForcedIncludeFiles="$(NOINHERIT)"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="$(NOINHERIT)"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -146,215 +279,215 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\config.h"
+			RelativePath="..\..\external-packages\fluidsynth\config.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\config_win32.h"
+			RelativePath="..\..\external-packages\fluidsynth\config_win32.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_adriver.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_adriver.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_adriver.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_adriver.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_chan.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_chan.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_chan.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_chan.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_chorus.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_chorus.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_chorus.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_chorus.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_cmd.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_cmd.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_cmd.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_cmd.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_conv.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_conv.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_conv.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_conv.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_defsfont.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_defsfont.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_defsfont.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_defsfont.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_event.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_event.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_event_priv.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_event_priv.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_gen.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_gen.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_gen.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_gen.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_hash.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_hash.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_hash.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_hash.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_io.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_io.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_io.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_io.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_list.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_list.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_list.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_list.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_mdriver.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_mdriver.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_mdriver.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_mdriver.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_midi.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_midi.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_midi.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_midi.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_midi_router.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_midi_router.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_midi_router.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_midi_router.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_midishare.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_midishare.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_mod.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_mod.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_mod.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_mod.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_phase.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_phase.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_ramsfont.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_ramsfont.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_ramsfont.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_ramsfont.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_rev.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_rev.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_rev.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_rev.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_settings.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_settings.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_settings.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_settings.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_sfont.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_sfont.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_strtok.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_strtok.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_strtok.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_strtok.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_synth.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_synth.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_synth.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_synth.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_sys.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_sys.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_sys.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_sys.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_tuning.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_tuning.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_tuning.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_tuning.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_voice.c"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_voice.c"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluid_voice.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluid_voice.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluidsynth.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluidsynth.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\external-packages\fluidsynth\fluidsynth_priv.h"
+			RelativePath="..\..\external-packages\fluidsynth\fluidsynth_priv.h"
 			>
 		</File>
 	</Files>

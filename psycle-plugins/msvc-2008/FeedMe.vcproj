@@ -20,7 +20,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\plugin.vsprops;..\..\properties\platform_win32.vsprops"
+			InheritedPropertySheets="..\..\build-systems\msvc\properties\debug.vsprops;..\..\build-systems\msvc\properties\plugin.vsprops;..\..\build-systems\msvc\properties\platform_win32.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -77,7 +77,7 @@
 		<Configuration
 			Name="debug|x64"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\plugin.vsprops;..\..\properties\platform_x64.vsprops"
+			InheritedPropertySheets="..\..\build-systems\msvc\properties\debug.vsprops;..\..\build-systems\msvc\properties\plugin.vsprops;..\..\build-systems\msvc\properties\platform_x64.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -135,7 +135,7 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\plugin.vsprops;..\..\properties\platform_win32.vsprops"
+			InheritedPropertySheets="..\..\build-systems\msvc\properties\release.vsprops;..\..\build-systems\msvc\properties\plugin.vsprops;..\..\build-systems\msvc\properties\platform_win32.vsprops"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -193,7 +193,7 @@
 		<Configuration
 			Name="release|x64"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\plugin.vsprops;..\..\properties\platform_x64.vsprops"
+			InheritedPropertySheets="..\..\build-systems\msvc\properties\release.vsprops;..\..\build-systems\msvc\properties\plugin.vsprops;..\..\build-systems\msvc\properties\platform_x64.vsprops"
 			WholeProgramOptimization="1"
 			>
 			<Tool
@@ -258,39 +258,39 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\CDsp.cpp"
+			RelativePath="..\src\psycle\plugins\druttis\CDsp.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\CDsp.h"
+			RelativePath="..\src\psycle\plugins\druttis\CDsp.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\CEnvelope.cpp"
+			RelativePath="..\src\psycle\plugins\druttis\CEnvelope.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\CEnvelope.h"
+			RelativePath="..\src\psycle\plugins\druttis\CEnvelope.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\FeedMe\CTrack.cpp"
+			RelativePath="..\src\psycle\plugins\druttis\FeedMe\CTrack.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\FeedMe\CTrack.h"
+			RelativePath="..\src\psycle\plugins\druttis\FeedMe\CTrack.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\DspMath.h"
+			RelativePath="..\src\psycle\plugins\druttis\DspMath.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\FeedMe\FeedMe.cpp"
+			RelativePath="..\src\psycle\plugins\druttis\FeedMe\FeedMe.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\psycle-plugins\src\psycle\plugins\druttis\wtfmlib.h"
+			RelativePath="..\src\psycle\plugins\druttis\wtfmlib.h"
 			>
 		</File>
 	</Files>
