@@ -76,7 +76,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pre_compiled_headers", "pro
 		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1} = {29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pre_compiled_headers.mfc", "projects\pre_compiled_headers\pre_compiled_headers_with_mfc.msvc-2008.vcproj", "{28C015FB-3BDA-4B32-8D85-C652E9892216}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pre_compiled_headers_with_mfc", "projects\pre_compiled_headers\pre_compiled_headers_with_mfc.msvc-2008.vcproj", "{28C015FB-3BDA-4B32-8D85-C652E9892216}"
 	ProjectSection(ProjectDependencies) = postProject
 		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1} = {29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}
 	EndProjectSection
@@ -126,7 +126,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.arguru.rever
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "asio (steinberg's sdk)", "..\..\psycle-audiodrivers\asio.msvc-2008.vcproj", "{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "steinberg-asio-sdk", "..\..\psycle-audiodrivers\asio.msvc-2008.vcproj", "{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
@@ -411,14 +411,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-core", "..\..\psycle
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "projects\zlib\zlib.msvc-2008.vcproj", "{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-helpers.unit-tests", "..\..\psycle-helpers\psycle-helpers-unit-tests.msvc-2008.vcproj", "{C6292BF4-9E87-4176-9101-A3D29D163B35}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-helpers-unit-tests", "..\..\psycle-helpers\psycle-helpers-unit-tests.msvc-2008.vcproj", "{C6292BF4-9E87-4176-9101-A3D29D163B35}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B78DFE59-051A-43FD-B489-775A4982581C} = {B78DFE59-051A-43FD-B489-775A4982581C}
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1} = {29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "universalis.unit-tests", "..\..\universalis\universalis-unit-tests.msvc-2008.vcproj", "{15447E72-E8B4-4545-AC7B-091E68221C41}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "universalis-unit-tests", "..\..\universalis\universalis-unit-tests.msvc-2008.vcproj", "{15447E72-E8B4-4545-AC7B-091E68221C41}"
 	ProjectSection(ProjectDependencies) = postProject
 		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1} = {29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}
 	EndProjectSection
@@ -434,6 +434,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.dw_tremolo", "..\..\psycle-plugins\msvc\dw_tremolo.msvc-2008.vcproj", "{8ADD9C4A-378B-48D8-9853-4EA253F05190}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-helpers", "..\..\psycle-helpers\psycle-helpers.msvc-2008.vcproj", "{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-player", "..\..\psycle-player\psycle-player.msvc-2008.vcproj", "{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1383,6 +1385,20 @@ Global
 		{16F2DEB9-8F35-45C9-B460-732615F0C8D5}.unpack|win32.ActiveCfg = release|x64
 		{16F2DEB9-8F35-45C9-B460-732615F0C8D5}.unpack|x64.ActiveCfg = release|x64
 		{16F2DEB9-8F35-45C9-B460-732615F0C8D5}.unpack|x64.Build.0 = release|x64
+		{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}.debug|win32.ActiveCfg = debug|Win32
+		{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}.debug|win32.Build.0 = debug|Win32
+		{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}.debug|x64.ActiveCfg = debug|x64
+		{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}.debug|x64.Build.0 = debug|x64
+		{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}.documentation|win32.ActiveCfg = debug|x64
+		{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}.documentation|x64.ActiveCfg = debug|x64
+		{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}.documentation|x64.Build.0 = debug|x64
+		{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}.release|win32.ActiveCfg = release|Win32
+		{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}.release|win32.Build.0 = release|Win32
+		{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}.release|x64.ActiveCfg = release|x64
+		{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}.release|x64.Build.0 = release|x64
+		{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}.unpack|win32.ActiveCfg = release|x64
+		{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}.unpack|x64.ActiveCfg = release|x64
+		{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}.unpack|x64.Build.0 = release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

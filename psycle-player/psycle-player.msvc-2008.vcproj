@@ -3,7 +3,8 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="psycle-player"
-	ProjectGUID="{071f8a79-4146-47a0-bd16-f4d8eb43e5f0}"
+	ProjectGUID="{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -264,20 +265,19 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{B78DFE59-051A-43FD-B489-785A3982541C}"
-			RelativePathToProject="..\psycle-core.msvc-2008.vcproj"
+			RelativePathToProject="..\..\psycle-core\psycle-core.msvc-2008.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{1d7f6f39-323d-4d7d-8bd9-4304fd6a2791}"
-			RelativePathToProject="..\psycle-audiodrivers.msvc-2008.vcproj"
 		/>
 	</References>
 	<Files>
 		<File
-			RelativePath="src\psycle\player\main.cpp"
+			RelativePath="src\psycle\player\configuration.cpp"
 			>
 		</File>
 		<File
-			RelativePath="src\psycle\player\configuration.cpp"
+			RelativePath="src\psycle\player\main.cpp"
 			>
 		</File>
 	</Files>
