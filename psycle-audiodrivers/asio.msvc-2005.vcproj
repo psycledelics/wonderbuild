@@ -9,6 +9,9 @@
 		<Platform
 			Name="Win32"
 		/>
+		<Platform
+			Name="x64"
+		/>
 	</Platforms>
 	<ToolFiles>
 	</ToolFiles>
@@ -16,7 +19,58 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\debug.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc-2008\properties\debug.vsprops;..\build-systems\msvc-2008\properties\platform_win32.vsprops"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="debug|x64"
+			ConfigurationType="4"
+			InheritedPropertySheets="..\build-systems\msvc-2008\properties\debug.vsprops;..\build-systems\msvc-2008\properties\platform_x64.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -67,8 +121,58 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\release.vsprops"
-			WholeProgramOptimization="1"
+			InheritedPropertySheets="..\build-systems\msvc-2008\properties\release.vsprops;..\build-systems\msvc-2008\properties\platform_win32.vsprops"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="release|x64"
+			ConfigurationType="4"
+			InheritedPropertySheets="..\build-systems\msvc-2008\properties\release.vsprops;..\build-systems\msvc-2008\properties\platform_x64.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -120,7 +224,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
-			RelativePathToProject=".\projects\pre_compiled_headers\pre_compiled_headers.vcproj"
+			RelativePathToProject="..\build-systems\msvc-2008\projects\pre_compiled_headers\pre_compiled_headers.vcproj"
 		/>
 	</References>
 	<Files>
@@ -128,10 +232,19 @@
 			Name="asio"
 			>
 			<File
-				RelativePath="..\..\..\..\src\asio\asio.cpp"
+				RelativePath="src\asio\asio.cpp"
 				>
 				<FileConfiguration
 					Name="debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="debug|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -148,16 +261,34 @@
 						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\asio\asio.private.hpp"
+				RelativePath="src\asio\asio.private.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\asio\asiodrivers.cpp"
+				RelativePath="src\asio\asiodrivers.cpp"
 				>
 				<FileConfiguration
 					Name="debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="debug|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -174,9 +305,18 @@
 						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="release|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\asio\asiolist.cpp"
+				RelativePath="src\asio\asiolist.cpp"
 				>
 				<FileConfiguration
 					Name="debug|Win32"
@@ -188,7 +328,25 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="debug|x64"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="release|x64"
 					>
 					<Tool
 						Name="VCCLCompilerTool"

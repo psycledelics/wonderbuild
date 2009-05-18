@@ -223,8 +223,8 @@
 	</Configurations>
 	<References>
 		<ProjectReference
-			ReferencedProjectIdentifier="{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
-			RelativePathToProject="..\psycle-helpers\psycle-helpers.msvc-2008.vcproj"
+			ReferencedProjectIdentifier="{1d7f6f39-323d-4d7d-8bd9-4304fd6a2791}"
+			RelativePathToProject="..\psycle-audiodrivers.msvc-2008.vcproj"
 		/>
 	</References>
 	<Files>
@@ -608,86 +608,6 @@
 				</File>
 				<File
 					RelativePath="src\psycle\core\zipwriterstream.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="audiodrivers"
-				>
-				<File
-					RelativePath="src\psycle\audiodrivers\alsaout.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\alsaout.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\audiodriver.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\audiodriver.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\dsound.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\esoundout.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\esoundout.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\gstreamerout.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\gstreamerout.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\jackout.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\jackout.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\microsoftdirectsoundout.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\microsoftdirectsoundout.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\microsoftmmewaveout.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\microsoftmmewaveout.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\netaudioout.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\netaudioout.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\wavefileout.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\audiodrivers\wavefileout.h"
 					>
 				</File>
 			</Filter>

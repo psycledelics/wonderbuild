@@ -4,7 +4,6 @@
 	Version="9.00"
 	Name="asio (steinberg&apos;s sdk)"
 	ProjectGUID="{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -123,7 +122,6 @@
 			Name="release|Win32"
 			ConfigurationType="4"
 			InheritedPropertySheets="..\build-systems\msvc-2008\properties\release.vsprops;..\build-systems\msvc-2008\properties\platform_win32.vsprops"
-			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -175,7 +173,6 @@
 			Name="release|x64"
 			ConfigurationType="4"
 			InheritedPropertySheets="..\build-systems\msvc-2008\properties\release.vsprops;..\build-systems\msvc-2008\properties\platform_x64.vsprops"
-			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"

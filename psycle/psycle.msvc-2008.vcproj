@@ -5,7 +5,6 @@
 	Name="psycle"
 	ProjectGUID="{C6292BF4-9E87-4176-9101-A3D29D074B35}"
 	RootNamespace="psycle"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -148,7 +147,7 @@
 			ConfigurationType="1"
 			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\use_pre_compiled_header_with_mfc.vsprops;..\build-systems\msvc\properties\program.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
 			UseOfMFC="2"
-			WholeProgramOptimization="1"
+			ManagedExtensions="0"
 			ExcludeBuckets="5;6;8;15;16;18;20"
 			>
 			<Tool
@@ -210,7 +209,7 @@
 			ConfigurationType="1"
 			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\use_pre_compiled_header_with_mfc.vsprops;..\build-systems\msvc\properties\program.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
 			UseOfMFC="2"
-			WholeProgramOptimization="1"
+			ManagedExtensions="0"
 			ExcludeBuckets="5;6;8;15;16;18;20"
 			>
 			<Tool
@@ -227,7 +226,6 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TargetEnvironment="3"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -272,23 +270,23 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{B78DFE59-051A-43FD-B489-775A4982581C}"
-			RelativePathToProject="$(TopSrcDir)\universalis\universalis.msvc-2008.vcproj"
+			RelativePathToProject="..\universalis\universalis.msvc-2008.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
-			RelativePathToProject="$(TopSrcDir)\psycle-audiodrivers\asio.msvc-2008.vcproj"
+			RelativePathToProject="..\psycle-audiodrivers\asio.msvc-2008.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{28C015FB-3BDA-4B32-8D85-C652E9892216}"
-			RelativePathToProject="$(TopSrcDir)\build-systems\msvc\projects\pre_compiled_headers\pre_compiled_headers_with_mfc.msvc-2008.vcproj"
+			RelativePathToProject="..\build-systems\msvc\projects\pre_compiled_headers\pre_compiled_headers_with_mfc.msvc-2008.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
-			RelativePathToProject="$(TopSrcDir)\psycle-helpers\psycle-helpers.msvc-2008.vcproj"
+			RelativePathToProject="..\psycle-helpers\psycle-helpers.msvc-2008.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{B78DFE59-051A-43FD-B489-785A3982541C}"
-			RelativePathToProject="$(TopSrcDir)\psycle-core\psycle-core.msvc-2008.vcproj"
+			RelativePathToProject="..\psycle-core\psycle-core.msvc-2008.vcproj"
 		/>
 	</References>
 	<Files>
@@ -1470,7 +1468,7 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="Seib-Vsthost"
+			Name="seib-vsthost"
 			>
 			<File
 				RelativePath="src\seib-vsthost\CVSTHost.Seib.cpp"
