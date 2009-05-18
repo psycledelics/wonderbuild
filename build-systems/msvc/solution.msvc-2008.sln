@@ -126,7 +126,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.arguru.rever
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "steinberg-asio-sdk", "..\..\psycle-audiodrivers\asio.msvc-2008.vcproj", "{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "asio", "..\..\psycle-audiodrivers\asio.msvc-2008.vcproj", "{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
@@ -436,6 +436,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-helpers", "..\..\psycle-helpers\psycle-helpers.msvc-2008.vcproj", "{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-player", "..\..\psycle-player\psycle-player.msvc-2008.vcproj", "{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-audiodrivers", "..\..\psycle-audiodrivers\psycle-audiodrivers.msvc-2008.vcproj", "{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1399,6 +1401,20 @@ Global
 		{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}.unpack|win32.ActiveCfg = release|x64
 		{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}.unpack|x64.ActiveCfg = release|x64
 		{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}.unpack|x64.Build.0 = release|x64
+		{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}.debug|win32.ActiveCfg = debug|Win32
+		{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}.debug|win32.Build.0 = debug|Win32
+		{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}.debug|x64.ActiveCfg = debug|x64
+		{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}.debug|x64.Build.0 = debug|x64
+		{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}.documentation|win32.ActiveCfg = debug|x64
+		{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}.documentation|x64.ActiveCfg = debug|x64
+		{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}.documentation|x64.Build.0 = debug|x64
+		{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}.release|win32.ActiveCfg = release|Win32
+		{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}.release|win32.Build.0 = release|Win32
+		{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}.release|x64.ActiveCfg = release|x64
+		{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}.release|x64.Build.0 = release|x64
+		{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}.unpack|win32.ActiveCfg = release|x64
+		{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}.unpack|x64.ActiveCfg = release|x64
+		{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}.unpack|x64.Build.0 = release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

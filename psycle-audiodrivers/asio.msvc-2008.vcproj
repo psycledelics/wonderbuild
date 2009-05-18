@@ -2,8 +2,10 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="steinberg-asio-sdk"
+	Name="asio"
 	ProjectGUID="{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
+	RootNamespace="asio"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -224,7 +226,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
-			RelativePathToProject="..\build-systems\msvc\projects\pre_compiled_headers\pre_compiled_headers.vcproj"
+			RelativePathToProject=".\projects\pre_compiled_headers\pre_compiled_headers.msvc-2008.vcproj"
 		/>
 	</References>
 	<Files>
