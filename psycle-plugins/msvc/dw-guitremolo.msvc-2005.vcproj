@@ -258,7 +258,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
-			RelativePathToProject=".\projects\pre_compiled_headers\pre_compiled_headers.vcproj"
+			RelativePathToProject=".\projects\pre-compiled-headers\pre-compiled-headers-with-mfc.msvc-2005.vcproj"
 		/>
 	</References>
 	<Files>
@@ -270,8 +270,8 @@
 				>
 				<Tool
 					Name="VCCLCompilerTool"
-					PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
-					ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
+					PrecompiledHeaderFile="$(IntDir)/../pre-compiled-headers-with-mfc.pch"
+					ProgramDataBaseFileName="$(IntDir)/../pre-compiled-headers-with-mfc.pdb"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -279,8 +279,8 @@
 				>
 				<Tool
 					Name="VCCLCompilerTool"
-					PrecompiledHeaderFile="$(IntDir)/../pre_compiled_headers.mfc.pch"
-					ProgramDataBaseFileName="$(IntDir)/../pre_compiled_headers.mfc.pdb"
+					PrecompiledHeaderFile="$(IntDir)/../pre-compiled-headers-with-mfc.pch"
+					ProgramDataBaseFileName="$(IntDir)/../pre-compiled-headers-with-mfc.pdb"
 				/>
 			</FileConfiguration>
 		</File>
