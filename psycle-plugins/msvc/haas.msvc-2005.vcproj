@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.haas"
+	Name="psycle-plugins/haas"
+	RootNameSpace="haas"
 	ProjectGUID="{16A3B78E-D26B-4057-A524-9158B9559D9F}"
 	TargetFrameworkVersion="131072"
 	>

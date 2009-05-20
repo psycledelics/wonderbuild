@@ -5,7 +5,6 @@
 	Name="steinberg-asio-sdk"
 	RootNamespace="asio"
 	ProjectGUID="{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
-	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform

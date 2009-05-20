@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.pooplog.scratch2"
+	Name="psycle-plugins/pooplog-scratch-master-2"
+	RootNamespace="pooplog-scratch-master-2"
 	ProjectGUID="{169A62CC-C6C2-4FDA-B320-B813D6FB7748}"
 	TargetFrameworkVersion="131072"
 	>

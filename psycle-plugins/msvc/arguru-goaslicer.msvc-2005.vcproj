@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.arguru.goaslicer"
+	Name="psycle-plugins/arguru-goaslicer"
+	RootNameSpace="arguru-goaslicer"
 	ProjectGUID="{6199ABC3-ABFE-4947-8270-D9248CCAC88D}"
 	TargetFrameworkVersion="131072"
 	>

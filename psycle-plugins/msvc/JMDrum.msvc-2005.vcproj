@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.jaz.drum (aka Josep-Maria Drum, or JMDrum)"
+	Name="psycle-plugins/jaz-drum (aka Josep-Maria Drum, or JMDrum)"
+	RootNameSpace="jmdrum"
 	ProjectGUID="{28D6932C-A980-4A38-AAA0-EDCE59682766}"
 	TargetFrameworkVersion="131072"
 	>

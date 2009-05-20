@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.vd.noisegate"
+	Name="psycle-plugins/vd-noisegate"
+	RootNamespace="vdnoisegate"
 	ProjectGUID="{29688DF6-F5D9-4BE8-9014-81436D967603}"
 	TargetFrameworkVersion="131072"
 	>

@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.druttis.eq3"
+	Name="psycle-plugins/druttis-eq3"
+	RootNameSpace="eq3"
 	ProjectGUID="{1C7E86D5-7D35-4C8F-BDF0-6BE89FD0C58F}"
 	TargetFrameworkVersion="131072"
 	>

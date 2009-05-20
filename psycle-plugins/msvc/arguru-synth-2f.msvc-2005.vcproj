@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.arguru.synth"
+	Name="psycle-plugins/arguru-synth"
+	RootNameSpace="arguru-synth-2f"
 	ProjectGUID="{4F58513B-F7E3-46CD-8196-9B3E4A07AF20}"
 	TargetFrameworkVersion="131072"
 	>

@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.pooplog.fm.light"
+	Name="psycle-plugins/pooplog-fm-light"
+	RootNamespace="pooplog-fm-light"
 	ProjectGUID="{9ADD208D-3BEA-476F-A0CE-5ED4D10A62E7}"
 	TargetFrameworkVersion="131072"
 	>

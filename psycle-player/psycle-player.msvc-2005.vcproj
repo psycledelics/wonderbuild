@@ -4,7 +4,6 @@
 	Version="8.00"
 	Name="psycle-player"
 	ProjectGUID="{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}"
-	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform

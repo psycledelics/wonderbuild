@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.vd.echo"
+	Name="psycle-plugins/vd-echo"
+	RootNamespace="vdecho"
 	ProjectGUID="{75C36F66-DB9A-4586-BDC8-7F3AEFA76E34}"
 	TargetFrameworkVersion="131072"
 	>

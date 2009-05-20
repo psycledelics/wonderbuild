@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.druttis.dsp (static build)"
+	Name="psycle-plugins/helpers/druttis-dsp"
+	RootNameSpace="dsp"
 	ProjectGUID="{F46EC0F9-8440-418D-91E7-41176165E294}"
-	RootNamespace="psycle.plugins.druttis.dsp (static build)"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>

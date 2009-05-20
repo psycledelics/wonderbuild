@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.pooplog.delay"
+	Name="psycle-plugins/pooplog-delay"
+	RootNamespace="pooplog-delay"
 	ProjectGUID="{343A5812-CBF3-4E09-AF81-8500476DE5E5}"
 	TargetFrameworkVersion="131072"
 	>

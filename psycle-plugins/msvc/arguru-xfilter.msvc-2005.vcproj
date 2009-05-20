@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.arguru.xfilter (aka cross-delay)"
+	Name="psycle-plugins/arguru-xfilter (aka cross-delay)"
+	RootNameSpace="arguru-xfilter"
 	ProjectGUID="{1B5F9342-46EE-4359-8178-DAB8BB37E979}"
 	TargetFrameworkVersion="131072"
 	>

@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.vd.fastverb"
+	Name="psycle-plugins/vd-fastverb"
+	RootNamespace="vsfastverb"
 	ProjectGUID="{B252B9E6-DBEA-4701-9F7B-9F4294B571D0}"
 	TargetFrameworkVersion="131072"
 	>

@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.ayeternal.flanger"
+	Name="psycle-plugins/ayeternal-flanger"
+	RootNameSpace="flanger"
 	ProjectGUID="{5E7F1902-C3E3-43DE-A35D-402E42CD78B8}"
 	TargetFrameworkVersion="131072"
 	>

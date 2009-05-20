@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.druttis.koruz"
+	Name="psycle-plugins/druttis-koruz"
+	RootNameSpace="koruz"
 	ProjectGUID="{C233B433-2D3A-41BD-ABAB-F92B569E95EA}"
 	TargetFrameworkVersion="131072"
 	>

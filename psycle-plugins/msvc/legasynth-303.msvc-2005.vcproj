@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.legasynth.303"
+	Name="psycle-plugins/legasynth-303"
+	RootNameSpace="legasynth-303"
 	ProjectGUID="{F3ABFF20-76B9-4113-805F-2B7EB67CAB0F}"
 	TargetFrameworkVersion="131072"
 	>

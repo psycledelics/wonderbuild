@@ -5,7 +5,6 @@
 	Name="psycle-plugins/zephod-super-fm"
 	RootNamespace="zephod-superfm"
 	ProjectGUID="{652E2772-861D-48C6-A710-FDC1078CBA09}"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform

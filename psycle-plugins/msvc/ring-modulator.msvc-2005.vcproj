@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.ayeternal.ring_modulator"
+	Name="psycle-plugins/ayeternal-ring-modulator"
+	RootNamespace="ring-modulator"
 	ProjectGUID="{BA57DEBE-F6E2-412F-B58F-56BD5BBBDB34}"
 	TargetFrameworkVersion="131072"
 	>

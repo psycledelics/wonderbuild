@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.fluidsynth (dynamic library)"
+	Name="psycle-plugins/helpers/fluidsynth"
+	RootNameSpace="fluidsynth"
 	ProjectGUID="{923A9CFD-C2B2-4A53-952B-EC9CD8413704}"
-	RootNamespace="psycle.plugins.fluidsynth (dynamic library)"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>

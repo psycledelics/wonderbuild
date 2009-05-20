@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.bdzld.negative"
+	Name="psycle-plugins/bdzld-negative"
+	RootNameSpace="negative"
 	ProjectGUID="{57779BFB-E246-4305-9431-C0639619C17A}"
 	TargetFrameworkVersion="131072"
 	>

@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.fluidsynth.sf2.player"
+	Name="psycle-plugins/fluidsynth-sf2-player"
+	RootNameSpace="fs-sf2-player"
 	ProjectGUID="{E6905023-50A7-49E0-A5DE-5C0D26414B8D}"
 	RootNamespace="psycle.plugins.fluidsynth.sf2.player"
 	TargetFrameworkVersion="131072"

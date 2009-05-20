@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.pooplog.lofi"
+	Name="psycle-plugins/pooplog-lofi-processor"
+	RootNamespace="pooplog-lofi-processor"
 	ProjectGUID="{E50C03CC-FE5F-4E33-9A7D-196AA6D17E00}"
 	TargetFrameworkVersion="131072"
 	>
