@@ -8,12 +8,12 @@
 	<Tool
 		Name="VCCLCompilerTool"
 		UsePrecompiledHeader="2"
-		PrecompiledHeaderFile="$(TopOutputDir)/intermediate/pre_compiled_headers_with_mfc.pch"
-		ProgramDataBaseFileName="$(TopOutputDir)/intermediate/pre_compiled_headers_with_mfc.pdb"
+		PrecompiledHeaderFile="$(TopOutputDir)/intermediate/pre-compiled-headers-with-mfc.pch"
+		ProgramDataBaseFileName="$(TopOutputDir)/intermediate/pre-compiled-headers-with-mfc.pdb"
 	/>
 	<UserMacro
 		Name="PreCompiledObject"
-		Value="&quot;$(TopOutputDir)/intermediate/pre_compiled_headers_with_mfc/pre_compiled_headers.obj&quot;"
+		Value="&quot;$(TopOutputDir)/intermediate/pre-compiled_headers-with-mfc/pre-compiled-headers.obj&quot;"
 		InheritsFromParent="true"
 		Delimiter=" "
 	/>

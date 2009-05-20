@@ -9,15 +9,15 @@
 	<Tool
 		Name="VCCLCompilerTool"
 		UsePrecompiledHeader="1"
-		PrecompiledHeaderFile="$(OutDir)/$(ProjectName).pch"
-		ProgramDataBaseFileName="$(OutDir)/$(ProjectName).pdb"
+		PrecompiledHeaderFile="$(OutDir)/$(RootNameSpace).pch"
+		ProgramDataBaseFileName="$(OutDir)/$(RootNameSpace).pdb"
 	/>
 	<Tool
 		Name="VCLinkerTool"
 		IgnoreImportLibrary="true"
-		OutputFile="$(IntDir)/$(InputName).dll"
-		ProgramDatabaseFile="$(IntDir)/$(InputName).pdb"
-		ImportLibrary="$(IntDir)/$(InputName).lib"
+		OutputFile="$(IntDir)/$(RootNameSpace).dll"
+		ProgramDatabaseFile="$(IntDir)/$(RootNameSpace).pdb"
+		ImportLibrary="$(IntDir)/$(RootNameSpace).lib"
 	/>
 	<UserMacro
 		Name="PreCompiledObject"

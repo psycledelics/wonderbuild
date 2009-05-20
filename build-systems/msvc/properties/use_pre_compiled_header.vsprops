@@ -10,8 +10,8 @@
 		UsePrecompiledHeader="2"
 		ForcedIncludeFiles="$(PreCompiledHeader)"
 		PrecompiledHeaderThrough="$(PreCompiledHeader)"
-		PrecompiledHeaderFile="$(TopOutputDir)/intermediate/pre_compiled_headers.pch"
-		ProgramDataBaseFileName="$(TopOutputDir)/intermediate/pre_compiled_headers.pdb"
+		PrecompiledHeaderFile="$(TopOutputDir)/intermediate/pre-compiled-headers.pch"
+		ProgramDataBaseFileName="$(TopOutputDir)/intermediate/pre-compiled-headers.pdb"
 	/>
 	<Tool
 		Name="VCLinkerTool"
@@ -23,6 +23,6 @@
 	/>
 	<UserMacro
 		Name="PreCompiledObject"
-		Value="&quot;$(TopOutputDir)/intermediate/pre_compiled_headers/pre_compiled_headers.obj&quot;"
+		Value="&quot;$(TopOutputDir)/intermediate/pre-compiled-headers/pre-compiled-headers.obj&quot;"
 	/>
 </VisualStudioPropertySheet>
