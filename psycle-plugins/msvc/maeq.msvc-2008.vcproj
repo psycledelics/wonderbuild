@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="psycle.plugins.moreamp.maeq"
+	Name="psycle.plugins/moreamp-eq"
+	RootNameSpace="maeq"
 	ProjectGUID="{17801124-1DB1-4DB1-9E56-7E862219A20D}"
 	TargetFrameworkVersion="131072"
 	>

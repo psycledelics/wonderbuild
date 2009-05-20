@@ -4,8 +4,6 @@
 	Version="9.00"
 	Name="psycle"
 	ProjectGUID="{C6292BF4-9E87-4176-9101-A3D29D074B35}"
-	RootNamespace="psycle"
-	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform

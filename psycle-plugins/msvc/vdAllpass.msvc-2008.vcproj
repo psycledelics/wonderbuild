@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="psycle.plugins.vd.allpass"
+	Name="psycle-plugins/vd-allpass"
+	RootNamespace="vdallpass"
 	ProjectGUID="{3F6026D4-85D0-492F-A9B6-FFE49D8DD1C7}"
 	TargetFrameworkVersion="131072"
 	>

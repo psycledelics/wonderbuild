@@ -5,7 +5,6 @@
 	Name="zlib"
 	ProjectGUID="{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}"
 	Keyword="MakeFileProj"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform

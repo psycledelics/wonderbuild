@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="psycle.plugins.druttis.feedme"
+	Name="psycle-plugins/druttis-feedme"
+	RootNameSpace="feedme"
 	ProjectGUID="{49BA720B-BEB2-42F6-9168-C6EEA8C8BE30}"
 	TargetFrameworkVersion="131072"
 	>

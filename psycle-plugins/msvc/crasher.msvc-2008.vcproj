@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="psycle.plugins.crasher"
+	Name="psycle-plugins/crasher"
+	RootNameSpace="crasher"
 	ProjectGUID="{520E5BA9-4E94-45B7-A37F-EEB90EFF86A7}"
 	TargetFrameworkVersion="131072"
 	>

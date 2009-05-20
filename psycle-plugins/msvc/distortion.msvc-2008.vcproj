@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="psycle.plugins.ayeternal.distortion"
+	Name="psycle-plugins/ayeternal-distortion"
+	RootNameSpace="distortion"
 	ProjectGUID="{B7971021-83E8-4CC7-A926-DFF0B4530A41}"
 	TargetFrameworkVersion="131072"
 	>

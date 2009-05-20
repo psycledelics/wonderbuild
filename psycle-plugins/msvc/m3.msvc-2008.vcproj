@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="psycle.plugins.makk.m3"
+	Name="psycle-plugins/makk-m3"
+	RootNameSpace="m3"
 	ProjectGUID="{B7B85261-D124-4CF6-B12A-91D4105B3CDC}"
 	TargetFrameworkVersion="131072"
 	>

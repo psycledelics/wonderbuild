@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="psycle.plugins.audacity.phaser"
+	Name="psycle-plugins/audacity-phaser"
+	RootNameSpace="audacity-phaser"
 	ProjectGUID="{D9481658-10F2-4007-905A-0873271C6045}"
 	TargetFrameworkVersion="131072"
 	>

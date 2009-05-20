@@ -8,7 +8,7 @@
 	>
 	<Tool
 		Name="VCBscMakeTool"
-		OutputFile="$(IntDir)/$(InputName).bsc"
+		OutputFile="$(IntDir)/$(RootNameSpace).bsc"
 	/>
 	<Tool
 		Name="VCCLCompilerTool"
@@ -18,15 +18,15 @@
 	/>
 	<Tool
 		Name="VCLibrarianTool"
-		OutputFile="$(TopOutputDir)/lib/$(ProjectName).lib"
+		OutputFile="$(TopOutputDir)/lib/$(RootNameSpace).lib"
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		OutputFile="$(OutDir)/$(ProjectName).dll"
+		OutputFile="$(OutDir)/$(RootNameSpace).dll"
 		GenerateDebugInformation="true"
-		ProgramDatabaseFile="$(OutDir)/$(ProjectName).pdb"
+		ProgramDatabaseFile="$(OutDir)/$(RootNameSpace).pdb"
 		TurnOffAssemblyGeneration="true"
-		ImportLibrary="$(TopOutputDir)/lib/$(ProjectName).lib"
+		ImportLibrary="$(TopOutputDir)/lib/$(RootNameSpace).lib"
 	/>
 	<Tool
 		Name="VCResourceCompilerTool"

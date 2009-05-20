@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="psycle.plugins.druttis.phantom"
+	Name="psycle-plugins/druttis-phantom"
+	RootNameSpace="phantom"
 	ProjectGUID="{A517216B-EE2E-4473-B342-2842C5F5BCBC}"
 	TargetFrameworkVersion="131072"
 	>

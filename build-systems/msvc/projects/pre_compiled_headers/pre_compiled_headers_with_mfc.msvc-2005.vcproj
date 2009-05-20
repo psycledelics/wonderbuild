@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="pre_compiled_headers_with_mfc"
+	Name="pre-compiled-headers-with-mfc"
 	ProjectGUID="{28C015FB-3BDA-4B32-8D85-C652E9892216}"
 	>
 	<Platforms>

@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="psycle.plugins.thunderpalace_softsat"
+	Name="psycle-plugins/thunderpalace-softsat"
+	RootNamespace="thunderpalace-softsat"
 	ProjectGUID="{CDD9BC26-289D-4558-A22D-500F0BB76828}"
 	TargetFrameworkVersion="131072"
 	>

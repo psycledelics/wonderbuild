@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="psycle.plugins.ayeternal.delay"
+	Name="psycle-plugins/ayeternal-delay"
+	RootNameSpace="delay"
 	ProjectGUID="{F9D890D8-B4BF-4C41-BE8A-9AC222AA396B}"
 	TargetFrameworkVersion="131072"
 	>

@@ -4,7 +4,6 @@
 	Version="9.00"
 	Name="psycle-audiodrivers"
 	ProjectGUID="{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}"
-	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform

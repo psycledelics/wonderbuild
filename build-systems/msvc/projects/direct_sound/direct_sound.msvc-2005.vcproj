@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="direct_sound"
+	Name="microsoft-direct-sound"
 	ProjectGUID="{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}"
 	Keyword="MakeFileProj"
 	>

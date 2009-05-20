@@ -5,7 +5,6 @@
 	Name="boost"
 	ProjectGUID="{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}"
 	Keyword="MakeFileProj"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform

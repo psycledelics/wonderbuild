@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="psycle.plugins.dw_iopan"
+	Name="psycle-plugins/dw-iopan"
+	RootNameSpace="dw-iopan"
 	ProjectGUID="{8ADD9C4A-378B-48D8-9853-4EA253F05189}"
 	TargetFrameworkVersion="131072"
 	>

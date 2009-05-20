@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="psycle.plugins.ladspa.gverb"
+	Name="psycle-plugins/ladspa-gverb"
+	RootNameSpace="ladspa-gverb"
 	ProjectGUID="{1EDE3137-50AB-4565-AA60-1E8F7C11164F}"
 	TargetFrameworkVersion="131072"
 	>

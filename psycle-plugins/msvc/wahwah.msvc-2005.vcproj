@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle.plugins.audacity.wahwah"
+	Name="psycle-plugins/audacity-wahwah"
+	RootNamespace="wahwah"
 	ProjectGUID="{25CF6AC2-6555-41FC-AAB7-A92C9DAE2A61}"
 	TargetFrameworkVersion="131072"
 	>

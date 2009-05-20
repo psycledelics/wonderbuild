@@ -6,7 +6,7 @@
 	>
 	<Tool
 		Name="VCLinkerTool"
-		OutputFile="$(OutDir)/$(InputName).exe"
+		OutputFile="$(OutDir)/$(RootNameSpace).exe"
 		TurnOffAssemblyGeneration="false"
 	/>
 </VisualStudioPropertySheet>
