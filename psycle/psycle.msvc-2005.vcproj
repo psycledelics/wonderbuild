@@ -5,6 +5,7 @@
 	Name="psycle"
 	ProjectGUID="{C6292BF4-9E87-4176-9101-A3D29D074B35}"
 	RootNamespace="psycle"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -270,23 +271,27 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{B78DFE59-051A-43FD-B489-775A4982581C}"
-			RelativePathToProject="..\universalis\universalis.msvc-2005.vcproj"
+			RelativePathToProject="..\..\universalis\universalis.msvc-2005.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
-			RelativePathToProject="..\psycle-audiodrivers\asio.msvc-2005.vcproj"
+			RelativePathToProject="..\..\psycle-audiodrivers\asio.msvc-2005.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{28C015FB-3BDA-4B32-8D85-C652E9892216}"
-			RelativePathToProject="..\build-systems\msvc\projects\pre_compiled_headers\pre_compiled_headers_with_mfc.msvc-2005.vcproj"
+			RelativePathToProject=".\projects\pre_compiled_headers\pre_compiled_headers_with_mfc.msvc-2005.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
-			RelativePathToProject="..\psycle-helpers\psycle-helpers.msvc-2005.vcproj"
+			RelativePathToProject="..\..\psycle-helpers\psycle-helpers.msvc-2005.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{B78DFE59-051A-43FD-B489-785A3982541C}"
-			RelativePathToProject="..\psycle-core\psycle-core.msvc-2005.vcproj"
+			RelativePathToProject="..\..\psycle-core\psycle-core.msvc-2005.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}"
+			RelativePathToProject="..\..\psycle-audiodrivers\psycle-audiodrivers.msvc-2005.vcproj"
 		/>
 	</References>
 	<Files>
@@ -1488,4 +1493,6 @@
 			</File>
 		</Filter>
 	</Files>
+	<Globals>
+	</Globals>
 </VisualStudioProject>

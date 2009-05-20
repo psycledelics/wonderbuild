@@ -3,7 +3,8 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="psycle-audiodrivers"
-	ProjectGUID="{1d7f6f39-323d-4d7d-8bd9-4304fd6a2791}"
+	ProjectGUID="{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -224,7 +225,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
-			RelativePathToProject="..\psycle-helpers\psycle-helpers.msvc-2005.vcproj"
+			RelativePathToProject="..\..\psycle-helpers\psycle-helpers.msvc-2005.vcproj"
 		/>
 	</References>
 	<Files>
