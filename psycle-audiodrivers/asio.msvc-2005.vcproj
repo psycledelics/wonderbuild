@@ -225,7 +225,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
-			RelativePathToProject=".\projects\pre-compiled-headers\pre_compiled_headers.msvc-2005.vcproj"
+			RelativePathToProject=".\projects\pre-compiled-headers\pre-compiled-headers.msvc-2005.vcproj"
 		/>
 	</References>
 	<Files>

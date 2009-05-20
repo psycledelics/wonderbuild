@@ -277,7 +277,7 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{28C015FB-3BDA-4B32-8D85-C652E9892216}"
-			RelativePathToProject=".\projects\pre-compiled-headers\pre_compiled_headers_with_mfc.msvc-2008.vcproj"
+			RelativePathToProject=".\projects\pre-compiled-headers\pre-compiled-headers-with-mfc.msvc-2008.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
