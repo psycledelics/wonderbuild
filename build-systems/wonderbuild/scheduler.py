@@ -25,12 +25,11 @@ class Scheduler(object):
 
 	class Context(object):
 		def __init__(self, scheduler):
-			self._scheduler = scheduler			
 			self.thread_count = scheduler.thread_count
 			self.lock = scheduler._lock
-			self.parallel_wait = self._scheduler._parallel_wait
-			self.parallel_no_wait = self._scheduler._parallel_no_wait
-			self.wait = self._scheduler._wait
+			self.parallel_wait = scheduler._parallel_wait
+			self.parallel_no_wait = scheduler._parallel_no_wait
+			self.wait = scheduler._wait
 
 	def process(self, tasks):
 		self._task_queue = tasks
