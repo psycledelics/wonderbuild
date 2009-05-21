@@ -72,7 +72,7 @@ class AutoLinkSupportCheckTask(BuildCheckTask):
 							defined __BORLANDC__ || \\
 							__MWERKS__ >= 0x3000 && _WIN32 || \\
 							defined __ICL && defined _MSC_EXTENSIONS && _MSC_VER >= 1200 || \\
-							defined _MSVC_VER \\
+							!defined __ICL && defined _MSVC_VER \\
 					)
 						#error no auto link support
 					#endif
