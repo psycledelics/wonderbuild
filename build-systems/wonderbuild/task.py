@@ -68,7 +68,7 @@ class CheckTask(ProjectTask):
 		try: old_sig, self._results = self.persistent
 		except KeyError: old_sig = None
 		if old_sig == self.sig:
-			if __debug__ and is_debug: debug('task: skip: no change: ' + self.name)
+			if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 		else:
 			if not silent:
 				desc = 'checking for ' + self.desc
