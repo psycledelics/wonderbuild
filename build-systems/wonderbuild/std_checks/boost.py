@@ -52,7 +52,7 @@ class BoostCheckTask(MultiBuildCheckTask):
 					self._source_text = \
 						'#include <boost/version.hpp>\n' \
 						'BOOST_VERSION\n' \
-						'BOOST_LIB_VERSION'
+						'BOOST_LIB_VERSION\n'
 					return self._source_text
 			
 			def do_check_and_set_result(self, sched_ctx):
