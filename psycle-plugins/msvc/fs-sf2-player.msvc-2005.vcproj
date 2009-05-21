@@ -5,7 +5,6 @@
 	Name="psycle-plugins/fluidsynth-sf2-player"
 	RootNameSpace="fs-sf2-player"
 	ProjectGUID="{E6905023-50A7-49E0-A5DE-5C0D26414B8D}"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -94,7 +93,6 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TargetEnvironment="3"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -137,8 +135,6 @@
 			Name="release|Win32"
 			ConfigurationType="2"
 			InheritedPropertySheets="..\..\build-systems\msvc\properties\release.vsprops;..\..\build-systems\msvc\properties\plugin.vsprops;..\..\build-systems\msvc\properties\use_pre_compiled_header_with_mfc.vsprops;..\..\build-systems\msvc\properties\platform_win32.vsprops"
-			UseOfMFC="0"
-			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -196,8 +192,6 @@
 			Name="release|x64"
 			ConfigurationType="2"
 			InheritedPropertySheets="..\..\build-systems\msvc\properties\release.vsprops;..\..\build-systems\msvc\properties\plugin.vsprops;..\..\build-systems\msvc\properties\use_pre_compiled_header_with_mfc.vsprops;..\..\build-systems\msvc\properties\platform_x64.vsprops"
-			UseOfMFC="0"
-			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -213,7 +207,6 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TargetEnvironment="3"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"

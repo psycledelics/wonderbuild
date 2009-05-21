@@ -42,9 +42,11 @@
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="WIN32;_M_IX86;_WINDOWS;_USRDLL;FLUIDSYNTH_DLL_EXPORTS;FLUIDSYNTH_SEQ_DLL_EXPORTS"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName=""
-				CompileAs="1"
 				ForcedIncludeFiles="$(NOINHERIT)"
+				PrecompiledHeaderThrough=""
+				PrecompiledHeaderFile=""
+				ProgramDataBaseFileName="$(IntDir)/$(RootNameSpace).pdb"
+				CompileAs="1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -106,9 +108,11 @@
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="WIN32;_M_IX86;_WINDOWS;_USRDLL;FLUIDSYNTH_DLL_EXPORTS;FLUIDSYNTH_SEQ_DLL_EXPORTS"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName=""
-				CompileAs="1"
 				ForcedIncludeFiles="$(NOINHERIT)"
+				PrecompiledHeaderThrough=""
+				PrecompiledHeaderFile=""
+				ProgramDataBaseFileName="$(IntDir)/$(RootNameSpace).pdb"
+				CompileAs="1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -149,7 +153,6 @@
 			Name="release|Win32"
 			ConfigurationType="2"
 			InheritedPropertySheets="..\..\build-systems\msvc\properties\release.vsprops;..\..\build-systems\msvc\properties\plugin.vsprops;..\..\build-systems\msvc\properties\platform_win32.vsprops"
-			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -170,9 +173,11 @@
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="NDEBUG;WIN32;_M_IX86;_WINDOWS;_USRDLL;FLUIDSYNTH_DLL_EXPORTS;FLUIDSYNTH_SEQ_DLL_EXPORTS"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName=""
-				CompileAs="1"
 				ForcedIncludeFiles="$(NOINHERIT)"
+				PrecompiledHeaderThrough=""
+				PrecompiledHeaderFile=""
+				ProgramDataBaseFileName="$(IntDir)/$(RootNameSpace).pdb"
+				CompileAs="1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -213,7 +218,6 @@
 			Name="release|x64"
 			ConfigurationType="2"
 			InheritedPropertySheets="..\..\build-systems\msvc\properties\release.vsprops;..\..\build-systems\msvc\properties\plugin.vsprops;..\..\build-systems\msvc\properties\platform_x64.vsprops"
-			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -229,15 +233,16 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TargetEnvironment="3"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				PreprocessorDefinitions="NDEBUG;WIN32;_M_IX86;_WINDOWS;_USRDLL;FLUIDSYNTH_DLL_EXPORTS;FLUIDSYNTH_SEQ_DLL_EXPORTS"
 				UsePrecompiledHeader="0"
-				ProgramDataBaseFileName=""
-				CompileAs="1"
 				ForcedIncludeFiles="$(NOINHERIT)"
+				PrecompiledHeaderThrough=""
+				PrecompiledHeaderFile=""
+				ProgramDataBaseFileName="$(IntDir)/$(RootNameSpace).pdb"
+				CompileAs="1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
