@@ -53,8 +53,6 @@ class Impl(object):
 	@staticmethod
 	def _cfg_cxx_args(cfg, include_func):
 		args = [cfg.cxx_prog, '-pipe']
-		if cfg.debug: args.append('-g')
-		if cfg.optim is not None: args.append('-O' + cfg.optim)
 		if cfg.pic: args.append('-fPIC')
 		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)

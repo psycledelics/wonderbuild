@@ -66,8 +66,6 @@ class BuildCfg(ClientCfg):
 		self.static_prog = None
 		self.impl = None
 		self.kind = self.version = None
-		self.debug = False
-		self.optim = None
 		self.check_missing = False
 		try: self.fhs = project.fhs
 		except AttributeError: self.fhs = project.fhs = FHS(project)
@@ -90,8 +88,6 @@ class BuildCfg(ClientCfg):
 		c.impl = self.impl
 		c.kind = self.kind
 		c.version = self.version
-		c.debug = self.debug
-		c.optim = self.optim
 		c.check_missing = self.check_missing
 		c.fhs = self.fhs
 		return c
@@ -116,8 +112,6 @@ class BuildCfg(ClientCfg):
 			#sig.update(str(self.target_platform_binary_format_is_pe))
 			sig.update(self.kind)
 			sig.update(self.version)
-			sig.update(str(self.debug))
-			sig.update(str(self.optim))
 			sig.update(str(self.check_missing))
 			if len(self.pkg_config): sig.update(_PkgConfigTask.env_sig())
 			sig = self.__common_sig = sig.digest()
@@ -226,8 +220,6 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 	known_options = set([
 		'cxx', # cxx-compiler
 		'cxx-flags', # cxx-compiler-flags
-		'cxx-debug',
-		'cxx-optim',
 		'cxx-pic',
 		'cxx-mod-shared-libs', # cxx-shared-libs
 		'cxx-mod-static-progs', # cxx-static-progs
@@ -242,8 +234,6 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 	def generate_option_help(help):
 		help['cxx']                  = ('<prog>', 'use <prog> as c++ compiler')
 		help['cxx-flags']            = ('[flags]', 'use specific c++ compiler flags')
-		help['cxx-debug']            = ('<yes|no>', 'whether to make the c++ compiler produce debugging information', 'no')
-		help['cxx-optim']            = ('<level>', 'use c++ compiler optimisation <level>')
 		help['cxx-pic']              = ('<yes|no>', 'whether to make the c++ compiler emit pic code rather than non-pic code for static libs and programs (always pic for shared libs)', 'no (for static libs and programs)')
 		#help['cxx-mod-shared']      = ('<yes|no|progs-only>', '...', 'yes')
 		#help['cxx-mod-static']      = ('<no|libs|libs-and-progs>', '...', 'no')
@@ -269,7 +259,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		try:
 			old_sig, self.check_missing, \
 			self.kind, self.version, \
-			self.cxx_prog, self.cxx_flags, self.pic, self.optim, self.debug, \
+			self.cxx_prog, self.cxx_flags, self.pic, \
 			self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
 			self.ar_prog, self.ranlib_prog = \
 				self.project.persistent[str(self.__class__)]
@@ -287,9 +277,6 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 				flags = os.environ.get('CXXFLAGS', None)
 				if flags is not None: self.cxx_flags = flags.split()
 				else: self.cxx_flags = []
-
-			self.optim = o.get('cxx-optim', None)
-			self.debug = o.get('cxx-debug', False)
 
 			if 'cxx-pic' in o: self.pic = o['cxx-pic'] != 'no'
 			else: self.pic = None
@@ -322,7 +309,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 			self.project.persistent[str(self.__class__)] = \
 				self.options_sig, self.check_missing, \
 				self.kind, self.version, \
-				self.cxx_prog, self.cxx_flags, self.pic, self.optim, self.debug, \
+				self.cxx_prog, self.cxx_flags, self.pic, \
 				self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
 				self.ar_prog, self.ranlib_prog
 		else:
