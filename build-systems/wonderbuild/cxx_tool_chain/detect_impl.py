@@ -14,6 +14,9 @@ def select_impl(user_build_cfg):
 	elif self.kind == 'msvc':
 		from msvc_impl import Impl
 		self.impl = Impl(self.project.persistent)
+	elif self.kind == 'posix':
+		from posix_impl import Impl
+		self.impl = Impl(self.project.persistent)
 
 def detect_impl(user_build_cfg):
 	self = user_build_cfg
