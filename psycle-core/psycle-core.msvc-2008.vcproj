@@ -223,8 +223,8 @@
 	</Configurations>
 	<References>
 		<ProjectReference
-			ReferencedProjectIdentifier="{1d7f6f39-323d-4d7d-8bd9-4304fd6a2791}"
-			RelativePathToProject="..\psycle-audiodrivers.msvc-2008.vcproj"
+			ReferencedProjectIdentifier="{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}"
+			RelativePathToProject="..\psycle-audiodrivers\psycle-audiodrivers.msvc-2008.vcproj"
 		/>
 	</References>
 	<Files>
