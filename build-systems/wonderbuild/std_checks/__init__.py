@@ -69,10 +69,10 @@ class AutoLinkSupportCheckTask(BuildCheckTask):
 				"""
 					// check below is the same as in <boost/config/auto_link.hpp>
 					#if !( \\
-							defined _MSVC_VER || \\
 							defined __BORLANDC__ || \\
 							__MWERKS__ >= 0x3000 && _WIN32 || \\
-							defined __ICL && defined _MSC_EXTENSIONS && _MSC_VER >= 1200 \\
+							defined __ICL && defined _MSC_EXTENSIONS && _MSC_VER >= 1200 || \\
+							defined _MSVC_VER \\
 					)
 						#error no auto link support
 					#endif
