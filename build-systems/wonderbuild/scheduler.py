@@ -28,9 +28,9 @@ class Scheduler(object):
 			self._scheduler = scheduler			
 			self.thread_count = scheduler.thread_count
 			self.lock = scheduler._lock
-		def parallel_wait(self, *tasks): self._scheduler._parallel_wait(*tasks)
-		def parallel_no_wait(self, *tasks): self._scheduler._parallel_no_wait(*tasks)
-		def wait(self, *tasks): self._scheduler._wait(*tasks)
+			self.parallel_wait = self._scheduler._parallel_wait
+			self.parallel_no_wait = self._scheduler._parallel_no_wait
+			self.wait = self._scheduler._wait
 
 	def process(self, tasks):
 		self._task_queue = tasks
@@ -104,7 +104,7 @@ class Scheduler(object):
 				while True:
 					while not self._done_or_break_condition() and len(self._task_queue) == 0: self._condition.wait(timeout = self.timeout)
 					if self._done_or_break_condition(): break
-					self._process_one(self._task_queue.pop())
+					self._process_one_task(self._task_queue.pop())
 					if self._done_condition():
 						self._condition.notifyAll()
 						break
@@ -122,7 +122,7 @@ class Scheduler(object):
 	
 	def _done_or_break_condition(self): return self._done_condition() or self._stop_requested
 
-	def _process_one(self, task):
+	def _process_one_task(self, task):
 		assert not task._processed
 		if __debug__ and is_debug: debug('sched: processing task: ' + str(task))
 		task(self._context)
@@ -142,7 +142,7 @@ class Scheduler(object):
 		else:
 			self._todo_count += 1
 			tasks[0]._queued = True
-			self._process_one(tasks[0])
+			self._process_one_task(tasks[0])
 			if len(tasks) != 1: self._wait(*tasks[1:])
 		if __debug__:
 			for task in tasks: assert task._processed, task
@@ -166,6 +166,6 @@ class Scheduler(object):
 				while not task._processed and not self._stop_requested and len(self._task_queue) == 0: self._condition.wait(timeout = self.timeout)
 				if self._stop_requested: raise StopIteration
 				if task._processed: break
-				self._process_one(self._task_queue.pop())
+				self._process_one_task(self._task_queue.pop())
 		if __debug__:
 			for task in tasks: assert task._processed, task
