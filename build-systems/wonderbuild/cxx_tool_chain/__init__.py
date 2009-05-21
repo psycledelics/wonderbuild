@@ -953,7 +953,9 @@ class MultiBuildCheckTask(CheckTask):
 
 class BuildCheckTask(MultiBuildCheckTask):
 	@property
-	def _prog_source_text(self): return self.source_text + '\nint main() { return 0; }\n'
+	def _prog_source_text(self):
+		if self.pipe_preproc or not self.link: return self.source_text
+		else: return self.source_text + '\nint main() { return 0; }\n'
 
 	@property
 	def bld_dir(self):

@@ -13,7 +13,7 @@ class BinaryFormatElfCheckTask(BuildCheckTask):
 	def source_text(self): return \
 		'#if !defined __ELF__\n' \
 		'	#error the target platform binary format is not elf\n' \
-		'#endif'
+		'#endif\n'
 
 class BinaryFormatPeCheckTask(BuildCheckTask):
 	@staticmethod
@@ -29,7 +29,7 @@ class BinaryFormatPeCheckTask(BuildCheckTask):
 	def source_text(self): return \
 		'#if !defined _WIN32 && !defined __CYGWIN__\n' \
 		'	#error the target platform binary format is not pe\n' \
-		'#endif'
+		'#endif\n'
 
 class MSWindowsCheckTask(BuildCheckTask):
 	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'mswindows', base_cfg, compile=False)
@@ -38,7 +38,7 @@ class MSWindowsCheckTask(BuildCheckTask):
 	def source_text(self): return \
 		'#if !defined _WIN32\n' \
 		'	#error the target platform is not mswindows\n' \
-		'#endif'
+		'#endif\n'
 
 class CygwinCheckTask(BuildCheckTask):
 	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'cygwin', base_cfg, compile=False)
@@ -47,7 +47,7 @@ class CygwinCheckTask(BuildCheckTask):
 	def source_text(self): return \
 		'#if !defined __CYGWIN__\n' \
 		'	#error the target platform is not cygwin\n' \
-		'#endif'
+		'#endif\n'
 
 class MingwCheckTask(BuildCheckTask):
 	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'mingw', base_cfg, compile=False)
@@ -56,7 +56,7 @@ class MingwCheckTask(BuildCheckTask):
 	def source_text(self): return \
 		'#if defined __MINGW32__\n' \
 		'	#error this is not mingw gcc\n' \
-		'#endif'
+		'#endif\n'
 
 class AutoLinkSupportCheckTask(BuildCheckTask):
 	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'auto-link', base_cfg, compile=False)

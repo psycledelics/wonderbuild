@@ -41,7 +41,9 @@ class BoostCheckTask(MultiBuildCheckTask):
 	def source_text(self): return '' # TODO see property in AllInOneCheckTask class
 
 	class ReadVersion(BuildCheckTask):
-			def __init__(self, outer): BuildCheckTask.__init__(self, 'boost-version-' + str(outer._min_version_wanted_raw), outer.base_cfg, pipe_preproc=True)
+			def __init__(self, outer):
+				BuildCheckTask.__init__(self, 'boost-version-' + str(outer._min_version_wanted_raw), outer.base_cfg, pipe_preproc=True)
+				self._outer = outer
 			
 			@property
 			def source_text(self):
@@ -49,18 +51,34 @@ class BoostCheckTask(MultiBuildCheckTask):
 				except AttributeError:
 					self._source_text = \
 						'#include <boost/version.hpp>\n' \
-						'wonderbuild: boost version: BOOST_VERSION\n' \
-						'wonderbuild: boost lib: version: BOOST_LIB_VERSION\n'
+						'BOOST_VERSION\n' \
+						'BOOST_LIB_VERSION'
 					return self._source_text
 			
 			def do_check_and_set_result(self, sched_ctx):
 				BuildCheckTask.do_check_and_set_result(self, sched_ctx)
-				print self.results
 				r, out = self.results
-				if r:
-					out = out.split('\n')[:-2]
-					print out
-	
+				if not r: self.results = False, None, None
+				else:
+					out = out.split('\n')[-3:-1]
+					int_version = int(out[0])
+					ok = int_version >= self._outer._min_version_wanted_raw
+					self.results = ok, int_version, out[1].strip('"')
+			
+			@property
+			def result(self): return self.results[0]
+			
+			@property
+			def int_version(self): return self.results[1]
+			
+			@property
+			def lib_version(self): return self.results[2]
+			
+			@property
+			def result_display(self):
+				if self.result: return 'yes (version ' + str(self.int_version) + ' ' + self.lib_version + ')', '32'
+				else: return 'no', '31'
+
 	def do_check_and_set_result(self, sched_ctx):
 		read_version = BoostCheckTask.ReadVersion(self)
 		sched_ctx.parallel_wait(read_version)
