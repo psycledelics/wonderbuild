@@ -249,7 +249,7 @@ class Impl(object):
 		else: o = os.devnull
 		# TODO -xc for C
 		args = cfg.cxx_args_cwd + ['-xc++', '-']
-		if not build_check_task.compile: args += ['-E', '-o', o]
-		elif not build_check_task.link: args += ['-c', '-o', o]
+		if not build_check_task.compile: args.append('-E')
+		elif not build_check_task.link: args += ['-c', '-o', o + '.o']
 		else: args += ['-o', o] + cfg.ld_args[1:]
 		return exec_subprocess_pipe(args, input = build_check_task._prog_source_text, silent = True)

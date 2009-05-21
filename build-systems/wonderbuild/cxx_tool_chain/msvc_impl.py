@@ -201,9 +201,11 @@ class Impl(object):
 		cfg = build_check_task.cfg
 		cfg.shared = cfg.pic = False
 		cwd = build_check_task.bld_dir
-		i = cwd / 'a.cpp' # TODO a.c for C
-		f = open(i.path, 'w')
+		s = cwd / 'a.cpp' # TODO a.c for C
+		f = open(s.path, 'w')
 		try: f.write(build_check_task._prog_source_text)
 		finally: f.close()
-		args = cfg.cxx_args_bld + [i.rel_path(cwd), '-link'] + cfg.ld_args[1:]
+		args = cfg.cxx_args_bld + [s.rel_path(cwd)]
+		if not build_check_task.compile: args.append('-EP')
+		elif build_check_task.link: args += ['-link'] + cfg.ld_args[1:]
 		return exec_subprocess_pipe(args, cwd = cwd.path, silent = True)
