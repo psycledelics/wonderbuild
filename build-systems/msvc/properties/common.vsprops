@@ -31,4 +31,7 @@
 	<Tool
 		Name="VCResourceCompilerTool"
 	/>
+	<Tool
+		Name="VCManifestTool"
+	/>
 </VisualStudioPropertySheet>
