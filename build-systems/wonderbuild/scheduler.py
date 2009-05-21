@@ -122,8 +122,9 @@ class Scheduler(object):
 	def _done_or_break_condition(self): return self._done_condition() or self._stop_requested
 
 	def _process_one_task(self, task):
-		assert not task._processed
-		if __debug__ and is_debug: debug('sched: processing task: ' + str(task))
+		if __debug__ and is_debug:
+			debug('sched: processing task: ' + str(task))
+			assert not task._processed
 		task(self._context)
 		#try: task(self._context)
 		#except Exception, e: raise Exception, '\nin task: ' + str(task) + ': ' + str(e)
@@ -142,8 +143,8 @@ class Scheduler(object):
 			self._todo_count += 1
 			tasks[0]._queued = True
 			self._process_one_task(tasks[0])
-			if len(tasks) != 1: self._wait(*tasks[1:])
-		if __debug__:
+			if count != 1: self._wait(*tasks[1:])
+		if __debug__ and is_debug:
 			for task in tasks: assert task._processed, task
 	
 	def _parallel_no_wait(self, *tasks):
@@ -166,5 +167,5 @@ class Scheduler(object):
 				if self._stop_requested: raise StopIteration
 				if task._processed: break
 				self._process_one_task(self._task_queue.pop())
-		if __debug__:
+		if __debug__ and is_debug:
 			for task in tasks: assert task._processed, task
