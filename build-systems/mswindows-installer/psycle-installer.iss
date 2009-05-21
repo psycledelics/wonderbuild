@@ -11,18 +11,18 @@ AppUpdatesURL=http://psycle.sourceforge.net/
 DefaultDirName={pf}\Psycle
 DefaultGroupName=Psycle
 AllowNoIcons=true
-InfoBeforeFile=..\..\doc\for-end-users\readme.txt
-InfoAfterFile=..\..\doc\for-end-users\whatsnew.txt
+InfoBeforeFile=..\..\psycle\doc\for-end-users\readme.txt
+InfoAfterFile=..\..\psycle\doc\for-end-users\whatsnew.txt
 OutputBaseFilename=PsycleInstallerSSE2
-SetupIconFile=..\..\pixmaps\psycle.ico
+SetupIconFile=..\..\psycle\pixmaps\psycle.ico
 Compression=lzma
 SolidCompression=true
 VersionInfoVersion=1.8.5
 VersionInfoCompany=psycledelics
 VersionInfoDescription=Psycle Installer
-VersionInfoCopyright=2000-2007 psycledelics
+VersionInfoCopyright=2000-2009 psycledelics
 SetupLogging=false
-AppCopyright=© psycledelics 2000-2007
+AppCopyright=© psycledelics 2000-2009
 PrivilegesRequired=poweruser
 AllowRootDirectory=true
 ShowLanguageDialog=auto
@@ -41,21 +41,21 @@ Name: Delete_plugins_cache; Description: deletes the cache of plugin names to fo
 Name: Delete_registry_settings; Description: deletes the existing settings in the registry, allowing psycle to regenerate the defaults.
 
 [Files]
-Source: ..\msvc_7.1\output\release.g7\bin\psycle.exe; DestDir: {app}; Flags: ignoreversion; Tasks: ; Languages: ; Components: Application
-Source: ..\msvc_7.1\output\release.g7\bin\zlib1.dll; DestDir: {app}; Flags: ignoreversion; Components: Application
-Source: ..\msvc_7.1\output\release.g7\bin\boost_filesystem-vc71-mt-1_32.dll; DestDir: {app}; Flags: ignoreversion; Components: Application
-Source: ..\msvc_7.1\output\release.g7\bin\boost_thread-vc71-mt-1_32.dll; DestDir: {app}; Flags: ignoreversion; Components: Application
-Source: ..\msvc_7.1\output\release.g7\bin\universalis.dll; DestDir: {app}; Flags: ignoreversion; Components: Application
-Source: ..\msvc_7.1\output\release.g7\bin\psycle.plugins\*.dll; DestDir: {app}\PsyclePlugins; Flags: ignoreversion; Components: Open_Source_Plugins; Excludes: crasher.dll
-Source: ..\..\closed-source\*; DestDir: {app}\PsyclePlugins\closed-source; Flags: ignoreversion recursesubdirs createallsubdirs; Components: Closed_Source_Plugins
-Source: ..\..\doc\for-end-users\*; DestDir: {app}\docs; Flags: ignoreversion recursesubdirs createallsubdirs; Components: Documentation; Excludes: .svn, Log1.log
-Source: ..\..\..\psycle-plugins\presets\*.prs; DestDir: {app}\PsyclePlugins; Flags: ignoreversion onlyifdoesntexist; Components: Presets
+Source: ..\msvc\output\release\bin\psycle.exe; DestDir: {app}; Flags: ignoreversion; Tasks: ; Languages: ; Components: Application
+Source: ..\msvc\output\release\bin\zlib1.dll; DestDir: {app}; Flags: ignoreversion; Components: Application
+Source: ..\msvc\output\release\bin\boost_filesystem-vc90-mt-1_38.dll; DestDir: {app}; Flags: ignoreversion; Components: Application
+Source: ..\msvc\output\release\bin\boost_thread-vc90-mt-1_38.dll; DestDir: {app}; Flags: ignoreversion; Components: Application
+Source: ..\msvc\output\release\bin\universalis.dll; DestDir: {app}; Flags: ignoreversion; Components: Application
+Source: ..\msvc\output\release\bin\psycle-plugins\*.dll; DestDir: {app}\psycle-plugins; Flags: ignoreversion; Components: Open_Source_Plugins; Excludes: crasher.dll
+Source: ..\..\psycle-plugins\closed-source\*; DestDir: {app}\psycle-plugins\closed-source; Flags: ignoreversion recursesubdirs createallsubdirs; Components: Closed_Source_Plugins
+Source: ..\..\psycle\doc\for-end-users\*; DestDir: {app}\docs; Flags: ignoreversion recursesubdirs createallsubdirs; Components: Documentation; Excludes: .svn, Log1.log
+Source: ..\..\psycle-plugins\presets\*.prs; DestDir: {app}\PsyclePlugins; Flags: ignoreversion onlyifdoesntexist; Components: Presets
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: ..\msvc_7.1\output\release.g7\bin\MFC71.dll; DestDir: {app}; Components: " Microsoft_dlls"; Tasks: ; Languages: 
-Source: ..\msvc_7.1\output\release.g7\bin\MSVCP71.dll; DestDir: {app}; Components: " Microsoft_dlls"
-Source: ..\msvc_7.1\output\release.g7\bin\MSVCR71.dll; DestDir: {app}; Components: " Microsoft_dlls"
-Source: ..\..\doc\*.psy; DestDir: {app}\Songs; Flags: ignoreversion replacesameversion; Components: " Songs"
-Source: ..\..\..\psycle-plugins\src\psycle\plugins\*.txt; DestDir: {app}\Docs; Excludes: license.txt; Flags: recursesubdirs ignoreversion
+Source: ..\msvc\output\release\bin\MFC90.dll; DestDir: {app}; Components: " Microsoft_dlls"; Tasks: ; Languages: 
+Source: ..\msvc\output\release\bin\MSVCP90.dll; DestDir: {app}; Components: " Microsoft_dlls"
+Source: ..\msvc\output\release\bin\MSVCR90.dll; DestDir: {app}; Components: " Microsoft_dlls"
+Source: ..\..\psycle\doc\*.psy; DestDir: {app}\Songs; Flags: ignoreversion replacesameversion; Components: " Songs"
+Source: ..\..\psycle-plugins\src\psycle\plugins\*.txt; DestDir: {app}\Docs; Excludes: license.txt; Flags: recursesubdirs ignoreversion
 
 [INI]
 Filename: {app}\psycle.url; Section: InternetShortcut; Key: URL; String: http://psycle.pastnotecut.org; Flags: uninsdeleteentry uninsdeletesectionifempty; Tasks: ; Languages: 
