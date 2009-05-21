@@ -8,7 +8,7 @@ set pkgdir=..\..\..\..\external-packages\zlib-1.2.3
 set libdir=lib-mswindows-cabi
 
 
-if not exist %output%\zlib_stamp (
+if not exist %output%\zlib-stamp (
 
 	if not exist %output%\debug\bin (
 		mkdir %output%\debug\bin || exit /b 1
@@ -30,5 +30,5 @@ if not exist %output%\zlib_stamp (
 	)
 	xcopy/f %pkgdir%\%libdir%\zlib.lib %output%\release\lib\ || exit /b 1
 
-	echo zlib copied > %output%\zlib_stamp || exit /b 1
+	echo zlib copied > %output%\zlib-stamp || exit /b 1
 )

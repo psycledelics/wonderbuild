@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="create_pre_compiled_header"
-	OutputDirectory="$(TopOutputDir)/intermediate/"
+	OutputDirectory="$(TopOutputDir)/intermediate/$(ProjectName)"
 	InheritedPropertySheets=".\top_output_dir.vsprops"
 	>
 	<Tool

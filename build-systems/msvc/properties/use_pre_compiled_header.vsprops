@@ -10,8 +10,8 @@
 		UsePrecompiledHeader="2"
 		ForcedIncludeFiles="$(PreCompiledHeader)"
 		PrecompiledHeaderThrough="$(PreCompiledHeader)"
-		PrecompiledHeaderFile="$(TopOutputDir)/intermediate/pre-compiled-headers.pch"
-		ProgramDataBaseFileName="$(TopOutputDir)/intermediate/pre-compiled-headers.pdb"
+		PrecompiledHeaderFile="$(TopOutputDir)/intermediate/pre-compiled-headers/pre-compiled-headers.pch"
+		ProgramDataBaseFileName="$(TopOutputDir)/intermediate/pre-compiled-headers/pre-compiled-headers.pdb"
 	/>
 	<Tool
 		Name="VCLinkerTool"
