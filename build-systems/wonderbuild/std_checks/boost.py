@@ -60,7 +60,7 @@ class BoostCheckTask(MultiBuildCheckTask):
 				r, out = self.results
 				if not r: self.results = False, None, None
 				else:
-					out = out.split('\n')[-3:-1]
+					out = out.split()[-2:]
 					int_version = int(out[0])
 					ok = int_version >= self._outer._min_version_wanted_raw
 					self.results = ok, int_version, out[1].strip('"')
