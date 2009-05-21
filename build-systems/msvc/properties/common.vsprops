@@ -28,10 +28,4 @@
 		TurnOffAssemblyGeneration="true"
 		ImportLibrary="$(TopOutputDir)/lib/$(RootNameSpace).lib"
 	/>
-	<Tool
-		Name="VCResourceCompilerTool"
-	/>
-	<Tool
-		Name="VCManifestTool"
-	/>
 </VisualStudioPropertySheet>
