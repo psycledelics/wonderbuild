@@ -246,7 +246,7 @@ class Impl(object):
 		cfg = build_check_task.cfg
 		cfg.shared = cfg.pic = False
 		args = cfg.cxx_args_cwd + ['-xc++', '-'] # TODO -xc for C
-		if build_check_task.preproc_pipe: args.append('-E')
+		if build_check_task.pipe_preproc: args.append('-E')
 		else:
 			if os.name == 'posix': o = os.devnull
 			else:
