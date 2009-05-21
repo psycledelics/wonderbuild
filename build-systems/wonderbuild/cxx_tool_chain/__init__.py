@@ -978,5 +978,6 @@ class BuildCheckTask(MultiBuildCheckTask):
 				f.write(err); f.write('\n')
 				f.write('return code: '); f.write(str(r)); f.write('\n')
 			finally: f.close()
-			self.results = r == 0
+			if self.pipe_preproc: self.results = r == 0, out
+			else: self.results = r == 0
 		finally: sched_context.lock.acquire()

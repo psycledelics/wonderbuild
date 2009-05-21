@@ -254,7 +254,7 @@ class Impl(object):
 				elif not build_check_task.link: o = 'a.o'
 				else: o = 'a'
 				o = (build_check_task.bld_dir / o).path
-			if not build_check_task.compile: args += ['-E', '-o', o)
-			elif not build_check_task.link: args.append('-c', '-o', o)
+			if not build_check_task.compile: args += ['-E', '-o', o]
+			elif not build_check_task.link: args += ['-c', '-o', o]
 			else: args += ['-o', o] + cfg.ld_args[1:]
 		return exec_subprocess_pipe(args, input = build_check_task._prog_source_text, silent = True)
