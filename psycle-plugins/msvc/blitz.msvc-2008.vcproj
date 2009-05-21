@@ -5,7 +5,6 @@
 	Name="psycle-plugins/blitz"
 	RootNameSpace="blitz"
 	ProjectGUID="{C55834ED-9038-4D48-AE49-122834E68B25}"
-	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -94,7 +93,6 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TargetEnvironment="3"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -137,7 +135,6 @@
 			Name="release|Win32"
 			ConfigurationType="2"
 			InheritedPropertySheets="..\..\build-systems\msvc\properties\release.vsprops;..\..\build-systems\msvc\properties\plugin.vsprops;..\..\build-systems\msvc\properties\platform_win32.vsprops"
-			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -195,7 +192,6 @@
 			Name="release|x64"
 			ConfigurationType="2"
 			InheritedPropertySheets="..\..\build-systems\msvc\properties\release.vsprops;..\..\build-systems\msvc\properties\plugin.vsprops;..\..\build-systems\msvc\properties\platform_x64.vsprops"
-			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -211,7 +207,6 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TargetEnvironment="3"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
