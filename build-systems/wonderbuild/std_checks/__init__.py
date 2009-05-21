@@ -65,13 +65,11 @@ class AutoLinkSupportCheckTask(BuildCheckTask):
 	def source_text(self):
 		try: return self._source_text
 		except AttributeError:
-			# TODO don't include <boost/config.hpp>
 			self._source_text = \
 				"""
-					// text below copied from <boost/config/auto_link.hpp>
-					#include <boost/config.hpp>
+					// check below is the same as in <boost/config/auto_link.hpp>
 					#if !( \\
-							defined BOOST_MSVC || \\
+							defined _MSVC_VER || \\
 							defined __BORLANDC__ || \\
 							__MWERKS__ >= 0x3000 && _WIN32 || \\
 							defined __ICL && defined _MSC_EXTENSIONS && _MSC_VER >= 1200 \\
