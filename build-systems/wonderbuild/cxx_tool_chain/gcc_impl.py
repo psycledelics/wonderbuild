@@ -245,11 +245,16 @@ class Impl(object):
 	def process_build_check_task(build_check_task):
 		cfg = build_check_task.cfg
 		cfg.shared = cfg.pic = False
-		if os.name != 'posix': o = (build_check_task.bld_dir / 'a').path
-		else: o = os.devnull
-		# TODO -xc for C
-		args = cfg.cxx_args_cwd + ['-xc++', '-']
-		if not build_check_task.compile: args.append('-E')
-		elif not build_check_task.link: args += ['-c', '-o', o + '.o']
-		else: args += ['-o', o] + cfg.ld_args[1:]
+		args = cfg.cxx_args_cwd + ['-xc++', '-'] # TODO -xc for C
+		if build_check_task.preproc_pipe: args.append('-E')
+		else:
+			if os.name == 'posix': o = os.devnull
+			else:
+				if not build_check_task.compile: o = 'a.i'
+				elif not build_check_task.link: o = 'a.o'
+				else: o = 'a'
+				o = (build_check_task.bld_dir / o).path
+			if not build_check_task.compile: args += ['-E', '-o', o)
+			elif not build_check_task.link: args.append('-c', '-o', o)
+			else: args += ['-o', o] + cfg.ld_args[1:]
 		return exec_subprocess_pipe(args, input = build_check_task._prog_source_text, silent = True)

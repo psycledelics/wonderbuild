@@ -206,6 +206,8 @@ class Impl(object):
 		try: f.write(build_check_task._prog_source_text)
 		finally: f.close()
 		args = cfg.cxx_args_bld + [s.rel_path(cwd)]
-		if not build_check_task.compile: args.append('-EP')
-		elif build_check_task.link: args += ['-link'] + cfg.ld_args[1:]
+		if build_check_task.preproc_pipe: args.append('-EP')
+		elif not build_check_task.compile: args.append('-P')
+		elif not build_check_task.link: args.append('-c')
+		else: args += ['-link'] + cfg.ld_args[1:]
 		return exec_subprocess_pipe(args, cwd = cwd.path, silent = True)

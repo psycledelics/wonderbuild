@@ -914,10 +914,11 @@ class _PkgConfigLdFlagsTask(_PkgConfigFlagsTask):
 	def apply_to(self, cfg): cfg.ld_flags += self.result
 
 class MultiBuildCheckTask(CheckTask):
-	def __init__(self, name, base_cfg, compile=True, link=True):
+	def __init__(self, name, base_cfg, preproc_pipe=False, compile=True, link=True):
 		CheckTask.__init__(self, base_cfg.project)
 		self.name = name
 		self.base_cfg = base_cfg
+		self.preproc_pipe = preproc_pipe
 		self.compile = compile
 		self.link = link
 
