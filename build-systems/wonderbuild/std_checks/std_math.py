@@ -25,7 +25,7 @@ class StdMathCheckTask(MultiBuildCheckTask):
 
 	@property
 	def result_display(self):
-		if self.result: return 'yes with' + (not self.m and 'out' or '') + ' libm', '32'
+		if self.result: return 'yes with' + (not self.m and 'out' or '') + ' lm', '32'
 		else: return 'no', '31'
 		
 	def apply_to(self, cfg):
@@ -42,7 +42,7 @@ class StdMathCheckTask(MultiBuildCheckTask):
 		
 	class SubCheckTask(BuildCheckTask):
 		def __init__(self, outer, m):
-			BuildCheckTask.__init__(self, outer.name + '-with' + (not m and 'out' or '') + '-libm', outer.base_cfg)
+			BuildCheckTask.__init__(self, outer.name + '-with' + (not m and 'out' or '') + '-lm', outer.base_cfg)
 			self.outer = outer
 			self.m = m
 

@@ -25,7 +25,7 @@ class DlfcnCheckTask(MultiBuildCheckTask):
 
 	@property
 	def result_display(self):
-		if self.result: return 'yes with' + (not self.dl and 'out' or '') + ' libdl', '32'
+		if self.result: return 'yes with' + (not self.dl and 'out' or '') + ' ldl', '32'
 		else: return 'no', '31'
 		
 	def apply_to(self, cfg):
@@ -43,7 +43,7 @@ class DlfcnCheckTask(MultiBuildCheckTask):
 	
 	class SubCheckTask(BuildCheckTask):
 		def __init__(self, outer, dl):
-			BuildCheckTask.__init__(self, outer.name + '-with' + (not dl and 'out' or '') + '-libdl', outer.base_cfg)
+			BuildCheckTask.__init__(self, outer.name + '-with' + (not dl and 'out' or '') + '-ldl', outer.base_cfg)
 			self.outer = outer
 			self.dl = dl
 
