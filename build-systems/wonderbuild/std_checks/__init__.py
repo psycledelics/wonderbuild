@@ -32,7 +32,7 @@ class BinaryFormatPeCheckTask(BuildCheckTask):
 		'#endif\n'
 
 class MSWindowsCheckTask(BuildCheckTask):
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'mswindows', base_cfg, compile=False)
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'ms-windows', base_cfg, compile=False)
 
 	@property
 	def source_text(self): return \
@@ -59,7 +59,7 @@ class MingwCheckTask(BuildCheckTask):
 		'#endif\n'
 
 class AutoLinkSupportCheckTask(BuildCheckTask):
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'auto-link', base_cfg, compile=False)
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'auto-link-support', base_cfg, compile=False)
 
 	@property
 	def source_text(self):

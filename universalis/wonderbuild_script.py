@@ -11,6 +11,7 @@ class Wonderbuild(ScriptTask):
 		src_dir = self.src_dir / 'src'
 		
 		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, PreCompileTasks, ModTask
+		from wonderbuild.std_checks import MSWindowsCheckTask
 		from wonderbuild.std_checks.std_math import StdMathCheckTask
 		from wonderbuild.std_checks.dlfcn import DlfcnCheckTask
 		from wonderbuild.std_checks.pthread import PThreadCheckTask
@@ -69,9 +70,9 @@ class Wonderbuild(ScriptTask):
 					glibmm.apply_to(self.cfg)
 					self._source_text += '\n#include <glibmm.h>'
 				if winmm.result:
+					winmm.apply_to(self.cfg)
 					self._source_text += '\n#include <windows.h>'
 					self._source_text += '\n#include <mmsystem.h>'
-					winmm.apply_to(self.cfg)
 				PreCompileTasks.__call__(self, sched_ctx)
 		pch = Pch()
 
@@ -90,6 +91,11 @@ class Wonderbuild(ScriptTask):
 				if boost.result: boost.apply_to(self.cfg)
 				else: raise Exception, 'need boost'
 				if glibmm.result: glibmm.apply_to(self.cfg)
+				if winmm.result: winmm.apply_to(self.cfg)
+				else:
+					mswindows = MSWindowsCheckTask.shared(check_cfg)
+					sched_ctx.parallel_wait(mswindows)
+					if mswindows.result: raise Exception, 'need winmm'
 				#sched_ctx.parallel_wait(diversalis.install)
 				diversalis.client_cfg.apply_to(self.cfg)
 				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
