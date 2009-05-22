@@ -10,7 +10,7 @@ class Wonderbuild(ScriptTask):
 		project = self.project
 		src_dir = self.src_dir / 'src'
 		
-		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, ModTask
+		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, PreCompileTasks, ModTask
 		from wonderbuild.std_checks import StdMathCheckTask, BoostCheckTask, DlfcnCheckTask, PThreadCheckTask
 		from wonderbuild.install import InstallTask
 		
@@ -19,10 +19,10 @@ class Wonderbuild(ScriptTask):
 		build_cfg = UserBuildCfg.new_or_clone(project)
 
 		check_cfg = build_cfg.clone()
-		std_math_check = StdMathCheckTask(check_cfg)
-		boost_check = BoostCheckTask((1, 33), ['signals', 'thread', 'filesystem'], check_cfg)
-		dlfcn_check = DlfcnCheckTask(check_cfg)
-		pthread_check = PThreadCheckTask(check_cfg)
+		std_math_check = StdMathCheckTask.shared(check_cfg)
+		boost_check = BoostCheckTask.shared((1, 33), ['signals', 'thread', 'filesystem'], check_cfg)
+		dlfcn_check = DlfcnCheckTask.shared(check_cfg)
+		pthread_check = PThreadCheckTask.shared(check_cfg)
 
 		diversalis = ScriptTask.shared(project, src_dir.parent.parent / 'diversalis')
 
@@ -30,13 +30,50 @@ class Wonderbuild(ScriptTask):
 		build_cfg.include_paths.append(src_dir / 'universalis' / 'standard_library' / 'future_std_include')
 		build_cfg.defines['UNIVERSALIS__SOURCE'] = build_cfg.shared and '1' or '-1'
 		
+		class Pch(PreCompileTasks):
+			def __init__(self): PreCompileTasks.__init__(self, 'pch', build_cfg)
+
+			@property
+			def source_text(self):
+				try: return self._source_text
+				except AttributeError:
+					self._source_text = \
+						'#include <string>\n' \
+						'#include <sstream>\n' \
+						'#include <iostream>'
+					return self._source_text
+
+			def __call__(self, sched_ctx):
+				sched_ctx.parallel_wait(glibmm, std_math_check, boost_check, dlfcn_check, pthread_check)
+				self.source_text
+				if std_math_check.result:
+					std_math_check.apply_to(self.cfg)
+					self._source_text += '\n#include <cmath>'
+				if pthread_check.result:
+					pthread_check.apply_to(self.cfg)
+					self._source_text += '\n#include <pthread.h>'
+				if dlfcn_check.result:
+					dlfcn_check.apply_to(self.cfg)
+					self._source_text += '\n#include <dlfcn.h>'
+				if boost_check.result:
+					boost_check.apply_to(self.cfg)
+					self._source_text += '\n#include <boost/thread.hpp>'
+					self._source_text += '\n#include <boost/filesystem/path.hpp>'
+					self._source_text += '\n#include <boost/signals.hpp>'
+				if glibmm.result:
+					glibmm.apply_to(self.cfg)
+					self._source_text += '\n#include <glibmm.h>'
+				PreCompileTasks.__call__(self, sched_ctx)
+		pch = Pch()
+
 		class Universalis(ModTask):
 			def __init__(self): ModTask.__init__(self, 'universalis', ModTask.Kinds.LIB, build_cfg)
 
 			def __call__(self, sched_ctx):
 				install = Universalis.Install(self.project)
 				sched_ctx.parallel_no_wait(install)
-				sched_ctx.parallel_wait(glibmm, std_math_check, boost_check, dlfcn_check, pthread_check)
+				sched_ctx.parallel_wait(glibmm, std_math_check, boost_check, dlfcn_check, pthread_check, pch.lib_task)
+				pch.lib_task.apply_to(self.cfg)
 				if dlfcn_check.result: dlfcn_check.apply_to(self.cfg)
 				if pthread_check.result: pthread_check.apply_to(self.cfg)
 				if std_math_check.result: std_math_check.apply_to(self.cfg)
