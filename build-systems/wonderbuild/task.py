@@ -44,6 +44,14 @@ class ProjectTask(Task):
 	persistent = property(_get_persistent, _set_persistent)
 
 class CheckTask(ProjectTask):
+	@classmethod
+	def shared(class_, *args, **kw):
+		return class_(*args, **kw)
+		# uid = str(class_)
+		#try: instance = project.persistent[uid]
+		#except KeyError: instance = project.persistent[uid] = class_(project, *args, **kw)
+		#return instance
+	
 	def __init__(self, project): ProjectTask.__init__(self, project)
 
 	@property

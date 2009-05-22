@@ -20,7 +20,7 @@ class Wonderbuild(ScriptTask):
 
 		check_cfg = build_cfg.clone()
 		std_math_check = StdMathCheckTask(check_cfg)
-		boost_check = BoostCheckTask(103300, ['signals', 'thread', 'filesystem'], check_cfg)
+		boost_check = BoostCheckTask((1, 33), ['signals', 'thread', 'filesystem'], check_cfg)
 		dlfcn_check = DlfcnCheckTask(check_cfg)
 		pthread_check = PThreadCheckTask(check_cfg)
 

@@ -54,7 +54,7 @@ class MingwCheckTask(BuildCheckTask):
 
 	@property
 	def source_text(self): return \
-		'#if defined __MINGW32__\n' \
+		'#if !defined __MINGW32__\n' \
 		'	#error this is not mingw gcc\n' \
 		'#endif\n'
 

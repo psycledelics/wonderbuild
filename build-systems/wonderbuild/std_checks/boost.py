@@ -8,17 +8,14 @@ from wonderbuild.cxx_tool_chain import MultiBuildCheckTask, BuildCheckTask
 from wonderbuild.signature import Sig
 from wonderbuild.logger import silent, is_debug, debug
 
-from wonderbuild.std_checks import AutoLinkSupportCheckTask
+from wonderbuild.std_checks import AutoLinkSupportCheckTask, MingwCheckTask
 
 class BoostCheckTask(MultiBuildCheckTask):
-	def __init__(self, min_version_wanted_raw, libraries, base_cfg):
-		MultiBuildCheckTask.__init__(self, 'boost' + ' ' + ' '.join(libraries), base_cfg)
-		self._min_version_wanted_raw = min_version_wanted_raw
-		self._min_version_wanted_major = str(min_version_wanted_raw // 100000)
-		self._min_version_wanted_minor = str(min_version_wanted_raw // 100 % 1000)
-		self._min_version_wanted_patch = str(min_version_wanted_raw % 100)
-		self._min_version_wanted = self._min_version_wanted_major + '.' + self._min_version_wanted_minor + '.' + self._min_version_wanted_patch
-		self._libraries = libraries
+	def __init__(self, min_version_tuple, lib_names, base_cfg):
+		# TODO remove useless trailing zeroes in the version tuple
+		MultiBuildCheckTask.__init__(self, 'boost' + '-version-' + '.'.join(str(i) for i in min_version_tuple) + '-libs-' + ','.join(lib_names), base_cfg)
+		self.min_version_tuple = min_version_tuple
+		self.lib_names = lib_names
 
 	@property
 	def result(self): return self.results[0]
@@ -27,14 +24,10 @@ class BoostCheckTask(MultiBuildCheckTask):
 	def include_path(self): return self.results[1]
 
 	@property
-	def lib_path(self): return self.results[2]
-	
-	@property
-	def libs(self): return self.results[3]
+	def libs(self): return self.results[2]
 
 	def apply_to(self, cfg):
 		if self.include_path is not None: cfg.include_paths.append(self.include_path)
-		if self.lib_path is not None: cfg.lib_path.append(self.lib_path)
 		cfg.libs.extend(self.libs)
 
 	@property
@@ -42,7 +35,7 @@ class BoostCheckTask(MultiBuildCheckTask):
 
 	class ReadVersion(BuildCheckTask):
 			def __init__(self, outer):
-				BuildCheckTask.__init__(self, 'boost-version-' + str(outer._min_version_wanted_raw), outer.base_cfg, pipe_preproc=True)
+				BuildCheckTask.__init__(self, 'boost-version-' + '.'.join(str(i) for i in outer.min_version_tuple), outer.base_cfg, pipe_preproc=True)
 				self._outer = outer
 			
 			@property
@@ -62,7 +55,11 @@ class BoostCheckTask(MultiBuildCheckTask):
 				else:
 					out = out.split()[-2:]
 					int_version = int(out[0])
-					ok = int_version >= self._outer._min_version_wanted_raw
+					min_version_tuple = self._outer.min_version_tuple
+					min_int_version = min_version_tuple[0] * 100000
+					if len(min_version_tuple) >= 2: min_int_version += min_version_tuple[1] * 100
+					if len(min_version_tuple) >= 3: min_int_version += min_version_tuple[2]
+					ok = int_version >= min_int_version
 					self.results = ok, int_version, out[1].strip('"')
 			
 			@property
@@ -76,21 +73,71 @@ class BoostCheckTask(MultiBuildCheckTask):
 			
 			@property
 			def result_display(self):
-				if self.result: return 'yes (version ' + str(self.int_version) + ' ' + self.lib_version + ')', '32'
-				else: return 'no', '31'
+				version = self.int_version is not None and ' (found version ' + str(self.lib_version).replace('_', '.') + ')' or ''
+				if self.result: return 'yes' + version, '32'
+				else: return 'no' + version, '31'
 
 	def do_check_and_set_result(self, sched_ctx):
+		failed = False, None, None
 		read_version = BoostCheckTask.ReadVersion(self)
 		sched_ctx.parallel_wait(read_version)
+		include_path = None
+		if not read_version.result:
+			if sys.platform != 'cygwin':
+				self.results = failed
+				return
+				
+			# damn cygwin installs boost headers in e.g. /usr/include/boost-1_33_1/
+			dir = self.project.fs.root / 'usr' / 'include'
+			try:
+				if dir.exists and dir.is_dir:
+					max_entry = None
+					max_entry_version = [0]
+					for entry in dir.actual_children.itervalues():
+						if entry.name.startswith('boost-'):
+							if __debug__ and is_debug: debug('cfg: boost: found headers in ' + str(entry))
+							entry_version = entry.name[len('boost-'):].split('_')
+							for i in xrange(len(max_entry_version)):
+								if i >= len(entry_version): break
+								try: a = int(entry_version[i])
+								except ValueError:
+									if __debug__ and is_debug: debug('cfg: boost: ignoring non-integer versioned headers ' + str(entry))
+									break
+								b = max_entry_version[i]
+								if a > b:
+									max_entry = entry
+									max_entry_version[i] = a
+									for s in entry_version[len(max_entry_version):]:
+										try: max_entry_version.append(int(s))
+										except ValueError:
+											if __debug__ and is_debug: debug('cfg: boost: ignoring non-integer in version for headers ' + str(entry))
+											break
+									break
+								if a < b: break
+					if max_entry is not None:
+						if len(self.min_version_tuple) == 0: include_path = max_entry
+						else:
+							for i in xrange(len(self.min_version_tuple)):
+								if i >= len(max_entry_version): a = 0
+								else: a = max_entry_version[i]
+								b = self.min_version_tuple[i]
+								if a > b: include_path = max_entry; break
+								if a < b: break
+								if i == len(self.min_version_tuple) - 1: include_path = max_entry
+					if include_path is None:
+						self.results = self.results = failed
+						return
+					if __debug__ and is_debug: debug('cfg: boost: selected headers ' + str(entry))
+					read_version = BoostCheckTask.ReadVersion(self)
+					sched_ctx.parallel_wait(read_version)
+					if not read_version.result:
+						self.results = self.results = failed
+						return
+			finally: pass # dir.forget()
+		
+		lib_version = read_version.lib_version
 		
 		source_texts = {}
-		source_texts['version'] = \
-			"""
-				#include <boost/version.hpp>
-				#if BOOST_VERSION < %i
-					#error
-				#endif
-			""" % self._min_version_wanted_raw
 		def auto_link(name, dynamic = True):
 			result = \
 				"""
@@ -182,78 +229,41 @@ class BoostCheckTask(MultiBuildCheckTask):
 				void wave() { /* todo do something with it for a complete check */ }
 			""" + auto_link('wave', dynamic = False)
 
-		include_path = None
-		libraries = self._libraries[:]
-
-		if sys.platform == 'cygwin':
-			# damn cygwin installs boost headers in e.g. /usr/include/boost-1_33_1/ and doesn't give symlinks for library files
-			dir = self.project.fs.root / 'usr' / 'include'
-			if dir.exists and dir.is_dir:
-				boost_dir = dir / 'boost'
-				if not boost_dir.exists or not boost_dir.is_dir:
-					for entry in dir.actual_children.itervalues():
-						if entry.name.startswith('boost-'):
-							if __debug__ and is_debug: debug('cfg: found boost headers in ' + str(entry))
-							# TODO better version comparion
-							if entry.name >= 'boost-' + self._min_version_wanted_major + '_' + self._min_version_wanted_minor + '_' + self._min_version_wanted_patch:
-								if __debug__ and is_debug: debug('cfg: selecting boost headers in ' + str(entry))
-								include_path = entry
-								break
-			dir = self.project.fs.root / 'usr' / 'lib'
-			if dir.exists and dir.is_dir:
-				children = dir.actual_children
-				libraries = self._libraries[:]
-				for library in self._libraries:
-					library_select = library + '-gcc-mt' # TODO the version could even differ from the headers we selected above
-					library_search = 'libboost_' + library_select + '.a'
-					if library_search in children:
-						if __debug__ and is_debug: debug('cfg: selecting boost library ' + library_select + ' as name ' + library + ' (found ' + str(library_search) + ')')
-						source_texts[library_select] = source_texts[library]
-						libraries.remove(library)
-						libraries.append(library_select)
-		else:
-			for library in self._libraries:
-				library_select = library + '-mt'
-				source_texts[library_select] = source_texts[library]
-				libraries.remove(library)
-				libraries.append(library_select)
+		link_libs = []
 		
+		auto_link_support_check_task = AutoLinkSupportCheckTask.shared(self.base_cfg)
+		sched_ctx.parallel_wait(auto_link_support_check_task)
+		if not auto_link_support_check_task.result: 
+			if self.base_cfg.kind == 'gcc':
+				mingw_check_task = MingwCheckTask.shared(self.base_cfg)
+				sched_ctx.parallel_wait(mingw_check_task)
+				toolset = mingw_check_task.result and '-mgw' or '-gcc'
+			else: toolset = ''
+			for lib in self.lib_names:
+				link_lib = lib + toolset + '-mt-' + lib_version
+				source_texts[link_lib] = source_texts[lib]
+				link_libs.append(link_lib)
+		
+		cfg_link_libs = ['boost_' + lib for lib in link_libs]
+
 		outer = self
 
-		auto_link_support_check_task = AutoLinkSupportCheckTask(outer.base_cfg)
-		sched_ctx.parallel_wait(auto_link_support_check_task)
-		if auto_link_support_check_task.result: link_libraries = []
-		else: link_libraries = libraries
-
-		lib_path = None
-
-		cfg_link_libraries = ['boost_' + library for library in link_libraries]
-
 		class AllInOneCheckTask(BuildCheckTask):
-			def __init__(self): BuildCheckTask.__init__(self, 'boost,' + ','.join(link_libraries) + ',' + outer._min_version_wanted, outer.base_cfg)
+			def __init__(self): BuildCheckTask.__init__(self, 'boost' + '-version-' + '.'.join(str(i) for i in outer.min_version_tuple) + '-link-libs-' + ','.join(l for l in link_libs), outer.base_cfg)
 			
 			@property
 			def source_text(self):
 				try: return self._source_text
 				except AttributeError:
-					self._source_text = source_texts['version'] + '\n' + '\n'.join([source_texts[library] for library in link_libraries])
+					self._source_text = '\n'.join([source_texts[lib] for lib in link_libs])
 					return self._source_text
 			
 			def do_check_and_set_result(self, sched_ctx):
 				if include_path is not None: self.cfg.include_paths.append(include_path)
-				self.cfg.libs += cfg_link_libraries
+				self.cfg.libs += cfg_link_libs
 				BuildCheckTask.do_check_and_set_result(self, sched_ctx)
 
 		all_in_one = AllInOneCheckTask()
 		sched_ctx.parallel_wait(all_in_one)
-		if all_in_one.result:
-			self.results = True, include_path, lib_path, cfg_link_libraries
-		elif True: # posix?
-			link_libraries = self._libraries
-			cfg_link_libraries = ['boost_' + library for library in link_libraries]
-			all_in_one = AllInOneCheckTask()
-			sched_ctx.parallel_wait(all_in_one)
-			if all_in_one.result:
-				self.results = True, include_path, lib_path, cfg_link_libraries
-			else: self.results = False, None, None, None
-		else: self.results = False, None, None, None
+		if not all_in_one.result: self.results = failed
+		else: self.results = True, include_path, cfg_link_libs
