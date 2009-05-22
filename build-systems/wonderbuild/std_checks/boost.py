@@ -2,7 +2,7 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2006-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import sys
+import sys, os
 
 from wonderbuild.cxx_tool_chain import MultiBuildCheckTask, BuildCheckTask
 from wonderbuild.signature import Sig
@@ -86,8 +86,8 @@ class BoostCheckTask(MultiBuildCheckTask):
 					if include_path is None:
 						self.results = self.results = failed
 						return
-					if __debug__ and is_debug: debug('cfg: boost: selected headers ' + str(entry))
-					read_version = BoostCheckTask.ReadVersion(self)
+					if __debug__ and is_debug: debug('cfg: boost: selected headers ' + str(include_path))
+					read_version = BoostCheckTask.ReadVersion(self, include_path)
 					sched_ctx.parallel_wait(read_version)
 					if not read_version.result:
 						self.results = self.results = failed
@@ -151,12 +151,14 @@ class BoostCheckTask(MultiBuildCheckTask):
 				link_check('', '')
 
 	class ReadVersion(BuildCheckTask):
-			def __init__(self, outer):
+			def __init__(self, outer, include_path = None):
 				BuildCheckTask.__init__(
-					self, 'boost-' + '.'.join(str(i) for i in outer.min_version_tuple),
+					self, 'boost-' + '.'.join(str(i) for i in outer.min_version_tuple) + \
+					(include_path and '-path-' + include_path.abs_path.replace(os.sep, ',').replace(os.pardir, '_') or ''),
 					outer.base_cfg, pipe_preproc=True
 				)
 				self._outer = outer
+				self.include_path = include_path
 			
 			@property
 			def source_text(self):
@@ -169,6 +171,7 @@ class BoostCheckTask(MultiBuildCheckTask):
 					return self._source_text
 			
 			def do_check_and_set_result(self, sched_ctx):
+				if self.include_path is not None: self.cfg.include_paths.append(self.include_path)
 				BuildCheckTask.do_check_and_set_result(self, sched_ctx)
 				r, out = self.results
 				if not r: self.results = False, None, None
