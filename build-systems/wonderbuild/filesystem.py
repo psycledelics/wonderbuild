@@ -320,6 +320,11 @@ class Node(object):
 			else: self._abs_path = os.path.join(self.parent.abs_path, self.name)
 			return self._abs_path
 
+	def clear(self):
+		self._time = None
+		try: del self._sig
+		except AttributeError: pass
+
 	def forget(self):
 		"detach the node from its parent. This is used to cut from the tree the branches we don't want to dump in the pickle"
 		if __debug__ and is_debug: debug('fs: forget: ' + str(self))
