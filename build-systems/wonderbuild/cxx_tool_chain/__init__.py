@@ -381,7 +381,7 @@ class _PreCompileTask(ProjectTask):
 						if __debug__ and is_debug: debug('cpp: deps not found: ' + str(self.header))
 						changed = True
 					else:
-						dep_sigs.sort()
+						#dep_sigs.sort()
 						if old_dep_sig != Sig(''.join(dep_sigs)).digest():
 							# The cached implicit deps changed.
 							if __debug__ and is_debug: debug('cpp: deps changed: ' + str(self.header))
@@ -649,7 +649,7 @@ class ModTask(ProjectTask):
 						if __debug__ and is_debug: debug('cpp: deps not found: ' + str(s))
 						changed_sources.append(s)
 						continue
-					dep_sigs.sort() # TODO use heapq
+					#dep_sigs.sort() # TODO use heapq
 					if old_dep_sig != Sig(''.join(dep_sigs)).digest():
 						# The cached implicit deps changed.
 						if __debug__ and is_debug: debug('cpp: deps changed: ' + str(s))

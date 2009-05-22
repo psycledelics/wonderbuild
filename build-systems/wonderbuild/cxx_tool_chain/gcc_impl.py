@@ -102,7 +102,7 @@ class Impl(object):
 		finally: lock.release()
 		if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
 		dep_sigs = [d.sig for d in deps]
-		dep_sigs.sort()
+		#dep_sigs.sort()
 		precompile_task.persistent = precompile_task.sig, deps, Sig(''.join(dep_sigs)).digest()
 
 	def precompile_task_target_name(self, header_name): return header_name + self.precompile_task_target_ext
@@ -130,7 +130,7 @@ class Impl(object):
 			finally: lock.release()
 			if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
 			dep_sigs = [d.sig for d in deps]
-			dep_sigs.sort()
+			#dep_sigs.sort()
 			implicit_deps[s[0]] = deps, Sig(''.join(dep_sigs)).digest()
 
 	@property

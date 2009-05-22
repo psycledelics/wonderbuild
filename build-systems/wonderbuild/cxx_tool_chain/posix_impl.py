@@ -62,7 +62,7 @@ class Impl(object):
 				debug('cpp: deps found: ' + str(s) + ': ' + str([str(d) for d in deps]))
 				if len(not_found) != 0: debug('cpp: deps not found: ' + str(s) + ': '+ str([str(x) for x in not_found]))
 			dep_sigs = [d.sig for d in deps]
-			dep_sigs.sort()
+			#dep_sigs.sort()
 			implicit_deps[s] = deps, Sig(''.join(dep_sigs)).digest()
 
 	@property
