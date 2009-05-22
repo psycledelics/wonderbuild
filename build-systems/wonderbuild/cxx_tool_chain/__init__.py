@@ -111,7 +111,7 @@ class BuildCfg(ClientCfg):
 			if e is not None: sig.update(e)
 			#sig.update(str(self.target_platform_binary_format_is_pe))
 			sig.update(self.kind)
-			for v in self.version: sig.update(str(v))
+			sig.update(str(self.version))
 			sig.update(str(self.check_missing))
 			if len(self.pkg_config): sig.update(_PkgConfigTask.env_sig())
 			sig = self.__common_sig = sig.digest()
