@@ -748,7 +748,8 @@ class ModTask(ProjectTask):
 						desc = 'linking ' + shared + ' ' + pic + ' program'
 					elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = '1;7;34'
 					else: desc = 'linking shared lib'; color = '1;7;33'
-					s = ['+' + self._obj_name(s) + '(' + str(s) + ')' for s in sources]
+					if __debug__ and is_debug: s = ['+' + self._obj_name(s) + '(' + str(s) + ')' for s in sources]
+					else: s = ['+' + self._obj_name(s) for s in sources]
 					if removed_obj_names is not None: s += ['-' + o for o in removed_obj_names]
 					s.sort()
 					self.print_desc_multi_column_format(desc + ' ' + str(self) + ' from objects', s, color)
