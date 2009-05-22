@@ -28,6 +28,7 @@ class Wonderbuild(ScriptTask):
 		dlfcn = DlfcnCheckTask.shared(check_cfg)
 		pthread = PThreadCheckTask.shared(check_cfg)
 		boost = BoostCheckTask.shared((1, 33), ['signals', 'thread', 'filesystem'], check_cfg)
+		mswindows = MSWindowsCheckTask.shared(check_cfg)
 		winmm = WinMMCheckTask.shared(check_cfg)
 
 		diversalis = ScriptTask.shared(project, src_dir.parent.parent / 'diversalis')
@@ -50,7 +51,7 @@ class Wonderbuild(ScriptTask):
 					return self._source_text
 
 			def __call__(self, sched_ctx):
-				sched_ctx.parallel_wait(std_math, dlfcn, pthread, boost, glibmm, winmm)
+				sched_ctx.parallel_wait(std_math, dlfcn, pthread, boost, glibmm, mswindows, winmm)
 				self.source_text
 				if std_math.result:
 					std_math.apply_to(self.cfg)
@@ -69,10 +70,11 @@ class Wonderbuild(ScriptTask):
 				if glibmm.result:
 					glibmm.apply_to(self.cfg)
 					self._source_text += '\n#include <glibmm.h>'
-				if winmm.result:
-					winmm.apply_to(self.cfg)
+				if mswindows.result:
 					self._source_text += '\n#include <windows.h>'
-					self._source_text += '\n#include <mmsystem.h>'
+					if winmm.result:
+						winmm.apply_to(self.cfg)
+						self._source_text += '\n#include <mmsystem.h>'
 				PreCompileTasks.__call__(self, sched_ctx)
 		pch = Pch()
 
@@ -91,11 +93,9 @@ class Wonderbuild(ScriptTask):
 				if boost.result: boost.apply_to(self.cfg)
 				else: raise Exception, 'need boost'
 				if glibmm.result: glibmm.apply_to(self.cfg)
-				if winmm.result: winmm.apply_to(self.cfg)
-				else:
-					mswindows = MSWindowsCheckTask.shared(check_cfg)
-					sched_ctx.parallel_wait(mswindows)
-					if mswindows.result: raise Exception, 'need winmm'
+				if mswindows.result:
+					if winmm.result: winmm.apply_to(self.cfg)
+					else: raise Exception, 'need winmm on mswindows'
 				#sched_ctx.parallel_wait(diversalis.install)
 				diversalis.client_cfg.apply_to(self.cfg)
 				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
