@@ -86,6 +86,9 @@ class CheckTask(ProjectTask):
 			if not silent: self.print_check_result(desc, *self.result_display)
 
 	@property
+	def __bool__(self): return self.result
+
+	@property
 	def result(self): return self.results
 
 	def _get_results(self):
