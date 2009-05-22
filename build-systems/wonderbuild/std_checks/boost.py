@@ -49,49 +49,15 @@ class BoostCheckTask(MultiBuildCheckTask):
 			# damn cygwin installs boost headers in e.g. /usr/include/boost-1_33_1/
 			dir = self.project.fs.root / 'usr' / 'include'
 			try:
-				if dir.exists and dir.is_dir:
-					max_entry = None
-					max_entry_version = [0]
-					for entry in dir.actual_children.itervalues():
-						if entry.name.startswith('boost-'):
-							if __debug__ and is_debug: debug('cfg: boost: found headers in ' + str(entry))
-							entry_version = entry.name[len('boost-'):].split('_')
-							for i in xrange(len(max_entry_version)):
-								if i >= len(entry_version): break
-								try: a = int(entry_version[i])
-								except ValueError:
-									if __debug__ and is_debug: debug('cfg: boost: ignoring non-integer versioned headers ' + str(entry))
-									break
-								b = max_entry_version[i]
-								if a > b:
-									max_entry = entry
-									max_entry_version[i] = a
-									for s in entry_version[len(max_entry_version):]:
-										try: max_entry_version.append(int(s))
-										except ValueError:
-											if __debug__ and is_debug: debug('cfg: boost: ignoring non-integer in version for headers ' + str(entry))
-											break
-									break
-								if a < b: break
-					if max_entry is not None:
-						if len(self.min_version_tuple) == 0: include_path = max_entry
-						else:
-							for i in xrange(len(self.min_version_tuple)):
-								if i >= len(max_entry_version): a = 0
-								else: a = max_entry_version[i]
-								b = self.min_version_tuple[i]
-								if a > b: include_path = max_entry; break
-								if a < b: break
-								if i == len(self.min_version_tuple) - 1: include_path = max_entry
-					if include_path is None:
-						self.results = self.results = failed
-						return
-					if __debug__ and is_debug: debug('cfg: boost: selected headers ' + str(include_path))
-					read_version = BoostCheckTask.ReadVersion(self, include_path)
-					sched_ctx.parallel_wait(read_version)
-					if not read_version.result:
-						self.results = self.results = failed
-						return
+				include_path = self.find_max_include_above_min(dir)
+				if include_path is None:
+					self.results = self.results = failed
+					return
+				read_version = BoostCheckTask.ReadVersion(self, include_path)
+				sched_ctx.parallel_wait(read_version)
+				if not read_version.result:
+					self.results = self.results = failed
+					return
 			finally: pass # dir.forget()
 		
 		selected_source_texts = [self.source_texts()[lib] for lib in self.lib_names]
@@ -199,6 +165,45 @@ class BoostCheckTask(MultiBuildCheckTask):
 				version = self.int_version is not None and ' (found version ' + str(self.lib_version).replace('_', '.') + ')' or ''
 				if self.result: return 'yes' + version, '32'
 				else: return 'no' + version, '31'
+
+	def find_max_include_above_min(self, dir):
+		include_path = None
+		if dir.exists and dir.is_dir:
+			max_entry = None
+			max_entry_version = [0]
+			for entry in dir.actual_children.itervalues():
+				if entry.name.startswith('boost-'):
+					if __debug__ and is_debug: debug('cfg: boost: found headers in ' + str(entry))
+					entry_version = entry.name[len('boost-'):].split('_')
+					for i in xrange(len(max_entry_version)):
+						if i >= len(entry_version): break
+						try: a = int(entry_version[i])
+						except ValueError:
+							if __debug__ and is_debug: debug('cfg: boost: ignoring non-integer versioned headers ' + str(entry))
+							break
+						b = max_entry_version[i]
+						if a > b:
+							max_entry = entry
+							max_entry_version[i] = a
+							for s in entry_version[len(max_entry_version):]:
+								try: max_entry_version.append(int(s))
+								except ValueError:
+									if __debug__ and is_debug: debug('cfg: boost: ignoring non-integer in version for headers ' + str(entry))
+									break
+							break
+						if a < b: break
+			if max_entry is not None:
+				if len(self.min_version_tuple) == 0: include_path = max_entry
+				else:
+					for i in xrange(len(self.min_version_tuple)):
+						if i >= len(max_entry_version): a = 0
+						else: a = max_entry_version[i]
+						b = self.min_version_tuple[i]
+						if a > b: include_path = max_entry; break
+						if a < b: break
+						if i == len(self.min_version_tuple) - 1: include_path = max_entry
+			if __debug__ and is_debug and include_path is not None: debug('cfg: boost: selected headers ' + str(include_path))
+			return include_path
 
 	@classmethod
 	def source_texts(class_):
