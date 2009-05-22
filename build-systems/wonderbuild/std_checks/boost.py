@@ -98,13 +98,17 @@ class BoostCheckTask(MultiBuildCheckTask):
 		lib_version = '-' + read_version.lib_version
 		
 		def link_check(toolset = None, lib_version = None):
-			link_libs = toolset is not None and [lib + toolset + '-mt' + lib_version for lib in self.lib_names] or []
+			threading = '-mt'
+			abi = ''
+			variant = (toolset or '') + (threading or '') + (abi or '') + (lib_version or '')
+			link_libs = toolset is not None and [lib + variant for lib in self.lib_names] or []
 			cfg_link_libs = ['boost_' + lib for lib in link_libs]
 			outer = self
 			class AllInOneCheckTask(BuildCheckTask):
 				def __init__(self): BuildCheckTask.__init__(
 					self, 'boost' + '-version-' + '.'.join(str(i) for i in outer.min_version_tuple) + \
-					'-link-libs-' + ','.join(link_libs or outer.lib_names), outer.base_cfg
+					'-link-' + ','.join(outer.lib_names) + \
+					variant, outer.base_cfg
 				)
 			
 				@property
