@@ -61,7 +61,7 @@ def detect_impl(user_build_cfg):
 				self.cxx_prog = 'cl'
 			else: self.kind = None
 	if self.kind == 'gcc':
-		self.version = out.rstrip('\n')
+		self.version = tuple(int(v) for v in out.rstrip('\n').split('.'))
 		from gcc_impl import Impl
 		self.impl = Impl()
 	elif self.kind == 'msvc':
@@ -69,7 +69,8 @@ def detect_impl(user_build_cfg):
 		x = 'Version '
 		self.version = self.version[self.version.find(x) + len(x):]
 		x = self.version.rfind(' for')
-		if x >= 0: self.version = self.version[:x]
+		if x >= 0: self.version = tuple(int(v) for v in self.version[:x].split('.'))
+		else: self.version = (0,)
 		from msvc_impl import Impl
 		self.impl = Impl(self.project.persistent)
 	else:
