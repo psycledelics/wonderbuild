@@ -11,7 +11,11 @@ class Wonderbuild(ScriptTask):
 		src_dir = self.src_dir / 'src'
 		
 		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, PreCompileTasks, ModTask
-		from wonderbuild.std_checks import StdMathCheckTask, BoostCheckTask, DlfcnCheckTask, PThreadCheckTask
+		from wonderbuild.std_checks.std_math import StdMathCheckTask
+		from wonderbuild.std_checks.dlfcn import DlfcnCheckTask
+		from wonderbuild.std_checks.pthread import PThreadCheckTask
+		from wonderbuild.std_checks.boost import BoostCheckTask
+		from wonderbuild.std_checks.winmm import WinMMCheckTask
 		from wonderbuild.install import InstallTask
 		
 		glibmm = PkgConfigCheckTask.shared(self.project, ['glibmm-2.4 >= 2.4'])
@@ -19,10 +23,11 @@ class Wonderbuild(ScriptTask):
 		build_cfg = UserBuildCfg.new_or_clone(project)
 
 		check_cfg = build_cfg.clone()
-		std_math_check = StdMathCheckTask.shared(check_cfg)
-		boost_check = BoostCheckTask.shared((1, 33), ['signals', 'thread', 'filesystem'], check_cfg)
-		dlfcn_check = DlfcnCheckTask.shared(check_cfg)
-		pthread_check = PThreadCheckTask.shared(check_cfg)
+		std_math = StdMathCheckTask.shared(check_cfg)
+		dlfcn = DlfcnCheckTask.shared(check_cfg)
+		pthread = PThreadCheckTask.shared(check_cfg)
+		boost = BoostCheckTask.shared((1, 33), ['signals', 'thread', 'filesystem'], check_cfg)
+		winmm = WinMMCheckTask.shared(check_cfg)
 
 		diversalis = ScriptTask.shared(project, src_dir.parent.parent / 'diversalis')
 
@@ -44,25 +49,29 @@ class Wonderbuild(ScriptTask):
 					return self._source_text
 
 			def __call__(self, sched_ctx):
-				sched_ctx.parallel_wait(glibmm, std_math_check, boost_check, dlfcn_check, pthread_check)
+				sched_ctx.parallel_wait(std_math, dlfcn, pthread, boost, glibmm, winmm)
 				self.source_text
-				if std_math_check.result:
-					std_math_check.apply_to(self.cfg)
+				if std_math.result:
+					std_math.apply_to(self.cfg)
 					self._source_text += '\n#include <cmath>'
-				if pthread_check.result:
-					pthread_check.apply_to(self.cfg)
-					self._source_text += '\n#include <pthread.h>'
-				if dlfcn_check.result:
-					dlfcn_check.apply_to(self.cfg)
+				if dlfcn.result:
+					dlfcn.apply_to(self.cfg)
 					self._source_text += '\n#include <dlfcn.h>'
-				if boost_check.result:
-					boost_check.apply_to(self.cfg)
+				if pthread.result:
+					pthread.apply_to(self.cfg)
+					self._source_text += '\n#include <pthread.h>'
+				if boost.result:
+					boost.apply_to(self.cfg)
 					self._source_text += '\n#include <boost/thread.hpp>'
 					self._source_text += '\n#include <boost/filesystem/path.hpp>'
 					self._source_text += '\n#include <boost/signals.hpp>'
 				if glibmm.result:
 					glibmm.apply_to(self.cfg)
 					self._source_text += '\n#include <glibmm.h>'
+				if winmm.result:
+					self._source_text += '\n#include <windows.h>'
+					self._source_text += '\n#include <mmsystem.h>'
+					winmm.apply_to(self.cfg)
 				PreCompileTasks.__call__(self, sched_ctx)
 		pch = Pch()
 
@@ -72,15 +81,16 @@ class Wonderbuild(ScriptTask):
 			def __call__(self, sched_ctx):
 				install = Universalis.Install(self.project)
 				sched_ctx.parallel_no_wait(install)
-				sched_ctx.parallel_wait(glibmm, std_math_check, boost_check, dlfcn_check, pthread_check, pch.lib_task)
+				sched_ctx.parallel_wait(pch.lib_task)
 				pch.lib_task.apply_to(self.cfg)
-				if dlfcn_check.result: dlfcn_check.apply_to(self.cfg)
-				if pthread_check.result: pthread_check.apply_to(self.cfg)
-				if std_math_check.result: std_math_check.apply_to(self.cfg)
+				if dlfcn.result: dlfcn.apply_to(self.cfg)
+				if pthread.result: pthread.apply_to(self.cfg)
+				if std_math.result: std_math.apply_to(self.cfg)
 				else: raise Exception, 'need std math'
-				if boost_check.result: boost_check.apply_to(self.cfg)
+				if boost.result: boost.apply_to(self.cfg)
 				else: raise Exception, 'need boost'
 				if glibmm.result: glibmm.apply_to(self.cfg)
+				#sched_ctx.parallel_wait(diversalis.install)
 				diversalis.client_cfg.apply_to(self.cfg)
 				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 				ModTask.__call__(self, sched_ctx)

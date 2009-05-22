@@ -4,15 +4,21 @@
 
 from wonderbuild.cxx_tool_chain import BuildCheckTask
 
-class PThreadCheckTask(BuildCheckTask):
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'posix-thread', base_cfg)
+class WinMMCheckTask(BuildCheckTask):
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'ms-winmm', base_cfg)
 
 	def apply_to(self, cfg):
-		cfg.libs.append('pthread')
+		cfg.libs.append('winmm')
 
 	@property
 	def source_text(self): return \
-		'#include <pthread.h>\n' \
-		'void pthread() {\n' \
-		'	pthread_t self(pthread_self());\n' \
-		'}'
+		"""\
+			#include <windows.h>
+			#include <mmsystem.h>
+			void microsoft_mm_system() {
+				::UINT milliseconds(10);
+				::timeBeginPeriod(milliseconds);
+				::timeGetTime();
+				::timeEndPeriod(milliseconds);
+			}
+		"""

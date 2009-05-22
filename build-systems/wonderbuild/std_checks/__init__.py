@@ -78,8 +78,3 @@ class AutoLinkSupportCheckTask(BuildCheckTask):
 					#endif
 				"""
 			return self._source_text
-
-from pthread import PThreadCheckTask
-from std_math import StdMathCheckTask
-from dlfcn import DlfcnCheckTask
-from boost import BoostCheckTask
