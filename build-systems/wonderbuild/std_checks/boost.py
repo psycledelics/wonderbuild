@@ -14,7 +14,7 @@ class BoostCheckTask(MultiBuildCheckTask):
 	def __init__(self, min_version_tuple, lib_names, base_cfg):
 		# TODO remove useless trailing zeroes in the version tuple
 		MultiBuildCheckTask.__init__(
-			self, 'boost-version-' + '.'.join(str(i) for i in min_version_tuple) + \
+			self, 'boost-' + '.'.join(str(i) for i in min_version_tuple) + \
 			'-libs-' + ','.join(lib_names), base_cfg
 		)
 		self.min_version_tuple = min_version_tuple
@@ -106,7 +106,7 @@ class BoostCheckTask(MultiBuildCheckTask):
 			outer = self
 			class AllInOneCheckTask(BuildCheckTask):
 				def __init__(self): BuildCheckTask.__init__(
-					self, 'boost' + '-version-' + '.'.join(str(i) for i in outer.min_version_tuple) + \
+					self, 'boost-' + '.'.join(str(i) for i in outer.min_version_tuple) + \
 					'-link-' + ','.join(outer.lib_names) + \
 					variant, outer.base_cfg
 				)
@@ -153,7 +153,7 @@ class BoostCheckTask(MultiBuildCheckTask):
 	class ReadVersion(BuildCheckTask):
 			def __init__(self, outer):
 				BuildCheckTask.__init__(
-					self, 'boost-version-' + '.'.join(str(i) for i in outer.min_version_tuple),
+					self, 'boost-' + '.'.join(str(i) for i in outer.min_version_tuple),
 					outer.base_cfg, pipe_preproc=True
 				)
 				self._outer = outer

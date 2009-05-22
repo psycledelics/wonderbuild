@@ -76,7 +76,7 @@ def detect_impl(user_build_cfg):
 	else:
 		if not silent: self.print_check_result(desc, 'not found', '31')
 		return
-	if not silent: self.print_check_result(desc, str(self.kind) + ' version ' + str(self.version), '32')
+	if not silent: self.print_check_result(desc, str(self.kind) + ' version ' + '.'.join(str(v) for v in self.version), '32')
 	cxx_prog, ld_prog, ar_prog, ranlib_prog = self.impl.progs(self)
 	if 'cxx' not in o: self.cxx_prog = cxx_prog
 	if 'cxx-mod-ld' not in o: self.ld_prog = ld_prog
