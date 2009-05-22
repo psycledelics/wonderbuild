@@ -13,7 +13,7 @@ class Wonderbuild(ScriptTask):
 		src_dir = self.src_dir / 'src'
 
 		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, BuildCheckTask, PreCompileTasks, ModTask
-		from wonderbuild.std_checks import StdMathCheckTask
+		from wonderbuild.std_checks.std_math import StdMathCheckTask
 		from wonderbuild.install import InstallTask
 	
 		glibmm = PkgConfigCheckTask.shared(self.project, ['glibmm-2.4 >= 2.4'])
@@ -23,7 +23,7 @@ class Wonderbuild(ScriptTask):
 		build_cfg.include_paths.append(src_dir)
 
 		check_cfg = build_cfg.clone()
-		std_math_check = StdMathCheckTask.shared(check_cfg)
+		std_math = StdMathCheckTask.shared(check_cfg)
 
 		class Pch(PreCompileTasks):
 			def __init__(self): PreCompileTasks.__init__(self, 'pch', build_cfg)
@@ -39,14 +39,13 @@ class Wonderbuild(ScriptTask):
 					return self._source_text
 
 			def __call__(self, sched_ctx):
-				sched_ctx.parallel_wait(std_math_check, glibmm)
-				if std_math_check.result:
-					std_math_check.apply_to(self.cfg)
-					self.source_text
+				sched_ctx.parallel_wait(std_math, glibmm)
+				self.source_text
+				if std_math.result:
+					std_math.apply_to(self.cfg)
 					self._source_text += '\n#include <cmath>'
 				if glibmm.result:
 					glibmm.apply_to(self.cfg)
-					self.source_text
 					self._source_text += '\n#include <glibmm.h>'
 				PreCompileTasks.__call__(self, sched_ctx)
 		pch = Pch()
@@ -57,9 +56,9 @@ class Wonderbuild(ScriptTask):
 			def __call__(self, sched_ctx):
 				install = LibFoo.Install(self.project)
 				sched_ctx.parallel_no_wait(install)
-				sched_ctx.parallel_wait(glibmm, std_math_check, pch.lib_task)
+				sched_ctx.parallel_wait(glibmm, std_math, pch.lib_task)
 				pch.lib_task.apply_to(self.cfg)
-				if std_math_check.result: std_math_check.apply_to(self.cfg)
+				if std_math.result: std_math.apply_to(self.cfg)
 				if glibmm.result: glibmm.apply_to(self.cfg)
 				for s in (src_dir / 'foo').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 				ModTask.__call__(self, sched_ctx)
