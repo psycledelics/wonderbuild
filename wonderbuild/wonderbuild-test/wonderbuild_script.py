@@ -23,7 +23,7 @@ class Wonderbuild(ScriptTask):
 		build_cfg.include_paths.append(src_dir)
 
 		check_cfg = build_cfg.clone()
-		std_math_check = StdMathCheckTask(check_cfg)
+		std_math_check = StdMathCheckTask.shared(check_cfg)
 
 		class Pch(PreCompileTasks):
 			def __init__(self): PreCompileTasks.__init__(self, 'pch', build_cfg)
