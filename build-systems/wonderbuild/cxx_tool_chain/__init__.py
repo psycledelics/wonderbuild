@@ -75,6 +75,8 @@ class BuildCfg(ClientCfg):
 		c = ClientCfg.clone(self, class_)
 		try: c._target_platform_binary_format_is_pe = self._target_platform_binary_format_is_pe
 		except AttributeError: pass
+		try: c._pic_flag_defines_pic = self._pic_flag_defines_pic
+		except AttributeError: pass
 		c.lang = self.lang
 		c.cxx_prog = self.cxx_prog
 		c.pic = self.pic
@@ -96,12 +98,26 @@ class BuildCfg(ClientCfg):
 	def target_platform_binary_format_is_pe(self):
 		try: return self._target_platform_binary_format_is_pe
 		except AttributeError:
+			self._target_platform_binary_format_is_pe = False # allows it to be reentrant during the check itself
 			from wonderbuild.std_checks import BinaryFormatPeCheckTask
 			pe = BinaryFormatPeCheckTask.shared(self)
 			self.project.sched_context.parallel_wait(pe)
 			self._target_platform_binary_format_is_pe = pe.result
 			return pe.result
 		
+	@property
+	def pic_flag_defines_pic(self):
+		try: return self._pic_flag_defines_pic
+		except AttributeError:
+			self._pic_flag_defines_pic = True # allows it to be reentrant during the check itself
+			from wonderbuild.std_checks import PicFlagDefinesPicCheckTask
+			pic = PicFlagDefinesPicCheckTask.shared(self)
+			self.project.sched_context.lock.acquire()
+			try: self.project.sched_context.parallel_wait(pic)
+			finally: self.project.sched_context.lock.release()
+			self._pic_flag_defines_pic = pic.result
+			return pic.result
+
 	@property
 	def _common_sig(self):
 		try: return self.__common_sig
@@ -110,6 +126,7 @@ class BuildCfg(ClientCfg):
 			e = os.environ.get('PATH', None)
 			if e is not None: sig.update(e)
 			#sig.update(str(self.target_platform_binary_format_is_pe))
+			#sig.update(str(self.pic_flag_defines_pic))
 			sig.update(self.kind)
 			sig.update(str(self.version))
 			sig.update(str(self.check_missing))
@@ -931,6 +948,7 @@ class MultiBuildCheckTask(CheckTask):
 		try: return self._cfg
 		except AttributeError:
 			self._cfg = self.base_cfg.clone()
+			if self.link: self.cfg.shared = False # build a program
 			self.apply_to(self._cfg)
 			return self._cfg
 

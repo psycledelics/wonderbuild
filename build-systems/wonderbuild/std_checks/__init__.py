@@ -86,6 +86,25 @@ class MingwCheckTask(BuildCheckTask):
 		'	#error this is not mingw gcc\n' \
 		'#endif\n'
 
+class PicFlagDefinesPicCheckTask(BuildCheckTask):
+	@staticmethod
+	def shared(base_cfg):
+		try: return base_cfg.project.cxx_compiler_pic_flag_defines_pic
+		except AttributeError:
+			task = base_cfg.project.cxx_compiler_pic_flag_defines_pic = PicFlagDefinesPicCheckTask(base_cfg)
+			return task
+
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'pic-flag-defines-pic', base_cfg, compile=False)
+
+	def apply_to(self, cfg):
+		cfg.pic = True
+
+	@property
+	def source_text(self): return \
+		'#if !defined __PIC__ && !defined __pic__\n' \
+		'	#error no pic\n' \
+		'#endif\n'
+
 class AutoLinkSupportCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared(base_cfg):

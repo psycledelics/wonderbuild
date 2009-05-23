@@ -52,7 +52,7 @@ class Impl(object):
 	@staticmethod
 	def _cfg_cxx_args(cfg, include_func):
 		args = [cfg.cxx_prog, '-pipe']
-		if cfg.pic: args.append('-fPIC')
+		if cfg.pic and cfg.pic_flag_defines_pic: args.append('-fPIC')
 		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + v)
@@ -243,7 +243,7 @@ class Impl(object):
 	@staticmethod
 	def process_build_check_task(build_check_task):
 		cfg = build_check_task.cfg
-		cfg.shared = cfg.pic = False
+		if build_check_task.link: cfg.shared = False # build a program
 		args = cfg.cxx_args_cwd + ['-xc++', '-'] # TODO -xc for C
 		if build_check_task.pipe_preproc: args.append('-E')
 		else:
