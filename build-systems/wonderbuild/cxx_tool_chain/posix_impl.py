@@ -149,7 +149,6 @@ class Impl(object):
 	@staticmethod
 	def process_build_check_task(build_check_task):
 		cfg = build_check_task.cfg
-		if build_check_task.link: cfg.shared = False # build a program
 		cwd = build_check_task.bld_dir
 		s = cwd / 'a.cpp' # TODO a.c for C
 		f = open(s.path, 'w')

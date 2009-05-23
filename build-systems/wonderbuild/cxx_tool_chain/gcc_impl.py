@@ -243,7 +243,6 @@ class Impl(object):
 	@staticmethod
 	def process_build_check_task(build_check_task):
 		cfg = build_check_task.cfg
-		if build_check_task.link: cfg.shared = False # build a program
 		args = cfg.cxx_args_cwd + ['-xc++', '-'] # TODO -xc for C
 		if build_check_task.pipe_preproc: args.append('-E')
 		else:
