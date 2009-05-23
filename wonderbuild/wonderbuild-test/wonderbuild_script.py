@@ -20,10 +20,10 @@ class Wonderbuild(ScriptTask):
 
 		build_cfg = UserBuildCfg.new_or_clone(self.project)
 
-		build_cfg.include_paths.append(src_dir)
-
 		check_cfg = build_cfg.clone()
 		std_math = StdMathCheckTask.shared(check_cfg)
+
+		build_cfg.include_paths.append(src_dir)
 
 		class Pch(PreCompileTasks):
 			def __init__(self): PreCompileTasks.__init__(self, 'pch', build_cfg)
@@ -41,10 +41,10 @@ class Wonderbuild(ScriptTask):
 			def __call__(self, sched_ctx):
 				sched_ctx.parallel_wait(std_math, glibmm)
 				self.source_text
-				if std_math.result:
+				if std_math:
 					std_math.apply_to(self.cfg)
 					self._source_text += '\n#include <cmath>'
-				if glibmm.result:
+				if glibmm:
 					glibmm.apply_to(self.cfg)
 					self._source_text += '\n#include <glibmm.h>'
 				PreCompileTasks.__call__(self, sched_ctx)
@@ -56,10 +56,10 @@ class Wonderbuild(ScriptTask):
 			def __call__(self, sched_ctx):
 				install = LibFoo.Install(self.project)
 				sched_ctx.parallel_no_wait(install)
-				sched_ctx.parallel_wait(glibmm, std_math, pch.lib_task)
+				sched_ctx.parallel_wait(pch.lib_task)
 				pch.lib_task.apply_to(self.cfg)
-				if std_math.result: std_math.apply_to(self.cfg)
-				if glibmm.result: glibmm.apply_to(self.cfg)
+				if std_math: std_math.apply_to(self.cfg)
+				if glibmm: glibmm.apply_to(self.cfg)
 				for s in (src_dir / 'foo').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 				ModTask.__call__(self, sched_ctx)
 				sched_ctx.wait(install)
@@ -86,9 +86,9 @@ class Wonderbuild(ScriptTask):
 			def __call__(self, sched_ctx):
 				self.dep_lib_tasks.append(lib_foo)
 				sched_ctx.parallel_no_wait(*self.dep_lib_tasks)
-				sched_ctx.parallel_wait(pch.prog_task, glibmm)
+				sched_ctx.parallel_wait(pch.prog_task)
 				pch.prog_task.apply_to(self.cfg)
-				if glibmm.result: glibmm.apply_to(self.cfg)
+				if glibmm: glibmm.apply_to(self.cfg)
 				for s in (src_dir / 'main').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 				ModTask.__call__(self, sched_ctx)
 		main_prog = MainProg()
