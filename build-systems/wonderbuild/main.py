@@ -62,8 +62,9 @@ else:
 			def __init__(self, project):
 				Task.__init__(self)
 				self.project = project
-				
+
 			def __call__(self, sched_context):
+				self.result = 1
 				sched_context.parallel_wait(self.project)
 				
 				from wonderbuild.script import ScriptTask, default_script_file

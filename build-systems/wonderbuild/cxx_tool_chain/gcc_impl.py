@@ -14,9 +14,15 @@ need_sep_fix = os.sep != '/'
 class Impl(object):
 
 	@staticmethod
+	def parse_version(out, err): return tuple(int(v) for v in out.rstrip('\n').split('.'))
+
+	@staticmethod
 	def progs(cfg):
-		if False and not out_is_dumb: cxx_prog = ld_prog = ((cfg.project.fs.cur / __file__).parent / 'colorgcc').abs_path
-		else: cxx_prog, ld_prog = cfg.cxx_prog, cfg.ld_prog or cfg.cxx_prog
+		if not out_is_dumb and cfg.cxx_prog in (None, 'g++') and cfg.ld_prog in (None, 'g++'):
+			cxx_prog = ld_prog = ((cfg.project.fs.cur / __file__).parent / 'colorgcc').abs_path
+		else: cxx_prog, ld_prog = \
+			cfg.cxx_prog or 'g++', \
+			cfg.ld_prog or cfg.cxx_prog or 'g++'
 		return cxx_prog, ld_prog, 'ar', 'ranlib' # for gnu ar, 'ar s' is used instead of ranlib
 		# see also g++ -print-prog-name=ld
 		
@@ -54,6 +60,7 @@ class Impl(object):
 	def _cfg_cxx_args(cfg, include_func):
 		args = [cfg.cxx_prog, '-pipe']
 		if cfg.pic and cfg.pic_flag_defines_pic: args.append('-fPIC')
+		#if cfg.pic: args.append('-fPIC')
 		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + v)
@@ -112,6 +119,7 @@ class Impl(object):
 	def process_cxx_task(self, cxx_task, lock):
 		args = cxx_task.cfg.cxx_args_bld + ['-c', '-MMD'] + [s.name for s in cxx_task._actual_sources]
 		cwd = cxx_task.target_dir
+		implicit_deps = cxx_task.persistent_implicit_deps
 		if exec_subprocess(args, cwd = cwd.path) == 0:
 			succeeded_sources = zip(cxx_task.sources, cxx_task._actual_sources)
 			failed_sources = None
@@ -128,9 +136,13 @@ class Impl(object):
 					obj = cwd / (s[1].name[:s[1].name.rfind('.')] + self.cxx_task_target_ext)
 					obj.clear()
 					if obj.exists: succeeded_sources.append(s)
-					else: failed_sources.append(s[0])
+					else:
+						src = s[0]
+						failed_sources.append(src)
+						try: had_failed, old_cxx_sig, deps, old_dep_sig = implicit_deps[src]
+						except KeyError: implicit_deps[src] = True, None, None, None # This is a new source.
+						else: implicit_deps[src] = True, old_cxx_sig, deps, old_dep_sig
 			finally: lock.release()
-		implicit_deps = cxx_task.persistent_implicit_deps
 		for s in succeeded_sources:
 			# reads deps from the .d files generated as side-effect of compilation by gcc's -MD or -MMD option
 			path = s[1].path
@@ -144,7 +156,7 @@ class Impl(object):
 			finally: lock.release()
 			if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
 			dep_sigs = [d.sig for d in deps]
-			implicit_deps[s[0]] = cxx_task.cfg.cxx_sig, deps, Sig(''.join(dep_sigs)).digest()
+			implicit_deps[s[0]] = False, cxx_task.cfg.cxx_sig, deps, Sig(''.join(dep_sigs)).digest()
 		if failed_sources is not None: raise UserReadableException, ' '.join(str(s) for s in failed_sources)
 
 	@property

@@ -32,6 +32,15 @@ class Scheduler(object):
 			self.parallel_no_wait = scheduler._parallel_no_wait
 			self.wait = scheduler._wait
 
+	class _DummyLock(object):
+		def acquire(self): pass
+		def release(self): pass
+	
+	class _DummyCondition(_DummyLock):
+		def wait(self, timeout): pass
+		def notify(self, count = 1): pass
+		def notifyAll(self): pass
+
 	def process(self, tasks):
 		self._task_queue = tasks
 		self._todo_count = len(tasks)
@@ -51,13 +60,14 @@ class Scheduler(object):
 
 		if self.thread_count != 1:
 			if __debug__ and is_debug: debug('sched: starting threads: ' + str(self.thread_count))
+			#sys.setcheckinterval(interval)
 			self._joining = False
 			self._threads = []
 			remaining_start_count = self.thread_count - 1
 			remaining_start_condition = threading.Condition(threading.Lock())
 			remaining_start_condition.acquire()
 			try:
-				t = threading.Thread(target = self._thread_function, args = (0, remaining_start_count - 1, remaining_start_condition), name = 'scheduler-thread-' + str(0))
+				t = threading.Thread(target = self._thread_loop, args = (0, remaining_start_count - 1, remaining_start_condition), name = 'scheduler-thread-' + str(0))
 				t.setDaemon(True)
 				t.start()
 				self._threads.append(t)
@@ -65,35 +75,28 @@ class Scheduler(object):
 			finally: remaining_start_condition.release()
 
 		self._joining = True
-		self._thread_function(-1, 0, None) # XXX need a way to handle timeout
-
-		if self.thread_count != 1:
-			if __debug__ and is_debug: debug('sched: joining threads')
-			self._condition.acquire()
-			try:
-				self._joining = True
-				self._condition.notifyAll()
-			finally: self._condition.release()
-			for t in self._threads: t.join(timeout = self.timeout)
-		if hasattr(self, 'exception'): raise self.exception
+		try: self._thread_loop(-1, 0, None) # note: no timeout handling here
+		finally:
+			if self.thread_count != 1:
+				if __debug__ and is_debug: debug('sched: joining threads')
+				self._condition.acquire()
+				try:
+					self._joining = True
+					self._condition.notifyAll()
+				finally: self._condition.release()
+				for t in self._threads: t.join(timeout = self.timeout)
+			if hasattr(self, 'exception'):
+				if isinstance(self.exception, UserReadableException): raise self.exception
+				else: raise UserReadableException, 'An exception occurred, see stack trace above.'
 		
-	class _DummyLock(object):
-		def acquire(self): pass
-		def release(self): pass
-	
-	class _DummyCondition(_DummyLock):
-		def wait(self, timeout): pass
-		def notify(self, count = 1): pass
-		def notifyAll(self): pass
-
-	def _thread_function(self, i, remaining_start_count, remaining_start_condition):
+	def _thread_loop(self, i, remaining_start_count, remaining_start_condition):
 		if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': started')
 		if remaining_start_condition is not None:
 			remaining_start_condition.acquire()
 			try:
 				if remaining_start_count == 0: remaining_start_condition.notify()
 				else:
-					t = threading.Thread(target = self._thread_function, args = (i + 1, remaining_start_count - 1, remaining_start_condition), name = 'scheduler-thread-' + str(i + 1))
+					t = threading.Thread(target = self._thread_loop, args = (i + 1, remaining_start_count - 1, remaining_start_condition), name = 'scheduler-thread-' + str(i + 1))
 					t.setDaemon(True)
 					t.start()
 					self._threads.append(t)
@@ -109,15 +112,13 @@ class Scheduler(object):
 						self._condition.notifyAll()
 						break
 			except StopIteration: pass
-			except UserReadableException, e:
-				self.exception = e
-				self._stop_requested = True
-				self._condition.notifyAll()
 			except Exception, e:
 				self.exception = e
 				self._stop_requested = True
 				self._condition.notifyAll()
-				raise
+				if not isinstance(e, UserReadableException):
+					import traceback
+					traceback.print_exc()
 		finally:
 			if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': terminated')
 			self._condition.release()
@@ -130,9 +131,11 @@ class Scheduler(object):
 		if __debug__ and is_debug:
 			debug('sched: processing task: ' + str(task))
 			assert not task._processed
+
 		task(self._context)
 		#try: task(self._context)
 		#except Exception, e: raise Exception, '\nin task: ' + str(task) + ': ' + str(e)
+
 		if __debug__ and is_debug: debug('sched: task processed: ' + str(task))
 		task._processed = True
 		self._todo_count -= 1

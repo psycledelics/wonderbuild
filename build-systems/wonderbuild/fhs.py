@@ -21,6 +21,13 @@ class FHS(OptionCfg):
 		help['install-dest-dir']   = ('<dir>', 'use <dir> as staged install prefix', '<bld-dir>/staged-install')
 		help['install-prefix-dir'] = ('<abs-dir>', 'use <abs-dir> as final install prefix', '/usr/local')
 
+	@staticmethod
+	def shared(project):
+		try: return project.fhs
+		except AttributeError:
+			instance = project.fhs = FHS(project)
+			return instance
+
 	def __init__(self, project):
 		OptionCfg.__init__(self, project)
 		

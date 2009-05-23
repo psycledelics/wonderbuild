@@ -5,6 +5,7 @@
 import os, threading
 from collections import deque
 
+from wonderbuild import UserReadableException
 from wonderbuild.logger import out, is_debug, debug, colored, silent
 from wonderbuild.signature import Sig
 from wonderbuild.option_cfg import OptionCfg
@@ -56,20 +57,15 @@ class BuildCfg(ClientCfg):
 	def __init__(self, project):
 		ClientCfg.__init__(self, project)
 		self.lang = 'c++'
-		self.cxx_prog = None
-		self.pic = None
-		self.pch = None
+		self.cxx_prog = self.ld_prog = self.ar_prog = self.ranlib_prog = None
+		self.pic = self.shared = self.static_prog = None
 		self.includes = deque()
-		self.ld_prog = None
-		self.ar_prog = None
-		self.ranlib_prog = None
-		self.shared = None
-		self.static_prog = None
-		self.impl = None
-		self.kind = self.version = None
+		self.pch = None
 		self.check_missing = False
-		try: self.fhs = project.fhs
-		except AttributeError: self.fhs = project.fhs = FHS(project)
+		self.fhs = FHS.shared(project)
+		self.impl = self.kind = self.version = None
+		self.target_platform_binary_format_is_pe = None
+		self.pic_flag_defines_pic = None
 
 	def clone(self, class_ = None):
 		if class_ is None: class_ = self.__class__
@@ -88,36 +84,14 @@ class BuildCfg(ClientCfg):
 		c.ranlib_prog = self.ranlib_prog
 		c.shared = self.shared
 		c.static_prog = self.static_prog
+		c.check_missing = self.check_missing
+		c.fhs = self.fhs
 		c.impl = self.impl
 		c.kind = self.kind
 		c.version = self.version
-		c.check_missing = self.check_missing
-		c.fhs = self.fhs
+		c.target_platform_binary_format_is_pe = self.target_platform_binary_format_is_pe
+		c.pic_flag_defines_pic = self.pic_flag_defines_pic
 		return c
-
-	@property
-	def target_platform_binary_format_is_pe(self):
-		try: return self._target_platform_binary_format_is_pe
-		except AttributeError:
-			self._target_platform_binary_format_is_pe = False # allows it to be reentrant during the check itself
-			from wonderbuild.std_checks import BinaryFormatPeCheckTask
-			pe = BinaryFormatPeCheckTask.shared(self)
-			self.project.sched_context.parallel_wait(pe)
-			self._target_platform_binary_format_is_pe = pe.result
-			return pe.result
-		
-	@property
-	def pic_flag_defines_pic(self):
-		try: return self._pic_flag_defines_pic
-		except AttributeError:
-			self._pic_flag_defines_pic = True # allows it to be reentrant during the check itself
-			from wonderbuild.std_checks import PicFlagDefinesPicCheckTask
-			pic = PicFlagDefinesPicCheckTask.shared(self)
-			self.project.sched_context.lock.acquire()
-			try: self.project.sched_context.parallel_wait(pic)
-			finally: self.project.sched_context.lock.release()
-			self._pic_flag_defines_pic = pic.result
-			return pic.result
 
 	@property
 	def _common_sig(self):
@@ -222,45 +196,37 @@ class BuildCfg(ClientCfg):
 			if __debug__ and is_debug: debug('cfg: cxx: build: ar ranlib: ' + str(args))
 			return args
 
-	def print_check(self, desc):
-		out.write(colored('34', 'wonderbuild: cfg: ' + desc + ' ...') + '\n')
-		out.flush()
-		
-	def print_check_result(self, desc, result, color):
-		out.write(colored('34', 'wonderbuild: cfg: ' + desc + ': ') + colored(color, result) + '\n')
-		out.flush()
-
 class UserBuildCfg(BuildCfg, OptionCfg):
 	def clone(self, class_ = None):
 		if class_ is None: class_ = BuildCfg
 		return class_.clone(self, class_)
 
 	known_options = set([
-		'cxx', # cxx-compiler
-		'cxx-flags', # cxx-compiler-flags
-		'cxx-pic',
-		'cxx-mod-shared-libs', # cxx-shared-libs
-		'cxx-mod-static-progs', # cxx-static-progs
-		'cxx-mod-ld', # cxx-linker
-		'cxx-mod-ld-flags', # cxx-linker-flags
-		'cxx-mod-ar', # cxx-archiver
-		'cxx-mod-ranlib', # cxx-archive-indexer
+		'cxx',
+		'cxx-flags',
+		'pic',
+		'shared-libs',
+		'static-progs',
+		'ld',
+		'ld-flags',
+		'ar',
+		'ranlib',
 		'check-missing'
 	])
 
 	@staticmethod
 	def generate_option_help(help):
-		help['cxx']                  = ('<prog>', 'use <prog> as c++ compiler')
-		help['cxx-flags']            = ('[flags]', 'use specific c++ compiler flags')
-		help['cxx-pic']              = ('<yes|no>', 'whether to make the c++ compiler emit pic code rather than non-pic code for static libs and programs (always pic for shared libs)', 'no (for static libs and programs)')
-		#help['cxx-mod-shared']      = ('<yes|no|progs-only>', '...', 'yes')
-		#help['cxx-mod-static']      = ('<no|libs|libs-and-progs>', '...', 'no')
-		help['cxx-mod-shared-libs']  = ('<yes|no>', 'whether to build shared libs (rather than static libs)', 'yes unless cxx-pic is set explicitly to no or cxx-mod-static-progs is set to yes')
-		help['cxx-mod-static-progs'] = ('<yes|no>', 'whether to statically link programs (rather than dynamically using shared libs)', 'no')
-		help['cxx-mod-ld']           = ('<prog>', 'use <prog> as shared lib and program linker')
-		help['cxx-mod-ld-flags']     = ('[flags]', 'use specific linker flags')
-		help['cxx-mod-ar']           = ('<prog>', 'use <prog> as static lib archiver', 'ar')
-		help['cxx-mod-ranlib']       = ('<prog>', 'use <prog> as static lib archive indexer', 'ranlib (or via ar s flag for gnu ar)')
+		help['cxx']          = ('<prog>', 'use <prog> as c++ compiler')
+		help['cxx-flags']    = ('[flags]', 'use specific c++ compiler flags')
+		help['pic']          = ('<yes|no>', 'whether to make the c++ compiler emit pic code rather than non-pic code for static libs and programs (always pic for shared libs)', 'no (for static libs and programs)')
+		#help['shared']      = ('<yes|no|progs-only>', '...', 'yes')
+		#help['static']      = ('<no|libs|libs-and-progs>', '...', 'no')
+		help['shared-libs']  = ('<yes|no>', 'whether to build shared libs (rather than static libs)', 'yes unless the pic option is set explicitly to no or the static-progs option is set to yes')
+		help['static-progs'] = ('<yes|no>', 'whether to statically link programs (rather than dynamically using shared libs)', 'no')
+		help['ld']           = ('<prog>', 'use <prog> as shared lib and program linker')
+		help['ld-flags']     = ('[flags]', 'use specific linker flags')
+		help['ar']           = ('<prog>', 'use <prog> as static lib archiver', 'ar')
+		help['ranlib']       = ('<prog>', 'use <prog> as static lib archive indexer', 'the posix ar s flag is used instead')
 		help['check-missing']        = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'no')
 
 	@staticmethod
@@ -274,9 +240,11 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		BuildCfg.__init__(self, project)
 		OptionCfg.__init__(self, project)
 		
+		o = self.options
+		if 'help' in o: return
+
 		try:
 			old_sig, self.check_missing, \
-			self.kind, self.version, \
 			self.cxx_prog, self.cxx_flags, self.pic, \
 			self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
 			self.ar_prog, self.ranlib_prog = \
@@ -284,7 +252,6 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		except KeyError: old_sig = None
 		if old_sig != self.options_sig:
 			if __debug__ and is_debug: debug('cfg: cxx: user: parsing options')
-			o = self.options
 
 			if 'check-missing' in o: self.check_missing = o['check-missing'] == 'yes'
 			else: self.check_missing = False
@@ -296,14 +263,14 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 				if flags is not None: self.cxx_flags = flags.split()
 				else: self.cxx_flags = []
 
-			if 'cxx-pic' in o: self.pic = o['cxx-pic'] != 'no'
+			if 'pic' in o: self.pic = o['pic'] != 'no'
 			else: self.pic = None
 
-			if 'cxx-mod-shared-libs' in o: self.shared = o['cxx-mod-shared-libs'] != 'no'
+			if 'shared-libs' in o: self.shared = o['shared-libs'] != 'no'
 			else: self.shared = None
 			
-			if 'cxx-mod-static-progs' in o:
-				self.static_prog = o['cxx-mod-static-progs'] == 'yes'
+			if 'static-progs' in o:
+				self.static_prog = o['static-progs'] == 'yes'
 				if self.static_prog and self.shared is None: self.shared = False
 			else: self.static_prog = False
 
@@ -312,29 +279,25 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 				self.pic = False # this is for programs only
 			elif self.shared is None: self.shared = self.pic
 
-			if 'cxx-mod-ld' in o: self.ld_prog = o['cxx-mod-ld']
-			if 'cxx-mod-flags' in o: self.cxx_mod_flags = o['cxx-mod-flags'].split()
+			if 'ld' in o: self.ld_prog = o['ld']
+			if 'ld-flags' in o: self.ld_flags = o['ld-flags'].split()
 			else:
 				flags = os.environ.get('LDFLAGS', None)
 				if flags is not None: self.ld_flags = flags.split()
 				else: self.ld_flags = []
-			if 'cxx-mod-ar' in o: self.ar_prog = o['cxx-mod-ar']
-			if 'cxx-mod-ranlib' in o: self.ranlib_prog = o['cxx-mod-ranlib']
-
-			from detect_impl import detect_impl
-			detect_impl(self)
+			if 'ar' in o: self.ar_prog = o['ar']
+			if 'ranlib' in o: self.ranlib_prog = o['ranlib']
 
 			self.project.persistent[str(self.__class__)] = \
 				self.options_sig, self.check_missing, \
-				self.kind, self.version, \
 				self.cxx_prog, self.cxx_flags, self.pic, \
 				self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
 				self.ar_prog, self.ranlib_prog
-		else:
-			from detect_impl import select_impl
-			select_impl(self)
 
-		if self.impl is None: raise Exception, 'unsupported c++ compiler'
+		from detect_impl import DetectImplCheckTask
+		detect_impl = DetectImplCheckTask.shared(self)
+		self.project.sched_context.parallel_wait(detect_impl)
+		if self.impl is None: raise UserReadableException, 'unsupported c++ compiler'
 
 class _PreCompileTask(ProjectTask):
 	def __init__(self, name, base_cfg):
@@ -645,13 +608,20 @@ class ModTask(ProjectTask):
 		else:
 			self._type_changed = state[1] != self.ld
 			if __debug__ and is_debug and self._type_changed: debug('task: mod type changed: ' + str(self))
-			changed_sources = []
+			changed_sources = deque()
 			implicit_deps = state[2]
 			for s in self.sources:
-				try: old_cxx_sig, deps, old_dep_sig = implicit_deps[s]
+				try: had_failed, old_cxx_sig, deps, old_dep_sig = implicit_deps[s]
 				except KeyError:
 					# This is a new source.
 					changed_sources.append(s)
+					continue
+				if had_failed:
+					# The compilation failed the last time.
+					# We place this source first in the deque so that it is compiled first,
+					# and hence we can give the fastest feedback in the usage cycle "fix some compilation errors then retry to build".
+					if __debug__ and is_debug: debug('task: retry previously failed: ' + str(s))
+					changed_sources.appendleft(s)
 					continue
 				try: dep_sigs = [dep.sig for dep in deps]
 				except OSError:
@@ -986,16 +956,17 @@ class BuildCheckTask(MultiBuildCheckTask):
 			dir = self.bld_dir
 			dir.make_dir(dir.parent)
 			r, out, err = self.cfg.impl.process_build_check_task(self)
-			log = dir / 'build.log'
-			f = open(log.path, 'w')
-			try:
-				f.write(self._prog_source_text); f.write('\n')
-				f.write(str(self.cfg.cxx_args_cwd)); f.write('\n')
-				f.write(str(self.cfg.ld_args)); f.write('\n')
-				f.write(out); f.write('\n')
-				f.write(err); f.write('\n')
-				f.write('return code: '); f.write(str(r)); f.write('\n')
-			finally: f.close()
+			if False: # no real need for a log file, the --verbose=exec option gives the same details
+				log = dir / 'build.log'
+				f = open(log.path, 'w')
+				try:
+					f.write(self._prog_source_text); f.write('\n')
+					f.write(str(self.cfg.cxx_args_cwd)); f.write('\n')
+					f.write(str(self.cfg.ld_args)); f.write('\n')
+					f.write(out); f.write('\n')
+					f.write(err); f.write('\n')
+					f.write('return code: '); f.write(str(r)); f.write('\n')
+				finally: f.close()
 			if self.pipe_preproc: self.results = r == 0, out
 			else: self.results = r == 0
 		finally: sched_context.lock.acquire()
