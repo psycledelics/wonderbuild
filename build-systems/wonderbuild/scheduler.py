@@ -4,6 +4,7 @@
 
 import os, threading
 
+from wonderbuild import UserReadableException
 from logger import is_debug, debug, colored, silent
 
 try: cpu_count = os.sysconf('SC_NPROCESSORS_ONLN')
@@ -108,6 +109,10 @@ class Scheduler(object):
 						self._condition.notifyAll()
 						break
 			except StopIteration: pass
+			except UserReadableException, e:
+				self.exception = e
+				self._stop_requested = True
+				self._condition.notifyAll()
 			except Exception, e:
 				self.exception = e
 				self._stop_requested = True
