@@ -28,7 +28,7 @@ class Wonderbuild(ScriptTask):
 		std_math = StdMathCheckTask.shared(check_cfg)
 		dlfcn = DlfcnCheckTask.shared(check_cfg)
 		pthread = PThreadCheckTask.shared(check_cfg)
-		boost = BoostCheckTask.shared((1, 33), ['signals', 'thread', 'filesystem'], check_cfg)
+		boost = BoostCheckTask.shared((1, 34), ['signals', 'thread', 'filesystem'], check_cfg)
 		mswindows = MSWindowsCheckTask.shared(check_cfg)
 		winmm = WinMMCheckTask.shared(check_cfg)
 
@@ -84,14 +84,19 @@ class Wonderbuild(ScriptTask):
 				pch.lib_task.apply_to(self.cfg)
 				if dlfcn: dlfcn.apply_to(self.cfg)
 				if pthread: pthread.apply_to(self.cfg)
+
 				if std_math: std_math.apply_to(self.cfg)
-				else: raise UserReadableException, 'need std math'
+				else: raise UserReadableException, 'universalis requires the standard math lib: ' + std_math.help
+
 				if boost: boost.apply_to(self.cfg)
-				else: raise UserReadableException, 'need boost'
+				else: raise UserReadableException, 'universalis requires the boost libs: ' + boost.help
+
 				if glibmm: glibmm.apply_to(self.cfg)
+
 				if mswindows:
 					if winmm: winmm.apply_to(self.cfg)
-					else: raise UserReadableException, 'need winmm on mswindows'
+					else: raise UserReadableException, 'on mswindows, universalis requires microsoft\'s windows multimedia extensions: ' + winmm.help
+
 				#sched_ctx.parallel_wait(diversalis.install)
 				diversalis.client_cfg.apply_to(self.cfg)
 				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)

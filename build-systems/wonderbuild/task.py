@@ -63,10 +63,13 @@ class CheckTask(ProjectTask):
 	@property
 	def desc(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
 
+	def __str__(self): return self.desc
+
+	@property
+	def help(self): return str(self)
+	
 	def do_check_and_set_result(self, sched_context): raise Exception, str(self.__class__) + ' did not redefine the method.'
 
-	def __str__(self): return self.desc
-	
 	@property
 	def result_display(self):
 		if self.result: return 'yes', '32'

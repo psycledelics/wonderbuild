@@ -21,6 +21,27 @@ class BoostCheckTask(MultiBuildCheckTask):
 		self.lib_names = lib_names
 
 	@property
+	def help(self):
+		s = \
+		'\nBoost libs ' + ', '.join(self.lib_names) + \
+		', in version ' + '.'.join(str(i) for i in self.min_version_tuple) + ' or greater.' \
+		'\nFor Debian-based distributions, use \'apt-cache search libboost\' to look for the packages.' \
+		'\nFor Cygwin, use \'cygcheck --package-query libboost\' to look for the packages.' \
+		'\nIf you don''t find them in your distribution\'s packages, you may go to http://boost.org .'
+		from wonderbuild.subprocess_wrapper import exec_subprocess_pipe
+		for args in (
+			('apt-cache', 'search', 'libboost'),
+			('cygcheck', '--package-query', 'libboost')
+		):
+			try: r, out, err = exec_subprocess_pipe(args, silent=True)
+			except: pass
+			else:
+				if r == 0: s += \
+					'\n\nResult of \'' + ' '.join(args) + \
+					'\':\n' + '\n'.join(out.split('\n'))
+		return s.replace('\n', '\n\t')
+
+	@property
 	def result(self): return self.results[0]
 
 	@property
