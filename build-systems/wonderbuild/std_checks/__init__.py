@@ -34,7 +34,7 @@ class BinaryFormatPeCheckTask(BuildCheckTask):
 
 	@property
 	def source_text(self): return \
-		'#if !defined _WIN32 && !defined __CYGWIN__\n' \
+		'#if !defined _WIN32 && !defined __CYGWIN__ && !defined __MSYS__ && !defined _UWIN\n' \
 		'	#error the target platform binary format is not pe\n' \
 		'#endif\n'
 
