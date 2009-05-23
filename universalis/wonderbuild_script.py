@@ -51,7 +51,7 @@ class Wonderbuild(ScriptTask):
 					return self._source_text
 
 			def __call__(self, sched_ctx):
-				sched_ctx.parallel_wait(std_math, dlfcn, pthread, boost, glibmm, mswindows, winmm)
+				sched_ctx.parallel_wait(std_math, dlfcn, pthread, boost, glibmm)
 				self.source_text
 				if std_math:
 					std_math.apply_to(self.cfg)
@@ -70,11 +70,6 @@ class Wonderbuild(ScriptTask):
 				if glibmm:
 					glibmm.apply_to(self.cfg)
 					self._source_text += '\n#include <glibmm.h>'
-				if mswindows:
-					self._source_text += '\n#include <windows.h>'
-					if winmm:
-						winmm.apply_to(self.cfg)
-						self._source_text += '\n#include <mmsystem.h>'
 				PreCompileTasks.__call__(self, sched_ctx)
 		pch = Pch()
 
@@ -84,7 +79,7 @@ class Wonderbuild(ScriptTask):
 			def __call__(self, sched_ctx):
 				install = Universalis.Install(self.project)
 				sched_ctx.parallel_no_wait(install)
-				sched_ctx.parallel_wait(pch.lib_task)
+				sched_ctx.parallel_wait(pch.lib_task, mswindows, winmm)
 				pch.lib_task.apply_to(self.cfg)
 				if dlfcn: dlfcn.apply_to(self.cfg)
 				if pthread: pthread.apply_to(self.cfg)
