@@ -48,7 +48,7 @@ else:
 				print >> sys.stderr, colored('2', 'wonderbuild: build time: ' + str(t) + 's')
 				if gc_enabled: gc.enable()
 		except UserReadableException, e:
-			print >> sys.stderr, colored('31', 'wonderbuild: failed: ' + str(e))
+			print >> sys.stderr, colored('31;1', 'wonderbuild: failed: ') + colored('31', str(e))
 			r = 1
 		sys.exit(r)
 

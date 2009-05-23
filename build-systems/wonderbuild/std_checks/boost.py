@@ -23,12 +23,9 @@ class BoostCheckTask(MultiBuildCheckTask):
 	@property
 	def help(self):
 		s = \
-		'Boost libs ' + ', '.join(self.lib_names) + \
-		', in version ' + '.'.join(str(i) for i in self.min_version_tuple) + ' or greater.\n' \
-		'\nFor Debian-based distributions, use \'apt-cache search libboost\' to look for the packages.' \
-		'\nFor Cygwin, use \'cygcheck --package-query libboost\' to look for the packages.' \
-		'\nIf you don''t find them in your distribution\'s packages, you may go to http://boost.org .' + \
-		self.help_package('libboost')
+			'Boost libs ' + ', '.join(self.lib_names) + \
+			', in version ' + '.'.join(str(i) for i in self.min_version_tuple) + ' or greater.' + \
+			'\n\n' + self.help_package('libboost', 'http://boost.org')
 		return s.replace('\n', '\n\t')
 
 	@property
