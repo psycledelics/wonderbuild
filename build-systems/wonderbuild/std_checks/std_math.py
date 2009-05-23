@@ -8,11 +8,11 @@ class StdMathCheckTask(MultiBuildCheckTask):
 	def __init__(self, base_cfg): MultiBuildCheckTask.__init__(self, 'c++-std-math', base_cfg)
 		
 	def do_check_and_set_result(self, sched_ctx):
-		t = StdMathCheckTask.SubCheckTask(self, False)
+		t = StdMathCheckTask.SubCheckTask(self, True)
 		sched_ctx.parallel_wait(t)
 		if t.result: self.results = t.result, t.m
 		else:
-			t = StdMathCheckTask.SubCheckTask(self, True)
+			t = StdMathCheckTask.SubCheckTask(self, False)
 			sched_ctx.parallel_wait(t)
 			if t.result: self.results = t.result, t.m
 			else: self.results = False, None
