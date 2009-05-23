@@ -76,7 +76,7 @@ class Impl(object):
 			#'-Fo' + obj.rel_path(cwd), # -Fo option defaults to input file with ext changed to .obj
 		]
 		r = exec_subprocess(args, cwd = cwd.path)
-		if r != 0: raise Exception, r
+		if r != 0: raise UserReadableException, precompile_task
 		lock.acquire()
 		try: deps, not_found = self.cpp.scan_deps(precompile_task.header, precompile_task.cfg.include_paths)
 		finally: lock.release()
@@ -96,7 +96,7 @@ class Impl(object):
 		args = cxx_task.cfg.cxx_args_bld + ['-c'] + [s.name for s in cxx_task._actual_sources]
 		cwd = cxx_task.target_dir
 		r = exec_subprocess(args, cwd = cwd.path)
-		if r != 0: raise Exception, r
+		if r != 0: raise UserReadableException, cxx_task
 		implicit_deps = cxx_task.persistent_implicit_deps
 		for s in cxx_task.sources:
 			lock.acquire()
@@ -164,7 +164,7 @@ class Impl(object):
 			if removed_obj_names is not None:
 				for o in removed_obj_names: args.append('-remove:' + o)
 		r = exec_subprocess(args)
-		if r != 0: raise Exception, r
+		if r != 0: raise UserReadableException, mod_task
 		# no ranlib with msvc
 
 	@staticmethod

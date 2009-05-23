@@ -52,7 +52,7 @@ class Impl(object):
 		args = cxx_task.cfg.cxx_args_bld + ['-c'] + [s.name for s in cxx_task._actual_sources]
 		cwd = cxx_task.target_dir
 		r = exec_subprocess(args, cwd = cwd.path)
-		if r != 0: raise Exception, r
+		if r != 0: raise UserReadableException, cxx_task
 		implicit_deps = cxx_task.persistent_implicit_deps
 		for s in cxx_task.sources:
 			lock.acquire()
@@ -108,7 +108,7 @@ class Impl(object):
 			args = mod_task.cfg.ld_args
 			args = [args[0], '-o' + mod_task.target.path] + obj_paths + args[1:]
 			r = exec_subprocess(args)
-			if r != 0: raise Exception, r
+			if r != 0: raise UserReadableException, mod_task
 		else:
 			ar_args, ranlib_args = mod_task.cfg.ar_ranlib_args
 			if len(obj_names) != 0:
@@ -117,19 +117,19 @@ class Impl(object):
 				args.append(mod_task.target.path)
 				args += obj_paths
 				r = exec_subprocess(args)
-				if r != 0: raise Exception, r
+				if r != 0: raise UserReadableException, mod_task
 			if removed_obj_names is not None:
 				if ranlib_args is None: args = [ar_args[0], '-d']
 				if ranlib_args is None: args.append('-s')
 				args.append(mod_task.target.path)
 				args += removed_obj_names
 				r = exec_subprocess(args)
-				if r != 0: raise Exception, r
+				if r != 0: raise UserReadableException, mod_task
 			if ranlib_args is not None: # '-s' not in ar_args
 				args = ranlib_args[:]
 				args.append(mod_task.target.path)
 				r = exec_subprocess(args)
-				if r != 0: raise Exception, r
+				if r != 0: raise UserReadableException, mod_task
 
 	@staticmethod
 	def mod_task_targets(mod_task): return (mod_task.target,)

@@ -4,6 +4,7 @@
 
 import os
 
+from wonderbuild import UserReadableException
 from wonderbuild.logger import is_debug, debug, colored, out_is_dumb
 from wonderbuild.signature import Sig
 from wonderbuild.subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
@@ -90,7 +91,7 @@ class Impl(object):
 			args.append('-o' + path)
 			path += '.d'
 		r = exec_subprocess(args)
-		if r != 0: raise Exception, r
+		if r != 0: raise UserReadableException, precompile_task
 		# reads deps from the .d files generated as side-effect of compilation by gcc's -MD or -MMD option
 		f = open(path, 'r')
 		try: deps = f.read().replace('\\\n', '')
@@ -115,7 +116,7 @@ class Impl(object):
 		args = cxx_task.cfg.cxx_args_bld + ['-c', '-MMD'] + [s.name for s in cxx_task._actual_sources]
 		cwd = cxx_task.target_dir
 		r = exec_subprocess(args, cwd = cwd.path)
-		if r != 0: raise Exception, r
+		if r != 0: raise UserReadableException, cxx_task
 		implicit_deps = cxx_task.persistent_implicit_deps
 		for s in zip(cxx_task.sources, cxx_task._actual_sources):
 			# reads deps from the .d files generated as side-effect of compilation by gcc's -MD or -MMD option
@@ -193,7 +194,7 @@ class Impl(object):
 				if False and mod_task.cfg.shared: # mingw doesn't need import libs
 					args.append('-Wl,--out-implib,' + (mod_task.cfg.fhs.lib / 'lib' + mod_task.target.name + '.dll.a').path)
 			r = exec_subprocess(args)
-			if r != 0: raise Exception, r
+			if r != 0: raise UserReadableException, mod_task
 		else:
 			ar_args, ranlib_args = mod_task.cfg.ar_ranlib_args
 			if len(obj_names) != 0:
@@ -202,16 +203,16 @@ class Impl(object):
 				args.append(mod_task.target.path)
 				args += obj_paths
 				r = exec_subprocess(args)
-				if r != 0: raise Exception, r
+				if r != 0: raise UserReadableException, mod_task
 			if removed_obj_names is not None:
 				args = [ar_args[0], ranlib_args is None and 'ds' or 'd', mod_task.target.path] + removed_obj_names
 				r = exec_subprocess(args)
-				if r != 0: raise Exception, r
+				if r != 0: raise UserReadableException, mod_task
 			if ranlib_args is not None: # 's' not in ar_args[1]
 				args = ranlib_args[:]
 				args.append(mod_task.target.path)
 				r = exec_subprocess(args)
-				if r != 0: raise Exception, r
+				if r != 0: raise UserReadableException, mod_task
 
 	@staticmethod
 	def mod_task_targets(mod_task): return (mod_task.target,)
