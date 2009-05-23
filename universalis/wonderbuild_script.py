@@ -53,26 +53,26 @@ class Wonderbuild(ScriptTask):
 			def __call__(self, sched_ctx):
 				sched_ctx.parallel_wait(std_math, dlfcn, pthread, boost, glibmm, mswindows, winmm)
 				self.source_text
-				if std_math.result:
+				if std_math:
 					std_math.apply_to(self.cfg)
 					self._source_text += '\n#include <cmath>'
-				if dlfcn.result:
+				if dlfcn:
 					dlfcn.apply_to(self.cfg)
 					self._source_text += '\n#include <dlfcn.h>'
-				if pthread.result:
+				if pthread:
 					pthread.apply_to(self.cfg)
 					self._source_text += '\n#include <pthread.h>'
-				if boost.result:
+				if boost:
 					boost.apply_to(self.cfg)
 					self._source_text += '\n#include <boost/thread.hpp>'
 					self._source_text += '\n#include <boost/filesystem/path.hpp>'
 					self._source_text += '\n#include <boost/signals.hpp>'
-				if glibmm.result:
+				if glibmm:
 					glibmm.apply_to(self.cfg)
 					self._source_text += '\n#include <glibmm.h>'
-				if mswindows.result:
+				if mswindows:
 					self._source_text += '\n#include <windows.h>'
-					if winmm.result:
+					if winmm:
 						winmm.apply_to(self.cfg)
 						self._source_text += '\n#include <mmsystem.h>'
 				PreCompileTasks.__call__(self, sched_ctx)
@@ -86,15 +86,15 @@ class Wonderbuild(ScriptTask):
 				sched_ctx.parallel_no_wait(install)
 				sched_ctx.parallel_wait(pch.lib_task)
 				pch.lib_task.apply_to(self.cfg)
-				if dlfcn.result: dlfcn.apply_to(self.cfg)
-				if pthread.result: pthread.apply_to(self.cfg)
-				if std_math.result: std_math.apply_to(self.cfg)
+				if dlfcn: dlfcn.apply_to(self.cfg)
+				if pthread: pthread.apply_to(self.cfg)
+				if std_math: std_math.apply_to(self.cfg)
 				else: raise Exception, 'need std math'
-				if boost.result: boost.apply_to(self.cfg)
+				if boost: boost.apply_to(self.cfg)
 				else: raise Exception, 'need boost'
-				if glibmm.result: glibmm.apply_to(self.cfg)
-				if mswindows.result:
-					if winmm.result: winmm.apply_to(self.cfg)
+				if glibmm: glibmm.apply_to(self.cfg)
+				if mswindows:
+					if winmm: winmm.apply_to(self.cfg)
 					else: raise Exception, 'need winmm on mswindows'
 				#sched_ctx.parallel_wait(diversalis.install)
 				diversalis.client_cfg.apply_to(self.cfg)

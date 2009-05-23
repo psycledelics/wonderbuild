@@ -7,6 +7,13 @@ from wonderbuild.cxx_tool_chain import BuildCheckTask
 # gcc -E -dM -std=c++98 -x c++-header /dev/null | sort
 
 class BinaryFormatElfCheckTask(BuildCheckTask):
+	@staticmethod
+	def shared(base_cfg):
+		try: return base_cfg.project.target_platform_binary_format_is_elf
+		except AttributeError:
+			task = base_cfg.project.target_platform_binary_format_is_elf = BinaryFormatElfCheckTask(base_cfg)
+			return task
+
 	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'binary-format-elf', base_cfg, compile=False)
 
 	@property
@@ -32,6 +39,13 @@ class BinaryFormatPeCheckTask(BuildCheckTask):
 		'#endif\n'
 
 class MSWindowsCheckTask(BuildCheckTask):
+	@staticmethod
+	def shared(base_cfg):
+		try: return base_cfg.project.target_platform_is_mswindows
+		except AttributeError:
+			task = base_cfg.project.target_platform_is_mswindows = MSWindowsCheckTask(base_cfg)
+			return task
+
 	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'ms-windows', base_cfg, compile=False)
 
 	@property
@@ -41,6 +55,13 @@ class MSWindowsCheckTask(BuildCheckTask):
 		'#endif\n'
 
 class CygwinCheckTask(BuildCheckTask):
+	@staticmethod
+	def shared(base_cfg):
+		try: return base_cfg.project.target_platform_is_cygwin
+		except AttributeError:
+			task = base_cfg.project.target_platform_is_cygwin = CygwinCheckTask(base_cfg)
+			return task
+
 	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'cygwin', base_cfg, compile=False)
 
 	@property
@@ -50,6 +71,13 @@ class CygwinCheckTask(BuildCheckTask):
 		'#endif\n'
 
 class MingwCheckTask(BuildCheckTask):
+	@staticmethod
+	def shared(base_cfg):
+		try: return base_cfg.project.cxx_compiler_is_mingw
+		except AttributeError:
+			task = base_cfg.project.cxx_compiler_is_mingw = MingwCheckTask(base_cfg)
+			return task
+
 	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'mingw', base_cfg, compile=False)
 
 	@property
@@ -59,6 +87,13 @@ class MingwCheckTask(BuildCheckTask):
 		'#endif\n'
 
 class AutoLinkSupportCheckTask(BuildCheckTask):
+	@staticmethod
+	def shared(base_cfg):
+		try: return base_cfg.project.cxx_compiler_has_auto_link_support
+		except AttributeError:
+			task = base_cfg.project.cxx_compiler_has_auto_link_support = AutoLinkSupportCheckTask(base_cfg)
+			return task
+
 	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'auto-link-support', base_cfg, compile=False)
 
 	@property
