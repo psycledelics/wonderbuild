@@ -56,7 +56,7 @@ class CheckTask(ProjectTask):
 			if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 		else:
 			if not silent:
-				desc = 'checking for ' + self.desc
+				desc = self.desc
 				self.print_check(desc)
 			self.do_check_and_set_result(sched_context)
 			self.persistent = self.sig, self.results
