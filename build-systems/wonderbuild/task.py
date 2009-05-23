@@ -68,6 +68,21 @@ class CheckTask(ProjectTask):
 	@property
 	def help(self): return str(self)
 	
+	def help_package(self, search):
+		from wonderbuild.subprocess_wrapper import exec_subprocess_pipe
+		s = ''
+		for args in (
+			('apt-cache', 'search', search),
+			('cygcheck', '--package-query', search)
+		):
+			try: r, out, err = exec_subprocess_pipe(args, silent=True)
+			except: pass
+			else:
+				if r == 0: s += \
+					'\n\nResult of \'' + ' '.join(args) + \
+					'\':\n\t' + '\n\t'.join(out.split('\n'))
+		return s
+	
 	def do_check_and_set_result(self, sched_context): raise Exception, str(self.__class__) + ' did not redefine the method.'
 
 	@property

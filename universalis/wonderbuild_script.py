@@ -28,7 +28,7 @@ class Wonderbuild(ScriptTask):
 		std_math = StdMathCheckTask.shared(check_cfg)
 		dlfcn = DlfcnCheckTask.shared(check_cfg)
 		pthread = PThreadCheckTask.shared(check_cfg)
-		boost = BoostCheckTask.shared((1, 34), ['signals', 'thread', 'filesystem'], check_cfg)
+		boost = BoostCheckTask.shared((1, 39), ['signals', 'thread', 'filesystem'], check_cfg)
 		mswindows = MSWindowsCheckTask.shared(check_cfg)
 		winmm = WinMMCheckTask.shared(check_cfg)
 
@@ -89,7 +89,7 @@ class Wonderbuild(ScriptTask):
 				else: raise UserReadableException, 'universalis requires the standard math lib: ' + std_math.help
 
 				if boost: boost.apply_to(self.cfg)
-				else: raise UserReadableException, 'universalis requires the boost libs: ' + boost.help
+				else: raise UserReadableException, 'universalis requires the folowing boost libs: ' + boost.help
 
 				if glibmm: glibmm.apply_to(self.cfg)
 
