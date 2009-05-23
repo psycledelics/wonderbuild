@@ -75,8 +75,7 @@ class Impl(object):
 			#'-Fp' + precompile_task.target.rel_path(cwd), # -Fp option defaults to input file with ext changed to .pch
 			#'-Fo' + obj.rel_path(cwd), # -Fo option defaults to input file with ext changed to .obj
 		]
-		r = exec_subprocess(args, cwd = cwd.path)
-		if r != 0: raise UserReadableException, precompile_task
+		if exec_subprocess(args, cwd = cwd.path) != 0: raise UserReadableException, precompile_task
 		lock.acquire()
 		try: deps, not_found = self.cpp.scan_deps(precompile_task.header, precompile_task.cfg.include_paths)
 		finally: lock.release()
@@ -84,7 +83,6 @@ class Impl(object):
 			debug('cpp: deps found: ' + str(precompile_task.header) + ': ' + str([str(d) for d in deps]))
 			if len(not_found) != 0: debug('cpp: deps not found: ' + str(precompile_task.header) + ': '+ str([str(x) for x in not_found]))
 		dep_sigs = [d.sig for d in deps]
-		#dep_sigs.sort()
 		precompile_task.persistent = precompile_task.sig, deps, Sig(''.join(dep_sigs)).digest()
 
 	def precompile_task_target_name(self, header_name): return header_name[:header_name.rfind('.')] + self.precompile_task_target_ext
@@ -95,8 +93,7 @@ class Impl(object):
 	def process_cxx_task(self, cxx_task, lock):
 		args = cxx_task.cfg.cxx_args_bld + ['-c'] + [s.name for s in cxx_task._actual_sources]
 		cwd = cxx_task.target_dir
-		r = exec_subprocess(args, cwd = cwd.path)
-		if r != 0: raise UserReadableException, cxx_task
+		if exec_subprocess(args, cwd = cwd.path) != 0: raise UserReadableException, cxx_task
 		implicit_deps = cxx_task.persistent_implicit_deps
 		for s in cxx_task.sources:
 			lock.acquire()
@@ -106,8 +103,7 @@ class Impl(object):
 				debug('cpp: deps found: ' + str(s) + ': ' + str([str(d) for d in deps]))
 				if len(not_found) != 0: debug('cpp: deps not found: ' + str(s) + ': '+ str([str(x) for x in not_found]))
 			dep_sigs = [d.sig for d in deps]
-			#dep_sigs.sort()
-			implicit_deps[s] = deps, Sig(''.join(dep_sigs)).digest()
+			implicit_deps[s] = cxx_task.cfg.cxx_sig, deps, Sig(''.join(dep_sigs)).digest()
 
 	@property
 	def cxx_task_target_ext(self): return '.obj'
@@ -163,8 +159,7 @@ class Impl(object):
 			args += obj_paths
 			if removed_obj_names is not None:
 				for o in removed_obj_names: args.append('-remove:' + o)
-		r = exec_subprocess(args)
-		if r != 0: raise UserReadableException, mod_task
+		if exec_subprocess(args) != 0: raise UserReadableException, mod_task
 		# no ranlib with msvc
 
 	@staticmethod

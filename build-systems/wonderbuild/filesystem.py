@@ -324,6 +324,9 @@ class Node(object):
 		self._time = None
 		try: del self._sig
 		except AttributeError: pass
+		try: del self._exists
+		except AttributeError: pass
+		if self._actual_children is not None: self._actual_children = self._old_children = None
 
 	def forget(self):
 		"detach the node from its parent. This is used to cut from the tree the branches we don't want to dump in the pickle"

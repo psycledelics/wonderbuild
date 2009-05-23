@@ -15,7 +15,7 @@ class Impl(object):
 
 	@staticmethod
 	def progs(cfg):
-		if not out_is_dumb: cxx_prog = ld_prog = ((cfg.project.fs.cur / __file__).parent / 'colorgcc').abs_path
+		if False and not out_is_dumb: cxx_prog = ld_prog = ((cfg.project.fs.cur / __file__).parent / 'colorgcc').abs_path
 		else: cxx_prog, ld_prog = cfg.cxx_prog, cfg.ld_prog or cfg.cxx_prog
 		return cxx_prog, ld_prog, 'ar', 'ranlib' # for gnu ar, 'ar s' is used instead of ranlib
 		# see also g++ -print-prog-name=ld
@@ -90,8 +90,7 @@ class Impl(object):
 			path = os.path.join(dir.path, 'x')
 			args.append('-o' + path)
 			path += '.d'
-		r = exec_subprocess(args)
-		if r != 0: raise UserReadableException, precompile_task
+		if exec_subprocess(args) != 0: raise UserReadableException, precompile_task
 		# reads deps from the .d files generated as side-effect of compilation by gcc's -MD or -MMD option
 		f = open(path, 'r')
 		try: deps = f.read().replace('\\\n', '')
@@ -103,7 +102,6 @@ class Impl(object):
 		finally: lock.release()
 		if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
 		dep_sigs = [d.sig for d in deps]
-		#dep_sigs.sort()
 		precompile_task.persistent = precompile_task.sig, deps, Sig(''.join(dep_sigs)).digest()
 
 	def precompile_task_target_name(self, header_name): return header_name + self.precompile_task_target_ext
@@ -111,14 +109,29 @@ class Impl(object):
 	@property
 	def precompile_task_target_ext(self): return '.gch'
 
-	@staticmethod
-	def process_cxx_task(cxx_task, lock):
+	def process_cxx_task(self, cxx_task, lock):
 		args = cxx_task.cfg.cxx_args_bld + ['-c', '-MMD'] + [s.name for s in cxx_task._actual_sources]
 		cwd = cxx_task.target_dir
-		r = exec_subprocess(args, cwd = cwd.path)
-		if r != 0: raise UserReadableException, cxx_task
+		if exec_subprocess(args, cwd = cwd.path) == 0:
+			succeeded_sources = zip(cxx_task.sources, cxx_task._actual_sources)
+			failed_sources = None
+		else:
+			# We check whether each object exists to determine which sources were compiled successfully,
+			# so that theses are not rebuilt the next time.
+			succeeded_sources = []
+			failed_sources = []
+			lock.acquire()
+			try:
+				cwd.clear()
+				cwd.actual_children # not needed, just an optimisation
+				for s in zip(cxx_task.sources, cxx_task._actual_sources):
+					obj = cwd / (s[1].name[:s[1].name.rfind('.')] + self.cxx_task_target_ext)
+					obj.clear()
+					if obj.exists: succeeded_sources.append(s)
+					else: failed_sources.append(s[0])
+			finally: lock.release()
 		implicit_deps = cxx_task.persistent_implicit_deps
-		for s in zip(cxx_task.sources, cxx_task._actual_sources):
+		for s in succeeded_sources:
 			# reads deps from the .d files generated as side-effect of compilation by gcc's -MD or -MMD option
 			path = s[1].path
 			f = open(path[:path.rfind('.')] + '.d', 'r')
@@ -131,8 +144,8 @@ class Impl(object):
 			finally: lock.release()
 			if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
 			dep_sigs = [d.sig for d in deps]
-			#dep_sigs.sort()
-			implicit_deps[s[0]] = deps, Sig(''.join(dep_sigs)).digest()
+			implicit_deps[s[0]] = cxx_task.cfg.cxx_sig, deps, Sig(''.join(dep_sigs)).digest()
+		if failed_sources is not None: raise UserReadableException, ' '.join(str(s) for s in failed_sources)
 
 	@property
 	def cxx_task_target_ext(self): return '.o'
@@ -193,8 +206,7 @@ class Impl(object):
 				args.append('-Wl,--enable-auto-import') # supress informational messages
 				if False and mod_task.cfg.shared: # mingw doesn't need import libs
 					args.append('-Wl,--out-implib,' + (mod_task.cfg.fhs.lib / 'lib' + mod_task.target.name + '.dll.a').path)
-			r = exec_subprocess(args)
-			if r != 0: raise UserReadableException, mod_task
+			if exec_subprocess(args) != 0: raise UserReadableException, mod_task
 		else:
 			ar_args, ranlib_args = mod_task.cfg.ar_ranlib_args
 			if len(obj_names) != 0:
@@ -202,17 +214,14 @@ class Impl(object):
 				if removed_obj_names is not None: args[1] = args[1].replace('s', '')
 				args.append(mod_task.target.path)
 				args += obj_paths
-				r = exec_subprocess(args)
-				if r != 0: raise UserReadableException, mod_task
+				if exec_subprocess(args) != 0: raise UserReadableException, mod_task
 			if removed_obj_names is not None:
 				args = [ar_args[0], ranlib_args is None and 'ds' or 'd', mod_task.target.path] + removed_obj_names
-				r = exec_subprocess(args)
-				if r != 0: raise UserReadableException, mod_task
+				if exec_subprocess(args) != 0: raise UserReadableException, mod_task
 			if ranlib_args is not None: # 's' not in ar_args[1]
 				args = ranlib_args[:]
 				args.append(mod_task.target.path)
-				r = exec_subprocess(args)
-				if r != 0: raise UserReadableException, mod_task
+				if exec_subprocess(args) != 0: raise UserReadableException, mod_task
 
 	@staticmethod
 	def mod_task_targets(mod_task): return (mod_task.target,)

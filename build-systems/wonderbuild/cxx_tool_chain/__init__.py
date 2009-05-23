@@ -146,7 +146,7 @@ class BuildCfg(ClientCfg):
 				sig.update(k)
 				if v is not None: sig.update(v)
 			for i in self.include_paths: sig.update(i.abs_path)
-			if self.pch is not None: sig.update(self.pch.path)
+			if self.pch is not None: sig.update(self.pch.abs_path)
 			for i in self.includes: sig.update(i.abs_path)
 			for f in self.cxx_flags: sig.update(f)
 			sig.update(self.impl.cxx_env_sig)
@@ -399,7 +399,6 @@ class _PreCompileTask(ProjectTask):
 						if __debug__ and is_debug: debug('cpp: deps not found: ' + str(self.header))
 						changed = True
 					else:
-						#dep_sigs.sort()
 						if old_dep_sig != Sig(''.join(dep_sigs)).digest():
 							# The cached implicit deps changed.
 							if __debug__ and is_debug: debug('cpp: deps changed: ' + str(self.header))
@@ -544,9 +543,6 @@ class BatchCompileTask(ProjectTask):
 					finally: f.close()
 				self._actual_sources.append(node)
 			self.cfg.impl.process_cxx_task(self, sched_context.lock)
-			# TODO If the compilation fails, compare each object timestamp with its source timestamp
-			# to determine which ones were compiled successfully,
-			# so that they are not rebuilt the next time.
 		finally: sched_context.lock.acquire()
 
 class ModTask(ProjectTask):
@@ -629,7 +625,7 @@ class ModTask(ProjectTask):
 			return self._target_dev_name
 
 	@property
-	def persistent_implicit_deps(self): return self.persistent[3]
+	def persistent_implicit_deps(self): return self.persistent[2]
 
 	def __call__(self, sched_context):
 		if len(self.dep_lib_tasks) != 0: sched_context.parallel_no_wait(*self.dep_lib_tasks)
@@ -643,48 +639,47 @@ class ModTask(ProjectTask):
 		try: state = self.persistent
 		except KeyError:
 			if __debug__ and is_debug: debug('task: no state: ' + str(self))
-			state = self.persistent = None, None, None, {}
+			state = self.persistent = None, None, {}
 			self._type_changed = False
 			changed_sources = self.sources
 		else:
 			self._type_changed = state[1] != self.ld
 			if __debug__ and is_debug and self._type_changed: debug('task: mod type changed: ' + str(self))
-			if state[2] != self.cfg.cxx_sig:
-				if __debug__ and is_debug: debug('task: cxx sig changed: ' + str(self))
-				changed_sources = self.sources
-			else:
-				changed_sources = []
-				implicit_deps = state[3]
-				for s in self.sources:
-					try: deps, old_dep_sig = implicit_deps[s] # TODO also put self.cfg.cxx_sig, and -include in implicit_deps
-					except KeyError:
-						# This is a new source.
+			changed_sources = []
+			implicit_deps = state[2]
+			for s in self.sources:
+				try: old_cxx_sig, deps, old_dep_sig = implicit_deps[s]
+				except KeyError:
+					# This is a new source.
+					changed_sources.append(s)
+					continue
+				try: dep_sigs = [dep.sig for dep in deps]
+				except OSError:
+					# A cached implicit dep does not exist anymore.
+					if __debug__ and is_debug: debug('cpp: deps not found: ' + str(s))
+					changed_sources.append(s)
+					continue
+				if old_dep_sig != Sig(''.join(dep_sigs)).digest():
+					# The cached implicit deps changed.
+					if __debug__ and is_debug: debug('cpp: deps changed: ' + str(s))
+					changed_sources.append(s)
+					continue
+				if old_cxx_sig != self.cfg.cxx_sig:
+					if __debug__ and is_debug: debug('task: cxx sig changed: ' + str(s))
+					changed_sources.append(s)
+					continue
+				if self.cfg.check_missing:
+					self.obj_dir.lock.acquire()
+					try:
+						try: self.obj_dir.actual_children # not needed, just an optimisation
+						except OSError: pass
+					finally: self.obj_dir.lock.release()
+					o = self.obj_dir / self._obj_name(s)
+					if not o.exists:
+						if __debug__ and is_debug: debug('task: target missing: ' + str(o))
 						changed_sources.append(s)
 						continue
-					try: dep_sigs = [dep.sig for dep in deps]
-					except OSError:
-						# A cached implicit dep does not exist anymore.
-						if __debug__ and is_debug: debug('cpp: deps not found: ' + str(s))
-						changed_sources.append(s)
-						continue
-					#dep_sigs.sort() # TODO use heapq
-					if old_dep_sig != Sig(''.join(dep_sigs)).digest():
-						# The cached implicit deps changed.
-						if __debug__ and is_debug: debug('cpp: deps changed: ' + str(s))
-						changed_sources.append(s)
-						continue
-					if self.cfg.check_missing:
-						self.obj_dir.lock.acquire()
-						try:
-							try: self.obj_dir.actual_children # not needed, just an optimisation
-							except OSError: pass
-						finally: self.obj_dir.lock.release()
-						o = self.obj_dir / self._obj_name(s)
-						if not o.exists:
-							if __debug__ and is_debug: debug('task: target missing: ' + str(o))
-							changed_sources.append(s)
-							continue
-					if __debug__ and is_debug: debug('task: skip: no change: ' + str(s))
+				if __debug__ and is_debug: debug('task: skip: no change: ' + str(s))
 		need_process = False
 		if len(changed_sources) != 0:
 			need_process = True
@@ -730,7 +725,7 @@ class ModTask(ProjectTask):
 						if __debug__ and is_debug: debug('task: in lib task changed: ' + str(self) + ' ' + str(t))
 						break
 		if not need_process:
-			implicit_deps = state[3]
+			implicit_deps = state[2]
 			if len(implicit_deps) > len(self.sources):
 				# some source has been removed from the list of sources to build
 				need_process = True
@@ -741,7 +736,7 @@ class ModTask(ProjectTask):
 			if self.kind != ModTask.Kinds.PROG and self.target_dir is not self.target_dev_dir: self.target_dev_dir.make_dir()
 			sched_context.lock.release()
 			try:
-				implicit_deps = state[3]
+				implicit_deps = state[2]
 				if len(implicit_deps) == len(self.sources):
 					source_states = implicit_deps
 					removed_obj_names = None
@@ -773,7 +768,7 @@ class ModTask(ProjectTask):
 					s.sort()
 					self.print_desc_multi_column_format(desc + ' ' + str(self) + ' from objects', s, color)
 				self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources], removed_obj_names)
-				self.persistent = self._mod_sig, self.ld, self.cfg.cxx_sig, source_states # TODO move cxx_sig into obj sig
+				self.persistent = self._mod_sig, self.ld, source_states
 			finally: sched_context.lock.acquire()
 		if not self.cfg.check_missing: self.obj_dir.forget()
 		self._needed_process = need_process
