@@ -9,7 +9,8 @@ from wonderbuild.logger import out, is_debug, debug, colored, silent
 from wonderbuild.signature import Sig
 from wonderbuild.option_cfg import OptionCfg
 from wonderbuild.fhs import FHS
-from wonderbuild.task import ProjectTask, CheckTask
+from wonderbuild.task import ProjectTask
+from wonderbuild.check_task import CheckTask
 from wonderbuild.subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 
 class ClientCfg(object):
