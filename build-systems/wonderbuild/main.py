@@ -10,38 +10,43 @@ if __name__ == '__main__':
 	from wonderbuild.main import main
 	main()
 else:
+	from wonderbuild import UserReadableException
 	from wonderbuild.options import parse_args, validate_options, print_help, OptionCollector
 
 	def main():
-		import time, gc
-		t = time.time()
-		gc_enabled = gc.isenabled()
-		if gc_enabled: gc.disable()
 		try:
-			options = parse_args(sys.argv[1:])
-			option_collector = OptionCollector()
-
-			import logger
-			logger.use_options(options)
-			option_collector.option_decls.add(logger)
-
-			option_collector.known_options.add('profile')
-			if 'help' in options: option_collector.help['profile'] = ('<file>', 'profile execution and put results in <file> (implies --jobs=1)')
-			profile = options.get('profile', None)
-			if profile is None: sys.exit(run(options, option_collector))
-			else:
-				import cProfile
-				# cProfile is only able to profile one thread
-				options['jobs'] = 1 # overrides possible previous jobs options
-				cProfile.run('from wonderbuild.main import run; run(options, option_collector)', profile)
-				import pstats
-				s = pstats.Stats(profile)
-				#s.sort_stats('time').print_stats(45)
-				s.sort_stats('cumulative').reverse_order().print_stats()
-		finally:
-			t = time.time() - t
-			print >> sys.stderr, 'wonderbuild: build time: ' + str(t) + 's'
-			if gc_enabled: gc.enable()
+			import time, gc
+			t = time.time()
+			gc_enabled = gc.isenabled()
+			if gc_enabled: gc.disable()
+			try:
+				options = parse_args(sys.argv[1:])
+				option_collector = OptionCollector()
+	
+				import logger
+				logger.use_options(options)
+				option_collector.option_decls.add(logger)
+	
+				option_collector.known_options.add('profile')
+				if 'help' in options: option_collector.help['profile'] = ('<file>', 'profile execution and put results in <file> (implies --jobs=1)')
+				profile = options.get('profile', None)
+				if profile is None: sys.exit(run(options, option_collector))
+				else:
+					import cProfile
+					# cProfile is only able to profile one thread
+					options['jobs'] = 1 # overrides possible previous jobs options
+					cProfile.run('from wonderbuild.main import run; run(options, option_collector)', profile)
+					import pstats
+					s = pstats.Stats(profile)
+					#s.sort_stats('time').print_stats(45)
+					s.sort_stats('cumulative').reverse_order().print_stats()
+			finally:
+				t = time.time() - t
+				print >> sys.stderr, 'wonderbuild: build time: ' + str(t) + 's'
+				if gc_enabled: gc.enable()
+		except UserReadableException, e:
+			print >> sys.stderr, 'wonderbuild: failed:', e
+			if profile is not None: sys.exit(1)
 
 	def run(options, option_collector):
 		if 'version' in options:

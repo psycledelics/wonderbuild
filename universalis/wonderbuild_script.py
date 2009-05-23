@@ -10,6 +10,7 @@ class Wonderbuild(ScriptTask):
 		project = self.project
 		src_dir = self.src_dir / 'src'
 		
+		from wonderbuild import UserReadableException
 		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, PreCompileTasks, ModTask
 		from wonderbuild.std_checks import MSWindowsCheckTask
 		from wonderbuild.std_checks.std_math import StdMathCheckTask
@@ -84,13 +85,13 @@ class Wonderbuild(ScriptTask):
 				if dlfcn: dlfcn.apply_to(self.cfg)
 				if pthread: pthread.apply_to(self.cfg)
 				if std_math: std_math.apply_to(self.cfg)
-				else: raise Exception, 'need std math'
+				else: raise UserReadableException, 'need std math'
 				if boost: boost.apply_to(self.cfg)
-				else: raise Exception, 'need boost'
+				else: raise UserReadableException, 'need boost'
 				if glibmm: glibmm.apply_to(self.cfg)
 				if mswindows:
 					if winmm: winmm.apply_to(self.cfg)
-					else: raise Exception, 'need winmm on mswindows'
+					else: raise UserReadableException, 'need winmm on mswindows'
 				#sched_ctx.parallel_wait(diversalis.install)
 				diversalis.client_cfg.apply_to(self.cfg)
 				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
