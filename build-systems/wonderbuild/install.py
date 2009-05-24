@@ -43,8 +43,7 @@ class InstallTask(ProjectTask, OptionCfg):
 
 	def __str__(self): return \
 		'installing from ' + str(self.trim_prefix) + \
-		' to ' + str(self.dest_dir) + \
-		': ' + ' '.join([s.rel_path(self.trim_prefix) for s in self.sources])
+		' to ' + str(self.dest_dir) # + ': ' + ' '.join([s.rel_path(self.trim_prefix) for s in self.sources])
 
 	@property
 	def uid(self):

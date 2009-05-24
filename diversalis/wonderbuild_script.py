@@ -5,37 +5,39 @@
 from wonderbuild.script import ScriptTask
 
 class Wonderbuild(ScriptTask):
-	def __call__(self, sched_ctx):
 
-		src_dir = self.src_dir / 'src'
+	@property
+	def client_headers(self): return self._client_headers
+
+	def __call__(self, sched_ctx):
 		project = self.project
+		src_dir = self.src_dir / 'src'
 
 		from wonderbuild.install import InstallTask
 	
-		class Diversalis(InstallTask):
+		class ClientHeaders(InstallTask):
 			def __init__(self): InstallTask.__init__(self, project)
 
 			@property
 			def trim_prefix(self): return src_dir
 
 			@property
+			def dest_dir(self): return self.fhs.include
+
+			@property
 			def sources(self):
 				try: return self._sources
 				except AttributeError:
 					self._sources = []
-					for s in (self.trim_prefix / 'diversalis').find_iter(in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)): self._sources.append(s)
+					for s in (self.trim_prefix / 'diversalis').find_iter(
+							in_pats = ('*.hpp',),
+							ex_pats = ('*.private.hpp',),
+							prune_pats = ('todo',)
+						): self._sources.append(s)
 					return self._sources
-	
-			@property
-			def dest_dir(self): return self.fhs.include
+			
+			def apply_to(self, cfg):
+				if not self.fhs.include in cfg.include_paths: cfg.include_paths.append(self.fhs.include)
 		
-		self.project.add_task_aliases(Diversalis(), 'all')
-	
-	@property
-	def client_cfg(self):
-		try: return self._client_cfg
-		except AttributeError:
-			from wonderbuild.cxx_tool_chain import ClientCfg
-			self._client_cfg = ClientCfg(self.project)
-			self._client_cfg.include_paths.append(self.src_dir / 'src')
-			return self._client_cfg
+		self._client_headers = ClientHeaders()
+		self.project.add_task_aliases(self._client_headers, 'diversalis', 'all')

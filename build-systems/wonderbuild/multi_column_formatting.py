@@ -62,7 +62,7 @@ def format(list, max_width):
 		result.append(line)
 	return result
 
-def fold(s, width):
+def fold(s, width): # TODO don't split the text in the middle of a word
 	l = []
 	for s in s.split('\n'):
 		if len(s) <= width: l.append(s)

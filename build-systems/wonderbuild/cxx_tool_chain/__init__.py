@@ -202,15 +202,15 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		return class_.clone(self, class_)
 
 	known_options = set([
+		'check-missing',
 		'cxx',
 		'cxx-flags',
-		'static',
-		'pic-static',
 		'ld',
 		'ld-flags',
 		'ar',
 		'ranlib',
-		'check-missing'
+		'static',
+		'pic-static'
 	])
 
 	@staticmethod
@@ -224,11 +224,6 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		help['ar']            = ('<prog>', 'use <prog> as static lib archiver', 'ar')
 		help['ranlib']        = ('<prog>', 'use <prog> as static lib archive indexer', 'the posix ar s flag is used instead')
 		
-		# posix compiler options
-		#help['optim']        = ('<0|1|n>', '...', '0')
-		#help['debug']        = ('<yes|no>', '...', 'no')
-		#help['strip']        = ('<yes|no>', '...', 'no')
-
 		help['static'] = ('<no|libs|full>',
 			'- no: builds shared libs and link programs dynamically against shared libs\n'
 			'- libs: build libs as static archives (rather than dynamic, shared libs)\n'
@@ -237,6 +232,11 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		help['pic-static'] = ('<yes|no>',
 			'whether to make the c++ compiler emit pic code even for static libs and programs\n' \
 			'(always pic for shared libs)', 'no (for static libs and programs)')
+
+		# posix compiler options -O -g -s
+		#help['optim']        = ('<0|1|n>', '...', '0')
+		#help['debug']        = ('<yes|no>', '...', 'no')
+		#help['strip']        = ('<yes|no>', '...', 'no')
 
 	@staticmethod
 	def new_or_clone(project):

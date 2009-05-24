@@ -15,6 +15,8 @@
 		#endif
 
 		#include <sys/unistd.h>
+		#include <dlfcn.h>
+		#include <pthread.h>
 
 		#if defined DIVERSALIS__COMPILER__MICROSOFT
 			#pragma message("pre-compiling " __FILE__ " ... done")
