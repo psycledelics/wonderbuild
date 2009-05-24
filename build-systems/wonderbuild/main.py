@@ -11,7 +11,7 @@ if __name__ == '__main__':
 	main()
 else:
 	from wonderbuild import UserReadableException
-	from wonderbuild.logger import colored
+	from wonderbuild.logger import out, colored, cols
 	from wonderbuild.options import parse_args, validate_options, print_help, OptionCollector
 
 	def main():
@@ -89,7 +89,7 @@ else:
 					option_collector.help['help'] = (None, 'show this help and exit')
 					option_collector.help['version'] = (None, 'show the version of this tool and exit')
 					option_collector.consolidate_help()
-					print_help(option_collector.help, sys.stdout)
+					print_help(option_collector.help, out, cols)
 					self.result = usage_error and 1 or 0
 					return
 

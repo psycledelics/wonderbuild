@@ -4,6 +4,8 @@
 
 import sys
 
+from multi_column_formatting import fold
+
 class OptionDecl(object):
 	known_options = set()
 	
@@ -47,7 +49,7 @@ def validate_options(options, known_options):
 				ok = False
 	return ok
 
-def print_help(help, out):
+def print_help(help, out, cols):
 	keys = []
 	def name(k, v):
 		if v is None: v = k
@@ -61,7 +63,10 @@ def print_help(help, out):
 		keys.append(k)
 	keys.sort()
 	just += 1
+	desc_width = cols - just - 1
+	def format(s): return ('\n ' + ' ' * just).join(fold(s, desc_width))
 	for k in keys:
 		v = help[k]
-		print >> out, name(k, v[0]).ljust(just), v[1]
-		if len(v) >= 3: print >> out, ''.ljust(just), '(default: ' + v[2] + ')'
+		print >> out, name(k, v[0]).ljust(just), format(v[1])
+		if len(v) >= 3: print >> out, ' '.ljust(just), format('(default: ' + v[2] + ')')
+

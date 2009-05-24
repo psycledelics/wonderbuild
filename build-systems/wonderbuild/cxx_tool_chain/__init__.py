@@ -204,9 +204,8 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 	known_options = set([
 		'cxx',
 		'cxx-flags',
-		'pic',
-		'shared-libs',
-		'static-progs',
+		'static',
+		'pic-static',
 		'ld',
 		'ld-flags',
 		'ar',
@@ -216,18 +215,28 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 
 	@staticmethod
 	def generate_option_help(help):
-		help['cxx']          = ('<prog>', 'use <prog> as c++ compiler')
-		help['cxx-flags']    = ('[flags]', 'use specific c++ compiler flags')
-		help['pic']          = ('<yes|no>', 'whether to make the c++ compiler emit pic code rather than non-pic code for static libs and programs (always pic for shared libs)', 'no (for static libs and programs)')
-		#help['shared']      = ('<yes|no|progs-only>', '...', 'yes')
-		#help['static']      = ('<no|libs|libs-and-progs>', '...', 'no')
-		help['shared-libs']  = ('<yes|no>', 'whether to build shared libs (rather than static libs)', 'yes unless the pic option is set explicitly to no or the static-progs option is set to yes')
-		help['static-progs'] = ('<yes|no>', 'whether to statically link programs (rather than dynamically using shared libs)', 'no')
-		help['ld']           = ('<prog>', 'use <prog> as shared lib and program linker')
-		help['ld-flags']     = ('[flags]', 'use specific linker flags')
-		help['ar']           = ('<prog>', 'use <prog> as static lib archiver', 'ar')
-		help['ranlib']       = ('<prog>', 'use <prog> as static lib archive indexer', 'the posix ar s flag is used instead')
-		help['check-missing']        = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'no')
+		help['check-missing'] = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'no')
+
+		help['cxx']           = ('<prog>', 'use <prog> as c++ compiler')
+		help['cxx-flags']     = ('[flags]', 'use specific c++ compiler flags')
+		help['ld']            = ('<prog>', 'use <prog> as shared lib and program linker')
+		help['ld-flags']      = ('[flags]', 'use specific linker flags')
+		help['ar']            = ('<prog>', 'use <prog> as static lib archiver', 'ar')
+		help['ranlib']        = ('<prog>', 'use <prog> as static lib archive indexer', 'the posix ar s flag is used instead')
+		
+		# posix compiler options
+		#help['optim']        = ('<0|1|n>', '...', '0')
+		#help['debug']        = ('<yes|no>', '...', 'no')
+		#help['strip']        = ('<yes|no>', '...', 'no')
+
+		help['static'] = ('<no|libs|full>',
+			'- no: builds shared libs and link programs dynamically against shared libs\n'
+			'- libs: build libs as static archives (rather than dynamic, shared libs)\n'
+			'- full: like libs but also statically link programs (rather than dynamically using shared libs)',
+			'no unless the static-progs option is set to yes')
+		help['pic-static'] = ('<yes|no>',
+			'whether to make the c++ compiler emit pic code even for static libs and programs\n' \
+			'(always pic for shared libs)', 'no (for static libs and programs)')
 
 	@staticmethod
 	def new_or_clone(project):
@@ -263,22 +272,17 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 				if flags is not None: self.cxx_flags = flags.split()
 				else: self.cxx_flags = []
 
-			if 'pic' in o: self.pic = o['pic'] != 'no'
-			else: self.pic = None
-
-			if 'shared-libs' in o: self.shared = o['shared-libs'] != 'no'
-			else: self.shared = None
+			if 'static' in o:
+				static = o['static']
+				self.shared = static not in ('libs', 'full')
+				self.static_prog = static == 'full'
+			else:
+				self.shared = True
+				self.static_prog = False
 			
-			if 'static-progs' in o:
-				self.static_prog = o['static-progs'] == 'yes'
-				if self.static_prog and self.shared is None: self.shared = False
-			else: self.static_prog = False
-
-			if self.pic is None:
-				if self.shared is None: self.shared = True
-				self.pic = False # this is for programs only
-			elif self.shared is None: self.shared = self.pic
-
+			if 'pic-static' in o: self.pic = o['pic-static'] != 'no'
+			else: self.pic = False # this is for programs only
+			
 			if 'ld' in o: self.ld_prog = o['ld']
 			if 'ld-flags' in o: self.ld_flags = o['ld-flags'].split()
 			else:

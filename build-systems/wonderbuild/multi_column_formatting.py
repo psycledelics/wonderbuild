@@ -61,3 +61,14 @@ def format(list, max_width):
 			if f >= list_len: break
 		result.append(line)
 	return result
+
+def fold(s, width):
+	l = []
+	for s in s.split('\n'):
+		if len(s) <= width: l.append(s)
+		else:
+			i = 0
+			while i < len(s):
+				l.append(s[i : i + width].strip())
+				i += width
+	return l
