@@ -53,12 +53,10 @@ class DetectImplCheckTask(CheckTask):
 		sched_context.lock.release()
 		try:
 			cfg = self.user_build_cfg
-			o = cfg.options
-			
 			# determine the kind of compiler
 			if cfg.cxx_prog is not None: # check the compiler specified in cfg.cxx_prog
 				if not silent:
-					desc = 'checking for ' + self.desc + ' ... ' + cfg.cxx_prog
+					desc = self.desc + ' ... ' + cfg.cxx_prog
 					self.print_check(desc)
 				try: r, out, err = exec_subprocess_pipe([cfg.cxx_prog, '-dumpversion'], silent=True)
 				except Exception, e:
@@ -74,7 +72,7 @@ class DetectImplCheckTask(CheckTask):
 					else: cfg.kind = None
 			else: # try some compilers program names until we found one available
 				if not silent:
-					desc = 'checking for ' + self.desc + ' ...'
+					desc = self.desc + ' ...'
 					self.print_check(desc + ' g++')
 				try: r, out, err = exec_subprocess_pipe(['g++', '-dumpversion'], silent=True)
 				except Exception, e:
@@ -105,7 +103,7 @@ class DetectImplCheckTask(CheckTask):
 			# set the impl corresponding to the kind
 			self.select_impl()
 			# read the version
-			if cfg.impl is not None: cfg.version = cfg.impl.parse_version(out, err)
+			cfg.version = cfg.impl is not None and cfg.impl.parse_version(out, err) or None
 		finally: sched_context.lock.acquire()
 		self.results = cfg.kind, cfg.version
 
@@ -115,7 +113,7 @@ class DetectImplCheckTask(CheckTask):
 		if cfg.kind == 'gcc':
 			from gcc_impl import Impl
 			cfg.impl = Impl()
-		elif kind == 'msvc':
+		elif cfg.kind == 'msvc':
 			from msvc_impl import Impl
 			cfg.impl = Impl(self.project.persistent)
 		elif cfg.kind == 'posix':

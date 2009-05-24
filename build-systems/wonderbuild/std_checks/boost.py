@@ -71,12 +71,13 @@ class BoostCheckTask(MultiBuildCheckTask):
 		selected_source_texts = [self.source_texts()[lib] for lib in self.lib_names]
 		lib_version = '-' + read_version.lib_version
 		
-		def link_check(toolset = None, lib_version = None):
-			threading = '-mt'
-			abi = ''
-			variant = (toolset or '') + (threading or '') + (abi or '') + (lib_version or '')
-			link_libs = toolset is not None and [lib + variant for lib in self.lib_names] or []
-			cfg_link_libs = ['boost_' + lib for lib in link_libs]
+		def link_check(**kw):
+			if kw.get('auto_link', False):
+				variant = '-auto-link'
+				cfg_link_libs = []
+			else:
+				variant = kw.get('toolset', '') + kw.get('threading', '-mt') + kw.get('abi', '') + kw.get('lib_version', '')
+				cfg_link_libs = ['boost_' + lib + variant for lib in self.lib_names]
 			outer = self
 			class AllInOneCheckTask(BuildCheckTask):
 				def __init__(self): BuildCheckTask.__init__(
@@ -103,9 +104,9 @@ class BoostCheckTask(MultiBuildCheckTask):
 			else: self.results = True, include_path, cfg_link_libs;
 			return self.result
 
-		auto_link_support_check_task = AutoLinkSupportCheckTask.shared(self.base_cfg)
-		sched_ctx.parallel_wait(auto_link_support_check_task)
-		if auto_link_support_check_task.result: link_check()
+		auto_link_support = AutoLinkSupportCheckTask.shared(self.base_cfg)
+		sched_ctx.parallel_wait(auto_link_support)
+		if auto_link_support: link_check(auto_link=True)
 		else:
 			if self.base_cfg.kind == 'gcc':
 				mingw_check_task = MingwCheckTask.shared(self.base_cfg)
@@ -119,10 +120,12 @@ class BoostCheckTask(MultiBuildCheckTask):
 				toolset = ''
 				versioned_toolset = None
 			versioned_toolset is not None and \
-				link_check(versioned_toolset, lib_version) or \
-				link_check(toolset, lib_version) or \
-				link_check(toolset, '') or \
-				link_check('', '')
+				link_check(toolset=versioned_toolset, lib_version=lib_version) or \
+				link_check(toolset=toolset, lib_version=lib_version) or \
+				link_check(toolset=versioned_toolset) or \
+				link_check(toolset=toolset) or \
+				link_check(lib_version=lib_version) or \
+				link_check()
 
 	class ReadVersion(BuildCheckTask):
 			def __init__(self, outer, include_path = None):
@@ -219,7 +222,7 @@ class BoostCheckTask(MultiBuildCheckTask):
 		except AttributeError:
 			source_texts = {}
 
-			def auto_link(name, dynamic = True):
+			def auto_link(name, dynamic=True):
 				result = \
 					"""
 						#define BOOST_LIB_NAME boost_%s
@@ -294,17 +297,17 @@ class BoostCheckTask(MultiBuildCheckTask):
 				"""
 					#include <boost/test/framework.hpp>
 					void unit_test_framework() { /* todo do something with it for a complete check */ }
-				""" + auto_link('unit_test_framework', dynamic = False)
+				""" + auto_link('unit_test_framework')
 			source_texts['prg_exec_monitor'] = \
 				"""
 					#include <boost/test/execution_monitor.hpp>
 					void prg_exec_monitor() { /* todo do something with it for a complete check */ }
-				""" + auto_link('prg_exec_monitor', dynamic = False)
+				""" + auto_link('prg_exec_monitor')
 			source_texts['test_exec_monitor'] = \
 				"""
 					#include <boost/test/execution_monitor.hpp>
 					void test_exec_monitor() { /* todo do something with it for a complete check */ }
-				""" + auto_link('test_exec_monitor', dynamic = False)
+				""" + auto_link('test_exec_monitor', dynamic=False)
 			source_texts['wave'] = \
 				"""
 					#include <boost/wave/wave_version.hpp>

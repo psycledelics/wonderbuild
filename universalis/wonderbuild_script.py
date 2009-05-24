@@ -24,11 +24,16 @@ class Wonderbuild(ScriptTask):
 
 		build_cfg = UserBuildCfg.new_or_clone(project)
 
+		if build_cfg.kind == 'msvc':
+			#build_cfg.defines['WINVER'] = '0x501' # select win xp explicitly because msvc 2008 defaults to vista
+			build_cfg.defines['BOOST_ALL_DYN_LINK'] = None
+			build_cfg.cxx_flags += ['-MD', '-EHa']
+
 		check_cfg = build_cfg.clone()
 		std_math = StdMathCheckTask.shared(check_cfg)
 		dlfcn = DlfcnCheckTask.shared(check_cfg)
 		pthread = PThreadCheckTask.shared(check_cfg)
-		boost = BoostCheckTask.shared((1, 33), ['signals', 'thread', 'filesystem'], check_cfg)
+		boost = BoostCheckTask.shared((1, 33), ('signals', 'thread', 'filesystem', 'date_time'), check_cfg)
 		mswindows = MSWindowsCheckTask.shared(check_cfg)
 		winmm = WinMMCheckTask.shared(check_cfg)
 
@@ -65,9 +70,10 @@ class Wonderbuild(ScriptTask):
 					self._source_text += '\n#include <pthread.h>'
 				if boost:
 					boost.apply_to(self.cfg)
+					self._source_text += '\n#include <boost/signals.hpp>'
 					self._source_text += '\n#include <boost/thread.hpp>'
 					self._source_text += '\n#include <boost/filesystem/path.hpp>'
-					self._source_text += '\n#include <boost/signals.hpp>'
+					self._source_text += '\n#include <boost/date_time/period.hpp>'
 				if glibmm:
 					glibmm.apply_to(self.cfg)
 					self._source_text += '\n#include <glibmm.h>'
