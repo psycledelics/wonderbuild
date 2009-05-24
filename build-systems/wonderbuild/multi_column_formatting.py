@@ -53,10 +53,8 @@ def format(list, max_width):
 		line = ''
 		while True: # print the next row
 			e = list[f]
-			name_len = len(e)
-			max_name_len = col_info.col_arr[col]
+			line += e.ljust(col_info.col_arr[col])
 			col += 1
-			line += e.ljust(max_name_len)
 			f += rows
 			if f >= list_len: break
 		result.append(line)

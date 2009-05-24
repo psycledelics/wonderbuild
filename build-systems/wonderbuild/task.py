@@ -21,13 +21,17 @@ class Task(object):
 		if len(line) > cols: line = desc + '\n\t' + '\n\t'.join(multi_column_formatting.format(list, cols - 8)) # less 8 because of the tab
 		out.write(colored(color, line) + '\n')
 		out.flush()
-
+	
 	def print_check(self, desc):
-		out.write(colored('34', 'wonderbuild: task: checking for ' + desc + ' ...') + '\n')
-		out.flush()
-		
+		if __debug__ and is_debug:
+			out.write(colored('34', 'wonderbuild: task: checking for ' + desc + ' ...') + '\n')
+			out.flush()
+	
 	def print_check_result(self, desc, result, color):
-		out.write(colored('34', 'wonderbuild: task: checking for ' + desc + ': ') + colored(color, result) + '\n')
+		if __debug__ and is_debug:
+			out.write(colored('34', 'wonderbuild: task: ... checked for ' + desc + ': ') + colored(color, result) + '\n')
+		else:
+			out.write(colored('34', 'wonderbuild: task: checked for ' + desc + ': ') + colored(color, result) + '\n')
 		out.flush()
 
 class ProjectTask(Task):
