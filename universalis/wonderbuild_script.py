@@ -24,10 +24,10 @@ class Wonderbuild(ScriptTask):
 
 		build_cfg = UserBuildCfg.new_or_clone(project)
 
-		if build_cfg.kind == 'msvc':
+		if build_cfg.kind == 'msvc': # XXX flags are a mess with msvc
 			#build_cfg.defines['WINVER'] = '0x501' # select win xp explicitly because msvc 2008 defaults to vista
 			build_cfg.defines['BOOST_ALL_DYN_LINK'] = None
-			build_cfg.cxx_flags += ['-MD', '-EHa']
+			build_cfg.cxx_flags += ['-EHa', '-MD']
 
 		check_cfg = build_cfg.clone()
 		std_math = StdMathCheckTask.shared(check_cfg)
@@ -86,8 +86,13 @@ class Wonderbuild(ScriptTask):
 			def __call__(self, sched_ctx):
 				install = Universalis.Install(self.project)
 				sched_ctx.parallel_no_wait(install)
-				sched_ctx.parallel_wait(pch.lib_task, mswindows, winmm)
-				pch.lib_task.apply_to(self.cfg)
+				if self.cfg.kind == 'msvc': # XXX pch has weird unresolved syms + pdb problems with msvc
+					sched_ctx.parallel_wait(std_math, dlfcn, pthread, boost, glibmm, mswindows, winmm)
+					self.cfg.defines['UNIVERSALIS__QUAQUAVERSALIS'] = None
+					self.cfg.ld_flags.append('user32.lib') # for the MessageBox function
+				else: 
+					sched_ctx.parallel_wait(pch.lib_task, mswindows, winmm)
+					pch.lib_task.apply_to(self.cfg)
 				if dlfcn: dlfcn.apply_to(self.cfg)
 				if pthread: pthread.apply_to(self.cfg)
 
