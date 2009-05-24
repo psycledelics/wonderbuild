@@ -157,11 +157,11 @@ class Impl(object):
 			sig = self._ld_env_sig = sig.digest()
 			return sig
 
-	@staticmethod
-	def cfg_ld_args(cfg):
+	def cfg_ld_args(self, cfg):
 		args = [cfg.ld_prog, '-nologo']
 		if cfg.shared: args.append('-dll')
 		elif cfg.static_prog: pass #args.append('-static')
+		if cfg.pch is not None: args.append((cfg.pch.parent / (cfg.pch.name[:cfg.pch.name.rfind('.')] + self.cxx_task_target_ext)).path)
 		for p in cfg.lib_paths: args.append('-libpath:' + p.path)
 		for l in cfg.libs: args.append(l + '.lib')
 		if len(cfg.static_libs):

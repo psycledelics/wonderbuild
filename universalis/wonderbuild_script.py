@@ -86,13 +86,8 @@ class Wonderbuild(ScriptTask):
 			def __call__(self, sched_ctx):
 				install = Universalis.Install(self.project)
 				sched_ctx.parallel_no_wait(install)
-				if self.cfg.kind == 'msvc': # XXX pch has weird unresolved syms + pdb problems with msvc
-					sched_ctx.parallel_wait(std_math, dlfcn, pthread, boost, glibmm, mswindows, winmm)
-					self.cfg.defines['UNIVERSALIS__QUAQUAVERSALIS'] = None
-					self.cfg.ld_flags.append('user32.lib') # for the MessageBox function
-				else: 
-					sched_ctx.parallel_wait(pch.lib_task, mswindows, winmm)
-					pch.lib_task.apply_to(self.cfg)
+				sched_ctx.parallel_wait(pch.lib_task, mswindows, winmm)
+				pch.lib_task.apply_to(self.cfg)
 				if dlfcn: dlfcn.apply_to(self.cfg)
 				if pthread: pthread.apply_to(self.cfg)
 
@@ -107,6 +102,10 @@ class Wonderbuild(ScriptTask):
 				if mswindows:
 					if winmm: winmm.apply_to(self.cfg)
 					else: raise UserReadableException, 'on mswindows, universalis requires microsoft\'s windows multimedia extensions: ' + winmm.help
+
+				if self.cfg.kind == 'msvc':
+					self.cfg.defines['UNIVERSALIS__QUAQUAVERSALIS'] = None
+					self.cfg.ld_flags.append('user32.lib') # for the MessageBox function
 
 				#sched_ctx.parallel_wait(diversalis.install)
 				diversalis.client_cfg.apply_to(self.cfg)
