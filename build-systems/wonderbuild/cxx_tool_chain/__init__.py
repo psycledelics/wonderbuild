@@ -330,7 +330,7 @@ class _PreCompileTask(ProjectTask):
 	def header(self):
 		try: return self._header
 		except AttributeError:
-			self._header = self.project.bld_dir / 'precompiled' / (self.name + '.private.hpp') # TODO .h for C
+			self._header = self.project.bld_dir / 'pre-compiled' / self.name / (self.name + '.private.hpp') # TODO .h for C
 			return self._header
 
 	@property
