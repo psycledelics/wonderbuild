@@ -96,6 +96,7 @@ class Project(Task):
 				self.sched_context.parallel_wait(*tasks)
 				self.processsing = False
 		finally:
+			if 'help' in self.options: return
 			#self.bld_dir.forget()
 			if False and __debug__ and is_debug: print self.persistent
 			gc_enabled = gc.isenabled()
