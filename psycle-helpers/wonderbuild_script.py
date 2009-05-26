@@ -18,39 +18,23 @@ if __name__ == '__main__':
 from wonderbuild.script import ScriptTask
 
 class Wonderbuild(ScriptTask):
-
-	@property
-	def client_headers(self): return self._client_headers
-
 	def __call__(self, sched_ctx):
 		project = self.project
+		top_src_dir = self.src_dir.parent
 		src_dir = self.src_dir / 'src'
 
+		from wonderbuild import UserReadableException
+		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, PreCompileTasks, ModTask
+		from wonderbuild.std_checks import MSWindowsCheckTask
+		from wonderbuild.std_checks.winmm import WinMMCheckTask
 		from wonderbuild.install import InstallTask
-	
-		class ClientHeaders(InstallTask):
-			def __init__(self): InstallTask.__init__(self, project)
 
-			@property
-			def trim_prefix(self): return src_dir
+		cfg = UserBuildCfg.new_or_clone(project)
+		if cfg.kind == 'msvc': # XXX flags are a mess with msvc
+			#cfg.defines['WINVER'] = '0x501' # select win xp explicitly because msvc 2008 defaults to vista
+			cfg.defines['BOOST_ALL_DYN_LINK'] = None # choose to link against boost dlls
+			cfg.cxx_flags += ['-EHa', '-MD'] # basic compilation flags required
 
-			@property
-			def dest_dir(self): return self.fhs.include
+		check_cfg = cfg.clone()
+		universalis = ScriptTask.shared(project, src_dir.parent.parent / 'universalis')
 
-			@property
-			def sources(self):
-				try: return self._sources
-				except AttributeError:
-					self._sources = []
-					for s in (self.trim_prefix / 'diversalis').find_iter(
-							in_pats = ('*.hpp',),
-							ex_pats = ('*.private.hpp',),
-							prune_pats = ('todo',)
-						): self._sources.append(s)
-					return self._sources
-			
-			def apply_to(self, cfg):
-				if not self.fhs.include in cfg.include_paths: cfg.include_paths.append(self.fhs.include)
-		
-		self._client_headers = ClientHeaders()
-		self.project.add_task_aliases(self._client_headers, 'diversalis', 'all')

@@ -248,10 +248,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 	def __init__(self, project):
 		BuildCfg.__init__(self, project)
 		OptionCfg.__init__(self, project)
-		
 		o = self.options
-		if 'help' in o: return
-
 		try:
 			old_sig, self.check_missing, \
 			self.cxx_prog, self.cxx_flags, self.pic, \
@@ -300,8 +297,9 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 
 		from detect_impl import DetectImplCheckTask
 		detect_impl = DetectImplCheckTask.shared(self)
-		self.project.sched_context.parallel_wait(detect_impl)
-		if self.impl is None: raise UserReadableException, 'unsupported c++ compiler'
+		if 'help' not in o:
+			self.project.sched_context.parallel_wait(detect_impl)
+			if self.impl is None: raise UserReadableException, 'no supported c++ compiler found'
 
 class _PreCompileTask(ProjectTask):
 	def __init__(self, name, base_cfg):

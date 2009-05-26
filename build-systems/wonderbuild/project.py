@@ -88,7 +88,9 @@ class Project(Task):
 		
 	def process_tasks_by_aliases(self):
 		try:
-			if self.list_aliases: print '\n'.join(str(k) + '\n\t' + '\n\t'.join(str(v) for v in v) for k, v in self.task_aliases.iteritems())
+			if self.list_aliases:
+				if 'help' in self.options: return
+				print '\n'.join(str(k) + '\n\t' + '\n\t'.join(str(v) for v in v) for k, v in self.task_aliases.iteritems())
 			else:
 				if self.requested_task_aliases is not None: tasks = self.tasks_with_aliases(self.requested_task_aliases)
 				else: tasks = self.task_aliases.get('all', ())
