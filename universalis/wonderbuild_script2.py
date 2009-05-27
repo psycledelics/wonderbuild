@@ -15,6 +15,85 @@ if __name__ == '__main__':
 		else: main()
 	else: main()
 
+class ModPhases(object):
+	def __init__(self):
+		self.check = None
+		self.cxx = None
+		self.mod = None
+
+class ModDep(ModPhases):
+	def apply_cxx_to(self, cfg): pass
+	def apply_private_mod_to(self, cfg): pass
+	def apply_public_mod_to(self, cfg): pass
+
+class MultiBuildCheckTask(CheckTask, ModDep):
+	def __init__(self):
+		self.check = self
+
+	def apply_cxx_to(self, cfg):
+		pass
+		
+	def apply_private_mod_to(self, cfg):
+		self.apply_public_mod_to(cfg)
+
+	def apply_public_mod_to(self, cfg):
+		pass
+
+class _DoModTask(Task):
+	def __init__(self, mod_task):
+		self.mod_task = mod_task
+
+	def __call__(self, sched_ctx):
+		mod_task = self.mod_task
+		sched_ctx.parallel_wait(mod_task)
+		sched_ctx.parallel_wait(*mod_task.all_deps) # normally already processed by mod_task
+		sched_ctx.parallel_wait(*(dep.cxx for dep in mod_task.all_deps))
+		mod_task.do_mod(sched_ctx)
+		for dep in all_deps: dep.apply_cxx_to(mod_task.cfg)
+		if mod_task.ld:
+			t = [dep.mod for dep in mod_task.all_deps]
+		t += batches
+		sched_ctx.parallel_wait(*t)
+		if mod_task.ld:
+			for dep in all_deps: dep.apply_private_mod_to(mod_task.cfg)
+		mod_task.cfg.impl.process_mod_task(mod_task)
+
+class ModTask(ProjectTask, ModDep):
+	def __init__(self, name, kind, base_cfg, *aliases):
+		if len(aliases) == 0: aliases = (name,)
+		ProjectTask.__init__(self, base_cfg.project, *aliases)
+		self.name = name
+		self.kind = kind
+		self.base_cfg = base_cfg
+		self.sources = []
+		self.mod = _DoModTask(self)
+		self.project.add_task_aliases(self.mod, *self.aliases)
+	
+	@property
+	def all_deps(self): return self.private_deps + self.public_deps
+		
+	def __call__(self, sched_ctx):
+		self.private_deps = [] # of ModDep
+		self.public_deps = [] # of ModDep
+		self.cxx = None
+
+	def do_mod(self, sched_ctx):
+		pass
+
+	def apply_cxx_to(self, cfg):
+		if self in cfg.applied: return
+		for dep in self.public_deps: dep.apply_cxx_to(cfg)
+
+	def apply_public_mod_to(self, cfg):
+		if self in cfg.applied: return
+		for dep in self.public_deps: dep.apply_public_mod_to(cfg)
+		if not self.target_dev_dir in cfg.lib_paths: cfg.lib_paths.append(self.target_dev_dir)
+		cfg.libs.append(self.target_dev_name)
+
+	def apply_private_mod_to(self, cfg):
+		if self in cfg.applied: return
+		for dep in self.all_deps: dep.apply_private_mod_to(cfg)
+
 from wonderbuild.script import ScriptTask
 
 class Wonderbuild(ScriptTask):
@@ -22,10 +101,7 @@ class Wonderbuild(ScriptTask):
 	def pch(self): return self._pch
 	
 	@property
-	def client_headers(self): return self._client_headers
-
-	@property
-	def client_mod(self): return self._client_mod
+	def mod(self): return self._mod
 
 	def __call__(self, sched_ctx):
 		project = self.project
@@ -58,6 +134,7 @@ class Wonderbuild(ScriptTask):
 		winmm = WinMMCheckTask.shared(check_cfg)
 		diversalis = ScriptTask.shared(project, src_dir.parent.parent / 'diversalis')
 
+		# used by pch too
 		cfg.defines['UNIVERSALIS__SOURCE'] = cfg.shared and '1' or '-1'
 		cfg.include_paths.extend([
 			src_dir,
@@ -91,24 +168,34 @@ class Wonderbuild(ScriptTask):
 				self.cfg.include_paths.append(top_src_dir / 'build-systems' / 'src')
 				PreCompileTasks.__call__(self, sched_ctx)
 
-		class UniversalisMod(ModTask):
-			def __init__(self): ModTask.__init__(self, 'universalis', ModTask.Kinds.LIB, cfg)
-
+		class Universalis(ModTask):
+			def __init__(self):
+				ModTask.__init__(self, 'universalis', ModTask.Kinds.LIB, cfg)
+				self.check = self
+				
 			def __call__(self, sched_ctx):
-				sched_ctx.parallel_wait(pch.lib_task, mswindows, winmm)
-				self.apply_to(self.cfg)
-				for x in (pch.lib_task,): x.apply_to(self.cfg)
-				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
+				self.private_deps += [pch.lib_task]
+				self.public_deps += [diversalis, std_math, boost]
+				sched_ctx.parallel_wait(dlfcn, pthread, glibmm, mswindows, winmm)
+				self.public_deps += [x for x in (dlfcn, pthread, glibmm) if x]
+				if mswindows:
+					if winmm: self.public_deps.append(winmm)
+					else: raise UserReadableException, 'on mswindows, universalis requires microsoft\'s windows multimedia extensions: ' + winmm.help
+				self.result = True
+				self.cxx = UniversalisClientHeaders()
 				ModTask.__call__(self, sched_ctx)
 			
-			def apply_to(self, cfg):
-				for x in (diversalis.client_headers, std_math, boost): x.apply_to(cfg)
-				for x in (dlfcn, pthread, glibmm):
-					if x: x.apply_to(cfg)
-				if mswindows:
-					if winmm: winmm.apply_to(cfg)
-					else: raise UserReadableException, 'on mswindows, universalis requires microsoft\'s windows multimedia extensions: ' + winmm.help
+			def do_mod(self):
+				self.cfg.defines['UNIVERSALIS__SOURCE'] = self.cfg.shared and '1' or '-1'
+				self.cfg.include_paths.extend([src_dir, src_dir / 'universalis' / 'standard_library' / 'future_std_include'])
+				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 			
+			def apply_cxx_to(self, cfg):
+				for i in (self.cxx.dest_dir, self.cxx.dest_dir / 'standard_library' / 'future_std_include'):
+					if not i in cfg.include_paths: cfg.include_paths.append(i)
+				if not self.cfg.shared: cfg.defines['UNIVERSALIS__SOURCE'] = '-1'
+				ModTask.apply_cxx_to(self, cfg)
+		
 		class UniversalisClientHeaders(InstallTask):
 			def __init__(self): InstallTask.__init__(self, project)
 
@@ -129,14 +216,10 @@ class Wonderbuild(ScriptTask):
 						in_pats = ('condition', 'cstdint', 'date_time', 'mutex', 'thread'),
 						prune_pats = ('*',)): self._sources.append(s)
 					return self._sources
-			
-			def apply_to(self, cfg):
-				if not self.fhs.include in cfg.include_paths: cfg.include_paths.append(self.fhs.include)
-				cfg.include_paths.append(self.fhs.include / 'universalis' / 'standard_library' / 'future_std_include')
-				if not cfg.shared: cfg.defines['UNIVERSALIS__SOURCE'] = '0'
 		
 		self._client_headers = headers = UniversalisClientHeaders()
 		self._pch = pch = Pch()
-		self._mod = mod = UniversalisMod()
-		self.project.add_task_aliases(mod, 'all')
-		self.project.add_task_aliases(headers, 'universalis', 'all')
+		self._mod = mod = Universalis()
+		self.project.add_task_aliases(mod, 'universalis', 'all')
+		self.project.add_task_aliases(mod.cxx, 'universalis', 'all')
+		self.project.add_task_aliases(mod.mod, 'universalis', 'all')
