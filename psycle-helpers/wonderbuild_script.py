@@ -38,3 +38,22 @@ class Wonderbuild(ScriptTask):
 		check_cfg = cfg.clone()
 		universalis = ScriptTask.shared(project, src_dir.parent.parent / 'universalis')
 
+		class Helpers(ModTask):
+			def __init__(self): ModTask.__init__(self, 'psycle-helpers', ModTask.Kinds.LIB, cfg)
+
+			def __call__(self, sched_ctx):
+				#sched_ctx.parallel_wait(pch.lib_task, universalis.mod)
+				#self.apply_to(self.cfg)
+				#for x in (pch.lib_task, universalis.mod): x.apply_to(self.cfg)
+				for s in (src_dir / 'psycle' / 'helpers').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
+				ModTask.__call__(self, sched_ctx)
+			
+			def apply_to(self, cfg):
+				for x in (universalis.client_cxx_cfg): x.apply_to(cfg)
+				for x in (dlfcn, pthread, glibmm):
+					if x: x.apply_to(cfg)
+				if mswindows:
+					if winmm: winmm.apply_to(cfg)
+					else: raise UserReadableException, 'on mswindows, universalis requires microsoft\'s windows multimedia extensions: ' + winmm.help
+		helpers = Helpers()
+		self.project.add_task_aliases(helpers, 'all')
