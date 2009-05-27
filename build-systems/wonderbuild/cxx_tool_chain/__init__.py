@@ -64,6 +64,7 @@ class BuildCfg(ClientCfg):
 		self.check_missing = False
 		self.fhs = FHS.shared(project)
 		self.impl = self.kind = self.version = None
+		# following two used only in the impl, so could be moved there
 		self.target_platform_binary_format_is_pe = None
 		self.pic_flag_defines_pic = None
 

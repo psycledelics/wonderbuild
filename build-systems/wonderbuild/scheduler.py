@@ -3,6 +3,7 @@
 # copyright 2007-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import os, threading
+from collections import deque
 
 from wonderbuild import UserReadableException
 from logger import is_debug, debug, colored, silent
@@ -41,8 +42,8 @@ class Scheduler(object):
 		def notify(self, count = 1): pass
 		def notifyAll(self): pass
 
-	def process(self, tasks):
-		self._task_queue = tasks
+	def process(self, *tasks):
+		self._task_queue = deque(tasks)
 		self._todo_count = len(tasks)
 		for task in tasks:
 			task._queued = True
@@ -160,7 +161,7 @@ class Scheduler(object):
 		notify = 0
 		for task in tasks:
 			if not task._processed and not task._queued:
-				self._task_queue.append(task)
+				self._task_queue.appendleft(task)
 				task._queued = True
 				notify += 1
 		if notify != 0:

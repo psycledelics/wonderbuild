@@ -107,6 +107,6 @@ else:
 			validate_options(options, option_collector.known_options)
 			raise
 
-		Scheduler(options).process([main_task])
+		Scheduler(options).process(main_task)
 
 		return main_task.result
