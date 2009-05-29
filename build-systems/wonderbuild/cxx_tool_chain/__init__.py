@@ -305,10 +305,8 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 
 class ModDepPhases(object):
 	def __init__(self): self.cxx = self.mod = None
-
 	def apply_cxx_to(self, cfg): pass
-	def apply_private_mod_to(self, cfg): pass
-	def apply_public_mod_to(self, cfg): pass
+	def apply_mod_to(self, cfg): pass
 
 class _PreCompileTask(ProjectTask, ModDepPhases):
 	def __init__(self, name, base_cfg):
@@ -635,17 +633,12 @@ class ModTask(ProjectTask, ModDepPhases):
 		if self in cfg._applied: return
 		for dep in self.public_deps: dep.apply_cxx_to(cfg)
 		cfg._applied.add(self)
-
-	def apply_public_mod_to(self, cfg):
+	
+	def apply_mod_to(self, cfg):
 		if self in cfg._applied: return
-		for dep in self.public_deps: dep.apply_public_mod_to(cfg)
+		for dep in self.shared and self.public_deps or self.all_deps: dep.apply_mod_to(cfg)
 		if not self.target_dev_dir in cfg.lib_paths: cfg.lib_paths.append(self.target_dev_dir)
 		cfg.libs.append(self.target_dev_name)
-		cfg._applied.add(self)
-
-	def apply_private_mod_to(self, cfg):
-		if self in cfg._applied: return
-		for dep in self.all_deps: dep.apply_private_mod_to(cfg)
 		cfg._applied.add(self)
 
 	class _CallbackTask(Task):
@@ -662,8 +655,6 @@ class ModTask(ProjectTask, ModDepPhases):
 		sched_ctx.parallel_wait(*(dep for dep in self.all_deps))
 		sched_ctx.parallel_wait(*(dep.cxx for dep in self.all_deps if dep.cxx is not None))
 		for dep in self.all_deps: dep.apply_cxx_to(self.cfg)
-		self.do_mod()
-		for dep in self.all_deps: dep.apply_public_mod_to(self.cfg)
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, we don't need pkg-config cxx flags in the signature
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.project, self.cfg.pkg_config)
@@ -672,6 +663,7 @@ class ModTask(ProjectTask, ModDepPhases):
 			if self.ld:
 				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask.shared(self.project, self.cfg.pkg_config, self.cfg.shared or not self.cfg.static_prog)
 				sched_ctx.parallel_no_wait(pkg_config_ld_flags_task)
+		self.do_mod()
 		try: state = self.persistent
 		except KeyError:
 			if __debug__ and is_debug: debug('task: no state: ' + str(self))
@@ -748,7 +740,7 @@ class ModTask(ProjectTask, ModDepPhases):
 					break
 		sched_ctx.parallel_wait(*tasks)
 		if self.ld:
-			for dep in self.all_deps: dep.apply_private_mod_to(self.cfg)
+			for dep in self.all_deps: dep.apply_mod_to(self.cfg)
 			if not need_process:
 				for dep in self.all_deps:
 					# when a dependant lib is a static archive, or changes its type from static to shared, we need to relink.
@@ -858,8 +850,6 @@ class _PkgConfigTask(CheckTask):
 	@property
 	def what_args(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
 
-	def apply_to(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
-
 	@property
 	def args(self): return [self.prog] + self.pkgs + self.what_args
 
@@ -929,6 +919,8 @@ class _PkgConfigFlagsTask(_PkgConfigTask):
 
 	@property
 	def result_display(self): return ' '.join(self.result), '32'
+
+	def apply_to(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
 
 class _PkgConfigCxxFlagsTask(_PkgConfigFlagsTask):
 	@classmethod
