@@ -42,10 +42,10 @@ class Wonderbuild(ScriptTask):
 				sched_ctx.parallel_wait(std_math, glibmm)
 				self.source_text
 				if std_math:
-					std_math.apply_to(self.cfg)
+					std_math.apply_cxx_to(self.cfg)
 					self._source_text += '\n#include <cmath>'
 				if glibmm:
-					glibmm.apply_to(self.cfg)
+					glibmm.apply_cxx_to(self.cfg)
 					self._source_text += '\n#include <glibmm.h>'
 				PreCompileTasks.__call__(self, sched_ctx)
 		pch = Pch()
@@ -54,15 +54,16 @@ class Wonderbuild(ScriptTask):
 			def __init__(self): ModTask.__init__(self, 'foo', ModTask.Kinds.LIB, build_cfg)
 
 			def __call__(self, sched_ctx):
-				install = LibFoo.Install(self.project)
-				sched_ctx.parallel_no_wait(install)
-				sched_ctx.parallel_wait(pch.lib_task)
-				pch.lib_task.apply_to(self.cfg)
-				if std_math: std_math.apply_to(self.cfg)
-				if glibmm: glibmm.apply_to(self.cfg)
-				for s in (src_dir / 'foo').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 				ModTask.__call__(self, sched_ctx)
-				sched_ctx.wait(install)
+				self.private_deps += [pch.lib_task]
+				sched_ctx.parallel_wait(std_math, glibmm)
+				for opt in (std_math, glibmm):
+					if opt: self.public_deps.append(opt)
+				for s in (src_dir / 'foo').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
+				self.cxx = LibFoo.Install(self.project)
+
+			def apply_cxx_to(self, cfg):
+				if not self.cxx.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx.dest_dir)
 
 			class Install(InstallTask):
 				@property
@@ -81,16 +82,14 @@ class Wonderbuild(ScriptTask):
 		lib_foo = LibFoo()
 	
 		class MainProg(ModTask):
-			def __init__(self): ModTask.__init__(self, 'main', ModTask.Kinds.PROG, build_cfg)
+			def __init__(self): ModTask.__init__(self, 'main', ModTask.Kinds.PROG, build_cfg, 'default')
 
 			def __call__(self, sched_ctx):
-				self.dep_lib_tasks.append(lib_foo)
-				sched_ctx.parallel_no_wait(*self.dep_lib_tasks)
-				sched_ctx.parallel_wait(pch.prog_task)
-				pch.prog_task.apply_to(self.cfg)
-				if glibmm: glibmm.apply_to(self.cfg)
-				for s in (src_dir / 'main').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 				ModTask.__call__(self, sched_ctx)
+				self.public_deps += [lib_foo]
+				self.private_deps += [pch.prog_task]
+				sched_ctx.parallel_wait(glibmm)
+				for opt in (glibmm,):
+					if opt: self.public_deps.append(opt)
+				for s in (src_dir / 'main').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 		main_prog = MainProg()
-		
-		self.project.add_task_aliases(main_prog, 'all')
