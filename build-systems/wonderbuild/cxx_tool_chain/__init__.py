@@ -353,6 +353,7 @@ class _PreCompileTask(ProjectTask, ModDepPhases):
 
 	def __call__(self, sched_ctx):
 		if len(self.cfg.pkg_config) != 0:
+			self.cfg.cxx_sig # compute the signature before, we don't need pkg-config cxx flags in the signature
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.project, self.cfg.pkg_config)
 			sched_ctx.parallel_wait(pkg_config_cxx_flags_task)
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
@@ -393,7 +394,7 @@ class _PreCompileTask(ProjectTask, ModDepPhases):
 				if not silent: 
 					if self.cfg.pic: pic = 'pic'; color = '7;1;35'
 					else: pic = 'non-pic'; color = '7;35'
-					self.print_desc('pre-compiling ' + pic + ' c++ ' + str(self), color)
+					self.print_desc('pre-compiling ' + pic + ' c++ ' + str(self.header), color)
 				dir = self.header.parent
 				dir.make_dir(dir.parent)
 				f = open(self.header.path, 'w')
@@ -535,18 +536,19 @@ class ModTask(ProjectTask, ModDepPhases):
 		self.kind = kind
 		self.base_cfg = base_cfg
 		self.sources = []
-		if kind != ModTask.Kinds.HEADERS:
-			self.mod = ModTask._CallbackTask(self)
-			self.project.add_task_aliases(self.mod, *aliases)
-		else:
+		if kind == ModTask.Kinds.HEADERS:
 			self.cxx = kw['cxx']
 			self.project.add_task_aliases(kw['cxx'], *aliases)
+		else:
+			self.mod = ModTask._CallbackTask(self)
+			self.project.add_task_aliases(self.mod, *aliases)
 
 	@property
 	def ld(self):
 		try: return self._ld
 		except AttributeError:
-			if self.kind == ModTask.Kinds.PROG: self._ld = True
+			if self.kind == ModTask.Kinds.HEADERS: self._ld = False
+			elif self.kind == ModTask.Kinds.PROG: self._ld = True
 			else: self._ld = self.cfg.shared
 			return self._ld
 
@@ -662,6 +664,7 @@ class ModTask(ProjectTask, ModDepPhases):
 		self.do_mod()
 		for dep in self.all_deps: dep.apply_cxx_to(self.cfg)
 		if len(self.cfg.pkg_config) != 0:
+			self.cfg.cxx_sig # compute the signature before, we don't need pkg-config cxx flags in the signature
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.project, self.cfg.pkg_config)
 			sched_ctx.parallel_wait(pkg_config_cxx_flags_task)
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
@@ -719,6 +722,8 @@ class ModTask(ProjectTask, ModDepPhases):
 						changed_sources.append(s)
 						continue
 				if __debug__ and is_debug: debug('task: skip: no change: ' + str(s))
+		if self.ld: tasks = [dep.mod for dep in self.all_deps if dep.mod is not None]
+		else: tasks = []
 		need_process = False
 		if len(changed_sources) != 0:
 			need_process = True
@@ -740,31 +745,23 @@ class ModTask(ProjectTask, ModDepPhases):
 					need_process = True
 					tasks = []
 					break
-		dep_mod_processed = False
-		if need_process:
-			if not self.ld: sched_ctx.parallel_wait(*tasks)
-			else:
-				tasks = [dep.mod for dep in self.all_deps if dep.mod is not None] + tasks
-				sched_ctx.parallel_wait(*tasks)
-				dep_mod_processed = True
-		if not need_process:
-			if state[0] != self._mod_sig:
+		sched_ctx.parallel_wait(*tasks)
+		for dep in self.all_deps: dep.apply_private_mod_to(self.cfg)
+		if not need_process and self.ld:
+			for dep in self.all_deps:
+				# when a dependant lib is a static archive, or changes its type from static to shared, we need to relink.
+				# when the check-missing option is on, we also relink to check that external symbols still exist.
+				try: need_process = dep._needed_process and (not dep.ld or dep._type_changed or self.cfg.check_missing)
+				except AttributeError: continue # not a lib task
+				if need_process:
+					if __debug__ and is_debug: debug('task: dep lib task changed: ' + str(self) + ' ' + str(dep))
+					break
+		if self.ld and len(self.cfg.pkg_config) != 0:
+				self.cfg.ld_sig # compute the signature before, we don't need pkg-config ld flags in the signature
+		if not need_process and state[0] != self._mod_sig:
 				if __debug__ and is_debug: debug('task: mod sig changed: ' + str(self))
 				changed_sources = self.sources
 				need_process = True
-			elif self.ld:
-				if not dep_mod_processed:
-					tasks = [dep.mod for dep in self.all_deps if dep.mod is not None]
-					sched_ctx.parallel_wait(*tasks)
-				dep_mod_processed = True
-				for dep in self.all_deps:
-					# when a dependant lib is a static archive, or changes its type from static to shared, we need to relink.
-					# when the check-missing option is on, we also relink to check that external symbols still exist.
-					try: need_process = dep._needed_process and (not dep.ld or dep._type_changed or self.cfg.check_missing)
-					except AttributeError: continue # not a lib task
-					if need_process:
-						if __debug__ and is_debug: debug('task: dep lib task changed: ' + str(self) + ' ' + str(dep))
-						break
 		if not need_process:
 			implicit_deps = state[2]
 			if len(implicit_deps) > len(self.sources):
@@ -773,12 +770,7 @@ class ModTask(ProjectTask, ModDepPhases):
 		if not need_process:
 			if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 		else:
-			if self.ld:
-				if not dep_mod_processed:
-					tasks = [dep.mod for dep in self.all_deps if dep.mod is not None]
-					sched_ctx.parallel_wait(*tasks)
-				for dep in self.all_deps: dep.apply_private_mod_to(self.cfg)
-				if len(self.cfg.pkg_config) != 0:
+			if self.ld and len(self.cfg.pkg_config) != 0:
 					sched_ctx.wait(pkg_config_ld_flags_task)
 					pkg_config_ld_flags_task.apply_to(self.cfg)
 			self.target_dir.make_dir()
@@ -834,7 +826,8 @@ class ModTask(ProjectTask, ModDepPhases):
 		try: return self.__mod_sig
 		except AttributeError:
 			sig = Sig(self.target_dir.abs_path)
-			if self.kind != ModTask.Kinds.PROG and self.target_dir is not self.target_dev_dir: sig.update(self.target_dev_dir.abs_path)
+			if self.kind not in (ModTask.Kinds.PROG, ModTask.Kinds.HEADERS) and \
+				self.target_dir is not self.target_dev_dir: sig.update(self.target_dev_dir.abs_path)
 			if self.ld: sig.update(self.cfg.ld_sig)
 			else: sig.update(self.cfg.ar_ranlib_sig)
 			self.__mod_sig = sig = sig.digest()
