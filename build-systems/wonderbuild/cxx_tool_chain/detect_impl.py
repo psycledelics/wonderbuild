@@ -42,15 +42,15 @@ class DetectImplCheckTask(CheckTask):
 	@property
 	def version(self): return self.results[1]
 	
-	def __call__(self, sched_context):
-		CheckTask.__call__(self, sched_context)
+	def __call__(self, sched_ctx):
+		CheckTask.__call__(self, sched_ctx)
 		cfg = self.user_build_cfg
 		cfg.kind = self.kind
 		cfg.version = self.version
 		self.setup_build_cfg()
 	
-	def do_check_and_set_result(self, sched_context):
-		sched_context.lock.release()
+	def do_check_and_set_result(self, sched_ctx):
+		sched_ctx.lock.release()
 		try:
 			cfg = self.user_build_cfg
 			# determine the kind of compiler
@@ -104,7 +104,7 @@ class DetectImplCheckTask(CheckTask):
 			self.select_impl()
 			# read the version
 			cfg.version = cfg.impl is not None and cfg.impl.parse_version(out, err) or None
-		finally: sched_context.lock.acquire()
+		finally: sched_ctx.lock.acquire()
 		self.results = cfg.kind, cfg.version
 
 	def select_impl(self):
@@ -138,6 +138,6 @@ class DetectImplCheckTask(CheckTask):
 
 			cfg.pic_flag_defines_pic = True # allows it to be reentrant during the check itself
 
-			self.project.sched_context.parallel_wait(pe, pic)
+			self.project.sched_ctx.parallel_wait(pe, pic)
 			cfg.target_platform_binary_format_is_pe = pe.result
 			cfg.pic_flag_defines_pic = pic.result

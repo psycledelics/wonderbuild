@@ -20,22 +20,23 @@ class ScriptLoaderTask(ProjectTask):
 
 	def __init__(self, project, script):
 		ProjectTask.__init__(self, project)
-		if script.is_dir: script = script / default_script_file
 		self.script = script
 		
-	def __str__(self): return str(self.script)
+	def __str__(self): return 'script ' + str(self.script) + ' (loading)'
 
-	def __call__(self, sched_context):
+	def __call__(self, sched_ctx):
+		script = self.script
+		if script.is_dir: script = script / default_script_file
 		d = {}
-		execfile(self.script.path, d)
-		self.task = d['Wonderbuild'](self.project, self.script.parent)
-		sched_context.parallel_wait(self.task)
+		execfile(script.path, d)
+		self.task = d['Wonderbuild'](self.project, script.parent)
+		sched_ctx.parallel_wait(self.task)
 
 class ScriptTask(ProjectTask):
 	@staticmethod	
 	def shared(project, *scripts):
 		script_tasks = [ScriptLoaderTask.shared(project, script) for script in scripts]
-		project.sched_context.parallel_wait(*script_tasks)
+		project.sched_ctx.parallel_wait(*script_tasks)
 		if len(scripts) == 1: return script_tasks[0].task
 		else: return (script_task.task for script_task in script_tasks)
 
@@ -43,5 +44,4 @@ class ScriptTask(ProjectTask):
 		ProjectTask.__init__(self, project)
 		self.src_dir = src_dir
 
-	def __str__(self): return str(self.__class__) + ' in src dir ' + str(self.src_dir)
-
+	def __str__(self): return 'script ' + str(self.src_dir) + ' (execution)'

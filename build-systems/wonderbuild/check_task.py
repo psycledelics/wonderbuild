@@ -3,7 +3,7 @@
 # copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 from task import ProjectTask
-from logger import is_debug, debug, silent
+from logger import out, colored, is_debug, debug, silent
 import multi_column_formatting
 
 class CheckTask(ProjectTask):
@@ -23,12 +23,24 @@ class CheckTask(ProjectTask):
 	@property
 	def uid(self): Exception, str(self.__class__) + ' did not redefine the property.'
 
+	def print_check(self, desc):
+		if __debug__ and is_debug:
+			out.write(colored('34', 'wonderbuild: task: checking for ' + desc + ' ...') + '\n')
+			out.flush()
+	
+	def print_check_result(self, desc, result, color):
+		if __debug__ and is_debug:
+			out.write(colored('34', 'wonderbuild: task: ... checked for ' + desc + ': ') + colored(color, result) + '\n')
+		else:
+			out.write(colored('34', 'wonderbuild: task: checked for ' + desc + ': ') + colored(color, result) + '\n')
+		out.flush()
+
 	@property
 	def desc(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
 
 	def do_check_and_set_result(self, sched_context): raise Exception, str(self.__class__) + ' did not redefine the method.'
 
-	def __str__(self): return self.desc
+	def __str__(self): return 'check ' + self.desc
 
 	@property
 	def help(self): return str(self)

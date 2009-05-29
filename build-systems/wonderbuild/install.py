@@ -42,7 +42,7 @@ class InstallTask(ProjectTask, OptionCfg):
 			self.project.persistent[str(self.__class__)] = self.options_sig, self.check_missing
 
 	def __str__(self): return \
-		'installing from ' + str(self.trim_prefix) + \
+		'install from ' + str(self.trim_prefix) + \
 		' to ' + str(self.dest_dir) # + ': ' + ' '.join([s.rel_path(self.trim_prefix) for s in self.sources])
 
 	@property

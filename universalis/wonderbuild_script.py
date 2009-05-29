@@ -22,10 +22,7 @@ class Wonderbuild(ScriptTask):
 	def pch(self): return self._pch
 	
 	@property
-	def client_headers(self): return self._client_headers
-
-	@property
-	def client_mod(self): return self._client_mod
+	def mod(self): return self._mod
 
 	def __call__(self, sched_ctx):
 		project = self.project
@@ -56,8 +53,9 @@ class Wonderbuild(ScriptTask):
 		glibmm = PkgConfigCheckTask.shared(project, ['glibmm-2.4 >= 2.4', 'gmodule-2.0 >= 2.0', 'gthread-2.0 >= 2.0'])
 		mswindows = MSWindowsCheckTask.shared(check_cfg)
 		winmm = WinMMCheckTask.shared(check_cfg)
-		diversalis = ScriptTask.shared(project, src_dir.parent.parent / 'diversalis')
+		diversalis = ScriptTask.shared(project, src_dir.parent.parent / 'diversalis').mod
 
+		# used by pch too
 		cfg.defines['UNIVERSALIS__SOURCE'] = cfg.shared and '1' or '-1'
 		cfg.include_paths.extend([
 			src_dir,
@@ -75,40 +73,52 @@ class Wonderbuild(ScriptTask):
 					return self._source_text
 
 			def __call__(self, sched_ctx):
-				sched_ctx.parallel_wait(std_math, dlfcn, pthread, boost, glibmm, diversalis.client_headers)
+				sched_ctx.parallel_no_wait(diversalis, std_math, dlfcn, pthread, boost, glibmm)
+				sched_ctx.wait(diversalis)
+				sched_ctx.parallel_no_wait(diversalis.cxx)
+				sched_ctx.wait(diversalis.cxx, std_math, dlfcn, pthread, boost, glibmm)
 				
-				if std_math: std_math.apply_to(self.cfg)
+				if std_math: std_math.apply_cxx_to(self.cfg)
 				else: raise UserReadableException, 'universalis requires the standard math lib: ' + std_math.help
 
-				if boost: boost.apply_to(self.cfg)
+				if boost: boost.apply_cxx_to(self.cfg)
 				else: raise UserReadableException, 'universalis requires the folowing boost libs: ' + boost.help
 
-				diversalis.client_headers.apply_to(self.cfg)
+				diversalis.apply_cxx_to(self.cfg)
 
 				for opt in (dlfcn, pthread, glibmm):
-					if opt: opt.apply_to(self.cfg)
+					if opt: opt.apply_cxx_to(self.cfg)
 
 				self.cfg.include_paths.append(top_src_dir / 'build-systems' / 'src')
 				PreCompileTasks.__call__(self, sched_ctx)
 
 		class UniversalisMod(ModTask):
-			def __init__(self): ModTask.__init__(self, 'universalis', ModTask.Kinds.LIB, cfg)
-
+			def __init__(self): ModTask.__init__(self, 'universalis', ModTask.Kinds.LIB, cfg, 'universalis', 'default')
+				
 			def __call__(self, sched_ctx):
-				sched_ctx.parallel_wait(pch.lib_task, mswindows, winmm)
-				self.apply_to(self.cfg)
-				for x in (pch.lib_task,): x.apply_to(self.cfg)
-				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
-				ModTask.__call__(self, sched_ctx)
-			
-			def apply_to(self, cfg):
-				for x in (diversalis.client_headers, std_math, boost): x.apply_to(cfg)
-				for x in (dlfcn, pthread, glibmm):
-					if x: x.apply_to(cfg)
+				self.private_deps = [pch.lib_task]
+				self.public_deps = [diversalis, std_math, boost]
+				sched_ctx.parallel_no_wait(dlfcn, pthread, glibmm, mswindows, winmm)
+				sched_ctx.parallel_wait(dlfcn, pthread, glibmm, mswindows)
+				self.public_deps += [x for x in (dlfcn, pthread, glibmm) if x]
 				if mswindows:
-					if winmm: winmm.apply_to(cfg)
+					sched_ctx.wait(winmm)
+					if winmm: self.public_deps.append(winmm)
 					else: raise UserReadableException, 'on mswindows, universalis requires microsoft\'s windows multimedia extensions: ' + winmm.help
+				self.result = True
+				self.cxx = UniversalisClientHeaders()
 			
+			def do_mod(self):
+				self.cfg.defines['UNIVERSALIS__SOURCE'] = self.cfg.shared and '1' or '-1'
+				self.cfg.include_paths.extend([src_dir, src_dir / 'universalis' / 'standard_library' / 'future_std_include'])
+				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
+			
+			def apply_cxx_to(self, cfg):
+				for i in (self.cxx.dest_dir, self.cxx.dest_dir / 'standard_library' / 'future_std_include'):
+					if not i in cfg.include_paths: cfg.include_paths.append(i)
+				if not self.cfg.shared: cfg.defines['UNIVERSALIS__SOURCE'] = '-1'
+				ModTask.apply_cxx_to(self, cfg)
+		
 		class UniversalisClientHeaders(InstallTask):
 			def __init__(self): InstallTask.__init__(self, project)
 
@@ -129,14 +139,6 @@ class Wonderbuild(ScriptTask):
 						in_pats = ('condition', 'cstdint', 'date_time', 'mutex', 'thread'),
 						prune_pats = ('*',)): self._sources.append(s)
 					return self._sources
-			
-			def apply_to(self, cfg):
-				if not self.fhs.include in cfg.include_paths: cfg.include_paths.append(self.fhs.include)
-				cfg.include_paths.append(self.fhs.include / 'universalis' / 'standard_library' / 'future_std_include')
-				if not cfg.shared: cfg.defines['UNIVERSALIS__SOURCE'] = '0'
 		
-		self._client_headers = headers = UniversalisClientHeaders()
 		self._pch = pch = Pch()
 		self._mod = mod = UniversalisMod()
-		self.project.add_task_aliases(mod, 'all')
-		self.project.add_task_aliases(headers, 'universalis', 'all')

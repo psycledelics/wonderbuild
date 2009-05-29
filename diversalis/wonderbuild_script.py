@@ -20,15 +20,33 @@ from wonderbuild.script import ScriptTask
 class Wonderbuild(ScriptTask):
 
 	@property
-	def client_headers(self): return self._client_headers
+	def mod(self): return self._mod
 
 	def __call__(self, sched_ctx):
 		project = self.project
 		src_dir = self.src_dir / 'src'
 
+		from wonderbuild.cxx_tool_chain import UserBuildCfg, ModTask
 		from wonderbuild.install import InstallTask
+
+		cfg = UserBuildCfg.new_or_clone(project)
 	
-		class ClientHeaders(InstallTask):
+		class DiversalisMod(ModTask):
+			def __init__(self): ModTask.__init__(self, 'diversalis', ModTask.Kinds.LIB, cfg, 'diversalis', 'default')
+				
+			def __call__(self, sched_ctx):
+				self.private_deps = []
+				self.public_deps = []
+				self.result = True
+				self.cxx = DiversalisClientHeaders()
+			
+			def do_mod(self): pass
+			
+			def apply_cxx_to(self, cfg):
+				if not self.cxx.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx.dest_dir)
+				ModTask.apply_cxx_to(self, cfg)
+
+		class DiversalisClientHeaders(InstallTask):
 			def __init__(self): InstallTask.__init__(self, project)
 
 			@property
@@ -48,9 +66,5 @@ class Wonderbuild(ScriptTask):
 							prune_pats = ('todo',)
 						): self._sources.append(s)
 					return self._sources
-			
-			def apply_to(self, cfg):
-				if not self.fhs.include in cfg.include_paths: cfg.include_paths.append(self.fhs.include)
 		
-		self._client_headers = ClientHeaders()
-		self.project.add_task_aliases(self._client_headers, 'diversalis', 'all')
+		self._mod = mod = DiversalisMod()

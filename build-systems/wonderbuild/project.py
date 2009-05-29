@@ -70,11 +70,13 @@ class Project(Task):
 		self.top_src_dir = self.fs.cur / src_path
 		self.bld_dir = self.fs.cur / bld_path
 
-	def __call__(self, sched_context): self.sched_context = sched_context
+	def __call__(self, sched_ctx): self.sched_ctx = sched_ctx
 
 	def add_task_aliases(self, task, *aliases):
 		if self.processsing: return # no need to add aliases during processing
-		if len(aliases) == 0: aliases = (None,)
+		if len(aliases) == 0:
+			if __debug__ and is_debug: aliases = (None,)
+			else: return
 		if __debug__ and is_debug: debug('project: aliases: ' + str(aliases) + ' ' + str(task.__class__))
 		for a in aliases:
 			try: self.task_aliases[a].append(task)
@@ -90,12 +92,18 @@ class Project(Task):
 		try:
 			if self.list_aliases:
 				if 'help' in self.options: return
-				print '\n'.join(str(k) + '\n\t' + '\n\t'.join(str(v) for v in v) for k, v in self.task_aliases.iteritems())
+				keys = self.task_aliases.keys()
+				keys.sort()
+				for k in keys:
+					if not (__debug__ and is_debug) and k is None: continue
+					v = [str(v) for v in self.task_aliases[k]]
+					v.sort()
+					print (k and str(k) or '<none>') + '\n\t' + '\n\t'.join(v)
 			else:
 				if self.requested_task_aliases is not None: tasks = self.tasks_with_aliases(self.requested_task_aliases)
-				else: tasks = self.task_aliases.get('all', ())
+				else: tasks = self.task_aliases.get('default', ())
 				self.processsing = True
-				self.sched_context.parallel_wait(*tasks)
+				self.sched_ctx.parallel_wait(*tasks)
 				self.processsing = False
 		finally:
 			if 'help' in self.options: return
