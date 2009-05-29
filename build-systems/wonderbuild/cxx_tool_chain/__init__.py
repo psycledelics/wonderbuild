@@ -661,8 +661,9 @@ class ModTask(ProjectTask, ModDepPhases):
 		sched_ctx.parallel_wait(self)
 		sched_ctx.parallel_wait(*(dep for dep in self.all_deps))
 		sched_ctx.parallel_wait(*(dep.cxx for dep in self.all_deps if dep.cxx is not None))
-		self.do_mod()
 		for dep in self.all_deps: dep.apply_cxx_to(self.cfg)
+		self.do_mod()
+		for dep in self.all_deps: dep.apply_public_mod_to(self.cfg)
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, we don't need pkg-config cxx flags in the signature
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.project, self.cfg.pkg_config)
@@ -746,17 +747,18 @@ class ModTask(ProjectTask, ModDepPhases):
 					tasks = []
 					break
 		sched_ctx.parallel_wait(*tasks)
-		for dep in self.all_deps: dep.apply_private_mod_to(self.cfg)
-		if not need_process and self.ld:
-			for dep in self.all_deps:
-				# when a dependant lib is a static archive, or changes its type from static to shared, we need to relink.
-				# when the check-missing option is on, we also relink to check that external symbols still exist.
-				try: need_process = dep._needed_process and (not dep.ld or dep._type_changed or self.cfg.check_missing)
-				except AttributeError: continue # not a lib task
-				if need_process:
-					if __debug__ and is_debug: debug('task: dep lib task changed: ' + str(self) + ' ' + str(dep))
-					break
-		if self.ld and len(self.cfg.pkg_config) != 0:
+		if self.ld:
+			for dep in self.all_deps: dep.apply_private_mod_to(self.cfg)
+			if not need_process:
+				for dep in self.all_deps:
+					# when a dependant lib is a static archive, or changes its type from static to shared, we need to relink.
+					# when the check-missing option is on, we also relink to check that external symbols still exist.
+					try: need_process = dep._needed_process and (not dep.ld or dep._type_changed or self.cfg.check_missing)
+					except AttributeError: continue # not a lib task
+					if need_process:
+						if __debug__ and is_debug: debug('task: dep lib task changed: ' + str(self) + ' ' + str(dep))
+						break
+			if len(self.cfg.pkg_config) != 0:
 				self.cfg.ld_sig # compute the signature before, we don't need pkg-config ld flags in the signature
 		if not need_process and state[0] != self._mod_sig:
 				if __debug__ and is_debug: debug('task: mod sig changed: ' + str(self))
