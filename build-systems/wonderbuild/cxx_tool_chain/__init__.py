@@ -623,7 +623,11 @@ class ModTask(ProjectTask, ModDepPhases):
 	def persistent_implicit_deps(self): return self.persistent[2]
 
 	@property
-	def all_deps(self): return self.private_deps + self.public_deps
+	def all_deps(self):
+		try: return self._all_deps
+		except AttributeError:
+			self._all_deps = self.private_deps + self.public_deps
+			return self._all_deps
 
 	def __call__(self, sched_ctx):
 		self.private_deps = [] # of ModDepPhases
@@ -659,11 +663,12 @@ class ModTask(ProjectTask, ModDepPhases):
 		def __str__(self): return 'module ' + str(self.mod_task.target) + ' (build)'
 
 		def __call__(self, sched_ctx):
-			if self.mod_task.cxx is not None: sched_ctx.parallel_wait(self.mod_task.cxx)
+			sched_ctx.parallel_wait(self.mod_task)
 			self.mod_task._callback(sched_ctx)
 	
 	def _callback(self, sched_ctx):
 		sched_ctx.parallel_wait(self)
+		if self.cxx is not None: sched_ctx.parallel_no_wait(self.cxx)
 		sched_ctx.parallel_wait(*(dep for dep in self.all_deps))
 		if self.ld: sched_ctx.parallel_no_wait(*(dep.mod for dep in self.all_deps if dep.mod is not None))
 		sched_ctx.parallel_wait(*(dep.cxx for dep in self.all_deps if dep.cxx is not None))
