@@ -522,11 +522,12 @@ class BatchCompileTask(ProjectTask):
 
 class ModTask(ProjectTask, ModDepPhases):
 	class Kinds(object):
-		PROG = 0
-		LIB = 1 # TODO allow the developer to specify that a lib is not dll-aware
-		LOADABLE = 2
+		HEADERS = 0
+		PROG = 1
+		LIB = 2 # TODO allow the developer to specify that a lib is not dll-aware
+		LOADABLE = 3
 
-	def __init__(self, name, kind, base_cfg, *aliases):
+	def __init__(self, name, kind, base_cfg, *aliases, **kw):
 		if len(aliases) == 0: aliases = (name,)
 		ProjectTask.__init__(self, base_cfg.project)
 		ModDepPhases.__init__(self)
@@ -534,8 +535,12 @@ class ModTask(ProjectTask, ModDepPhases):
 		self.kind = kind
 		self.base_cfg = base_cfg
 		self.sources = []
-		self.mod = ModTask._CallbackTask(self)
-		self.project.add_task_aliases(self.mod, *aliases)
+		if kind != ModTask.Kinds.HEADERS:
+			self.mod = ModTask._CallbackTask(self)
+			self.project.add_task_aliases(self.mod, *aliases)
+		else:
+			self.cxx = kw['cxx']
+			self.project.add_task_aliases(kw['cxx'], *aliases)
 
 	@property
 	def ld(self):
@@ -558,7 +563,9 @@ class ModTask(ProjectTask, ModDepPhases):
 					cfg.pic = True
 			return cfg
 
-	def __str__(self): return 'module ' + str(self.target) + ' (client)'
+	def __str__(self):
+		if self.kind != ModTask.Kinds.HEADERS: return 'module ' + str(self.target) + ' (client)'
+		else: return 'module headers ' + self.name + ': ' + str(self.cxx)
 
 	@property
 	def uid(self): return self.name

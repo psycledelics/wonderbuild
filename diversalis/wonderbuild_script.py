@@ -20,7 +20,7 @@ from wonderbuild.script import ScriptTask
 class Wonderbuild(ScriptTask):
 
 	@property
-	def mod(self): return self._mod
+	def mod_dep_phases(self): return self._mod_dep_phases
 
 	def __call__(self, sched_ctx):
 		project = self.project
@@ -32,21 +32,18 @@ class Wonderbuild(ScriptTask):
 		cfg = UserBuildCfg.new_or_clone(project)
 	
 		class DiversalisMod(ModTask):
-			def __init__(self): ModTask.__init__(self, 'diversalis', ModTask.Kinds.LIB, cfg, 'diversalis', 'default')
+			def __init__(self): ModTask.__init__(self, 'diversalis', ModTask.Kinds.HEADERS, cfg, 'diversalis', 'default', cxx=DiversalisHeadersInstall())
 				
 			def __call__(self, sched_ctx):
 				self.private_deps = []
 				self.public_deps = []
 				self.result = True
-				self.cxx = DiversalisClientHeaders()
-			
-			def do_mod(self): pass
 			
 			def apply_cxx_to(self, cfg):
 				if not self.cxx.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx.dest_dir)
 				ModTask.apply_cxx_to(self, cfg)
 
-		class DiversalisClientHeaders(InstallTask):
+		class DiversalisHeadersInstall(InstallTask):
 			def __init__(self): InstallTask.__init__(self, project)
 
 			@property
@@ -67,4 +64,4 @@ class Wonderbuild(ScriptTask):
 						): self._sources.append(s)
 					return self._sources
 		
-		self._mod = mod = DiversalisMod()
+		self._mod_dep_phases = mod_dep_phases = DiversalisMod()

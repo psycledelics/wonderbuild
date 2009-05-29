@@ -22,7 +22,7 @@ class Wonderbuild(ScriptTask):
 	def pch(self): return self._pch
 	
 	@property
-	def mod(self): return self._mod
+	def mod_dep_phases(self): return self._mod_dep_phases
 
 	def __call__(self, sched_ctx):
 		project = self.project
@@ -53,7 +53,7 @@ class Wonderbuild(ScriptTask):
 		glibmm = PkgConfigCheckTask.shared(project, ['glibmm-2.4 >= 2.4', 'gmodule-2.0 >= 2.0', 'gthread-2.0 >= 2.0'])
 		mswindows = MSWindowsCheckTask.shared(check_cfg)
 		winmm = WinMMCheckTask.shared(check_cfg)
-		diversalis = ScriptTask.shared(project, src_dir.parent.parent / 'diversalis').mod
+		diversalis = ScriptTask.shared(project, src_dir.parent.parent / 'diversalis').mod_dep_phases
 
 		# used by pch too
 		cfg.defines['UNIVERSALIS__SOURCE'] = cfg.shared and '1' or '-1'
@@ -141,4 +141,4 @@ class Wonderbuild(ScriptTask):
 					return self._sources
 		
 		self._pch = pch = Pch()
-		self._mod = mod = UniversalisMod()
+		self._mod_dep_phases = mod_dep_phases = UniversalisMod()
