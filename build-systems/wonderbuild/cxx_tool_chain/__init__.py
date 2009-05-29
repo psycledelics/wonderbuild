@@ -327,7 +327,7 @@ class _PreCompileTask(ProjectTask, ModDepPhases):
 
 	def apply_cxx_to(self, cfg): cfg.pch = self.header
 	
-	def __str__(self): return 'pre-compile ' + str(self.header) + ' (build)'
+	def __str__(self): return 'pre-compile ' + str(self.header) + ' (check)'
 
 	@property
 	def uid(self): return self.name
@@ -349,7 +349,18 @@ class _PreCompileTask(ProjectTask, ModDepPhases):
 	@property
 	def target_dir(self): return self.target.parent
 
-	def __call__(self, sched_ctx):
+	def __call__(self, sched_ctx): self.cxx = _PreCompileTask._CallbackTask(self)
+	
+	class _CallbackTask(Task):
+		def __init__(self, pre_compile_task):
+			Task.__init__(self)
+			self.pre_compile_task = pre_compile_task
+		
+		def __str__(self): return 'pre-compile ' + str(self.pre_compile_task.header) + ' (build)'
+
+		def __call__(self, sched_ctx): self.pre_compile_task._callback(sched_ctx)
+	
+	def _callback(self, sched_ctx):
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, we don't need pkg-config cxx flags in the signature
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.project, self.cfg.pkg_config)
@@ -416,13 +427,13 @@ class _PreCompileTask(ProjectTask, ModDepPhases):
 			sig = self._sig = sig.digest()
 			return sig
 
-class PreCompileTasks(ProjectTask):
+class PreCompileTasks(ProjectTask): # doesn't need to be a task
 	def __init__(self, name, base_cfg):
 		ProjectTask.__init__(self, base_cfg.project)
 		self.name = name
 		self.base_cfg = base_cfg
 
-	def __str__(self): return 'pre-compile ' + self.name + ' (client)'
+	def __str__(self): return 'pre-compile ' + self.name + ' (pic-or-not)'
 
 	@property
 	def source_text(self): return '#error ' + str(self.__class__) + ' did not redefine default source text.\n'
@@ -564,7 +575,7 @@ class ModTask(ProjectTask, ModDepPhases):
 			return cfg
 
 	def __str__(self):
-		if self.kind != ModTask.Kinds.HEADERS: return 'module ' + str(self.target) + ' (client)'
+		if self.kind != ModTask.Kinds.HEADERS: return 'module ' + str(self.target) + ' (check)'
 		else: return 'module headers ' + self.name + ': ' + str(self.cxx)
 
 	@property
@@ -617,7 +628,6 @@ class ModTask(ProjectTask, ModDepPhases):
 	def __call__(self, sched_ctx):
 		self.private_deps = [] # of ModDepPhases
 		self.public_deps = [] # of ModDepPhases
-		self.result = True
 
 	def _get_result(self):
 		try: return self._result
@@ -636,7 +646,7 @@ class ModTask(ProjectTask, ModDepPhases):
 	
 	def apply_mod_to(self, cfg):
 		if self in cfg._applied: return
-		for dep in self.shared and self.public_deps or self.all_deps: dep.apply_mod_to(cfg)
+		for dep in self.cfg.shared and self.public_deps or self.all_deps: dep.apply_mod_to(cfg)
 		if not self.target_dev_dir in cfg.lib_paths: cfg.lib_paths.append(self.target_dev_dir)
 		cfg.libs.append(self.target_dev_name)
 		cfg._applied.add(self)
@@ -648,11 +658,14 @@ class ModTask(ProjectTask, ModDepPhases):
 
 		def __str__(self): return 'module ' + str(self.mod_task.target) + ' (build)'
 
-		def __call__(self, sched_ctx): self.mod_task._callback(sched_ctx)
+		def __call__(self, sched_ctx):
+			if self.mod_task.cxx is not None: sched_ctx.parallel_wait(self.mod_task.cxx)
+			self.mod_task._callback(sched_ctx)
 	
 	def _callback(self, sched_ctx):
 		sched_ctx.parallel_wait(self)
 		sched_ctx.parallel_wait(*(dep for dep in self.all_deps))
+		if self.ld: sched_ctx.parallel_no_wait(*(dep.mod for dep in self.all_deps if dep.mod is not None))
 		sched_ctx.parallel_wait(*(dep.cxx for dep in self.all_deps if dep.cxx is not None))
 		for dep in self.all_deps: dep.apply_cxx_to(self.cfg)
 		if len(self.cfg.pkg_config) != 0:
@@ -720,7 +733,6 @@ class ModTask(ProjectTask, ModDepPhases):
 		need_process = False
 		if len(changed_sources) != 0:
 			need_process = True
-			tasks = []
 			batches = []
 			for i in xrange(sched_ctx.thread_count): batches.append([])
 			i = 0
