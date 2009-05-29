@@ -617,6 +617,7 @@ class ModTask(ProjectTask, ModDepPhases):
 	def __call__(self, sched_ctx):
 		self.private_deps = [] # of ModDepPhases
 		self.public_deps = [] # of ModDepPhases
+		self.result = True
 
 	def _get_result(self):
 		try: return self._result

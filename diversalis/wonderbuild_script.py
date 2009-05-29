@@ -34,11 +34,6 @@ class Wonderbuild(ScriptTask):
 		class DiversalisMod(ModTask):
 			def __init__(self): ModTask.__init__(self, 'diversalis', ModTask.Kinds.HEADERS, cfg, 'diversalis', 'default', cxx=DiversalisHeadersInstall())
 				
-			def __call__(self, sched_ctx):
-				self.private_deps = []
-				self.public_deps = []
-				self.result = True
-			
 			def apply_cxx_to(self, cfg):
 				if not self.cxx.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx.dest_dir)
 				ModTask.apply_cxx_to(self, cfg)
