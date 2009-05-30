@@ -80,7 +80,6 @@ class DetectImplCheckTask(CheckTask):
 					r = 1
 				if r == 0:
 					cfg.kind = 'gcc'
-					cfg.cxx_prog = 'g++' ###
 				else:
 					if not silent: self.print_check(desc + ' msvc')
 					try: r, out, err = exec_subprocess_pipe(['cl'], silent=True)
@@ -89,7 +88,6 @@ class DetectImplCheckTask(CheckTask):
 						r = 1
 					if r == 0:
 						cfg.kind = 'msvc'
-						cfg.cxx_prog = 'cl' ###
 					elif False: # pure posix support not tested
 						if not silent: self.print_check(desc + ' c++')
 						try: r, out, err = exec_subprocess_pipe(['c++'], silent=True)
@@ -98,7 +96,6 @@ class DetectImplCheckTask(CheckTask):
 							r = 1
 						if r == 0:
 							cfg.kind = 'posix'
-							cfg.cxx_prog = 'c++' ###
 					else: cfg.kind = None
 			# set the impl corresponding to the kind
 			self.select_impl()

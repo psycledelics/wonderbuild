@@ -404,7 +404,6 @@ class _PreCompileTask(ProjectTask, ModDepPhases):
 					if self.cfg.pic: pic = 'pic'; color = '7;1;35'
 					else: pic = 'non-pic'; color = '7;35'
 					self.print_desc('pre-compiling ' + pic + ' c++ ' + str(self.header), color)
-				try:
 				dir = self.header.parent
 				dir.make_dir(dir.parent)
 				f = open(self.header.path, 'w')
