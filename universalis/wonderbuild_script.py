@@ -78,6 +78,13 @@ class Wonderbuild(ScriptTask):
 				else: raise UserReadableException, 'universalis requires the folowing boost libs: ' + boost.help
 
 				diversalis.apply_cxx_to(self.cfg)
+				
+				# XXX diversalis adds the staged-install include dir to the include path,
+				# and, rarely but this happens, the pre-compilation is performed
+				# while universalis headers are being installed.
+				# this makes the pre-compilation fail when universalis headers are half-installed.
+				# the solution is to depend on the universalis.cxx task,
+				# and use the staged-install include dir rather than universalis' src dir.
 
 				for opt in (dlfcn, pthread, glibmm):
 					if opt: opt.apply_cxx_to(self.cfg)
@@ -87,18 +94,7 @@ class Wonderbuild(ScriptTask):
 					src_dir,
 					src_dir / 'universalis' / 'standard_library' / 'future_std_include'
 				])
-				self.cfg.defines['UNIVERSALIS__SOURCE'] = '123'
 				PreCompileTasks.__call__(self, sched_ctx)
-
-			def apply_cxx_to(self, cfg):
-				for i in (
-					top_src_dir / 'build-systems' / 'src',
-					src_dir,
-					src_dir / 'universalis' / 'standard_library' / 'future_std_include'
-				):
-					if not i in cfg.include_paths: cfg.include_paths.append(i)
-				cfg.defines['UNIVERSALIS__SOURCE'] = '1'
-				PreCompileTasks.apply_cxx_to(self, cfg)
 
 		class UniversalisMod(ModTask):
 			def __init__(self): ModTask.__init__(self, 'universalis', ModTask.Kinds.LIB, cfg, 'universalis', 'default')
@@ -118,7 +114,7 @@ class Wonderbuild(ScriptTask):
 			
 			def do_mod(self):
 				self.cfg.defines['UNIVERSALIS__SOURCE'] = self.cfg.shared and '1' or '-1'
-				if not src_dir in self.cfg.include_paths: self.cfg.include_paths.append(src_dir)
+				self.cfg.include_paths.extend([src_dir, src_dir / 'universalis' / 'standard_library' / 'future_std_include'])
 				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 			
 			def apply_cxx_to(self, cfg):

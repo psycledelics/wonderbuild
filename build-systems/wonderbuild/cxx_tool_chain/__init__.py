@@ -636,7 +636,7 @@ class ModTask(ProjectTask, ModDepPhases):
 	def all_deps(self):
 		try: return self._all_deps
 		except AttributeError:
-			self._all_deps = self.private_deps + self.public_deps
+			self._all_deps = self.public_deps + self.private_deps
 			return self._all_deps
 
 	def __call__(self, sched_ctx):
