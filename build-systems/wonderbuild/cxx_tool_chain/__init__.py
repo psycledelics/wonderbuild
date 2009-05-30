@@ -334,7 +334,9 @@ class _PreCompileTask(ProjectTask, ModDepPhases):
 	def header(self):
 		try: return self._header
 		except AttributeError:
-			self._header = self.project.bld_dir / 'pre-compiled' / self.name / (self.name + '.private.hpp') # TODO .h for C
+			self.project.bld_dir.lock.acquire()
+			try: self._header = self.project.bld_dir / 'pre-compiled' / self.name / (self.name + '.private.hpp') # TODO .h for C
+			finally: self.project.bld_dir.lock.release()
 			return self._header
 
 	@property
@@ -402,6 +404,7 @@ class _PreCompileTask(ProjectTask, ModDepPhases):
 					if self.cfg.pic: pic = 'pic'; color = '7;1;35'
 					else: pic = 'non-pic'; color = '7;35'
 					self.print_desc('pre-compiling ' + pic + ' c++ ' + str(self.header), color)
+				try:
 				dir = self.header.parent
 				dir.make_dir(dir.parent)
 				f = open(self.header.path, 'w')
@@ -591,7 +594,9 @@ class ModTask(ProjectTask, ModDepPhases):
 	def obj_dir(self):
 		try: return self._obj_dir
 		except AttributeError:
-			self._obj_dir = self.project.bld_dir / 'modules' / self.name
+			self.project.bld_dir.lock.acquire()
+			try: self._obj_dir = self.project.bld_dir / 'modules' / self.name
+			finally: self.project.bld_dir.lock.release()
 			return self._obj_dir
 
 	@property
@@ -1048,7 +1053,9 @@ class BuildCheckTask(MultiBuildCheckTask):
 	def bld_dir(self):
 		try: return self._bld_dir
 		except AttributeError:
-			self._bld_dir = self.project.bld_dir / 'checks' / self.name
+			self.project.bld_dir.lock.acquire()
+			try: self._bld_dir = self.project.bld_dir / 'checks' / self.name
+			finally: self.project.bld_dir.lock.release()
 			return self._bld_dir
 
 	def do_check_and_set_result(self, sched_ctx):
