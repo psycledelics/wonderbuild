@@ -25,9 +25,10 @@ class InstallTask(ProjectTask, OptionCfg):
 	@staticmethod
 	def generate_option_help(help): help['check-missing'] = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'no')
 	
-	def __init__(self, project):
+	def __init__(self, project, name):
 		ProjectTask.__init__(self, project)
 		OptionCfg.__init__(self, project)
+		self.name = name
 		self.fhs = FHS.shared(project)
 
 		try: old_sig, self.check_missing = self.project.persistent[str(self.__class__)]
@@ -42,15 +43,11 @@ class InstallTask(ProjectTask, OptionCfg):
 			self.project.persistent[str(self.__class__)] = self.options_sig, self.check_missing
 
 	def __str__(self): return \
-		'install from ' + str(self.trim_prefix) + \
+		'install ' + self.name + ' from ' + str(self.trim_prefix) + \
 		' to ' + str(self.dest_dir) # + ': ' + ' '.join([s.rel_path(self.trim_prefix) for s in self.sources])
 
 	@property
-	def uid(self):
-		try: return self._uid
-		except AttributeError:
-			self._uid = str(self.__class__) + '#' + str(self.sources[0])
-			return self._uid
+	def uid(self): return self.name
 	
 	@property
 	def trim_prefix(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
@@ -63,13 +60,17 @@ class InstallTask(ProjectTask, OptionCfg):
 	
 	def __call__(self, sched_context):
 		try: old_sig, sigs = self.project.persistent[self.uid]
-		except KeyError: old_sig = None
+		except KeyError:
+			if __debug__ and is_debug: debug('task: no state: ' + str(self))
+			old_sig = None
 		sig = [s.sig for s in self.sources]
 		sig.sort()
 		sig = Sig(''.join(sig))
 		sig.update(self.dest_dir.abs_path)
 		sig = sig.digest()
-		if old_sig != sig or self.check_missing:
+		if old_sig == sig and not self.check_missing:
+				if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
+		else:
 			if old_sig is None:
 				sigs = {}
 				changed_sources = self.sources
@@ -77,14 +78,24 @@ class InstallTask(ProjectTask, OptionCfg):
 				changed_sources = []
 				for s in self.sources:
 					try: source_sig = sigs[s]
-					except KeyError: changed_sources.append(s) # This is a new source.
+					except KeyError:
+						# This is a new source.
+						if __debug__ and is_debug: debug('task: no state: ' + str(s))
+						changed_sources.append(s)
 					else:
-						if source_sig != s.sig: changed_sources.append(s) # The source changed.							
+						if source_sig != s.sig:
+							# The source changed.
+							if __debug__ and is_debug: debug('task: sig changed: ' + str(s))
+							changed_sources.append(s)
 						elif self.check_missing:
 							rel_path = s.rel_path(self.trim_prefix)
 							dest = self.dest_dir / rel_path
-							if not dest.exists: changed_sources.append(s)
-			if len(changed_sources) != 0:
+							if not dest.exists:
+								if __debug__ and is_debug: debug('task: target missing: ' + str(dest))
+								changed_sources.append(s)
+			if len(changed_sources) == 0:
+				if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
+			else:
 				for s in changed_sources: sigs[s] = s.sig
 				sched_context.lock.release()
 				try:
@@ -99,7 +110,7 @@ class InstallTask(ProjectTask, OptionCfg):
 							list = [t[2] for t in install_tuples]
 							list.sort()
 							self.print_desc_multi_column_format(
- 								'installing from ' + str(self.trim_prefix) +
+ 								'installing ' + self.name + ' from ' + str(self.trim_prefix) +
 								' to ' + str(self.dest_dir),
 								list, '47;34'
 							)

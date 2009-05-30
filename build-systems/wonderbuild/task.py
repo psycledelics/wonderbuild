@@ -7,7 +7,7 @@ import multi_column_formatting
 
 class Task(object):
 	def __init__(self):
-		self._queued = self._processed = False
+		self._sched_stacked = self._sched_processed = False
 	
 	def __call__(self, sched_context): pass
 

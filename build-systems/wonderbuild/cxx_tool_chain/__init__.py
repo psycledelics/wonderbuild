@@ -166,20 +166,17 @@ class BuildCfg(ClientCfg):
 			sig = self._ld_sig = sig.digest()
 			return sig
 
-	@property
-	def cxx_args_cwd(self):
-		try: return self._cxx_args_cwd
-		except AttributeError:
-			args = self._cxx_args_cwd = self.impl.cfg_cxx_args_cwd(self)
-			if __debug__ and is_debug: debug('cfg: cxx: build: cxx cwd: ' + str(args))
-			return args
+	def bld_rel_path(self, node):
+		path = node.rel_path(self.project.bld_dir)
+		if not os.path.isabs(path): path = os.path.join(os.pardir, os.pardir, path)
+		return path
 
 	@property
-	def cxx_args_bld(self):
-		try: return self._cxx_args_bld
+	def cxx_args(self):
+		try: return self._cxx_args
 		except AttributeError:
-			args = self._cxx_args_bld = self.impl.cfg_cxx_args_bld(self)
-			if __debug__ and is_debug: debug('cfg: cxx: build: cxx bld: ' + str(args))
+			args = self._cxx_args = self.impl.cfg_cxx_args(self)
+			if __debug__ and is_debug: debug('cfg: cxx: build: cxx: ' + str(args))
 			return args
 
 	@property
@@ -305,6 +302,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 
 class ModDepPhases(object):
 	def __init__(self): self.cxx = self.mod = None
+	def deep_cxx_public_deps(self, cxx_public_deps): pass
 	def apply_cxx_to(self, cfg): pass
 	def apply_mod_to(self, cfg): pass
 
@@ -544,12 +542,15 @@ class ModTask(ProjectTask, ModDepPhases):
 		self.name = name
 		self.kind = kind
 		self.base_cfg = base_cfg
+		self.private_deps = [] # of ModDepPhases
+		self.public_deps = [] # of ModDepPhases
 		self.sources = []
 		if kind == ModTask.Kinds.HEADERS:
+			#self.cxx = ModTask._CxxCallbackTask(self)
 			self.cxx = kw['cxx']
 			self.project.add_task_aliases(kw['cxx'], *aliases)
 		else:
-			self.mod = ModTask._CallbackTask(self)
+			self.mod = ModTask._ModCallbackTask(self)
 			self.project.add_task_aliases(self.mod, *aliases)
 
 	@property
@@ -630,9 +631,8 @@ class ModTask(ProjectTask, ModDepPhases):
 			return self._all_deps
 
 	def __call__(self, sched_ctx):
-		self.private_deps = [] # of ModDepPhases
-		self.public_deps = [] # of ModDepPhases
-
+		sched_ctx.parallel_wait(*(dep for dep in self.all_deps))
+	
 	def _get_result(self):
 		try: return self._result
 		except AttributeError: raise Exception, 'did you forget to process the ' + str(self) + ' task?'
@@ -642,6 +642,10 @@ class ModTask(ProjectTask, ModDepPhases):
 	def __nonzero__(self): return self.result
 
 	def do_mod(self): pass
+	
+	def deep_cxx_public_deps(self, cxx_public_deps):
+		cxx_public_deps += [dep.cxx for dep in self.public_deps if dep.cxx is not None]
+		for dep in self.public_deps: dep.deep_cxx_public_deps(cxx_public_deps)
 
 	def apply_cxx_to(self, cfg):
 		if self in cfg._applied: return
@@ -655,23 +659,24 @@ class ModTask(ProjectTask, ModDepPhases):
 		cfg.libs.append(self.target_dev_name)
 		cfg._applied.add(self)
 
-	class _CallbackTask(Task):
+	class _ModCallbackTask(Task):
 		def __init__(self, mod_task):
 			Task.__init__(self)
 			self.mod_task = mod_task
 
 		def __str__(self): return 'module ' + str(self.mod_task.target) + ' (build)'
-
-		def __call__(self, sched_ctx):
-			sched_ctx.parallel_wait(self.mod_task)
-			self.mod_task._callback(sched_ctx)
+		def __call__(self, sched_ctx): self.mod_task._mod_callback(sched_ctx)
 	
-	def _callback(self, sched_ctx):
+	def _mod_callback(self, sched_ctx):
 		sched_ctx.parallel_wait(self)
 		if self.cxx is not None: sched_ctx.parallel_no_wait(self.cxx)
-		sched_ctx.parallel_wait(*(dep for dep in self.all_deps))
-		if self.ld: sched_ctx.parallel_no_wait(*(dep.mod for dep in self.all_deps if dep.mod is not None))
-		sched_ctx.parallel_wait(*(dep.cxx for dep in self.all_deps if dep.cxx is not None))
+		if self.ld:
+			dep_mods = list(dep.mod for dep in self.all_deps if dep.mod is not None)
+			sched_ctx.parallel_no_wait(*dep_mods)
+		# recurse cxx
+		cxx_deps = [dep.cxx for dep in self.private_deps if dep.cxx is not None]
+		self.deep_cxx_public_deps(cxx_deps)
+		sched_ctx.parallel_wait(*cxx_deps)
 		for dep in self.all_deps: dep.apply_cxx_to(self.cfg)
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, we don't need pkg-config cxx flags in the signature
@@ -697,6 +702,7 @@ class ModTask(ProjectTask, ModDepPhases):
 				try: had_failed, old_cxx_sig, deps, old_dep_sig = implicit_deps[s]
 				except KeyError:
 					# This is a new source.
+					if __debug__ and is_debug: debug('task: no state: ' + str(s))
 					changed_sources.append(s)
 					continue
 				if had_failed:
@@ -733,9 +739,8 @@ class ModTask(ProjectTask, ModDepPhases):
 						changed_sources.append(s)
 						continue
 				if __debug__ and is_debug: debug('task: skip: no change: ' + str(s))
-		if self.ld: tasks = [dep.mod for dep in self.all_deps if dep.mod is not None]
-		else: tasks = []
 		need_process = False
+		tasks = []
 		if len(changed_sources) != 0:
 			need_process = True
 			batches = []
@@ -753,8 +758,8 @@ class ModTask(ProjectTask, ModDepPhases):
 					if __debug__ and is_debug: debug('task: target missing: ' + str(t))
 					changed_sources = self.sources
 					need_process = True
-					tasks = []
 					break
+		if self.ld: tasks += dep_mods
 		sched_ctx.parallel_wait(*tasks)
 		if self.ld:
 			for dep in self.all_deps: dep.apply_mod_to(self.cfg)
@@ -814,11 +819,12 @@ class ModTask(ProjectTask, ModDepPhases):
 						desc = 'linking ' + shared + ' ' + pic + ' program'
 					elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = '1;7;34'
 					else: desc = 'linking shared lib'; color = '1;7;33'
-					if __debug__ and is_debug: s = ['+' + self._obj_name(s) + '(' + str(s) + ')' for s in sources]
-					else: s = ['+' + self._obj_name(s) for s in sources]
+					plus = not self.ld and '+' or ''
+					if __debug__ and is_debug: s = [plus + self._obj_name(s) + '(' + str(s) + ')' for s in sources]
+					else: s = [plus + self._obj_name(s) for s in sources]
 					if removed_obj_names is not None: s += ['-' + o for o in removed_obj_names]
 					s.sort()
-					self.print_desc_multi_column_format(desc + ' ' + str(self) + ' from objects', s, color)
+					self.print_desc_multi_column_format(desc + ' ' + str(self.target) + ' from objects', s, color)
 				self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources], removed_obj_names)
 				self.persistent = self._mod_sig, self.ld, source_states
 			finally: sched_ctx.lock.acquire()

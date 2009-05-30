@@ -4,6 +4,7 @@
 
 import sys, os, gc, cPickle
 
+from wonderbuild import UserReadableException
 from task import Task
 from script import ScriptLoaderTask
 from filesystem import FileSystem
@@ -85,7 +86,9 @@ class Project(Task):
 	def tasks_with_aliases(self, task_aliases = None):
 		tasks = set()
 		if task_aliases is None: task_aliases = (None,)
-		for a in task_aliases: tasks |= set(self.task_aliases[a])
+		try:
+			for a in task_aliases: tasks |= set(self.task_aliases[a])
+		except KeyError: raise UserReadableException, 'no such task alias: ' + a
 		return tasks
 		
 	def process_tasks_by_aliases(self):

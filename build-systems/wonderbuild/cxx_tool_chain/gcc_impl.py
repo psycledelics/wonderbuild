@@ -51,63 +51,48 @@ class Impl(object):
 			return sig
 
 	@staticmethod
-	def cfg_cxx_args_cwd(cfg): return Impl._cfg_cxx_args(cfg, Impl._cfg_cxx_args_include_cwd)
-
-	@staticmethod
-	def cfg_cxx_args_bld(cfg): return Impl._cfg_cxx_args(cfg, Impl._cfg_cxx_args_include_bld)
-	
-	@staticmethod
-	def _cfg_cxx_args(cfg, include_func):
+	def cfg_cxx_args(cfg):
 		args = [cfg.cxx_prog, '-pipe']
 		if cfg.pic and cfg.pic_flag_defines_pic: args.append('-fPIC')
 		#if cfg.pic: args.append('-fPIC')
 		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + v)
-		include_func(cfg, args)
+		for p in cfg.include_paths: args.append('-I' + cfg.bld_rel_path(p))
+		if cfg.pch is not None: args += ['-Winvalid-pch', '-include', cfg.bld_rel_path(cfg.pch)]
+		for i in cfg.includes: args += ['-include', cfg.bld_rel_path(i)]
 		args += cfg.cxx_flags
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: gcc: cxx: ' + str(args))
 		return args
-
-	@staticmethod
-	def _cfg_cxx_args_include_cwd(cfg, args):
-		for p in cfg.include_paths: args.append('-I' + p.path)
-		if cfg.pch is not None: args += ['-include', cfg.pch.path]
-		for i in cfg.includes: args += ['-include', i.path]
-
-	@staticmethod
-	def _cfg_cxx_args_include_bld(cfg, args):
-		for p in cfg.include_paths: args.append('-I' + os.path.join(os.pardir, os.pardir, p.rel_path(cfg.project.bld_dir)))
-		if cfg.pch is not None: args += ['-include', os.path.join(os.pardir, os.pardir, cfg.pch.rel_path(cfg.project.bld_dir))]
-		for i in cfg.includes: args += ['-include', os.path.join(os.pardir, os.pardir, i.rel_path(cfg.project.bld_dir))]
 
 	@staticmethod
 	def process_precompile_task(precompile_task, lock):
 		# some useful options: -Wmissing-include-dirs -Winvalid-pch -H -fpch-deps -Wp,-v
 		# to print the include search path: g++ -xc++ /dev/null -E -Wp,-v 2>&1 1>/dev/null | sed -e '/^[^ ]/d' -e 's,^ ,-I,'
 		# TODO -xc-header for C
-		args = precompile_task.cfg.cxx_args_cwd + ['-xc++-header', precompile_task.header.path, '-MD']
+		cwd = precompile_task.target_dir
+		args = precompile_task.cfg.cxx_args + ['-xc++-header', precompile_task.header.rel_path(cwd), '-MD']
 		use_dir = False
 		if not use_dir:
-			path = (precompile_task.target_dir / (precompile_task.header.name + '.d')).path
-			args.append('-MF' + path)
+			dep_file = (precompile_task.target_dir / (precompile_task.header.name[:precompile_task.header.name.rfind('.')] + '.d'))
+			# that's the default path anyway
+			if False: args.append('-MF' + dep_file.rel_path(cwd)) 
 		else:
 			dir = precompile_task.target
 			dir.make_dir()
-			path = os.path.join(dir.path, 'x')
-			args.append('-o' + path)
-			path += '.d'
-		if exec_subprocess(args) != 0: raise UserReadableException, precompile_task
+			o = dir / 'x'
+			args.append('-o' + o.rel_path(cwd))
+			dep_file = o.parent / (o.name + '.d')
+		if exec_subprocess(args, cwd=cwd.path) != 0: raise UserReadableException, precompile_task
 		# reads deps from the .d files generated as side-effect of compilation by gcc's -MD or -MMD option
-		f = open(path, 'r')
+		f = open(dep_file.path, 'r')
 		try: deps = f.read().replace('\\\n', '')
 		finally: f.close()
-		cwd = precompile_task.project.fs.cur
 		if need_sep_fix: deps = deps.replace('/', os.sep)
 		lock.acquire()
 		try: deps = [cwd / d for d in deps[deps.find(':') + 1:].split()]
 		finally: lock.release()
-		if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
+		if __debug__ and is_debug: debug('cpp: gcc dep file: ' + str(dep_file) + ': ' + str([str(d) for d in deps]))
 		dep_sigs = [d.sig for d in deps]
 		precompile_task.persistent = precompile_task.sig, deps, Sig(''.join(dep_sigs)).digest()
 
@@ -117,10 +102,10 @@ class Impl(object):
 	def precompile_task_target_ext(self): return '.gch'
 
 	def process_cxx_task(self, cxx_task, lock):
-		args = cxx_task.cfg.cxx_args_bld + ['-c', '-MMD'] + [s.name for s in cxx_task._actual_sources]
 		cwd = cxx_task.target_dir
+		args = cxx_task.cfg.cxx_args + ['-c', '-MMD'] + [s.name for s in cxx_task._actual_sources]
 		implicit_deps = cxx_task.persistent_implicit_deps
-		if exec_subprocess(args, cwd = cwd.path) == 0:
+		if exec_subprocess(args, cwd=cwd.path) == 0:
 			succeeded_sources = zip(cxx_task.sources, cxx_task._actual_sources)
 			failed_sources = None
 		else:
@@ -185,7 +170,7 @@ class Impl(object):
 		if cfg.shared: args.append('-shared')
 		elif cfg.static_prog: args.append('-static') # we can have both -shared and -static but that's not very useful
 		args.append('-Wl,-rpath=$ORIGIN' + os.sep + cfg.fhs.lib.rel_path(cfg.fhs.bin))
-		for p in cfg.lib_paths: args.append('-L' + p.path)
+		for p in cfg.lib_paths: args.append('-L' + cfg.bld_rel_path(p))
 		for l in cfg.libs: args.append('-l' + l)
 		if len(cfg.static_libs):
 			args.append('-Wl,-Bstatic')
@@ -209,31 +194,33 @@ class Impl(object):
 
 	@staticmethod
 	def process_mod_task(mod_task, obj_names, removed_obj_names):
-		path = mod_task.obj_dir.path
-		obj_paths = [os.path.join(path, o) for o in obj_names]
+		cwd = mod_task.obj_dir
+		obj_paths = obj_names
+		mod_task_target_path = mod_task.target.rel_path(cwd)
 		if mod_task.ld:
 			args = mod_task.cfg.ld_args
-			args = [args[0], '-o' + mod_task.target.path] + obj_paths + args[1:]
+			args = [args[0], '-o' + mod_task_target_path] + obj_paths + args[1:]
 			if mod_task.cfg.target_platform_binary_format_is_pe:
 				args.append('-Wl,--enable-auto-import') # supress informational messages
 				if False and mod_task.cfg.shared: # mingw doesn't need import libs
-					args.append('-Wl,--out-implib,' + (mod_task.cfg.fhs.lib / 'lib' + mod_task.target.name + '.dll.a').path)
-			if exec_subprocess(args) != 0: raise UserReadableException, mod_task
+					args.append('-Wl,--out-implib,' + (mod_task.cfg.fhs.lib / ('lib' + mod_task.target.name + '.dll.a')).rel_path(cwd))
+					args.append('-Wl,--out-implib,' + (mod_task.target_dev_dir / ('lib' + mod_task.target.name + '.dll.a')).rel_path(cwd))
+			if exec_subprocess(args, cwd=cwd.path) != 0: raise UserReadableException, mod_task
 		else:
 			ar_args, ranlib_args = mod_task.cfg.ar_ranlib_args
 			if len(obj_names) != 0:
 				args = ar_args[:]
 				if removed_obj_names is not None: args[1] = args[1].replace('s', '')
-				args.append(mod_task.target.path)
+				args.append(mod_task_target_path)
 				args += obj_paths
-				if exec_subprocess(args) != 0: raise UserReadableException, mod_task
+				if exec_subprocess(args, cwd=cwd.path) != 0: raise UserReadableException, mod_task
 			if removed_obj_names is not None:
-				args = [ar_args[0], ranlib_args is None and 'ds' or 'd', mod_task.target.path] + removed_obj_names
-				if exec_subprocess(args) != 0: raise UserReadableException, mod_task
+				args = [ar_args[0], ranlib_args is None and 'ds' or 'd', mod_task_target_path] + removed_obj_names
+				if exec_subprocess(args, cwd=cwd.path) != 0: raise UserReadableException, mod_task
 			if ranlib_args is not None: # 's' not in ar_args[1]
 				args = ranlib_args[:]
-				args.append(mod_task.target.path)
-				if exec_subprocess(args) != 0: raise UserReadableException, mod_task
+				args.append(mod_task_target_path)
+				if exec_subprocess(args, cwd=cwd.path) != 0: raise UserReadableException, mod_task
 
 	@staticmethod
 	def mod_task_targets(mod_task): return (mod_task.target,)
@@ -264,8 +251,9 @@ class Impl(object):
 
 	@staticmethod
 	def process_build_check_task(build_check_task):
+		cwd = build_check_task.bld_dir
 		cfg = build_check_task.cfg
-		args = cfg.cxx_args_cwd + ['-xc++', '-'] # TODO -xc for C
+		args = cfg.cxx_args + ['-xc++', '-'] # TODO -xc for C
 		if build_check_task.pipe_preproc: args.append('-E')
 		else:
 			if os.name == 'posix': o = os.devnull
@@ -273,8 +261,7 @@ class Impl(object):
 				if not build_check_task.compile: o = 'a.i'
 				elif not build_check_task.link: o = 'a.o'
 				else: o = 'a'
-				o = (build_check_task.bld_dir / o).path
 			if not build_check_task.compile: args += ['-E', '-o', o]
 			elif not build_check_task.link: args += ['-c', '-o', o]
 			else: args += ['-o', o] + cfg.ld_args[1:]
-		return exec_subprocess_pipe(args, input = build_check_task._prog_source_text, silent = True)
+		return exec_subprocess_pipe(args, cwd=cwd.path, input=build_check_task._prog_source_text, silent=True)

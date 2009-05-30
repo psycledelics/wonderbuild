@@ -3,7 +3,6 @@
 # copyright 2007-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import os, threading
-from collections import deque
 
 from wonderbuild import UserReadableException
 from logger import is_debug, debug, colored, silent
@@ -43,11 +42,11 @@ class Scheduler(object):
 		def notifyAll(self): pass
 
 	def process(self, *tasks):
-		self._task_queue = deque(tasks)
+		self._task_stack = list(tasks)
 		self._todo_count = len(tasks)
 		for task in tasks:
-			task._queued = True
-			if __debug__ and is_debug: debug('sched: tasks queued ' + str(self._todo_count) + ' ' + str(len(self._task_queue)) + ' ' + str(task))
+			task._sched_stacked = True
+			if __debug__ and is_debug: debug('sched: tasks stacked ' + str(self._todo_count) + ' ' + str(len(self._task_stack)) + ' ' + str(task))
 
 		if self.thread_count == 1:
 			self._lock = Scheduler._DummyLock()
@@ -106,9 +105,9 @@ class Scheduler(object):
 		try:
 			try:
 				while True:
-					while not self._done_or_break_condition() and len(self._task_queue) == 0: self._condition.wait(timeout = self.timeout)
+					while not self._done_or_break_condition() and len(self._task_stack) == 0: self._condition.wait(timeout = self.timeout)
 					if self._done_or_break_condition(): break
-					self._process_one_task(self._task_queue.pop())
+					self._process_one_task(self._task_stack.pop())
 					if self._done_condition():
 						self._condition.notifyAll()
 						break
@@ -130,51 +129,60 @@ class Scheduler(object):
 
 	def _process_one_task(self, task):
 		if __debug__ and is_debug:
+			debug('sched: task queue: ' + str([str(t) for t in self._task_stack]))
 			debug('sched: processing task: ' + str(task))
-			assert not task._processed
+			assert not task._sched_processed
 
 		task(self._context)
 		#try: task(self._context)
 		#except Exception, e: raise Exception, '\nin task: ' + str(task) + ': ' + str(e)
 
-		if __debug__ and is_debug: debug('sched: task processed: ' + str(task))
-		task._processed = True
+		if __debug__ and is_debug:
+			debug('sched: task processed: ' + str(task))
+			debug('sched: task queue: ' + str([str(t) for t in self._task_stack]))
+		task._sched_processed = True
 		self._todo_count -= 1
 		self._condition.notifyAll()
 	
 	def _parallel_wait(self, *tasks):
-		if __debug__ and is_debug: debug('sched: parallel_wait: ' + str([str(t) for t in tasks]))
+		if __debug__ and is_debug:
+			debug('sched: task queue: ' + str([str(t) for t in self._task_stack]))
+			debug('sched: parallel_wait: ' + str([str(t) for t in tasks]))
 		count = len(tasks)
 		if count == 0: return
 		if count != 1: self._parallel_no_wait(*tasks[1:])
-		if tasks[0]._queued: self._wait(*tasks)
+		if tasks[0]._sched_stacked: self._wait(*tasks)
 		else:
 			self._todo_count += 1
-			tasks[0]._queued = True
+			tasks[0]._sched_stacked = True
 			self._process_one_task(tasks[0])
 			if count != 1: self._wait(*tasks[1:])
 		if __debug__ and is_debug:
-			for task in tasks: assert task._processed, task
+			for task in tasks: assert task._sched_processed, task
 	
 	def _parallel_no_wait(self, *tasks):
-		if __debug__ and is_debug: debug('sched: parallel_no_wait: ' + str([str(t) for t in tasks]))
+		if __debug__ and is_debug:
+			debug('sched: task queue: ' + str([str(t) for t in self._task_stack]))
+			debug('sched: parallel_no_wait: ' + str([str(t) for t in tasks]))
 		notify = 0
 		for task in tasks:
-			if not task._processed and not task._queued:
-				self._task_queue.appendleft(task)
-				task._queued = True
+			if not task._sched_processed and not task._sched_stacked:
+				self._task_stack.append(task)
+				task._sched_stacked = True
 				notify += 1
 		if notify != 0:
 			self._todo_count += notify
 			self._condition.notify(notify)
 
 	def _wait(self, *tasks):
-		if __debug__ and is_debug: debug('sched: waiting for tasks: ' + str([str(t) for t in tasks]))
+		if __debug__ and is_debug:
+			debug('sched: task queue: ' + str([str(t) for t in self._task_stack]))
+			debug('sched: waiting for tasks: ' + str([str(t) for t in tasks]))
 		for task in tasks:
 			while True:
-				while not task._processed and not self._stop_requested and len(self._task_queue) == 0: self._condition.wait(timeout = self.timeout)
+				while not task._sched_processed and not self._stop_requested and len(self._task_stack) == 0: self._condition.wait(timeout = self.timeout)
 				if self._stop_requested: raise StopIteration
-				if task._processed: break
-				self._process_one_task(self._task_queue.pop())
+				if task._sched_processed: break
+				self._process_one_task(self._task_stack.pop())
 		if __debug__ and is_debug:
-			for task in tasks: assert task._processed, task
+			for task in tasks: assert task._sched_processed, task

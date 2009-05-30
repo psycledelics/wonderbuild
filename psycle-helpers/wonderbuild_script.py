@@ -18,15 +18,16 @@ if __name__ == '__main__':
 from wonderbuild.script import ScriptTask
 
 class Wonderbuild(ScriptTask):
+
+	@property
+	def mod_dep_phases(self): return self._mod_dep_phases
+
 	def __call__(self, sched_ctx):
 		project = self.project
 		top_src_dir = self.src_dir.parent
 		src_dir = self.src_dir / 'src'
 
-		from wonderbuild import UserReadableException
-		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, PreCompileTasks, ModTask
-		from wonderbuild.std_checks import MSWindowsCheckTask
-		from wonderbuild.std_checks.winmm import WinMMCheckTask
+		from wonderbuild.cxx_tool_chain import UserBuildCfg, ModTask
 		from wonderbuild.install import InstallTask
 
 		cfg = UserBuildCfg.new_or_clone(project)
@@ -37,23 +38,40 @@ class Wonderbuild(ScriptTask):
 
 		check_cfg = cfg.clone()
 		universalis = ScriptTask.shared(project, src_dir.parent.parent / 'universalis')
+		pch = universalis.pch
+		universalis = universalis.mod_dep_phases
 
-		class Helpers(ModTask):
-			def __init__(self): ModTask.__init__(self, 'psycle-helpers', ModTask.Kinds.LIB, cfg)
+		class HelpersMod(ModTask):
+			def __init__(self): ModTask.__init__(self, 'psycle-helpers', ModTask.Kinds.LIB, cfg, 'psycle-helpers', 'default')
 
 			def __call__(self, sched_ctx):
-				#sched_ctx.parallel_wait(pch.lib_task, universalis.mod)
-				#self.apply_to(self.cfg)
-				#for x in (pch.lib_task, universalis.mod): x.apply_to(self.cfg)
-				for s in (src_dir / 'psycle' / 'helpers').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
+				self.private_deps = [pch.lib_task]
+				self.public_deps = [universalis]
+				self.cxx = HelpersMod.InstallHeaders(self.project, self.name + '-headers')
 				ModTask.__call__(self, sched_ctx)
 			
-			def apply_to(self, cfg):
-				for x in (universalis.client_cxx_cfg): x.apply_to(cfg)
-				for x in (dlfcn, pthread, glibmm):
-					if x: x.apply_to(cfg)
-				if mswindows:
-					if winmm: winmm.apply_to(cfg)
-					else: raise UserReadableException, 'on mswindows, universalis requires microsoft\'s windows multimedia extensions: ' + winmm.help
-		helpers = Helpers()
-		self.project.add_task_aliases(helpers, 'all')
+			def do_mod(self):
+				self.cfg.include_paths.appendleft(src_dir)
+				for s in (src_dir / 'psycle' / 'helpers').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
+
+			def apply_cxx_to(self, cfg):
+				if not self.cxx.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx.dest_dir)
+				ModTask.apply_cxx_to(self, cfg)
+
+			class InstallHeaders(InstallTask):
+				@property
+				def trim_prefix(self): return src_dir
+
+				@property
+				def dest_dir(self): return self.fhs.include
+
+				@property
+				def sources(self):
+					try: return self._sources
+					except AttributeError:
+						self._sources = []
+						for s in (self.trim_prefix / 'psycle' / 'helpers').find_iter(
+							in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)): self._sources.append(s)
+						return self._sources
+
+		self._mod_dep_phases = mod_dep_phases = HelpersMod()

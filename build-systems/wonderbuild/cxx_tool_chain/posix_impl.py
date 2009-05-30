@@ -30,34 +30,21 @@ class Impl(object):
 	def cxx_env_sig(self): return ''
 
 	@staticmethod
-	def cfg_cxx_args_cwd(cfg): return Impl._cfg_cxx_args(cfg, Impl._cfg_cxx_args_include_cwd)
-
-	@staticmethod
-	def cfg_cxx_args_bld(cfg): return Impl._cfg_cxx_args(cfg, Impl._cfg_cxx_args_include_bld)
-	
-	@staticmethod
-	def _cfg_cxx_args(cfg, include_func):
+	def cfg_cxx_args(cfg):
 		args = [cfg.cxx_prog]
 		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + v)
-		include_func(cfg, args)
+		for p in cfg.include_paths: args.append('-I' + cfg.bld_rel_path(p))
 		args += cfg.cxx_flags
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: posix: cxx: ' + str(args))
 		return args
 
-	@staticmethod
-	def _cfg_cxx_args_include_cwd(cfg, args):
-		for p in cfg.include_paths: args.append('-I' + p.path)
-	@staticmethod
-	def _cfg_cxx_args_include_bld(cfg, args):
-		for p in cfg.include_paths: args.append('-I' + os.path.join(os.pardir, os.pardir, p.rel_path(cfg.project.bld_dir)))
-
 	def process_cxx_task(self, cxx_task, lock):
-		args = cxx_task.cfg.cxx_args_bld + ['-c'] + [s.name for s in cxx_task._actual_sources]
 		cwd = cxx_task.target_dir
+		args = cxx_task.cfg.cxx_args + ['-c'] + [s.name for s in cxx_task._actual_sources]
 		implicit_deps = cxx_task.persistent_implicit_deps
-		if exec_subprocess(args, cwd = cwd.path) == 0:
+		if exec_subprocess(args, cwd=cwd.path) == 0:
 			succeeded_sources = cxx_task.sources
 			failed_sources = None
 		else:
@@ -106,7 +93,7 @@ class Impl(object):
 	@staticmethod
 	def cfg_ld_args(cfg):
 		args = [cfg.ld_prog]
-		for p in cfg.lib_paths: args.append('-L' + p.path)
+		for p in cfg.lib_paths: args.append('-L' + cfg.bld_rel_path(p))
 		for l in cfg.libs: args.append('-l' + l)
 		for l in cfg.static_libs: args.append('-l' + l)
 		for l in cfg.shared_libs: args.append('-l' + l)
@@ -128,30 +115,31 @@ class Impl(object):
 
 	@staticmethod
 	def process_mod_task(mod_task, obj_names, removed_obj_names):
-		path = mod_task.obj_dir.path
-		obj_paths = [os.path.join(path, o) for o in obj_names]
+		cwd = mod_task.obj_dir
+		obj_paths = obj_names
+		mod_task_target_path = mod_task.target.rel_path(cwd)
 		if mod_task.ld:
 			args = mod_task.cfg.ld_args
-			args = [args[0], '-o' + mod_task.target.path] + obj_paths + args[1:]
-			if exec_subprocess(args) != 0: raise UserReadableException, mod_task
+			args = [args[0], '-o' + mod_task_target_path] + obj_paths + args[1:]
+			if exec_subprocess(args, cwd=cwd.path) != 0: raise UserReadableException, mod_task
 		else:
 			ar_args, ranlib_args = mod_task.cfg.ar_ranlib_args
 			if len(obj_names) != 0:
 				args = ar_args[:]
 				if removed_obj_names is not None: args.append('-s')
-				args.append(mod_task.target.path)
+				args.append(mod_task_target_path)
 				args += obj_paths
-				if exec_subprocess(args) != 0: raise UserReadableException, mod_task
+				if exec_subprocess(args, cwd=cwd.path) != 0: raise UserReadableException, mod_task
 			if removed_obj_names is not None:
 				if ranlib_args is None: args = [ar_args[0], '-d']
 				if ranlib_args is None: args.append('-s')
-				args.append(mod_task.target.path)
+				args.append(mod_task_target_path)
 				args += removed_obj_names
-				if exec_subprocess(args) != 0: raise UserReadableException, mod_task
+				if exec_subprocess(args, cwd=cwd.path) != 0: raise UserReadableException, mod_task
 			if ranlib_args is not None: # '-s' not in ar_args
 				args = ranlib_args[:]
-				args.append(mod_task.target.path)
-				if exec_subprocess(args) != 0: raise UserReadableException, mod_task
+				args.append(mod_task_target_path)
+				if exec_subprocess(args, cwd=cwd.path) != 0: raise UserReadableException, mod_task
 
 	@staticmethod
 	def mod_task_targets(mod_task): return (mod_task.target,)
@@ -170,15 +158,15 @@ class Impl(object):
 
 	@staticmethod
 	def process_build_check_task(build_check_task):
-		cfg = build_check_task.cfg
 		cwd = build_check_task.bld_dir
+		cfg = build_check_task.cfg
 		s = cwd / 'a.cpp' # TODO a.c for C
 		f = open(s.path, 'w')
 		try: f.write(build_check_task._prog_source_text)
 		finally: f.close()
-		args = cfg.cxx_args_bld + [s.rel_path(cwd)]
+		args = cfg.cxx_args + [s.rel_path(cwd)]
 		if build_check_task.pipe_preproc: args.append('-E')
 		elif not build_check_task.compile: args += ['-E', '-o', os.devnull]
 		elif not build_check_task.link: args += ['-c', '-o', os.devnull]
 		else: args += ['-o', os.devnull] + cfg.ld_args[1:]
-		return exec_subprocess_pipe(args, cwd = cwd.path, silent = True)
+		return exec_subprocess_pipe(args, cwd=cwd.path, silent=True)

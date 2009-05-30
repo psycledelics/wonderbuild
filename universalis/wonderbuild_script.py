@@ -57,10 +57,7 @@ class Wonderbuild(ScriptTask):
 
 		# used by pch too
 		cfg.defines['UNIVERSALIS__SOURCE'] = cfg.shared and '1' or '-1'
-		cfg.include_paths.extend([
-			src_dir,
-			src_dir / 'universalis' / 'standard_library' / 'future_std_include'
-		])
+		cfg.include_paths.extend([src_dir, src_dir / 'universalis' / 'standard_library' / 'future_std_include'])
 
 		class Pch(PreCompileTasks):
 			def __init__(self): PreCompileTasks.__init__(self, 'pch', cfg)
@@ -92,6 +89,16 @@ class Wonderbuild(ScriptTask):
 				self.cfg.include_paths.append(top_src_dir / 'build-systems' / 'src')
 				PreCompileTasks.__call__(self, sched_ctx)
 
+			def apply_cxx_to(self, cfg):
+				for i in (
+					top_src_dir / 'build-systems' / 'src',
+					self.cxx.dest_dir,
+					self.cxx.dest_dir / 'universalis' / 'standard_library' / 'future_std_include'
+				):
+					if not i in cfg.include_paths: cfg.include_paths.append(i)
+				if not self.cfg.shared: cfg.defines['UNIVERSALIS__SOURCE'] = '-1'
+				PreCompileTasks.apply_cxx_to(self, cfg)
+
 		class UniversalisMod(ModTask):
 			def __init__(self): ModTask.__init__(self, 'universalis', ModTask.Kinds.LIB, cfg, 'universalis', 'default')
 				
@@ -105,40 +112,36 @@ class Wonderbuild(ScriptTask):
 					sched_ctx.wait(winmm)
 					if winmm: self.public_deps.append(winmm)
 					else: raise UserReadableException, 'on mswindows, universalis requires microsoft\'s windows multimedia extensions: ' + winmm.help
-				self.result = True
-				self.cxx = UniversalisClientHeaders()
+				self.cxx = UniversalisMod.InstallHeaders(self.project, self.name + '-headers')
+				ModTask.__call__(self, sched_ctx)
 			
 			def do_mod(self):
-				self.cfg.defines['UNIVERSALIS__SOURCE'] = self.cfg.shared and '1' or '-1'
-				self.cfg.include_paths.extend([src_dir, src_dir / 'universalis' / 'standard_library' / 'future_std_include'])
 				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 			
 			def apply_cxx_to(self, cfg):
-				for i in (self.cxx.dest_dir, self.cxx.dest_dir / 'standard_library' / 'future_std_include'):
+				for i in (self.cxx.dest_dir, self.cxx.dest_dir / 'universalis' / 'standard_library' / 'future_std_include'):
 					if not i in cfg.include_paths: cfg.include_paths.append(i)
 				if not self.cfg.shared: cfg.defines['UNIVERSALIS__SOURCE'] = '-1'
 				ModTask.apply_cxx_to(self, cfg)
 		
-		class UniversalisClientHeaders(InstallTask):
-			def __init__(self): InstallTask.__init__(self, project)
+			class InstallHeaders(InstallTask):
+				@property
+				def trim_prefix(self): return src_dir
 
-			@property
-			def trim_prefix(self): return src_dir
+				@property
+				def dest_dir(self): return self.fhs.include
 
-			@property
-			def dest_dir(self): return self.fhs.include
-
-			@property
-			def sources(self):
-				try: return self._sources
-				except AttributeError:
-					self._sources = []
-					for s in (self.trim_prefix / 'universalis').find_iter(
-						in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)): self._sources.append(s)
-					for s in (self.trim_prefix / 'universalis' / 'standard_library' / 'future_std_include').find_iter(
-						in_pats = ('condition', 'cstdint', 'date_time', 'mutex', 'thread'),
-						prune_pats = ('*',)): self._sources.append(s)
-					return self._sources
+				@property
+				def sources(self):
+					try: return self._sources
+					except AttributeError:
+						self._sources = []
+						for s in (self.trim_prefix / 'universalis').find_iter(
+							in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)): self._sources.append(s)
+						for s in (self.trim_prefix / 'universalis' / 'standard_library' / 'future_std_include').find_iter(
+							in_pats = ('condition', 'cstdint', 'date_time', 'mutex', 'thread'),
+							prune_pats = ('*',)): self._sources.append(s)
+						return self._sources
 		
 		self._pch = pch = Pch()
 		self._mod_dep_phases = mod_dep_phases = UniversalisMod()

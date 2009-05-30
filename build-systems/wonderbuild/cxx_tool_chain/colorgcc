@@ -295,7 +295,18 @@ $forced_error_code = 0;
 while(<GCCOUT>)
 {
 	#print(color("reset"), $_);
-	if(m#^((In file included|                ) from) (.+?[^:/ ]+):(.*)$#) # In file included from filename:line:
+	if(m#^(cc1.*: )[Ww]arning: (.+?\.?[^:/ ]+): (.*)$#)
+	{
+		$field1 = $1 || "";
+		$field2 = $2 || "";
+		$field3 = $3 || "";
+		print($field1);
+		print($colors{"warningMessageColor"}, "warning: ");
+		print($colors{"introFileNameColor"}, "$field2: ", color("reset"));
+		srcscan($field3, $colors{"noteMessageColor"});
+		print("\n");
+	}
+	elsif(m#^((In file included|                ) from) (.+?[^:/ ]+):(.*)$#) # In file included from filename:line:
 	{
 		$field1 = " " . $1 || ""; # <-- bug here, field1's mem adress first byte gets overwritten by the ':' char, fuck perl.
 		$field_ = $2 || "";
