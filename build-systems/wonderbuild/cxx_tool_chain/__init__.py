@@ -301,20 +301,57 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 			if self.impl is None: raise UserReadableException, 'no supported c++ compiler found'
 
 class ModDepPhases(object):
-	def __init__(self): self.cxx = self.mod = None
-	def deep_cxx_public_deps(self, cxx_public_deps): pass
-	def apply_cxx_to(self, cfg): pass
-	def apply_mod_to(self, cfg): pass
-
-class _PreCompileTask(ProjectTask, ModDepPhases):
-	def __init__(self, name, base_cfg):
-		ProjectTask.__init__(self, base_cfg.project)
-		ModDepPhases.__init__(self)
-		self.name = name
-		self.base_cfg = base_cfg
+	def __init__(self):
+		self.private_deps = [] # of ModDepPhases
+		self.public_deps = [] # of ModDepPhases
+		self.cxx = self.mod = None
 
 	@property
-	def source_text(self): return '#error ' + str(self.__class__) + ' did not redefine default source text.\n'
+	def cfg(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
+
+	@property
+	def all_deps(self):
+		try: return self._all_deps
+		except AttributeError:
+			self._all_deps = self.public_deps + self.private_deps
+			return self._all_deps
+
+	def __call__(self, sched_ctx): sched_ctx.parallel_wait(*(dep for dep in self.all_deps))
+
+	def _get_result(self):
+		try: return self._result
+		except AttributeError: raise Exception, 'did you forget to process the ' + str(self) + ' task?'
+	def _set_result(self, value): self._result = value
+	result = property(_get_result, _set_result)
+	def __bool__(self): return self.result
+	def __nonzero__(self): return self.result
+
+	def do_cxx_deps(self, sched_ctx):
+		cxx_deps = [dep.cxx for dep in self.private_deps if dep.cxx is not None]
+		self._deep_cxx_public_deps(cxx_deps)
+		sched_ctx.parallel_wait(*cxx_deps)
+		for dep in self.all_deps: dep.apply_cxx_to(self.cfg)
+
+	def _deep_cxx_public_deps(self, cxx_public_deps):
+		cxx_public_deps += [dep.cxx for dep in self.public_deps if dep.cxx is not None]
+		for dep in self.public_deps: dep._deep_cxx_public_deps(cxx_public_deps)
+
+	def apply_cxx_to(self, cfg):
+		if self in cfg._applied: return
+		for dep in self.public_deps: dep.apply_cxx_to(cfg)
+		cfg._applied.add(self)
+	
+	def apply_mod_to(self, cfg):
+		if self in cfg._applied: return
+		for dep in self.cfg.shared and self.public_deps or self.all_deps: dep.apply_mod_to(cfg)
+		cfg._applied.add(self)
+
+class _PreCompileTask(ModDepPhases, ProjectTask):
+	def __init__(self, name, base_cfg):
+		ModDepPhases.__init__(self)
+		ProjectTask.__init__(self, base_cfg.project)
+		self.name = name
+		self.base_cfg = base_cfg
 
 	@property
 	def cfg(self):
@@ -323,8 +360,17 @@ class _PreCompileTask(ProjectTask, ModDepPhases):
 			self._cfg = self.base_cfg.clone()
 			return self._cfg
 
-	def apply_cxx_to(self, cfg): cfg.pch = self.header
+	def __call__(self, sched_ctx):
+		ModDepPhases.__call__(self, sched_ctx)
+		self.cxx = _PreCompileTask._CxxCallbackTask(self)
 	
+	def apply_cxx_to(self, cfg):
+		ModDepPhases.apply_cxx_to(self, cfg)
+		cfg.pch = self.header
+
+	@property
+	def source_text(self): return '#error ' + str(self.__class__) + ' did not redefine default source text.\n'
+
 	def __str__(self): return 'pre-compile ' + str(self.header) + ' (check)'
 
 	@property
@@ -349,18 +395,17 @@ class _PreCompileTask(ProjectTask, ModDepPhases):
 	@property
 	def target_dir(self): return self.target.parent
 
-	def __call__(self, sched_ctx): self.cxx = _PreCompileTask._CallbackTask(self)
-	
-	class _CallbackTask(Task):
+	class _CxxCallbackTask(Task):
 		def __init__(self, pre_compile_task):
 			Task.__init__(self)
 			self.pre_compile_task = pre_compile_task
 		
 		def __str__(self): return 'pre-compile ' + str(self.pre_compile_task.header) + ' (build)'
+		def __call__(self, sched_ctx): self.pre_compile_task._cxx_callback(sched_ctx)
 
-		def __call__(self, sched_ctx): self.pre_compile_task._callback(sched_ctx)
-	
-	def _callback(self, sched_ctx):
+	def _cxx_callback(self, sched_ctx):
+		sched_ctx.parallel_wait(self)
+		self.do_cxx_deps(sched_ctx)
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, we don't need pkg-config cxx flags in the signature
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.project, self.cfg.pkg_config)
@@ -427,17 +472,12 @@ class _PreCompileTask(ProjectTask, ModDepPhases):
 			sig = self._sig = sig.digest()
 			return sig
 
-class PreCompileTasks(ProjectTask, ModDepPhases):
+class PreCompileTasks(ModDepPhases, ProjectTask):
 	def __init__(self, name, base_cfg):
-		ProjectTask.__init__(self, base_cfg.project)
 		ModDepPhases.__init__(self)
+		ProjectTask.__init__(self, base_cfg.project)
 		self.name = name
 		self.base_cfg = base_cfg
-
-	def __str__(self): return 'pre-compile ' + self.name + ' (pic-or-not)'
-
-	@property
-	def source_text(self): return '#error ' + str(self.__class__) + ' did not redefine default source text.\n'
 
 	@property
 	def cfg(self):
@@ -445,6 +485,11 @@ class PreCompileTasks(ProjectTask, ModDepPhases):
 		except AttributeError:
 			self._cfg = self.base_cfg.clone()
 			return self._cfg
+
+	def __str__(self): return 'pre-compile ' + self.name + ' (pic-or-not)'
+
+	@property
+	def source_text(self): return '#error ' + str(self.__class__) + ' did not redefine default source text.\n'
 
 	@property
 	def lib_task(self):
@@ -535,7 +580,7 @@ class BatchCompileTask(ProjectTask):
 			self.cfg.impl.process_cxx_task(self, sched_ctx.lock)
 		finally: sched_ctx.lock.acquire()
 
-class ModTask(ProjectTask, ModDepPhases):
+class ModTask(ModDepPhases, ProjectTask):
 	class Kinds(object):
 		HEADERS = 0
 		PROG = 1
@@ -544,13 +589,11 @@ class ModTask(ProjectTask, ModDepPhases):
 
 	def __init__(self, name, kind, base_cfg, *aliases, **kw):
 		if len(aliases) == 0: aliases = (name,)
-		ProjectTask.__init__(self, base_cfg.project)
 		ModDepPhases.__init__(self)
+		ProjectTask.__init__(self, base_cfg.project)
 		self.name = name
 		self.kind = kind
 		self.base_cfg = base_cfg
-		self.private_deps = [] # of ModDepPhases
-		self.public_deps = [] # of ModDepPhases
 		self.sources = []
 		if kind == ModTask.Kinds.HEADERS:
 			#self.cxx = ModTask._CxxCallbackTask(self)
@@ -559,15 +602,6 @@ class ModTask(ProjectTask, ModDepPhases):
 		else:
 			self.mod = ModTask._ModCallbackTask(self)
 			self.project.add_task_aliases(self.mod, *aliases)
-
-	@property
-	def ld(self):
-		try: return self._ld
-		except AttributeError:
-			if self.kind == ModTask.Kinds.HEADERS: self._ld = False
-			elif self.kind == ModTask.Kinds.PROG: self._ld = True
-			else: self._ld = self.cfg.shared
-			return self._ld
 
 	@property
 	def cfg(self):
@@ -581,6 +615,12 @@ class ModTask(ProjectTask, ModDepPhases):
 					debug('cfg: cxx: mod: shared lib => overriding cfg to pic')
 					cfg.pic = True
 			return cfg
+
+	def apply_mod_to(self, cfg):
+		if self in cfg._applied: return
+		ModDepPhases.apply_mod_to(self, cfg)
+		if not self.target_dev_dir in cfg.lib_paths: cfg.lib_paths.append(self.target_dev_dir)
+		cfg.libs.append(self.target_dev_name)
 
 	def __str__(self):
 		if self.kind != ModTask.Kinds.HEADERS: return 'module ' + str(self.target) + ' (check)'
@@ -630,43 +670,16 @@ class ModTask(ProjectTask, ModDepPhases):
 			return self._target_dev_name
 
 	@property
-	def persistent_implicit_deps(self): return self.persistent[2]
+	def ld(self):
+		try: return self._ld
+		except AttributeError:
+			if self.kind == ModTask.Kinds.HEADERS: self._ld = False
+			elif self.kind == ModTask.Kinds.PROG: self._ld = True
+			else: self._ld = self.cfg.shared
+			return self._ld
 
 	@property
-	def all_deps(self):
-		try: return self._all_deps
-		except AttributeError:
-			self._all_deps = self.public_deps + self.private_deps
-			return self._all_deps
-
-	def __call__(self, sched_ctx):
-		sched_ctx.parallel_wait(*(dep for dep in self.all_deps))
-	
-	def _get_result(self):
-		try: return self._result
-		except AttributeError: raise Exception, 'did you forget to process the ' + str(self) + ' task?'
-	def _set_result(self, value): self._result = value
-	result = property(_get_result, _set_result)
-	def __bool__(self): return self.result
-	def __nonzero__(self): return self.result
-
-	def do_mod(self): pass
-	
-	def deep_cxx_public_deps(self, cxx_public_deps):
-		cxx_public_deps += [dep.cxx for dep in self.public_deps if dep.cxx is not None]
-		for dep in self.public_deps: dep.deep_cxx_public_deps(cxx_public_deps)
-
-	def apply_cxx_to(self, cfg):
-		if self in cfg._applied: return
-		for dep in self.public_deps: dep.apply_cxx_to(cfg)
-		cfg._applied.add(self)
-	
-	def apply_mod_to(self, cfg):
-		if self in cfg._applied: return
-		for dep in self.cfg.shared and self.public_deps or self.all_deps: dep.apply_mod_to(cfg)
-		if not self.target_dev_dir in cfg.lib_paths: cfg.lib_paths.append(self.target_dev_dir)
-		cfg.libs.append(self.target_dev_name)
-		cfg._applied.add(self)
+	def persistent_implicit_deps(self): return self.persistent[2]
 
 	class _ModCallbackTask(Task):
 		def __init__(self, mod_task):
@@ -675,18 +688,16 @@ class ModTask(ProjectTask, ModDepPhases):
 
 		def __str__(self): return 'module ' + str(self.mod_task.target) + ' (build)'
 		def __call__(self, sched_ctx): self.mod_task._mod_callback(sched_ctx)
-	
+
+	def do_mod(self): pass
+
 	def _mod_callback(self, sched_ctx):
 		sched_ctx.parallel_wait(self)
 		if self.cxx is not None: sched_ctx.parallel_no_wait(self.cxx)
 		if self.ld:
-			dep_mods = list(dep.mod for dep in self.all_deps if dep.mod is not None)
+			dep_mods = [dep.mod for dep in self.all_deps if dep.mod is not None]
 			sched_ctx.parallel_no_wait(*dep_mods)
-		# recurse cxx
-		cxx_deps = [dep.cxx for dep in self.private_deps if dep.cxx is not None]
-		self.deep_cxx_public_deps(cxx_deps)
-		sched_ctx.parallel_wait(*cxx_deps)
-		for dep in self.all_deps: dep.apply_cxx_to(self.cfg)
+		self.do_cxx_deps(sched_ctx)
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, we don't need pkg-config cxx flags in the signature
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.project, self.cfg.pkg_config)
@@ -913,36 +924,6 @@ class _PkgConfigTask(CheckTask):
 			if e is not None: sig.update(e)
 		return sig.digest()
 
-class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
-	@classmethod
-	def shared(class_, project, pkgs):
-		try: pkg_configs = project.cxx_pkg_configs
-		except AttributeError: pkg_configs = project.cxx_pkg_configs = {}
-		key = ' '.join(pkgs)
-		try: return pkg_configs[key]
-		except KeyError:
-			task = pkg_configs[key] = class_(project, pkgs)
-			return task
-
-	def __init__(self, *args, **kw):
-		_PkgConfigTask.__init__(self, *args, **kw)
-		ModDepPhases.__init__(self)
-
-	@property
-	def what_desc(self): return 'existence'
-	
-	@property
-	def what_args(self): return ['--exists']
-
-	def apply_cxx_to(self, cfg): cfg.pkg_config += self.pkgs
-		
-	def do_check_and_set_result(self, sched_ctx):
-		try: r = exec_subprocess(self.args)
-		except Exception, e:
-			if __debug__ and is_debug: debug('cfg: ' + self.desc + ': exception: ' + str(e))
-			r = 1
-		self.results = r == 0
-
 class _PkgConfigFlagsTask(_PkgConfigTask):
 	def do_check_and_set_result(self, sched_ctx):
 			r, out, err = exec_subprocess_pipe(self.args, silent = True)
@@ -1000,6 +981,42 @@ class _PkgConfigLdFlagsTask(_PkgConfigFlagsTask):
 
 	def apply_to(self, cfg): cfg.ld_flags += self.result
 
+class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
+	@classmethod
+	def shared(class_, project, pkgs):
+		try: pkg_configs = project.cxx_pkg_configs
+		except AttributeError: pkg_configs = project.cxx_pkg_configs = {}
+		key = ' '.join(pkgs)
+		try: return pkg_configs[key]
+		except KeyError:
+			task = pkg_configs[key] = class_(project, pkgs)
+			return task
+
+	def __init__(self, *args, **kw):
+		ModDepPhases.__init__(self)
+		_PkgConfigTask.__init__(self, *args, **kw)
+
+	def __call__(self, sched_ctx):
+		ModDepPhases.__call__(self, sched_ctx)
+		_PkgConfigTask.__call__(self, sched_ctx)
+
+	def apply_cxx_to(self, cfg):
+		ModDepPhases.apply_cxx_to(self, cfg)
+		cfg.pkg_config += self.pkgs
+		
+	@property
+	def what_desc(self): return 'existence'
+	
+	@property
+	def what_args(self): return ['--exists']
+
+	def do_check_and_set_result(self, sched_ctx):
+		try: r = exec_subprocess(self.args)
+		except Exception, e:
+			if __debug__ and is_debug: debug('cfg: ' + self.desc + ': exception: ' + str(e))
+			r = 1
+		self.results = r == 0
+
 class MultiBuildCheckTask(CheckTask, ModDepPhases):
 	def __init__(self, name, base_cfg, pipe_preproc=False, compile=True, link=True):
 		CheckTask.__init__(self, base_cfg.project)
@@ -1010,10 +1027,10 @@ class MultiBuildCheckTask(CheckTask, ModDepPhases):
 		self.compile = compile
 		self.link = link
 
-	def apply_cxx_to(self, cfg): self.apply_to(cfg)
+	def __call__(self, sched_ctx):
+		ModDepPhases.__call__(self, sched_ctx)
+		CheckTask.__call__(self, sched_ctx)
 
-	def apply_to(self, cfg): pass
-		
 	@property
 	def cfg(self):
 		try: return self._cfg
@@ -1023,6 +1040,12 @@ class MultiBuildCheckTask(CheckTask, ModDepPhases):
 			self.apply_to(self._cfg)
 			return self._cfg
 
+	def apply_cxx_to(self, cfg):
+		ModDepPhases.apply_cxx_to(self, cfg)
+		self.apply_to(cfg)
+
+	def apply_to(self, cfg): pass
+		
 	@property
 	def source_text(self): return '#error ' + str(self.__class__) + ' did not redefine default source text.\n'
 
