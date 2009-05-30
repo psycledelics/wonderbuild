@@ -55,10 +55,6 @@ class Wonderbuild(ScriptTask):
 		winmm = WinMMCheckTask.shared(check_cfg)
 		diversalis = ScriptTask.shared(project, src_dir.parent.parent / 'diversalis').mod_dep_phases
 
-		# used by pch too
-		cfg.defines['UNIVERSALIS__SOURCE'] = cfg.shared and '1' or '-1'
-		cfg.include_paths.extend([src_dir, src_dir / 'universalis' / 'standard_library' / 'future_std_include'])
-
 		class Pch(PreCompileTasks):
 			def __init__(self): PreCompileTasks.__init__(self, 'pch', cfg)
 
@@ -86,17 +82,22 @@ class Wonderbuild(ScriptTask):
 				for opt in (dlfcn, pthread, glibmm):
 					if opt: opt.apply_cxx_to(self.cfg)
 
-				self.cfg.include_paths.append(top_src_dir / 'build-systems' / 'src')
+				self.cfg.include_paths.extend([
+					top_src_dir / 'build-systems' / 'src',
+					src_dir,
+					src_dir / 'universalis' / 'standard_library' / 'future_std_include'
+				])
+				self.cfg.defines['UNIVERSALIS__SOURCE'] = '123'
 				PreCompileTasks.__call__(self, sched_ctx)
 
 			def apply_cxx_to(self, cfg):
 				for i in (
 					top_src_dir / 'build-systems' / 'src',
-					self.cxx.dest_dir,
-					self.cxx.dest_dir / 'universalis' / 'standard_library' / 'future_std_include'
+					src_dir,
+					src_dir / 'universalis' / 'standard_library' / 'future_std_include'
 				):
 					if not i in cfg.include_paths: cfg.include_paths.append(i)
-				if not self.cfg.shared: cfg.defines['UNIVERSALIS__SOURCE'] = '-1'
+				cfg.defines['UNIVERSALIS__SOURCE'] = '1'
 				PreCompileTasks.apply_cxx_to(self, cfg)
 
 		class UniversalisMod(ModTask):
@@ -116,6 +117,8 @@ class Wonderbuild(ScriptTask):
 				ModTask.__call__(self, sched_ctx)
 			
 			def do_mod(self):
+				self.cfg.defines['UNIVERSALIS__SOURCE'] = self.cfg.shared and '1' or '-1'
+				if not src_dir in self.cfg.include_paths: self.cfg.include_paths.append(src_dir)
 				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 			
 			def apply_cxx_to(self, cfg):

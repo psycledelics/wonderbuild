@@ -18,7 +18,7 @@ class Impl(object):
 
 	@staticmethod
 	def progs(cfg):
-		if not out_is_dumb and cfg.cxx_prog in (None, 'g++') and cfg.ld_prog in (None, 'g++'):
+		if not out_is_dumb and cfg.cxx_prog is None and cfg.ld_prog is None:
 			cxx_prog = ld_prog = ((cfg.project.fs.cur / __file__).parent / 'colorgcc').abs_path
 		else: cxx_prog, ld_prog = \
 			cfg.cxx_prog or 'g++', \

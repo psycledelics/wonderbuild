@@ -425,9 +425,10 @@ class _PreCompileTask(ProjectTask, ModDepPhases):
 			sig = self._sig = sig.digest()
 			return sig
 
-class PreCompileTasks(ProjectTask): # doesn't need to be a task
+class PreCompileTasks(ProjectTask, ModDepPhases):
 	def __init__(self, name, base_cfg):
 		ProjectTask.__init__(self, base_cfg.project)
+		ModDepPhases.__init__(self)
 		self.name = name
 		self.base_cfg = base_cfg
 
@@ -485,6 +486,10 @@ class PreCompileTasks(ProjectTask): # doesn't need to be a task
 			sched_ctx.parallel_wait(self.parent_task)
 			self.cfg.pic = self.pic
 			_PreCompileTask.__call__(self, sched_ctx)
+
+		def apply_cxx_to(self, cfg):
+			_PreCompileTask.apply_cxx_to(self, cfg)
+			self.parent_task.apply_cxx_to(cfg)
 
 class BatchCompileTask(ProjectTask):
 	def __init__(self, mod_task, sources):
