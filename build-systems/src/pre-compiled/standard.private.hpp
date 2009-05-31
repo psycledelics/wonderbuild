@@ -14,7 +14,8 @@
 		#pragma message("pre-compiling " __FILE__ " ...")
 	#endif
 
-	#if defined DIVERSALIS__COMPILER__MICROSOFT
+	#if defined DIVERSALIS__COMPILER__MICROSOFT && !defined _CRT_SECURE_NO_DEPRECATE
+		/// don't warn when unsecure standard functions are used
 		#define _CRT_SECURE_NO_DEPRECATE
 	#endif
 
