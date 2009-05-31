@@ -28,6 +28,20 @@ class Wonderbuild(ScriptTask):
 		class Pch(PreCompileTasks):
 			def __init__(self): PreCompileTasks.__init__(self, 'pch', build_cfg)
 
+			def __call__(self, sched_ctx):
+				self.public_deps = [std_math, glibmm]
+				req = self.public_deps
+				opt = std_math, glibmm
+				sched_ctx.parallel_wait(*opt)
+				self.result = True
+				self.public_deps += [x for x in opt if x]
+				PreCompileTasks.__call__(self, sched_ctx)
+			
+			def do_cxx(self):
+				self.source_text
+				if std_math: self._source_text += '\n#include <cmath>'
+				if glibmm: self._source_text += '\n#include <glibmm.h>'
+
 			@property
 			def source_text(self):
 				try: return self._source_text
@@ -37,30 +51,23 @@ class Wonderbuild(ScriptTask):
 						'#include <sstream>\n' \
 						'#include <iostream>'
 					return self._source_text
-
-			def __call__(self, sched_ctx):
-				sched_ctx.parallel_wait(std_math, glibmm)
-				self.source_text
-				if std_math:
-					std_math.apply_cxx_to(self.cfg)
-					self._source_text += '\n#include <cmath>'
-				if glibmm:
-					glibmm.apply_cxx_to(self.cfg)
-					self._source_text += '\n#include <glibmm.h>'
-				PreCompileTasks.__call__(self, sched_ctx)
 		pch = Pch()
 
 		class LibFoo(ModTask):
 			def __init__(self): ModTask.__init__(self, 'foo', ModTask.Kinds.LIB, build_cfg)
 
 			def __call__(self, sched_ctx):
+				self.private_deps = [pch.lib_task]
+				req = self.private_deps
+				opt = [std_math, glibmm]
+				sched_ctx.parallel_wait(*(req + opt))
+				self.result = min(req)
+				self.public_deps += [x for x in opt if x]
+				self.cxx = LibFoo.Install(self.project, self.name + '-headers')
 				ModTask.__call__(self, sched_ctx)
-				self.private_deps += [pch.lib_task]
-				sched_ctx.parallel_wait(std_math, glibmm)
-				for opt in (std_math, glibmm):
-					if opt: self.public_deps.append(opt)
+				
+			def do_mod(self):
 				for s in (src_dir / 'foo').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
-				self.cxx = LibFoo.Install(self.project)
 
 			def apply_cxx_to(self, cfg):
 				if not self.cxx.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx.dest_dir)
@@ -85,11 +92,14 @@ class Wonderbuild(ScriptTask):
 			def __init__(self): ModTask.__init__(self, 'main', ModTask.Kinds.PROG, build_cfg, 'default')
 
 			def __call__(self, sched_ctx):
+				self.public_deps = [lib_foo]
+				req = self.public_deps
+				opt = [glibmm]
+				sched_ctx.parallel_wait(*(req + opt))
+				self.result = min(req)
+				self.public_deps += [x for x in opt if x]
 				ModTask.__call__(self, sched_ctx)
-				self.public_deps += [lib_foo]
-				self.private_deps += [pch.prog_task]
-				sched_ctx.parallel_wait(glibmm)
-				for opt in (glibmm,):
-					if opt: self.public_deps.append(opt)
+				
+			def do_mod(self):
 				for s in (src_dir / 'main').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 		main_prog = MainProg()
