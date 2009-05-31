@@ -102,9 +102,9 @@ class Wonderbuild(ScriptTask):
 				ModTask.__call__(self, sched_ctx)
 			
 			def do_mod(self):
-				if not std_math: raise UserReadableException, 'universalis requires the standard math lib: ' + std_math.help
-				if not boost: raise UserReadableException, 'universalis requires the folowing boost libs: ' + boost.help
-				if mswindows and not winmm: raise UserReadableException, 'on mswindows, universalis requires microsoft\'s windows multimedia extensions: ' + winmm.help
+				if not std_math: raise UserReadableException, self.name + ' requires the standard math lib: ' + std_math.help
+				if not boost: raise UserReadableException, self.name + ' requires the folowing boost libs: ' + boost.help
+				if mswindows and not winmm: raise UserReadableException, 'on mswindows, ' + self.name + ' requires microsoft\'s windows multimedia extensions: ' + winmm.help
 				self.cfg.defines['UNIVERSALIS__SOURCE'] = self.cfg.shared and '1' or '-1'
 				self.cfg.include_paths.extend([src_dir, src_dir / 'universalis' / 'standard_library' / 'future_std_include'])
 				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)

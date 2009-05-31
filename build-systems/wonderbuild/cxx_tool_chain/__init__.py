@@ -44,6 +44,7 @@ class ClientCfg(object):
 		return c
 	
 	def apply_to(self, cfg):
+		if self in cfg._applied: return
 		cfg.defines.update(self.defines)
 		cfg.include_paths.extend(self.include_paths)
 		cfg.cxx_flags += self.cxx_flags
@@ -1013,6 +1014,7 @@ class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 		_PkgConfigTask.__call__(self, sched_ctx)
 
 	def apply_cxx_to(self, cfg):
+		if self in cfg._applied: return
 		ModDepPhases.apply_cxx_to(self, cfg)
 		cfg.pkg_config += self.pkgs
 		
