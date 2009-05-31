@@ -589,12 +589,7 @@
 			The wonderbuild script finds source files dynamically instead of relying on a hard-coded file list.
 			This is far more maintainance-free, and the impact on speed is negligible.
 			<br/><br/>
-			Wonderbuild is a work-in-progress and not ready for production.
-			Currently, it aims at building C++ code only, it's not documented, and lacks some essential features.
-			<br/>
-			If you need a complete and fast build tool, i suggest you try <a href='http://code.google.com/p/waf'>waf</a>.
-			<br/>
-			However, if you have an insterest in developping build tools,
+			If you have an insterest in developping build tools,
 			you can try wonderbuild with this benchmark with:
 			<code>
 				<pre>
