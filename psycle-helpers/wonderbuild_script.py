@@ -37,6 +37,7 @@ class Wonderbuild(ScriptTask):
 			cfg.cxx_flags += ['-EHa', '-MD'] # basic compilation flags required
 
 		check_cfg = cfg.clone()
+		#pch = ScriptTask.shared(project, src_dir.parent.parent / 'build-systems' / 'src' / 'pre_compiled_wonderbuild_script.py').mod_dep_phases
 		universalis = ScriptTask.shared(project, src_dir.parent.parent / 'universalis')
 		pch = universalis.pch
 		universalis = universalis.mod_dep_phases

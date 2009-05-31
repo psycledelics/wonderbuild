@@ -403,8 +403,11 @@ class _PreCompileTask(ModDepPhases, ProjectTask):
 		def __str__(self): return 'pre-compile ' + str(self.pre_compile_task.header) + ' (build)'
 		def __call__(self, sched_ctx): self.pre_compile_task._cxx_callback(sched_ctx)
 
+	def do_cxx(self): pass
+
 	def _cxx_callback(self, sched_ctx):
 		sched_ctx.parallel_wait(self)
+		self.do_cxx()
 		self.do_cxx_deps(sched_ctx)
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, we don't need pkg-config cxx flags in the signature
@@ -531,12 +534,19 @@ class PreCompileTasks(ModDepPhases, ProjectTask):
 
 		def __call__(self, sched_ctx):
 			sched_ctx.parallel_wait(self.parent_task)
+			self.private_deps = self.parent_task.private_deps
+			self.public_deps = self.parent_task.public_deps
+			self.result = self.parent_task.result
 			self.cfg.pic = self.pic
 			_PreCompileTask.__call__(self, sched_ctx)
 
 		def apply_cxx_to(self, cfg):
 			_PreCompileTask.apply_cxx_to(self, cfg)
 			self.parent_task.apply_cxx_to(cfg)
+
+		def do_cxx(self): self.parent_task.do_cxx()
+
+	def do_cxx(self): pass
 
 class BatchCompileTask(ProjectTask):
 	def __init__(self, mod_task, sources):

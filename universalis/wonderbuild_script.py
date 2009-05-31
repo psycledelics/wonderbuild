@@ -49,7 +49,7 @@ class Wonderbuild(ScriptTask):
 		std_math = StdMathCheckTask.shared(check_cfg)
 		dlfcn = DlfcnCheckTask.shared(check_cfg)
 		pthread = PThreadCheckTask.shared(check_cfg)
-		boost = BoostCheckTask.shared((1, 33), ('signals', 'thread', 'filesystem', 'date_time'), check_cfg)
+		boost = BoostCheckTask.shared((1, 35), ('signals', 'thread', 'filesystem', 'date_time'), check_cfg)
 		glibmm = PkgConfigCheckTask.shared(project, ['glibmm-2.4 >= 2.4', 'gmodule-2.0 >= 2.0', 'gthread-2.0 >= 2.0'])
 		mswindows = MSWindowsCheckTask.shared(check_cfg)
 		winmm = WinMMCheckTask.shared(check_cfg)
@@ -66,53 +66,45 @@ class Wonderbuild(ScriptTask):
 					return self._source_text
 
 			def __call__(self, sched_ctx):
-				sched_ctx.parallel_no_wait(diversalis, std_math, dlfcn, pthread, boost, glibmm)
-				sched_ctx.wait(diversalis)
-				sched_ctx.parallel_no_wait(diversalis.cxx)
-				sched_ctx.wait(diversalis.cxx, std_math, dlfcn, pthread, boost, glibmm)
-				
-				if std_math: std_math.apply_cxx_to(self.cfg)
-				else: raise UserReadableException, 'universalis requires the standard math lib: ' + std_math.help
-
-				if boost: boost.apply_cxx_to(self.cfg)
-				else: raise UserReadableException, 'universalis requires the folowing boost libs: ' + boost.help
-
-				diversalis.apply_cxx_to(self.cfg)
-				
-				# XXX diversalis adds the staged-install include dir to the include path,
-				# and, rarely but this happens, the pre-compilation is performed
-				# while universalis headers are being installed.
-				# this makes the pre-compilation fail when universalis headers are half-installed.
-				# the solution is to depend on the universalis.cxx task,
-				# and use the staged-install include dir rather than universalis' src dir.
-
-				for opt in (dlfcn, pthread, glibmm):
-					if opt: opt.apply_cxx_to(self.cfg)
-
-				self.cfg.include_paths.extend([
-					top_src_dir / 'build-systems' / 'src',
-					src_dir,
-					src_dir / 'universalis' / 'standard_library' / 'future_std_include'
-				])
+				self.public_deps = [diversalis, std_math, boost]
+				req = self.public_deps
+				opt = [dlfcn, pthread, glibmm]
+				sched_ctx.parallel_wait(universalis.cxx, *(req + opt))
+				self.result = min(req)
+				self.public_deps += [x for x in opt if x]
+				for i in (universalis.cxx.dest_dir, universalis.cxx.dest_dir / 'universalis' / 'standard_library' / 'future_std_include'):
+					if not i in self.cfg.include_paths: self.cfg.include_paths.append(i)
+				self.cfg.include_paths.append(top_src_dir / 'build-systems' / 'src')
 				PreCompileTasks.__call__(self, sched_ctx)
+			
+			def do_cxx(self):
+				if not std_math: raise UserReadableException, 'universalis requires the standard math lib: ' + std_math.help
+				if not boost: raise UserReadableException, 'universalis requires the folowing boost libs: ' + boost.help
 
 		class UniversalisMod(ModTask):
-			def __init__(self): ModTask.__init__(self, 'universalis', ModTask.Kinds.LIB, cfg, 'universalis', 'default')
+			def __init__(self):
+				ModTask.__init__(self, 'universalis', ModTask.Kinds.LIB, cfg, 'universalis', 'default')
+				self.cxx = UniversalisMod.InstallHeaders(self.project, self.name + '-headers')
 				
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
 				self.public_deps = [diversalis, std_math, boost]
-				sched_ctx.parallel_no_wait(dlfcn, pthread, glibmm, mswindows, winmm)
-				sched_ctx.parallel_wait(dlfcn, pthread, glibmm, mswindows)
-				self.public_deps += [x for x in (dlfcn, pthread, glibmm) if x]
-				if mswindows:
+				req = self.public_deps + self.private_deps
+				opt = [dlfcn, pthread, glibmm]
+				sched_ctx.parallel_no_wait(winmm)
+				sched_ctx.parallel_wait(mswindows, *(req + opt))
+				self.result = min(req)
+				self.public_deps += [x for x in opt if x]
+				if self.result and mswindows:
 					sched_ctx.wait(winmm)
 					if winmm: self.public_deps.append(winmm)
-					else: raise UserReadableException, 'on mswindows, universalis requires microsoft\'s windows multimedia extensions: ' + winmm.help
-				self.cxx = UniversalisMod.InstallHeaders(self.project, self.name + '-headers')
+					else: self.result = False
 				ModTask.__call__(self, sched_ctx)
 			
 			def do_mod(self):
+				if not std_math: raise UserReadableException, 'universalis requires the standard math lib: ' + std_math.help
+				if not boost: raise UserReadableException, 'universalis requires the folowing boost libs: ' + boost.help
+				if mswindows and not winmm: raise UserReadableException, 'on mswindows, universalis requires microsoft\'s windows multimedia extensions: ' + winmm.help
 				self.cfg.defines['UNIVERSALIS__SOURCE'] = self.cfg.shared and '1' or '-1'
 				self.cfg.include_paths.extend([src_dir, src_dir / 'universalis' / 'standard_library' / 'future_std_include'])
 				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
@@ -143,4 +135,4 @@ class Wonderbuild(ScriptTask):
 						return self._sources
 		
 		self._pch = pch = Pch()
-		self._mod_dep_phases = mod_dep_phases = UniversalisMod()
+		self._mod_dep_phases = mod_dep_phases = universalis = UniversalisMod()
