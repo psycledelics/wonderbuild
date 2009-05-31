@@ -118,7 +118,7 @@ class Impl(object):
 				if len(not_found) != 0: debug('cpp: deps not found: ' + str(s) + ': '+ str([str(x) for x in not_found]))
 			dep_sigs = [d.sig for d in deps]
 			implicit_deps[s] = False, cxx_task.cfg.cxx_sig, deps, Sig(''.join(dep_sigs)).digest()
-		if failed_sources is not None: raise UserReadableException, ' '.join(str(s) for s in failed_sources)
+		if failed_sources is not None: raise UserReadableException, '  '.join(str(s) for s in failed_sources)
 
 	@property
 	def cxx_task_target_ext(self): return '.obj'

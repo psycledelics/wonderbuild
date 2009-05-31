@@ -17,7 +17,7 @@ class Task(object):
 		
 	def print_desc_multi_column_format(self, desc, list, color = '7;1'):
 		desc = 'wonderbuild: task: ' + desc + ':'
-		line = desc + ' ' + ' '.join(list)
+		line = desc + ' ' + '  '.join(list)
 		if len(line) > cols: line = desc + '\n\t' + '\n\t'.join(multi_column_formatting.format(list, cols - 8)) # less 8 because of the tab
 		out.write(colored(color, line) + '\n')
 		out.flush()

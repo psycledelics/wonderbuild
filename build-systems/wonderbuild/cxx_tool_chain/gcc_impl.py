@@ -142,7 +142,7 @@ class Impl(object):
 			if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
 			dep_sigs = [d.sig for d in deps]
 			implicit_deps[s[0]] = False, cxx_task.cfg.cxx_sig, deps, Sig(''.join(dep_sigs)).digest()
-		if failed_sources is not None: raise UserReadableException, ' '.join(str(s) for s in failed_sources)
+		if failed_sources is not None: raise UserReadableException, '  '.join(str(s) for s in failed_sources)
 
 	@property
 	def cxx_task_target_ext(self): return '.o'
