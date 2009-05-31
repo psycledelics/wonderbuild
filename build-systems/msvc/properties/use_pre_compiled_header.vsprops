@@ -19,7 +19,7 @@
 	/>
 	<UserMacro
 		Name="PreCompiledHeader"
-		Value="pre-compiled.private.hpp"
+		Value="forced-include.private.hpp"
 	/>
 	<UserMacro
 		Name="PreCompiledObject"
