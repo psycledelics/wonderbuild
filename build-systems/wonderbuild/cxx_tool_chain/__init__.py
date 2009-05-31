@@ -544,7 +544,9 @@ class PreCompileTasks(ModDepPhases, ProjectTask):
 			_PreCompileTask.apply_cxx_to(self, cfg)
 			self.parent_task.apply_cxx_to(cfg)
 
-		def do_cxx(self): self.parent_task.do_cxx()
+		def do_cxx(self):
+			self.parent_task.do_cxx()
+			self.parent_task.cfg.apply_to(self.cfg)
 
 	def do_cxx(self): pass
 
