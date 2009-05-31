@@ -4,8 +4,6 @@
 	Version="9.00"
 	Name="universalis"
 	ProjectGUID="{B78DFE59-051A-43FD-B489-775A4982581C}"
-	RootNamespace="universalis"
-	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -254,7 +252,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
-			RelativePathToProject=".\projects\pre-compiled-headers\pre-compiled-headers.msvc-2008.vcproj"
+			RelativePathToProject="..\build-systems\msvc\projects\pre-compiled-headers\pre-compiled-headers.msvc-2008.vcproj"
 		/>
 	</References>
 	<Files>
@@ -514,7 +512,7 @@
 							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)\universalis,operating_system,exception.obj"
 						/>
-					</FileConfiguration>
+						</FileConfiguration>
 					<FileConfiguration
 						Name="debug|x64"
 						>
@@ -955,6 +953,4 @@
 			</File>
 		</Filter>
 	</Files>
-	<Globals>
-	</Globals>
 </VisualStudioProject>
