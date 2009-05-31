@@ -72,14 +72,14 @@ class Wonderbuild(ScriptTask):
 				sched_ctx.parallel_wait(universalis.cxx, *(req + opt))
 				self.result = min(req)
 				self.public_deps += [x for x in opt if x]
-				for i in (universalis.cxx.dest_dir, universalis.cxx.dest_dir / 'universalis' / 'standard_library' / 'future_std_include'):
-					if not i in self.cfg.include_paths: self.cfg.include_paths.append(i)
-				self.cfg.include_paths.append(top_src_dir / 'build-systems' / 'src')
 				PreCompileTasks.__call__(self, sched_ctx)
 			
 			def do_cxx(self):
 				if not std_math: raise UserReadableException, 'universalis requires the standard math lib: ' + std_math.help
 				if not boost: raise UserReadableException, 'universalis requires the folowing boost libs: ' + boost.help
+				for i in (universalis.cxx.dest_dir, universalis.cxx.dest_dir / 'universalis' / 'standard_library' / 'future_std_include'):
+					if not i in self.cfg.include_paths: self.cfg.include_paths.append(i)
+				self.cfg.include_paths.append(top_src_dir / 'build-systems' / 'src')
 
 		class UniversalisMod(ModTask):
 			def __init__(self):
