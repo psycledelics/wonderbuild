@@ -96,7 +96,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="UNIVERSALIS__SOURCE=1;UNIVERSALIS__QUAQUAVERSALIS"
+								PreprocessorDefinitions="UNIVERSALIS__SOURCE=1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -154,7 +154,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="UNIVERSALIS__SOURCE=1;UNIVERSALIS__QUAQUAVERSALIS"
+								PreprocessorDefinitions="UNIVERSALIS__SOURCE=1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -212,7 +212,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="UNIVERSALIS__SOURCE=1;UNIVERSALIS__QUAQUAVERSALIS"
+								PreprocessorDefinitions="UNIVERSALIS__SOURCE=1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
