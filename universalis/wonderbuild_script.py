@@ -58,28 +58,29 @@ class Wonderbuild(ScriptTask):
 		class Pch(PreCompileTasks):
 			def __init__(self): PreCompileTasks.__init__(self, 'pch', cfg)
 
-			@property
-			def source_text(self):
-				try: return self._source_text
-				except AttributeError:
-					self._source_text = '#include <pre-compiled.private.hpp>\n'
-					return self._source_text
-
 			def __call__(self, sched_ctx):
-				self.public_deps = [diversalis, std_math, boost]
+				self.public_deps = [diversalis]
 				req = self.public_deps
-				opt = [dlfcn, pthread, glibmm]
+				opt = [dlfcn, pthread, glibmm, std_math, boost]
 				sched_ctx.parallel_wait(universalis.cxx, *(req + opt))
 				self.result = min(req)
 				self.public_deps += [x for x in opt if x]
 				PreCompileTasks.__call__(self, sched_ctx)
 			
 			def do_cxx(self):
-				if not std_math: raise UserReadableException, 'universalis requires the standard math lib: ' + std_math.help
-				if not boost: raise UserReadableException, 'universalis requires the folowing boost libs: ' + boost.help
+				self.source_text
+				if boost: self._source_text += '\n#include <pre-compiled/boost.private.hpp>'
+				if std_math: self._source_text += '\n#include <cmath>'
 				for i in (universalis.cxx.dest_dir, universalis.cxx.dest_dir / 'universalis' / 'standard_library' / 'future_std_include'):
 					if not i in self.cfg.include_paths: self.cfg.include_paths.append(i)
 				self.cfg.include_paths.append(top_src_dir / 'build-systems' / 'src')
+
+			@property
+			def source_text(self):
+				try: return self._source_text
+				except AttributeError:
+					self._source_text = '#include <pre-compiled.private.hpp>'
+					return self._source_text
 
 		class UniversalisMod(ModTask):
 			def __init__(self):
@@ -88,7 +89,7 @@ class Wonderbuild(ScriptTask):
 				
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
-				self.public_deps = [diversalis, std_math, boost]
+				self.public_deps = [diversalis, boost]
 				req = self.public_deps + self.private_deps
 				opt = [dlfcn, pthread, glibmm]
 				sched_ctx.parallel_no_wait(winmm)
@@ -102,8 +103,7 @@ class Wonderbuild(ScriptTask):
 				ModTask.__call__(self, sched_ctx)
 			
 			def do_mod(self):
-				if not std_math: raise UserReadableException, self.name + ' requires the standard math lib: ' + std_math.help
-				if not boost: raise UserReadableException, self.name + ' requires the folowing boost libs: ' + boost.help
+				if not boost: raise UserReadableException, self.name + ' requires the following boost libs: ' + boost.help
 				if mswindows and not winmm: raise UserReadableException, 'on mswindows, ' + self.name + ' requires microsoft\'s windows multimedia extensions: ' + winmm.help
 				self.cfg.defines['UNIVERSALIS__SOURCE'] = self.cfg.shared and '1' or '-1'
 				self.cfg.include_paths.extend([src_dir, src_dir / 'universalis' / 'standard_library' / 'future_std_include'])

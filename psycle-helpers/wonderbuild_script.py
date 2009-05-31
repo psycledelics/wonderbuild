@@ -28,6 +28,7 @@ class Wonderbuild(ScriptTask):
 		src_dir = self.src_dir / 'src'
 
 		from wonderbuild.cxx_tool_chain import UserBuildCfg, ModTask
+		from wonderbuild.std_checks.std_math import StdMathCheckTask
 		from wonderbuild.install import InstallTask
 
 		cfg = UserBuildCfg.new_or_clone(project)
@@ -41,17 +42,22 @@ class Wonderbuild(ScriptTask):
 		universalis = ScriptTask.shared(project, src_dir.parent.parent / 'universalis')
 		pch = universalis.pch
 		universalis = universalis.mod_dep_phases
+		std_math = StdMathCheckTask.shared(check_cfg)
 
 		class HelpersMod(ModTask):
 			def __init__(self): ModTask.__init__(self, 'psycle-helpers', ModTask.Kinds.LIB, cfg, 'psycle-helpers', 'default')
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
-				self.public_deps = [universalis]
+				self.public_deps = [universalis, std_math]
+				req = self.public_deps + self.private_deps
+				sched_ctx.parallel_wait(*req)
+				self.result = min(req)
 				self.cxx = HelpersMod.InstallHeaders(self.project, self.name + '-headers')
 				ModTask.__call__(self, sched_ctx)
 			
 			def do_mod(self):
+				if not std_math: raise UserReadableException, self.name + ' requires the standard math lib: ' + std_math.help
 				self.cfg.include_paths.appendleft(src_dir)
 				for s in (src_dir / 'psycle' / 'helpers').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 

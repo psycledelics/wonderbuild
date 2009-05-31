@@ -3,7 +3,10 @@
 
 ///\file \brief inclusions of C/C++'s standard lib headers to be pre-compiled.
 
+#ifndef PSYCLE__BUILD_SYSTEMS__PRE_COMPILED__STANDARD__INCLUDED
+#define PSYCLE__BUILD_SYSTEMS__PRE_COMPILED__STANDARD__INCLUDED
 #pragma once
+
 #include <diversalis/compiler.hpp>
 #if defined DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION // if the compiler supports pre-compilation
 
@@ -73,4 +76,6 @@
 	#if defined DIVERSALIS__COMPILER__MICROSOFT
 		#pragma message("pre-compiling " __FILE__ " ... done")
 	#endif
+#endif
+
 #endif

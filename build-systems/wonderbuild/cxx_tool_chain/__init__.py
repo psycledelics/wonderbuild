@@ -773,7 +773,7 @@ class ModTask(ModDepPhases, ProjectTask):
 						continue
 				if __debug__ and is_debug: debug('task: skip: no change: ' + str(s))
 		need_process = False
-		tasks = []
+		tasks = self.ld and dep_mods or []
 		if len(changed_sources) != 0:
 			need_process = True
 			batches = []
@@ -792,7 +792,6 @@ class ModTask(ModDepPhases, ProjectTask):
 					changed_sources = self.sources
 					need_process = True
 					break
-		if self.ld: tasks += dep_mods
 		sched_ctx.parallel_wait(*tasks)
 		if self.ld:
 			for dep in self.all_deps: dep.apply_mod_to(self.cfg)

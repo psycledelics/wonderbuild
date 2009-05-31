@@ -3,7 +3,10 @@
 
 ///\file \brief inclusions of Microsoft's specific headers to be pre-compiled.
 
+#ifndef PSYCLE__BUILD_SYSTEMS__PRE_COMPILED__MICROSOFT__INCLUDED
+#define PSYCLE__BUILD_SYSTEMS__PRE_COMPILED__MICROSOFT__INCLUDED
 #pragma once
+
 #include <diversalis/compiler.hpp>
 #if defined DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION // if the compiler supports pre-compilation
 
@@ -99,4 +102,6 @@
 			#pragma message("pre-compiling " __FILE__ " ... done")
 		#endif
 	#endif
+#endif
+
 #endif

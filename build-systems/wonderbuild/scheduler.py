@@ -129,8 +129,8 @@ class Scheduler(object):
 
 	def _process_one_task(self, task):
 		if __debug__ and is_debug:
-			debug('sched: task queue: ' + str([str(t) for t in self._task_stack]))
-			debug('sched: processing task: ' + str(task))
+			debug('sched: task stack: ' + str([str(t) for t in self._task_stack]))
+			debug('sched: processing task: ' + str(task) + ' @' + str(id(task)))
 			assert not task._sched_processed
 
 		task(self._context)
@@ -138,15 +138,15 @@ class Scheduler(object):
 		#except Exception, e: raise Exception, '\nin task: ' + str(task) + ': ' + str(e)
 
 		if __debug__ and is_debug:
-			debug('sched: task processed: ' + str(task))
-			debug('sched: task queue: ' + str([str(t) for t in self._task_stack]))
+			debug('sched: task processed: ' + str(task) + ' @' + str(id(task)))
+			debug('sched: task stack: ' + str([str(t) for t in self._task_stack]))
 		task._sched_processed = True
 		self._todo_count -= 1
 		self._condition.notifyAll()
 	
 	def _parallel_wait(self, *tasks):
 		if __debug__ and is_debug:
-			debug('sched: task queue: ' + str([str(t) for t in self._task_stack]))
+			debug('sched: task stack: ' + str([str(t) for t in self._task_stack]))
 			debug('sched: parallel_wait: ' + str([str(t) for t in tasks]))
 		count = len(tasks)
 		if count == 0: return
@@ -162,10 +162,10 @@ class Scheduler(object):
 	
 	def _parallel_no_wait(self, *tasks):
 		if __debug__ and is_debug:
-			debug('sched: task queue: ' + str([str(t) for t in self._task_stack]))
+			debug('sched: task stack: ' + str([str(t) for t in self._task_stack]))
 			debug('sched: parallel_no_wait: ' + str([str(t) for t in tasks]))
 		notify = 0
-		for task in tasks:
+		for task in reversed(tasks):
 			if not task._sched_processed and not task._sched_stacked:
 				self._task_stack.append(task)
 				task._sched_stacked = True
@@ -175,11 +175,11 @@ class Scheduler(object):
 			self._condition.notify(notify)
 
 	def _wait(self, *tasks):
-		if __debug__ and is_debug:
-			debug('sched: task queue: ' + str([str(t) for t in self._task_stack]))
-			debug('sched: waiting for tasks: ' + str([str(t) for t in tasks]))
 		for task in tasks:
 			while True:
+				if __debug__ and is_debug:
+					debug('sched: task stack: ' + str([str(t) for t in self._task_stack]))
+					debug('sched: waiting for tasks: ' + str([str(t) for t in tasks if not t._sched_processed]))
 				while not task._sched_processed and not self._stop_requested and len(self._task_stack) == 0: self._condition.wait(timeout = self.timeout)
 				if self._stop_requested: raise StopIteration
 				if task._sched_processed: break
