@@ -79,7 +79,7 @@ class Wonderbuild(ScriptTask):
 			def source_text(self):
 				try: return self._source_text
 				except AttributeError:
-					self._source_text = '#include <pre-compiled.private.hpp>'
+					self._source_text = '#include <forced-include.private.hpp>'
 					return self._source_text
 
 		class UniversalisMod(ModTask):

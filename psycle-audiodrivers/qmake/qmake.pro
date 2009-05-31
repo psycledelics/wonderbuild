@@ -18,7 +18,7 @@ MOC_DIR = $$BUILD_DIR # Where intermediate moc files go.
 DESTDIR = $$BUILD_DIR # Where the final executable goes.
 
 CONFIG *= precompile_header
-PRECOMPILED_HEADER = $$TOP_SRC_DIR/build-systems/src/pre-compiled.private.hpp
+PRECOMPILED_HEADER = $$TOP_SRC_DIR/build-systems/src/forced-include.private.hpp
 
 sources_or_headers = \
 	$$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/audiodriver \
