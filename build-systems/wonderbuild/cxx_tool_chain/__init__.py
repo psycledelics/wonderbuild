@@ -224,14 +224,13 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		help['ar']            = ('<prog>', 'use <prog> as static lib archiver', 'ar')
 		help['ranlib']        = ('<prog>', 'use <prog> as static lib archive indexer', 'the posix ar s flag is used instead')
 		
-		help['static'] = ('<no|libs|full>',
-			'- no: builds shared libs and link programs dynamically against shared libs\n'
-			'- libs: build libs as static archives (rather than dynamic, shared libs)\n'
-			'- full: like libs but also statically link programs (rather than dynamically using shared libs)',
-			'no')
-		help['pic-static'] = ('<yes|no>',
+		help['static'] = ('<libs|full>',
+			'libs: build libs as static archives (rather than dynamic, shared libs),\n'
+			'full: like libs but also statically link programs (rather than dynamically using shared libs)',
+			'libs')
+		help['pic-static'] = (None,
 			'whether to make the c++ compiler emit pic code even for static libs and programs\n' \
-			'(always pic for shared libs)', 'no (for static libs and programs)')
+			'(shared libs are always pic regardless of this option)', 'non-pic for static libs and programs')
 
 		# posix compiler options -O -g -s
 		#help['optim']        = ('<0|1|n>', '...', '0')
@@ -268,16 +267,11 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 				if flags is not None: self.cxx_flags = flags.split()
 				else: self.cxx_flags = []
 
-			if 'static' in o:
-				static = o['static']
-				self.shared = static not in ('libs', 'full')
-				self.static_prog = static == 'full'
-			else:
-				self.shared = True
-				self.static_prog = False
+			static = o.get('static', None)
+			self.shared = not static
+			self.static_prog = static == 'full'
 			
-			if 'pic-static' in o: self.pic = o['pic-static'] != 'no'
-			else: self.pic = False # this is for programs only
+			self.pic = 'pic-static' not in o # this is for programs and static libs only
 			
 			if 'ld' in o: self.ld_prog = o['ld']
 			if 'ld-flags' in o: self.ld_flags = o['ld-flags'].split()
