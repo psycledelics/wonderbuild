@@ -62,16 +62,17 @@ class Wonderbuild(ScriptTask):
 				self.public_deps = [diversalis]
 				req = self.public_deps
 				opt = [dlfcn, pthread, glibmm, std_math, boost]
-				sched_ctx.parallel_wait(universalis.cxx, *(req + opt))
+				sched_ctx.parallel_wait(universalis.cxx_phase, *(req + opt))
+				sched_ctx.parallel_wait(*(req + opt))
 				self.result = min(req)
 				self.public_deps += [x for x in opt if x]
 				PreCompileTasks.__call__(self, sched_ctx)
 			
-			def do_cxx(self):
+			def do_cxx_phase(self):
 				self.source_text
 				if boost: self._source_text += '\n#include <pre-compiled/boost.private.hpp>'
 				if std_math: self._source_text += '\n#include <cmath>'
-				for i in (universalis.cxx.dest_dir, universalis.cxx.dest_dir / 'universalis' / 'standard_library' / 'future_std_include'):
+				for i in (universalis.cxx_phase.dest_dir, universalis.cxx_phase.dest_dir / 'universalis' / 'standard_library' / 'future_std_include'):
 					if not i in self.cfg.include_paths: self.cfg.include_paths.append(i)
 				self.cfg.include_paths.append(top_src_dir / 'build-systems' / 'src')
 
@@ -85,7 +86,7 @@ class Wonderbuild(ScriptTask):
 		class UniversalisMod(ModTask):
 			def __init__(self):
 				ModTask.__init__(self, 'universalis', ModTask.Kinds.LIB, cfg, 'universalis', 'default')
-				self.cxx = UniversalisMod.InstallHeaders(self.project, self.name + '-headers')
+				self.cxx_phase = UniversalisMod.InstallHeaders(self.project, self.name + '-headers')
 				
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
@@ -102,7 +103,7 @@ class Wonderbuild(ScriptTask):
 					else: self.result = False
 				ModTask.__call__(self, sched_ctx)
 			
-			def do_mod(self):
+			def do_mod_phase(self):
 				if not boost: raise UserReadableException, self.name + ' requires the following boost libs: ' + boost.help
 				if mswindows and not winmm: raise UserReadableException, 'on mswindows, ' + self.name + ' requires microsoft\'s windows multimedia extensions: ' + winmm.help
 				self.cfg.defines['UNIVERSALIS__SOURCE'] = self.cfg.shared and '1' or '-1'
@@ -110,11 +111,11 @@ class Wonderbuild(ScriptTask):
 				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 			
 			def apply_cxx_to(self, cfg):
-				for i in (self.cxx.dest_dir, self.cxx.dest_dir / 'universalis' / 'standard_library' / 'future_std_include'):
+				for i in (self.cxx_phase.dest_dir, self.cxx_phase.dest_dir / 'universalis' / 'standard_library' / 'future_std_include'):
 					if not i in cfg.include_paths: cfg.include_paths.append(i)
 				if not self.cfg.shared: cfg.defines['UNIVERSALIS__SOURCE'] = '-1'
 				ModTask.apply_cxx_to(self, cfg)
-		
+
 			class InstallHeaders(InstallTask):
 				@property
 				def trim_prefix(self): return src_dir

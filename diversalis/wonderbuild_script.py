@@ -33,11 +33,11 @@ class Wonderbuild(ScriptTask):
 	
 		class DiversalisMod(ModTask):
 			def __init__(self): ModTask.__init__(self, 'diversalis', ModTask.Kinds.HEADERS, cfg, 'diversalis', 'default',
-				cxx=DiversalisMod.InstallHeaders()
+				cxx_phase=DiversalisMod.InstallHeaders()
 			)
 				
 			def apply_cxx_to(self, cfg):
-				if not self.cxx.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx.dest_dir)
+				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
 				ModTask.apply_cxx_to(self, cfg)
 
 			class InstallHeaders(InstallTask):
@@ -53,12 +53,8 @@ class Wonderbuild(ScriptTask):
 				def sources(self):
 					try: return self._sources
 					except AttributeError:
-						self._sources = []
-						for s in (self.trim_prefix / 'diversalis').find_iter(
-								in_pats = ('*.hpp',),
-								ex_pats = ('*.private.hpp',),
-								prune_pats = ('todo',)
-							): self._sources.append(s)
+						self._sources = list((self.trim_prefix / 'diversalis').find_iter(
+							in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)))
 						return self._sources
 		
 		self._mod_dep_phases = mod_dep_phases = DiversalisMod()

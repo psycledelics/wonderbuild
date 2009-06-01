@@ -50,10 +50,12 @@ class CheckTask(ProjectTask):
 		if self.result: return 'yes', '32'
 		else: return 'no', '31'
 
+	### the results vs result thing is to be removed
+
 	@property
 	def result(self): return self.results
 	def __bool__(self): return self.result
-	def __nonzero__(self): return self.result
+	def __nonzero__(self): return self.__bool__() # __bool__ has become the default in python 3.0
 
 	def _get_results(self):
 		try: return self._results

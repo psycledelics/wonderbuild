@@ -305,7 +305,7 @@ class ModDepPhases(object):
 	def __init__(self):
 		self.private_deps = [] # of ModDepPhases
 		self.public_deps = [] # of ModDepPhases
-		self.cxx = self.mod = None
+		self.cxx_phase = self.mod_phase = None
 
 	@property
 	def cfg(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
@@ -317,7 +317,13 @@ class ModDepPhases(object):
 			self._all_deps = self.public_deps + self.private_deps
 			return self._all_deps
 
-	def __call__(self, sched_ctx): sched_ctx.parallel_wait(*(dep for dep in self.all_deps))
+	def __call__(self, sched_ctx):
+		### needs changes in CheckTask
+		#self.result = True
+		#self.do_check_phase(sched_ctx)
+		#if self.result and len(self.all_deps) != 0:
+			sched_ctx.parallel_wait(*(dep for dep in self.all_deps))
+			#self.result = min(self.all_deps)	
 
 	def _get_result(self):
 		try: return self._result
@@ -325,17 +331,17 @@ class ModDepPhases(object):
 	def _set_result(self, value): self._result = value
 	result = property(_get_result, _set_result)
 	def __bool__(self): return self.result
-	def __nonzero__(self): return self.result
+	def __nonzero__(self): return self.__bool__() # __bool__ has become the default in python 3.0
 
-	def do_cxx_deps(self, sched_ctx):
-		cxx_deps = [dep.cxx for dep in self.private_deps if dep.cxx is not None]
-		self._deep_cxx_public_deps(cxx_deps)
-		sched_ctx.parallel_wait(*cxx_deps)
+	def do_deps_cxx_phases(self, sched_ctx):
+		cxx_phases = [dep.cxx_phase for dep in self.private_deps if dep.cxx_phase is not None]
+		self._public_deps_deep_cxx_phases(cxx_phases)
+		sched_ctx.parallel_wait(*cxx_phases)
 		for dep in self.all_deps: dep.apply_cxx_to(self.cfg)
 
-	def _deep_cxx_public_deps(self, cxx_public_deps):
-		cxx_public_deps += [dep.cxx for dep in self.public_deps if dep.cxx is not None]
-		for dep in self.public_deps: dep._deep_cxx_public_deps(cxx_public_deps)
+	def _public_deps_deep_cxx_phases(self, cxx_phases):
+		cxx_phases += [dep.cxx_phase for dep in self.public_deps if dep.cxx_phase is not None]
+		for dep in self.public_deps: dep._public_deps_deep_cxx_phases(cxx_phases)
 
 	def apply_cxx_to(self, cfg):
 		if self in cfg._applied: return
@@ -363,7 +369,7 @@ class _PreCompileTask(ModDepPhases, ProjectTask):
 
 	def __call__(self, sched_ctx):
 		ModDepPhases.__call__(self, sched_ctx)
-		self.cxx = _PreCompileTask._CxxCallbackTask(self)
+		self.cxx_phase = _PreCompileTask._CxxPhaseCallbackTask(self)
 	
 	def apply_cxx_to(self, cfg):
 		ModDepPhases.apply_cxx_to(self, cfg)
@@ -396,20 +402,20 @@ class _PreCompileTask(ModDepPhases, ProjectTask):
 	@property
 	def target_dir(self): return self.target.parent
 
-	class _CxxCallbackTask(Task):
+	class _CxxPhaseCallbackTask(Task):
 		def __init__(self, pre_compile_task):
 			Task.__init__(self)
 			self.pre_compile_task = pre_compile_task
 		
 		def __str__(self): return 'pre-compile ' + str(self.pre_compile_task.header) + ' (build)'
-		def __call__(self, sched_ctx): self.pre_compile_task._cxx_callback(sched_ctx)
+		def __call__(self, sched_ctx): self.pre_compile_task._cxx_phase_callback(sched_ctx)
 
-	def do_cxx(self): pass
+	def do_cxx_phase(self): pass
 
-	def _cxx_callback(self, sched_ctx):
+	def _cxx_phase_callback(self, sched_ctx):
 		sched_ctx.parallel_wait(self)
-		self.do_cxx()
-		self.do_cxx_deps(sched_ctx)
+		self.do_deps_cxx_phases(sched_ctx)
+		self.do_cxx_phase()
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, we don't need pkg-config cxx flags in the signature
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.project, self.cfg.pkg_config)
@@ -545,13 +551,13 @@ class PreCompileTasks(ModDepPhases, ProjectTask):
 			_PreCompileTask.apply_cxx_to(self, cfg)
 			self.parent_task.apply_cxx_to(cfg)
 
-		def do_cxx(self):
-			self.parent_task.do_cxx()
+		def do_cxx_phase(self):
+			self.parent_task.do_cxx_phase()
 			self.parent_task.cfg.apply_to(self.cfg)
 
-	def do_cxx(self): pass
+	def do_cxx_phase(self): pass
 
-class BatchCompileTask(ProjectTask):
+class _BatchCompileTask(ProjectTask):
 	def __init__(self, mod_task, sources):
 		ProjectTask.__init__(self, mod_task.project)
 		self.mod_task = mod_task
@@ -609,12 +615,12 @@ class ModTask(ModDepPhases, ProjectTask):
 		self.base_cfg = base_cfg
 		self.sources = []
 		if kind == ModTask.Kinds.HEADERS:
-			#self.cxx = ModTask._CxxCallbackTask(self)
-			self.cxx = kw['cxx']
-			self.project.add_task_aliases(kw['cxx'], *aliases)
+			#self.cxx_phase = ModTask._CxxPhaseCallbackTask(self)
+			self.cxx_phase = kw['cxx_phase']
+			self.project.add_task_aliases(self.cxx_phase, *aliases)
 		else:
-			self.mod = ModTask._ModCallbackTask(self)
-			self.project.add_task_aliases(self.mod, *aliases)
+			self.mod_phase = ModTask._ModPhaseCallbackTask(self)
+			self.project.add_task_aliases(self.mod_phase, *aliases)
 
 	@property
 	def cfg(self):
@@ -637,7 +643,7 @@ class ModTask(ModDepPhases, ProjectTask):
 
 	def __str__(self):
 		if self.kind != ModTask.Kinds.HEADERS: return 'module ' + str(self.target) + ' (check)'
-		else: return 'module headers ' + self.name + ': ' + str(self.cxx)
+		else: return 'module headers ' + self.name + ': ' + str(self.cxx_phase)
 
 	@property
 	def uid(self): return self.name
@@ -694,23 +700,23 @@ class ModTask(ModDepPhases, ProjectTask):
 	@property
 	def persistent_implicit_deps(self): return self.persistent[2]
 
-	class _ModCallbackTask(Task):
+	class _ModPhaseCallbackTask(Task):
 		def __init__(self, mod_task):
 			Task.__init__(self)
 			self.mod_task = mod_task
 
 		def __str__(self): return 'module ' + str(self.mod_task.target) + ' (build)'
-		def __call__(self, sched_ctx): self.mod_task._mod_callback(sched_ctx)
+		def __call__(self, sched_ctx): self.mod_task._mod_phase_callback(sched_ctx)
 
-	def do_mod(self): pass
+	def do_mod_phase(self): pass
 
-	def _mod_callback(self, sched_ctx):
+	def _mod_phase_callback(self, sched_ctx):
 		sched_ctx.parallel_wait(self)
-		if self.cxx is not None: sched_ctx.parallel_no_wait(self.cxx)
+		if self.cxx_phase is not None: sched_ctx.parallel_no_wait(self.cxx_phase)
 		if self.ld:
-			dep_mods = [dep.mod for dep in self.all_deps if dep.mod is not None]
-			sched_ctx.parallel_no_wait(*dep_mods)
-		self.do_cxx_deps(sched_ctx)
+			deps_mod_phases = [dep.mod_phase for dep in self.all_deps if dep.mod_phase is not None]
+			sched_ctx.parallel_no_wait(*deps_mod_phases)
+		self.do_deps_cxx_phases(sched_ctx)
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, we don't need pkg-config cxx flags in the signature
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.project, self.cfg.pkg_config)
@@ -719,7 +725,7 @@ class ModTask(ModDepPhases, ProjectTask):
 			if self.ld:
 				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask.shared(self.project, self.cfg.pkg_config, self.cfg.shared or not self.cfg.static_prog)
 				sched_ctx.parallel_no_wait(pkg_config_ld_flags_task)
-		self.do_mod()
+		self.do_mod_phase()
 		try: state = self.persistent
 		except KeyError:
 			if __debug__ and is_debug: debug('task: no state: ' + str(self))
@@ -773,7 +779,7 @@ class ModTask(ModDepPhases, ProjectTask):
 						continue
 				if __debug__ and is_debug: debug('task: skip: no change: ' + str(s))
 		need_process = False
-		tasks = self.ld and dep_mods or []
+		tasks = self.ld and deps_mod_phases or []
 		if len(changed_sources) != 0:
 			need_process = True
 			batches = []
@@ -784,7 +790,7 @@ class ModTask(ModDepPhases, ProjectTask):
 				i = (i + 1) % sched_ctx.thread_count
 			for b in batches:
 				if len(b) == 0: break
-				tasks.append(BatchCompileTask(self, b))
+				tasks.append(_BatchCompileTask(self, b))
 		elif self.cfg.check_missing:
 			for t in self.targets:
 				if not t.exists:

@@ -29,6 +29,16 @@ else:
 				logger.use_options(options)
 				option_collector.option_decls.add(logger)
 	
+				option_collector.known_options.add('debug')
+				if 'help' in options: option_collector.help['debug'] = ('[passwd]', 'use the python rpdb2/winpdb debugger')
+				debug = options.get('debug', None)
+				if debug is not None:
+					import rpdb2
+					if len(debug) != 0: rpdb2.start_embedded_debugger(debug)
+					else:
+						print 'wonderbuild: please chose a password for the python rpdb2 debugger:'
+						rpdb2.start_embedded_debugger_interactive_password()
+
 				option_collector.known_options.add('profile')
 				if False: # do not show this option
 					if 'help' in options: option_collector.help['profile'] = ('<file>', 'profile execution and put results in <file> (implies --jobs=1)')
