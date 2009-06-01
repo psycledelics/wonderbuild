@@ -215,7 +215,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 
 	@staticmethod
 	def generate_option_help(help):
-		help['check-missing'] = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'no')
+		help['check-missing'] = (None, 'check for missing built files (rebuilds files you manually deleted in the build dir)')
 
 		help['cxx']           = ('<prog>', 'use <prog> as c++ compiler')
 		help['cxx-flags']     = ('[flags]', 'use specific c++ compiler flags')
@@ -259,8 +259,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		if old_sig != self.options_sig:
 			if __debug__ and is_debug: debug('cfg: cxx: user: parsing options')
 
-			if 'check-missing' in o: self.check_missing = o['check-missing'] != 'no'
-			else: self.check_missing = False
+			self.check_missing = 'check-missing' in o
 
 			if 'cxx' in o: self.cxx_prog = o['cxx']
 			if 'cxx-flags' in o: self.cxx_flags = o['cxx-flags'].split()

@@ -23,7 +23,7 @@ class InstallTask(ProjectTask, OptionCfg):
 	known_options = set(['check-missing'])
 
 	@staticmethod
-	def generate_option_help(help): help['check-missing'] = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'no')
+	def generate_option_help(help): help['check-missing'] = (None, 'check for missing built files (rebuilds files you manually deleted in the build dir)')
 	
 	def __init__(self, project, name):
 		ProjectTask.__init__(self, project)
