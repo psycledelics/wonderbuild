@@ -371,7 +371,7 @@ class _PreCompileTask(ModDepPhases, ProjectTask):
 	@property
 	def source_text(self): return '#error ' + str(self.__class__) + ' did not redefine default source text.\n'
 
-	def __str__(self): return 'pre-compile ' + str(self.header) + ' (check)'
+	def __str__(self): return 'deps of pre-compilation of ' + str(self.header)
 
 	@property
 	def uid(self): return self.name
@@ -400,7 +400,7 @@ class _PreCompileTask(ModDepPhases, ProjectTask):
 			Task.__init__(self)
 			self.pre_compile_task = pre_compile_task
 		
-		def __str__(self): return 'pre-compile ' + str(self.pre_compile_task.header) + ' (build)'
+		def __str__(self): return 'pre-compile ' + str(self.pre_compile_task.header)
 		def __call__(self, sched_ctx): self.pre_compile_task._cxx_phase_callback(sched_ctx)
 
 	def do_cxx_phase(self): pass
@@ -635,8 +635,8 @@ class ModTask(ModDepPhases, ProjectTask):
 		cfg.libs.append(self.target_dev_name)
 
 	def __str__(self):
-		if self.kind != ModTask.Kinds.HEADERS: return 'module ' + str(self.target) + ' (check)'
-		else: return 'module headers ' + self.name + ': ' + str(self.cxx_phase)
+		if self.kind != ModTask.Kinds.HEADERS: return 'deps of module ' + str(self.target)
+		else: return 'install headers ' + self.name + ': ' + str(self.cxx_phase)
 
 	@property
 	def uid(self): return self.name
@@ -698,7 +698,7 @@ class ModTask(ModDepPhases, ProjectTask):
 			Task.__init__(self)
 			self.mod_task = mod_task
 
-		def __str__(self): return 'module ' + str(self.mod_task.target) + ' (build)'
+		def __str__(self): return 'build module ' + str(self.mod_task.target)
 		def __call__(self, sched_ctx): self.mod_task._mod_phase_callback(sched_ctx)
 
 	def do_mod_phase(self): pass
