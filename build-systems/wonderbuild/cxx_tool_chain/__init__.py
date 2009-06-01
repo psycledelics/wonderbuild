@@ -228,7 +228,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 			'- no: builds shared libs and link programs dynamically against shared libs\n'
 			'- libs: build libs as static archives (rather than dynamic, shared libs)\n'
 			'- full: like libs but also statically link programs (rather than dynamically using shared libs)',
-			'no unless the static-progs option is set to yes')
+			'no')
 		help['pic-static'] = ('<yes|no>',
 			'whether to make the c++ compiler emit pic code even for static libs and programs\n' \
 			'(always pic for shared libs)', 'no (for static libs and programs)')

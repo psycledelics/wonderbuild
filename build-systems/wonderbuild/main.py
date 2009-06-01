@@ -30,7 +30,7 @@ else:
 				option_collector.option_decls.add(logger)
 	
 				option_collector.known_options.add('debug')
-				if 'help' in options: option_collector.help['debug'] = ('[passwd]', 'use the python rpdb2/winpdb debugger')
+				if 'help' in options: option_collector.help['debug'] = ('[passwd]', 'use the python rpdb2/winpdb debugger', 'prompt for password if none given')
 				debug = options.get('debug', None)
 				if debug is not None:
 					import rpdb2
