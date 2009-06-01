@@ -19,7 +19,7 @@ class Project(Task):
 	def generate_option_help(help):
 		help['src-dir'] = ('<dir>', 'use <dir> as the source dir', 'current working dir: ' + os.getcwd())
 		help['bld-dir'] = ('<dir>', 'use <dir> as the build dir', '<src-dir>' + os.sep + '++wonderbuild')
-		help['aliases'] = ('<name,...>', 'build tasks with aliases <name,...>, comma-separated list')
+		help['aliases'] = ('<name,...>', 'build tasks with aliases <name,...>, comma-separated list', 'default')
 		help['list-aliases'] = (None, 'list the available task aliases')
 
 	def __init__(self, options, option_collector):
