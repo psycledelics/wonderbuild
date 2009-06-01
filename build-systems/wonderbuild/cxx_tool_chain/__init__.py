@@ -259,7 +259,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		if old_sig != self.options_sig:
 			if __debug__ and is_debug: debug('cfg: cxx: user: parsing options')
 
-			if 'check-missing' in o: self.check_missing = o['check-missing'] == 'yes'
+			if 'check-missing' in o: self.check_missing = o['check-missing'] != 'no'
 			else: self.check_missing = False
 
 			if 'cxx' in o: self.cxx_prog = o['cxx']
