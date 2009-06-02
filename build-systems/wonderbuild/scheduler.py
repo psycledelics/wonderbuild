@@ -105,13 +105,57 @@ class Scheduler(object):
 		try:
 			try:
 				while True:
-					while not self._done_or_break_condition() and len(self._task_stack) == 0: self._condition.wait(timeout = self.timeout)
-					if self._done_or_break_condition(): break
-					self._process_one_task(self._task_stack.pop())
-					if self._done_condition():
-						self._condition.notifyAll()
-						break
-			except StopIteration: pass
+						while not self._done_or_break_condition() and len(self._task_stack) == 0:
+							if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': waiting')
+							self._condition.wait(timeout = self.timeout)
+							if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': notified')
+						if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': condition met')
+						if self._done_or_break_condition(): break
+						task = self._task_stack.pop()
+						if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': task pop: ' + str(task) + ' ' + str(task.out_tasks))
+						if not task._sched_processed:
+							task_gen = None
+							try:
+								try: task_gen = task._sched_gen
+								except AttributeError: task_gen = task._sched_gen = task(self._context)
+								in_tasks = task_gen.next()
+							except StopIteration:
+								if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': task processed: ' + str(task) + ' ' + str(task.out_tasks))
+								task._sched_processed = True
+							except:
+								if task_gen is not None:
+									try: task_gen.close() # or del task_gen. note: no close() on python 2.4
+									except: pass # we only want the original exception
+								raise
+							else:
+								task._sched_stacked = False
+								notify = 0
+								task._sched_in_task_todo_count += len(in_tasks)
+								for in_task in in_tasks:
+									in_task._sched_out_tasks.append(task)
+									if not in_task._sched_stacked and in_task._sched_in_task_todo_count == 0:
+										if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': in task stacked: ' + str(in_task))
+										self._task_stack.append(in_task)
+										in_task._sched_stacked = True
+									 	notify += 1
+								self._todo_count += notify
+								if notify > 1: self._condition.notify(notify - 1)
+								continue
+						task._sched_stacked = False
+						self._todo_count -= 1
+						notify = -1
+						for out_task in task._sched_out_tasks:
+							out_task._sched_in_task_todo_count -= 1
+							if not out_task._sched_stacked and out_task._sched_in_task_todo_count == 0:
+								if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': out task stacked: ' + str(out_task))
+								self._task_stack.append(out_task)
+								out_task._sched_stacked = True
+								notify += 1
+						task._sched_out_tasks = []
+						if notify > 0: self._condition.notify(notify)
+						elif notify < 0 and self._done_condition():
+							self._condition.notifyAll()
+							break
 			except Exception, e:
 				self.exception = e
 				self._stop_requested = True
@@ -127,23 +171,6 @@ class Scheduler(object):
 	
 	def _done_or_break_condition(self): return self._done_condition() or self._stop_requested
 
-	def _process_one_task(self, task):
-		if __debug__ and is_debug:
-			debug('sched: task stack: ' + str([str(t) for t in self._task_stack]))
-			debug('sched: processing task: ' + str(task) + ' @' + str(id(task)))
-			assert not task._sched_processed
-
-		task(self._context)
-		#try: task(self._context)
-		#except Exception, e: raise Exception, '\nin task: ' + str(task) + ': ' + str(e)
-
-		if __debug__ and is_debug:
-			debug('sched: task processed: ' + str(task) + ' @' + str(id(task)))
-			debug('sched: task stack: ' + str([str(t) for t in self._task_stack]))
-		task._sched_processed = True
-		self._todo_count -= 1
-		self._condition.notifyAll()
-	
 	def _parallel_wait(self, *tasks):
 		if __debug__ and is_debug:
 			debug('sched: task stack: ' + str([str(t) for t in self._task_stack]))
@@ -151,12 +178,12 @@ class Scheduler(object):
 		count = len(tasks)
 		if count == 0: return
 		if count != 1: self._parallel_no_wait(*tasks[1:])
-		if tasks[0]._sched_stacked: self._wait(*tasks)
+		if tasks[0]._sched_stacked: yield self._wait(*tasks)
 		else:
 			self._todo_count += 1
 			tasks[0]._sched_stacked = True
 			self._process_one_task(tasks[0])
-			if count != 1: self._wait(*tasks[1:])
+			if count != 1: yield self._wait(*tasks[1:])
 		if __debug__ and is_debug:
 			for task in tasks: assert task._sched_processed, task
 	
@@ -176,6 +203,7 @@ class Scheduler(object):
 
 	def _wait(self, *tasks):
 		for task in tasks:
+			if __debug__ and is_debug: assert task._sched_stacked, task
 			while True:
 				if __debug__ and is_debug:
 					debug('sched: task stack: ' + str([str(t) for t in self._task_stack]))
@@ -183,6 +211,5 @@ class Scheduler(object):
 				while not task._sched_processed and not self._stop_requested and len(self._task_stack) == 0: self._condition.wait(timeout = self.timeout)
 				if self._stop_requested: raise StopIteration
 				if task._sched_processed: break
-				self._process_one_task(self._task_stack.pop())
-		if __debug__ and is_debug:
-			for task in tasks: assert task._sched_processed, task
+				yield ()
+			if __debug__ and is_debug: assert task._sched_processed, task

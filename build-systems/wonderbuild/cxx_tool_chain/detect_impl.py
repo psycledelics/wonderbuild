@@ -135,6 +135,6 @@ class DetectImplCheckTask(CheckTask):
 
 			cfg.pic_flag_defines_pic = True # allows it to be reentrant during the check itself
 
-			self.project.sched_ctx.parallel_wait(pe, pic)
+			yield self.project.sched_ctx.parallel_wait(pe, pic)
 			cfg.target_platform_binary_format_is_pe = pe.result
 			cfg.pic_flag_defines_pic = pic.result

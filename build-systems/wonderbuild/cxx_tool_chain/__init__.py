@@ -291,7 +291,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		from detect_impl import DetectImplCheckTask
 		detect_impl = DetectImplCheckTask.shared(self)
 		if 'help' not in o:
-			self.project.sched_ctx.parallel_wait(detect_impl)
+			yield self.project.sched_ctx.parallel_wait(detect_impl)
 			if self.impl is None: raise UserReadableException, 'no supported c++ compiler found'
 
 class ModDepPhases(object):
@@ -313,9 +313,9 @@ class ModDepPhases(object):
 	def __call__(self, sched_ctx):
 		### needs changes in CheckTask
 		#self.result = True
-		#self.do_check_phase(sched_ctx)
+		#yield self.do_check_phase(sched_ctx)
 		#if self.result and len(self.all_deps) != 0:
-			sched_ctx.parallel_wait(*(dep for dep in self.all_deps))
+			yield sched_ctx.parallel_wait(*(dep for dep in self.all_deps))
 			#self.result = min(self.all_deps)	
 
 	def _get_result(self):
@@ -329,7 +329,7 @@ class ModDepPhases(object):
 	def do_deps_cxx_phases(self, sched_ctx):
 		cxx_phases = [dep.cxx_phase for dep in self.private_deps if dep.cxx_phase is not None]
 		self._public_deps_deep_cxx_phases(cxx_phases)
-		sched_ctx.parallel_wait(*cxx_phases)
+		yield sched_ctx.parallel_wait(*cxx_phases)
 		for dep in self.all_deps: dep.apply_cxx_to(self.cfg)
 
 	def _public_deps_deep_cxx_phases(self, cxx_phases):
@@ -361,7 +361,7 @@ class _PreCompileTask(ModDepPhases, ProjectTask):
 			return self._cfg
 
 	def __call__(self, sched_ctx):
-		ModDepPhases.__call__(self, sched_ctx)
+		yield ModDepPhases.__call__(self, sched_ctx)
 		self.cxx_phase = _PreCompileTask._CxxPhaseCallbackTask(self)
 	
 	def apply_cxx_to(self, cfg):
@@ -401,18 +401,18 @@ class _PreCompileTask(ModDepPhases, ProjectTask):
 			self.pre_compile_task = pre_compile_task
 		
 		def __str__(self): return 'pre-compile ' + str(self.pre_compile_task.header)
-		def __call__(self, sched_ctx): self.pre_compile_task._cxx_phase_callback(sched_ctx)
+		def __call__(self, sched_ctx): yield self.pre_compile_task._cxx_phase_callback(sched_ctx)
 
 	def do_cxx_phase(self): pass
 
 	def _cxx_phase_callback(self, sched_ctx):
-		sched_ctx.parallel_wait(self)
-		self.do_deps_cxx_phases(sched_ctx)
+		yield sched_ctx.parallel_wait(self)
+		yield self.do_deps_cxx_phases(sched_ctx)
 		self.do_cxx_phase()
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, we don't need pkg-config cxx flags in the signature
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.project, self.cfg.pkg_config)
-			sched_ctx.parallel_wait(pkg_config_cxx_flags_task)
+			yield sched_ctx.parallel_wait(pkg_config_cxx_flags_task)
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
 		sched_ctx.lock.release()
 		try:
@@ -533,12 +533,12 @@ class PreCompileTasks(ModDepPhases, ProjectTask):
 		def source_text(self): return self.parent_task.source_text
 
 		def __call__(self, sched_ctx):
-			sched_ctx.parallel_wait(self.parent_task)
+			yield sched_ctx.parallel_wait(self.parent_task)
 			self.private_deps = self.parent_task.private_deps
 			self.public_deps = self.parent_task.public_deps
 			self.result = self.parent_task.result
 			self.cfg.pic = self.pic
-			_PreCompileTask.__call__(self, sched_ctx)
+			yield _PreCompileTask.__call__(self, sched_ctx)
 
 		def apply_cxx_to(self, cfg):
 			_PreCompileTask.apply_cxx_to(self, cfg)
@@ -591,6 +591,7 @@ class _BatchCompileTask(ProjectTask):
 				self._actual_sources.append(node)
 			self.cfg.impl.process_cxx_task(self, sched_ctx.lock)
 		finally: sched_ctx.lock.acquire()
+		raise StopIteration
 
 class ModTask(ModDepPhases, ProjectTask):
 	class Kinds(object):
@@ -636,7 +637,7 @@ class ModTask(ModDepPhases, ProjectTask):
 
 	def __str__(self):
 		if self.kind != ModTask.Kinds.HEADERS: return 'deps of module ' + str(self.target)
-		else: return 'install headers ' + self.name + ': ' + str(self.cxx_phase)
+		else: return 'deps of headers ' + self.name
 
 	@property
 	def uid(self): return self.name
@@ -699,21 +700,21 @@ class ModTask(ModDepPhases, ProjectTask):
 			self.mod_task = mod_task
 
 		def __str__(self): return 'build module ' + str(self.mod_task.target)
-		def __call__(self, sched_ctx): self.mod_task._mod_phase_callback(sched_ctx)
+		def __call__(self, sched_ctx): yield self.mod_task._mod_phase_callback(sched_ctx)
 
 	def do_mod_phase(self): pass
 
 	def _mod_phase_callback(self, sched_ctx):
-		sched_ctx.parallel_wait(self)
+		yield sched_ctx.parallel_wait(self)
 		if self.cxx_phase is not None: sched_ctx.parallel_no_wait(self.cxx_phase)
 		if self.ld:
 			deps_mod_phases = [dep.mod_phase for dep in self.all_deps if dep.mod_phase is not None]
 			sched_ctx.parallel_no_wait(*deps_mod_phases)
-		self.do_deps_cxx_phases(sched_ctx)
+		yield self.do_deps_cxx_phases(sched_ctx)
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, we don't need pkg-config cxx flags in the signature
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.project, self.cfg.pkg_config)
-			sched_ctx.parallel_wait(pkg_config_cxx_flags_task)
+			yield sched_ctx.parallel_wait(pkg_config_cxx_flags_task)
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
 			if self.ld:
 				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask.shared(self.project, self.cfg.pkg_config, self.cfg.shared or not self.cfg.static_prog)
@@ -791,7 +792,7 @@ class ModTask(ModDepPhases, ProjectTask):
 					changed_sources = self.sources
 					need_process = True
 					break
-		sched_ctx.parallel_wait(*tasks)
+		yield sched_ctx.parallel_wait(*tasks)
 		if self.ld:
 			for dep in self.all_deps: dep.apply_mod_to(self.cfg)
 			if not need_process:
@@ -818,7 +819,7 @@ class ModTask(ModDepPhases, ProjectTask):
 			if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 		else:
 			if self.ld and len(self.cfg.pkg_config) != 0:
-					sched_ctx.wait(pkg_config_ld_flags_task)
+					yield sched_ctx.wait(pkg_config_ld_flags_task)
 					pkg_config_ld_flags_task.apply_to(self.cfg)
 			self.target_dir.make_dir()
 			if self.kind != ModTask.Kinds.PROG and self.target_dir is not self.target_dev_dir: self.target_dev_dir.make_dir()
@@ -937,9 +938,10 @@ class _PkgConfigTask(CheckTask):
 
 class _PkgConfigFlagsTask(_PkgConfigTask):
 	def do_check_and_set_result(self, sched_ctx):
-			r, out, err = exec_subprocess_pipe(self.args, silent = True)
-			if r != 0: raise Exception, r
-			self.results = out.split()
+		r, out, err = exec_subprocess_pipe(self.args, silent = True)
+		if r != 0: raise Exception, r
+		self.results = out.split()
+		raise StopIteration
 
 	@property
 	def result_display(self): return ' '.join(self.result), '32'
@@ -1008,8 +1010,8 @@ class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 		_PkgConfigTask.__init__(self, *args, **kw)
 
 	def __call__(self, sched_ctx):
-		ModDepPhases.__call__(self, sched_ctx)
-		_PkgConfigTask.__call__(self, sched_ctx)
+		yield ModDepPhases.__call__(self, sched_ctx)
+		yield _PkgConfigTask.__call__(self, sched_ctx)
 
 	def apply_cxx_to(self, cfg):
 		if self in cfg._applied: return
@@ -1028,6 +1030,7 @@ class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 			if __debug__ and is_debug: debug('cfg: ' + self.desc + ': exception: ' + str(e))
 			r = 1
 		self.results = r == 0
+		raise StopIteration
 
 class MultiBuildCheckTask(CheckTask, ModDepPhases):
 	def __init__(self, name, base_cfg, pipe_preproc=False, compile=True, link=True):
@@ -1040,8 +1043,8 @@ class MultiBuildCheckTask(CheckTask, ModDepPhases):
 		self.link = link
 
 	def __call__(self, sched_ctx):
-		ModDepPhases.__call__(self, sched_ctx)
-		CheckTask.__call__(self, sched_ctx)
+		yield ModDepPhases.__call__(self, sched_ctx)
+		yield CheckTask.__call__(self, sched_ctx)
 
 	@property
 	def cfg(self):
@@ -1112,3 +1115,4 @@ class BuildCheckTask(MultiBuildCheckTask):
 			if self.pipe_preproc: self.results = r == 0, out
 			else: self.results = r == 0
 		finally: sched_ctx.lock.acquire()
+	raise StopIteration

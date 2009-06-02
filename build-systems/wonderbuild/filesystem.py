@@ -247,8 +247,7 @@ class Node(object):
 							if match(name, pat): matched = True; break
 					if not matched:
 						for node in node.find_iter(in_pats, ex_pats, prune_pats): yield node
-		raise StopIteration
-
+	
 	def __div__(self, path): return self.__truediv__(path) # truediv has become the default div in python 3.0 (that's //, not / !)
 
 	def __truediv__(self, path):

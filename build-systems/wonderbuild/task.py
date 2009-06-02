@@ -8,19 +8,36 @@ import multi_column_formatting
 class Task(object):
 	def __init__(self):
 		self._sched_stacked = self._sched_processed = False
-	
-	def __call__(self, sched_context): pass
+		self._sched_in_task_todo_count = 0
+		self._sched_out_tasks = []
+
+	def __call__(self, sched_ctx): raise StopIteration
+		# example:
+		#
+		# yield (sub_task_1, sub_task_2, ...)
+		#
+		# sched_ctx.release()
+		# try: do something
+		# finally: sched_ctx.acquire()
+		#
+		# yield (more_sub_task_1, more_sub_task_2, ...)
+		#
+		# sched_ctx.release()
+		# try: do something more
+		# finally: sched_ctx.acquire()
+		#
+		# yield (again_more_sub_task_1, again_more_sub_task_2, ...)
 
 	def print_desc(self, desc, color = '7;1'):
 		out.write(colored(color, 'wonderbuild: task: ' + desc) + '\n')
-		out.flush()
+		#out.flush()
 		
 	def print_desc_multi_column_format(self, desc, list, color = '7;1'):
 		desc = 'wonderbuild: task: ' + desc + ':'
 		line = desc + ' ' + '  '.join(list)
 		if len(line) > cols: line = desc + '\n\t' + '\n\t'.join(multi_column_formatting.format(list, cols - 8)) # less 8 because of the tab
 		out.write(colored(color, line) + '\n')
-		out.flush()
+		#out.flush()
 
 class ProjectTask(Task):
 	def __init__(self, project, *aliases):

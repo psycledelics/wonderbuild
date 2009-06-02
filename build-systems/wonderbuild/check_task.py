@@ -26,19 +26,19 @@ class CheckTask(ProjectTask):
 	def print_check(self, desc):
 		if __debug__ and is_debug:
 			out.write(colored('34', 'wonderbuild: task: checking for ' + desc + ' ...') + '\n')
-			out.flush()
+			#out.flush()
 	
 	def print_check_result(self, desc, result, color):
 		if __debug__ and is_debug:
 			out.write(colored('34', 'wonderbuild: task: ... checked for ' + desc + ': ') + colored(color, result) + '\n')
 		else:
 			out.write(colored('34', 'wonderbuild: task: checked for ' + desc + ': ') + colored(color, result) + '\n')
-		out.flush()
+		#out.flush()
 
 	@property
 	def desc(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
 
-	def do_check_and_set_result(self, sched_context): raise Exception, str(self.__class__) + ' did not redefine the method.'
+	def do_check_and_set_result(self, sched_ctx): raise Exception, str(self.__class__) + ' did not redefine the method.'
 
 	def __str__(self): return 'check ' + self.desc
 
@@ -63,7 +63,7 @@ class CheckTask(ProjectTask):
 	def _set_results(self, value): self._results = value
 	results = property(_get_results, _set_results)
 
-	def __call__(self, sched_context):
+	def __call__(self, sched_ctx):
 		try: old_sig, self._results = self.persistent
 		except KeyError: old_sig = None
 		if old_sig == self.sig:
@@ -72,7 +72,7 @@ class CheckTask(ProjectTask):
 			if not silent:
 				desc = self.desc
 				self.print_check(desc)
-			self.do_check_and_set_result(sched_context)
+			yield self.do_check_and_set_result(sched_ctx)
 			self.persistent = self.sig, self.results
 			if not silent: self.print_check_result(desc, *self.result_display)
 
