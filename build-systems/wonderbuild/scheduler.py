@@ -50,10 +50,10 @@ class Scheduler(object):
 
 		if self.thread_count == 1:
 			self._lock = Scheduler._DummyLock()
-			self._condition = Scheduler._DummyCondition()
+			self._cond = Scheduler._DummyCondition()
 		else:
 			self._lock = threading.Lock()
-			self._condition = threading.Condition(self._lock)
+			self._cond = threading.Condition(self._lock)
 		self._context = Scheduler.Context(self)
 
 		self._stop_requested = False
@@ -64,53 +64,54 @@ class Scheduler(object):
 			self._joining = False
 			self._threads = []
 			remaining_start_count = self.thread_count - 1
-			remaining_start_condition = threading.Condition(threading.Lock())
-			remaining_start_condition.acquire()
+			remaining_start_cond = threading.Condition(threading.Lock())
+			remaining_start_cond.acquire()
 			try:
-				t = threading.Thread(target = self._thread_loop, args = (0, remaining_start_count - 1, remaining_start_condition), name = 'scheduler-thread-' + str(0))
+				t = threading.Thread(target = self._thread_loop, args = (0, remaining_start_count - 1, remaining_start_cond), name = 'scheduler-thread-' + str(0))
 				t.setDaemon(True)
 				t.start()
 				self._threads.append(t)
-				while len(self._threads) != remaining_start_count: remaining_start_condition.wait(timeout = self.timeout)
-			finally: remaining_start_condition.release()
+				while len(self._threads) != remaining_start_count: remaining_start_cond.wait(timeout = self.timeout)
+			finally: remaining_start_cond.release()
 
 		self._joining = True
 		try: self._thread_loop(-1, 0, None) # note: no timeout handling here
 		finally:
 			if self.thread_count != 1:
 				if __debug__ and is_debug: debug('sched: joining threads')
-				self._condition.acquire()
+				self._cond.acquire()
 				try:
 					self._joining = True
-					self._condition.notifyAll()
-				finally: self._condition.release()
+					self._cond.notifyAll()
+				finally: self._cond.release()
 				for t in self._threads: t.join(timeout = self.timeout)
 			if hasattr(self, 'exception'):
 				if isinstance(self.exception, UserReadableException): raise self.exception
 				else: raise UserReadableException, 'An exception occurred, see stack trace above.'
 		
-	def _thread_loop(self, i, remaining_start_count, remaining_start_condition):
+	def _thread_loop(self, i, remaining_start_count, remaining_start_cond):
 		if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': started')
-		if remaining_start_condition is not None:
-			remaining_start_condition.acquire()
+		if remaining_start_cond is not None:
+			remaining_start_cond.acquire()
 			try:
-				if remaining_start_count == 0: remaining_start_condition.notify()
+				if remaining_start_count == 0: remaining_start_cond.notify()
 				else:
-					t = threading.Thread(target = self._thread_loop, args = (i + 1, remaining_start_count - 1, remaining_start_condition), name = 'scheduler-thread-' + str(i + 1))
+					t = threading.Thread(target = self._thread_loop, args = (i + 1, remaining_start_count - 1, remaining_start_cond), name = 'scheduler-thread-' + str(i + 1))
 					t.setDaemon(True)
 					t.start()
 					self._threads.append(t)
-			finally: remaining_start_condition.release()
-		self._condition.acquire()
+			finally: remaining_start_cond.release()
+		self._cond.acquire()
 		try:
 			try:
 				while True:
-						while not self._done_or_break_condition() and len(self._task_stack) == 0:
+						while not self._done_or_break_cond() and len(self._task_stack) == 0:
 							if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': waiting')
-							self._condition.wait(timeout = self.timeout)
+							self._cond.wait(timeout = self.timeout)
 							if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': notified')
 						if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': condition met')
-						if self._done_or_break_condition(): break
+						if self._done_or_break_cond(): break
+						# XXX if not self._joining
 						task = self._task_stack.pop()
 						if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': task pop: ' + str(task) + ' ' + str(task.out_tasks))
 						if not task._sched_processed:
@@ -139,7 +140,7 @@ class Scheduler(object):
 										in_task._sched_stacked = True
 									 	notify += 1
 								self._todo_count += notify
-								if notify > 1: self._condition.notify(notify - 1)
+								if notify > 1: self._cond.notify(notify - 1)
 								continue
 						task._sched_stacked = False
 						self._todo_count -= 1
@@ -152,24 +153,24 @@ class Scheduler(object):
 								out_task._sched_stacked = True
 								notify += 1
 						task._sched_out_tasks = []
-						if notify > 0: self._condition.notify(notify)
-						elif notify < 0 and self._done_condition():
-							self._condition.notifyAll()
+						if notify > 0: self._cond.notify(notify)
+						elif notify < 0 and self._done_cond():
+							self._cond.notifyAll()
 							break
 			except Exception, e:
 				self.exception = e
 				self._stop_requested = True
-				self._condition.notifyAll()
+				self._cond.notifyAll()
 				if not isinstance(e, UserReadableException):
 					import traceback
 					traceback.print_exc()
 		finally:
 			if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': terminated')
-			self._condition.release()
+			self._cond.release()
 
-	def _done_condition(self): return self._joining and self._todo_count == 0
+	def _done_cond(self): return self._joining and self._todo_count == 0
 	
-	def _done_or_break_condition(self): return self._done_condition() or self._stop_requested
+	def _done_or_break_cond(self): return self._done_cond() or self._stop_requested
 
 	def _parallel_wait(self, *tasks):
 		if __debug__ and is_debug:
@@ -199,7 +200,7 @@ class Scheduler(object):
 				notify += 1
 		if notify != 0:
 			self._todo_count += notify
-			self._condition.notify(notify)
+			self._cond.notify(notify)
 
 	def _wait(self, *tasks):
 		for task in tasks:
@@ -208,7 +209,7 @@ class Scheduler(object):
 				if __debug__ and is_debug:
 					debug('sched: task stack: ' + str([str(t) for t in self._task_stack]))
 					debug('sched: waiting for tasks: ' + str([str(t) for t in tasks if not t._sched_processed]))
-				while not task._sched_processed and not self._stop_requested and len(self._task_stack) == 0: self._condition.wait(timeout = self.timeout)
+				while not task._sched_processed and not self._stop_requested and len(self._task_stack) == 0: self._cond.wait(timeout = self.timeout)
 				if self._stop_requested: raise StopIteration
 				if task._sched_processed: break
 				yield ()
