@@ -75,7 +75,7 @@ else:
 
 			def __call__(self, sched_ctx):
 				self.result = 1
-				yield sched_ctx.parallel_wait(self.project)
+				for x in sched_ctx.parallel_wait(self.project): yield x
 				
 				from wonderbuild.script import ScriptTask, default_script_file
 				script = self.project.top_src_dir / default_script_file
@@ -90,12 +90,12 @@ else:
 					usage_error = True
 
 				if not usage_error and 'help' not in options:
-					yield sched_ctx.parallel_wait(*script_tasks)
+					for x in sched_ctx.parallel_wait(*script_tasks): yield x
 					option_collector.consolidate_known_options()
 					usage_error = not validate_options(options, option_collector.known_options)
 
 				if usage_error or 'help' in options:
-					yield sched_ctx.parallel_wait(*script_tasks)
+					for x in sched_ctx.parallel_wait(*script_tasks): yield x
 					option_collector.help['help'] = (None, 'show this help and exit')
 					option_collector.help['version'] = (None, 'show the version of this tool and exit')
 					option_collector.consolidate_help()

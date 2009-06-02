@@ -30,13 +30,13 @@ class ScriptLoaderTask(ProjectTask):
 		d = {}
 		execfile(script.path, d)
 		self.task = d['Wonderbuild'](self.project, script.parent)
-		sched_ctx.parallel_wait(self.task)
+		for x in sched_ctx.parallel_wait(self.task): yield x
 
 class ScriptTask(ProjectTask):
 	@staticmethod	
 	def shared(project, *scripts):
 		script_tasks = [ScriptLoaderTask.shared(project, script) for script in scripts]
-		project.sched_ctx.parallel_wait(*script_tasks)
+		for x in project.sched_ctx.parallel_wait(*script_tasks): yield x
 		if len(scripts) == 1: return script_tasks[0].task
 		else: return (script_task.task for script_task in script_tasks)
 
