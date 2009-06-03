@@ -111,7 +111,6 @@ class Scheduler(object):
 							if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': notified')
 						if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': condition met')
 						if self._done_or_break_cond(): break
-						# XXX if not self._joining
 						task = self._task_stack.pop()
 						if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': task pop: ' + str(task) + ' ' + str(task.out_tasks))
 						if not task._sched_processed:
