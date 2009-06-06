@@ -47,7 +47,7 @@ def out(*args):
 	out.write(' '.join((str(a) for a in args)) + '\n')
 	#out.flush()
 	
-def sched(i, *tasks):
+def xxxsched(i, *tasks):
 	out(i, 'sched', [t.i for t in tasks])
 	global todo
 	count = len(tasks)
@@ -82,6 +82,10 @@ def wait(i, *tasks):
 			if task.processed: break
 			i = yield ()
 		assert task.processed, task
+
+def sched(i, *tasks):
+	out(i, 'sched', [t.i for t in tasks])
+	i = yield tasks
 
 def loop(i):
 	global todo
