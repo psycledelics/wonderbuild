@@ -103,66 +103,63 @@ class Scheduler(object):
 			finally: remaining_start_cond.release()
 		self._cond.acquire()
 		try:
-			try:
-				while True:
-						while not self._done_or_break_cond() and len(self._task_stack) == 0:
-							if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': waiting')
-							self._cond.wait(timeout = self.timeout)
-							if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': notified')
-						if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': condition met')
-						if self._done_or_break_cond(): break
-						task = self._task_stack.pop()
-						if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': task pop: ' + str(task) + ' ' + str(task.out_tasks))
-						if not task._sched_processed:
-							task_gen = None
-							try:
-								try: task_gen = task._sched_gen
-								except AttributeError: task_gen = task._sched_gen = task(self._context)
-								in_tasks = task_gen.next()
-							except StopIteration:
-								if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': task processed: ' + str(task) + ' ' + str(task.out_tasks))
-								task._sched_processed = True
-							except:
-								if task_gen is not None:
-									try: task_gen.close() # or del task_gen. note: no close() on python 2.4
-									except: pass # we only want the original exception
-								raise
-							else:
-								task._sched_stacked = False
-								notify = 0
-								task._sched_in_task_todo_count += len(in_tasks)
-								for in_task in in_tasks:
-									in_task._sched_out_tasks.append(task)
-									if not in_task._sched_stacked and in_task._sched_in_task_todo_count == 0:
-										if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': in task stacked: ' + str(in_task))
-										self._task_stack.append(in_task)
-										in_task._sched_stacked = True
-									 	notify += 1
-								self._todo_count += notify
-								if notify > 1: self._cond.notify(notify - 1)
-								continue
-						task._sched_stacked = False
-						self._todo_count -= 1
-						notify = -1
-						for out_task in task._sched_out_tasks:
-							out_task._sched_in_task_todo_count -= 1
-							if not out_task._sched_stacked and out_task._sched_in_task_todo_count == 0:
-								if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': out task stacked: ' + str(out_task))
-								self._task_stack.append(out_task)
-								out_task._sched_stacked = True
-								notify += 1
-						task._sched_out_tasks = []
-						if notify > 0: self._cond.notify(notify)
-						elif notify < 0 and self._done_cond():
-							self._cond.notifyAll()
-							break
-			except Exception, e:
-				self.exception = e
-				self._stop_requested = True
-				self._cond.notifyAll()
-				if not isinstance(e, UserReadableException):
-					import traceback
-					traceback.print_exc()
+			while True:
+					while not self._done_or_break_cond() and len(self._task_stack) == 0:
+						if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': waiting')
+						self._cond.wait(timeout = self.timeout)
+						if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': notified')
+					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': condition met')
+					if self._done_or_break_cond(): break
+					task = self._task_stack.pop()
+					if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': task pop: ' + str(task) + ' ' + str(task._sched_out_tasks))
+					if not task._sched_processed:
+						task_gen = None
+						try:
+							try: task_gen = task._sched_gen
+							except AttributeError: task_gen = task._sched_gen = task(self._context)
+							in_tasks = task_gen.next()
+						except StopIteration:
+							if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': task processed: ' + str(task) + ' ' + str(task._sched_out_tasks))
+							task._sched_processed = True
+						except:
+							if task_gen is not None: task_gen.close()
+							raise
+						else:
+							task._sched_stacked = False
+							notify = 0
+							task._sched_in_task_todo_count += len(in_tasks)
+							for in_task in in_tasks:
+								in_task._sched_out_tasks.append(task)
+								if not in_task._sched_stacked and in_task._sched_in_task_todo_count == 0:
+									if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': in task stacked: ' + str(in_task))
+									self._task_stack.append(in_task)
+									in_task._sched_stacked = True
+								 	notify += 1
+							self._todo_count += notify
+							if notify > 1: self._cond.notify(notify - 1)
+							continue
+					task._sched_stacked = False
+					self._todo_count -= 1
+					notify = -1
+					for out_task in task._sched_out_tasks:
+						out_task._sched_in_task_todo_count -= 1
+						if not out_task._sched_stacked and out_task._sched_in_task_todo_count == 0:
+							if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': out task stacked: ' + str(out_task))
+							self._task_stack.append(out_task)
+							out_task._sched_stacked = True
+							notify += 1
+					task._sched_out_tasks = []
+					if notify > 0: self._cond.notify(notify)
+					elif notify < 0 and self._done_cond():
+						self._cond.notifyAll()
+						break
+		except Exception, e:
+			self.exception = e
+			self._stop_requested = True
+			self._cond.notifyAll()
+			if not isinstance(e, UserReadableException):
+				import traceback
+				traceback.print_exc()
 		finally:
 			if __debug__ and is_debug: debug('sched: thread: ' + str(i) + ': terminated')
 			self._cond.release()
@@ -178,12 +175,12 @@ class Scheduler(object):
 		count = len(tasks)
 		if count == 0: return
 		if count != 1: self._parallel_no_wait(*tasks[1:])
-		if tasks[0]._sched_stacked: yield self._wait(*tasks)
+		if not tasks[0]._sched_processed and tasks[0]._sched_stacked: for x in self._wait(*tasks): yield x
 		else:
 			self._todo_count += 1
 			tasks[0]._sched_stacked = True
-			self._process_one_task(tasks[0])
-			if count != 1: yield self._wait(*tasks[1:])
+			yield tasks[0]
+			if count != 1: for x in self._wait(*tasks[1:]): yield x
 		if __debug__ and is_debug:
 			for task in tasks: assert task._sched_processed, task
 	

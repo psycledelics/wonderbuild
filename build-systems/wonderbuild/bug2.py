@@ -49,12 +49,13 @@ def sched(i, *tasks):
 	global todo
 	count = len(tasks)
 	if count > 1:
+		notify = 0
 		for task in tasks[1:]:
-			notify = 0
 			if not task.processed and not task.queued:
 				task.queued = True
 				queue.append(task)
 				notify += 1
+		if notify != 0:
 			todo += notify
 			cond.notify(notify)
 	task = tasks[0]
@@ -84,6 +85,7 @@ def do(i, x):
 		cond.notifyAll()
 
 def wait(i, *tasks):
+	global todo
 	for task in tasks:
 		while True:
 			out(i, 'wait for', task.i)
@@ -93,6 +95,7 @@ def wait(i, *tasks):
 			if task.processed: break
 			cr = coroutine(task)
 			cr.next()
+			if task.processed: break
 			queue.append(cr)
 			todo += 1
 			do(i, queue.pop())
