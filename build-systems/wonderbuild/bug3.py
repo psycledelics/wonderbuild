@@ -47,45 +47,24 @@ def out(*args):
 	out.write(' '.join((str(a) for a in args)) + '\n')
 	#out.flush()
 	
-def xxxsched(i, *tasks):
-	out(i, 'sched', [t.i for t in tasks])
-	global todo
-	count = len(tasks)
-	if count == 0: return
-	if count != 1:
-		notify = 0
-		for task in reversed(tasks[1:]):
-			if not task.processed and not task.queued:
-				out(i, 'task queued', task.i)
-				queue.append(task)
-				task.queued = True
-				notify += 1
-		if notify != 0:
-			todo += notify
-			cond.notify(notify)
-	if tasks[0].queued:
-		for x in wait(i, *tasks): i = yield x
-	else:
-		if not tasks[0].processed: i = yield (tasks[0],)
-		if count != 1:
-			for x in wait(i, *tasks[1:]): i = yield x
-	for task in tasks: assert task.processed, task
-
-def wait(i, *tasks):
-	global todo
+def sched_no_wait(i, *tasks):
+	out(i, 'sched no wait', [t.i for t in tasks])
+	notify = 0
 	for task in tasks:
-		while True:
-			out(i, 'wait for', task.i)
-			while not task.processed and len(queue) == 0:
-				out(i, 'wait for', task.i)
-				cond.wait()
-			if task.processed: break
-			i = yield ()
-		assert task.processed, task
+		if not task.processed and not task.queued and task.in_task_todo_count == 0:
+			queue.append(task)
+			task.queued = True
+		 	notify += 1
+	todo += notify
+	if notify != 0: cond.notify(notify)
 
 def sched(i, *tasks):
 	out(i, 'sched', [t.i for t in tasks])
-	i = yield tasks
+	tasks_to_yield = []
+	for task in tasks:
+		if not task.processed: tasks_to_yield.append(task)
+	if len(tasks_to_yield) != 0: i = yield tasks_to_yield
+	for task in tasks: assert task.processed, task
 
 def loop(i):
 	global todo
