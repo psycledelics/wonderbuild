@@ -56,6 +56,7 @@ def sched(i, *tasks):
 		notify = 0
 		for task in reversed(tasks[1:]):
 			if not task.processed and not task.queued:
+				out(i, 'task queued', task.i)
 				queue.append(task)
 				task.queued = True
 				notify += 1
@@ -104,19 +105,20 @@ def loop(i):
 						in_tasks = task_gen.next()
 					else: in_tasks = task_gen.send(i)
 				except StopIteration:
-					out(i, 'processed', task.i, [t.i for t in task.out_tasks])
+					out(i, 'processed', task.i, 'out tasks', [t.i for t in task.out_tasks])
 					task.processed = True
 				except:
 					if task_gen is not None: task_gen.close()
 					raise
 				else:
+					out(i, 'task', task.i, 'in tasks', [t.i for t in in_tasks])
 					task.queued = False
 					notify = 0
 					task.in_task_todo_count += len(in_tasks)
 					for in_task in in_tasks:
 						in_task.out_tasks.append(task)
 						if not in_task.queued and in_task.in_task_todo_count == 0:
-							out(i, 'in task queued', in_task.i)
+							out(i, 'task', task.i, 'in task queued', in_task.i)
 							queue.append(in_task)
 							in_task.queued = True
 						 	notify += 1
@@ -129,7 +131,7 @@ def loop(i):
 			for out_task in task.out_tasks:
 				out_task.in_task_todo_count -= 1
 				if not out_task.queued and out_task.in_task_todo_count == 0:
-					out(i, ' out task queued', out_task.i)
+					out(i, 'task', task.i, 'out task queued', out_task.i)
 					queue.append(out_task)
 					out_task.queued = True
 					notify += 1
