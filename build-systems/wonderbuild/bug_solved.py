@@ -52,11 +52,13 @@ def sched_no_wait(i, *tasks):
 	notify = 0
 	for task in tasks:
 		if not task.processed and not task.queued and task.in_task_todo_count == 0:
+			out(i, 'task queued', task.i)
 			queue.append(task)
 			task.queued = True
 		 	notify += 1
-	todo += notify
-	if notify != 0: cond.notify(notify)
+	if notify != 0:
+		todo += notify
+		cond.notify(notify)
 
 def sched(i, *tasks):
 	out(i, 'sched', [t.i for t in tasks])
