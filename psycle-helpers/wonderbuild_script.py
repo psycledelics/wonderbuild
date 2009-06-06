@@ -15,7 +15,7 @@ if __name__ == '__main__':
 		else: main()
 	else: main()
 
-from wonderbuild.script import ScriptTask
+from wonderbuild.script import ScriptTask, ScriptLoaderTask
 
 class Wonderbuild(ScriptTask):
 
@@ -31,6 +31,16 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.std_checks.std_math import StdMathCheckTask
 		from wonderbuild.install import InstallTask
 
+		#pch = ScriptLoaderTask.shared(project, src_dir.parent.parent / 'build-systems' / 'src' / 'pre_compiled_wonderbuild_script.py')
+		universalis = ScriptLoaderTask.shared(project, src_dir.parent.parent / 'universalis')
+		for x in sched_ctx.parallel_wait(universalis): sched_ctx = yield x
+
+		#pch = pch.script_task.mod_dep_phases
+		universalis = universalis.script_task
+		
+		pch = universalis.pch
+		universalis = universalis.mod_dep_phases
+
 		cfg = UserBuildCfg.new_or_clone(project)
 		if cfg.kind == 'msvc': # XXX flags are a mess with msvc
 			#cfg.defines['WINVER'] = '0x501' # select win xp explicitly because msvc 2008 defaults to vista
@@ -38,10 +48,6 @@ class Wonderbuild(ScriptTask):
 			cfg.cxx_flags += ['-EHa', '-MD'] # basic compilation flags required
 
 		check_cfg = cfg.clone()
-		#pch = ScriptTask.shared(project, src_dir.parent.parent / 'build-systems' / 'src' / 'pre_compiled_wonderbuild_script.py').mod_dep_phases
-		universalis = ScriptTask.shared(project, src_dir.parent.parent / 'universalis')
-		pch = universalis.pch
-		universalis = universalis.mod_dep_phases
 		std_math = StdMathCheckTask.shared(check_cfg)
 
 		class HelpersMod(ModTask):
@@ -51,10 +57,10 @@ class Wonderbuild(ScriptTask):
 				self.private_deps = [pch.lib_task]
 				self.public_deps = [universalis, std_math]
 				req = self.public_deps + self.private_deps
-				sched_ctx.parallel_wait(*req)
+				for x in sched_ctx.parallel_wait(*req): sched_ctx = yield x
 				self.result = min(req)
 				self.cxx_phase = HelpersMod.InstallHeaders(self.project, self.name + '-headers')
-				ModTask.__call__(self, sched_ctx)
+				for x in ModTask.__call__(self, sched_ctx): sched_ctx = yield x
 			
 			def do_mod_phase(self):
 				if not std_math: raise UserReadableException, self.name + ' requires the standard math lib: ' + std_math.help

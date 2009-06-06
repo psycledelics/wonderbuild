@@ -15,7 +15,7 @@ else:
 	from wonderbuild.options import parse_args, validate_options, print_help, OptionCollector
 
 	def main():
-		r = 0
+		r = 1
 		try:
 			import time, gc
 			t = time.time()
@@ -60,6 +60,8 @@ else:
 		except UserReadableException, e:
 			print >> sys.stderr, colored('31;1', 'wonderbuild: failed: ') + colored('31', str(e))
 			r = 1
+		else:
+			if r != 0: print >> sys.stderr, colored('31;1', 'wonderbuild: failed: ') + colored('31', 'nonzero return code: ' + str(r))
 		sys.exit(r)
 
 	def run(options, option_collector):
@@ -75,27 +77,27 @@ else:
 
 			def __call__(self, sched_ctx):
 				self.result = 1
-				for x in sched_ctx.parallel_wait(self.project): yield x
+				for x in sched_ctx.parallel_wait(self.project): sched_ctx = yield x
 				
-				from wonderbuild.script import ScriptTask, default_script_file
+				from wonderbuild.script import ScriptLoaderTask, default_script_file
 				script = self.project.top_src_dir / default_script_file
 				if script.exists:
-					script_tasks = (ScriptTask.shared(self.project, script),)
+					script_loader_tasks = (ScriptLoaderTask.shared(self.project, script),)
 					usage_error = False
 				else:
 					option_collector.consolidate_known_options()
 					validate_options(options, option_collector.known_options)
 					print >> sys.stderr, 'wonderbuild: error: no ' + script.path + ' found'
-					script_tasks = ()
+					script_loader_tasks = ()
 					usage_error = True
 
 				if not usage_error and 'help' not in options:
-					for x in sched_ctx.parallel_wait(*script_tasks): yield x
+					for x in sched_ctx.parallel_wait(*script_loader_tasks): sched_ctx = yield x
 					option_collector.consolidate_known_options()
 					usage_error = not validate_options(options, option_collector.known_options)
 
 				if usage_error or 'help' in options:
-					for x in sched_ctx.parallel_wait(*script_tasks): yield x
+					for x in sched_ctx.parallel_wait(*script_tasks): sched_ctx = yield x
 					option_collector.help['help'] = (None, 'show this help and exit')
 					option_collector.help['version'] = (None, 'show the version of this tool and exit')
 					option_collector.consolidate_help()

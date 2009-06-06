@@ -72,7 +72,7 @@ class CheckTask(ProjectTask):
 			if not silent:
 				desc = self.desc
 				self.print_check(desc)
-			yield self.do_check_and_set_result(sched_ctx)
+			for x in self.do_check_and_set_result(sched_ctx): sched_ctx = yield x
 			self.persistent = self.sig, self.results
 			if not silent: self.print_check_result(desc, *self.result_display)
 

@@ -47,7 +47,7 @@ class BoostCheckTask(MultiBuildCheckTask):
 	def do_check_and_set_result(self, sched_ctx):
 		failed = False, None, None
 		read_version = BoostCheckTask.ReadVersion(self)
-		yield sched_ctx.parallel_wait(read_version)
+		for x in sched_ctx.parallel_wait(read_version): sched_ctx = yield x
 		include_path = None
 		if not read_version.result:
 			if sys.platform != 'cygwin':
@@ -62,7 +62,7 @@ class BoostCheckTask(MultiBuildCheckTask):
 					self.results = self.results = failed
 					return
 				read_version = BoostCheckTask.ReadVersion(self, include_path)
-				yield sched_ctx.parallel_wait(read_version)
+				for x in sched_ctx.parallel_wait(read_version): sched_ctx = yield x
 				if not read_version.result:
 					self.results = self.results = failed
 					return
@@ -96,20 +96,20 @@ class BoostCheckTask(MultiBuildCheckTask):
 				def do_check_and_set_result(self, sched_ctx):
 					if include_path is not None: self.cfg.include_paths.append(include_path)
 					self.cfg.libs += cfg_link_libs
-					yield BuildCheckTask.do_check_and_set_result(self, sched_ctx)
+					for x in BuildCheckTask.do_check_and_set_result(self, sched_ctx): sched_ctx = yield x
 
 			all_in_one = AllInOneCheckTask()
-			yield sched_ctx.parallel_wait(all_in_one)
+			for x in sched_ctx.parallel_wait(all_in_one): sched_ctx = yield x
 			if not all_in_one.result: self.results = failed;
 			else: self.results = True, include_path, cfg_link_libs;
 
 		auto_link_support = AutoLinkSupportCheckTask.shared(self.base_cfg)
-		yield sched_ctx.parallel_wait(auto_link_support)
+		for x in sched_ctx.parallel_wait(auto_link_support): sched_ctx = yield x
 		if auto_link_support: yield link_check(auto_link=True)
 		else:
 			if self.base_cfg.kind == 'gcc':
 				mingw_check_task = MingwCheckTask.shared(self.base_cfg)
-				yield sched_ctx.parallel_wait(mingw_check_task)
+				for x in sched_ctx.parallel_wait(mingw_check_task): sched_ctx = yield x
 				toolset = mingw_check_task.result and '-mgw' or '-gcc'
 				versioned_toolset = toolset + str(self.base_cfg.version[0]) + str(self.base_cfg.version[1])
 			elif self.base_cfg.kind == 'msvc':
@@ -147,7 +147,7 @@ class BoostCheckTask(MultiBuildCheckTask):
 			
 			def do_check_and_set_result(self, sched_ctx):
 				if self.include_path is not None: self.cfg.include_paths.append(self.include_path)
-				BuildCheckTask.do_check_and_set_result(self, sched_ctx)
+				for x in BuildCheckTask.do_check_and_set_result(self, sched_ctx): sched_ctx = yield x
 				r, out = self.results
 				if not r: self.results = False, None, None
 				else:

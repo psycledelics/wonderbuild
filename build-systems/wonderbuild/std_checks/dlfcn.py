@@ -9,11 +9,11 @@ class DlfcnCheckTask(MultiBuildCheckTask):
 		
 	def do_check_and_set_result(self, sched_ctx):
 		t = DlfcnCheckTask.SubCheckTask(self, True)
-		yield sched_ctx.parallel_wait(t)
+		for x in sched_ctx.parallel_wait(t): sched_ctx = yield x
 		if t.result: self.results = t.result, t.dl
 		else:
 			t = DlfcnCheckTask.SubCheckTask(self, False)
-			yield sched_ctx.parallel_wait(t)
+			for x in sched_ctx.parallel_wait(t): sched_ctx = yield x
 			if t.result: self.results = t.result, t.dl
 			else: self.results = False, None
 	

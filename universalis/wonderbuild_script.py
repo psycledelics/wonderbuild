@@ -62,11 +62,10 @@ class Wonderbuild(ScriptTask):
 				self.public_deps = [diversalis]
 				req = self.public_deps
 				opt = [dlfcn, pthread, glibmm, std_math, boost]
-				sched_ctx.parallel_wait(universalis.cxx_phase, *(req + opt))
-				sched_ctx.parallel_wait(*(req + opt))
+				for x in sched_ctx.parallel_wait(universalis.cxx_phase, *(req + opt)): sched_ctx = yield x
 				self.result = min(req)
 				self.public_deps += [x for x in opt if x]
-				PreCompileTasks.__call__(self, sched_ctx)
+				for x in PreCompileTasks.__call__(self, sched_ctx): sched_ctx = yield x
 			
 			def do_cxx_phase(self):
 				self.source_text
@@ -94,14 +93,14 @@ class Wonderbuild(ScriptTask):
 				req = self.public_deps + self.private_deps
 				opt = [dlfcn, pthread, glibmm]
 				sched_ctx.parallel_no_wait(winmm)
-				sched_ctx.parallel_wait(mswindows, *(req + opt))
+				for x in sched_ctx.parallel_wait(mswindows, *(req + opt)): sched_ctx = yield x
 				self.result = min(req)
 				self.public_deps += [x for x in opt if x]
 				if self.result and mswindows:
-					sched_ctx.wait(winmm)
+					for x in sched_ctx.wait(winmm): sched_ctx = yield x
 					if winmm: self.public_deps.append(winmm)
 					else: self.result = False
-				ModTask.__call__(self, sched_ctx)
+				for x in ModTask.__call__(self, sched_ctx): sched_ctx = yield x
 			
 			def do_mod_phase(self):
 				if not boost: raise UserReadableException, self.name + ' requires the following boost libs: ' + boost.help

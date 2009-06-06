@@ -9,14 +9,14 @@ default_script_file = 'wonderbuild_script.py'
 class ScriptLoaderTask(ProjectTask):
 	@staticmethod
 	def shared(project, script):
-		try: script_tasks = project.script_tasks
-		except AttributeError: script_tasks = project.script_tasks = {}
+		try: script_loader_tasks = project.script_loader_tasks
+		except AttributeError: script_loader_tasks = project.script_loader_tasks = {}
 		else:
-			try: script_task = script_tasks[script]
+			try: script_loader_task = script_loader_tasks[script]
 			except KeyError: pass
-			else: return script_task
-		script_task = script_tasks[script] = ScriptLoaderTask(project, script)
-		return script_task
+			else: return script_loader_task
+		script_loader_task = script_loader_tasks[script] = ScriptLoaderTask(project, script)
+		return script_loader_task
 
 	def __init__(self, project, script):
 		ProjectTask.__init__(self, project)
@@ -29,19 +29,17 @@ class ScriptLoaderTask(ProjectTask):
 		if script.is_dir: script = script / default_script_file
 		d = {}
 		execfile(script.path, d)
-		self.task = d['Wonderbuild'](self.project, script.parent)
-		for x in sched_ctx.parallel_wait(self.task): yield x
+		self._script_task = d['Wonderbuild'](self.project, script.parent)
+		for x in sched_ctx.parallel_wait(self._script_task): sched_ctx = yield x
+	
+	@property
+	def script_task(self):
+		try: return self._script_task
+		except AttributeError: raise Exception, 'did you forget to process the ' + str(self) + ' task?'
 
 class ScriptTask(ProjectTask):
-	@staticmethod	
-	def shared(project, *scripts):
-		script_tasks = [ScriptLoaderTask.shared(project, script) for script in scripts]
-		for x in project.sched_ctx.parallel_wait(*script_tasks): yield x
-		if len(scripts) == 1: return script_tasks[0].task
-		else: return (script_task.task for script_task in script_tasks)
-
 	def __init__(self, project, src_dir):
 		ProjectTask.__init__(self, project)
 		self.src_dir = src_dir
-
+		
 	def __str__(self): return 'script ' + str(self.src_dir) + ' (execution)'

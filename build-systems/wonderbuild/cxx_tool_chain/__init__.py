@@ -229,7 +229,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 			'full: like libs but also statically link programs (rather than dynamically using shared libs)',
 			'libs')
 		help['pic-static'] = (None,
-			'whether to make the c++ compiler emit pic code even for static libs and programs\n' \
+			'instruct the c++ compiler to emit pic code even for static libs and programs\n' \
 			'(shared libs are always pic regardless of this option)', 'non-pic for static libs and programs')
 
 		# posix compiler options -O -g -s
@@ -291,7 +291,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		from detect_impl import DetectImplCheckTask
 		detect_impl = DetectImplCheckTask.shared(self)
 		if 'help' not in o:
-			for x in self.project.sched_ctx.parallel_wait(detect_impl): yield x
+			for x in self.project.sched_ctx.parallel_wait(detect_impl): sched_ctx = yield x
 			if self.impl is None: raise UserReadableException, 'no supported c++ compiler found'
 
 class ModDepPhases(object):
@@ -313,9 +313,9 @@ class ModDepPhases(object):
 	def __call__(self, sched_ctx):
 		### needs changes in CheckTask
 		#self.result = True
-		#for x in self.do_check_phase(sched_ctx): yield x
+		#for x in self.do_check_phase(sched_ctx): sched_ctx = yield x
 		#if self.result and len(self.all_deps) != 0:
-			for x in sched_ctx.parallel_wait(*(dep for dep in self.all_deps)): yield x
+			for x in sched_ctx.parallel_wait(*(dep for dep in self.all_deps)): sched_ctx = yield x
 			#self.result = min(self.all_deps)	
 
 	def _get_result(self):
@@ -329,7 +329,7 @@ class ModDepPhases(object):
 	def do_deps_cxx_phases(self, sched_ctx):
 		cxx_phases = [dep.cxx_phase for dep in self.private_deps if dep.cxx_phase is not None]
 		self._public_deps_deep_cxx_phases(cxx_phases)
-		for x in sched_ctx.parallel_wait(*cxx_phases): yield x
+		for x in sched_ctx.parallel_wait(*cxx_phases): sched_ctx = yield x
 		for dep in self.all_deps: dep.apply_cxx_to(self.cfg)
 
 	def _public_deps_deep_cxx_phases(self, cxx_phases):
@@ -361,7 +361,7 @@ class _PreCompileTask(ModDepPhases, ProjectTask):
 			return self._cfg
 
 	def __call__(self, sched_ctx):
-		for x in ModDepPhases.__call__(self, sched_ctx): yield x
+		for x in ModDepPhases.__call__(self, sched_ctx): sched_ctx = yield x
 		self.cxx_phase = _PreCompileTask._CxxPhaseCallbackTask(self)
 	
 	def apply_cxx_to(self, cfg):
@@ -402,18 +402,18 @@ class _PreCompileTask(ModDepPhases, ProjectTask):
 		
 		def __str__(self): return 'pre-compile ' + str(self.pre_compile_task.header)
 		def __call__(self, sched_ctx):
-			for x in self.pre_compile_task._cxx_phase_callback(sched_ctx): yield x
+			for x in self.pre_compile_task._cxx_phase_callback(sched_ctx): sched_ctx = yield x
 
 	def do_cxx_phase(self): pass
 
 	def _cxx_phase_callback(self, sched_ctx):
-		for x in sched_ctx.parallel_wait(self): yield x
-		for x in self.do_deps_cxx_phases(sched_ctx): yield x
+		for x in sched_ctx.parallel_wait(self): sched_ctx = yield x
+		for x in self.do_deps_cxx_phases(sched_ctx): sched_ctx = yield x
 		self.do_cxx_phase()
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, we don't need pkg-config cxx flags in the signature
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.project, self.cfg.pkg_config)
-			for x in sched_ctx.parallel_wait(pkg_config_cxx_flags_task): yield x
+			for x in sched_ctx.parallel_wait(pkg_config_cxx_flags_task): sched_ctx = yield x
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
 		sched_ctx.lock.release()
 		try:
@@ -534,12 +534,12 @@ class PreCompileTasks(ModDepPhases, ProjectTask):
 		def source_text(self): return self.parent_task.source_text
 
 		def __call__(self, sched_ctx):
-			for x in sched_ctx.parallel_wait(self.parent_task): yield x
+			for x in sched_ctx.parallel_wait(self.parent_task): sched_ctx = yield x
 			self.private_deps = self.parent_task.private_deps
 			self.public_deps = self.parent_task.public_deps
 			self.result = self.parent_task.result
 			self.cfg.pic = self.pic
-			for x in _PreCompileTask.__call__(self, sched_ctx): yield x
+			for x in _PreCompileTask.__call__(self, sched_ctx): sched_ctx = yield x
 
 		def apply_cxx_to(self, cfg):
 			_PreCompileTask.apply_cxx_to(self, cfg)
@@ -702,21 +702,21 @@ class ModTask(ModDepPhases, ProjectTask):
 
 		def __str__(self): return 'build module ' + str(self.mod_task.target)
 		def __call__(self, sched_ctx):
-			for x in self.mod_task._mod_phase_callback(sched_ctx): yield x
+			for x in self.mod_task._mod_phase_callback(sched_ctx): sched_ctx = yield x
 
 	def do_mod_phase(self): pass
 
 	def _mod_phase_callback(self, sched_ctx):
-		for x in sched_ctx.parallel_wait(self): yield x
+		for x in sched_ctx.parallel_wait(self): sched_ctx = yield x
 		if self.cxx_phase is not None: sched_ctx.parallel_no_wait(self.cxx_phase)
 		if self.ld:
 			deps_mod_phases = [dep.mod_phase for dep in self.all_deps if dep.mod_phase is not None]
 			sched_ctx.parallel_no_wait(*deps_mod_phases)
-		for x in self.do_deps_cxx_phases(sched_ctx): yield x
+		for x in self.do_deps_cxx_phases(sched_ctx): sched_ctx = yield x
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, we don't need pkg-config cxx flags in the signature
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.project, self.cfg.pkg_config)
-			for x in sched_ctx.parallel_wait(pkg_config_cxx_flags_task): yield x
+			for x in sched_ctx.parallel_wait(pkg_config_cxx_flags_task): sched_ctx = yield x
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
 			if self.ld:
 				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask.shared(self.project, self.cfg.pkg_config, self.cfg.shared or not self.cfg.static_prog)
@@ -794,7 +794,7 @@ class ModTask(ModDepPhases, ProjectTask):
 					changed_sources = self.sources
 					need_process = True
 					break
-		for x in sched_ctx.parallel_wait(*tasks): yield x
+		for x in sched_ctx.parallel_wait(*tasks): sched_ctx = yield x
 		if self.ld:
 			for dep in self.all_deps: dep.apply_mod_to(self.cfg)
 			if not need_process:
@@ -821,7 +821,7 @@ class ModTask(ModDepPhases, ProjectTask):
 			if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 		else:
 			if self.ld and len(self.cfg.pkg_config) != 0:
-					for x in sched_ctx.wait(pkg_config_ld_flags_task): yield x
+					for x in sched_ctx.parallel_wait(pkg_config_ld_flags_task): sched_ctx = yield x
 					pkg_config_ld_flags_task.apply_to(self.cfg)
 			self.target_dir.make_dir()
 			if self.kind != ModTask.Kinds.PROG and self.target_dir is not self.target_dev_dir: self.target_dev_dir.make_dir()
@@ -1012,8 +1012,8 @@ class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 		_PkgConfigTask.__init__(self, *args, **kw)
 
 	def __call__(self, sched_ctx):
-		for x in ModDepPhases.__call__(self, sched_ctx): yield x
-		for x in _PkgConfigTask.__call__(self, sched_ctx): yield x
+		for x in ModDepPhases.__call__(self, sched_ctx): sched_ctx = yield x
+		for x in _PkgConfigTask.__call__(self, sched_ctx): sched_ctx = yield x
 
 	def apply_cxx_to(self, cfg):
 		if self in cfg._applied: return
@@ -1045,8 +1045,8 @@ class MultiBuildCheckTask(CheckTask, ModDepPhases):
 		self.link = link
 
 	def __call__(self, sched_ctx):
-		for x in ModDepPhases.__call__(self, sched_ctx): yield x
-		for x in CheckTask.__call__(self, sched_ctx): yield x
+		for x in ModDepPhases.__call__(self, sched_ctx): sched_ctx = yield x
+		for x in CheckTask.__call__(self, sched_ctx): sched_ctx = yield x
 
 	@property
 	def cfg(self):
@@ -1117,4 +1117,4 @@ class BuildCheckTask(MultiBuildCheckTask):
 			if self.pipe_preproc: self.results = r == 0, out
 			else: self.results = r == 0
 		finally: sched_ctx.lock.acquire()
-	raise StopIteration
+		raise StopIteration
