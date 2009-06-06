@@ -19,7 +19,7 @@ class Task:
 
 class Task0(Task):
 	def __call__(self, i):
-		for x in sched(i, t1, t2): yield x
+		for x in sched(i, t1, t2): i = yield x
 		Task.__call__(self, i)
 t0 = Task0(0)
 
@@ -29,7 +29,7 @@ t2 = Task(2)
 
 class Task3(Task):
 	def __call__(self, i):
-		for x in sched(i, t0): yield x
+		for x in sched(i, t0): i = yield x
 		Task.__call__(self, i)
 t3 = Task3(3)
 
@@ -48,13 +48,13 @@ def out(*args):
 	#out.flush()
 	
 def sched(i, *tasks):
-	out(str(i) + ' sched ' + str([t.i for t in tasks]))
+	out(i, 'sched', [t.i for t in tasks])
 	global todo
 	count = len(tasks)
 	if count == 0: return
 	if count != 1:
 		notify = 0
-		for task in reversed(tasks):
+		for task in reversed(tasks[1:]):
 			if not task.processed and not task.queued:
 				queue.append(task)
 				task.queued = True
@@ -68,7 +68,7 @@ def sched(i, *tasks):
 		if not tasks[0].processed: i = yield (tasks[0],)
 		if count != 1:
 			for x in wait(i, *tasks[1:]): i = yield x
-	assert task.processed, task
+	for task in tasks: assert task.processed, task
 
 def wait(i, *tasks):
 	global todo
@@ -79,8 +79,8 @@ def wait(i, *tasks):
 				out(i, 'wait for', task.i)
 				cond.wait()
 			if task.processed: break
-			yield ()
-			assert task.processed, task
+			i = yield ()
+		assert task.processed, task
 
 def loop(i):
 	global todo
@@ -90,12 +90,12 @@ def loop(i):
 		while not joining: cond.wait()
 		while True:
 			while todo != 0 and len(queue) == 0:
-				out(i, 'wait', 'todo', todo, str([task.i for task in queue]))
+				out(i, 'wait', 'todo', todo, [task.i for task in queue])
 				cond.wait()
 			if todo == 0: break
 			task = queue.pop()
 			if not task.processed:
-				out(str(i) + ' process ' + str(task.i))
+				out(i, 'process', task.i)
 				task_gen = None
 				try:
 					try: task_gen = task._gen
@@ -104,7 +104,7 @@ def loop(i):
 						in_tasks = task_gen.next()
 					else: in_tasks = task_gen.send(i)
 				except StopIteration:
-					out(str(i) + ' processed ' + str(task.i) + ' ' + str([t.i for t in task.out_tasks]))
+					out(i, 'processed', task.i, [t.i for t in task.out_tasks])
 					task.processed = True
 				except:
 					if task_gen is not None: task_gen.close()
@@ -116,7 +116,7 @@ def loop(i):
 					for in_task in in_tasks:
 						in_task.out_tasks.append(task)
 						if not in_task.queued and in_task.in_task_todo_count == 0:
-							out(str(i) + ' in task queued: ' + str(in_task.i))
+							out(i, 'in task queued', in_task.i)
 							queue.append(in_task)
 							in_task.queued = True
 						 	notify += 1
@@ -129,7 +129,7 @@ def loop(i):
 			for out_task in task.out_tasks:
 				out_task.in_task_todo_count -= 1
 				if not out_task.queued and out_task.in_task_todo_count == 0:
-					out(str(i) + ' out task queued: ' + str(out_task.i))
+					out(i, ' out task queued', out_task.i)
 					queue.append(out_task)
 					out_task.queued = True
 					notify += 1
