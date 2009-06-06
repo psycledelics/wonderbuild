@@ -60,9 +60,7 @@ def sched_no_wait(i, *tasks):
 
 def sched(i, *tasks):
 	out(i, 'sched', [t.i for t in tasks])
-	tasks_to_yield = []
-	for task in tasks:
-		if not task.processed: tasks_to_yield.append(task)
+	tasks_to_yield = tuple(task for task in tasks if not task.processed)
 	if len(tasks_to_yield) != 0: i = yield tasks_to_yield
 	for task in tasks: assert task.processed, task
 
