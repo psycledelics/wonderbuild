@@ -71,10 +71,6 @@ class Project(Task):
 		self.top_src_dir = self.fs.cur / src_path
 		self.bld_dir = self.fs.cur / bld_path
 
-	def __call__(self, sched_ctx):
-		self.sched_ctx = sched_ctx
-		raise StopIteration
-
 	def add_task_aliases(self, task, *aliases):
 		if self.processsing: return # no need to add aliases during processing
 		if len(aliases) == 0:
@@ -93,7 +89,7 @@ class Project(Task):
 		except KeyError: raise UserReadableException, 'no such task alias: ' + a
 		return tasks
 		
-	def process_tasks_by_aliases(self):
+	def __call__(self, sched_ctx):
 		try:
 			if self.list_aliases:
 				if 'help' in self.options: return
@@ -108,7 +104,7 @@ class Project(Task):
 				if self.requested_task_aliases is not None: tasks = self.tasks_with_aliases(self.requested_task_aliases)
 				else: tasks = self.task_aliases.get('default', ())
 				self.processsing = True
-				for x in self.sched_ctx.parallel_wait(*tasks): self.sched_ctx = yield x
+				for x in sched_ctx.parallel_wait(*tasks): sched_ctx = yield x
 				self.processsing = False
 		finally:
 			if 'help' in self.options: return

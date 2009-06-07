@@ -55,9 +55,10 @@ class ClientCfg(object):
 		cfg.ld_flags += self.ld_flags
 		cfg.pkg_config += self.pkg_config
 		
-class BuildCfg(ClientCfg):
+class BuildCfg(ClientCfg, Task):
 	def __init__(self, project):
 		ClientCfg.__init__(self, project)
+		Task.__init__(self)
 		self.lang = 'c++'
 		self.cxx_prog = self.ld_prog = self.ar_prog = self.ranlib_prog = None
 		self.pic = self.shared = self.static_prog = None
@@ -247,6 +248,8 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 	def __init__(self, project):
 		BuildCfg.__init__(self, project)
 		OptionCfg.__init__(self, project)
+		
+	def __call__(self, sched_ctx):
 		o = self.options
 		try:
 			old_sig, self.check_missing, \
@@ -291,7 +294,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		from detect_impl import DetectImplCheckTask
 		detect_impl = DetectImplCheckTask.shared(self)
 		if 'help' not in o:
-			for x in self.project.sched_ctx.parallel_wait(detect_impl): sched_ctx = yield x
+			for x in sched_ctx.parallel_wait(detect_impl): sched_ctx = yield x
 			if self.impl is None: raise UserReadableException, 'no supported c++ compiler found'
 
 class ModDepPhases(object):
@@ -572,6 +575,7 @@ class _BatchCompileTask(ProjectTask):
 	def persistent_implicit_deps(self): return self.mod_task.persistent_implicit_deps
 
 	def __call__(self, sched_ctx):
+		if False: yield
 		self.target_dir.make_dir()
 		self.target_dir.actual_children # not needed, just an optimisation
 		sched_ctx.lock.release()
@@ -592,7 +596,6 @@ class _BatchCompileTask(ProjectTask):
 				self._actual_sources.append(node)
 			self.cfg.impl.process_cxx_task(self, sched_ctx.lock)
 		finally: sched_ctx.lock.acquire()
-		raise StopIteration
 
 class ModTask(ModDepPhases, ProjectTask):
 	class Kinds(object):
@@ -940,10 +943,10 @@ class _PkgConfigTask(CheckTask):
 
 class _PkgConfigFlagsTask(_PkgConfigTask):
 	def do_check_and_set_result(self, sched_ctx):
+		if False: yield
 		r, out, err = exec_subprocess_pipe(self.args, silent = True)
 		if r != 0: raise Exception, r
 		self.results = out.split()
-		raise StopIteration
 
 	@property
 	def result_display(self): return ' '.join(self.result), '32'
@@ -1027,12 +1030,12 @@ class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 	def what_args(self): return ['--exists']
 
 	def do_check_and_set_result(self, sched_ctx):
+		if False: yield
 		try: r = exec_subprocess(self.args)
 		except Exception, e:
 			if __debug__ and is_debug: debug('cfg: ' + self.desc + ': exception: ' + str(e))
 			r = 1
 		self.results = r == 0
-		raise StopIteration
 
 class MultiBuildCheckTask(CheckTask, ModDepPhases):
 	def __init__(self, name, base_cfg, pipe_preproc=False, compile=True, link=True):
@@ -1098,6 +1101,7 @@ class BuildCheckTask(MultiBuildCheckTask):
 			return self._bld_dir
 
 	def do_check_and_set_result(self, sched_ctx):
+		if False: yield
 		sched_ctx.lock.release()
 		try:
 			dir = self.bld_dir
@@ -1117,4 +1121,3 @@ class BuildCheckTask(MultiBuildCheckTask):
 			if self.pipe_preproc: self.results = r == 0, out
 			else: self.results = r == 0
 		finally: sched_ctx.lock.acquire()
-		raise StopIteration

@@ -191,6 +191,7 @@ class Scheduler(object):
 		tasks_to_yield = tuple(t for t in tasks if not t._sched_processed)
 		if len(tasks_to_yield) != 0:
 			if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': yield tasks: ' + str([str(t) for t in tasks_to_yield]))
+			#XXX
 			sched_ctx = yield tasks_to_yield
 		if __debug__ and is_debug:
 			debug('sched: thread: ' + str(thread_id) + ': parallel_wait done: ' + str([str(t) for t in tasks]))

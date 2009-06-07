@@ -47,9 +47,13 @@ class BoostCheckTask(MultiBuildCheckTask):
 	def do_check_and_set_result(self, sched_ctx):
 		failed = False, None, None
 		read_version = BoostCheckTask.ReadVersion(self)
-		for x in sched_ctx.parallel_wait(read_version): sched_ctx = yield x
+		for x in sched_ctx.parallel_wait(read_version):
+			print 'xxxx', x
+			assert sched_ctx, 1
+			sched_ctx = yield x
+			assert sched_ctx, 2
 		include_path = None
-		if not read_version.result:
+		if not read_version:
 			if sys.platform != 'cygwin':
 				self.results = failed
 				return
@@ -59,12 +63,12 @@ class BoostCheckTask(MultiBuildCheckTask):
 			try:
 				include_path = self.find_max_include_above_min(dir)
 				if include_path is None:
-					self.results = self.results = failed
+					self.results = failed
 					return
 				read_version = BoostCheckTask.ReadVersion(self, include_path)
 				for x in sched_ctx.parallel_wait(read_version): sched_ctx = yield x
-				if not read_version.result:
-					self.results = self.results = failed
+				if not read_version:
+					self.results = failed
 					return
 			finally: pass # dir.forget()
 		
@@ -100,12 +104,13 @@ class BoostCheckTask(MultiBuildCheckTask):
 
 			all_in_one = AllInOneCheckTask()
 			for x in sched_ctx.parallel_wait(all_in_one): sched_ctx = yield x
-			if not all_in_one.result: self.results = failed;
-			else: self.results = True, include_path, cfg_link_libs;
+			if not all_in_one: self.results = failed
+			else: self.results = True, include_path, cfg_link_libs
 
 		auto_link_support = AutoLinkSupportCheckTask.shared(self.base_cfg)
 		for x in sched_ctx.parallel_wait(auto_link_support): sched_ctx = yield x
-		if auto_link_support: yield link_check(auto_link=True)
+		if auto_link_support:
+			for x in link_check(auto_link=True): sched_ctx = yield x
 		else:
 			if self.base_cfg.kind == 'gcc':
 				mingw_check_task = MingwCheckTask.shared(self.base_cfg)
@@ -118,12 +123,18 @@ class BoostCheckTask(MultiBuildCheckTask):
 			else:
 				toolset = ''
 				versioned_toolset = None
-			if versioned_toolset is not None: yield link_check(toolset=versioned_toolset, lib_version=lib_version)
-			if not self.result: yield link_check(toolset=toolset, lib_version=lib_version)
-			if not self.result: yield link_check(toolset=versioned_toolset)
-			if not self.result: yield link_check(toolset=toolset)
-			if not self.result: yield link_check(lib_version=lib_version)
-			if not self.result: yield link_check()
+			if versioned_toolset is not None:
+				for x in link_check(toolset=versioned_toolset, lib_version=lib_version): sched_ctx = yield x
+			if not self.result:
+				for x in link_check(toolset=toolset, lib_version=lib_version): sched_ctx = yield x
+			if not self.result:
+				for x in link_check(toolset=versioned_toolset): sched_ctx = yield x
+			if not self.result:
+				for x in link_check(toolset=toolset): sched_ctx = yield x
+			if not self.result:
+				for x in link_check(lib_version=lib_version): sched_ctx = yield x
+			if not self.result:
+				for x in link_check(): sched_ctx = yield x
 
 	class ReadVersion(BuildCheckTask):
 			def __init__(self, outer, include_path = None):
@@ -159,7 +170,6 @@ class BoostCheckTask(MultiBuildCheckTask):
 					if len(min_version_tuple) >= 3: min_int_version += min_version_tuple[2]
 					ok = int_version >= min_int_version
 					self.results = ok, int_version, out[1].strip('"')
-				raise StopIteration
 			
 			@property
 			def result(self): return self.results[0]

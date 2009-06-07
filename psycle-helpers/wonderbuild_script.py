@@ -27,21 +27,19 @@ class Wonderbuild(ScriptTask):
 		top_src_dir = self.src_dir.parent
 		src_dir = self.src_dir / 'src'
 
+		universalis = ScriptLoaderTask.shared(project, src_dir.parent.parent / 'universalis')
+		for x in sched_ctx.parallel_wait(universalis): sched_ctx = yield x
+		universalis = universalis.script_task
+		pch = universalis.pch
+		universalis = universalis.mod_dep_phases
+
 		from wonderbuild.cxx_tool_chain import UserBuildCfg, ModTask
 		from wonderbuild.std_checks.std_math import StdMathCheckTask
 		from wonderbuild.install import InstallTask
 
-		#pch = ScriptLoaderTask.shared(project, src_dir.parent.parent / 'build-systems' / 'src' / 'pre_compiled_wonderbuild_script.py')
-		universalis = ScriptLoaderTask.shared(project, src_dir.parent.parent / 'universalis')
-		for x in sched_ctx.parallel_wait(universalis): sched_ctx = yield x
-
-		#pch = pch.script_task.mod_dep_phases
-		universalis = universalis.script_task
-		
-		pch = universalis.pch
-		universalis = universalis.mod_dep_phases
-
 		cfg = UserBuildCfg.new_or_clone(project)
+		for x in sched_ctx.parallel_wait(cfg): sched_ctx = yield x
+		
 		if cfg.kind == 'msvc': # XXX flags are a mess with msvc
 			#cfg.defines['WINVER'] = '0x501' # select win xp explicitly because msvc 2008 defaults to vista
 			cfg.defines['BOOST_ALL_DYN_LINK'] = None # choose to link against boost dlls

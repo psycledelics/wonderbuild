@@ -11,7 +11,8 @@ class Task(object):
 		self._sched_in_task_todo_count = 0
 		self._sched_out_tasks = []
 
-	def __call__(self, sched_ctx): raise StopIteration
+	def __call__(self, sched_ctx):
+		if False: yield
 		# example:
 		#
 		# for x in (sub_task_1, sub_task_2, ...): sched_ctx = yield x

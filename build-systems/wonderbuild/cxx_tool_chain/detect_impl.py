@@ -43,13 +43,14 @@ class DetectImplCheckTask(CheckTask):
 	def version(self): return self.results[1]
 	
 	def __call__(self, sched_ctx):
-		CheckTask.__call__(self, sched_ctx)
+		for x in CheckTask.__call__(self, sched_ctx): sched_ctx = yield x
 		cfg = self.user_build_cfg
 		cfg.kind = self.kind
 		cfg.version = self.version
-		self.setup_build_cfg()
+		for x in self._setup_build_cfg(sched_ctx): sched_ctx = yield x
 	
 	def do_check_and_set_result(self, sched_ctx):
+		if False: yield
 		sched_ctx.lock.release()
 		try:
 			cfg = self.user_build_cfg
@@ -98,13 +99,13 @@ class DetectImplCheckTask(CheckTask):
 							cfg.kind = 'posix'
 					else: cfg.kind = None
 			# set the impl corresponding to the kind
-			self.select_impl()
+			self._select_impl()
 			# read the version
 			cfg.version = cfg.impl is not None and cfg.impl.parse_version(out, err) or None
 		finally: sched_ctx.lock.acquire()
 		self.results = cfg.kind, cfg.version
 
-	def select_impl(self):
+	def _select_impl(self):
 		cfg = self.user_build_cfg
 		# set the impl corresponding to the kind
 		if cfg.kind == 'gcc':
@@ -118,9 +119,9 @@ class DetectImplCheckTask(CheckTask):
 			cfg.impl = Impl(self.project.persistent)
 		else: cfg.impl = cfg.version = None
 
-	def setup_build_cfg(self):
+	def _setup_build_cfg(self, sched_ctx):
 		cfg = self.user_build_cfg
-		if cfg.impl is None: self.select_impl()
+		if cfg.impl is None: self._select_impl()
 		if cfg.impl is not None:
 			o = cfg.options
 			# set the programs
@@ -135,6 +136,6 @@ class DetectImplCheckTask(CheckTask):
 
 			cfg.pic_flag_defines_pic = True # allows it to be reentrant during the check itself
 
-			for x in self.project.sched_ctx.parallel_wait(pe, pic): sched_ctx = yield x
+			for x in sched_ctx.parallel_wait(pe, pic): sched_ctx = yield x
 			cfg.target_platform_binary_format_is_pe = pe.result
 			cfg.pic_flag_defines_pic = pic.result

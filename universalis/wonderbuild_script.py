@@ -15,7 +15,7 @@ if __name__ == '__main__':
 		else: main()
 	else: main()
 
-from wonderbuild.script import ScriptTask
+from wonderbuild.script import ScriptTask, ScriptLoaderTask
 
 class Wonderbuild(ScriptTask):
 	@property
@@ -29,6 +29,10 @@ class Wonderbuild(ScriptTask):
 		top_src_dir = self.src_dir.parent
 		src_dir = self.src_dir / 'src'
 		
+		diversalis = ScriptLoaderTask.shared(project, src_dir.parent.parent / 'diversalis')
+		for x in sched_ctx.parallel_wait(diversalis): sched_ctx = yield x
+		diversalis = diversalis.script_task.mod_dep_phases
+
 		from wonderbuild import UserReadableException
 		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, PreCompileTasks, ModTask
 		from wonderbuild.std_checks import MSWindowsCheckTask
@@ -40,6 +44,8 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.install import InstallTask
 		
 		cfg = UserBuildCfg.new_or_clone(project)
+		for x in sched_ctx.parallel_wait(cfg): sched_ctx = yield x
+
 		if cfg.kind == 'msvc': # XXX flags are a mess with msvc
 			#cfg.defines['WINVER'] = '0x501' # select win xp explicitly because msvc 2008 defaults to vista
 			cfg.defines['BOOST_ALL_DYN_LINK'] = None # choose to link against boost dlls
@@ -53,7 +59,6 @@ class Wonderbuild(ScriptTask):
 		glibmm = PkgConfigCheckTask.shared(project, ['glibmm-2.4 >= 2.4', 'gmodule-2.0 >= 2.0', 'gthread-2.0 >= 2.0'])
 		mswindows = MSWindowsCheckTask.shared(check_cfg)
 		winmm = WinMMCheckTask.shared(check_cfg)
-		diversalis = ScriptTask.shared(project, src_dir.parent.parent / 'diversalis').mod_dep_phases
 
 		class Pch(PreCompileTasks):
 			def __init__(self): PreCompileTasks.__init__(self, 'pch', cfg)
