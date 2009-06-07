@@ -15,19 +15,19 @@ class Task(object):
 		if False: yield
 		# example:
 		#
-		# for x in (sub_task_1, sub_task_2, ...): sched_ctx = yield x
+		# for x in (sub_task_1, sub_task_2, ...): yield x
 		#
 		# sched_ctx.release()
 		# try: do something
 		# finally: sched_ctx.acquire()
 		#
-		# for x in (more_sub_task_1, more_sub_task_2, ...): sched_ctx = yield x
+		# for x in (more_sub_task_1, more_sub_task_2, ...): yield x
 		#
 		# sched_ctx.release()
 		# try: do something more
 		# finally: sched_ctx.acquire()
 		#
-		# for x in (again_more_sub_task_1, again_more_sub_task_2, ...): sched_ctx = yield x
+		# for x in (again_more_sub_task_1, again_more_sub_task_2, ...): yield x
 
 	def print_desc(self, desc, color = '7;1'):
 		out.write(colored(color, 'wonderbuild: task: ' + desc) + '\n')

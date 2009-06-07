@@ -30,7 +30,7 @@ class ScriptLoaderTask(ProjectTask):
 		d = {}
 		execfile(script.path, d)
 		self._script_task = d['Wonderbuild'](self.project, script.parent)
-		for x in sched_ctx.parallel_wait(self._script_task): sched_ctx = yield x
+		for x in sched_ctx.parallel_wait(self._script_task): yield x
 	
 	@property
 	def script_task(self):

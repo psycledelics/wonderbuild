@@ -29,12 +29,8 @@ class Scheduler(object):
 			self.thread_count = scheduler.thread_count
 			self.lock = scheduler._lock
 			self._scheduler = scheduler
-			self._thread_id = -1
-
-		def parallel_wait(self, *tasks):
-			for x in self._scheduler._parallel_wait(self._thread_id, *tasks): yield x
-
-		def parallel_no_wait(self, *tasks): self._scheduler._parallel_no_wait(self._thread_id, *tasks)
+			self.parallel_wait = scheduler._parallel_wait
+			self.parallel_no_wait = scheduler._parallel_no_wait
 
 	class _DummyLock(object):
 		def acquire(self): pass
@@ -186,23 +182,23 @@ class Scheduler(object):
 	
 	def _done_or_break_cond(self): return self._done_cond() or self._stop_requested
 
-	def _parallel_wait(self, thread_id, *tasks):
-		if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': parallel_wait: ' + str([str(t) for t in tasks]))
+	def _parallel_wait(self, *tasks):
+		if __debug__ and is_debug: debug('sched: parallel_wait: ' + str([str(t) for t in tasks]))
 		tasks_to_yield = tuple(t for t in tasks if not t._sched_processed)
 		if len(tasks_to_yield) != 0:
-			if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': yield tasks: ' + str([str(t) for t in tasks_to_yield]))
+			if __debug__ and is_debug: debug('sched: yield tasks: ' + str([str(t) for t in tasks_to_yield]))
 			#XXX
 			sched_ctx = yield tasks_to_yield
 		if __debug__ and is_debug:
-			debug('sched: thread: ' + str(thread_id) + ': parallel_wait done: ' + str([str(t) for t in tasks]))
+			debug('sched: thread: parallel_wait done: ' + str([str(t) for t in tasks]))
 			for t in tasks: assert t._sched_processed, t
 	
-	def _parallel_no_wait(self, thread_id, *tasks):
-		if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': parallel_no_wait: ' + str([str(t) for t in tasks]))
+	def _parallel_no_wait(self, *tasks):
+		if __debug__ and is_debug: debug('sched: thread: parallel_no_wait: ' + str([str(t) for t in tasks]))
 		notify = 0
 		for t in reversed(tasks):
 			if not t._sched_processed and not t._sched_stacked and t._sched_in_task_todo_count == 0:
-				if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': task pushed on stack: ' + str(t))
+				if __debug__ and is_debug: debug('sched: thread: task pushed on stack: ' + str(t))
 				self._task_stack.append(t)
 				t._sched_stacked = True
 				notify += 1

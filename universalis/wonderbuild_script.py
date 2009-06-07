@@ -30,7 +30,7 @@ class Wonderbuild(ScriptTask):
 		src_dir = self.src_dir / 'src'
 		
 		diversalis = ScriptLoaderTask.shared(project, src_dir.parent.parent / 'diversalis')
-		for x in sched_ctx.parallel_wait(diversalis): sched_ctx = yield x
+		for x in sched_ctx.parallel_wait(diversalis): yield x
 		diversalis = diversalis.script_task.mod_dep_phases
 
 		from wonderbuild import UserReadableException
@@ -44,7 +44,7 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.install import InstallTask
 		
 		cfg = UserBuildCfg.new_or_clone(project)
-		for x in sched_ctx.parallel_wait(cfg): sched_ctx = yield x
+		for x in sched_ctx.parallel_wait(cfg): yield x
 
 		if cfg.kind == 'msvc': # XXX flags are a mess with msvc
 			#cfg.defines['WINVER'] = '0x501' # select win xp explicitly because msvc 2008 defaults to vista
@@ -67,10 +67,10 @@ class Wonderbuild(ScriptTask):
 				self.public_deps = [diversalis]
 				req = self.public_deps
 				opt = [dlfcn, pthread, glibmm, std_math, boost]
-				for x in sched_ctx.parallel_wait(universalis.cxx_phase, *(req + opt)): sched_ctx = yield x
+				for x in sched_ctx.parallel_wait(universalis.cxx_phase, *(req + opt)): yield x
 				self.result = min(req)
 				self.public_deps += [x for x in opt if x]
-				for x in PreCompileTasks.__call__(self, sched_ctx): sched_ctx = yield x
+				for x in PreCompileTasks.__call__(self, sched_ctx): yield x
 			
 			def do_cxx_phase(self):
 				self.source_text
@@ -98,14 +98,14 @@ class Wonderbuild(ScriptTask):
 				req = self.public_deps + self.private_deps
 				opt = [dlfcn, pthread, glibmm]
 				sched_ctx.parallel_no_wait(winmm)
-				for x in sched_ctx.parallel_wait(mswindows, *(req + opt)): sched_ctx = yield x
+				for x in sched_ctx.parallel_wait(mswindows, *(req + opt)): yield x
 				self.result = min(req)
 				self.public_deps += [x for x in opt if x]
 				if self.result and mswindows:
-					for x in sched_ctx.wait(winmm): sched_ctx = yield x
+					for x in sched_ctx.wait(winmm): yield x
 					if winmm: self.public_deps.append(winmm)
 					else: self.result = False
-				for x in ModTask.__call__(self, sched_ctx): sched_ctx = yield x
+				for x in ModTask.__call__(self, sched_ctx): yield x
 			
 			def do_mod_phase(self):
 				if not boost: raise UserReadableException, self.name + ' requires the following boost libs: ' + boost.help

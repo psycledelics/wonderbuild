@@ -104,7 +104,7 @@ class Project(Task):
 				if self.requested_task_aliases is not None: tasks = self.tasks_with_aliases(self.requested_task_aliases)
 				else: tasks = self.task_aliases.get('default', ())
 				self.processsing = True
-				for x in sched_ctx.parallel_wait(*tasks): sched_ctx = yield x
+				for x in sched_ctx.parallel_wait(*tasks): yield x
 				self.processsing = False
 		finally:
 			if 'help' in self.options: return

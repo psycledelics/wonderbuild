@@ -43,11 +43,11 @@ class DetectImplCheckTask(CheckTask):
 	def version(self): return self.results[1]
 	
 	def __call__(self, sched_ctx):
-		for x in CheckTask.__call__(self, sched_ctx): sched_ctx = yield x
+		for x in CheckTask.__call__(self, sched_ctx): yield x
 		cfg = self.user_build_cfg
 		cfg.kind = self.kind
 		cfg.version = self.version
-		for x in self._setup_build_cfg(sched_ctx): sched_ctx = yield x
+		for x in self._setup_build_cfg(sched_ctx): yield x
 	
 	def do_check_and_set_result(self, sched_ctx):
 		if False: yield
@@ -136,6 +136,6 @@ class DetectImplCheckTask(CheckTask):
 
 			cfg.pic_flag_defines_pic = True # allows it to be reentrant during the check itself
 
-			for x in sched_ctx.parallel_wait(pe, pic): sched_ctx = yield x
+			for x in sched_ctx.parallel_wait(pe, pic): yield x
 			cfg.target_platform_binary_format_is_pe = pe.result
 			cfg.pic_flag_defines_pic = pic.result

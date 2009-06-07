@@ -30,7 +30,7 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.install import InstallTask
 
 		cfg = UserBuildCfg.new_or_clone(project)
-		for x in sched_ctx.parallel_wait(cfg): sched_ctx = yield x
+		for x in sched_ctx.parallel_wait(cfg): yield x
 	
 		class DiversalisMod(ModTask):
 			def __init__(self): ModTask.__init__(self, 'diversalis', ModTask.Kinds.HEADERS, cfg, 'diversalis', 'default',

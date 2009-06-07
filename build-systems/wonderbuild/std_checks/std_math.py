@@ -9,11 +9,11 @@ class StdMathCheckTask(MultiBuildCheckTask):
 		
 	def do_check_and_set_result(self, sched_ctx):
 		t = StdMathCheckTask.SubCheckTask(self, True)
-		for x in sched_ctx.parallel_wait(t): sched_ctx = yield x
+		for x in sched_ctx.parallel_wait(t): yield x
 		if t.result: self.results = t.result, t.m
 		else:
 			t = StdMathCheckTask.SubCheckTask(self, False)
-			for x in sched_ctx.parallel_wait(t): sched_ctx = yield x
+			for x in sched_ctx.parallel_wait(t): yield x
 			if t.result: self.results = t.result, t.m
 			else: self.results = False, None
 	
