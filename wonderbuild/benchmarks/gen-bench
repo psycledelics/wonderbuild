@@ -128,11 +128,16 @@ class Wonderbuild(ScriptTask):
 		class CustomBuildCfg(UserBuildCfg):
 			def __init__(self, project):
 				UserBuildCfg.__init__(self, project)
+				
+			def __call__(self, sched_ctx):
+				for x in UserBuildCfg.__call__(self, sched_ctx): yield x
 				self.cxx_flags = ['-g', '-O0', '-Wall']
 				self.shared = self.pic = False
 				self.defines['BENCH'] = None
 				self.include_paths.append(src_dir)
+		
 		build_cfg = CustomBuildCfg(self.project)
+		for x in sched_ctx.parallel_wait(build_cfg): sched_ctx = yield x
 
 		use_pch = False
 		if use_pch:
@@ -160,15 +165,17 @@ class Wonderbuild(ScriptTask):
 	
 			def __call__(self, sched_ctx):
 				if use_pch:
-					sched_ctx.parallel_wait(pch.lib_task)
-					pch.lib_task.apply_to(self.cfg)
+					for x in sched_ctx.parallel_wait(pch.lib_task): yield x
+				for x in ModTask.__call__(self, sched_ctx): yield x
+
+			def do_mod_phase(self):
+				if use_pch: pch.lib_task.apply_to(self.cfg)
 				self.cfg.defines['BENCH_LIB'] = self.i
 				sub_src_dir = src_dir / self.name
 				for s in sub_src_dir.find_iter(in_pats = ['*.cpp']): self.sources.append(s)
-				ModTask.__call__(self, sched_ctx)
 
 		for n in src_dir.find_iter(in_pats = ('lib_*',), prune_pats = ('*',)):
-			self.project.add_task_aliases(BenchLib(n.name, n.name[len('lib_'):]).mod, 'default')
+			self.project.add_task_aliases(BenchLib(n.name, n.name[len('lib_'):]).mod_phase, 'default')
 ''')
 
 def create_waf(libs):
