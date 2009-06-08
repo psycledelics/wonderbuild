@@ -19,22 +19,18 @@ from wonderbuild.script import ScriptTask, ScriptLoaderTask
 
 class Wonderbuild(ScriptTask):
 
-	@property
-	def mod_dep_phases(self): return self._mod_dep_phases
-
 	def __call__(self, sched_ctx):
 		project = self.project
 		top_src_dir = self.src_dir.parent
 		src_dir = self.src_dir / 'src'
 
-		audiodrivers = ScriptLoaderTask.shared(project, src_dir.parent.parent / 'psycle-audiodrivers')
+		core = ScriptLoaderTask.shared(project, src_dir.parent.parent / 'psycle-core')
 		pch = ScriptLoaderTask.shared(project, src_dir.parent.parent / 'universalis')
-		for x in sched_ctx.parallel_wait(audiodrivers, pch): yield x
-		audiodrivers = audiodrivers.script_task.mod_dep_phases
+		for x in sched_ctx.parallel_wait(core, pch): yield x
+		core = core.script_task.mod_dep_phases
 		pch = pch.script_task.pch
 
 		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, ModTask
-		from wonderbuild.std_checks.zlib import ZLibCheckTask
 		from wonderbuild.install import InstallTask
 
 		xml = PkgConfigCheckTask.shared(project, ['libxml++-2.6'])
@@ -47,46 +43,27 @@ class Wonderbuild(ScriptTask):
 			cfg.defines['BOOST_ALL_DYN_LINK'] = None # choose to link against boost dlls
 			cfg.cxx_flags += ['-EHa', '-MD'] # basic compilation flags required
 
-		check_cfg = cfg.clone()
-		zlib = ZLibCheckTask.shared(check_cfg)
-
-		class CoreMod(ModTask):
-			def __init__(self): ModTask.__init__(self, 'psycle-core', ModTask.Kinds.LIB, cfg, 'psycle-core', 'default')
+		class PlayerMod(ModTask):
+			def __init__(self): ModTask.__init__(self, 'psycle-player', ModTask.Kinds.PROG, cfg, 'psycle-player', 'default')
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
-				self.public_deps = [audiodrivers, xml, zlib]
+				self.public_deps = [core]
 				req = self.public_deps + self.private_deps
-				for x in sched_ctx.parallel_wait(*req): yield x
+				opt = [xml]
+				for x in sched_ctx.parallel_wait(*(req + opt)): yield x				
 				self.result = min(req)
-				self.cxx_phase = CoreMod.InstallHeaders(self.project, self.name + '-headers')
+				self.public_deps += [o for o in opt if o]
 				for x in ModTask.__call__(self, sched_ctx): yield x
-			
-			def apply_cxx_to(self, cfg):
-				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
-				ModTask.apply_cxx_to(self, cfg)
 
+			def apply_cxx_to(self, cfg):
+				if xml: cfg.defines['PSYCLE__LIBXMLPP_AVAILABLE'] = None
+				ModTask.apply_cxx_to(self, cfg)
+			
 			def do_mod_phase(self):
 				self.cfg.include_paths.appendleft(src_dir)
-				self.cfg.include_paths.appendleft(top_src_dir / 'psycle-plugins' / 'src')
-				for s in (src_dir / 'psycle' / 'core').find_iter(
-					in_pats = ('*.cpp',), prune_pats = ('todo',), ex_pats = ('psy4filter.cpp',)
+				for s in (src_dir / 'psycle' / 'player').find_iter(
+					in_pats = ('*.cpp',), prune_pats = ('todo',)
 				): self.sources.append(s)
 
-			class InstallHeaders(InstallTask):
-				@property
-				def trim_prefix(self): return src_dir
-
-				@property
-				def dest_dir(self): return self.fhs.include
-
-				@property
-				def sources(self):
-					try: return self._sources
-					except AttributeError:
-						self._sources = []
-						for s in (self.trim_prefix / 'psycle' / 'core').find_iter(
-							in_pats = ('*.hpp', '*.h'), ex_pats = ('*.private.hpp', '*.private.h'), prune_pats = ('todo',)): self._sources.append(s)
-						return self._sources
-
-		self._mod_dep_phases = mod_dep_phases = CoreMod()
+		player = PlayerMod()

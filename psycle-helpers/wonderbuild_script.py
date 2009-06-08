@@ -58,7 +58,6 @@ class Wonderbuild(ScriptTask):
 				self.public_deps = [universalis, std_math]
 				for x in ModTask.__call__(self, sched_ctx): yield x
 				req = self.public_deps + self.private_deps
-				for x in sched_ctx.parallel_wait(*req): yield x
 				self.result = min(req)
 
 			def apply_cxx_to(self, cfg):

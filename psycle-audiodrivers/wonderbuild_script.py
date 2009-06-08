@@ -68,9 +68,8 @@ class Wonderbuild(ScriptTask):
 				self.public_deps += [o for o in opt if o]
 				self.cxx_phase = AudioDriversMod.InstallHeaders(self.project, self.name + '-headers')
 				for x in ModTask.__call__(self, sched_ctx): yield x
-			
-			def apply_cxx_to(self, cfg):
-				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+
+			def _apply_defines(self, cfg):
 				d = cfg.defines
 				if alsa:   d['PSYCLE__ALSA_AVAILABLE'] = None
 				if jack:   d['PSYCLE__JACK_AVAILABLE'] = None
@@ -81,10 +80,10 @@ class Wonderbuild(ScriptTask):
 					if gstreamer: d['PSYCLE__GSTREAMER_AVAILABLE'] = None
 					if netaudio:  d['PSYCLE__NET_AUDIO_AVAILABLE'] = None
 					if asio:      d['PSYCLE__STEINBERG_ASIO_AVAILABLE'] = None
-				ModTask.apply_cxx_to(self, cfg)
-
+			
 			def do_mod_phase(self):
 				self.cfg.include_paths.appendleft(src_dir)
+				self._apply_defines(self.cfg)
 				s = self.sources
 				dir = src_dir / 'psycle' / 'audiodrivers'
 				s.append(dir / 'audiodriver.cpp')
@@ -98,6 +97,11 @@ class Wonderbuild(ScriptTask):
 					if gstreamer: s.append(dir / 'gstreamerout.cpp')
 					if netaudio:  s.append(dir / 'netaudioout.cpp')
 					if asio:      s.append(dir / 'asioout.cpp')
+
+			def apply_cxx_to(self, cfg):
+				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+				self._apply_defines(cfg)
+				ModTask.apply_cxx_to(self, cfg)
 
 			class InstallHeaders(InstallTask):
 				@property

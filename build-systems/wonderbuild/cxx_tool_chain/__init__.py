@@ -304,7 +304,7 @@ class ModDepPhases(object):
 		self.cxx_phase = self.mod_phase = None
 
 	@property
-	def cfg(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
+	def expose_private_deps(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
 
 	@property
 	def all_deps(self):
@@ -339,19 +339,31 @@ class ModDepPhases(object):
 		cxx_phases += [dep.cxx_phase for dep in self.public_deps if dep.cxx_phase is not None]
 		for dep in self.public_deps: dep._public_deps_deep_cxx_phases(cxx_phases)
 
-	def apply_cxx_to(self, cfg):
-		if self in cfg._applied: return
-		for dep in self.public_deps: dep.apply_cxx_to(cfg)
-		cfg._applied.add(self)
-	
-	def apply_mod_to(self, cfg):
-		if self in cfg._applied: return
-		for dep in self.cfg.shared and self.public_deps or self.all_deps: dep.apply_mod_to(cfg)
-		cfg._applied.add(self)
+	def _applied(self, cfg, what):
+		uid = str(id(self)) + '#' + what
+		result = uid in cfg._applied
+		cfg._applied.add(uid)
 
-class _PreCompileTask(ModDepPhases, ProjectTask):
+	def apply_cxx_to(self, cfg):
+		if self._applied(cfg, 'cxx'): return False
+		for dep in self.public_deps: dep.apply_cxx_to(cfg)
+		return True
+	
+	def apply_mod_to(self, cfg, expose_private_deps):
+		if self._applied(cfg, 'mod'): return False
+		for dep in expose_private_deps and self.public_deps or self.all_deps: dep.apply_mod_to(cfg, expose_private_deps)
+		return True
+
+class ModDepPhasesWithCfg(ModDepPhases):
+	@property
+	def cfg(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
+
+	@property
+	def expose_private_deps(self): return self.cfg.shared or not self.cfg.static_prog
+
+class _PreCompileTask(ModDepPhasesWithCfg, ProjectTask):
 	def __init__(self, name, base_cfg):
-		ModDepPhases.__init__(self)
+		ModDepPhasesWithCfg.__init__(self)
 		ProjectTask.__init__(self, base_cfg.project)
 		self.name = name
 		self.base_cfg = base_cfg
@@ -364,11 +376,11 @@ class _PreCompileTask(ModDepPhases, ProjectTask):
 			return self._cfg
 
 	def __call__(self, sched_ctx):
-		for x in ModDepPhases.__call__(self, sched_ctx): yield x
+		for x in ModDepPhasesWithCfg.__call__(self, sched_ctx): yield x
 		self.cxx_phase = _PreCompileTask._CxxPhaseCallbackTask(self)
 	
 	def apply_cxx_to(self, cfg):
-		ModDepPhases.apply_cxx_to(self, cfg)
+		if not ModDepPhasesWithCfg.apply_cxx_to(self, cfg): return
 		cfg.pch = self.header
 
 	@property
@@ -479,9 +491,9 @@ class _PreCompileTask(ModDepPhases, ProjectTask):
 			sig = self._sig = sig.digest()
 			return sig
 
-class PreCompileTasks(ModDepPhases, ProjectTask):
+class PreCompileTasks(ModDepPhasesWithCfg, ProjectTask):
 	def __init__(self, name, base_cfg):
-		ModDepPhases.__init__(self)
+		ModDepPhasesWithCfg.__init__(self)
 		ProjectTask.__init__(self, base_cfg.project)
 		self.name = name
 		self.base_cfg = base_cfg
@@ -597,7 +609,7 @@ class _BatchCompileTask(ProjectTask):
 			self.cfg.impl.process_cxx_task(self, sched_ctx.lock)
 		finally: sched_ctx.lock.acquire()
 
-class ModTask(ModDepPhases, ProjectTask):
+class ModTask(ModDepPhasesWithCfg, ProjectTask):
 	class Kinds(object):
 		HEADERS = 0
 		PROG = 1
@@ -606,7 +618,7 @@ class ModTask(ModDepPhases, ProjectTask):
 
 	def __init__(self, name, kind, base_cfg, *aliases, **kw):
 		if len(aliases) == 0: aliases = (name,)
-		ModDepPhases.__init__(self)
+		ModDepPhasesWithCfg.__init__(self)
 		ProjectTask.__init__(self, base_cfg.project)
 		self.name = name
 		self.kind = kind
@@ -633,11 +645,11 @@ class ModTask(ModDepPhases, ProjectTask):
 					cfg.pic = True
 			return cfg
 
-	def apply_mod_to(self, cfg):
-		if self in cfg._applied: return
-		ModDepPhases.apply_mod_to(self, cfg)
-		if not self.target_dev_dir in cfg.lib_paths: cfg.lib_paths.append(self.target_dev_dir)
-		cfg.libs.append(self.target_dev_name)
+	def apply_mod_to(self, cfg, expose_private_deps):
+		if not ModDepPhasesWithCfg.apply_mod_to(self, cfg, expose_private_deps): return
+		if self.kind != ModTask.Kinds.HEADERS:
+			if not self.target_dev_dir in cfg.lib_paths: cfg.lib_paths.append(self.target_dev_dir)
+			cfg.libs.append(self.target_dev_name)
 
 	def __str__(self):
 		if self.kind != ModTask.Kinds.HEADERS: return 'deps of module ' + str(self.target)
@@ -722,7 +734,7 @@ class ModTask(ModDepPhases, ProjectTask):
 			for x in sched_ctx.parallel_wait(pkg_config_cxx_flags_task): yield x
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
 			if self.ld:
-				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask.shared(self.project, self.cfg.pkg_config, self.cfg.shared or not self.cfg.static_prog)
+				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask.shared(self.project, self.cfg.pkg_config, self.expose_private_deps)
 				sched_ctx.parallel_no_wait(pkg_config_ld_flags_task)
 		self.do_mod_phase()
 		try: state = self.persistent
@@ -799,7 +811,7 @@ class ModTask(ModDepPhases, ProjectTask):
 					break
 		for x in sched_ctx.parallel_wait(*tasks): yield x
 		if self.ld:
-			for dep in self.all_deps: dep.apply_mod_to(self.cfg)
+			for dep in self.all_deps: dep.apply_mod_to(self.cfg, self.expose_private_deps)
 			if not need_process:
 				for dep in self.all_deps:
 					# when a dependant lib is a static archive, or changes its type from static to shared, we need to relink.
@@ -1019,8 +1031,7 @@ class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 		for x in _PkgConfigTask.__call__(self, sched_ctx): yield x
 
 	def apply_cxx_to(self, cfg):
-		if self in cfg._applied: return
-		ModDepPhases.apply_cxx_to(self, cfg)
+		if not ModDepPhases.apply_cxx_to(self, cfg): return
 		cfg.pkg_config += self.pkgs
 		
 	@property
@@ -1037,10 +1048,10 @@ class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 			r = 1
 		self.results = r == 0
 
-class MultiBuildCheckTask(CheckTask, ModDepPhases):
+class MultiBuildCheckTask(CheckTask, ModDepPhasesWithCfg):
 	def __init__(self, name, base_cfg, pipe_preproc=False, compile=True, link=True):
 		CheckTask.__init__(self, base_cfg.project)
-		ModDepPhases.__init__(self)
+		ModDepPhasesWithCfg.__init__(self)
 		self.name = name
 		self.base_cfg = base_cfg
 		self.pipe_preproc = pipe_preproc
@@ -1048,7 +1059,7 @@ class MultiBuildCheckTask(CheckTask, ModDepPhases):
 		self.link = link
 
 	def __call__(self, sched_ctx):
-		for x in ModDepPhases.__call__(self, sched_ctx): yield x
+		for x in ModDepPhasesWithCfg.__call__(self, sched_ctx): yield x
 		for x in CheckTask.__call__(self, sched_ctx): yield x
 
 	@property
@@ -1061,7 +1072,7 @@ class MultiBuildCheckTask(CheckTask, ModDepPhases):
 			return self._cfg
 
 	def apply_cxx_to(self, cfg):
-		ModDepPhases.apply_cxx_to(self, cfg)
+		if not ModDepPhasesWithCfg.apply_cxx_to(self, cfg): return
 		self.apply_to(cfg)
 
 	def apply_to(self, cfg): pass
