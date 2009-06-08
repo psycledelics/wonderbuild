@@ -58,7 +58,8 @@ class InstallTask(ProjectTask, OptionCfg):
 	@property
 	def dest_dir(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
 	
-	def __call__(self, sched_context):
+	def __call__(self, sched_ctx):
+		if False: yield
 		try: old_sig, sigs = self.project.persistent[self.uid]
 		except KeyError:
 			if __debug__ and is_debug: debug('task: no state: ' + str(self))
@@ -97,7 +98,7 @@ class InstallTask(ProjectTask, OptionCfg):
 				if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 			else:
 				for s in changed_sources: sigs[s] = s.sig
-				sched_context.lock.release()
+				sched_ctx.lock.release()
 				try:
 					self.dest_dir.lock.acquire()
 					try:
@@ -121,4 +122,4 @@ class InstallTask(ProjectTask, OptionCfg):
 							install(s.path, dest.path)
 						self.project.persistent[self.uid] = sig, sigs
 					finally: self.dest_dir.lock.release()
-				finally: sched_context.lock.acquire()
+				finally: sched_ctx.lock.acquire()
