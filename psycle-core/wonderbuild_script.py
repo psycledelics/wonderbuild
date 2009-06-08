@@ -68,7 +68,9 @@ class Wonderbuild(ScriptTask):
 			def do_mod_phase(self):
 				self.cfg.include_paths.appendleft(src_dir)
 				self.cfg.include_paths.appendleft(top_src_dir / 'psycle-plugins' / 'src')
-				for s in (src_dir / 'psycle' / 'core').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
+				for s in (src_dir / 'psycle' / 'core').find_iter(
+					in_pats = ('*.cpp',), prune_pats = ('todo',), ex_pats = ('psy4filter.cpp',)
+				): self.sources.append(s)
 
 			class InstallHeaders(InstallTask):
 				@property

@@ -87,6 +87,7 @@ class Wonderbuild(ScriptTask):
 				self.cfg.include_paths.appendleft(src_dir)
 				s = self.sources
 				dir = src_dir / 'psycle' / 'audiodrivers'
+				s.append(dir / 'audiodriver.cpp')
 				s.append(dir / 'wavefileout.cpp')
 				if alsa:   s.append(dir / 'alsaout.cpp')
 				if jack:   s.append(dir / 'jackout.cpp')
@@ -111,6 +112,7 @@ class Wonderbuild(ScriptTask):
 					except AttributeError:
 						self._sources = s = []
 						dir = src_dir / 'psycle' / 'audiodrivers'
+						s.append(dir / 'audiodriver.h')
 						s.append(dir / 'wavefileout.h')
 						if alsa:   s.append(dir / 'alsaout.h')
 						if jack:   s.append(dir / 'jackout.h')
