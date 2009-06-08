@@ -4,14 +4,11 @@
 
 from wonderbuild.task import ProjectTask
 
-class Dummy(ProjectTask):
-	def __call__(self, sched_ctx):
-		print 'libhello dummy task executing'
+class Dummy(ProjectTask): pass
 
 from wonderbuild.script import ScriptTask
 
 class Wonderbuild(ScriptTask):
 	def __call__(self, sched_ctx):
-		print 'libhello script task executing'
+		if False: yield
 		self.dummy = Dummy(self.project)
-		#self.project.add_task_aliases(self.dummy, 'dummy', 'all')

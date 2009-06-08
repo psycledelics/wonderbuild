@@ -2,13 +2,27 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-from wonderbuild.script import ScriptTask
+if __name__ == '__main__':
+	try: from wonderbuild.main import main
+	except ImportError:
+		import sys, os
+		dir = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+		if dir not in sys.path: sys.path.append(dir)
+		try: from wonderbuild.main import main
+		except ImportError:
+			print >> sys.stderr, 'could not find wonderbuild'
+			sys.exit(1)
+		else: main()
+	else: main()
+
+from wonderbuild.script import ScriptTask, ScriptLoaderTask
 
 class Wonderbuild(ScriptTask):
 	def __call__(self, sched_ctx):
 
-		lib_hello = ScriptTask.shared(self.project, self.src_dir / 'libhello')
-		print 'sub script tasks:', lib_hello.dummy
+		lib_hello = ScriptLoaderTask.shared(self.project, self.src_dir / 'libhello')
+		for x in sched_ctx.parallel_wait(lib_hello): yield x
+		lib_hello = lib_hello.script_task
 
 		src_dir = self.src_dir / 'src'
 
@@ -19,6 +33,7 @@ class Wonderbuild(ScriptTask):
 		glibmm = PkgConfigCheckTask.shared(self.project, ['glibmm-2.4 >= 2.4'])
 
 		build_cfg = UserBuildCfg.new_or_clone(self.project)
+		for x in sched_ctx.parallel_wait(build_cfg): sched_ctx = yield x
 
 		check_cfg = build_cfg.clone()
 		std_math = StdMathCheckTask.shared(check_cfg)
@@ -32,12 +47,12 @@ class Wonderbuild(ScriptTask):
 				self.public_deps = [std_math, glibmm]
 				req = self.public_deps
 				opt = std_math, glibmm
-				sched_ctx.parallel_wait(*opt)
+				for x in sched_ctx.parallel_wait(*opt): yield x
 				self.result = True
 				self.public_deps += [x for x in opt if x]
-				PreCompileTasks.__call__(self, sched_ctx)
+				for x in PreCompileTasks.__call__(self, sched_ctx): yield x
 			
-			def do_cxx(self):
+			def do_cxx_phase(self):
 				self.source_text
 				if std_math: self._source_text += '\n#include <cmath>'
 				if glibmm: self._source_text += '\n#include <glibmm.h>'
@@ -60,13 +75,13 @@ class Wonderbuild(ScriptTask):
 				self.private_deps = [pch.lib_task]
 				req = self.private_deps
 				opt = [std_math, glibmm]
-				sched_ctx.parallel_wait(*(req + opt))
+				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.result = min(req)
 				self.public_deps += [x for x in opt if x]
 				self.cxx = LibFoo.Install(self.project, self.name + '-headers')
-				ModTask.__call__(self, sched_ctx)
+				for x in ModTask.__call__(self, sched_ctx): yield x
 				
-			def do_mod(self):
+			def do_mod_phase(self):
 				for s in (src_dir / 'foo').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 
 			def apply_cxx_to(self, cfg):
@@ -95,11 +110,11 @@ class Wonderbuild(ScriptTask):
 				self.public_deps = [lib_foo]
 				req = self.public_deps
 				opt = [glibmm]
-				sched_ctx.parallel_wait(*(req + opt))
+				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.result = min(req)
 				self.public_deps += [x for x in opt if x]
-				ModTask.__call__(self, sched_ctx)
+				for x in ModTask.__call__(self, sched_ctx): yield x
 				
-			def do_mod(self):
+			def do_mod_phase(self):
 				for s in (src_dir / 'main').find_iter(in_pats = ['*.cpp'], prune_pats = ['todo']): self.sources.append(s)
 		main_prog = MainProg()
