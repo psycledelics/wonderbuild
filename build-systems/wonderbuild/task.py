@@ -41,7 +41,7 @@ class Task(object):
 		#out.flush()
 
 class ProjectTask(Task):
-	def __init__(self, project, *aliases):
+	def __init__(self, project, *aliases): #XXX aliases as keyword
 		Task.__init__(self)
 		self.project = project
 		project.add_task_aliases(self, *aliases)
