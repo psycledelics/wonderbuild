@@ -48,12 +48,46 @@ class Wonderbuild(ScriptTask):
 		check_cfg = cfg.clone()
 		std_math = StdMathCheckTask.shared(check_cfg)
 
+		class HelpersMathMod(ModTask):
+			def __init__(self): ModTask.__init__(self, 'psycle-helpers-math', ModTask.Kinds.HEADERS, cfg, 'psycle-helpers-math', 'default',
+				cxx_phase=HelpersMathMod.InstallHeaders()
+			)
+				
+			def __call__(self, sched_ctx):
+				self.private_deps = [pch.lib_task]
+				self.public_deps = [universalis, std_math]
+				for x in ModTask.__call__(self, sched_ctx): yield x
+				req = self.public_deps + self.private_deps
+				for x in sched_ctx.parallel_wait(*req): yield x
+				self.result = min(req)
+
+			def apply_cxx_to(self, cfg):
+				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+				ModTask.apply_cxx_to(self, cfg)
+
+			class InstallHeaders(InstallTask):
+				def __init__(self): InstallTask.__init__(self, project, 'psycle-helpers-math-headers')
+
+				@property
+				def trim_prefix(self): return src_dir
+
+				@property
+				def dest_dir(self): return self.fhs.include
+
+				@property
+				def sources(self):
+					try: return self._sources
+					except AttributeError:
+						self._sources = list((self.trim_prefix / 'psycle' / 'helpers' / 'math').find_iter(
+							in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)))
+						return self._sources
+
 		class HelpersMod(ModTask):
 			def __init__(self): ModTask.__init__(self, 'psycle-helpers', ModTask.Kinds.LIB, cfg, 'psycle-helpers', 'default')
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
-				self.public_deps = [universalis, std_math]
+				self.public_deps = [universalis, helpers_math]
 				req = self.public_deps + self.private_deps
 				for x in sched_ctx.parallel_wait(*req): yield x
 				self.result = min(req)
@@ -63,7 +97,7 @@ class Wonderbuild(ScriptTask):
 			def do_mod_phase(self):
 				if not std_math: raise UserReadableException, self.name + ' requires the standard math lib: ' + std_math.help
 				self.cfg.include_paths.appendleft(src_dir)
-				for s in (src_dir / 'psycle' / 'helpers').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
+				for s in (src_dir / 'psycle' / 'helpers').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo', 'math')): self.sources.append(s)
 
 			def apply_cxx_to(self, cfg):
 				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
@@ -82,7 +116,8 @@ class Wonderbuild(ScriptTask):
 					except AttributeError:
 						self._sources = []
 						for s in (self.trim_prefix / 'psycle' / 'helpers').find_iter(
-							in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)): self._sources.append(s)
+							in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo', 'math')): self._sources.append(s)
 						return self._sources
-
+						
+		helpers_math = HelpersMathMod()
 		self._mod_dep_phases = mod_dep_phases = HelpersMod()
