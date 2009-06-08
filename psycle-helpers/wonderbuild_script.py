@@ -38,7 +38,7 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.install import InstallTask
 
 		cfg = UserBuildCfg.new_or_clone(project)
-		for x in sched_ctx.parallel_wait(cfg): sched_ctx = yield x
+		for x in sched_ctx.parallel_wait(cfg): yield x
 		
 		if cfg.kind == 'msvc': # XXX flags are a mess with msvc
 			#cfg.defines['WINVER'] = '0x501' # select win xp explicitly because msvc 2008 defaults to vista
@@ -55,10 +55,10 @@ class Wonderbuild(ScriptTask):
 				self.private_deps = [pch.lib_task]
 				self.public_deps = [universalis, std_math]
 				req = self.public_deps + self.private_deps
-				for x in sched_ctx.parallel_wait(*req): sched_ctx = yield x
+				for x in sched_ctx.parallel_wait(*req): yield x
 				self.result = min(req)
 				self.cxx_phase = HelpersMod.InstallHeaders(self.project, self.name + '-headers')
-				for x in ModTask.__call__(self, sched_ctx): sched_ctx = yield x
+				for x in ModTask.__call__(self, sched_ctx): yield x
 			
 			def do_mod_phase(self):
 				if not std_math: raise UserReadableException, self.name + ' requires the standard math lib: ' + std_math.help

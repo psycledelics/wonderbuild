@@ -43,6 +43,8 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.std_checks.winmm import WinMMCheckTask
 		from wonderbuild.install import InstallTask
 		
+		glibmm = PkgConfigCheckTask.shared(project, ['glibmm-2.4 >= 2.4', 'gmodule-2.0 >= 2.0', 'gthread-2.0 >= 2.0'])
+
 		cfg = UserBuildCfg.new_or_clone(project)
 		for x in sched_ctx.parallel_wait(cfg): yield x
 
@@ -56,7 +58,6 @@ class Wonderbuild(ScriptTask):
 		dlfcn = DlfcnCheckTask.shared(check_cfg)
 		pthread = PThreadCheckTask.shared(check_cfg)
 		boost = BoostCheckTask.shared((1, 33), ('signals', 'thread', 'filesystem', 'date_time'), check_cfg)
-		glibmm = PkgConfigCheckTask.shared(project, ['glibmm-2.4 >= 2.4', 'gmodule-2.0 >= 2.0', 'gthread-2.0 >= 2.0'])
 		mswindows = MSWindowsCheckTask.shared(check_cfg)
 		winmm = WinMMCheckTask.shared(check_cfg)
 

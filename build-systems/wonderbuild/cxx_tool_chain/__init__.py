@@ -895,13 +895,13 @@ class _PkgConfigTask(CheckTask):
 	@property
 	def prog(self): return 'pkg-config'
 
-	def __str__(self): return 'check pkg-config ' + ' '.join(self.pkgs) + ' ' + ' '.join(self.what_args)
+	def __str__(self): return 'check pkg-config ' + ' '.join(self.what_args) + ' ' + ' '.join(self.pkgs)
 
 	@property
 	def desc(self):
 		try: return self._desc
 		except AttributeError:
-			self._desc = self.prog + ' ' + ' '.join(self.pkgs) + ' ' + self.what_desc
+			self._desc = self.prog + ' ' + self.what_desc + ' ' + ' '.join(self.pkgs)
 			return self._desc
 
 	@property
