@@ -307,11 +307,7 @@ class ModDepPhases(object):
 	def expose_private_deps(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
 
 	@property
-	def all_deps(self):
-		try: return self._all_deps
-		except AttributeError:
-			self._all_deps = self.public_deps + self.private_deps
-			return self._all_deps
+	def all_deps(self): return self.public_deps + self.private_deps
 
 	def __call__(self, sched_ctx):
 		### needs changes in CheckTask
