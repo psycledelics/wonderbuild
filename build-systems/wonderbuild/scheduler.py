@@ -100,12 +100,15 @@ class Scheduler(object):
 			try: task_gen = task._sched_gen
 			except AttributeError: pass
 			else:
-				if task_gen is not None: task_gen.close()
-				task._sched_gen = None
+				if task_gen is not None:
+					try: task_gen.close()
+					finally: task._sched_gen = None
 		finally:
 			out_tasks = task._sched_out_tasks
 			task._out_tasks = None
-			for out_task in out_tasks: self._close_gen(out_task)
+			for out_task in out_tasks:
+				try: self._close_gen(out_task)
+				except: continue
 
 	def _thread_loop(self, thread_id, remaining_start_count, remaining_start_cond):
 		if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': started')
