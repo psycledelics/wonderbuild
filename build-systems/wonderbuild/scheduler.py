@@ -90,10 +90,24 @@ class Scheduler(object):
 					self._cond.notifyAll()
 				finally: self._cond.release()
 				for t in self._threads: t.join(timeout = self.timeout)
+			for task in self._task_stack: self._close_gen(task)
 			if hasattr(self, 'exception'):
 				if isinstance(self.exception, UserReadableException): raise self.exception
 				else: raise UserReadableException, 'An exception occurred, see stack trace above.'
-		
+	
+	def _close_gen(self, task):
+		try: task_gen = task._sched_gen
+		except AttributeError: pass
+		else:
+			if task_gen is not None: task_gen.close()
+			task._sched_gen = None
+		try: out_tasks = task._sched_out_tasks
+		except AttributeError: pass
+		else:
+			if out_tasks is not None:
+				task._out_tasks = None
+				for out_task in out_tasks: self._close_gen(out_task)
+
 	def _thread_loop(self, thread_id, remaining_start_count, remaining_start_cond):
 		if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': started')
 		if remaining_start_cond is not None:
@@ -127,15 +141,13 @@ class Scheduler(object):
 						task_gen = None
 						try:
 							try: task_gen = task._sched_gen
-							except AttributeError:
-								task_gen = task._sched_gen = task(self._context)
-								in_tasks = task_gen.next()
-							else: in_tasks = task_gen.send(self._context)
+							except AttributeError: task_gen = task._sched_gen = task(self._context)
+							in_tasks = task_gen.next()
 						except StopIteration:
 							if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': task processed: ' + str(task) + ', out tasks: ' + str([str(t) for t in task._sched_out_tasks]))
 							task._sched_processed = True
 						except:
-							if task_gen is not None: task_gen.close()
+							if task_gen is not None: self._close_gen(task)
 							raise
 						else:
 							if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': task: ' + str(task) + ', in tasks: ' + str([str(t) for t in in_tasks]))
