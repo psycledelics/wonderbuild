@@ -96,17 +96,16 @@ class Scheduler(object):
 				else: raise UserReadableException, 'An exception occurred, see stack trace above.'
 	
 	def _close_gen(self, task):
-		try: task_gen = task._sched_gen
-		except AttributeError: pass
-		else:
-			if task_gen is not None: task_gen.close()
-			task._sched_gen = None
-		try: out_tasks = task._sched_out_tasks
-		except AttributeError: pass
-		else:
-			if out_tasks is not None:
-				task._out_tasks = None
-				for out_task in out_tasks: self._close_gen(out_task)
+		try:
+			try: task_gen = task._sched_gen
+			except AttributeError: pass
+			else:
+				if task_gen is not None: task_gen.close()
+				task._sched_gen = None
+		finally:
+			out_tasks = task._sched_out_tasks
+			task._out_tasks = None
+			for out_task in out_tasks: self._close_gen(out_task)
 
 	def _thread_loop(self, thread_id, remaining_start_count, remaining_start_cond):
 		if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': started')
