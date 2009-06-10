@@ -90,8 +90,8 @@ class Scheduler(object):
 					self._cond.notifyAll()
 				finally: self._cond.release()
 				for t in self._threads: t.join(timeout = self.timeout)
-			for task in self._task_stack: self._close_gen(task)
 			if hasattr(self, 'exception'):
+				for task in self._task_stack: self._close_gen(task)
 				if isinstance(self.exception, UserReadableException): raise self.exception
 				else: raise UserReadableException, 'An exception occurred, see stack trace above.'
 	
