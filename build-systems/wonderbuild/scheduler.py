@@ -105,8 +105,8 @@ class Scheduler(object):
 					finally: task._sched_gen = None
 		finally:
 			out_tasks = task._sched_out_tasks
-			task._out_tasks = None
 			if out_tasks is not None:
+				task._out_tasks = None
 				for out_task in out_tasks:
 					try: self._close_gen(out_task)
 					except: continue
