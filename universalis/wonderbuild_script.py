@@ -29,7 +29,7 @@ class Wonderbuild(ScriptTask):
 		top_src_dir = self.src_dir.parent
 		src_dir = self.src_dir / 'src'
 		
-		diversalis = ScriptLoaderTask.shared(project, src_dir.parent.parent / 'diversalis')
+		diversalis = ScriptLoaderTask.shared(project, top_src_dir / 'diversalis')
 		for x in sched_ctx.parallel_wait(diversalis): yield x
 		diversalis = diversalis.script_task.mod_dep_phases
 

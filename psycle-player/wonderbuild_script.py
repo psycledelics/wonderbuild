@@ -24,8 +24,8 @@ class Wonderbuild(ScriptTask):
 		top_src_dir = self.src_dir.parent
 		src_dir = self.src_dir / 'src'
 
-		core = ScriptLoaderTask.shared(project, src_dir.parent.parent / 'psycle-core')
-		pch = ScriptLoaderTask.shared(project, src_dir.parent.parent / 'universalis')
+		core = ScriptLoaderTask.shared(project, top_src_dir / 'psycle-core')
+		pch = ScriptLoaderTask.shared(project, top_src_dir / 'universalis')
 		for x in sched_ctx.parallel_wait(core, pch): yield x
 		core = core.script_task.mod_dep_phases
 		pch = pch.script_task.pch

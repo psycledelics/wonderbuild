@@ -27,7 +27,7 @@ class Wonderbuild(ScriptTask):
 		top_src_dir = self.src_dir.parent
 		src_dir = self.src_dir / 'src'
 
-		universalis = ScriptLoaderTask.shared(project, src_dir.parent.parent / 'universalis')
+		universalis = ScriptLoaderTask.shared(project, top_src_dir / 'universalis')
 		for x in sched_ctx.parallel_wait(universalis): yield x
 		universalis = universalis.script_task
 		pch = universalis.pch
