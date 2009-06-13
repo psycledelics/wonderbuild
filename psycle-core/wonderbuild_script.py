@@ -58,7 +58,7 @@ class Wonderbuild(ScriptTask):
 				self.public_deps = [audiodrivers, xml, zlib]
 				req = self.public_deps + self.private_deps
 				for x in sched_ctx.parallel_wait(*req): yield x
-				self.result = min(req)
+				self.result = min(bool(r) for r in req)
 				self.cxx_phase = CoreMod.InstallHeaders(self.project, self.name + '-headers')
 				for x in ModTask.__call__(self, sched_ctx): yield x
 			

@@ -69,7 +69,7 @@ class Wonderbuild(ScriptTask):
 				req = self.public_deps
 				opt = [dlfcn, pthread, glibmm, std_math, boost]
 				for x in sched_ctx.parallel_wait(universalis.cxx_phase, *(req + opt)): yield x
-				self.result = min(req)
+				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
 				for x in PreCompileTasks.__call__(self, sched_ctx): yield x
 			
@@ -100,17 +100,20 @@ class Wonderbuild(ScriptTask):
 				opt = [dlfcn, pthread, glibmm]
 				sched_ctx.parallel_no_wait(winmm)
 				for x in sched_ctx.parallel_wait(mswindows, *(req + opt)): yield x
-				self.result = min(req)
+				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
 				if self.result and mswindows:
 					for x in sched_ctx.wait(winmm): yield x
 					if winmm: self.public_deps.append(winmm)
 					else: self.result = False
 				for x in ModTask.__call__(self, sched_ctx): yield x
-			
-			def do_mod_phase(self):
+
+			def do_ensure_deps(self):
 				if not boost: raise UserReadableException, self.name + ' requires the following boost libs: ' + boost.help
 				if mswindows and not winmm: raise UserReadableException, 'on mswindows, ' + self.name + ' requires microsoft\'s windows multimedia extensions: ' + winmm.help
+				ModTask.do_ensure_deps(self)
+			
+			def do_mod_phase(self):
 				self.cfg.defines['UNIVERSALIS__SOURCE'] = self.cfg.shared and '1' or '-1'
 				self.cfg.include_paths.extend([src_dir, src_dir / 'universalis' / 'standard_library' / 'future_std_include'])
 				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)

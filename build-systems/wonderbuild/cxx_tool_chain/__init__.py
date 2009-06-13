@@ -138,9 +138,12 @@ class BuildCfg(ClientCfg, Task):
 			sig = Sig(self._common_sig)
 			sig.update(str(self.shared))
 			sig.update(str(self.static_prog))
-			for p in self.lib_paths: sig.update(p.path)
+			for p in sorted(self.lib_paths): sig.update(p.path)
+			self.libs.sort();
 			for l in self.libs: sig.update(l)
+			self.static_libs.sort()
 			for l in self.static_libs: sig.update(l)
+			self.shared_libs.sort()
 			for l in self.shared_libs: sig.update(l)
 			sig.update(self.impl.common_mod_env_sig)
 			sig = self.__common_mod_sig = sig.digest()
@@ -314,8 +317,8 @@ class ModDepPhases(object):
 		#self.result = True
 		#for x in self.do_check_phase(sched_ctx): yield x
 		#if self.result and len(self.all_deps) != 0:
-			for x in sched_ctx.parallel_wait(*(dep for dep in self.all_deps)): yield x
-			#self.result = min(self.all_deps)	
+			for x in sched_ctx.parallel_wait(*self.all_deps): yield x
+			#self.result = min(bool(dep) for dep in self.all_deps)	
 
 	def _get_result(self):
 		try: return self._result
@@ -325,6 +328,10 @@ class ModDepPhases(object):
 	def __bool__(self): return self.result
 	def __nonzero__(self): return self.__bool__() # __bool__ has become the default in python 3.0
 
+	def do_ensure_deps(self): 
+		for dep in self.all_deps:
+			if not dep: raise UserReadableException, str(self) + ' requires the following dep: ' + str(dep)
+	
 	def _applied(self, cfg, what):
 		uid = str(id(self)) + '#' + what
 		result = uid in cfg._applied
@@ -442,6 +449,7 @@ class _PreCompileTask(ModDepPhasesWithCfg, ProjectTask):
 
 	def _cxx_phase_callback(self, sched_ctx):
 		for x in sched_ctx.parallel_wait(self): yield x
+		self.do_ensure_deps()
 		for x in self.do_deps_cxx_phases(sched_ctx): yield x
 		self.do_cxx_phase()
 		if len(self.cfg.pkg_config) != 0:
@@ -742,6 +750,7 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 
 	def _mod_phase_callback(self, sched_ctx):
 		for x in sched_ctx.parallel_wait(self): yield x
+		self.do_ensure_deps()
 		if self.cxx_phase is not None: sched_ctx.parallel_no_wait(self.cxx_phase)
 		if self.ld:
 			deps_mod_phases = [dep.mod_phase for dep in self.all_deps if dep.mod_phase is not None]

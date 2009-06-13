@@ -81,7 +81,7 @@ class BoostCheckTask(MultiBuildCheckTask):
 			outer = self
 			class AllInOneCheckTask(BuildCheckTask):
 				def __init__(self): BuildCheckTask.__init__(
-					self, 'boost-' + '.'.join(str(i) for i in outer.min_version_tuple) + \
+					self, 'boost-' + read_version.lib_version + \
 					'-link-' + ','.join(outer.lib_names) + \
 					variant, outer.base_cfg
 				)

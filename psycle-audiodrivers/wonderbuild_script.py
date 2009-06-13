@@ -64,7 +64,7 @@ class Wonderbuild(ScriptTask):
 				req = self.public_deps + self.private_deps
 				opt = [alsa, jack, esound, dsound, winmm] # gstreamer, netaudio, asio
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
-				self.result = min(req)
+				self.result = min(bool(r) for r in req)
 				self.public_deps += [o for o in opt if o]
 				self.cxx_phase = AudioDriversMod.InstallHeaders(self.project, self.name + '-headers')
 				for x in ModTask.__call__(self, sched_ctx): yield x

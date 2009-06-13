@@ -37,6 +37,10 @@ class Wonderbuild(ScriptTask):
 				cxx_phase=DiversalisMod.InstallHeaders()
 			)
 				
+			def __call__(self, sched_ctx):
+				self.result = True
+				for x in ModTask.__call__(self, sched_ctx): yield x
+			
 			def apply_cxx_to(self, cfg):
 				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
 				ModTask.apply_cxx_to(self, cfg)

@@ -57,8 +57,8 @@ class Wonderbuild(ScriptTask):
 				self.private_deps = [pch.lib_task]
 				self.public_deps = [universalis, std_math]
 				for x in ModTask.__call__(self, sched_ctx): yield x
-				req = self.public_deps + self.private_deps
-				self.result = min(req)
+				req = self.all_deps
+				self.result = min(bool(r) for r in req)
 
 			def apply_cxx_to(self, cfg):
 				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
@@ -87,9 +87,9 @@ class Wonderbuild(ScriptTask):
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
 				self.public_deps = [universalis, helpers_math]
-				req = self.public_deps + self.private_deps
+				req = self.all_deps
 				for x in sched_ctx.parallel_wait(*req): yield x
-				self.result = min(req)
+				self.result = min(bool(r) for r in req)
 				self.cxx_phase = HelpersMod.InstallHeaders(self.project, self.name + '-headers')
 				for x in ModTask.__call__(self, sched_ctx): yield x
 			
