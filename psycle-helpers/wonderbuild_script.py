@@ -21,6 +21,9 @@ class Wonderbuild(ScriptTask):
 
 	@property
 	def mod_dep_phases(self): return self._mod_dep_phases
+	
+	@property
+	def math_mod_dep_phases(self): return self._math_mod_dep_phases
 
 	def __call__(self, sched_ctx):
 		project = self.project
@@ -118,5 +121,5 @@ class Wonderbuild(ScriptTask):
 							in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo', 'math')): self._sources.append(s)
 						return self._sources
 						
-		helpers_math = HelpersMathMod()
+		self._math_mod_dep_phases = helpers_math = HelpersMathMod()
 		self._mod_dep_phases = mod_dep_phases = HelpersMod()
