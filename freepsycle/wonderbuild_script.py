@@ -56,8 +56,62 @@ class Wonderbuild(ScriptTask):
 		check_cfg = cfg.clone()
 		dsound = DSoundCheckTask.shared(check_cfg)
 
-		#class Path
-		#class Engine
+		class UniformModule(ModTask):
+			def __init__(self, dir, name, *deps):
+				ModTask.__init__(self, name, ModTask.Kinds.LIB, cfg, name, 'default')
+				self.dir = dir
+				self.public_deps += deps
+
+			def __call__(self, sched_ctx):
+				self.private_deps = [pch.lib_task]
+				self.public_deps += [universalis, helpers_math]
+				req = self.all_deps
+				for x in sched_ctx.parallel_wait(*req): yield x
+				self.result = min(bool(r) for r in req)
+				self.cxx_phase = self.__class__.InstallHeaders(self)
+				for x in ModTask.__call__(self, sched_ctx): yield x
+			
+			def do_mod_phase(self):
+				self.cfg.include_paths.appendleft(src_dir)
+				path = self.dir / self.name
+				if path.exists:
+					for s in path.find_iter(in_pats = ('*.cpp',), prune_pats = ('todo')): self.sources.append(s)
+				else: self.sources.append(self.dir / (self.name + '.cpp'))
+
+			def apply_cxx_to(self, cfg):
+				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+				ModTask.apply_cxx_to(self, cfg)
+
+			class InstallHeaders(InstallTask):
+				def __init__(self, outer):
+					InstallTask.__init__(self, outer.project, outer.name + '-headers')
+					self.outer = outer
+					
+				@property
+				def trim_prefix(self): return src_dir
+
+				@property
+				def dest_dir(self): return self.fhs.include
+
+				@property
+				def sources(self):
+					try: return self._sources
+					except AttributeError:
+						self._sources = []
+						path = self.outer.dir / self.outer.name
+						if path.exists:
+							for s in path.find_iter(
+								in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo')): self._sources.append(s)
+						else: self._sources = [self.outer.dir / (self.outer.name + '.hpp')]
+						return self._sources
+
+		paths = UniformModule(src_dir / 'psycle', 'paths')
+		engine = UniformModule(src_dir / 'psycle', 'engine')
+		host = UniformModule(src_dir / 'psycle', 'host')
+		stream = UniformModule(src_dir / 'psycle', 'stream')
+		bipolar_filter = UniformModule(src_dir / 'psycle' / 'plugins', 'bipolar_filter', engine)
+		resource = UniformModule(src_dir / 'psycle' / 'plugins', 'resource', engine)
+
 		#class Host
 		#class Stream
 		#class BipolarFilter

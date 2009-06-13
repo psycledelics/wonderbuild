@@ -95,9 +95,11 @@ class Wonderbuild(ScriptTask):
 				self.result = min(bool(r) for r in req)
 				self.cxx_phase = HelpersMod.InstallHeaders(self.project, self.name + '-headers')
 				for x in ModTask.__call__(self, sched_ctx): yield x
-			
-			def do_mod_phase(self):
+
+			def do_ensure_deps(self):			
 				if not std_math: raise UserReadableException, self.name + ' requires the standard math lib: ' + std_math.help
+
+			def do_mod_phase(self):
 				self.cfg.include_paths.appendleft(src_dir)
 				for s in (src_dir / 'psycle' / 'helpers').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo', 'math')): self.sources.append(s)
 
