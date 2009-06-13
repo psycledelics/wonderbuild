@@ -56,11 +56,8 @@ class Wonderbuild(ScriptTask):
 				self.public_deps += [o for o in opt if o]
 				for x in ModTask.__call__(self, sched_ctx): yield x
 
-			def apply_cxx_to(self, cfg):
-				if xml: cfg.defines['PSYCLE__LIBXMLPP_AVAILABLE'] = None
-				ModTask.apply_cxx_to(self, cfg)
-			
 			def do_mod_phase(self):
+				if xml: self.cfg.defines['PSYCLE__LIBXMLPP_AVAILABLE'] = None
 				self.cfg.include_paths.appendleft(src_dir)
 				for s in (src_dir / 'psycle' / 'player').find_iter(
 					in_pats = ('*.cpp',), prune_pats = ('todo',)
