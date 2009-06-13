@@ -5,6 +5,13 @@
 from wonderbuild.cxx_tool_chain import MultiBuildCheckTask, BuildCheckTask
 
 class StdMathCheckTask(MultiBuildCheckTask):
+	@staticmethod
+	def shared(base_cfg):
+		try: return base_cfg.project.std_math_check_task
+		except AttributeError:
+			task = base_cfg.project.std_math_check_task = StdMathCheckTask(base_cfg)
+			return task
+
 	def __init__(self, base_cfg): MultiBuildCheckTask.__init__(self, 'c++-std-math', base_cfg)
 		
 	def do_check_and_set_result(self, sched_ctx):

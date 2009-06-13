@@ -74,9 +74,6 @@ class Wonderbuild(ScriptTask):
 				for x in PreCompileTasks.__call__(self, sched_ctx): yield x
 			
 			def do_cxx_phase(self):
-				self.source_text
-				if boost: self._source_text += '\n#include <pre-compiled/boost.private.hpp>'
-				if std_math: self._source_text += '\n#include <cmath>'
 				for i in (universalis.cxx_phase.dest_dir, universalis.cxx_phase.dest_dir / 'universalis' / 'standard_library' / 'future_std_include'):
 					if not i in self.cfg.include_paths: self.cfg.include_paths.append(i)
 				self.cfg.include_paths.append(top_src_dir / 'build-systems' / 'src')
@@ -85,8 +82,11 @@ class Wonderbuild(ScriptTask):
 			def source_text(self):
 				try: return self._source_text
 				except AttributeError:
-					self._source_text = '#include <forced-include.private.hpp>'
-					return self._source_text
+					s = '#include <forced-include.private.hpp>'
+					if boost: s += '\n#include <pre-compiled/boost.private.hpp>'
+					if std_math: s += '\n#include <cmath>'
+					self._source_text = s
+					return s
 
 		class UniversalisMod(ModTask):
 			def __init__(self):

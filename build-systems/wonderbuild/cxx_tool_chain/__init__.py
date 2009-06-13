@@ -120,10 +120,11 @@ class BuildCfg(ClientCfg, Task):
 			sig = Sig(self._common_sig)
 			sig.update(self.cxx_prog)
 			sig.update(str(self.pic))
-			for k, v in self.defines.iteritems():
+			for k in sorted(self.defines.iterkeys()):
 				sig.update(k)
+				v = self.defines[k]
 				if v is not None: sig.update(v)
-			for i in self.include_paths: sig.update(i.abs_path)
+			for p in sorted(p.abs_path for p in self.include_paths): sig.update(p) # XXX not good to sign the sorted include path
 			if self.pch is not None: sig.update(self.pch.abs_path)
 			for i in self.includes: sig.update(i.abs_path)
 			for f in self.cxx_flags: sig.update(f)
@@ -138,7 +139,7 @@ class BuildCfg(ClientCfg, Task):
 			sig = Sig(self._common_sig)
 			sig.update(str(self.shared))
 			sig.update(str(self.static_prog))
-			for p in sorted(self.lib_paths): sig.update(p.path)
+			for p in sorted(p.abs_path for p in self.lib_paths): sig.update(p) # XXX not good to sign the sorted lib path
 			self.libs.sort();
 			for l in self.libs: sig.update(l)
 			self.static_libs.sort()
@@ -580,16 +581,16 @@ class PreCompileTasks(ModDepPhasesWithCfg, ProjectTask):
 			self.private_deps = self.parent_task.private_deps
 			self.public_deps = self.parent_task.public_deps
 			self.result = self.parent_task.result
-			self.cfg.pic = self.pic
+			try: self.parent_task._cxx_phase_done
+			except AttributeError:
+				self.parent_task.do_cxx_phase()
+				self.parent_task._cxx_phase_done = True
+			self.cfg.pic = self.pic # this clones the parent cfg and changes the pic setting
 			for x in _PreCompileTask.__call__(self, sched_ctx): yield x
 
 		def apply_cxx_to(self, cfg):
 			_PreCompileTask.apply_cxx_to(self, cfg)
 			self.parent_task.apply_cxx_to(cfg)
-
-		def do_cxx_phase(self):
-			self.parent_task.do_cxx_phase()
-			self.parent_task.cfg.apply_to(self.cfg)
 
 	def do_cxx_phase(self): pass
 
