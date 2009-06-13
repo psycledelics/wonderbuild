@@ -271,10 +271,10 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 				else: self.cxx_flags = []
 
 			static = o.get('static', None)
-			self.shared = not static
+			self.shared = static is None
 			self.static_prog = static == 'full'
 			
-			self.pic = 'pic-static' not in o # this is for programs and static libs only
+			self.pic = 'pic-static' in o # this is for programs and static libs only
 			
 			if 'ld' in o: self.ld_prog = o['ld']
 			if 'ld-flags' in o: self.ld_flags = o['ld-flags'].split()
@@ -304,7 +304,7 @@ class ModDepPhases(object):
 		self.cxx_phase = self.mod_phase = None
 
 	@property
-	def expose_private_deps(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
+	def expose_private_deep_deps(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
 
 	@property
 	def all_deps(self): return self.public_deps + self.private_deps
@@ -325,37 +325,60 @@ class ModDepPhases(object):
 	def __bool__(self): return self.result
 	def __nonzero__(self): return self.__bool__() # __bool__ has become the default in python 3.0
 
-	def do_deps_cxx_phases(self, sched_ctx):
-		cxx_phases = [dep.cxx_phase for dep in self.private_deps if dep.cxx_phase is not None]
-		self._public_deps_deep_cxx_phases(cxx_phases)
-		for x in sched_ctx.parallel_wait(*cxx_phases): yield x
-		for dep in self.all_deps: dep.apply_cxx_to(self.cfg)
-
-	def _public_deps_deep_cxx_phases(self, cxx_phases):
-		cxx_phases += [dep.cxx_phase for dep in self.public_deps if dep.cxx_phase is not None]
-		for dep in self.public_deps: dep._public_deps_deep_cxx_phases(cxx_phases)
-
 	def _applied(self, cfg, what):
 		uid = str(id(self)) + '#' + what
 		result = uid in cfg._applied
 		cfg._applied.add(uid)
 
-	def apply_cxx_to(self, cfg):
-		if self._applied(cfg, 'cxx'): return False
-		for dep in self.public_deps: dep.apply_cxx_to(cfg)
-		return True
+	def apply_cxx_to(self, cfg): return not self._applied(cfg, 'cxx')
+	def apply_mod_to(self, cfg): return not self._applied(cfg, 'mod')
 	
-	def apply_mod_to(self, cfg, expose_private_deps):
-		if self._applied(cfg, 'mod'): return False
-		for dep in expose_private_deps and self.public_deps or self.all_deps: dep.apply_mod_to(cfg, expose_private_deps)
-		return True
+	def do_deps_cxx_phases(self, sched_ctx):
+		deps = self.topologically_sorted_unique_deep_deps(expose_private_deps=True, expose_private_deep_deps=False)
+		cxx_phases = [dep.cxx_phase for dep in deps if dep.cxx_phase is not None]
+		for x in sched_ctx.parallel_wait(*cxx_phases): yield x
+		for dep in deps: dep.apply_cxx_to(self.cfg)
+
+	def topologically_sorted_unique_deep_deps(self, expose_private_deps, expose_private_deep_deps):
+		try: return \
+			expose_private_deps and (\
+				expose_private_deep_deps and \
+				self._private_private_topologically_sorted_unique_deep_deps or \
+				self._private_public_topologically_sorted_unique_deep_deps \
+			) or self._public_public_topologically_sorted_unique_deep_deps
+		except AttributeError:
+			dep_depths = {}
+			self._dep_depths(dep_depths, 0, expose_private_deps, expose_private_deep_deps)
+
+			depth_deps = {}
+			for dep, depth in dep_depths.iteritems():
+				try: depth_deps[depth].append(dep)
+				except KeyError: depth_deps[depth] = [dep]
+
+			result = []
+			for depth in xrange(len(depth_deps)): result += depth_deps[depth]
+
+			if expose_private_deps:
+				if expose_private_deep_deps: self._private_private_topologically_sorted_unique_deep_deps = result
+				else: self._private_public_topologically_sorted_unique_deep_deps = result
+			else: self._public_public_topologically_sorted_unique_deep_deps = result
+			return result
+		
+	def _dep_depths(self, dep_depths, depth, expose_private_deps, expose_private_deep_deps):
+		for dep in expose_private_deps and self.all_deps or self.public_deps:
+			try: d = dep_depths[dep]
+			except KeyError:
+				dep_depths[dep] = depth
+				dep._dep_depths(dep_depths, depth + 1, expose_private_deep_deps, expose_private_deep_deps)
+			else:
+				if d < depth: dep_depths[dep] = depth
 
 class ModDepPhasesWithCfg(ModDepPhases):
 	@property
 	def cfg(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
 
 	@property
-	def expose_private_deps(self): return self.cfg.shared or not self.cfg.static_prog
+	def expose_private_deep_deps(self): return self.cfg.shared or not self.cfg.static_prog
 
 class _PreCompileTask(ModDepPhasesWithCfg, ProjectTask):
 	def __init__(self, name, base_cfg):
@@ -641,8 +664,8 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 					cfg.pic = True
 			return cfg
 
-	def apply_mod_to(self, cfg, expose_private_deps):
-		if not ModDepPhasesWithCfg.apply_mod_to(self, cfg, expose_private_deps): return
+	def apply_mod_to(self, cfg):
+		if not ModDepPhasesWithCfg.apply_mod_to(self, cfg): return
 		if self.kind != ModTask.Kinds.HEADERS:
 			if not self.target_dev_dir in cfg.lib_paths: cfg.lib_paths.append(self.target_dev_dir)
 			cfg.libs.append(self.target_dev_name)
@@ -730,7 +753,7 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 			for x in sched_ctx.parallel_wait(pkg_config_cxx_flags_task): yield x
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
 			if self.ld:
-				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask.shared(self.project, self.cfg.pkg_config, self.expose_private_deps)
+				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask.shared(self.project, self.cfg.pkg_config, self.expose_private_deep_deps)
 				sched_ctx.parallel_no_wait(pkg_config_ld_flags_task)
 		self.do_mod_phase()
 		try: state = self.persistent
@@ -807,7 +830,8 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 					break
 		for x in sched_ctx.parallel_wait(*tasks): yield x
 		if self.ld:
-			for dep in self.all_deps: dep.apply_mod_to(self.cfg, self.expose_private_deps)
+			for dep in self.topologically_sorted_unique_deep_deps(
+				expose_private_deps=True, expose_private_deep_deps=self.expose_private_deep_deps): dep.apply_mod_to(self.cfg)
 			if not need_process:
 				for dep in self.all_deps:
 					# when a dependant lib is a static archive, or changes its type from static to shared, we need to relink.
@@ -1042,6 +1066,7 @@ class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 		except Exception, e:
 			if __debug__ and is_debug: debug('cfg: ' + self.desc + ': exception: ' + str(e))
 			r = 1
+		# note: in case of a positive result, we could as well store a positive result for each individual packages
 		self.results = r == 0
 
 class MultiBuildCheckTask(CheckTask, ModDepPhasesWithCfg):
