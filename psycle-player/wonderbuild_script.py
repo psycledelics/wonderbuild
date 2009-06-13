@@ -47,7 +47,7 @@ class Wonderbuild(ScriptTask):
 			def __init__(self): ModTask.__init__(self, 'psycle-player', ModTask.Kinds.PROG, cfg, 'psycle-player', 'default')
 
 			def __call__(self, sched_ctx):
-				self.private_deps = [pch.lib_task]
+				self.private_deps = [pch.prog_task]
 				self.public_deps = [core]
 				req = self.all_deps
 				opt = [xml]
