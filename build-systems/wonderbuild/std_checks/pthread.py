@@ -8,7 +8,10 @@ class PThreadCheckTask(BuildCheckTask):
 	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'posix-thread', base_cfg)
 
 	def apply_to(self, cfg):
-		cfg.libs.append('pthread')
+		if cfg.kind == 'gcc':
+			cfg.cxx_flags.append('-pthread')
+			cfg.ld_flags.append('-pthread')
+		else: cfg.libs.append('pthread')
 
 	@property
 	def source_text(self): return \
