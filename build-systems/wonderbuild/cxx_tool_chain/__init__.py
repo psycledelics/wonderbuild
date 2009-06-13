@@ -124,7 +124,8 @@ class BuildCfg(ClientCfg, Task):
 				sig.update(k)
 				v = self.defines[k]
 				if v is not None: sig.update(v)
-			for p in sorted(p.abs_path for p in self.include_paths): sig.update(p) # XXX not good to sign the sorted include path
+			# XXX not good to sign the sorted include path (this is due to topologically_sorted_unique_deep_deps not returning always the same order)
+			for p in sorted(p.abs_path for p in self.include_paths): sig.update(p)
 			if self.pch is not None: sig.update(self.pch.abs_path)
 			for i in self.includes: sig.update(i.abs_path)
 			for f in self.cxx_flags: sig.update(f)
@@ -139,7 +140,8 @@ class BuildCfg(ClientCfg, Task):
 			sig = Sig(self._common_sig)
 			sig.update(str(self.shared))
 			sig.update(str(self.static_prog))
-			for p in sorted(p.abs_path for p in self.lib_paths): sig.update(p) # XXX not good to sign the sorted lib path
+			# XXX not good to sign the sorted lib path  (this is due to topologically_sorted_unique_deep_deps not returning always the same order)			
+			for p in sorted(p.abs_path for p in self.lib_paths): sig.update(p)
 			self.libs.sort();
 			for l in self.libs: sig.update(l)
 			self.static_libs.sort()
