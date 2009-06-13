@@ -51,7 +51,7 @@ class Wonderbuild(ScriptTask):
 				self.public_deps = [core]
 				req = self.all_deps
 				opt = [xml]
-				for x in sched_ctx.parallel_wait(*(req + opt)): yield x				
+				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.result = min(bool(r) for r in req)
 				self.public_deps += [o for o in opt if o]
 				for x in ModTask.__call__(self, sched_ctx): yield x
