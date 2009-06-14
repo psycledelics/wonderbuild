@@ -992,8 +992,12 @@ class _PkgConfigFlagsTask(_PkgConfigTask):
 		if r != 0: raise Exception, r
 		self.results = out.split()
 
-	@property
-	def result_display(self): return ' '.join(self.result), '32'
+	if __debug__ and is_debug:
+		@property
+		def result_display(self): return ' '.join(self.result), '32'
+	else:
+		@property
+		def result_display(self): return 'ok', '32'
 
 	def apply_to(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
 
