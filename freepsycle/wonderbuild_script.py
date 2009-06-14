@@ -56,10 +56,12 @@ class Wonderbuild(ScriptTask):
 		check_cfg = cfg.clone()
 		dsound = DSoundCheckTask.shared(check_cfg)
 
+		for x in sched_ctx.parallel_wait(gstreamer, jack, alsa, dsound, gtkmm, gnomecanvas): yield x
+
 		class UniformModule(ModTask):
-			def __init__(self, dir, name, *deps):
+			def __init__(self, path, name, *deps):
 				ModTask.__init__(self, name, ModTask.Kinds.LIB, cfg, name, 'default')
-				self.dir = dir
+				self.path = path
 				self.public_deps += deps
 
 			def __call__(self, sched_ctx):
@@ -73,10 +75,9 @@ class Wonderbuild(ScriptTask):
 			
 			def do_mod_phase(self):
 				self.cfg.include_paths.appendleft(src_dir)
-				path = self.dir / self.name
-				if path.exists:
-					for s in path.find_iter(in_pats = ('*.cpp',), prune_pats = ('todo')): self.sources.append(s)
-				else: self.sources.append(self.dir / (self.name + '.cpp'))
+				if self.path.exists:
+					for s in self.path.find_iter(in_pats = ('*.cpp',), prune_pats = ('todo')): self.sources.append(s)
+				else: self.sources.append(self.path.parent / (self.path.name + '.cpp'))
 
 			def apply_cxx_to(self, cfg):
 				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
@@ -98,30 +99,25 @@ class Wonderbuild(ScriptTask):
 					try: return self._sources
 					except AttributeError:
 						self._sources = []
-						path = self.outer.dir / self.outer.name
-						if path.exists:
-							for s in path.find_iter(
+						if self.outer.path.exists:
+							for s in self.outer.path.find_iter(
 								in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo')): self._sources.append(s)
-						else: self._sources = [self.outer.dir / (self.outer.name + '.hpp')]
+						else: self._sources = [self.outer.path.parent / (self.outer.path.name + '.hpp')]
 						return self._sources
 
-		paths = UniformModule(src_dir / 'psycle', 'paths')
-		engine = UniformModule(src_dir / 'psycle', 'engine')
-		host = UniformModule(src_dir / 'psycle', 'host')
-		stream = UniformModule(src_dir / 'psycle', 'stream')
-		bipolar_filter = UniformModule(src_dir / 'psycle' / 'plugins', 'bipolar_filter', engine)
-		resource = UniformModule(src_dir / 'psycle' / 'plugins', 'resource', engine)
+		paths = UniformModule(src_dir / 'psycle' / 'paths', 'freepsycle-path')
+		engine = UniformModule(src_dir / 'psycle' / 'engine', 'freepsycle-engine')
+		host = UniformModule(src_dir / 'psycle' / 'host', 'freepsycle-host')
+		stream = UniformModule(src_dir / 'psycle' / 'stream', 'freepsycle-stream')
+		bipolar_filter = UniformModule(src_dir / 'psycle' / 'plugins' / 'bipolar_filter', 'freepsycle-plugin-bipolar-filter', engine)
+		resource = UniformModule(src_dir / 'psycle' / 'plugins' / 'resource', 'freepsycle-plugin-resource', engine)
+		decay = UniformModule(src_dir / 'psycle' / 'plugins' / 'decay', 'freepsycle-plugin-decay', engine)
+		sequence = UniformModule(src_dir / 'psycle' / 'plugins' / 'sequence', 'freepsycle-plugin-sequence', engine)
+		sine = UniformModule(src_dir / 'psycle' / 'plugins' / 'sine', 'freepsycle-plugin-sine', engine)
+		additioner = UniformModule(src_dir / 'psycle' / 'plugins' / 'additioner', 'freepsycle-plugin-additioner', engine)
+		multiplier = UniformModule(src_dir / 'psycle' / 'plugins' / 'multiplier', 'freepsycle-plugin-multiplier', engine)
+		if dsound: dsound_output = UniformModule(src_dir / 'psycle' / 'plugins' / 'outputs'/ 'direct_sound', 'freepsycle-plugin-outputs-microsoft-direct-sound', resource)
 
-		#class Host
-		#class Stream
-		#class BipolarFilter
-		#class Resource
-		#class Plugin
-		#class Decay
-		#class Sequence
-		#class Sine
-		#class Additioner
-		#class Multiplier
 		#class Output
 		#default_output
 		#class MSDirectSoundOutput
