@@ -96,7 +96,7 @@ class Wonderbuild(ScriptTask):
 				self.cxx_phase = HelpersMod.InstallHeaders(self.project, self.name + '-headers')
 				for x in ModTask.__call__(self, sched_ctx): yield x
 
-			def do_ensure_deps(self):			
+			def do_ensure_deps(self):
 				if not std_math: raise UserReadableException, self.name + ' requires the standard math lib: ' + std_math.help
 
 			def do_mod_phase(self):
