@@ -35,8 +35,6 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild import UserReadableException
 		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, ModTask
 		from wonderbuild.std_checks.dsound import DSoundCheckTask
-		from wonderbuild.std_checks import MSWindowsCheckTask
-		from wonderbuild.std_checks.winmm import WinMMCheckTask
 		from wonderbuild.install import InstallTask
 
 		gstreamer = PkgConfigCheckTask.shared(project, ['gstreamer-0.10 >= 0.10', 'gstreamer-plugins-base-0.10 >= 0.10'])
