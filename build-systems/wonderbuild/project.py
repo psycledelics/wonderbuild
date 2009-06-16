@@ -4,11 +4,11 @@
 
 import sys, os, gc, cPickle
 
-from wonderbuild import UserReadableException
+from wonderbuild import abi_sig, UserReadableException
 from task import Task
 from script import ScriptLoaderTask
 from filesystem import FileSystem
-from logger import is_debug, debug
+from logger import is_debug, debug, colored
 
 if __debug__ and is_debug: import time
 
@@ -57,7 +57,11 @@ class Project(Task):
 					try:
 						try:
 							if __debug__ and is_debug: t0 = time.time()
-							self.persistent = cPickle.load(f)
+							pickle_abi_sig = cPickle.load(f)
+							if pickle_abi_sig != abi_sig:
+								print >> sys.stderr, colored('33', 'wonderbuild: abi sig changed: discarding persistent pickle file, full rebuild will be performed')
+								self.persistent = {}
+							else: self.persistent = cPickle.load(f)
 							if __debug__ and is_debug: debug('project: pickle: load time: ' + str(time.time() - t0) + ' s')
 						except Exception, e:
 							print >> sys.stderr, 'could not load pickle:', e
@@ -119,7 +123,9 @@ class Project(Task):
 				except IOError:
 					self.bld_dir.make_dir()
 					f = open(path, 'wb')
-				try: cPickle.dump(self.persistent, f, cPickle.HIGHEST_PROTOCOL)
+				try:
+					cPickle.dump(abi_sig, f, cPickle.HIGHEST_PROTOCOL)
+					cPickle.dump(self.persistent, f, cPickle.HIGHEST_PROTOCOL)
 				finally: f.close()
 				if __debug__ and is_debug:
 					debug('project: pickle: dump time: ' + str(time.time() - t0) + ' s')

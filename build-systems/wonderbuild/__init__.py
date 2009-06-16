@@ -3,3 +3,5 @@
 # copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 class UserReadableException(Exception): pass
+
+abi_sig = '0'
