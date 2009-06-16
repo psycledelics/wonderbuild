@@ -804,9 +804,11 @@ def import_package(filename):
 	path, name = os.path.split(filename)
 	name, ext  = os.path.splitext(name)
 	file, filename, data = imp.find_module(name, path)
-	modname = 'mingw_package_' + name
-	mod = imp.load_module(modname, file, filename, data)
-	return mod
+	try:
+		modname = 'mingw_package_' + name
+		mod = imp.load_module(modname, file, filename, data)
+		return mod
+	finally: file.close()
 
 def shell(script, verbose = True):
 	if verbose:
