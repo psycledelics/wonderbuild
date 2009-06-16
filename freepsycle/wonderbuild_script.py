@@ -3,10 +3,12 @@
 # copyright 2009-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 if __name__ == '__main__':
+	import sys, os
+	dir = os.path.dirname(__file__)
+	sys.argv.append('--src-dir=' + dir)
 	try: from wonderbuild.main import main
 	except ImportError:
-		import sys, os
-		dir = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, 'build-systems'))
+		dir = os.path.abspath(os.path.join(dir, os.pardir, 'build-systems'))
 		if dir not in sys.path: sys.path.append(dir)
 		try: from wonderbuild.main import main
 		except ImportError:
