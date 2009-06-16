@@ -106,8 +106,8 @@ BuildmasterConfig['builders'].append(
 			[
 				factory.s(SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis', locks = [compile_lock]),
-				factory.s(Compile, command = 'scons --directory=universalis', locks = [compile_lock]),
-				factory.s(Test, command = './++sconscrap/variants/default/stage-install/usr/local/bin/universalis_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
+				factory.s(Compile, command = './universalis/wonderbuild_script.py', locks = [compile_lock]),
+				#factory.s(Test, command = './++wonderbuild/staged-install/usr/local/bin/universalis_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
 			]
 		)
 	}
@@ -161,7 +161,7 @@ BuildmasterConfig['builders'].append(
 				#factory.s(SVN, retry = (600, 3), mode = 'update', baseURL = svn_url, defaultBranch = 'trunk', locks = [svn_lock]),
 				factory.s(SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis freepsycle', locks = [compile_lock]),
-				factory.s(Compile, command = 'scons --directory=freepsycle', locks = [compile_lock])
+				factory.s(Compile, command = './freepsycle/wonderbuild_script.py', locks = [compile_lock])
 			]
 		)
 	}
@@ -229,7 +229,7 @@ BuildmasterConfig['builders'].append(
 			[
 				factory.s(SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = './tools/check-policy psycle-core', locks = [compile_lock]),
-				factory.s(Compile, command = 'cd psycle-core && qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && make', locks = [compile_lock]),
+				factory.s(Compile, command = './psycle-core/wonderbuild_script.py', locks = [compile_lock]),
 			]
 		)
 	}
@@ -281,7 +281,7 @@ BuildmasterConfig['builders'].append(
 			[
 				factory.s(SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = './tools/check-policy psycle-player', locks = [compile_lock]),
-				factory.s(Compile, command = 'cd psycle-player && qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && make', locks = [compile_lock])
+				factory.s(Compile, command = './psycle-player/wonderbuild_script.py', locks = [compile_lock])
 			]
 		)
 	}
@@ -467,8 +467,8 @@ BuildmasterConfig['builders'].append(
 			[
 				factory.s(SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis psycle-helpers', locks = [compile_lock]),
-				factory.s(Compile, command = 'scons --directory=psycle-helpers', locks = [compile_lock]),
-				factory.s(Test, command = './++sconscrap/variants/default/stage-install/usr/local/bin/psycle-helpers_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
+				factory.s(Compile, command = './psycle-helpers/wonderbuild_script.py', locks = [compile_lock]),
+				#factory.s(Test, command = './++wonderbuild/staged-install/usr/local/bin/psycle-helpers_unit_tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
 			]
 		)
 	}
