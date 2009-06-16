@@ -2,9 +2,24 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2009-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
+import sys, os, imp
+
+from logger import is_debug, debug
 from task import ProjectTask
 
 default_script_file = 'wonderbuild_script.py'
+
+def import_module(script_path):
+	modname = 'wonderbuild-script:' + script_path.replace(os.pardir, '_').replace('.', ',')
+	try: return sys.modules[modname]
+	except KeyError:
+		if __debug__ and is_debug: debug('import: ' + script_path)
+		path, name = os.path.split(script_path)
+		name, ext  = os.path.splitext(name)
+		path = [os.path.abspath(path)]
+		file, script_path, data = imp.find_module(name, path)
+		return imp.load_module(modname, file, script_path, data)
+		return mod
 
 class ScriptLoaderTask(ProjectTask):
 	@staticmethod
@@ -27,9 +42,7 @@ class ScriptLoaderTask(ProjectTask):
 	def __call__(self, sched_ctx):
 		script = self.script
 		if script.is_dir: script = script / default_script_file
-		d = {}
-		execfile(script.path, d)
-		self._script_task = d['Wonderbuild'](self.project, script.parent)
+		self._script_task = import_module(script.path).Wonderbuild(self.project, script.parent)
 		for x in sched_ctx.parallel_wait(self._script_task): yield x
 	
 	@property
