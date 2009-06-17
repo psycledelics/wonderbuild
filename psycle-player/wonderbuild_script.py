@@ -49,13 +49,12 @@ class Wonderbuild(ScriptTask):
 			def __init__(self): ModTask.__init__(self, 'psycle-player', ModTask.Kinds.PROG, cfg, 'psycle-player', 'default')
 
 			def __call__(self, sched_ctx):
-				self.private_deps = [pch.prog_task]
-				self.public_deps = [core]
+				self.private_deps = [pch.prog_task, core]
 				req = self.all_deps
 				opt = [xml]
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.result = min(bool(r) for r in req)
-				self.public_deps += [o for o in opt if o]
+				self.private_deps += [o for o in opt if o]
 				for x in ModTask.__call__(self, sched_ctx): yield x
 
 			def do_mod_phase(self):

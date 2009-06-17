@@ -40,6 +40,7 @@ class Wonderbuild(ScriptTask):
 
 		from wonderbuild.cxx_tool_chain import UserBuildCfg, ModTask
 		from wonderbuild.std_checks.std_math import StdMathCheckTask
+		from wonderbuild.std_checks.boost import BoostCheckTask
 		from wonderbuild.install import InstallTask
 
 		cfg = UserBuildCfg.new_or_clone(project)
@@ -52,6 +53,7 @@ class Wonderbuild(ScriptTask):
 
 		check_cfg = cfg.clone()
 		std_math = StdMathCheckTask.shared(check_cfg)
+		boost_test = BoostCheckTask.shared((1, 33), ('unit_test_framework',), check_cfg)
 
 		class HelpersMathMod(ModTask):
 			def __init__(self): ModTask.__init__(self, 'psycle-helpers-math', ModTask.Kinds.HEADERS, cfg, 'psycle-helpers-math', 'default',
@@ -125,5 +127,21 @@ class Wonderbuild(ScriptTask):
 							in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo', 'math')): self._sources.append(s)
 						return self._sources
 						
+		class UnitTestMod(ModTask):
+			def __init__(self): ModTask.__init__(self, 'psycle-helpers-unit-tests', ModTask.Kinds.PROG, cfg, 'psycle-helpers-unit-tests', 'default')
+
+			def __call__(self, sched_ctx):
+				self.private_deps = [pch.prog_task, universalis, boost_test]
+				req = self.all_deps
+				for x in sched_ctx.parallel_wait(*req): yield x
+				self.result = min(bool(r) for r in req)
+				for x in ModTask.__call__(self, sched_ctx): yield x
+
+			def do_mod_phase(self):
+				self.cfg.include_paths.appendleft(src_dir)
+				self.sources.append(src_dir / 'unit_tests.cpp')
+
 		self._math_mod_dep_phases = helpers_math = HelpersMathMod()
 		self._mod_dep_phases = mod_dep_phases = HelpersMod()
+		for x in sched_ctx.parallel_wait(boost_test): yield x
+		if boost_test: unit_tests = UnitTestMod()

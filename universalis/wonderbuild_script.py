@@ -60,6 +60,7 @@ class Wonderbuild(ScriptTask):
 		dlfcn = DlfcnCheckTask.shared(check_cfg)
 		pthread = PThreadCheckTask.shared(check_cfg)
 		boost = BoostCheckTask.shared((1, 33), ('signals', 'thread', 'filesystem', 'date_time'), check_cfg)
+		boost_test = BoostCheckTask.shared((1, 33), ('unit_test_framework',), check_cfg)
 		mswindows = MSWindowsCheckTask.shared(check_cfg)
 		winmm = WinMMCheckTask.shared(check_cfg)
 
@@ -144,6 +145,22 @@ class Wonderbuild(ScriptTask):
 							in_pats = ('condition', 'cstdint', 'date_time', 'mutex', 'thread'),
 							prune_pats = ('*',)): self._sources.append(s)
 						return self._sources
+
+		class UnitTestMod(ModTask):
+			def __init__(self): ModTask.__init__(self, 'universalis-unit-tests', ModTask.Kinds.PROG, cfg, 'universalis-unit-tests', 'default')
+
+			def __call__(self, sched_ctx):
+				self.private_deps = [pch.prog_task, universalis, boost_test]
+				req = self.all_deps
+				for x in sched_ctx.parallel_wait(*req): yield x
+				self.result = min(bool(r) for r in req)
+				for x in ModTask.__call__(self, sched_ctx): yield x
+
+			def do_mod_phase(self):
+				self.cfg.include_paths.appendleft(src_dir)
+				self.sources.append(src_dir / 'unit_tests.cpp')
 		
 		self._pch = pch = Pch()
 		self._mod_dep_phases = mod_dep_phases = universalis = UniversalisMod()
+		for x in sched_ctx.parallel_wait(boost_test): yield x
+		if boost_test: unit_tests = UnitTestMod()
