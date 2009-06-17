@@ -70,7 +70,8 @@ def module(bld, target, kind, types = ('static', 'shared'), sources = None, incl
 			obj.target = target
 			if len(types) > 1: obj.target += '-' + type
 		else:
-			obj = bld.new_task_gen('cxx', type == 'static' and 'staticlib' or type == 'shared' and 'shlib')
+			features = type == 'static' and ('staticlib',) or type == 'shared' and ('shlib', 'implib')
+			obj = bld.new_task_gen('cxx', *features)
 			obj.target = target
 			if type == 'shared':
 				global VERSION
