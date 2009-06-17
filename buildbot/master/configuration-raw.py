@@ -107,7 +107,7 @@ BuildmasterConfig['builders'].append(
 				factory.s(SVN, retry = (600, 3), mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis', locks = [compile_lock]),
 				factory.s(Compile, command = './universalis/wonderbuild_script.py', locks = [compile_lock]),
-				factory.s(Test, command = './++wonderbuild/staged-install/usr/local/bin/universalis-unit-tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
+				factory.s(Test, command = './universalis/++wonderbuild/staged-install/usr/local/bin/universalis-unit-tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
 			]
 		)
 	}
@@ -468,7 +468,7 @@ BuildmasterConfig['builders'].append(
 				factory.s(SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
 				factory.s(PolicyCheck, command = './tools/check-policy diversalis universalis psycle-helpers', locks = [compile_lock]),
 				factory.s(Compile, command = './psycle-helpers/wonderbuild_script.py', locks = [compile_lock]),
-				factory.s(Test, command = './++wonderbuild/staged-install/usr/local/bin/psycle-helpers-unit-tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
+				factory.s(Test, command = './psycle-helpers/++wonderbuild/staged-install/usr/local/bin/psycle-helpers-unit-tests --log_level=test_suite --report_level=detailed', locks = [compile_lock])
 			]
 		)
 	}
