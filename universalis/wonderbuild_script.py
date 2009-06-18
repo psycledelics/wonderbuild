@@ -106,7 +106,7 @@ class Wonderbuild(ScriptTask):
 				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
 				if self.result and mswindows:
-					for x in sched_ctx.wait(winmm): yield x
+					for x in sched_ctx.parallel_wait(winmm): yield x
 					if winmm: self.public_deps.append(winmm)
 					else: self.result = False
 				for x in ModTask.__call__(self, sched_ctx): yield x

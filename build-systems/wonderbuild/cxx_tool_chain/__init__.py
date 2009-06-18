@@ -679,7 +679,7 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 		if not ModDepPhasesWithCfg.apply_mod_to(self, cfg): return
 		if self.kind != ModTask.Kinds.HEADERS:
 			if not self.target_dev_dir in cfg.lib_paths: cfg.lib_paths.append(self.target_dev_dir)
-			cfg.libs.append(self.target_dev_name)
+			cfg.libs.append(self.name)
 
 	def __str__(self):
 		if self.kind != ModTask.Kinds.HEADERS: return 'deps of module ' + str(self.target)
