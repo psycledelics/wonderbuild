@@ -898,7 +898,7 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 						if self.cfg.static_prog: shared = 'static'; color += ';37;40'
 						else: shared = 'dynamic'; color += ';32'
 						desc = 'linking ' + shared + ' ' + pic + ' program'
-					elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = '1;7;34'
+					elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = '1;7;36'
 					else: desc = 'linking shared lib'; color = '1;7;33'
 					plus = not self.ld and '+' or ''
 					if __debug__ and is_debug: s = [plus + self._obj_name(s) + '(' + str(s) + ')' for s in sources]
