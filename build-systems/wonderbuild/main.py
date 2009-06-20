@@ -20,7 +20,9 @@ else:
 			import time, gc
 			t = time.time()
 			gc_enabled = gc.isenabled()
-			if gc_enabled: gc.disable()
+			if gc_enabled:
+				try: gc.disable()
+				except NotImplementedError: pass # jython uses gc of the jvm
 			try:
 				options = parse_args(sys.argv[1:])
 				option_collector = OptionCollector()

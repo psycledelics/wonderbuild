@@ -48,7 +48,9 @@ class Project(Task):
 		self.processsing = False
 
 		gc_enabled = gc.isenabled()
-		if gc_enabled: gc.disable()
+		if gc_enabled:
+			try: gc.disable()
+			except NotImplementedError: pass # jython uses gc of the jvm
 		try:
 			try:
 				try: f = open(os.path.join(bld_path, 'persistent.pickle'), 'rb')
@@ -115,7 +117,9 @@ class Project(Task):
 			#self.bld_dir.forget()
 			if False and __debug__ and is_debug: print self.persistent
 			gc_enabled = gc.isenabled()
-			if gc_enabled: gc.disable()
+			if gc_enabled:
+				try: gc.disable()
+				except NotImplementedError: pass # jython uses gc of the jvm
 			try:
 				path = os.path.join(self.bld_dir.path, 'persistent.pickle')
 				if __debug__ and is_debug: t0 = time.time()

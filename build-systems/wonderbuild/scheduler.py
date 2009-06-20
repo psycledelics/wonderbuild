@@ -2,7 +2,7 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2007-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import os, threading
+import os, threading, platform
 
 from wonderbuild import UserReadableException
 from logger import is_debug, debug, colored, silent
@@ -41,6 +41,17 @@ class Scheduler(object):
 		def notify(self, count = 1): pass
 		def notifyAll(self): pass
 
+	class _JythonCondition(object):
+		def __init__(self, lock): self._cond = threading.Condition(lock)
+		def acquire(self): self._cond.acquire()
+		def release(self): self._cond.release()
+		def wait(self, timeout): self._cond.wait(timeout)
+		def notify(self, count = 1):
+			if count == 0: return
+			elif count == 1: self._cond.notify()
+			else: self._cond.notifyAll() # there was no notify(count) as of jython 2.5.0
+		def notifyAll(self): self._cond.notifyAll()
+		
 	def process(self, *tasks):
 		self._task_stack = list(tasks)
 		self._todo_count = len(tasks)
@@ -53,7 +64,8 @@ class Scheduler(object):
 			self._cond = Scheduler._DummyCondition()
 		else:
 			self._lock = threading.Lock()
-			self._cond = threading.Condition(self._lock)
+			if platform.system() == 'Java': self._cond = Scheduler._JythonCondition(self._lock)
+			else: self._cond = threading.Condition(self._lock)
 		self._context = Scheduler.Context(self)
 
 		self._stop_requested = False
