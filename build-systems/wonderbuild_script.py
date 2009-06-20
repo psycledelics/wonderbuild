@@ -3,11 +3,12 @@
 # copyright 2009-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 
-#############################################
+##############################################################################
 #
 # this script simply builds all of the trunk
+# (except qpsycle, psycle-plugins, and psycle-mfc)
 #
-#############################################
+##############################################################################
 
 
 if __name__ == '__main__':
