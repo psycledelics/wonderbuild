@@ -483,7 +483,6 @@
 					<li>Jython was version 2.5.0</li>
 					<li>The JVM was Sun's version 1.6.0</li>
 					<li>Waf version was 1.5.8</li>
-					<li>Scons version was 1.2.0</li>
 					<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
 				</ul>
 			</part>
