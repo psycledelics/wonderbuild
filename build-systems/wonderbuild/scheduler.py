@@ -2,7 +2,7 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2007-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import os, threading, platform
+import os, threading
 
 from wonderbuild import UserReadableException
 from logger import is_debug, debug, colored, silent
@@ -64,7 +64,8 @@ class Scheduler(object):
 			self._cond = Scheduler._DummyCondition()
 		else:
 			self._lock = threading.Lock()
-			if platform.system() == 'Java': self._cond = Scheduler._JythonCondition(self._lock)
+			#if platform.system() == 'Java'
+			if os.name == 'java': self._cond = Scheduler._JythonCondition(self._lock)
 			else: self._cond = threading.Condition(self._lock)
 		self._context = Scheduler.Context(self)
 
