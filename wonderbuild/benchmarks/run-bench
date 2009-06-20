@@ -27,6 +27,10 @@ main() {
 			measure ../../wonderbuild.py --bld-dir=build-$tool --cxx=g++ --jobs=$jobs "$@"
 		;;
 	
+		wonderbuild-on-jython)
+			measure java -jar ../../jython/jython.jar ../../wonderbuild.py --bld-dir=build-$tool --cxx=g++ --jobs=$jobs "$@"
+		;;
+
 		waf)
 			if ! test -d build-$tool
 			then
@@ -39,9 +43,30 @@ main() {
 			fi
 		;;
 
+		waf-on-jython)
+			if test $op = 'reset'
+			then
+				rm -Rf build-waf
+			fi &&
+			if ! test -d build-waf
+			then
+				java -jar ../../jython/jython.jar ../../waf/waf-light configure
+			fi &&
+			# waf lacks a silent option!
+			if test -x ../../waf/waf-light-on-jython.dev-null
+			then measure ../../waf/waf-light-on-jython.dev-null --jobs=$jobs "$@"
+			else measure java -jar ../../jython/jython.jar ../../waf/waf-light --jobs=$jobs "$@"
+			fi
+		;;
+
 		scons)
 			SCONS_LIB_DIR=$(pwd)/../../scons/src/engine \
 				measure python ../../scons/src/script/scons.py --no-cache --jobs=$jobs "$@"
+		;;
+
+		scons-on-jython)
+			SCONS_LIB_DIR=$(pwd)/../../scons/src/engine \
+				measure java -jar ../../jython/jython.jar ../../scons/src/script/scons.py --no-cache --jobs=$jobs "$@"
 		;;
 
 		make)
