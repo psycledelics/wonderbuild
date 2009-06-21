@@ -259,15 +259,15 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\src\psycle\plugins\audacity\audacity_compressor.cpp"
+			RelativePath="..\src\psycle\plugins\audacity\compressor\plugin.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\audacity\Compressor.cpp"
+			RelativePath="..\src\psycle\plugins\audacity\compressor\Compressor.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\audacity\Compressor.h"
+			RelativePath="..\src\psycle\plugins\audacity\compressor\Compressor.h"
 			>
 		</File>
 	</Files>

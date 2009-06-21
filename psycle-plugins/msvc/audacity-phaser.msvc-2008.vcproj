@@ -259,7 +259,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\src\psycle\plugins\audacity\audacity_phaser.cpp"
+			RelativePath="..\src\psycle\plugins\audacity\phaser.cpp"
 			>
 		</File>
 	</Files>

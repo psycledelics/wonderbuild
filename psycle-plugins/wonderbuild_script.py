@@ -82,6 +82,8 @@ class Wonderbuild(ScriptTask):
 		arguru_reverb = UniformMod(n + 'arguru-reverb', p / 'arguru_reverb')
 		arguru_synth = UniformMod(n + 'arguru-synth-2f', p / 'arguru_synth_2_final')
 		arguru_yezar_freeverb = UniformMod(n + 'arguru-freeverb', p / 'yezar_freeverb')
+		audacity_compressor = UniformMod(n + 'wahwah', p / 'audacity' / 'compressor')
+		audacity_phaser = UniformMod(n + 'wahwah', p / 'audacity' / 'phaser')
 		audacity_wahwah = UniformMod(n + 'wahwah', p / 'audacity' / 'wahwah')
 		ayeternal_2_pole_filter = UniformMod(n + 'filter-2-poles', p / 'filter_2_poles')
 		ayeternal_delay = UniformMod(n + 'delay', p / 'delay')
@@ -122,8 +124,6 @@ class Wonderbuild(ScriptTask):
 		zephod_super_fm = UniformMod(n + 'zephod-superfm', p / 'zephod_super_fm')
 		
 if False: # TODO
-	plugin_module('audacity_compressor', 'audacity compressor').add_plugin_sources([os.path.join('audacity', '*ompressor.cpp')])
-	plugin_module('audacity_phaser', 'audacity phaser').add_plugin_sources([os.path.join('audacity', '*_phaser.cpp')])
 
 	# dw libs
 	
