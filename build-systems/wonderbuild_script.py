@@ -40,6 +40,7 @@ else:
 						'psycle-core',
 						'psycle-audiodrivers',
 						'psycle-player',
+						'psycle-plugins',
 						'freepsycle'
 					)
 				)
