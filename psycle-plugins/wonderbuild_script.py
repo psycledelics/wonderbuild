@@ -153,71 +153,33 @@ class Wonderbuild(ScriptTask):
 		dw_filter = UniformMod('psycle-dw-filter', p / 'dw' / 'dw_filter', kind=ModTask.Kinds.LIB)
 		dw_eq = UniformMod(n + 'dw-eq', p / 'dw' / 'eq', deps=(dw_filter,))
 		
+		druttis_plucked_string UniformMod(n + 'pluckedstring', p / 'druttis' / 'PluckedString')
+
 		druttis_band_limited_wave_tables = UniformMod('psycle-druttis-band-limited-wave-tables', p / 'druttis' / 'blwtbl')
 
-		druttis_dsp = UniformMod('psycle-druttis-dsp', p / 'druttis' / 'dsp', kind=ModTask.Kinds.LIB,
-			deps=(druttis_band_limited_wave_tables,))
+		druttis_dsp = UniformMod('psycle-druttis-dsp', p / 'druttis' / 'dsp',
+			kind=ModTask.Kinds.LIB, deps=(druttis_band_limited_wave_tables,))
 			
 		druttis_sublime = UniformMod(n + 'sublime', p / 'druttis' / 'sublime', deps=(druttis_dsp,))
 		druttis_slicit = UniformMod(n + 'slicit', p / 'druttis' / 'slicit', deps=(druttis_dsp,))
 		druttis_eq3 = UniformMod(n + 'eq3', p / 'druttis' / 'eq3', deps=(druttis_dsp,))
 
-		druttis_dsp_class = UniformMod('psycle-druttis-dsp-class', p / 'druttis' / 'CDsp', kind=ModTask.Kinds.LIB,
-			deps=(druttis_band_limited_wave_tables,))
-			
-		druttis_envelope_class = UniformMod('psycle-druttis-envelope-class', p / 'druttis' / 'CEnvelope', kind=ModTask.Kinds.LIB)
+		druttis_dsp_class = UniformMod('psycle-druttis-dsp-class', p / 'druttis' / 'CDsp',
+			kind=ModTask.Kinds.LIB, deps=(druttis_band_limited_wave_tables,))
 
-		druttis_feed_me = UniformMod(n + 'feedme', p / 'druttis' / 'FeedMe', deps=(druttis_dsp_class, druttis_envelope_class))
+		druttis_koruz UniformMod(n + 'koruz', p / 'druttis' / 'Koruz',
+			deps=(druttis_dsp_class,))
+
+		druttis_envelope_class = UniformMod('psycle-druttis-envelope-class', p / 'druttis' / 'CEnvelope',
+			kind=ModTask.Kinds.LIB)
+
+		druttis_phatom UniformMod(n + 'phantom', p / 'druttis' / 'Phantom',
+			deps=(druttis_dsp_class, druttis_envelope_class))
+
+		druttis_feed_me = UniformMod(n + 'feedme', p / 'druttis' / 'FeedMe',
+			deps=(druttis_dsp_class, druttis_envelope_class))
 		
-if False: # TODO clean the mess with druttis libs
-
-	druttis_plucked_string = plugin_module('pluckedstring', 'druttis plucked string')
-	druttis_plucked_string.add_plugin_sources([os.path.join('druttis', 'PluckedString', '*.cpp')])
-	druttis_plucked_string.add_dependencies([druttis_lib])
-
-	druttis_phantom = plugin_module('phantom', 'druttis phantom')
-	druttis_phantom.add_plugin_sources([os.path.join('druttis', 'Phantom', '*.cpp')])
-	druttis_phantom.add_dependencies([druttis_dsp_class, druttis_envelope_class, druttis_dsp_lib])
-
-	druttis_koruz = plugin_module('koruz', 'druttis koruz')
-	druttis_koruz.add_plugin_sources([os.path.join('druttis', 'Koruz', '*.cpp')])
-	druttis_koruz.add_dependencies([druttis_dsp_class, druttis_dsp_lib])
-
-	druttis_lib_module = module(source_package,
-		name = 'druttis_lib',
-		version = source_package.version(),
-		description = 'druttis lib',
-		dependencies = [universalis] # note this is actually a dependency on psycle-helpers
-	)
-	druttis_lib_module.add_sources(find(project, 'src', [os.path.join('psycle', 'plugins', 'druttis', 'Lib', file) for file in (
-		'BiQuad.cpp', 'CEnvelope.cpp', 'DLineN.cpp')]))
-	druttis_lib_module.add_headers(find(project, 'src', [os.path.join('psycle', 'plugins', 'druttis', 'Lib', file) for file in (
-		'BiQuad.h', 'CEnvelope.h', 'DLineN.h')]))
-	druttis_lib_package = pkg_config_package(project,
-		name = 'druttis-lib-' + str(druttis_lib_module.version().major()),
-		version = druttis_lib_module.version(),
-		description = druttis_lib_module.description(),
-		modules = [druttis_lib_module]
-	)
-	druttis_lib = druttis_lib_package.local_package()
-
-	druttis_dsp_lib_module = module(source_package,
-		name = 'druttis_dsp_lib',
-		version = source_package.version(),
-		description = 'druttis dsp lib',
-		dependencies = []
-	)
-	#druttis_dsp_lib_module.add_sources(find(project, 'src', [os.path.join('psycle', 'plugins', 'druttis', 'DspLib', 'AllPass.cpp')]))
-	druttis_dsp_lib_module.add_headers(find(project, 'src', [os.path.join('psycle', 'plugins', 'druttis', 'DspLib', 'AllPass.h')]))
-	druttis_dsp_lib_module.add_sources(find(project, 'src', [os.path.join('psycle', 'plugins', 'druttis', 'Lib', 'DspAlgs.cpp')])) # todo header is lowercase while source is not
-	druttis_dsp_lib_module.add_headers(find(project, 'src', [os.path.join('psycle', 'plugins', 'druttis', 'Lib', 'dspalgs.h')]))
-	druttis_dsp_lib_package = pkg_config_package(project,
-		name = 'druttis-dsp-lib-' + str(druttis_dsp_lib_module.version().major()),
-		version = druttis_dsp_lib_module.version(),
-		description = druttis_dsp_lib_module.description(),
-		modules = [druttis_dsp_lib_module]
-	)
-	druttis_dsp_lib = druttis_dsp_lib_package.local_package()
+if False: # TODO
 
 	if False: # it uses the msapi!
 		plugin_module('ymidi', 'yannis brown midi').add_plugin_sources([os.path.join('y_midi', '*.cpp')])

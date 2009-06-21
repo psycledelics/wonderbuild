@@ -259,23 +259,23 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\src\psycle\plugins\druttis\Lib\AMath.h"
+			RelativePath="..\src\psycle\plugins\druttis\PluckedString\AMath.h"
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\druttis\Lib\BiQuad.cpp"
+			RelativePath="..\src\psycle\plugins\druttis\PluckedString\BiQuad.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\druttis\Lib\BiQuad.h"
+			RelativePath="..\src\psycle\plugins\druttis\PluckedString\BiQuad.h"
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\druttis\Lib\CEnvelope.cpp"
+			RelativePath="..\src\psycle\plugins\druttis\PluckedString\CEnvelope.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\druttis\Lib\CEnvelope.h"
+			RelativePath="..\src\psycle\plugins\druttis\PluckedString\CEnvelope.h"
 			>
 		</File>
 		<File
@@ -287,11 +287,11 @@
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\druttis\Lib\DLineL.h"
+			RelativePath="..\src\psycle\plugins\druttis\PluckedString\DLineL.h"
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\druttis\Lib\DLineN.cpp"
+			RelativePath="..\src\psycle\plugins\druttis\PluckedString\DLineN.cpp"
 			>
 		</File>
 		<File
