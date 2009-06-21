@@ -59,10 +59,10 @@ class Wonderbuild(ScriptTask):
 		for x in sched_ctx.parallel_wait(gstreamer, jack, alsa, dsound, gtkmm, gnomecanvasmm): yield x
 
 		class UniformMod(ModTask):
-			def __init__(self, name, path, *deps, **kw):
-				ModTask.__init__(self, name, kw.get('kind', ModTask.Kinds.LOADABLE), cfg, name, 'default')
+			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):
+				ModTask.__init__(self, name, kind, cfg, name, 'default')
 				self.path = path
-				self.public_deps += deps
+				if deps is not None: self.public_deps += deps
 
 			def __call__(self, sched_ctx):
 				if self.kind == ModTask.Kinds.PROG: self.private_deps = [pch.prog_task]
@@ -107,54 +107,54 @@ class Wonderbuild(ScriptTask):
 						if f.exists: self._sources.append(f)
 						return self._sources
 
-		paths = UniformMod('freepsycle-path', src_dir / 'psycle' / 'paths')
-		engine = UniformMod('freepsycle-engine', src_dir / 'psycle' / 'engine')
-		host = UniformMod('freepsycle-host', src_dir / 'psycle' / 'host', engine)
-		stream = UniformMod('freepsycle-stream', src_dir / 'psycle' / 'stream')
-		resource = UniformMod('freepsycle-plugin-resource', src_dir / 'psycle' / 'plugins' / 'resource', engine)
-		decay = UniformMod('freepsycle-plugin-decay', src_dir / 'psycle' / 'plugins' / 'decay', engine)
-		sequence = UniformMod('freepsycle-plugin-sequence', src_dir / 'psycle' / 'plugins' / 'sequence', engine)
-		sine = UniformMod('freepsycle-plugin-sine', src_dir / 'psycle' / 'plugins' / 'sine', engine)
-		bipolar_filter = UniformMod('freepsycle-plugin-bipolar-filter', src_dir / 'psycle' / 'plugins' / 'bipolar_filter', engine)
-		additioner = UniformMod('freepsycle-plugin-additioner', src_dir / 'psycle' / 'plugins' / 'additioner', bipolar_filter)
-		multiplier = UniformMod('freepsycle-plugin-multiplier', src_dir / 'psycle' / 'plugins' / 'multiplier', bipolar_filter)
+		paths = UniformMod('freepsycle-path', src_dir / 'psycle' / 'paths', kind=ModTask.Kinds.LIB)
+		engine = UniformMod('freepsycle-engine', src_dir / 'psycle' / 'engine', kind=ModTask.Kinds.LIB)
+		host = UniformMod('freepsycle-host', src_dir / 'psycle' / 'host', deps=(engine,), kind=ModTask.Kinds.LIB)
+		stream = UniformMod('freepsycle-stream', src_dir / 'psycle' / 'stream', kind=ModTask.Kinds.LIB)
+		resource = UniformMod('freepsycle-plugin-resource', src_dir / 'psycle' / 'plugins' / 'resource', deps=(engine,), kind=ModTask.Kinds.LIB)
+		decay = UniformMod('freepsycle-plugin-decay', src_dir / 'psycle' / 'plugins' / 'decay', deps=(engine,))
+		sequence = UniformMod('freepsycle-plugin-sequence', src_dir / 'psycle' / 'plugins' / 'sequence', deps=(engine,))
+		sine = UniformMod('freepsycle-plugin-sine', src_dir / 'psycle' / 'plugins' / 'sine', deps=(engine,))
+		bipolar_filter = UniformMod('freepsycle-plugin-bipolar-filter', src_dir / 'psycle' / 'plugins' / 'bipolar_filter', deps=(engine,))
+		additioner = UniformMod('freepsycle-plugin-additioner', src_dir / 'psycle' / 'plugins' / 'additioner', deps=(bipolar_filter,))
+		multiplier = UniformMod('freepsycle-plugin-multiplier', src_dir / 'psycle' / 'plugins' / 'multiplier', deps=(bipolar_filter,))
 
 		default_output_impl = None
 		
 		if dsound:
 			dsound_output = UniformMod('freepsycle-plugin-outputs-direct-sound',
 				src_dir / 'psycle' / 'plugins' / 'outputs' / 'direct_sound',
-				resource, stream, dsound)
+				deps=(resource, stream, dsound))
 			if default_output_impl is None: default_output_impl = dsound_output
 
 		if gstreamer:
 			gst_output = UniformMod('freepsycle-plugin-outputs-gstreamer',
 				src_dir / 'psycle' / 'plugins' / 'outputs' / 'gstreamer',
-				resource, stream, gstreamer)
+				deps=(resource, stream, gstreamer))
 			if default_output_impl is None: default_output_impl = gst_output
 
 		if alsa:
 			alsa_output = UniformMod('freepsycle-plugin-outputs-alsa',
 				src_dir / 'psycle' / 'plugins' / 'outputs' / 'alsa',
-				resource, stream, alsa)
+				deps=(resource, stream, alsa))
 			if default_output_impl is None: default_output_impl = alsa_output
 
 		if jack:
 			jack_output = UniformMod('freepsycle-plugin-outputs-jack',
 				src_dir / 'psycle' / 'plugins' / 'outputs' / 'jack',
-				resource, stream, jack)
+				deps=(resource, stream, jack))
 			if default_output_impl is None: default_output_impl = jack_output
 
 		dummy_output = UniformMod('freepsycle-plugin-outputs-dummy',
 			src_dir / 'psycle' / 'plugins' / 'outputs' / 'dummy',
-			resource)
+			deps=(resource,))
 		if default_output_impl is None: default_output_impl = dummy_output
 
 		#print 'selected ' + default_output_impl.name + ' as default output plugin module.'
 		class DefaultOutput(UniformMod):
 			def __init__(self): UniformMod.__init__(self, 'freepsycle-plugin-output',
 				src_dir / 'psycle' / 'plugins' / 'output',
-				default_output_impl)
+				deps=(default_output_impl,))
 
 			def apply_defines_to(self, cfg):
 				cfg.defines['PSYCLE__PLUGINS__OUTPUTS__DEFAULT__' + default_output_impl.path.name.replace('-', '_').upper()] = None
@@ -169,9 +169,9 @@ class Wonderbuild(ScriptTask):
 
 		text = UniformMod('freepsycle-text',
 			src_dir / 'psycle' / 'front_ends' / 'text',
-			host, paths, sequence, kind=ModTask.Kinds.PROG)
+			deps=(host, paths, sequence), kind=ModTask.Kinds.PROG)
 
 		if gtkmm and gnomecanvasmm:
 			gui = UniformMod('freepsycle-gui',
 				src_dir / 'psycle' / 'front_ends' / 'gui',
-				host, paths, gtkmm, gnomecanvasmm, kind=ModTask.Kinds.PROG)
+				deps=(host, paths, gtkmm, gnomecanvasmm), kind=ModTask.Kinds.PROG)

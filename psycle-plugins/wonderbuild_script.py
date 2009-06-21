@@ -47,10 +47,10 @@ class Wonderbuild(ScriptTask):
 			cfg.cxx_flags += ['-EHa', '-MD'] # basic compilation flags required
 
 		class UniformMod(ModTask):
-			def __init__(self, name, path, *deps, **kw):
-				ModTask.__init__(self, name, kw.get('kind', ModTask.Kinds.LOADABLE), cfg, name, 'default')
+			def __init__(self, name, path=None, deps=None, kind=ModTask.Kinds.LOADABLE):
+				ModTask.__init__(self, name, kind, cfg, name, 'default')
 				self.path = path
-				self.public_deps += deps
+				if deps is not None: self.public_deps += deps
 
 			def __call__(self, sched_ctx):
 				if self.kind == ModTask.Kinds.PROG: self.private_deps = [pch.prog_task]
@@ -63,9 +63,10 @@ class Wonderbuild(ScriptTask):
 			
 			def do_mod_phase(self):
 				self.cfg.include_paths.appendleft(src_dir)
-				if self.path.exists:
-					for s in self.path.find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
-				else: self.sources.append(self.path.parent / (self.path.name + '.cpp'))
+				if self.path is not None:
+					if self.path.exists:
+						for s in self.path.find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
+					else: self.sources.append(self.path.parent / (self.path.name + '.cpp'))
 
 			def apply_cxx_to(self, cfg):
 				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
@@ -119,7 +120,7 @@ class Wonderbuild(ScriptTask):
 		vincenzo_demasi_fastverb = UniformMod(n + 'vsfastverb', p / 'vincenzo_demasi' / 'vsFastVerb')
 		vincenzo_demasi_noise_gate = UniformMod(n + 'vdnoisegate', p / 'vincenzo_demasi' / 'vdNoiseGate')
 		zephod_super_fm = UniformMod(n + 'zephod-superfm', p / 'zephod_super_fm')
-
+		
 if False: # TODO
 	plugin_module('audacity_compressor', 'audacity compressor').add_plugin_sources([os.path.join('audacity', '*ompressor.cpp')])
 	plugin_module('audacity_phaser', 'audacity phaser').add_plugin_sources([os.path.join('audacity', '*_phaser.cpp')])
