@@ -36,15 +36,11 @@ class Wonderbuild(ScriptTask):
 
 		from wonderbuild import UserReadableException
 		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, ModTask
+		from wonderbuild.std_checks.dlfcn import DlfcnCheckTask
 		from wonderbuild.install import InstallTask
 
 		cfg = UserBuildCfg.new_or_clone(project)
 		for x in sched_ctx.parallel_wait(cfg): yield x
-		
-		if cfg.kind == 'msvc': # XXX flags are a mess with msvc
-			#cfg.defines['WINVER'] = '0x501' # select win xp explicitly because msvc 2008 defaults to vista
-			cfg.defines['BOOST_ALL_DYN_LINK'] = None # choose to link against boost dlls
-			cfg.cxx_flags += ['-EHa', '-MD'] # basic compilation flags required
 
 		class UniformMod(ModTask):
 			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):
@@ -115,10 +111,12 @@ class Wonderbuild(ScriptTask):
 		ayeternal_2_pole_filter = UniformMod(n + 'filter-2-poles', p / 'filter_2_poles')
 		ayeternal_delay = UniformMod(n + 'delay', p / 'delay')
 		ayeternal_distortion = UniformMod(n + 'distortion', p / 'distortion')
+		ayeternal_flanger = UniformMod(n + 'flanger', p / 'flanger')
 		ayeternal_gainer = UniformMod(n + 'gainer', p / 'gainer')
 		ayeternal_ring_modulator = UniformMod(n + 'ring-modulator', p / 'ring_modulator')
 		bdzld_negative = UniformMod(n + 'negative', p / 'negative')
 		docbexter_phaser = UniformMod(n + 'bexphase', p / 'bexphase')
+		crasher = UniformMod(n + 'crasher', p / 'crasher')
 		dw_granulizer = UniformMod(n + 'dw-granulizer', p / 'dw' / 'granulizer')
 		dw_iopan = UniformMod(n + 'dw-iopan', p / 'dw' / 'iopan')
 		dw_tremolo = UniformMod(n + 'dw-tremolo', p / 'dw' / 'tremolo')
@@ -178,31 +176,14 @@ class Wonderbuild(ScriptTask):
 
 		druttis_feed_me = UniformMod(n + 'feedme', p / 'druttis' / 'FeedMe',
 			deps=(druttis_dsp_class, druttis_envelope_class))
+
+		if False: # it uses ms's winapi!
+			yannis_brown_midi = UniformMod(n + 'ymidi', p / 'y_midi')
+
+		if False: # [bohan] i haven't found this one listed in the closed-source dir, but i can't find its sources either!
+			guido_volume = UniformMod(n + 'guido-volume', p / '?????!!!!!!!!')
 		
-if False: # TODO
-
-	if False: # it uses the msapi!
-		plugin_module('ymidi', 'yannis brown midi').add_plugin_sources([os.path.join('y_midi', '*.cpp')])
-
-	if False: # [bohan] i haven't found this one listed in the closed-source dir, but i can't find its sources either!
-		plugin_module('guido_volume', 'guido volume').add_plugin_sources(['?????!!!!!!!!'])
-	
-	from sconscrap.std_checks.dlfcn import dlfcn
-	dlfcn = dlfcn(project)
-	if dlfcn.result():
-		# whoops, it uses the posix api!
-		# I have to rewrite it using glibmm.
-		# -- bohan
-		class plugin_check_module(module):
-			def __init__(self):
-				module.__init__(self, source_package,
-					name = 'psycle-plugin-check',
-					version = source_package.version(),
-					description = 'psycle plugin sanity check',
-					dependencies = [universalis, dlfcn],
-					target_type = module.target_types.program
-				)
-				modules.append(self)
-			def dynamic_dependencies(self):
-				self.add_sources(find(project, 'src', [os.path.join('psycle', 'plugin_check.cpp')]))
-		plugin_check_module = plugin_check_module()
+		check_cfg = cfg.clone()
+		dlfcn = DlfcnCheckTask.shared(check_cfg)
+		for x in sched_ctx.parallel_wait(dlfcn): yield x
+		if dlfcn: psycle_plugin_check = UniformMod('psycle-plugin-check', src_dir / 'psycle' / 'plugin_check', kind=ModTask.Kinds.PROG)

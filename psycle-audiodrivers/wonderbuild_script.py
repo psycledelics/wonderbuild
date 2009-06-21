@@ -48,11 +48,6 @@ class Wonderbuild(ScriptTask):
 		cfg = UserBuildCfg.new_or_clone(project)
 		for x in sched_ctx.parallel_wait(cfg): yield x
 		
-		if cfg.kind == 'msvc': # XXX flags are a mess with msvc
-			#cfg.defines['WINVER'] = '0x501' # select win xp explicitly because msvc 2008 defaults to vista
-			cfg.defines['BOOST_ALL_DYN_LINK'] = None # choose to link against boost dlls
-			cfg.cxx_flags += ['-EHa', '-MD'] # basic compilation flags required
-
 		check_cfg = cfg.clone()
 		winmm = WinMMCheckTask.shared(check_cfg)
 		dsound = DSoundCheckTask.shared(check_cfg)
