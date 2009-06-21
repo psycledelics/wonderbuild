@@ -173,7 +173,7 @@ class Wonderbuild(ScriptTask):
 		druttis_envelope_class = UniformMod('psycle-druttis-envelope-class', p / 'druttis' / 'CEnvelope',
 			kind=ModTask.Kinds.LIB)
 
-		druttis_phatom = UniformMod(n + 'phantom', p / 'druttis' / 'Phantom',
+		druttis_phantom = UniformMod(n + 'phantom', p / 'druttis' / 'Phantom',
 			deps=(druttis_dsp_class, druttis_envelope_class))
 
 		druttis_feed_me = UniformMod(n + 'feedme', p / 'druttis' / 'FeedMe',
