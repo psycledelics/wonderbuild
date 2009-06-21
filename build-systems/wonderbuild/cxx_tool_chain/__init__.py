@@ -299,7 +299,7 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 
 		from detect_impl import DetectImplCheckTask
 		detect_impl = DetectImplCheckTask.shared(self)
-		if 'help' not in o:
+		if True or 'help' not in o: # XXX
 			for x in sched_ctx.parallel_wait(detect_impl): yield x
 			if self.impl is None: raise UserReadableException, 'no supported c++ compiler found'
 
