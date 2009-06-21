@@ -19,7 +19,6 @@ def import_module(script_path):
 		path = [os.path.abspath(path)]
 		file, script_path, data = imp.find_module(name, path)
 		return imp.load_module(modname, file, script_path, data)
-		return mod
 
 class ScriptLoaderTask(ProjectTask):
 	@staticmethod
