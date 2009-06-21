@@ -153,7 +153,7 @@ class Wonderbuild(ScriptTask):
 		dw_filter = UniformMod('psycle-dw-filter', p / 'dw' / 'dw_filter', kind=ModTask.Kinds.LIB)
 		dw_eq = UniformMod(n + 'dw-eq', p / 'dw' / 'eq', deps=(dw_filter,))
 		
-		druttis_plucked_string UniformMod(n + 'pluckedstring', p / 'druttis' / 'PluckedString')
+		druttis_plucked_string = UniformMod(n + 'pluckedstring', p / 'druttis' / 'PluckedString')
 
 		druttis_band_limited_wave_tables = UniformMod('psycle-druttis-band-limited-wave-tables', p / 'druttis' / 'blwtbl')
 
@@ -167,13 +167,13 @@ class Wonderbuild(ScriptTask):
 		druttis_dsp_class = UniformMod('psycle-druttis-dsp-class', p / 'druttis' / 'CDsp',
 			kind=ModTask.Kinds.LIB, deps=(druttis_band_limited_wave_tables,))
 
-		druttis_koruz UniformMod(n + 'koruz', p / 'druttis' / 'Koruz',
+		druttis_koruz = UniformMod(n + 'koruz', p / 'druttis' / 'Koruz',
 			deps=(druttis_dsp_class,))
 
 		druttis_envelope_class = UniformMod('psycle-druttis-envelope-class', p / 'druttis' / 'CEnvelope',
 			kind=ModTask.Kinds.LIB)
 
-		druttis_phatom UniformMod(n + 'phantom', p / 'druttis' / 'Phantom',
+		druttis_phatom = UniformMod(n + 'phantom', p / 'druttis' / 'Phantom',
 			deps=(druttis_dsp_class, druttis_envelope_class))
 
 		druttis_feed_me = UniformMod(n + 'feedme', p / 'druttis' / 'FeedMe',
