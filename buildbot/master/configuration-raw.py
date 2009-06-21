@@ -400,7 +400,7 @@ BuildmasterConfig['builders'].append(
 		'factory': factory.BuildFactory(
 			[
 				factory.s(SVN, mode = 'update', svnurl = svn_url, locks = [svn_lock]),
-				factory.s(Compile, command = 'scons --directory=psycle-plugins', locks = [compile_lock])
+				factory.s(Compile, command = './psycle-plugins/wonderbuild_script.py', locks = [compile_lock])
 			]
 		)
 	}
