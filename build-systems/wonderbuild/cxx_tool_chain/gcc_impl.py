@@ -31,9 +31,14 @@ class Impl(object):
 		try: return self._common_env_sig
 		except AttributeError:
 			sig = Sig()
-			# linux/solaris LD_LIBRARY_PATH, macosx DYLD_LIBRARY_PATH, hpux SHLIB_PATH, aix LIBPATH
 			# for LIBRARY_PATH, see http://www.mingw.org/wiki/LibraryPathHOWTO
-			for name in ('LD_LIBRARY_PATH', 'DYLD_LIBRARY_PATH', 'SHLIB_PATH', 'LIBPATH', 'GCC_EXEC_PREFIX', 'COMPILER_PATH', 'LIBRARY_PATH'):
+			for name in (
+				'LD_LIBRARY_PATH', # linux/solaris/macosx
+				'DYLD_LIBRARY_PATH', 'DYLD_FALLBACK_LIBRARY_PATH', # macosx
+				'SHLIB_PATH', # hpux
+				'LIBPATH', # aix
+				'GCC_EXEC_PREFIX', 'COMPILER_PATH', 'LIBRARY_PATH'
+			):
 				e = os.environ.get(name, None)
 				if e is not None: sig.update(e)
 			sig = self._common_env_sig = sig.digest()
