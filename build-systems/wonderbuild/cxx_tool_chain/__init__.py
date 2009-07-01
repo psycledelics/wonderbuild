@@ -203,7 +203,7 @@ class BuildCfg(ClientCfg, Task):
 			if __debug__ and is_debug: debug('cfg: cxx: build: ar ranlib: ' + str(args))
 			return args
 
-class UserBuildCfg(BuildCfg, OptionCfg):
+class UserBuildCfgTask(BuildCfg, OptionCfg):
 	def clone(self, class_ = None):
 		if class_ is None: class_ = BuildCfg
 		return class_.clone(self, class_)
@@ -245,9 +245,14 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 		#help['strip']        = ('<yes|no>', '...', 'no')
 
 	@staticmethod
-	def new_or_clone(project):
-		try: build_cfg = project.cxx_user_build_cfg
-		except AttributeError: build_cfg = project.cxx_user_build_cfg = UserBuildCfg(project)
+	def shared(project):
+		try: build_cfg_task = project.cxx_user_build_cfg_task
+		except AttributeError: build_cfg_task = project.cxx_user_build_cfg_task = UserBuildCfgTask(project)
+		return build_cfg_task
+	
+	def new_or_clone(self):
+		try: build_cfg = self.project.cxx_user_build_cfg
+		except AttributeError: build_cfg = self.project.cxx_user_build_cfg = self
 		else: build_cfg = build_cfg.clone()
 		return build_cfg
 	
@@ -297,9 +302,9 @@ class UserBuildCfg(BuildCfg, OptionCfg):
 				self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
 				self.ar_prog, self.ranlib_prog
 
-		from detect_impl import DetectImplCheckTask
-		detect_impl = DetectImplCheckTask.shared(self)
 		if True or 'help' not in o: # XXX
+			from detect_impl import DetectImplCheckTask
+			detect_impl = DetectImplCheckTask.shared(self)
 			for x in sched_ctx.parallel_wait(detect_impl): yield x
 			if self.impl is None: raise UserReadableException, 'no supported c++ compiler found'
 

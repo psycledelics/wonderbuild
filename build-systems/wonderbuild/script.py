@@ -9,7 +9,8 @@ from task import ProjectTask
 
 default_script_file = 'wonderbuild_script.py'
 
-def import_module(script_path):
+def import_module(node):
+	script_path = node.path
 	modname = 'wonderbuild-script:' + script_path.replace(os.pardir, '_').replace('.', ',')
 	try: return sys.modules[modname]
 	except KeyError:
@@ -40,8 +41,8 @@ class ScriptLoaderTask(ProjectTask):
 
 	def __call__(self, sched_ctx):
 		script = self.script
-		if script.is_dir: script = script / default_script_file
-		self._script_task = import_module(script.path).Wonderbuild(self.project, script.parent)
+		if script.exists and script.is_dir: script = script / default_script_file
+		self._script_task = import_module(script).Wonderbuild(self.project, script.parent)
 		for x in sched_ctx.parallel_wait(self._script_task): yield x
 	
 	@property
