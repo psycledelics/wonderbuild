@@ -480,7 +480,7 @@
 			<part caption='Tool versions'>
 				<ul>
 					<li>Python (CPython) version was 2.5.2</li>
-					<li>Jython was version 2.5.0</li>
+					<li>Jython version was 2.5.0</li>
 					<li>The JVM was Sun's version 1.6.0</li>
 					<li>Waf version was 1.5.8</li>
 					<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
@@ -541,7 +541,7 @@
 			<part caption='Tool versions'>
 				<ul>
 					<li>Python (CPython) version was 2.5.2</li>
-					<li>Jython was version 2.5.0</li>
+					<li>Jython version was 2.5.0</li>
 					<li>The JVM was Sun's version 1.6.0</li>
 					<li>Waf version was 1.5.8</li>
 					<li>Make version was gnu make 3.81</li>
