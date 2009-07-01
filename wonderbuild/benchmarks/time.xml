@@ -492,7 +492,9 @@
 					<bar name='cpython/wonderbuild' value=' 30.76'>gcc deps</bar>
 					<bar name='jython/wonderbuild'  value=' 41.61'>gcc deps</bar>
 					<bar-section>Not using batch compilation</bar-section>
+					<bar name='cpython/wonderbuild' value=' 38.92'>gcc deps</bar>
 					<bar name='cpython/waf'         value=' 47.31'>waf cpp, timestamp signatures</bar>
+					<bar name='jython/wonderbuild'  value='147.37'>gcc deps</bar>
 					<bar name='jython/waf'          value='202.51'>waf cpp, timestamp signatures</bar>
 				</bars>
 			</part>
