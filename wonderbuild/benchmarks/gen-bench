@@ -121,23 +121,23 @@ def create_wonderbuild(libs):
 from wonderbuild.script import ScriptTask
 class Wonderbuild(ScriptTask):
 	def __call__(self, sched_ctx):
-		from wonderbuild.cxx_tool_chain import UserBuildCfg, PreCompileTasks, ModTask
+		from wonderbuild.cxx_tool_chain import UserBuildCfgTask, PreCompileTasks, ModTask
 
 		src_dir = self.src_dir
 		
-		class CustomBuildCfg(UserBuildCfg):
+		class CustomBuildCfgTask(UserBuildCfgTask):
 			def __init__(self, project):
-				UserBuildCfg.__init__(self, project)
+				UserBuildCfgTask.__init__(self, project)
 				
 			def __call__(self, sched_ctx):
-				for x in UserBuildCfg.__call__(self, sched_ctx): yield x
+				for x in UserBuildCfgTask.__call__(self, sched_ctx): yield x
 				self.cxx_flags = ['-g', '-O0', '-Wall']
 				self.shared = self.pic = False
 				self.defines['BENCH'] = None
 				self.include_paths.append(src_dir)
 		
-		build_cfg = CustomBuildCfg(self.project)
-		for x in sched_ctx.parallel_wait(build_cfg): sched_ctx = yield x
+		build_cfg = CustomBuildCfgTask(self.project)
+		for x in sched_ctx.parallel_wait(build_cfg): yield x
 
 		use_pch = False
 		if use_pch:

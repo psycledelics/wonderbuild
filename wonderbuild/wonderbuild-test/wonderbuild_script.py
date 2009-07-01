@@ -3,9 +3,11 @@
 # copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 if __name__ == '__main__':
+	import sys, os
+	dir = os.path.dirname(__file__)
+	sys.argv.append('--src-dir=' + dir)
 	try: from wonderbuild.main import main
 	except ImportError:
-		import sys, os
 		dir = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 		if dir not in sys.path: sys.path.append(dir)
 		try: from wonderbuild.main import main
@@ -26,14 +28,15 @@ class Wonderbuild(ScriptTask):
 
 		src_dir = self.src_dir / 'src'
 
-		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, BuildCheckTask, PreCompileTasks, ModTask
+		from wonderbuild.cxx_tool_chain import UserBuildCfgTask, PkgConfigCheckTask, BuildCheckTask, PreCompileTasks, ModTask
 		from wonderbuild.std_checks.std_math import StdMathCheckTask
 		from wonderbuild.install import InstallTask
 	
 		glibmm = PkgConfigCheckTask.shared(self.project, ['glibmm-2.4 >= 2.4'])
 
-		build_cfg = UserBuildCfg.new_or_clone(self.project)
+		build_cfg = UserBuildCfgTask.shared(self.project)
 		for x in sched_ctx.parallel_wait(build_cfg): sched_ctx = yield x
+		build_cfg = build_cfg.new_or_clone()
 
 		check_cfg = build_cfg.clone()
 		std_math = StdMathCheckTask.shared(check_cfg)
@@ -46,9 +49,9 @@ class Wonderbuild(ScriptTask):
 			def __call__(self, sched_ctx):
 				self.public_deps = [std_math, glibmm]
 				req = self.public_deps
-				opt = std_math, glibmm
-				for x in sched_ctx.parallel_wait(*opt): yield x
-				self.result = True
+				opt = [std_math, glibmm]
+				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
+				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
 				for x in PreCompileTasks.__call__(self, sched_ctx): yield x
 			
@@ -76,7 +79,7 @@ class Wonderbuild(ScriptTask):
 				req = self.private_deps
 				opt = [std_math, glibmm]
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
-				self.result = min(req)
+				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
 				self.cxx = LibFoo.Install(self.project, self.name + '-headers')
 				for x in ModTask.__call__(self, sched_ctx): yield x
