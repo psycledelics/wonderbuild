@@ -614,44 +614,39 @@ class IRC(BaseIRC):
 	def irc(self): return self.f.p
 	
 	def buildFinished(self, builderName, build, results):
-		def msg(message):
-			for channel in self.channelMap(builderName):
-				if not self.irc().quiet.get(channel, False): self.irc().msg(channel, message.encode('ascii', 'replace'))
+		msg = None
+		def append(s): msg = msg is None and s or (msg + ' ' + s)
 		watched = self.watched[builderName]
 		from buildbot.status.builder import SUCCESS, WARNINGS, FAILURE, SKIPPED, EXCEPTION
 		if build.getResults() == FAILURE:
-	   		if not watched.responsibles:
-	   			for responsible in build.getResponsibleUsers():
-	   				if not responsible in watched.responsibles: watched.responsibles.append(responsible)
-				msg('%s: Your recent commit(s) might have broken the build of %s!' % (
-					', '.join(watched.responsibles),
-					builderName))
-	   		else:
-	   			old_responsibles = []
-	   			new_responsibles = []
-	   			for responsible in build.getResponsibleUsers():
-	   				if responsible in watched.responsibles: old_responsibles.append(responsible)
-	   				else: new_responsibles.append(responsible)
-	   			if old_responsibles: msg('%s: You broke the build of %s even more!' % (
-	   				', '.join(old_responsibles),
-	   				builderName))
-	   			if new_responsibles: msg('%s: Your recent commit(s) did not manage to repair what %s broke in the build of %s...' % (
-	   				', '.join(new_responsibles),
-	   				' and '.join(watched.responsibles), 
-	   				builderName))
-	   			watched.responsibles.extend(new_responsibles)
+			if not watched.responsibles:
+				for responsible in build.getResponsibleUsers():
+					if not responsible in watched.responsibles: watched.responsibles.append(responsible)
+				append('%s: %s broken by your recent commits.' % (', '.join(watched.responsibles), builderName))
+			else:
+				old_responsibles = []
+				new_responsibles = []
+				for responsible in build.getResponsibleUsers():
+					if responsible in watched.responsibles: old_responsibles.append(responsible)
+					else: new_responsibles.append(responsible)
+				if old_responsibles and not new_responsibles: append('%s: %s still broken.' % (', '.join(old_responsibles), builderName))
+				elif new_responsibles: append('%s: %s still broken (was broken by %s).' % (
+					', '.join(old_responsibles + new_responsibles), builderName, ' and '.join(watched.responsibles)))
+				else: append('%s still broken.' % (builderName,))
+				watched.responsibles.extend(new_responsibles)
 		elif watched.results == FAILURE and build.getResults() in (SUCCESS, WARNINGS):
-			msg('%s: You managed to repair the build of %s!' % (
-				', '.join(build.getResponsibleUsers()),
-				builderName))
+			append('%s: %s repaired.' % (', '.join(build.getResponsibleUsers()), builderName))
 			watched.responsibles = []
 		watched.results = build.getResults()
 		if watched.results in (FAILURE, WARNINGS, EXCEPTION):
-			if watched.results == WARNINGS: msg('Some warnings occured while building %s.' % builderName)
-			elif watched.results == EXCEPTION: msg('An exception occured while trying to build %s!' % builderName)
+			if watched.results == WARNINGS: append('Some warnings occured while building %s.' % builderName)
+			elif watched.results == EXCEPTION: append('An exception occured while trying to build %s!' % builderName)
 			url = self._parent_status.getURLForThing(build)
 			if not url: url = self._parent_status.getBuildbotURL()
-			if url: msg('Build details are at %s' % url)
+			if url: append('Build details are at %s' % url)
+		if msg is not None:
+			for channel in self.channelMap(builderName):
+				if not self.irc().quiet.get(channel, False): self.irc().msg(channel, msg.encode('ascii', 'replace'))
 
 	def channelMap(self, builderName):
 		result = []
