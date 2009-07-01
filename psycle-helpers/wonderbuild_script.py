@@ -20,6 +20,8 @@ if __name__ == '__main__':
 from wonderbuild.script import ScriptTask, ScriptLoaderTask
 
 class Wonderbuild(ScriptTask):
+	@property
+	def common(self): return self._common
 
 	@property
 	def mod_dep_phases(self): return self._mod_dep_phases
@@ -35,16 +37,19 @@ class Wonderbuild(ScriptTask):
 		universalis = ScriptLoaderTask.shared(project, top_src_dir / 'universalis')
 		for x in sched_ctx.parallel_wait(universalis): yield x
 		universalis = universalis.script_task
-		pch = universalis.pch
+		self._common = common = universalis.common
 		universalis = universalis.mod_dep_phases
+		pch = common.pch
+		cfg = common.cfg.new_or_clone()
 
-		from wonderbuild.cxx_tool_chain import UserBuildCfg, ModTask
+		from wonderbuild.cxx_tool_chain import UserBuildCfgTask, ModTask
 		from wonderbuild.std_checks.std_math import StdMathCheckTask
 		from wonderbuild.std_checks.boost import BoostCheckTask
 		from wonderbuild.install import InstallTask
 
-		cfg = UserBuildCfg.new_or_clone(project)
+		cfg = UserBuildCfgTask.shared(project)
 		for x in sched_ctx.parallel_wait(cfg): yield x
+		cfg = cfg.new_or_clone()
 		
 		check_cfg = cfg.clone()
 		std_math = StdMathCheckTask.shared(check_cfg)

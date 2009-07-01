@@ -20,6 +20,8 @@ if __name__ == '__main__':
 from wonderbuild.script import ScriptTask, ScriptLoaderTask
 
 class Wonderbuild(ScriptTask):
+	@property
+	def common(self): return self._common
 
 	@property
 	def mod_dep_phases(self): return self._mod_dep_phases
@@ -30,20 +32,19 @@ class Wonderbuild(ScriptTask):
 		src_dir = self.src_dir / 'src'
 
 		audiodrivers = ScriptLoaderTask.shared(project, top_src_dir / 'psycle-audiodrivers')
-		pch = ScriptLoaderTask.shared(project, top_src_dir / 'universalis')
-		for x in sched_ctx.parallel_wait(audiodrivers, pch): yield x
-		audiodrivers = audiodrivers.script_task.mod_dep_phases
-		pch = pch.script_task.pch
+		for x in sched_ctx.parallel_wait(audiodrivers): yield x
+		audiodrivers = audiodrivers.script_task
+		self._common = common = audiodrivers.common
+		audiodrivers = audiodrivers.mod_dep_phases
+		pch = common.pch
+		cfg = common.cfg.new_or_clone()
 
-		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, ModTask
+		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, ModTask
 		from wonderbuild.std_checks.zlib import ZLibCheckTask
 		from wonderbuild.install import InstallTask
 
 		xml = PkgConfigCheckTask.shared(project, ['libxml++-2.6'])
 
-		cfg = UserBuildCfg.new_or_clone(project)
-		for x in sched_ctx.parallel_wait(cfg): yield x
-		
 		check_cfg = cfg.clone()
 		zlib = ZLibCheckTask.shared(check_cfg)
 

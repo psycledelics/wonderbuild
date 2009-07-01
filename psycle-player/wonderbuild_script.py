@@ -20,6 +20,8 @@ if __name__ == '__main__':
 from wonderbuild.script import ScriptTask, ScriptLoaderTask
 
 class Wonderbuild(ScriptTask):
+	@property
+	def common(self): return self._common
 
 	def __call__(self, sched_ctx):
 		project = self.project
@@ -27,19 +29,18 @@ class Wonderbuild(ScriptTask):
 		src_dir = self.src_dir / 'src'
 
 		core = ScriptLoaderTask.shared(project, top_src_dir / 'psycle-core')
-		pch = ScriptLoaderTask.shared(project, top_src_dir / 'universalis')
-		for x in sched_ctx.parallel_wait(core, pch): yield x
-		core = core.script_task.mod_dep_phases
-		pch = pch.script_task.pch
+		for x in sched_ctx.parallel_wait(core): yield x
+		core = core.script_task
+		self._common = common = core.common
+		core = core.mod_dep_phases
+		pch = common.pch
+		cfg = common.cfg.new_or_clone()
 
-		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, ModTask
+		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, ModTask
 		from wonderbuild.install import InstallTask
 
 		xml = PkgConfigCheckTask.shared(project, ['libxml++-2.6'])
 
-		cfg = UserBuildCfg.new_or_clone(project)
-		for x in sched_ctx.parallel_wait(cfg): yield x
-		
 		class PlayerMod(ModTask):
 			def __init__(self): ModTask.__init__(self, 'psycle-player', ModTask.Kinds.PROG, cfg, 'psycle-player', 'default')
 

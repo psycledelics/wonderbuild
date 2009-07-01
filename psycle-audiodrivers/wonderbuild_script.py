@@ -20,6 +20,8 @@ if __name__ == '__main__':
 from wonderbuild.script import ScriptTask, ScriptLoaderTask
 
 class Wonderbuild(ScriptTask):
+	@property
+	def common(self): return self._common
 
 	@property
 	def mod_dep_phases(self): return self._mod_dep_phases
@@ -30,12 +32,14 @@ class Wonderbuild(ScriptTask):
 		src_dir = self.src_dir / 'src'
 
 		helpers = ScriptLoaderTask.shared(project, top_src_dir / 'psycle-helpers')
-		pch = ScriptLoaderTask.shared(project, top_src_dir / 'universalis')
-		for x in sched_ctx.parallel_wait(helpers, pch): yield x
-		helpers = helpers.script_task.mod_dep_phases
-		pch = pch.script_task.pch
+		for x in sched_ctx.parallel_wait(helpers): yield x
+		helpers = helpers.script_task
+		self._common = common = helpers.common
+		helpers = helpers.mod_dep_phases
+		pch = common.pch
+		cfg = common.cfg.new_or_clone()
 
-		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, ModTask
+		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, ModTask
 		from wonderbuild.std_checks.winmm import WinMMCheckTask
 		from wonderbuild.std_checks.dsound import DSoundCheckTask
 		from wonderbuild.install import InstallTask
@@ -45,9 +49,6 @@ class Wonderbuild(ScriptTask):
 		esound = PkgConfigCheckTask.shared(project, ['esound'])
 		gstreamer = PkgConfigCheckTask.shared(project, ['gstreamer-0.10 >= 0.10 gstreamer-plugins-base-0.10 >= 0.10'])
 
-		cfg = UserBuildCfg.new_or_clone(project)
-		for x in sched_ctx.parallel_wait(cfg): yield x
-		
 		check_cfg = cfg.clone()
 		winmm = WinMMCheckTask.shared(check_cfg)
 		dsound = DSoundCheckTask.shared(check_cfg)

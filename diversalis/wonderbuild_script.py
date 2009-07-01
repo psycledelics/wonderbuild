@@ -17,23 +17,28 @@ if __name__ == '__main__':
 		else: main()
 	else: main()
 
-from wonderbuild.script import ScriptTask
+from wonderbuild.script import ScriptTask, ScriptLoaderTask
 
 class Wonderbuild(ScriptTask):
+	@property
+	def common(self): return self._common
 
 	@property
 	def mod_dep_phases(self): return self._mod_dep_phases
 
 	def __call__(self, sched_ctx):
 		project = self.project
+		top_src_dir = self.src_dir.parent
 		src_dir = self.src_dir / 'src'
 
-		from wonderbuild.cxx_tool_chain import UserBuildCfg, ModTask
+		common = ScriptLoaderTask.shared(project, top_src_dir / 'build-systems' / 'wonderbuild_script_common')
+		for x in sched_ctx.parallel_wait(common): yield x
+		self._common = common = common.script_task
+		cfg = common.cfg.new_or_clone()
+
+		from wonderbuild.cxx_tool_chain import ModTask
 		from wonderbuild.install import InstallTask
 
-		cfg = UserBuildCfg.new_or_clone(project)
-		for x in sched_ctx.parallel_wait(cfg): yield x
-	
 		class DiversalisMod(ModTask):
 			def __init__(self): ModTask.__init__(self, 'diversalis', ModTask.Kinds.HEADERS, cfg, 'diversalis', 'default',
 				cxx_phase=DiversalisMod.InstallHeaders()

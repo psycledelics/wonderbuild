@@ -21,8 +21,8 @@ from wonderbuild.script import ScriptTask, ScriptLoaderTask
 
 class Wonderbuild(ScriptTask):
 	@property
-	def pch(self): return self._pch
-	
+	def common(self): return self._common
+
 	@property
 	def mod_dep_phases(self): return self._mod_dep_phases
 
@@ -33,10 +33,13 @@ class Wonderbuild(ScriptTask):
 		
 		diversalis = ScriptLoaderTask.shared(project, top_src_dir / 'diversalis')
 		for x in sched_ctx.parallel_wait(diversalis): yield x
-		diversalis = diversalis.script_task.mod_dep_phases
+		diversalis = diversalis.script_task
+		self._common = common = diversalis.common
+		diversalis = diversalis.mod_dep_phases
+		cfg = common.cfg.new_or_clone()
 
 		from wonderbuild import UserReadableException
-		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, PreCompileTasks, ModTask
+		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, PreCompileTasks, ModTask
 		from wonderbuild.std_checks import MSWindowsCheckTask
 		from wonderbuild.std_checks.std_math import StdMathCheckTask
 		from wonderbuild.std_checks.dlfcn import DlfcnCheckTask
@@ -46,14 +49,6 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.install import InstallTask
 		
 		glibmm = PkgConfigCheckTask.shared(project, ['glibmm-2.4 >= 2.4', 'gmodule-2.0 >= 2.0', 'gthread-2.0 >= 2.0'])
-
-		cfg = UserBuildCfg.new_or_clone(project)
-		for x in sched_ctx.parallel_wait(cfg): yield x
-
-		if cfg.kind == 'msvc': # XXX flags are a mess with msvc
-			#cfg.defines['WINVER'] = '0x501' # select win xp explicitly because msvc 2008 defaults to vista
-			cfg.defines['BOOST_ALL_DYN_LINK'] = None # choose to link against boost dlls
-			cfg.cxx_flags += ['-EHa', '-MD'] # basic compilation flags required
 
 		check_cfg = cfg.clone()
 		std_math = StdMathCheckTask.shared(check_cfg)
@@ -160,7 +155,7 @@ class Wonderbuild(ScriptTask):
 				self.cfg.include_paths.appendleft(src_dir)
 				self.sources.append(src_dir / 'unit_tests.cpp')
 		
-		self._pch = pch = Pch()
+		common._pch = pch = Pch() # overrides the common pch
 		self._mod_dep_phases = mod_dep_phases = universalis = UniversalisMod()
 		for x in sched_ctx.parallel_wait(boost_test): yield x
 		if boost_test: unit_tests = UnitTestMod()

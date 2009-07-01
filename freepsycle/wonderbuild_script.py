@@ -20,6 +20,8 @@ if __name__ == '__main__':
 from wonderbuild.script import ScriptTask, ScriptLoaderTask
 
 class Wonderbuild(ScriptTask):
+	@property
+	def common(self): return self._common
 
 	def __call__(self, sched_ctx):
 		project = self.project
@@ -30,12 +32,14 @@ class Wonderbuild(ScriptTask):
 		helpers = ScriptLoaderTask.shared(project, top_src_dir / 'psycle-helpers')
 		for x in sched_ctx.parallel_wait(universalis, helpers): yield x
 		universalis = universalis.script_task
-		pch = universalis.pch
+		self._common = common = universalis.common
 		universalis = universalis.mod_dep_phases
 		helpers_math = helpers.script_task.math_mod_dep_phases
+		pch = common.pch
+		cfg = common.cfg.new_or_clone()
 
 		from wonderbuild import UserReadableException
-		from wonderbuild.cxx_tool_chain import UserBuildCfg, PkgConfigCheckTask, ModTask
+		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, ModTask
 		from wonderbuild.std_checks.dsound import DSoundCheckTask
 		from wonderbuild.install import InstallTask
 
@@ -45,9 +49,6 @@ class Wonderbuild(ScriptTask):
 		gtkmm = PkgConfigCheckTask.shared(project, ['gtkmm-2.4 >= 2.4'])
 		gnomecanvasmm = PkgConfigCheckTask.shared(project, ['libgnomecanvasmm-2.6 >= 2.6'])
 
-		cfg = UserBuildCfg.new_or_clone(project)
-		for x in sched_ctx.parallel_wait(cfg): yield x
-		
 		check_cfg = cfg.clone()
 		dsound = DSoundCheckTask.shared(check_cfg)
 
