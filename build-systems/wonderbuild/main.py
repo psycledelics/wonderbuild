@@ -68,7 +68,8 @@ else:
 
 	def run(options, option_collector):
 		if 'version' in options:
-			print 'wonderbuild 0.3'
+			from wonderbuild import version
+			print 'wonderbuild ' + '.'.join(str(v) for v in version)
 			return 0
 
 		from wonderbuild.task import Task

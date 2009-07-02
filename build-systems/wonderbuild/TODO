@@ -1,0 +1,33 @@
+* when a precompiled header task detects a change in a header and rebuilds the pch, dependent tasks aren't rebuilt.
+
+* record the compiler abs path in sig, determined via the PATH env var.
+
+* build checks should include headers in the sig.
+
+* pkg-config checks should include .pc file timestamp in the sig.
+
+* when a loadable module depends on a lib, that lib can't be a non-pic one.
+
+* --help shouldn't create the build dir.
+
+* need a way to select a script from the command line, instead of --src-dir.
+
+* standard flags flavors for debug, release, and strip.
+
+* cannot test tty on jython.
+
+* 256-color terms (usually not advertised).
+
+* no background color with lines starting with tabs (due to inversed video?).
+
+* integrate binreloc.
+
+* rewrite colorgcc in python.
+
+* generate .pc files.
+
+* only the top-level script should have default tasks.
+
+* c lang support.
+
+* versionned libs.

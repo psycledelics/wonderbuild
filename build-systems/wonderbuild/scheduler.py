@@ -7,8 +7,17 @@ import os, threading
 from wonderbuild import UserReadableException
 from logger import is_debug, debug, colored, silent
 
-try: cpu_count = os.sysconf('SC_NPROCESSORS_ONLN')
-except: cpu_count = int(os.environ.get('NUMBER_OF_PROCESSORS', 1)) # env var defined on mswindows
+is_jython = os.name == 'java' # platform.system() == 'Java'
+
+try:
+	#if 'SC_NPROCESSORS_ONLN' in os.sysconf_names:
+	cpu_count = os.sysconf('SC_NPROCESSORS_ONLN')
+except:
+	if is_jython:
+		from java.lang import Runtime
+		cpu_count = Runtime.getRuntime().availableProcessors()
+	else: cpu_count = int(os.environ.get('NUMBER_OF_PROCESSORS', 1)) # env var defined on mswindows
+#_, cpu_count, __ = int(exec_subprocess_pipe(['sysctl', '-n', 'hw.ncpu']))
 
 _default_timeout = 3600.0
 
@@ -64,8 +73,7 @@ class Scheduler(object):
 			self._cond = Scheduler._DummyCondition()
 		else:
 			self._lock = threading.Lock()
-			#if platform.system() == 'Java'
-			if os.name == 'java': self._cond = Scheduler._JythonCondition(self._lock)
+			if is_jython: self._cond = Scheduler._JythonCondition(self._lock)
 			else: self._cond = threading.Condition(self._lock)
 		self._context = Scheduler.Context(self)
 
