@@ -167,11 +167,11 @@ if False: # following not used yet. would help in having less repetitive build d
 		descriptionDone = ['uploaded']
 		def __init__(self, *args, **kw):
 			kw['locks'] = []
-			kw['no_slash_inversion_command'] = 
-				('scp -F ../../../../.ssh/config ' +
+			kw['no_slash_inversion_command'] = (
+				'scp -F ../../../../.ssh/config ' +
 				'%(src)s/%(file)s upload.buildborg.retropaganda.info:psycle/htdocs/packages/%(dst)s/ && ' +
-				'echo download the package at http://psycle.sourceforge.net/packages/%(dst)s') \
-				% {'file': kw['file'], 'src': kw['src'], 'dst': kw['dst']}
+				'echo download the package at http://psycle.sourceforge.net/packages/%(dst)s'
+				) % {'file': kw['file'], 'src': kw['src'], 'dst': kw['dst']}
 			def kw['file']; del kw['src']; del kw['dst']
 			ShellCommand.__init__(self, *args, **kw)
 
