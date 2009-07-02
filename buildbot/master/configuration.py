@@ -27,8 +27,8 @@ branch = 'trunk'
 svn_url = 'https://' + project_name + '.svn.sourceforge.net/svnroot/' + project_name + '/' + branch
 svn_dir = project_name + '-' + branch + os.sep
 poll_interval = 5 * 60
-bunch_timer = poll_interval + 60
-hist_max = poll_interval  * 2 // 60
+bunch_timer = poll_interval + 15
+hist_max = poll_interval * 2 // 60
 
 from buildbot.changes.svnpoller import SVNPoller
 BuildmasterConfig['sources'].append(SVNPoller(svnurl = svn_url, pollinterval = poll_interval, histmax = hist_max))
