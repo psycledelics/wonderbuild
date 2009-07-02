@@ -93,7 +93,7 @@ class SVNUpdate(SVN):
 		kw['svnurl'] = svn_url
 		if False: kw['defaultBranch'] = 'trunk'
 		kw['locks'] = [svn_lock]
-		step.SVN.__init__(self, *args, **kw)
+		SVN.__init__(self, *args, **kw)
 
 def handle_microsoft_kw(kw):
 	if 'microsoft' in kw:
