@@ -161,19 +161,19 @@ class Upload(ShellCommand):
 
 if False: # following not used yet. would help in having less repetitive build definitions
 
-	class Upload(ShellCommand):
-		name = 'upload'
-		description = ['uploading']
-		descriptionDone = ['uploaded']
-		def __init__(self, *args, **kw):
-			kw['locks'] = []
-			kw['no_slash_inversion_command'] = (
-				'scp -F ../../../../.ssh/config ' + \
-				'%(src)s/%(file)s upload.buildborg.retropaganda.info:psycle/htdocs/packages/%(dst)s/ && ' + \
-				'echo download the package at http://psycle.sourceforge.net/packages/%(dst)s' \
-				) % {'file': kw['file'], 'src': kw['src'], 'dst': kw['dst']}
-			def kw['file']; del kw['src']; del kw['dst']
-			ShellCommand.__init__(self, *args, **kw)
+	#class Upload(ShellCommand):
+	#	name = 'upload'
+	#	description = ['uploading']
+	#	descriptionDone = ['uploaded']
+	#	def __init__(self, *args, **kw):
+	#		kw['locks'] = []
+	#		kw['no_slash_inversion_command'] = (
+	#			'scp -F ../../../../.ssh/config ' + \
+	#			'%(src)s/%(file)s upload.buildborg.retropaganda.info:psycle/htdocs/packages/%(dst)s/ && ' + \
+	#			'echo download the package at http://psycle.sourceforge.net/packages/%(dst)s' \
+	#			) % {'file': kw['file'], 'src': kw['src'], 'dst': kw['dst']}
+	#		def kw['file']; del kw['src']; del kw['dst']
+	#		ShellCommand.__init__(self, *args, **kw)
 
 	def append_standard_builders(
 		category = 'psycle', name, trigger_dirs, update_step = factory.s(SVNUpdate), build_dir = svn_dir,
