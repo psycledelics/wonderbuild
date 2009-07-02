@@ -165,7 +165,7 @@ class Wonderbuild(ScriptTask):
 
 		random_notes = UniformMod('freepsycle-test-random-notes',
 			src_dir / 'psycle' / 'tests' / 'random_notes',
-			deps=(host, paths, sequence), kind=ModTask.Kinds.PROG)
+			deps=(host, paths, default_output, sequence, decay, additioner, sine), kind=ModTask.Kinds.PROG)
 
 		if gtkmm and gnomecanvasmm:
 			gui = UniformMod('freepsycle-gui',
