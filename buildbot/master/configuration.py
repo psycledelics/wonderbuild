@@ -121,7 +121,7 @@ class PolicyCheck(Test):
 	description = ['checking policy']
 	descriptionDone = ['policy']
 	def __init__(self, *args, **kw):
-		kw['command'] += 'python ./tools/check-policy ' + ' '.join(kw['dirs'])
+		kw['command'] = 'python ./tools/check-policy ' + ' '.join(kw['dirs'])
 		del kw['dirs']
 		Test.__init__(self, *args, **kw)
 	def evaluateCommand(self, cmd):
