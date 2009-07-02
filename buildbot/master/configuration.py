@@ -55,7 +55,7 @@ BuildmasterConfig['schedulers'] = []
 from buildbot.scheduler import Scheduler as BaseScheduler
 class Scheduler(BaseScheduler):
 	def __init__(self, *args, **kw):
-		kw['branch'] = None,
+		kw['branch'] = None
 		kw['treeStableTimer'] = bunch_timer
 		BaseScheduler.__init__(self, *args, **kw)
 
