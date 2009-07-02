@@ -177,7 +177,7 @@ if False: # following not used yet. would help in having less repetitive build d
 
 	def append_standard_builders(
 		category = 'psycle', name, trigger_dirs, update_step = factory.s(SVNUpdate), build_dir = svn_dir,
-		policy_check_dirs = None, compile_command = None, build_system = 'wonderbuild', test_command = None, boost_test = False
+		policy_check_dirs = None, compile_command = None, build_system = 'wonderbuild', test_command = None, boost_test = False,
 		unix = True, mingw = True, mingw_pkg = None, mingw_pkg_command = None, msvc = True
 	):
 		def append(name, variant, slaves, compile_command, mingw = False, msvc = False):
