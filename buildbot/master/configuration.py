@@ -54,10 +54,10 @@ BuildmasterConfig['schedulers'] = []
 
 from buildbot.scheduler import Scheduler as BaseScheduler
 class Scheduler(BaseScheduler):
-	#def __init__(self, *args, **kw):
-	#	kw['branch'] = None,
-	#	kw['treeStableTimer'] = bunch_timer
-	#	BaseScheduler.__init__(self, *args, **kw)
+	def __init__(self, *args, **kw):
+		kw['branch'] = None,
+		kw['treeStableTimer'] = bunch_timer
+		BaseScheduler.__init__(self, *args, **kw)
 
 	def addUnimportantChange(self, change):
 		from twisted.python import log
@@ -161,24 +161,25 @@ class Upload(ShellCommand):
 
 if False: # following not used yet. would help in having less repetitive build definitions
 
-	#class Upload(ShellCommand):
-	#	name = 'upload'
-	#	description = ['uploading']
-	#	descriptionDone = ['uploaded']
-	#	def __init__(self, *args, **kw):
-	#		kw['locks'] = []
-	#		kw['no_slash_inversion_command'] = (
-	#			'scp -F ../../../../.ssh/config ' + \
-	#			'%(src)s/%(file)s upload.buildborg.retropaganda.info:psycle/htdocs/packages/%(dst)s/ && ' + \
-	#			'echo download the package at http://psycle.sourceforge.net/packages/%(dst)s' \
-	#			) % {'file': kw['file'], 'src': kw['src'], 'dst': kw['dst']}
-	#		def kw['file']; del kw['src']; del kw['dst']
-	#		ShellCommand.__init__(self, *args, **kw)
+	class Upload(ShellCommand):
+		name = 'upload'
+		description = ['uploading']
+		descriptionDone = ['uploaded']
+		def __init__(self, *args, **kw):
+			kw['locks'] = []
+			kw['no_slash_inversion_command'] = (
+				'scp -F ../../../../.ssh/config ' +
+				'%(src)s/%(file)s upload.buildborg.retropaganda.info:psycle/htdocs/packages/%(dst)s/ && ' +
+				'echo download the package at http://psycle.sourceforge.net/packages/%(dst)s'
+				) % {'file': kw['file'], 'src': kw['src'], 'dst': kw['dst']}
+			del kw['file']; del kw['src']; del kw['dst']
+			ShellCommand.__init__(self, *args, **kw)
 
 	def append_standard_builders(
-		category = 'psycle', name, trigger_dirs, update_step = factory.s(SVNUpdate), build_dir = svn_dir,
+		name, trigger_dirs,
+		category = 'psycle', update_step = factory.s(SVNUpdate), build_dir = svn_dir,
 		policy_check_dirs = None, compile_command = None, build_system = 'wonderbuild', test_command = None, boost_test = False,
-		unix = True, mingw = True, mingw_pkg = None, mingw_pkg_command = None, msvc = True
+		unix = True, mingw = True, mingw_pkg = None, mingw_pkg_command = None, msvc = True,
 	):
 		def append(name, variant, slaves, compile_command, mingw = False, msvc = False):
 			microsoft = mingw or msvc
@@ -192,21 +193,21 @@ if False: # following not used yet. would help in having less repetitive build d
 				if build_system == 'wonderbuild': compile_command = 'python ' + name + '/wonderbuild_script.py'
 				elif build_system == 'waf': compile_command = 'waf --srcdir=' + name
 				elif build_system == 'scons': compile_command = 'scons --directory=' + name
-				elif build_system == 'autotools': compile_command =
-					'cd ' + name + ' &&' +
-					'if test -f autogen.sh; then sh autogen.sh --prefix=$(dirname $(pwd))/install ' +
-					'else sh configure --prefix=$(dirname $(pwd))/install; fi && ' +
+				elif build_system == 'autotools': compile_command = \
+					'cd ' + name + ' &&' + \
+					'if test -f autogen.sh; then sh autogen.sh --prefix=$(dirname $(pwd))/install ' + \
+					'else sh configure --prefix=$(dirname $(pwd))/install; fi && ' + \
 					'make install'
-				elif build_system == 'qmake': compile_command =
-					'cd ' + name + ' && ' +
-					'qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && ' +
+				elif build_system == 'qmake': compile_command = \
+					'cd ' + name + ' && ' + \
+					'qmake -recursive CONFIG-=debug_and_release CONFIG-=debug && ' + \
 					(mingw and 'mingw32-make' or msvc and 'nmake' or 'make')
 			elif callable(compile_command): compile_command = compile_command(microsoft, mingw, msvc)
 
 			factory_steps.append(factory.s(Compile, microsoft = microsoft, mingw = mingw, msvc = msvc, command = compile_command))
 
-			if boost_test and build_system == 'wonderbuild': test_command =
-				'./++wonderbuild/staged-install/usr/local/bin/' + name + '-unit-tests' +
+			if boost_test and build_system == 'wonderbuild': test_command = \
+				'./++wonderbuild/staged-install/usr/local/bin/' + name + '-unit-tests' + \
 				' --log_level=test_suite --report_level=detailed'
 			if test_command: factory_steps.append(factory.s(Test, microsoft = microsoft, command = test_command))
 
@@ -249,7 +250,7 @@ if False: # following not used yet. would help in having less repetitive build d
 	append_standard_builders(
 		name = 'universalis',
 		trigger_dirs = universalis_deps,
-		policy_check_dirs, universalis_deps,
+		policy_check_dirs = universalis_deps,
 		boost_test = True
 	)
 else:
@@ -262,8 +263,8 @@ else:
 			'factory': factory.BuildFactory(
 				[
 					factory.s(SVNUpdate),
-					factory.s(PolicyCheck, dirs = ['diversalis', 'universalis'],
-					factory.s(Compile, command = './universalis/wonderbuild_script.py',
+					factory.s(PolicyCheck, dirs = ['diversalis', 'universalis']),
+					factory.s(Compile, command = './universalis/wonderbuild_script.py'),
 					factory.s(BoostTest, path = './universalis/++wonderbuild/staged-install/usr/local/bin/universalis-unit-tests')
 				]
 			)
@@ -272,8 +273,6 @@ else:
 	BuildmasterConfig['schedulers'].append(
 		Scheduler(
 			name = 'universalis',
-			branch = None,
-			treeStableTimer = bunch_timer,
 			builderNames = ['universalis'],
 			fileIsImportant = lambda change: filter(change, universalis_deps)
 		)
@@ -309,8 +308,6 @@ else:
 	BuildmasterConfig['schedulers'].append(
 		Scheduler(
 			name = 'psycle-helpers',
-			branch = None,
-			treeStableTimer = bunch_timer,
 			builderNames = ['psycle-helpers'],
 			fileIsImportant = lambda change: filter(change, psycle_helpers_deps)
 		)
@@ -345,8 +342,6 @@ else:
 	BuildmasterConfig['schedulers'].append(
 		Scheduler(
 			name = 'freepsycle',
-			branch = None,
-			treeStableTimer = bunch_timer,
 			builderNames = ['freepsycle'],
 			fileIsImportant = lambda change: filter(change, freepsycle_deps)
 		)
@@ -360,7 +355,7 @@ if False: # following not used yet. would help in having less repetitive build d
 	append_standard_builders(
 		name = 'psycle-core',
 		trigger_dirs = psycle_core_deps,
-		policy_check_dirs, ['psycle-core', 'psycle-audiodrivers'],
+		policy_check_dirs = ['psycle-core', 'psycle-audiodrivers'],
 	)
 else:
 	BuildmasterConfig['builders'].append(
@@ -372,7 +367,7 @@ else:
 			'factory': factory.BuildFactory(
 				[
 					factory.s(SVNUpdate),
-					factory.s(PolicyCheck, dirs = ['psycle-core', 'psycle-audiodrivers'],
+					factory.s(PolicyCheck, dirs = ['psycle-core', 'psycle-audiodrivers']),
 					factory.s(Compile, command = './psycle-core/wonderbuild_script.py')
 				]
 			)
@@ -381,8 +376,6 @@ else:
 	BuildmasterConfig['schedulers'].append(
 		Scheduler(
 			name = 'psycle-core',
-			branch = None,
-			treeStableTimer = bunch_timer,
 			builderNames = ['psycle-core'],
 			fileIsImportant = lambda change: filter(change, psycle_core_deps)
 		)
@@ -395,8 +388,8 @@ psycle_player_deps = ['psycle-player/'] + psycle_core_deps
 if False: # following not used yet. would help in having less repetitive build definitions
 	append_standard_builders(
 		name = 'psycle-player',
-		trigger_dirs = psycle_player_deps
-		policy_check_dirs, ['psycle-player'],
+		trigger_dirs = psycle_player_deps,
+		policy_check_dirs = ['psycle-player']
 	)
 else:
 	BuildmasterConfig['builders'].append(
@@ -417,8 +410,6 @@ else:
 	BuildmasterConfig['schedulers'].append(
 		Scheduler(
 			name = 'psycle-player',
-			branch = None,
-			treeStableTimer = bunch_timer,
 			builderNames = ['psycle-player'],
 			fileIsImportant = lambda change: filter(change, psycle_player_deps)
 		)
@@ -454,8 +445,6 @@ else:
 	BuildmasterConfig['schedulers'].append(
 		Scheduler(
 			name = 'qpsycle',
-			branch = None,
-			treeStableTimer = bunch_timer,
 			builderNames = ['qpsycle'],
 			fileIsImportant = lambda change: filter(change, qpsycle_deps)
 		)
@@ -489,8 +478,6 @@ else:
 	BuildmasterConfig['schedulers'].append(
 		Scheduler(
 			name = 'psycle-plugins',
-			branch = None,
-			treeStableTimer = bunch_timer,
 			builderNames = ['psycle-plugins'],
 			fileIsImportant = lambda change: filter(change, psycle_plugins_deps)
 		)
@@ -525,8 +512,6 @@ elif False: # disabled
 	BuildmasterConfig['schedulers'].append(
 		Scheduler(
 			name = 'psycle.msvc',
-			branch = None,
-			treeStableTimer = bunch_timer,
 			builderNames = ['psycle.msvc'],
 			fileIsImportant = lambda change: filter(change, psycle_msvc_deps)
 		)
@@ -567,8 +552,6 @@ BuildmasterConfig['builders'].append(
 BuildmasterConfig['schedulers'].append(
 	Scheduler(
 		name = 'sondar',
-		branch = None,
-		treeStableTimer = bunch_timer,
 		builderNames = ['sondar'],
 		fileIsImportant = lambda change: filter(change, ['sondar/', 'host_gtk/'])
 	)
