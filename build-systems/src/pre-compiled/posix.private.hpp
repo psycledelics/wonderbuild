@@ -11,7 +11,7 @@
 #if defined DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION // if the compiler supports pre-compilation
 
 	#include <diversalis/operating_system.hpp>
-	#if defined DIVERSALIS__OPERATING_SYSTEM__POSIX
+	#if defined DIVERSALIS__OS__POSIX
 
 		#if defined DIVERSALIS__COMPILER__MICROSOFT
 			#pragma message("pre-compiling " __FILE__ " ...")

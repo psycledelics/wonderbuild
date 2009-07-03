@@ -53,8 +53,8 @@ VS_VERSION_INFO VERSIONINFO
 
 				VALUE "SpecialBuild",
 					// [bohan] avoid bug with microsoft's resource compiler: #ifdef and not #if defined ; see bug http://lab.msdn.microsoft.com/ProductFeedback/viewFeedback.aspx?FeedbackID=FDBK45638
-					#ifdef PACKAGENERIC__OPERATING_SYSTEM__UNAME
-						"build platform:\r\n"            PACKAGENERIC__OPERATING_SYSTEM__UNAME
+					#ifdef PACKAGENERIC__OS__UNAME
+						"build platform:\r\n"            PACKAGENERIC__OS__UNAME
 						"\r\n\r\n"
 					#endif
 					"" // o_O` avoid bug with mingw 3.3 resource compiler
@@ -90,8 +90,8 @@ VS_VERSION_INFO VERSIONINFO
 						#endif
 					#endif
 					"" // o_O` avoid bug with mingw 3.3 resource compiler
-					#ifdef PACKAGENERIC__OPERATING_SYSTEM__ID
-						" by " PACKAGENERIC__OPERATING_SYSTEM__ID
+					#ifdef PACKAGENERIC__OS__ID
+						" by " PACKAGENERIC__OS__ID
 					#endif
 			}
 	}

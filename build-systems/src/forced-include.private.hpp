@@ -8,10 +8,10 @@
 #define PSYCLE__BUILD_SYSTEMS__FORCED_INCLUDE__INCLUDED
 #pragma once
 
-#define DIVERSALIS__OPERATING_SYSTEM__MICROSOFT__REQUIRED_VERSION 0x500 // win2k
+#define DIVERSALIS__OS__MICROSOFT__REQUIRED_VERSION 0x500 // win2k
 #include <diversalis/operating_system.hpp> // defines WINVER, _WIN32_WINDOWS, and _WIN32_NT.
 
-#if defined DIVERSALIS__OPERATING_SYSTEM__MICROSOFT
+#if defined DIVERSALIS__OS__MICROSOFT
 	/// tells microsoft's headers not to pollute the global namespace with min and max macros (which break a lot of libraries, including the standard c++ library!)
 	#define NOMINMAX
 #endif
