@@ -40,15 +40,18 @@ class FileSystem(object):
 		self.cur._is_dir = True
 		self.cur._exists = True
 	
-ignore = set(['.git', '.bzr', '.hg', '_MTN', '_darcs', '.svn'])
+ignore_names = set(['.git', '.bzr', '.hg', '_MTN', '_darcs', '.svn'])
 if False: # old stuff not widely used anymore, so it's not enabled by default
-	ignore.add('{arch}')
-	ignore.add('.arch-ids')
-	ignore.add('CVS')
-	ignore.add('RCS')
-	ignore.add('SCCS')
-if False: # TODO ignoring backup files needs patterns
-	ignore_pats = set(['*~', '#*#'])
+	ignore_names.add('{arch}')
+	ignore_names.add('.arch-ids')
+	ignore_names.add('CVS')
+	ignore_names.add('RCS')
+	ignore_names.add('SCCS')
+ignore_pats = set(['*~', '#*#'])
+
+def ignore(name):
+	return name in ignore_names or \
+	any(match(name, ignore_pat) for ignore_pat in ignore_pats)
 
 if __debug__ and is_debug: all_abs_paths = set()
 
@@ -191,10 +194,10 @@ class Node(object):
 				if self._children is None:
 					self._children = {}
 					for name in os.listdir(self.path):
-						if name not in ignore: self._children[name] = self._actual_children[name] = Node(self, name)
+						if not ignore(name): self._children[name] = self._actual_children[name] = Node(self, name)
 				else:
 					for name in os.listdir(self.path):
-						if name not in ignore:
+						if not ignore(name):
 							try: child = self._children[name]
 							except KeyError: self._children[name] = self._actual_children[name] = Node(self, name)
 							else: self._actual_children[name] = child
