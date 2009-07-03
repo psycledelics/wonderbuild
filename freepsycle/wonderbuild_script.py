@@ -118,30 +118,30 @@ class Wonderbuild(ScriptTask):
 		default_output_impl = None
 		
 		if dsound:
-			dsound_output = UniformMod('freepsycle-plugin-outputs-direct-sound',
+			dsound_output = UniformMod('freepsycle-plugin-output-direct-sound',
 				src_dir / 'psycle' / 'plugins' / 'outputs' / 'direct_sound',
 				deps=(resource, stream, dsound))
 			if default_output_impl is None: default_output_impl = dsound_output
 
 		if gstreamer:
-			gst_output = UniformMod('freepsycle-plugin-outputs-gstreamer',
+			gst_output = UniformMod('freepsycle-plugin-output-gstreamer',
 				src_dir / 'psycle' / 'plugins' / 'outputs' / 'gstreamer',
 				deps=(resource, stream, gstreamer))
 			if default_output_impl is None: default_output_impl = gst_output
 
 		if alsa:
-			alsa_output = UniformMod('freepsycle-plugin-outputs-alsa',
+			alsa_output = UniformMod('freepsycle-plugin-output-alsa',
 				src_dir / 'psycle' / 'plugins' / 'outputs' / 'alsa',
 				deps=(resource, stream, alsa))
 			if default_output_impl is None: default_output_impl = alsa_output
 
 		if jack:
-			jack_output = UniformMod('freepsycle-plugin-outputs-jack',
+			jack_output = UniformMod('freepsycle-plugin-output-jack',
 				src_dir / 'psycle' / 'plugins' / 'outputs' / 'jack',
 				deps=(resource, stream, jack))
 			if default_output_impl is None: default_output_impl = jack_output
 
-		dummy_output = UniformMod('freepsycle-plugin-outputs-dummy',
+		dummy_output = UniformMod('freepsycle-plugin-output-dummy',
 			src_dir / 'psycle' / 'plugins' / 'outputs' / 'dummy',
 			deps=(resource,))
 		if default_output_impl is None: default_output_impl = dummy_output
@@ -153,7 +153,7 @@ class Wonderbuild(ScriptTask):
 				deps=(default_output_impl,))
 
 			def apply_defines_to(self, cfg):
-				cfg.defines['PSYCLE__PLUGINS__OUTPUTS__DEFAULT__' + default_output_impl.path.name.replace('-', '_').upper()] = None
+				cfg.defines['PSYCLE__PLUGINS__OUTPUT__DEFAULT__' + default_output_impl.path.name.replace('-', '_').upper()] = None
 
 			def do_mod_phase(self):
 				self.apply_defines_to(self.cfg)
