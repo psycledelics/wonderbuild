@@ -63,24 +63,24 @@ sources_or_headers = \
 	$$UNIVERSALIS_DIR/src/universalis/detail/configuration \
 	$$UNIVERSALIS_DIR/src/universalis/detail/project \
 	$$UNIVERSALIS_DIR/src/universalis/exception \
-	$$UNIVERSALIS_DIR/src/universalis/operating_system/clocks \
-	$$UNIVERSALIS_DIR/src/universalis/operating_system/cpu_affinity \
-	$$UNIVERSALIS_DIR/src/universalis/operating_system/detail/check_version \
-	$$UNIVERSALIS_DIR/src/universalis/operating_system/detail/microsoft/max_path \
-	$$UNIVERSALIS_DIR/src/universalis/operating_system/dynamic_link/main \
-	$$UNIVERSALIS_DIR/src/universalis/operating_system/dynamic_link/resolver \
-	$$UNIVERSALIS_DIR/src/universalis/operating_system/exception \
-	$$UNIVERSALIS_DIR/src/universalis/operating_system/exceptions/code_description \
-	$$UNIVERSALIS_DIR/src/universalis/operating_system \
-	$$UNIVERSALIS_DIR/src/universalis/operating_system/loggers \
-	$$UNIVERSALIS_DIR/src/universalis/operating_system/operating_system \
-	$$UNIVERSALIS_DIR/src/universalis/operating_system/paths \
-	$$UNIVERSALIS_DIR/src/universalis/operating_system/paths/implementation \
-	$$UNIVERSALIS_DIR/src/universalis/operating_system/paths/injection/implementation \
-	$$UNIVERSALIS_DIR/src/universalis/operating_system/paths/injection/interface \
-	$$UNIVERSALIS_DIR/src/universalis/operating_system/paths/interface \
-	$$UNIVERSALIS_DIR/src/universalis/operating_system/terminal \
-	$$UNIVERSALIS_DIR/src/universalis/operating_system/thread_name \
+	$$UNIVERSALIS_DIR/src/universalis/os/clocks \
+	$$UNIVERSALIS_DIR/src/universalis/os/cpu_affinity \
+	$$UNIVERSALIS_DIR/src/universalis/os/detail/check_version \
+	$$UNIVERSALIS_DIR/src/universalis/os/detail/microsoft/max_path \
+	$$UNIVERSALIS_DIR/src/universalis/os/dynamic_link/main \
+	$$UNIVERSALIS_DIR/src/universalis/os/dynamic_link/resolver \
+	$$UNIVERSALIS_DIR/src/universalis/os/exception \
+	$$UNIVERSALIS_DIR/src/universalis/os/exceptions/code_description \
+	$$UNIVERSALIS_DIR/src/universalis/os \
+	$$UNIVERSALIS_DIR/src/universalis/os/loggers \
+	$$UNIVERSALIS_DIR/src/universalis/os/os \
+	$$UNIVERSALIS_DIR/src/universalis/os/paths \
+	$$UNIVERSALIS_DIR/src/universalis/os/paths/implementation \
+	$$UNIVERSALIS_DIR/src/universalis/os/paths/injection/implementation \
+	$$UNIVERSALIS_DIR/src/universalis/os/paths/injection/interface \
+	$$UNIVERSALIS_DIR/src/universalis/os/paths/interface \
+	$$UNIVERSALIS_DIR/src/universalis/os/terminal \
+	$$UNIVERSALIS_DIR/src/universalis/os/thread_name \
 	$$UNIVERSALIS_DIR/src/universalis/processor/atomic/compare_and_swap \
 	$$UNIVERSALIS_DIR/src/universalis/processor/exception \
 	$$UNIVERSALIS_DIR/src/universalis/processor/exceptions/code_description \

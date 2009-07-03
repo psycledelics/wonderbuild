@@ -10,7 +10,7 @@
 #include <diversalis/compiler.hpp>
 #if defined DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION // if the compiler supports pre-compilation
 
-	#include <diversalis/operating_system.hpp>
+	#include <diversalis/os.hpp>
 	#if defined DIVERSALIS__OS__MICROSOFT
 
 		#if defined DIVERSALIS__COMPILER__MICROSOFT

@@ -272,7 +272,7 @@
 				>
 			</File>
 			<File
-				RelativePath="src\universalis\operating_system.hpp"
+				RelativePath="src\universalis\os.hpp"
 				>
 			</File>
 			<File
@@ -488,29 +488,29 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="operating_system"
+				Name="os"
 				>
 				<File
-					RelativePath="src\universalis\operating_system\clocks.cpp"
+					RelativePath="src\universalis\os\clocks.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\operating_system\clocks.hpp"
+					RelativePath="src\universalis\os\clocks.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\operating_system\cpu_affinity.hpp"
+					RelativePath="src\universalis\os\cpu_affinity.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\operating_system\exception.cpp"
+					RelativePath="src\universalis\os\exception.cpp"
 					>
 					<FileConfiguration
 						Name="debug|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\universalis,operating_system,exception.obj"
+							ObjectFile="$(IntDir)\universalis,os,exception.obj"
 						/>
 						</FileConfiguration>
 					<FileConfiguration
@@ -518,7 +518,7 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\universalis,operating_system,exception.obj"
+							ObjectFile="$(IntDir)\universalis,os,exception.obj"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -526,7 +526,7 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\universalis,operating_system,exception.obj"
+							ObjectFile="$(IntDir)\universalis,os,exception.obj"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -534,63 +534,63 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\universalis,operating_system,exception.obj"
+							ObjectFile="$(IntDir)\universalis,os,exception.obj"
 						/>
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="src\universalis\operating_system\exception.hpp"
+					RelativePath="src\universalis\os\exception.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\operating_system\loggers.cpp"
+					RelativePath="src\universalis\os\loggers.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\operating_system\loggers.hpp"
+					RelativePath="src\universalis\os\loggers.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\operating_system\operating_system.hpp"
+					RelativePath="src\universalis\os\os.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\operating_system\paths.cpp"
+					RelativePath="src\universalis\os\paths.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\operating_system\paths.hpp"
+					RelativePath="src\universalis\os\paths.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\operating_system\terminal.cpp"
+					RelativePath="src\universalis\os\terminal.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\operating_system\terminal.hpp"
+					RelativePath="src\universalis\os\terminal.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\operating_system\thread_name.cpp"
+					RelativePath="src\universalis\os\thread_name.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\operating_system\thread_name.hpp"
+					RelativePath="src\universalis\os\thread_name.hpp"
 					>
 				</File>
 				<Filter
 					Name="detail"
 					>
 					<File
-						RelativePath="src\universalis\operating_system\detail\check_version.cpp"
+						RelativePath="src\universalis\os\detail\check_version.cpp"
 						>
 					</File>
 					<File
-						RelativePath="src\universalis\operating_system\detail\check_version.hpp"
+						RelativePath="src\universalis\os\detail\check_version.hpp"
 						>
 					</File>
 					<File
-						RelativePath="src\universalis\operating_system\detail\microsoft\max_path.hpp"
+						RelativePath="src\universalis\os\detail\microsoft\max_path.hpp"
 						>
 					</File>
 				</Filter>
@@ -598,34 +598,34 @@
 					Name="dynamic_link"
 					>
 					<File
-						RelativePath="src\universalis\operating_system\dynamic_link\main.hpp"
+						RelativePath="src\universalis\os\dynamic_link\main.hpp"
 						>
 					</File>
 					<File
-						RelativePath="src\universalis\operating_system\dynamic_link\main.private.hpp"
+						RelativePath="src\universalis\os\dynamic_link\main.private.hpp"
 						>
 					</File>
 					<File
-						RelativePath="src\universalis\operating_system\dynamic_link\resolver.cpp"
+						RelativePath="src\universalis\os\dynamic_link\resolver.cpp"
 						>
 					</File>
 					<File
-						RelativePath="src\universalis\operating_system\dynamic_link\resolver.hpp"
+						RelativePath="src\universalis\os\dynamic_link\resolver.hpp"
 						>
 					</File>
 				</Filter>
 				<Filter
-					Name="universalis/operating_system/exceptions"
+					Name="universalis/os/exceptions"
 					>
 					<File
-						RelativePath="src\universalis\operating_system\exceptions\code_description.cpp"
+						RelativePath="src\universalis\os\exceptions\code_description.cpp"
 						>
 						<FileConfiguration
 							Name="debug|Win32"
 							>
 							<Tool
 								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\universalis,operating_system,exceptions,code_description.obj"
+								ObjectFile="$(IntDir)\universalis,os,exceptions,code_description.obj"
 							/>
 						</FileConfiguration>
 						<FileConfiguration
@@ -633,7 +633,7 @@
 							>
 							<Tool
 								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\universalis,operating_system,exceptions,code_description.obj"
+								ObjectFile="$(IntDir)\universalis,os,exceptions,code_description.obj"
 							/>
 						</FileConfiguration>
 						<FileConfiguration
@@ -641,7 +641,7 @@
 							>
 							<Tool
 								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\universalis,operating_system,exceptions,code_description.obj"
+								ObjectFile="$(IntDir)\universalis,os,exceptions,code_description.obj"
 							/>
 						</FileConfiguration>
 						<FileConfiguration
@@ -649,12 +649,12 @@
 							>
 							<Tool
 								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\universalis,operating_system,exceptions,code_description.obj"
+								ObjectFile="$(IntDir)\universalis,os,exceptions,code_description.obj"
 							/>
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath="src\universalis\operating_system\exceptions\code_description.hpp"
+						RelativePath="src\universalis\os\exceptions\code_description.hpp"
 						>
 					</File>
 				</Filter>
@@ -662,22 +662,22 @@
 					Name="paths"
 					>
 					<File
-						RelativePath="src\universalis\operating_system\paths\implementation.hpp"
+						RelativePath="src\universalis\os\paths\implementation.hpp"
 						>
 					</File>
 					<File
-						RelativePath="src\universalis\operating_system\paths\interface.hpp"
+						RelativePath="src\universalis\os\paths\interface.hpp"
 						>
 					</File>
 					<Filter
-						Name="universalis/operating_system/paths/injection"
+						Name="universalis/os/paths/injection"
 						>
 						<File
-							RelativePath="src\universalis\operating_system\paths\injection\implementation.hpp"
+							RelativePath="src\universalis\os\paths\injection\implementation.hpp"
 							>
 						</File>
 						<File
-							RelativePath="src\universalis\operating_system\paths\injection\interface.hpp"
+							RelativePath="src\universalis\os\paths\injection\interface.hpp"
 							>
 						</File>
 					</Filter>
@@ -900,7 +900,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\diversalis\src\diversalis\operating_system.hpp"
+				RelativePath="..\diversalis\src\diversalis\os.hpp"
 				>
 			</File>
 			<File
