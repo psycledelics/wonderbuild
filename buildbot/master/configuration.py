@@ -137,7 +137,7 @@ class Compile(BaseCompile):
 
 class BoostTest(Test):
 	def __init__(self, *args, **kw):
-		kw['command'] = kw['path'] + '--log_level=test_suite --report_level=detailed'
+		kw['command'] = kw['path'] + ' --log_level=test_suite --report_level=detailed'
 		del kw['path']
 		handle_microsoft_kw(kw)
 		BaseTest.__init__(self, *args, **kw)
