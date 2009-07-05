@@ -86,4 +86,7 @@ class Wonderbuild(ScriptTask):
 						return self._sources
 
 		simple = UniformMod('simple', src_dir / 'simple', kind=ModTask.Kinds.PROG)
+		simple = UniformMod('simple-mixed', src_dir / 'simple_mixed', kind=ModTask.Kinds.PROG)
+		simple = UniformMod('pixmap', src_dir / 'pixmap', kind=ModTask.Kinds.PROG)
+		simple = UniformMod('pixmap-mixed', src_dir / 'pixmap_mixed', kind=ModTask.Kinds.PROG)
 		simple = UniformMod('font', src_dir / 'font', kind=ModTask.Kinds.PROG)
