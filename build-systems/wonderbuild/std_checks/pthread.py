@@ -8,7 +8,7 @@ class PThreadCheckTask(BuildCheckTask):
 	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'posix-thread', base_cfg)
 
 	def apply_to(self, cfg):
-		if cfg.kind == 'gcc':
+		if cfg.kind == 'gcc': # TODO windows/cygwin platforms
 			cfg.cxx_flags.append('-pthread')
 			cfg.ld_flags.append('-pthread')
 		else: cfg.libs.append('pthread')

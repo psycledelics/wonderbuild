@@ -9,8 +9,7 @@ class DSoundCheckTask(BuildCheckTask):
 		BuildCheckTask.__init__(self, 'ms-dsound', base_cfg)
 		self.min_version = min_version
 
-	def apply_to(self, cfg):
-		cfg.libs.append('dsound')
+	def apply_to(self, cfg): cfg.libs.append('dsound')
 
 	@property
 	def source_text(self): return \
