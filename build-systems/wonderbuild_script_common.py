@@ -19,7 +19,6 @@ class Wonderbuild(ScriptTask):
 		project = self.project
 		top_src_dir = self.src_dir.parent
 		
-		from wonderbuild import UserReadableException
 		from wonderbuild.cxx_tool_chain import UserBuildCfgTask, PkgConfigCheckTask
 		from wonderbuild.std_checks.std_math import StdMathCheckTask
 		from wonderbuild.std_checks.dlfcn import DlfcnCheckTask
