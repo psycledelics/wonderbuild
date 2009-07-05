@@ -88,3 +88,4 @@ class Wonderbuild(ScriptTask):
 						return self._sources
 
 		basic_shapes = UniformMod('basic-shapes', src_dir / 'basic_shapes', kind=ModTask.Kinds.PROG)
+		basic_shapes = UniformMod('transform', src_dir / 'transform', kind=ModTask.Kinds.PROG)
