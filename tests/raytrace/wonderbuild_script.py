@@ -94,4 +94,4 @@ class Wonderbuild(ScriptTask):
 						if f.exists: self._sources.append(f)
 						return self._sources
 
-		cpu = UniformMod('cpu', src_dir / 'cpu', kind=ModTask.Kinds.PROG)
+		cpu = UniformMod('raytrace-cpu', src_dir / 'raytrace' / 'cpu', kind=ModTask.Kinds.PROG)
