@@ -8,7 +8,7 @@ if __name__ == '__main__':
 	sys.argv.append('--src-dir=' + dir)
 	try: from wonderbuild.main import main
 	except ImportError:
-		dir = os.path.abspath(os.path.join(dir, os.pardir, os.pardir, os.pardir, 'build-systems'))
+		dir = os.path.abspath(os.path.join(dir, os.pardir, 'build-systems'))
 		if dir not in sys.path: sys.path.append(dir)
 		try: from wonderbuild.main import main
 		except ImportError:
@@ -20,20 +20,30 @@ if __name__ == '__main__':
 from wonderbuild.script import ScriptTask, ScriptLoaderTask
 
 class Wonderbuild(ScriptTask):
+	@property
+	def common(self): return self._common
+
 	def __call__(self, sched_ctx):
 		project = self.project
-		top_src_dir = self.src_dir.parent.parent
-		src_dir = self.src_dir
+		top_src_dir = self.src_dir.parent
+		src_dir = self.src_dir / 'src'
 
-		from wonderbuild.cxx_tool_chain import UserBuildCfgTask, PkgConfigCheckTask
-		from wonderbuild.cxx_tool_chain import ModTask
+		universalis = ScriptLoaderTask.shared(project, top_src_dir / 'universalis')
+		helpers = ScriptLoaderTask.shared(project, top_src_dir / 'psycle-helpers')
+		for x in sched_ctx.parallel_wait(universalis, helpers): yield x
+		universalis = universalis.script_task
+		self._common = common = universalis.common
+		universalis = universalis.mod_dep_phases
+		helpers_math = helpers.script_task.math_mod_dep_phases
+		pch = common.pch
+		cfg = common.cfg.new_or_clone()
+
+		from wonderbuild import UserReadableException
+		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, ModTask
+		from wonderbuild.std_checks.dsound import DSoundCheckTask
 		from wonderbuild.install import InstallTask
 
-		gtkglextmm = PkgConfigCheckTask.shared(project, ['gtkglextmm-1.2 >= 1.2'])
-
-		self._cfg = cfg = UserBuildCfgTask.shared(project)
-		for x in sched_ctx.parallel_wait(cfg): yield x
-		cfg = cfg.new_or_clone()
+		gtkmm = PkgConfigCheckTask.shared(project, ['gtkmm-2.4 >= 2.4'])
 
 		class UniformMod(ModTask):
 			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):
@@ -42,10 +52,9 @@ class Wonderbuild(ScriptTask):
 				if deps is not None: self.public_deps += deps
 
 			def __call__(self, sched_ctx):
-				self.private_deps = [gtkglextmm]
-				#if self.kind == ModTask.Kinds.PROG: self.private_deps.append(pch.prog_task)
-				#else: self.private_deps.append(pch.lib_task)
-				#self.public_deps += []
+				if self.kind == ModTask.Kinds.PROG: self.private_deps = [pch.prog_task]
+				else: self.private_deps = [pch.lib_task]
+				self.public_deps += [universalis, helpers_math, gtkmm]
 				req = self.all_deps
 				for x in sched_ctx.parallel_wait(*req): yield x
 				self.result = min(bool(r) for r in req)
@@ -55,7 +64,7 @@ class Wonderbuild(ScriptTask):
 			def do_mod_phase(self):
 				self.cfg.include_paths.appendleft(src_dir)
 				if self.path.exists:
-					for s in self.path.find_iter(in_pats = ('*.cpp'), prune_pats = ('todo',)): self.sources.append(s)
+					for s in self.path.find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 				else: self.sources.append(self.path.parent / (self.path.name + '.cpp'))
 
 			def apply_cxx_to(self, cfg):
@@ -85,8 +94,4 @@ class Wonderbuild(ScriptTask):
 						if f.exists: self._sources.append(f)
 						return self._sources
 
-		simple = UniformMod('simple', src_dir / 'simple', kind=ModTask.Kinds.PROG)
-		simple = UniformMod('simple-mixed', src_dir / 'simple_mixed', kind=ModTask.Kinds.PROG)
-		simple = UniformMod('pixmap', src_dir / 'pixmap', kind=ModTask.Kinds.PROG)
-		simple = UniformMod('pixmap-mixed', src_dir / 'pixmap_mixed', kind=ModTask.Kinds.PROG)
-		simple = UniformMod('font', src_dir / 'font', kind=ModTask.Kinds.PROG)
+		cpu = UniformMod('cpu', src_dir / 'cpu', kind=ModTask.Kinds.PROG)
