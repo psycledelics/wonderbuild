@@ -57,7 +57,7 @@ class Wonderbuild(ScriptTask):
 			def do_mod_phase(self):
 				self.cfg.include_paths.appendleft(src_dir)
 				if self.path.exists:
-					for s in self.path.find_iter(in_pats = ('*.cpp'), prune_pats = ('todo',)): self.sources.append(s)
+					for s in self.path.find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 				else: self.sources.append(self.path.parent / (self.path.name + '.cpp'))
 
 			def apply_cxx_to(self, cfg):

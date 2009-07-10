@@ -25,15 +25,17 @@ class Wonderbuild(ScriptTask):
 		top_src_dir = self.src_dir.parent.parent
 		src_dir = self.src_dir
 
-		from wonderbuild.cxx_tool_chain import UserBuildCfgTask, PkgConfigCheckTask
+		from wonderbuild.cxx_tool_chain import UserBuildCfgTask
 		from wonderbuild.cxx_tool_chain import ModTask
+		from wonderbuild.std_checks.opengl import OpenGLUTCheckTask
 		from wonderbuild.install import InstallTask
-
-		gtkglextmm = PkgConfigCheckTask.shared(project, ['gtkglextmm-1.2 >= 1.2'])
 
 		self._cfg = cfg = UserBuildCfgTask.shared(project)
 		for x in sched_ctx.parallel_wait(cfg): yield x
 		cfg = cfg.new_or_clone()
+
+		check_cfg = cfg.clone()
+		glut = OpenGLUTCheckTask.shared(check_cfg)
 
 		class UniformMod(ModTask):
 			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):
@@ -42,7 +44,7 @@ class Wonderbuild(ScriptTask):
 				if deps is not None: self.public_deps += deps
 
 			def __call__(self, sched_ctx):
-				self.private_deps = [gtkglextmm]
+				self.private_deps = [glut]
 				#if self.kind == ModTask.Kinds.PROG: self.private_deps.append(pch.prog_task)
 				#else: self.private_deps.append(pch.lib_task)
 				#self.public_deps += []
@@ -85,8 +87,4 @@ class Wonderbuild(ScriptTask):
 						if f.exists: self._sources.append(f)
 						return self._sources
 
-		simple = UniformMod('simple', src_dir / 'simple', kind=ModTask.Kinds.PROG)
-		simple = UniformMod('simple-mixed', src_dir / 'simple_mixed', kind=ModTask.Kinds.PROG)
-		simple = UniformMod('pixmap', src_dir / 'pixmap', kind=ModTask.Kinds.PROG)
-		simple = UniformMod('pixmap-mixed', src_dir / 'pixmap_mixed', kind=ModTask.Kinds.PROG)
-		simple = UniformMod('font', src_dir / 'font', kind=ModTask.Kinds.PROG)
+		basic_shapes = UniformMod('toon', src_dir / 'toon', kind=ModTask.Kinds.PROG)
