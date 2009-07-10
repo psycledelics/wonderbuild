@@ -7,7 +7,9 @@ from wonderbuild.cxx_tool_chain import BuildCheckTask
 class OpenGLCheckTask(BuildCheckTask):
 	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'opengl', base_cfg)
 
-	def apply_to(self, cfg): cfg.libs.append('GL')
+	def apply_to(self, cfg):
+		cfg.defines['GL_GLEXT_PROTOTYPES'] = None
+		cfg.libs.append('GL')
 
 	@property
 	def source_text(self): return \
