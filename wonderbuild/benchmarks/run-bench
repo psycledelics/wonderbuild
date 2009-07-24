@@ -5,7 +5,7 @@ set -x &&
 jobs=4 &&
 
 measure() {
-	time "$@"
+	if which time; then time "$@"; else case "$SHELL" in bash) time "$@";; *) bash -c "time $@";; esac; fi
 	#strace -fF "$@"
 } &&
 
@@ -31,6 +31,19 @@ main() {
 			measure java -jar ../../jython/jython.jar ../../wonderbuild.py --bld-dir=build-$tool --cxx=g++ --jobs=$jobs "$@"
 		;;
 
+		fbuild)
+			# the --buildroot=build-$tool option seem to be broken!
+			if test $op = reset
+			then
+				rm -Rf build-$tool
+			fi &&
+			# fbuild lacks a silent option!
+			if test -x ../../fbuild/fbuild-light.dev-null
+			then measure ../../fbuild/fbuild-light.dev-null --buildroot=build-$tool --jobs=$jobs "$@"
+			else measure ../../fbuild/fbuild-light --buildroot=build-$tool --jobs=$jobs "$@"
+			fi
+		;;
+	
 		waf)
 			if ! test -d build-$tool
 			then
@@ -44,7 +57,7 @@ main() {
 		;;
 
 		waf-on-jython)
-			if test $op = 'reset'
+			if test $op = reset
 			then
 				rm -Rf build-waf
 			fi &&

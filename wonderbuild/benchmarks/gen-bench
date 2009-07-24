@@ -40,6 +40,7 @@ def main(argv):
 
 	for tool in (
 		create_wonderbuild,
+		create_fbuild,
 		create_waf,
 		create_scons,
 		create_autotools,
@@ -163,10 +164,10 @@ class Wonderbuild(ScriptTask):
 				ModTask.__init__(self, name, ModTask.Kinds.LIB, build_cfg)
 				self.i = i
 	
-			def __call__(self, sched_ctx):
-				if use_pch:
+			if use_pch:
+				def __call__(self, sched_ctx):
 					for x in sched_ctx.parallel_wait(pch.lib_task): yield x
-				for x in ModTask.__call__(self, sched_ctx): yield x
+					for x in ModTask.__call__(self, sched_ctx): yield x
 
 			def do_mod_phase(self):
 				if use_pch: pch.lib_task.apply_to(self.cfg)
@@ -176,6 +177,26 @@ class Wonderbuild(ScriptTask):
 
 		for n in src_dir.find_iter(in_pats = ('lib_*',), prune_pats = ('*',)):
 			self.project.add_task_aliases(BenchLib(n.name, n.name[len('lib_'):]).mod_phase, 'default')
+''')
+
+def create_fbuild(libs):
+    f = open('fbuildroot.py', 'w')
+    f.write(r'''
+from fbuild.path import Path
+import fbuild.builders.cxx
+
+def build():
+    src_dir = Path('.')
+    static = fbuild.builders.cxx.guess_static()
+    flags = ['-g', '-O0', '-Wall']
+    defines = ['BENCH']
+    include_paths = [src_dir]
+    for p in Path('.').igloball('lib_*'):
+    	lib = static.build_lib(p, [s for s in p.find('*.cpp')],
+    		macros=defines + ['BENCH_LIB=' + p[len('lib_'):]],
+    		includes=include_paths,
+    		cflags=flags
+    	)
 ''')
 
 def create_waf(libs):
@@ -387,7 +408,7 @@ def create_cmake_sub(lib_number, classes):
 add_library(%(tgt)s STATIC %(src)s)
 ''' % {
 	'num': str(lib_number),
-	'tgt': str(lib_number),
+	'tgt': lib_name(lib_number),
 	'src': ' '.join(['class_' + str(i) + '.cpp' for i in xrange(classes)])
 })
 
