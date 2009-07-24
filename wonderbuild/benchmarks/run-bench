@@ -35,7 +35,7 @@ main() {
 			# the --buildroot=build-$tool option seem to be broken!
 			if test $op = reset
 			then
-				rm -Rf build-$tool
+				rm -Rf build
 			fi &&
 			# fbuild lacks a silent option!
 			if test -x ../../fbuild/fbuild-light.dev-null
