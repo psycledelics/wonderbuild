@@ -4,7 +4,7 @@
 	<part caption='Results'>
 		<part caption='Times on a fast machine' anchor='linux'>
 			All tests were run with 4 jobs on the same quad core system,
-			ext2 filesystem on a 4-disk lvm/dmraid0 device, linux 2.6.24, gcc's C++ compiler.
+			ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
 			<part caption='Tool versions'>
 				<ul>
 					<li>Scons version was 1.2.0</li>
@@ -341,7 +341,7 @@
 			It clearly demonstrates the advantage of pre-compilation as soon as the size of the headers become significant.
 			<br/><br/>
 			All tests were run with 4 jobs on the same quad core system,
-			ext2 filesystem on a 4-disk lvm/dmraid0 device, linux 2.6.24, gcc's C++ compiler.
+			ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
 			<part caption='Tool versions'>
 				<ul>
 					<li>Waf version was 1.5.3</li>
@@ -481,7 +481,7 @@
 			Comparison of Python (CPython) and Jython.
 			<br/><br/>
 			All tests were run with 4 jobs on the same quad core system,
-			ext2 filesystem on a 4-disk lvm/dmraid0 device, linux 2.6.24, gcc's C++ compiler.
+			ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
 			<part caption='Tool versions'>
 				<ul>
 					<li>Python (CPython) version was 2.5.2</li>
@@ -542,7 +542,7 @@
 			The test machine had 4 CPUs.
 			<br/><br/>
 			All tests were run on the same quad core system,
-			ext2 filesystem on a 4-disk lvm/dmraid0 device, linux 2.6.24, gcc's C++ compiler.
+			ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
 			<part caption='Tool versions'>
 				<ul>
 					<li>Python (CPython) version was 2.5.2</li>
