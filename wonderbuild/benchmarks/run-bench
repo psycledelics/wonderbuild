@@ -5,7 +5,7 @@ set -x &&
 jobs=4 &&
 
 measure() {
-	if which time; then time "$@"; else case "$SHELL" in bash) time "$@";; *) bash -c "time $@";; esac; fi
+	if which time; then time "$@"; else case "$SHELL" in bash) time "$@";; *) bash -c "time $*";; esac; fi
 	#strace -fF "$@"
 } &&
 
@@ -32,11 +32,6 @@ main() {
 		;;
 
 		fbuild)
-			# the --buildroot=build-$tool option seem to be broken!
-			if test $op = reset
-			then
-				rm -Rf build
-			fi &&
 			# fbuild lacks a silent option!
 			if test -x ../../fbuild/fbuild-light.dev-null
 			then measure ../../fbuild/fbuild-light.dev-null --buildroot=build-$tool --jobs=$jobs "$@"
