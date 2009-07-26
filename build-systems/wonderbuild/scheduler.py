@@ -50,16 +50,17 @@ class Scheduler(object):
 		def notify(self, count = 1): pass
 		def notifyAll(self): pass
 
-	class _JythonCondition(object):
-		def __init__(self, lock): self._cond = threading.Condition(lock)
-		def acquire(self): self._cond.acquire()
-		def release(self): self._cond.release()
-		def wait(self, timeout): self._cond.wait(timeout)
-		def notify(self, count = 1):
-			if count == 0: return
-			elif count == 1: self._cond.notify()
-			else: self._cond.notifyAll() # there was no notify(count) as of jython 2.5.0
-		def notifyAll(self): self._cond.notifyAll()
+	if is_jython:
+		class _JythonCondition(object):
+			def __init__(self, lock): self._cond = threading.Condition(lock)
+			def acquire(self): self._cond.acquire()
+			def release(self): self._cond.release()
+			def wait(self, timeout): self._cond.wait(timeout)
+			def notify(self, count = 1):
+				if count == 0: return
+				elif count == 1: self._cond.notify()
+				else: self._cond.notifyAll() # there was no notify(count) as of jython 2.5.0
+			def notifyAll(self): self._cond.notifyAll()
 		
 	def process(self, *tasks):
 		self._task_stack = list(tasks)
