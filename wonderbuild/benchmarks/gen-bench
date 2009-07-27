@@ -127,9 +127,6 @@ class Wonderbuild(ScriptTask):
 		src_dir = self.src_dir
 		
 		class CustomBuildCfgTask(UserBuildCfgTask):
-			def __init__(self, project):
-				UserBuildCfgTask.__init__(self, project)
-				
 			def __call__(self, sched_ctx):
 				for x in UserBuildCfgTask.__call__(self, sched_ctx): yield x
 				self.cxx_flags = ['-g', '-O0', '-Wall']
