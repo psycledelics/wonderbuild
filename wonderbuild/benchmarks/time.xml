@@ -718,7 +718,7 @@
 			<br/><br/>
 			(Note: the wonderbuild and fbuild scripts find source files dynamically instead of relying on a hard-coded file list.)
 			<part caption='No-op rebuild'>
-				<bars unit='' scale='0.02'>
+				<bars unit='' scale='0.015'>
 					<bar-section>Number of stat() calls</bar-section>
 					<bar name='jam'           value=' 9252'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='wonderbuild'   value='10381'>with check of missing built files (including intermediate object files)</bar>
@@ -728,7 +728,7 @@
 					<bar name='toy makefiles' value='61996'>(recursive)</bar>
 					<bar name='scons'         value='67190'>with default options</bar>
 				</bars>
-				<bars unit='' scale='0.02'>
+				<bars unit='' scale='0.015'>
 					<bar-section>Number of fstat() calls</bar-section>
 					<bar name='wonderbuild'   value='  217'>(same with or without check of missing built files)</bar>
 					<bar name='fbuild'        value='  340'>(timestamp signatures only, content hashing disabled)</bar>
