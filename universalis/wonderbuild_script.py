@@ -72,7 +72,7 @@ class Wonderbuild(ScriptTask):
 				for x in PreCompileTasks.__call__(self, sched_ctx): yield x
 			
 			def do_cxx_phase(self):
-				for i in (universalis.cxx_phase.dest_dir, universalis.cxx_phase.dest_dir / 'universalis' / 'standard_library' / 'future_std_include'):
+				for i in (universalis.cxx_phase.dest_dir, universalis.cxx_phase.dest_dir / 'universalis' / 'stdlib' / 'future_std_include'):
 					if not i in self.cfg.include_paths: self.cfg.include_paths.append(i)
 				self.cfg.include_paths.append(top_src_dir / 'build-systems' / 'src')
 
@@ -113,11 +113,11 @@ class Wonderbuild(ScriptTask):
 			
 			def do_mod_phase(self):
 				self.cfg.defines['UNIVERSALIS__SOURCE'] = self.cfg.shared and '1' or '-1'
-				self.cfg.include_paths.extend([src_dir, src_dir / 'universalis' / 'standard_library' / 'future_std_include'])
+				self.cfg.include_paths.extend([src_dir, src_dir / 'universalis' / 'stdlib' / 'future_std_include'])
 				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 			
 			def apply_cxx_to(self, cfg):
-				for i in (self.cxx_phase.dest_dir, self.cxx_phase.dest_dir / 'universalis' / 'standard_library' / 'future_std_include'):
+				for i in (self.cxx_phase.dest_dir, self.cxx_phase.dest_dir / 'universalis' / 'stdlib' / 'future_std_include'):
 					if not i in cfg.include_paths: cfg.include_paths.append(i)
 				if not self.cfg.shared: cfg.defines['UNIVERSALIS__SOURCE'] = '-1'
 				ModTask.apply_cxx_to(self, cfg)
@@ -136,7 +136,7 @@ class Wonderbuild(ScriptTask):
 						self._sources = []
 						for s in (self.trim_prefix / 'universalis').find_iter(
 							in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)): self._sources.append(s)
-						for s in (self.trim_prefix / 'universalis' / 'standard_library' / 'future_std_include').find_iter(
+						for s in (self.trim_prefix / 'universalis' / 'stdlib' / 'future_std_include').find_iter(
 							in_pats = ('condition', 'cstdint', 'date_time', 'mutex', 'thread'),
 							prune_pats = ('*',)): self._sources.append(s)
 						return self._sources

@@ -87,31 +87,31 @@ sources_or_headers = \
 	$$UNIVERSALIS_DIR/src/universalis/processor/exceptions/fpu \
 	$$UNIVERSALIS_DIR/src/universalis/processor \
 	$$UNIVERSALIS_DIR/src/universalis/processor/processor \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/allocators \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/condition \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/date_time \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/detail/allocators \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/detail/boost_xtime \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/detail/duration \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/detail/hiresolution_clock \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/detail/iso646 \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/detail/utc_time \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/exceptions/code_description \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/mutex \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/ndebug \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/standard_library \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/stdc_secure_lib \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/stdint \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/thread \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/allocators \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/condition \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/date_time \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/detail/allocators \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/detail/boost_xtime \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/detail/duration \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/detail/hiresolution_clock \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/detail/iso646 \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/detail/utc_time \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/exceptions/code_description \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/mutex \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/ndebug \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/stdlib \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/stdc_secure_lib \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/stdint \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/thread \
 	$$UNIVERSALIS_DIR/src/universalis/universalis
 
 SOURCES_PRESERVE_PATH += $$sources(sources_or_headers)
 HEADERS += $$headers(sources_or_headers) \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/future_std_include/condition \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/future_std_include/date_time \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/future_std_include/mutex \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/future_std_include/cstdint \
-	$$UNIVERSALIS_DIR/src/universalis/standard_library/future_std_include/thread
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/future_std_include/condition \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/future_std_include/date_time \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/future_std_include/mutex \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/future_std_include/cstdint \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib/future_std_include/thread
 
 include($$COMMON_DIR/display-vars.pri)

@@ -280,7 +280,7 @@
 				>
 			</File>
 			<File
-				RelativePath="src\universalis\standard_library.hpp"
+				RelativePath="src\universalis\stdlib.hpp"
 				>
 			</File>
 			<File
@@ -772,73 +772,73 @@
 				</Filter>
 			</Filter>
 			<Filter
-				Name="standard_library"
+				Name="stdlib"
 				>
 				<File
-					RelativePath="src\universalis\standard_library\allocators.hpp"
+					RelativePath="src\universalis\stdlib\allocators.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\standard_library\condition.hpp"
+					RelativePath="src\universalis\stdlib\condition.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\standard_library\date_time.hpp"
+					RelativePath="src\universalis\stdlib\date_time.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\standard_library\mutex.hpp"
+					RelativePath="src\universalis\stdlib\mutex.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\standard_library\ndebug.hpp"
+					RelativePath="src\universalis\stdlib\ndebug.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\standard_library\standard_library.hpp"
+					RelativePath="src\universalis\stdlib\stdlib.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\standard_library\stdc_secure_lib.hpp"
+					RelativePath="src\universalis\stdlib\stdc_secure_lib.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\standard_library\stdint.hpp"
+					RelativePath="src\universalis\stdlib\stdint.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\standard_library\thread.hpp"
+					RelativePath="src\universalis\stdlib\thread.hpp"
 					>
 				</File>
 				<Filter
-					Name="universalis/standard_library/detail"
+					Name="universalis/stdlib/detail"
 					>
 					<File
-						RelativePath="src\universalis\standard_library\detail\allocators.cpp"
+						RelativePath="src\universalis\stdlib\detail\allocators.cpp"
 						>
 					</File>
 					<File
-						RelativePath="src\universalis\standard_library\detail\allocators.hpp"
+						RelativePath="src\universalis\stdlib\detail\allocators.hpp"
 						>
 					</File>
 					<File
-						RelativePath="src\universalis\standard_library\detail\boost_xtime.hpp"
+						RelativePath="src\universalis\stdlib\detail\boost_xtime.hpp"
 						>
 					</File>
 					<File
-						RelativePath="src\universalis\standard_library\detail\duration.hpp"
+						RelativePath="src\universalis\stdlib\detail\duration.hpp"
 						>
 					</File>
 					<File
-						RelativePath="src\universalis\standard_library\detail\hiresolution_clock.hpp"
+						RelativePath="src\universalis\stdlib\detail\hiresolution_clock.hpp"
 						>
 					</File>
 					<File
-						RelativePath="src\universalis\standard_library\detail\iso646.hpp"
+						RelativePath="src\universalis\stdlib\detail\iso646.hpp"
 						>
 					</File>
 					<File
-						RelativePath="src\universalis\standard_library\detail\utc_time.hpp"
+						RelativePath="src\universalis\stdlib\detail\utc_time.hpp"
 						>
 					</File>
 				</Filter>
@@ -846,14 +846,14 @@
 					Name="exceptions"
 					>
 					<File
-						RelativePath="src\universalis\standard_library\exceptions\code_description.cpp"
+						RelativePath="src\universalis\stdlib\exceptions\code_description.cpp"
 						>
 						<FileConfiguration
 							Name="debug|Win32"
 							>
 							<Tool
 								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\universalis,standard_library,exception.obj"
+								ObjectFile="$(IntDir)\universalis,stdlib,exception.obj"
 							/>
 						</FileConfiguration>
 						<FileConfiguration
@@ -861,7 +861,7 @@
 							>
 							<Tool
 								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\universalis,standard_library,exception.obj"
+								ObjectFile="$(IntDir)\universalis,stdlib,exception.obj"
 							/>
 						</FileConfiguration>
 						<FileConfiguration
@@ -869,7 +869,7 @@
 							>
 							<Tool
 								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\universalis,standard_library,exception.obj"
+								ObjectFile="$(IntDir)\universalis,stdlib,exception.obj"
 							/>
 						</FileConfiguration>
 						<FileConfiguration
@@ -877,12 +877,12 @@
 							>
 							<Tool
 								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\universalis,standard_library,exception.obj"
+								ObjectFile="$(IntDir)\universalis,stdlib,exception.obj"
 							/>
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath="src\universalis\standard_library\exceptions\code_description.hpp"
+						RelativePath="src\universalis\stdlib\exceptions\code_description.hpp"
 						>
 					</File>
 				</Filter>
@@ -908,7 +908,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\diversalis\src\diversalis\standard_library.hpp"
+				RelativePath="..\diversalis\src\diversalis\stdlib.hpp"
 				>
 			</File>
 			<Filter
@@ -932,23 +932,23 @@
 			Name="standard headers"
 			>
 			<File
-				RelativePath="src\universalis\standard_library\future_std_include\condition"
+				RelativePath="src\universalis\stdlib\future_std_include\condition"
 				>
 			</File>
 			<File
-				RelativePath="src\universalis\standard_library\future_std_include\cstdint"
+				RelativePath="src\universalis\stdlib\future_std_include\cstdint"
 				>
 			</File>
 			<File
-				RelativePath="src\universalis\standard_library\future_std_include\date_time"
+				RelativePath="src\universalis\stdlib\future_std_include\date_time"
 				>
 			</File>
 			<File
-				RelativePath="src\universalis\standard_library\future_std_include\mutex"
+				RelativePath="src\universalis\stdlib\future_std_include\mutex"
 				>
 			</File>
 			<File
-				RelativePath="src\universalis\standard_library\future_std_include\thread"
+				RelativePath="src\universalis\stdlib\future_std_include\thread"
 				>
 			</File>
 		</Filter>

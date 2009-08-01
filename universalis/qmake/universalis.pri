@@ -9,8 +9,8 @@ isEmpty(universalis_included) {
 	UNIVERSALIS_DIR = $$TOP_SRC_DIR/universalis
 	UNIVERSALIS_BUILD_DIR = $$UNIVERSALIS_DIR/++build
 	
-	INCLUDEPATH *= $$UNIVERSALIS_DIR/src $$UNIVERSALIS_DIR/src/universalis/standard_library/future_std_include
-	DEPENDPATH  *= $$UNIVERSALIS_DIR/src $$UNIVERSALIS_DIR/src/universalis/standard_library/future_std_include
+	INCLUDEPATH *= $$UNIVERSALIS_DIR/src $$UNIVERSALIS_DIR/src/universalis/stdlib/future_std_include
+	DEPENDPATH  *= $$UNIVERSALIS_DIR/src $$UNIVERSALIS_DIR/src/universalis/stdlib/future_std_include
 
 	INCLUDEPATH *= $$UNIVERSALIS_DIR/qmake/src
 	DEPENDPATH  *= $$UNIVERSALIS_DIR/qmake/src

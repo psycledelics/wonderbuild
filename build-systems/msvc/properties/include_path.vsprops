@@ -32,7 +32,7 @@
 		&quot;$(TopSrcDir)/external-packages/&quot;;
 		&quot;$(TopSrcDir)/diversalis/src&quot;;
 		&quot;$(TopSrcDir)/universalis/src&quot;;
-		&quot;$(TopSrcDir)/universalis/src/universalis/standard_library/future_std_include&quot;;
+		&quot;$(TopSrcDir)/universalis/src/universalis/stdlib/future_std_include&quot;;
 		&quot;$(TopSrcDir)/psycle-helpers/src&quot;;
 		&quot;$(TopSrcDir)/psycle-audiodrivers/src&quot;;
 		&quot;$(TopSrcDir)/psycle-core/src&quot;;
