@@ -628,8 +628,9 @@ class _BatchCompileTask(ProjectTask):
 		sched_ctx.lock.release()
 		try:
 			if not silent:
-				if self.cfg.pic: pic = 'pic'; color = '1;44;37'
-				else: pic = 'non-pic'; color = '44;37'
+				color = '48;5;25;38;5;15'
+				if self.cfg.pic: pic = 'pic'; color += ';1'
+				else: pic = 'non-pic';
 				s = [str(s) for s in self.sources]
 				s.sort()
 				self.print_desc_multi_column_format('batch-compiling ' + pic + ' objects from c++', s, color)
@@ -896,15 +897,15 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 				if self.ld: sources = self.sources
 				else: sources = changed_sources
 				if not silent:
-					if not self.ld: desc = 'archiving and indexing static lib'; color = '7;36'#'37;46'
+					if not self.ld: desc = 'archiving and indexing static lib'; color = '48;5;30;38;5;15'
 					elif self.kind == ModTask.Kinds.PROG:
-						if self.cfg.pic: pic = 'pic'; color = '1;7'
-						else: pic = 'non-pic'; color = '7'
-						if self.cfg.static_prog: shared = 'static'; color += ';37;40'
-						else: shared = 'dynamic'; color += ';32'
+						if self.cfg.pic: pic = 'pic'; color = '1'
+						else: pic = 'non-pic'; color = ''
+						if self.cfg.static_prog: shared = 'static'; color += ';47;30'
+						else: shared = 'dynamic'; color += ';42'
 						desc = 'linking ' + shared + ' ' + pic + ' program'
-					elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = '1;7;36'
-					else: desc = 'linking shared lib'; color = '1;7;33'
+					elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = '46'
+					else: desc = 'linking shared lib'; color = '43'
 					plus = not self.ld and '+' or ''
 					if __debug__ and is_debug: s = [plus + self._obj_name(s) + '(' + str(s) + ')' for s in sources]
 					else: s = [plus + self._obj_name(s) for s in sources]
