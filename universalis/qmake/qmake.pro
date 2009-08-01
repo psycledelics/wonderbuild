@@ -81,12 +81,12 @@ sources_or_headers = \
 	$$UNIVERSALIS_DIR/src/universalis/os/paths/interface \
 	$$UNIVERSALIS_DIR/src/universalis/os/terminal \
 	$$UNIVERSALIS_DIR/src/universalis/os/thread_name \
-	$$UNIVERSALIS_DIR/src/universalis/processor/atomic/compare_and_swap \
-	$$UNIVERSALIS_DIR/src/universalis/processor/exception \
-	$$UNIVERSALIS_DIR/src/universalis/processor/exceptions/code_description \
-	$$UNIVERSALIS_DIR/src/universalis/processor/exceptions/fpu \
+	$$UNIVERSALIS_DIR/src/universalis/cpu/atomic/compare_and_swap \
+	$$UNIVERSALIS_DIR/src/universalis/cpu/exception \
+	$$UNIVERSALIS_DIR/src/universalis/cpu/exceptions/code_description \
+	$$UNIVERSALIS_DIR/src/universalis/cpu/exceptions/fpu \
 	$$UNIVERSALIS_DIR/src/universalis/processor \
-	$$UNIVERSALIS_DIR/src/universalis/processor/processor \
+	$$UNIVERSALIS_DIR/src/universalis/cpu/processor \
 	$$UNIVERSALIS_DIR/src/universalis/stdlib/allocators \
 	$$UNIVERSALIS_DIR/src/universalis/stdlib/condition \
 	$$UNIVERSALIS_DIR/src/universalis/stdlib/date_time \

@@ -276,7 +276,7 @@
 				>
 			</File>
 			<File
-				RelativePath="src\universalis\processor.hpp"
+				RelativePath="src\universalis\cpu.hpp"
 				>
 			</File>
 			<File
@@ -727,7 +727,7 @@
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\processor\processor.hpp"
+					RelativePath="src\universalis\processor\cpu.hpp"
 					>
 				</File>
 				<Filter
@@ -904,7 +904,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\diversalis\src\diversalis\processor.hpp"
+				RelativePath="..\diversalis\src\diversalis\cpu.hpp"
 				>
 			</File>
 			<File
