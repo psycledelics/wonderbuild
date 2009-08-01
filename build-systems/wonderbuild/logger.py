@@ -36,23 +36,33 @@ def use_options(options):
 
 out = sys.stdout
 
-cols = 80
-try: import struct, fcntl, termios
-except ImportError: pass
-else:
-	if out.isatty():
-		def _cols():
-			lines, cols = struct.unpack(
-					"HHHH",
-					fcntl.ioctl(
-						out.fileno(),
-						termios.TIOCGWINSZ,
-						struct.pack("HHHH", 0, 0, 0, 0)
-					)
+def _get_cols():
+	try: import curses
+	except ImportError: pass
+	else:
+		curses.setupterm()
+		return curses.tigetnum('cols')
+	
+	try: import struct, fcntl, termios
+	except ImportError: pass
+	else:
+		if out.isatty():
+			try: lines, cols = struct.unpack(
+						"HHHH",
+						fcntl.ioctl(
+							out.fileno(),
+							termios.TIOCGWINSZ,
+							struct.pack("HHHH", 0, 0, 0, 0)
+						)
 				)[:2]
-			return cols
-		try: cols = _cols()
-		except IOError: pass
+			except IOError: pass
+			else: return cols
+
+	e = os.environ.get('COLUMNS', None)
+	if e is not None: return int(e)
+
+	return 80
+cols = _get_cols()
 
 out_is_dumb = os.environ.get('TERM', 'dumb') in ('dumb', 'emacs') or not out.isatty()
 if out_is_dumb:
@@ -60,3 +70,10 @@ if out_is_dumb:
 else:
 	def colored(color, s): return '\33[' + color + 'm' + s + '\33[0m'
 
+
+try: import curses
+except ImportError: pass
+else:
+	curses.setupterm()
+	colors = curses.tigetnum('colors')
+	#if num_colors > 0:
