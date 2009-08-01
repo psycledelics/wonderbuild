@@ -684,17 +684,17 @@
 				</Filter>
 			</Filter>
 			<Filter
-				Name="processor"
+				Name="cpu"
 				>
 				<File
-					RelativePath="src\universalis\processor\exception.cpp"
+					RelativePath="src\universalis\cpu\exception.cpp"
 					>
 					<FileConfiguration
 						Name="debug|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\universalis,processor,exception.obj"
+							ObjectFile="$(IntDir)\universalis,cpu,exception.obj"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -702,7 +702,7 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\universalis,processor,exception.obj"
+							ObjectFile="$(IntDir)\universalis,cpu,exception.obj"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -710,7 +710,7 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\universalis,processor,exception.obj"
+							ObjectFile="$(IntDir)\universalis,cpu,exception.obj"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -718,30 +718,30 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\universalis,processor,exception.obj"
+							ObjectFile="$(IntDir)\universalis,cpu,exception.obj"
 						/>
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="src\universalis\processor\exception.hpp"
+					RelativePath="src\universalis\cpu\exception.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\processor\cpu.hpp"
+					RelativePath="src\universalis\cpu\cpu.hpp"
 					>
 				</File>
 				<Filter
 					Name="exceptions"
 					>
 					<File
-						RelativePath="src\universalis\processor\exceptions\code_description.cpp"
+						RelativePath="src\universalis\cpu\exceptions\code_description.cpp"
 						>
 						<FileConfiguration
 							Name="debug|Win32"
 							>
 							<Tool
 								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\universalis,processor,exceptions,code_description.obj"
+								ObjectFile="$(IntDir)\universalis,cpu,exceptions,code_description.obj"
 							/>
 						</FileConfiguration>
 						<FileConfiguration
@@ -749,7 +749,7 @@
 							>
 							<Tool
 								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\universalis,processor,exceptions,code_description.obj"
+								ObjectFile="$(IntDir)\universalis,cpu,exceptions,code_description.obj"
 							/>
 						</FileConfiguration>
 						<FileConfiguration
@@ -757,7 +757,7 @@
 							>
 							<Tool
 								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\universalis,processor,exceptions,code_description.obj"
+								ObjectFile="$(IntDir)\universalis,cpu,exceptions,code_description.obj"
 							/>
 						</FileConfiguration>
 						<FileConfiguration
@@ -765,7 +765,7 @@
 							>
 							<Tool
 								Name="VCCLCompilerTool"
-								ObjectFile="$(IntDir)\universalis,processor,exceptions,code_description.obj"
+								ObjectFile="$(IntDir)\universalis,cpu,exceptions,code_description.obj"
 							/>
 						</FileConfiguration>
 					</File>
