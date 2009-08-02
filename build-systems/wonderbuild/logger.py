@@ -150,7 +150,7 @@ if __name__ == '__main__':
 		for c in [0x8] + [0x12 + (0x12 - 0x8) * x for x in xrange(23)]:
 			v = c < 128 and 255 or 0
 			out.write(colored(color_bg_fg_rgb((c, c, c), (v, v, v)), l == 1 and '%02x ' % c or '   '))
-			out.write(colored('48;5;' + str(i), l == 1 and '%03d' % i or '   ') + ' ')
+			out.write(colored('48;5;' + str(i) + ';38;5;' + (v != 0 and '231' or '0'), l == 1 and '%03d' % i or '   ') + ' ')
 			i += 1
 		out.write('\n')
 	if False:
