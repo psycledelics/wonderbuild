@@ -135,7 +135,11 @@ else:
 
 if __name__ == '__main__':
 	for i in xrange(16):
-		out.write(colored('48;5;' + str(i) + ';38;5;' + str((i + 8) % 16), ' ' * 9 + '%02d' % i + ' ' * 9) + ' ')
+		c = '48;5;' + str(i) + ';38;5;' + str((i + 8) % 16)
+		s = ' ' * 3 + '%02d' % i + ' ' * 3
+		out.write(colored(c, s))
+		for x in ('1', '2', '5', '6'): out.write(colored(c + ';' + x, ' ' + x + ' '))
+		out.write(' ')
 		if i == 7: out.write('\n')
 	out.write('\n\n')
 	s = [0] + [0x5f + (0x87 - 0x5f) * x for x in xrange(5)]
