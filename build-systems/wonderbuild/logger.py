@@ -116,9 +116,9 @@ else:
 				_map_r.append(v * scale)
 			if colors == 88:
 				scale = 4
-				for v in xrange(0x8b): m(0, scale)
-				for v in xrange(0x8b, 0xcd): m(1, scale)
-				for v in xrange(0xcd, 0xff): m(2, scale)
+				for x in xrange(0x8b): m(0, scale)
+				for x in xrange(0x8b, 0xcd): m(1, scale)
+				for x in xrange(0xcd, 0xff): m(2, scale)
 				m(3, scale)
 			
 				c1 = 0x2e
@@ -133,18 +133,18 @@ else:
 				#for x in xrange(0x?? - ?, 0x?? + ?): _map_grey[x] = '?'
 			elif colors == 256:
 				scale = 6
-				for v in xrange(0x5f): m(0, scale);
+				for x in xrange(0x5f): m(0, scale);
 				for i in xrange(1, 5):
 					for x in xrange(40): m(i, scale)
 				m(5, scale)
 
 				c1 = 8
 				for x in xrange(0, c1): _map_grey.append('16')
-				i = 231
-				for c2 in xrange(c1, 256, 10):
-					for v in xrange(c1, c2): _map_grey.append(str(i))
-					i += 1; c1 = c2
-				for x in xrange(c2, 256): _map_grey.append('231')
+				i = 232
+				for v in xrange(c1, 248, 10):
+					for x in xrange(10): _map_grey.append(str(i))
+					i += 1
+				for x in xrange(len(_map_grey), 256): _map_grey.append('231')
 				# there are also 4 grey colors in the 6x6x6 color cube, not counting black and white
 				for x in xrange(0x5f, 0x5f + 5): _map_grey[x] = '59'
 				for x in xrange(0x87, 0x87 + 5): _map_grey[x] = '102'
@@ -207,7 +207,9 @@ if __name__ == '__main__':
 			out.write('\n')
 		for l in xrange(2):
 			for c in [0x8] + [0x12 + (0x12 - 0x8) * x for x in xrange(23)]:
-				for x in (0, 1, 3, 4, 6, 8, 9): out.write(colored(color_bg_fg_rgb((c + x, c + x, c + x), (0, 0, 0)), ' '))
+				for x in (0, 1, 3, 4, 6, 8, 9):
+					x += c
+					out.write(colored(color_bg_fg_rgb((x, x, x), (0, 0, 0)), ' '))
 			out.write('\n')
 		# palette querying (xterm only)
 		# default 256-color palette:
