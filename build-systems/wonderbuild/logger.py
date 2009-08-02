@@ -109,36 +109,47 @@ else:
 		_map_b = []
 		_map_grey = []
 		def _fill_maps():
-			scale = {88: 4, 256: 6}[colors]
-			for v in xrange(256):
-				v = v * scale // 256
+			def m(v, scale):
 				_map_b.append(v)
 				v *= scale
 				_map_g.append(v)
 				_map_r.append(v * scale)
 			if colors == 88:
-				i = 0; c1 = 0x2e
-				for v in xrange(0, c1): _map_grey.append('16')
+				scale = 4
+				for v in xrange(0x8b): m(0, scale)
+				for v in xrange(0x8b, 0xcd): m(1, scale)
+				for v in xrange(0xcd, 0xff): m(2, scale)
+				m(3, scale)
+			
+				c1 = 0x2e
+				for x in xrange(0, c1): _map_grey.append('16')
+				i = 80
 				for c2 in (0x5c, 0x73, 0x8b, 0xa2, 0xb9, 0xd0, 0xe7):
-					for v in xrange(c1, c2): _map_grey.append(str(80 + i))
+					for v in xrange(c1, c2): _map_grey.append(str(i))
 					i += 1; c1 = c2
-				for v in xrange(c2, 256): _map_grey.append('87')
+				for x in xrange(c2, 256): _map_grey.append('79')
 				# there are also 2 grey colors in the 4x4x4 color cube, not counting black and white
 				#for x in xrange(0x?? - ?, 0x?? + ?): _map_grey[x] = '?'
 				#for x in xrange(0x?? - ?, 0x?? + ?): _map_grey[x] = '?'
 			elif colors == 256:
-				i = 0; c0 = c1 = 8
-				for v in xrange(0, c1): _map_grey.append('16')
-				for c2 in (c0 + x for x in xrange(0, 240, 10)):
-					for v in xrange(c1, c2): _map_grey.append(str(231 + i))
+				scale = 6
+				for v in xrange(0x5f): m(0, scale);
+				for i in xrange(1, 5):
+					for x in xrange(40): m(i, scale)
+				m(5, scale)
+
+				c1 = 8
+				for x in xrange(0, c1): _map_grey.append('16')
+				i = 231
+				for c2 in xrange(c1, 256, 10):
+					for v in xrange(c1, c2): _map_grey.append(str(i))
 					i += 1; c1 = c2
-				for v in xrange(c2, 256): _map_grey.append('255')
-				if True:
-					# there are also 4 grey colors in the 6x6x6 color cube, not counting black and white
-					for x in xrange(0x5f, 0x5f + 5): _map_grey[x] = '59'
-					for x in xrange(0x87, 0x87 + 5): _map_grey[x] = '102'
-					for x in xrange(0xaf, 0xaf + 5): _map_grey[x] = '145'
-					for x in xrange(0xd7, 0xd7 + 5): _map_grey[x] = '188'
+				for x in xrange(c2, 256): _map_grey.append('231')
+				# there are also 4 grey colors in the 6x6x6 color cube, not counting black and white
+				for x in xrange(0x5f, 0x5f + 5): _map_grey[x] = '59'
+				for x in xrange(0x87, 0x87 + 5): _map_grey[x] = '102'
+				for x in xrange(0xaf, 0xaf + 5): _map_grey[x] = '145'
+				for x in xrange(0xd7, 0xd7 + 5): _map_grey[x] = '188'
 		_fill_maps()
 		def _merge_rgb(rgb):
 			if rgb[0] == rgb[1] and rgb[1] == rgb[2]: return _map_grey[rgb[0]]
@@ -205,5 +216,6 @@ if __name__ == '__main__':
 		# xterm and mrxvt support changing the palette: http://invisible-island.net/xterm/ctlseqs/ctlseqs.html
 		# gnome-terminal has a fixed palette.
 		if False:
-			for i in xrange(255):
-				out.write('\33]4;' + str(i) + ';?\33\\')
+			out.write('\33]4')
+			for i in xrange(256): out.write(';' + str(i) + ';?')
+			out.write('\33\\')
