@@ -99,6 +99,7 @@ else:
 				(rgb[1] >= a and 2 or 0) + \
 				(rgb[2] >= a and 4 or 0)
 			if max(rgb) >= 170: c += 8
+			# TODO bright black is never used
 			return str(c)
 		def color_bg_fg_rgb(bg, fg):
 			return '48;5;' + _merge_rgb(bg) + ';38;5;' + _merge_rgb(fg)
@@ -130,4 +131,28 @@ else:
 		def color_bg_fg_rgb(bg, fg):
 			return '48;5;' + _merge_rgb(bg) + ';38;5;' + _merge_rgb(fg)
 	else:
-		def color_bg_fg_rgb(bg, fg): return ''	
+		def color_bg_fg_rgb(bg, fg): return ''
+
+if __name__ == '__main__':
+	s = [0] + [0x5f + (0x87 - 0x5f) * x for x in xrange(5)]
+	i = 16
+	for r in s:
+		for g in s:
+			for b in s:
+				v = (r + g + b) // 3 < 128 and 255 or 0
+				out.write(colored(color_bg_fg_rgb((r, g, b), (v, v, v)), '%02x/%02x/%02x        ' % (r, g, b)))
+				out.write(colored('48;5;' + str(i) + ';38;5;' + (v != 0 and '231' or '0'), '         %03d' % i) + ' ')
+				i += 1
+			out.write('\n')
+		out.write('\n')
+	for l in xrange(3):
+		i = 232
+		for c in [0x8] + [0x12 + (0x12 - 0x8) * x for x in xrange(23)]:
+			v = c < 128 and 255 or 0
+			out.write(colored(color_bg_fg_rgb((c, c, c), (v, v, v)), l == 1 and '%02x ' % c or '   '))
+			out.write(colored('48;5;' + str(i), l == 1 and '%03d' % i or '   ') + ' ')
+			i += 1
+		out.write('\n')
+	if False:
+		for i in xrange(255):
+			out.write('\33]4;' + str(i) + ';?\33\\')
