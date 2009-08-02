@@ -134,11 +134,24 @@ else:
 		def color_bg_fg_rgb(bg, fg): return ''
 
 if __name__ == '__main__':
-	for i in xrange(16):
-		c = '48;5;' + str(i) + ';38;5;' + str((i + 8) % 16)
-		s = ' ' * 3 + '%02d' % i + ' ' * 3
+	for i in xrange(8):
+		bg = '4' + str(i)
+		c = bg + ';3' + str(7 - i)
+		s = '%02d' % i + ' '
 		out.write(colored(c, s))
 		for x in ('1', '2', '5', '6'): out.write(colored(c + ';' + x, ' ' + x + ' '))
+		out.write(colored(bg + ';37', 'wh '))
+		out.write(colored(bg + ';30', 'bl '))
+		out.write(' ')
+	out.write('\n')
+	for i in xrange(16):
+		bg = '48;5;' + str(i)
+		c = bg + ';38;5;' + str((i + 8) % 16)
+		s = '%02d' % i + ' '
+		out.write(colored(c, s))
+		for x in ('1', '2', '5', '6'): out.write(colored(c + ';' + x, ' ' + x + ' '))
+		out.write(colored(bg + ';38;5;15', 'wh '))
+		out.write(colored(bg + ';38;5;0', 'bl '))
 		out.write(' ')
 		if i == 7: out.write('\n')
 	out.write('\n\n')
