@@ -36,23 +36,26 @@ def use_options(options):
 
 out = sys.stdout
 
+try: import curses
+except ImportError: _curses = False
+else:
+	try: curses.setupterm()
+	except: _curses = False
+	else: _curses = True
+
 def _get_cols():
-	try: import curses
-	except ImportError: pass
-	else:
-		curses.setupterm()
-		return curses.tigetnum('cols')
+	if _curses: return curses.tigetnum('cols')
 	
 	try: import struct, fcntl, termios
 	except ImportError: pass
 	else:
 		if out.isatty():
 			try: lines, cols = struct.unpack(
-						"HHHH",
+						'HHHH',
 						fcntl.ioctl(
 							out.fileno(),
 							termios.TIOCGWINSZ,
-							struct.pack("HHHH", 0, 0, 0, 0)
+							struct.pack('HHHH', 0, 0, 0, 0)
 						)
 				)[:2]
 			except IOError: pass
@@ -67,13 +70,64 @@ cols = _get_cols()
 out_is_dumb = os.environ.get('TERM', 'dumb') in ('dumb', 'emacs') or not out.isatty()
 if out_is_dumb:
 	def colored(color, s): return s
+	colors = 0
+	def color_bg_fg_rgb(bg, fg): return ''
 else:
 	def colored(color, s): return '\33[' + color + 'm' + s + '\33[0m'
-
-
-try: import curses
-except ImportError: pass
-else:
-	curses.setupterm()
-	colors = curses.tigetnum('colors')
-	#if num_colors > 0:
+	if _curses:
+		colors = curses.tigetnum('colors')
+		if \
+			colors == 8 and \
+			os.environ.get('TERM', None) == 'xterm' and \
+			os.environ.get('COLORTERM', None) == 'gnome-terminal': colors = 256
+	else: colors = 8
+	if colors == 8:
+		def _merge_rgb(rgb):
+			a = (rgb[0] + rgb[1] + rgb[2]) // 3
+			return str(
+				(rgb[0] >= a and 1 or 0) + \
+				(rgb[1] >= a and 2 or 0) + \
+				(rgb[2] >= a and 4 or 0)
+			)
+		def color_bg_fg_rgb(bg, fg):
+			return '4' + _merge_rgb(bg) + ';3' + _merge_rgb(fg)
+	elif colors == 16:
+		def _merge_rgb(rgb):
+			a = (rgb[0] + rgb[1] + rgb[2]) // 3
+			c = \
+				(rgb[0] >= a and 1 or 0) + \
+				(rgb[1] >= a and 2 or 0) + \
+				(rgb[2] >= a and 4 or 0)
+			if max(rgb) >= 170: c += 8
+			return str(c)
+		def color_bg_fg_rgb(bg, fg):
+			return '48;5;' + _merge_rgb(bg) + ';38;5;' + _merge_rgb(fg)
+	elif colors == 88 or colors == 256:
+		_map_r = []
+		_map_g = []
+		_map_b = []
+		_map_grey = []
+		def _fill_maps():
+			# note: xterm and mrxvt support changing the palette: http://invisible-island.net/xterm/ctlseqs/ctlseqs.html
+			#       gnome-terminal has a fixed palette.
+			scale = {88: 4, 256: 6}[colors]
+			scale_grey = {88: 8, 256: 24}[colors]
+			offset_grey = {88: 80, 256: 232}[colors]
+			for v in xrange(256):
+				_map_grey.append(str(offset_grey + v * scale_grey // 256))
+				# TODO there are also grey colors in the color cube (4 in 256-color mode, not counting black and white)
+				v = v * scale // 256
+				_map_b.append(v)
+				v *= scale
+				_map_g.append(v)
+				_map_r.append(v * scale)
+			_map_grey[0] = str(16)
+			_map_grey[255] = str(offset_grey - 1)
+		_fill_maps()
+		def _merge_rgb(rgb):
+			if rgb[0] == rgb[1] and rgb[1] == rgb[2]: return _map_grey[rgb[0]]
+			else: return str(16 + _map_r[rgb[0]] + _map_g[rgb[1]] + _map_b[rgb[2]])
+		def color_bg_fg_rgb(bg, fg):
+			return '48;5;' + _merge_rgb(bg) + ';38;5;' + _merge_rgb(fg)
+	else:
+		def color_bg_fg_rgb(bg, fg): return ''	

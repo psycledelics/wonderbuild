@@ -6,7 +6,7 @@ import os, threading
 from collections import deque
 
 from wonderbuild import UserReadableException
-from wonderbuild.logger import out, is_debug, debug, colored, silent
+from wonderbuild.logger import out, is_debug, debug, colored, color_bg_fg_rgb, silent
 from wonderbuild.signature import Sig
 from wonderbuild.option_cfg import OptionCfg
 from wonderbuild.fhs import FHS
@@ -628,7 +628,7 @@ class _BatchCompileTask(ProjectTask):
 		sched_ctx.lock.release()
 		try:
 			if not silent:
-				color = '48;5;25;38;5;15'
+				color = color_bg_fg_rgb((0, 50, 130), (255, 255, 255))
 				if self.cfg.pic: pic = 'pic'; color += ';1'
 				else: pic = 'non-pic';
 				s = [str(s) for s in self.sources]
@@ -897,15 +897,15 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 				if self.ld: sources = self.sources
 				else: sources = changed_sources
 				if not silent:
-					if not self.ld: desc = 'archiving and indexing static lib'; color = '48;5;30;38;5;15'
+					if not self.ld: desc = 'archiving and indexing static lib'; color = color_bg_fg_rgb((0, 100, 100), (255, 255, 255))
 					elif self.kind == ModTask.Kinds.PROG:
 						if self.cfg.pic: pic = 'pic'; color = '1'
 						else: pic = 'non-pic'; color = ''
-						if self.cfg.static_prog: shared = 'static'; color += ';47;30'
-						else: shared = 'dynamic'; color += ';42'
+						if self.cfg.static_prog: shared = 'static'; color += color_bg_fg_rgb((255, 255, 255), (0, 0, 0))
+						else: shared = 'dynamic'; color += color_bg_fg_rgb((0, 130, 0), (255, 255, 255))
 						desc = 'linking ' + shared + ' ' + pic + ' program'
-					elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = '46'
-					else: desc = 'linking shared lib'; color = '43'
+					elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = color_bg_fg_rgb((50, 130, 130), (255, 255, 255))
+					else: desc = 'linking shared lib'; color = color_bg_fg_rgb((130, 130, 0), (255, 255, 255))
 					plus = not self.ld and '+' or ''
 					if __debug__ and is_debug: s = [plus + self._obj_name(s) + '(' + str(s) + ')' for s in sources]
 					else: s = [plus + self._obj_name(s) for s in sources]
