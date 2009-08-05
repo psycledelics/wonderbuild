@@ -74,10 +74,6 @@ class BuildCfg(ClientCfg, Task):
 	def clone(self, class_ = None):
 		if class_ is None: class_ = self.__class__
 		c = ClientCfg.clone(self, class_)
-		try: c._target_platform_binary_format_is_pe = self._target_platform_binary_format_is_pe
-		except AttributeError: pass
-		try: c._pic_flag_defines_pic = self._pic_flag_defines_pic
-		except AttributeError: pass
 		c.lang = self.lang
 		c.cxx_prog = self.cxx_prog
 		c.pic = self.pic
