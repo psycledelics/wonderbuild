@@ -26,4 +26,6 @@
 
 * c lang support.
 
+* don't make target_dir methods depend on target methods, but rather the reverse, so that users may choose to "install" to another dir
+
 * versionned libs.

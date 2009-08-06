@@ -47,7 +47,22 @@ class DetectImplCheckTask(CheckTask):
 		cfg = self.user_build_cfg
 		cfg.kind = self.kind
 		cfg.version = self.version
-		for x in self._setup_build_cfg(sched_ctx): yield x
+		if cfg.impl is None: self._select_impl()
+		if cfg.impl is not None:
+			o = cfg.options
+			# set the programs
+			cxx_prog, ld_prog, ar_prog, ranlib_prog = cfg.impl.progs(cfg)
+			if 'cxx' not in o: cfg.cxx_prog = cxx_prog
+			if 'ld' not in o: cfg.ld_prog = ld_prog
+			if 'ar' not in o: cfg.ar_prog = ar_prog
+			if 'ranlib' not in o: cfg.ranlib_prog = ranlib_prog
+			
+			pe = BinaryFormatPeCheckTask.shared(cfg)
+			pic = PicFlagDefinesPicCheckTask.shared(cfg)
+			cfg.pic_flag_defines_pic = True # allows it to be reentrant during the check itself
+			for x in sched_ctx.parallel_wait(pe, pic): yield x
+			cfg.target_platform_binary_format_is_pe = pe.result
+			cfg.pic_flag_defines_pic = pic.result
 	
 	def do_check_and_set_result(self, sched_ctx):
 		if False: yield
@@ -71,7 +86,7 @@ class DetectImplCheckTask(CheckTask):
 						r = 1
 					if r == 0: cfg.kind = 'msvc'
 					else: cfg.kind = None
-			else: # try some compilers program names until we found one available
+			else: # try some compiler program names until we found one available
 				if not silent:
 					desc = self.desc + ' ...'
 					self.print_check(desc + ' g++')
@@ -79,24 +94,21 @@ class DetectImplCheckTask(CheckTask):
 				except Exception, e:
 					if __debug__ and is_debug: debug('cfg: ' + desc + ': ' + str(e))
 					r = 1
-				if r == 0:
-					cfg.kind = 'gcc'
+				if r == 0: cfg.kind = 'gcc'
 				else:
 					if not silent: self.print_check(desc + ' msvc')
 					try: r, out, err = exec_subprocess_pipe(['cl'], silent=True)
 					except Exception, e:
 						if __debug__ and is_debug: debug('cfg: ' + desc + ': ' + str(e))
 						r = 1
-					if r == 0:
-						cfg.kind = 'msvc'
+					if r == 0: cfg.kind = 'msvc'
 					elif False: # pure posix support not tested
 						if not silent: self.print_check(desc + ' c++')
 						try: r, out, err = exec_subprocess_pipe(['c++'], silent=True)
 						except Exception, e:
 							if __debug__ and is_debug: debug('cfg: ' + desc + ': ' + str(e))
 							r = 1
-						if r == 0:
-							cfg.kind = 'posix'
+						if r == 0: cfg.kind = 'posix'
 					else: cfg.kind = None
 			# set the impl corresponding to the kind
 			self._select_impl()
@@ -118,24 +130,3 @@ class DetectImplCheckTask(CheckTask):
 			from posix_impl import Impl
 			cfg.impl = Impl(self.project.persistent)
 		else: cfg.impl = cfg.version = None
-
-	def _setup_build_cfg(self, sched_ctx):
-		cfg = self.user_build_cfg
-		if cfg.impl is None: self._select_impl()
-		if cfg.impl is not None:
-			o = cfg.options
-			# set the programs
-			cxx_prog, ld_prog, ar_prog, ranlib_prog = cfg.impl.progs(cfg)
-			if 'cxx' not in o: cfg.cxx_prog = cxx_prog
-			if 'ld' not in o: cfg.ld_prog = ld_prog
-			if 'ar' not in o: cfg.ar_prog = ar_prog
-			if 'ranlib' not in o: cfg.ranlib_prog = ranlib_prog
-			
-			pe = BinaryFormatPeCheckTask.shared(cfg)
-			pic = PicFlagDefinesPicCheckTask.shared(cfg)
-
-			cfg.pic_flag_defines_pic = True # allows it to be reentrant during the check itself
-
-			for x in sched_ctx.parallel_wait(pe, pic): yield x
-			cfg.target_platform_binary_format_is_pe = pe.result
-			cfg.pic_flag_defines_pic = pic.result

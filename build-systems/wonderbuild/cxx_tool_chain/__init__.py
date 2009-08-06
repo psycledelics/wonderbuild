@@ -298,7 +298,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 				self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
 				self.ar_prog, self.ranlib_prog
 
-		if True or 'help' not in o: # XXX
+		if True or 'help' not in o: # XXX needs to be done because check tasks need the cfg impl sig
 			from detect_impl import DetectImplCheckTask
 			detect_impl = DetectImplCheckTask.shared(self)
 			for x in sched_ctx.parallel_wait(detect_impl): yield x
@@ -330,7 +330,7 @@ class ModDepPhases(object):
 	def _set_result(self, value): self._result = value
 	result = property(_get_result, _set_result)
 	def __bool__(self): return self.result
-	def __nonzero__(self): return self.__bool__() # __bool__ has become the default in python 3.0
+	def __nonzero__(self): return self.__bool__() # __bool__ has become the default in python 3
 
 	def do_ensure_deps(self): 
 		for dep in self.all_deps:
@@ -457,7 +457,7 @@ class _PreCompileTask(ModDepPhasesWithCfg, ProjectTask):
 		for x in self.do_deps_cxx_phases(sched_ctx): yield x
 		self.do_cxx_phase()
 		if len(self.cfg.pkg_config) != 0:
-			self.cfg.cxx_sig # compute the signature before, we don't need pkg-config cxx flags in the signature
+			self.cfg.cxx_sig # compute the signature before, because we don't need pkg-config cxx flags in the cfg sig
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.project, self.cfg.pkg_config)
 			for x in sched_ctx.parallel_wait(pkg_config_cxx_flags_task): yield x
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
