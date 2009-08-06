@@ -15,7 +15,7 @@ rather than burying everything behind a massive API.
 If you don't like waiting a long time for your builds to finish,
 you'll be pleased with the speed wonderbuild reaches: it has been
 designed from the ground up to be the fastest build tool, and according
-to benchmarks done with it and other various other build tools,
+to benchmarks done with it and various other build tools,
 the goal has been reached, You can read some benchmarks here:
 http://psycle.svn.sourceforge.net/viewvc/psycle/branches/bohan/wonderbuild/benchmarks/time.xml
 
