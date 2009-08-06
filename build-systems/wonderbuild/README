@@ -1,6 +1,6 @@
-===================================================
- Wonderbuild - the fastest programmable build tool
-===================================================
+=======================================================
+ Wonderbuild - an extremely fast, extensible build tool
+=======================================================
 
 Wonderbuild is a build tool that handles all the phases
 involved in building softwares: configuration/checks, build, installation.
