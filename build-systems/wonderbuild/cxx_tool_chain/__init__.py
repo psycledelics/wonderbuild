@@ -762,7 +762,7 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 			sched_ctx.parallel_no_wait(*deps_mod_phases)
 		for x in self.do_deps_cxx_phases(sched_ctx): yield x
 		if len(self.cfg.pkg_config) != 0:
-			self.cfg.cxx_sig # compute the signature before, we don't need pkg-config cxx flags in the signature
+			self.cfg.cxx_sig # compute the signature before, because we don't need pkg-config cxx flags in the cfg sig
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.project, self.cfg.pkg_config)
 			for x in sched_ctx.parallel_wait(pkg_config_cxx_flags_task): yield x
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
@@ -856,7 +856,7 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 						if __debug__ and is_debug: debug('task: dep lib task changed: ' + str(self) + ' ' + str(dep))
 						break
 			if len(self.cfg.pkg_config) != 0:
-				self.cfg.ld_sig # compute the signature before, we don't need pkg-config ld flags in the signature
+				self.cfg.ld_sig # compute the signature before, because we don't need pkg-config ld flags in the cfg sig
 		if not need_process and state[0] != self._mod_sig:
 				if __debug__ and is_debug: debug('task: mod sig changed: ' + str(self))
 				changed_sources = self.sources
