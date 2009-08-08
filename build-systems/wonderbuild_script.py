@@ -6,7 +6,7 @@
 ##############################################################################
 #
 # this script simply builds all of the trunk
-# (except qpsycle, psycle-plugins, and psycle-mfc)
+# (except qpsycle and psycle-mfc)
 #
 ##############################################################################
 
