@@ -15,16 +15,8 @@ if __name__ == '__main__':
 	import sys, os
 	dir = os.path.dirname(__file__)
 	sys.argv.append('--src-dir=' + dir)
-	try: from wonderbuild.main import main
-	except ImportError:
-		dir = os.path.abspath(os.path.join(dir, 'build-systems'))
-		if dir not in sys.path: sys.path.append(dir)
-		try: from wonderbuild.main import main
-		except ImportError:
-			print >> sys.stderr, 'could not find wonderbuild'
-			sys.exit(1)
-		else: main()
-	else: main()
+	from wonderbuild.main import main
+	main()
 
 else:
 	from wonderbuild.script import ScriptTask, ScriptLoaderTask
