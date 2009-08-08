@@ -362,7 +362,7 @@ class ModDepPhases(object):
 			self._dep_depths(dep_depths, 0, expose_private_deps, expose_private_deep_deps)
 
 			depth_deps = {}
-			for dep, depth in dep_depths.iteritems():
+			for dep, depth in dep_depths.iteritems(): # XXX random order here
 				try: depth_deps[depth].append(dep)
 				except KeyError: depth_deps[depth] = [dep]
 
@@ -389,7 +389,7 @@ class ModDepPhasesWithCfg(ModDepPhases):
 	def cfg(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
 
 	@property
-	def expose_private_deep_deps(self): return self.cfg.shared or not self.cfg.static_prog
+	def expose_private_deep_deps(self): return self.cfg.shared or not self.cfg.static_prog # XXX
 
 class _PreCompileTask(ModDepPhasesWithCfg, ProjectTask):
 	def __init__(self, name, base_cfg):
