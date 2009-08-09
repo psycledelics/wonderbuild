@@ -757,16 +757,14 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 		for x in sched_ctx.parallel_wait(self): yield x
 		self.do_ensure_deps()
 		if self.cxx_phase is not None: sched_ctx.parallel_no_wait(self.cxx_phase)
-		rec = True # XXX test
-		if rec:
-				deps = self.all_deps
-				deps_mod_phases = [dep.mod_phase for dep in deps if dep.mod_phase is not None]
-				sched_ctx.parallel_no_wait(*deps_mod_phases)
+		if not self.ld:
+			deps_mod_phases = [dep.mod_phase for dep in self.all_deps if dep.mod_phase is not None]
+			sched_ctx.parallel_no_wait(*deps_mod_phases)
+			deps_mod_phases = []
 		else:
-			if self.ld:
-				deps = self.topologically_sorted_unique_deep_deps(expose_private_deps=True, expose_private_deep_deps=True)
-				deps_mod_phases = [dep.mod_phase for dep in deps if dep.mod_phase is not None]
-				sched_ctx.parallel_no_wait(*deps_mod_phases)
+			deps = self.topologically_sorted_unique_deep_deps(expose_private_deps=True, expose_private_deep_deps=True)
+			deps_mod_phases = [dep.mod_phase for dep in deps if dep.mod_phase is not None]
+			sched_ctx.parallel_no_wait(*deps_mod_phases)
 		for x in self.do_deps_cxx_phases(sched_ctx): yield x
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, because we don't need pkg-config cxx flags in the cfg sig
@@ -830,10 +828,7 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 						continue
 				if __debug__ and is_debug: debug('task: skip: no change: ' + str(s))
 		need_process = False
-		if rec:
-			tasks = deps_mod_phases
-		else:
-			tasks = self.ld and deps_mod_phases or []
+		tasks = self.ld and deps_mod_phases or []
 		if len(changed_sources) != 0:
 			need_process = True
 			batches = []
@@ -854,12 +849,9 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 					break
 		for x in sched_ctx.parallel_wait(*tasks): yield x
 		if self.ld:
-			if True: # XXX -Wl,--as-needed
-				for dep in self.topologically_sorted_unique_deep_deps(
-					expose_private_deps=True, expose_private_deep_deps=True): dep.apply_mod_to(self.cfg)
-			else:
-				for dep in self.topologically_sorted_unique_deep_deps(
-					expose_private_deps=True, expose_private_deep_deps=self.expose_private_deep_deps): dep.apply_mod_to(self.cfg)
+			# XXX -Wl,--as-needed expose_private_deep_deps=self.expose_private_deep_deps
+			for dep in self.topologically_sorted_unique_deep_deps(
+				expose_private_deps=True, expose_private_deep_deps=True): dep.apply_mod_to(self.cfg)
 			if not need_process:
 				for dep in self.all_deps:
 					# when a dependant lib is a static archive, or changes its type from static to shared, we need to relink.
