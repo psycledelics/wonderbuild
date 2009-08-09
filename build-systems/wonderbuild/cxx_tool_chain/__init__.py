@@ -311,7 +311,7 @@ class ModDepPhases(object):
 		self.cxx_phase = self.mod_phase = None
 
 	@property
-	def expose_private_deep_deps(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
+	def expose_private_deep_deps(self): return False
 
 	@property
 	def all_deps(self): return self.public_deps + self.private_deps
@@ -351,6 +351,7 @@ class ModDepPhases(object):
 		for dep in deps: dep.apply_cxx_to(self.cfg)
 
 	def topologically_sorted_unique_deep_deps(self, expose_private_deps, expose_private_deep_deps):
+		if expose_private_deep_deps is None: expose_private_deep_deps = self.expose_private_deep_deps
 		try: return \
 			expose_private_deps and (\
 				expose_private_deep_deps and \
@@ -380,20 +381,13 @@ class ModDepPhases(object):
 			try: d = dep_depths[dep]
 			except KeyError:
 				dep_depths[dep] = depth
-				dep._dep_depths(dep_depths, depth + 1, expose_private_deep_deps, expose_private_deep_deps)
+				dep._dep_depths(dep_depths, depth + 1, dep.expose_private_deep_deps, dep.expose_private_deep_deps)
 			else:
 				if d < depth: dep_depths[dep] = depth
 
-class ModDepPhasesWithCfg(ModDepPhases):
-	@property
-	def cfg(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
-
-	@property
-	def expose_private_deep_deps(self): return self.cfg.shared or not self.cfg.static_prog # XXX
-
-class _PreCompileTask(ModDepPhasesWithCfg, ProjectTask):
+class _PreCompileTask(ModDepPhases, ProjectTask):
 	def __init__(self, name, base_cfg):
-		ModDepPhasesWithCfg.__init__(self)
+		ModDepPhases.__init__(self)
 		ProjectTask.__init__(self, base_cfg.project)
 		self.name = name
 		self.base_cfg = base_cfg
@@ -406,11 +400,11 @@ class _PreCompileTask(ModDepPhasesWithCfg, ProjectTask):
 			return self._cfg
 
 	def __call__(self, sched_ctx):
-		for x in ModDepPhasesWithCfg.__call__(self, sched_ctx): yield x
+		for x in ModDepPhases.__call__(self, sched_ctx): yield x
 		self.cxx_phase = _PreCompileTask._CxxPhaseCallbackTask(self)
 	
 	def apply_cxx_to(self, cfg):
-		if not ModDepPhasesWithCfg.apply_cxx_to(self, cfg): return
+		if not ModDepPhases.apply_cxx_to(self, cfg): return
 		cfg.pch = self.header
 
 	@property
@@ -522,9 +516,9 @@ class _PreCompileTask(ModDepPhasesWithCfg, ProjectTask):
 			sig = self._sig = sig.digest()
 			return sig
 
-class PreCompileTasks(ModDepPhasesWithCfg, ProjectTask):
+class PreCompileTasks(ModDepPhases, ProjectTask):
 	def __init__(self, name, base_cfg):
-		ModDepPhasesWithCfg.__init__(self)
+		ModDepPhases.__init__(self)
 		ProjectTask.__init__(self, base_cfg.project)
 		self.name = name
 		self.base_cfg = base_cfg
@@ -641,7 +635,7 @@ class _BatchCompileTask(ProjectTask):
 			self.cfg.impl.process_cxx_task(self, sched_ctx.lock)
 		finally: sched_ctx.lock.acquire()
 
-class ModTask(ModDepPhasesWithCfg, ProjectTask):
+class ModTask(ModDepPhases, ProjectTask):
 	class Kinds(object):
 		HEADERS = 0
 		PROG = 1
@@ -650,7 +644,7 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 
 	def __init__(self, name, kind, base_cfg, *aliases, **kw):
 		if len(aliases) == 0: aliases = (name,)
-		ModDepPhasesWithCfg.__init__(self)
+		ModDepPhases.__init__(self)
 		ProjectTask.__init__(self, base_cfg.project)
 		self.name = name
 		self.kind = kind
@@ -677,8 +671,17 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 					cfg.pic = True
 			return cfg
 
+	@property
+	def expose_private_deep_deps(self):
+		try: return self._expose_private_deep_deps
+		except AttributeError:
+			self._expose_private_deep_deps = \
+				(not self.ld or self.kind == ModTask.Kinds.PROG and self.cfg.static_prog) and \
+				self.kind != ModTask.Kinds.HEADERS
+			return self._expose_private_deep_deps
+
 	def apply_mod_to(self, cfg):
-		if not ModDepPhasesWithCfg.apply_mod_to(self, cfg): return
+		if not ModDepPhases.apply_mod_to(self, cfg): return
 		if self.kind != ModTask.Kinds.HEADERS:
 			if not self.target_dev_dir in cfg.lib_paths: cfg.lib_paths.append(self.target_dev_dir)
 			cfg.libs.append(self.name)
@@ -758,10 +761,13 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 		self.do_ensure_deps()
 		if self.cxx_phase is not None: sched_ctx.parallel_no_wait(self.cxx_phase)
 		if not self.ld:
-			deps_mod_phases = [dep.mod_phase for dep in self.all_deps if dep.mod_phase is not None]
-			sched_ctx.parallel_no_wait(*deps_mod_phases)
-			deps_mod_phases = []
+			# For static archives, we don't need to wait for the deps,
+			# but we want them to be done when the build finishes so that the resulting archive can be used.
+			deps = (dep.mod_phase for dep in self.all_deps if dep.mod_phase is not None)
+			sched_ctx.parallel_no_wait(*deps)
 		else:
+			# For shared libs and programs, we need all deps before linking.
+			# We schedule them in advance, and don't wait for them right now, but just before linking.
 			deps = self.topologically_sorted_unique_deep_deps(expose_private_deps=True, expose_private_deep_deps=True)
 			deps_mod_phases = [dep.mod_phase for dep in deps if dep.mod_phase is not None]
 			sched_ctx.parallel_no_wait(*deps_mod_phases)
@@ -772,7 +778,9 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 			for x in sched_ctx.parallel_wait(pkg_config_cxx_flags_task): yield x
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
 			if self.ld:
-				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask.shared(self.project, self.cfg.pkg_config, self.expose_private_deep_deps)
+				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask.shared(self.project, self.cfg.pkg_config,
+				 	# XXX pkg-config and static/shared (alternative is self.cfg.static_prog or not self.cfg.shared)
+					expose_private_deep_deps=self.cfg.static_prog)
 				sched_ctx.parallel_no_wait(pkg_config_ld_flags_task)
 		self.do_mod_phase()
 		try: state = self.persistent
@@ -828,6 +836,8 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 						continue
 				if __debug__ and is_debug: debug('task: skip: no change: ' + str(s))
 		need_process = False
+		# For shared libs and programs, we need all deps before linking.
+		# So these are parts of the tasks we need to process before linking.
 		tasks = self.ld and deps_mod_phases or []
 		if len(changed_sources) != 0:
 			need_process = True
@@ -847,15 +857,20 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 					changed_sources = self.sources
 					need_process = True
 					break
+		# Before linking, we wait for the compile tasks to complete.
+		# For shared libs and programs, we also need all deps before linking.
+		# We've scheduled them in advance, and now we wait for them too.
+		# Note: When linking a shared lib on platforms that support -Wl,--undefined,
+		#       which is the default on linux, we could go on even without all deps.
+		#       Linking programs needs all deps, however.
 		for x in sched_ctx.parallel_wait(*tasks): yield x
 		if self.ld:
-			# XXX -Wl,--as-needed expose_private_deep_deps=self.expose_private_deep_deps
 			for dep in self.topologically_sorted_unique_deep_deps(
-				expose_private_deps=True, expose_private_deep_deps=True): dep.apply_mod_to(self.cfg)
+				expose_private_deps=True, expose_private_deep_deps=None): dep.apply_mod_to(self.cfg)
 			if not need_process:
 				for dep in self.all_deps:
-					# when a dependant lib is a static archive, or changes its type from static to shared, we need to relink.
-					# when the check-missing option is on, we also relink to check that external symbols still exist.
+					# When a dependant lib is a static archive, or changes its type from static to shared, we need to relink.
+					# When the check-missing option is on, we also relink to check that external symbols still exist.
 					try: need_process = dep._needed_process and (not dep.ld or dep._type_changed or self.cfg.check_missing)
 					except AttributeError: continue # not a lib task
 					if need_process:
@@ -870,7 +885,7 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 		if not need_process:
 			implicit_deps = state[2]
 			if len(implicit_deps) > len(self.sources):
-				# some source has been removed from the list of sources to build
+				# Some source has been removed from the list of sources to build.
 				need_process = True
 		if not need_process:
 			if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
@@ -1030,28 +1045,28 @@ class _PkgConfigCxxFlagsTask(_PkgConfigFlagsTask):
 
 class _PkgConfigLdFlagsTask(_PkgConfigFlagsTask):
 	@classmethod
-	def shared(class_, project, pkgs, shared):
+	def shared(class_, project, pkgs, expose_private_deep_deps):
 		try: pkg_configs = project.cxx_pkg_configs
 		except AttributeError: pkg_configs = project.cxx_pkg_configs = {}
-		key = '--libs' + (shared and ' ' or '--static ') + ' '.join(pkgs)
+		key = '--libs' + (expose_private_deep_deps and ' --static ' or ' ') + ' '.join(pkgs)
 		try: return pkg_configs[key]
 		except KeyError:
-			task = pkg_configs[key] = class_(project, pkgs, shared)
+			task = pkg_configs[key] = class_(project, pkgs, expose_private_deep_deps)
 			return task
 
-	def __init__(self, project, pkgs, shared):
+	def __init__(self, project, pkgs, expose_private_deep_deps):
 		_PkgConfigFlagsTask.__init__(self, project, pkgs)
-		self.shared = shared
+		self.expose_private_deep_deps = expose_private_deep_deps
 
 	@property
 	def what_desc(self):
-		if self.shared: return 'shared ld flags'
-		else: return 'static ld flags'
+		if self.expose_private_deep_deps: return 'static ld flags'
+		else: return 'shared ld flags'
 	
 	@property
 	def what_args(self):
-		if self.shared: return ['--libs']
-		else: return ['--libs', '--static']
+		if self.expose_private_deep_deps: return ['--libs', '--static']
+		else: return ['--libs']
 
 	def apply_to(self, cfg): cfg.ld_flags += self.result
 
@@ -1093,10 +1108,10 @@ class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 		# note: in case of a positive result, we could as well store a positive result for each individual packages
 		self.results = r == 0
 
-class MultiBuildCheckTask(CheckTask, ModDepPhasesWithCfg):
+class MultiBuildCheckTask(CheckTask, ModDepPhases):
 	def __init__(self, name, base_cfg, pipe_preproc=False, compile=True, link=True):
 		CheckTask.__init__(self, base_cfg.project)
-		ModDepPhasesWithCfg.__init__(self)
+		ModDepPhases.__init__(self)
 		self.name = name
 		self.base_cfg = base_cfg
 		self.pipe_preproc = pipe_preproc
@@ -1104,7 +1119,7 @@ class MultiBuildCheckTask(CheckTask, ModDepPhasesWithCfg):
 		self.link = link
 
 	def __call__(self, sched_ctx):
-		for x in ModDepPhasesWithCfg.__call__(self, sched_ctx): yield x
+		for x in ModDepPhases.__call__(self, sched_ctx): yield x
 		for x in CheckTask.__call__(self, sched_ctx): yield x
 
 	@property
@@ -1117,7 +1132,7 @@ class MultiBuildCheckTask(CheckTask, ModDepPhasesWithCfg):
 			return self._cfg
 
 	def apply_cxx_to(self, cfg):
-		if not ModDepPhasesWithCfg.apply_cxx_to(self, cfg): return
+		if not ModDepPhases.apply_cxx_to(self, cfg): return
 		self.apply_to(cfg)
 
 	def apply_to(self, cfg): pass
