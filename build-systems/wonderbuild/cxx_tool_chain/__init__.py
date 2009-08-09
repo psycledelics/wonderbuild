@@ -345,22 +345,19 @@ class ModDepPhases(object):
 	def apply_mod_to(self, cfg): return not self._applied(cfg, 'mod')
 	
 	def do_deps_cxx_phases(self, sched_ctx):
-		deps = self.topologically_sorted_unique_deep_deps(expose_private_deps=True, expose_private_deep_deps=False)
+		deps = self.topologically_sorted_unique_deep_deps(expose_private_deep_deps=False)
 		cxx_phases = [dep.cxx_phase for dep in deps if dep.cxx_phase is not None]
 		for x in sched_ctx.parallel_wait(*cxx_phases): yield x
 		for dep in deps: dep.apply_cxx_to(self.cfg)
 
-	def topologically_sorted_unique_deep_deps(self, expose_private_deps, expose_private_deep_deps):
-		if expose_private_deep_deps is None: expose_private_deep_deps = self.expose_private_deep_deps
+	def topologically_sorted_unique_deep_deps(self, expose_private_deep_deps):
 		try: return \
-			expose_private_deps and (\
-				expose_private_deep_deps and \
-				self._private_private_topologically_sorted_unique_deep_deps or \
-				self._private_public_topologically_sorted_unique_deep_deps \
-			) or self._public_public_topologically_sorted_unique_deep_deps
+			expose_private_deep_deps is None and self._private_cut_topologically_sorted_unique_deep_deps or \
+			expose_private_deep_deps and self._private_topologically_sorted_unique_deep_deps or \
+			self._public_topologically_sorted_unique_deep_deps
 		except AttributeError:
 			dep_depths = {}
-			self._dep_depths(dep_depths, 0, expose_private_deps, expose_private_deep_deps)
+			self._dep_depths(dep_depths, 0, True, expose_private_deep_deps)
 
 			depth_deps = {}
 			for dep, depth in dep_depths.iteritems(): # XXX random order here
@@ -370,10 +367,9 @@ class ModDepPhases(object):
 			result = []
 			for depth in xrange(len(depth_deps)): result += depth_deps[depth]
 
-			if expose_private_deps:
-				if expose_private_deep_deps: self._private_private_topologically_sorted_unique_deep_deps = result
-				else: self._private_public_topologically_sorted_unique_deep_deps = result
-			else: self._public_public_topologically_sorted_unique_deep_deps = result
+			if expose_private_deep_deps is None: self._private_cut_topologically_sorted_unique_deep_deps = result
+			elif expose_private_deep_deps: self._private_topologically_sorted_unique_deep_deps = result
+			else: self._public_topologically_sorted_unique_deep_deps = result
 			return result
 		
 	def _dep_depths(self, dep_depths, depth, expose_private_deps, expose_private_deep_deps):
@@ -381,7 +377,10 @@ class ModDepPhases(object):
 			try: d = dep_depths[dep]
 			except KeyError:
 				dep_depths[dep] = depth
-				dep._dep_depths(dep_depths, depth + 1, dep.expose_private_deep_deps, dep.expose_private_deep_deps)
+				if expose_private_deep_deps is None:
+					dep._dep_depths(dep_depths, depth + 1, dep.expose_private_deep_deps, dep.expose_private_deep_deps and None)
+				else:
+					dep._dep_depths(dep_depths, depth + 1, expose_private_deep_deps, expose_private_deep_deps)
 			else:
 				if d < depth: dep_depths[dep] = depth
 
@@ -768,7 +767,7 @@ class ModTask(ModDepPhases, ProjectTask):
 		else:
 			# For shared libs and programs, we need all deps before linking.
 			# We schedule them in advance, and don't wait for them right now, but just before linking.
-			deps = self.topologically_sorted_unique_deep_deps(expose_private_deps=True, expose_private_deep_deps=True)
+			deps = self.topologically_sorted_unique_deep_deps(expose_private_deep_deps=True)
 			deps_mod_phases = [dep.mod_phase for dep in deps if dep.mod_phase is not None]
 			sched_ctx.parallel_no_wait(*deps_mod_phases)
 		for x in self.do_deps_cxx_phases(sched_ctx): yield x
@@ -865,8 +864,7 @@ class ModTask(ModDepPhases, ProjectTask):
 		#       Linking programs needs all deps, however.
 		for x in sched_ctx.parallel_wait(*tasks): yield x
 		if self.ld:
-			for dep in self.topologically_sorted_unique_deep_deps(
-				expose_private_deps=True, expose_private_deep_deps=None): dep.apply_mod_to(self.cfg)
+			for dep in self.topologically_sorted_unique_deep_deps(expose_private_deep_deps=None): dep.apply_mod_to(self.cfg)
 			if not need_process:
 				for dep in self.all_deps:
 					# When a dependant lib is a static archive, or changes its type from static to shared, we need to relink.
