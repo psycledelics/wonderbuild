@@ -22,14 +22,114 @@ else:
 
 	class Wonderbuild(ScriptTask):
 		def __call__(self, sched_ctx):
-			for x in sched_ctx.parallel_wait(
-				*(
-					ScriptLoaderTask.shared(self.project, self.src_dir / dir) \
-					for dir in (
-						'dyn-prog,shared-lib,shared-lib',
-						#'dyn-prog,static-lib,shared-lib',
-						#'dyn-prog,static-lib,static-lib',
-						#'static-prog,static-lib,static-lib'
-					)
-				)
-			): yield x
+			for static_wrapper in (True, False):
+				for static_impl in (True, False):
+					for x in self.variant(sched_ctx, False, static_wrapper, static_impl): yield x
+			for x in self.variant(sched_ctx, True, True, True): yield x
+						
+		def variant(self, sched_ctx, static_prog, static_wrapper, static_impl):
+			variant = \
+				(static_prog and 'static' or 'dyn') + '-prog,' + \
+				(static_wrapper and 'static' or 'shared') + '-wrapper,' + \
+				(static_impl and 'static' or 'shared') + '-impl'
+
+			src_dir = self.src_dir / 'src'
+
+			from wonderbuild.cxx_tool_chain import UserBuildCfgTask, ModTask
+			from wonderbuild.install import InstallTask
+
+			build_cfg = UserBuildCfgTask.shared(self.project)
+			for x in sched_ctx.parallel_wait(build_cfg): sched_ctx = yield x
+			build_cfg = build_cfg.new_or_clone()
+			build_cfg.include_paths.append(src_dir)
+			
+			build_cfg.shared = True
+			build_cfg.static_prog = False
+			
+			static_build_cfg = build_cfg.clone()
+			static_build_cfg.shared = False
+			static_build_cfg.static_prog = False
+	
+			# dependencies: MainProg -> LibWrapper -> LibImpl
+
+			class LibImpl(ModTask):
+				def __init__(self): ModTask.__init__(self,
+					'impl' + (static_impl and '-static' or '-shared'),
+					ModTask.Kinds.LIB, static_impl and static_build_cfg or build_cfg)
+
+				def __call__(self, sched_ctx):
+					self.result = True
+					self.cxx_phase = LibImpl.Install(self.project, self.name + '-headers')
+					for x in ModTask.__call__(self, sched_ctx): yield x
+
+				def do_mod_phase(self):
+					for s in (src_dir / 'impl').find_iter(in_pats = ('*.cpp',)): self.sources.append(s)
+
+				def apply_cxx_to(self, cfg):
+					if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+					
+				class Install(InstallTask):
+					def __init__(self, project, name): InstallTask.__init__(self, project, name + '-' + variant)
+						
+					@property
+					def trim_prefix(self): return src_dir
+
+					@property
+					def sources(self):
+						try: return self._sources
+						except AttributeError:
+							self._sources = []
+							for s in (self.trim_prefix / 'impl').find_iter(in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',)): self._sources.append(s)
+							return self._sources
+	
+					@property
+					def dest_dir(self): return self.fhs.include / variant
+			lib_impl = LibImpl()
+
+			class LibWrapper(ModTask):
+				def __init__(self): ModTask.__init__(self,
+					'wrapper' + (static_impl and '-static' or '-shared'),
+					ModTask.Kinds.LIB, static_wrapper and static_build_cfg or build_cfg)
+
+				def __call__(self, sched_ctx):
+					self.private_deps = [lib_impl]
+					self.result = True
+					self.cxx_phase = LibWrapper.Install(self.project, self.name + '-headers')
+					for x in ModTask.__call__(self, sched_ctx): yield x
+
+				def do_mod_phase(self):
+					for s in (src_dir / 'wrapper').find_iter(in_pats = ('*.cpp',)): self.sources.append(s)
+
+				def apply_cxx_to(self, cfg):
+					if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+
+				class Install(InstallTask):
+					def __init__(self, project, name): InstallTask.__init__(self, project, name + '-' + variant)
+
+					@property
+					def trim_prefix(self): return src_dir
+
+					@property
+					def sources(self):
+						try: return self._sources
+						except AttributeError:
+							self._sources = []
+							for s in (self.trim_prefix / 'wrapper').find_iter(in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',)): self._sources.append(s)
+							return self._sources
+	
+					@property
+					def dest_dir(self): return self.fhs.include / variant
+			lib_wrapper = LibWrapper()
+
+			class MainProg(ModTask):
+				def __init__(self): ModTask.__init__(self,
+					'main' + (static_impl and '-static' or '-dyn'),
+					ModTask.Kinds.PROG, static_prog and static_build_cfg or build_cfg, 'default')
+
+				def __call__(self, sched_ctx):
+					self.public_deps = [lib_wrapper]
+					for x in ModTask.__call__(self, sched_ctx): yield x
+			
+				def do_mod_phase(self):
+					for s in (src_dir / 'main').find_iter(in_pats = ('*.cpp',)): self.sources.append(s)
+			main_prog = MainProg()
