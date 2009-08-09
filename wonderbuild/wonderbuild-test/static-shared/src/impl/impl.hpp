@@ -2,9 +2,9 @@
 #define IMPL__IMPL_HPP
 #pragma once
 
-#if !defined _WIN32 || FOO < 0
+#if !defined _WIN32 || IMPL < 0
 	#define IMPL__LINK
-#elif FOO
+#elif IMPL
 	#define IMPL__LINK __declspec(dllexport)
 #else
 	#define IMPL__LINK __declspec(dllimport)

@@ -2,9 +2,9 @@
 #define WRAPPER__WRAPPER_HPP
 #pragma once
 
-#if !defined _WIN32 || FOO < 0
+#if !defined _WIN32 || WRAPPER < 0
 	#define WRAPPER__LINK
-#elif FOO
+#elif WRAPPER
 	#define WRAPPER__LINK __declspec(dllexport)
 #else
 	#define WRAPPER__LINK __declspec(dllimport)
