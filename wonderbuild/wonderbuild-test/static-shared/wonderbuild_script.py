@@ -41,15 +41,15 @@ else:
 
 			def variant(sched_ctx, static_prog, static_wrapper, static_impl):
 				variant_name = \
-					(static_prog and 'static' or 'dyn') + '-prog,' + \
-					(static_wrapper and 'static' or 'shared') + '-wrapper,' + \
+					(static_prog and 'static' or 'dyn') + '-prog--' + \
+					(static_wrapper and 'static' or 'shared') + '-wrapper--' + \
 					(static_impl and 'static' or 'shared') + '-impl'
 
 				# dependencies: MainProg -> LibWrapper -> LibImpl
 
 				class LibImpl(ModTask):
 					def __init__(self): ModTask.__init__(self,
-						variant_name + ',impl',
+						variant_name + '--impl',
 						ModTask.Kinds.LIB, static_impl and static_build_cfg or build_cfg)
 
 					def __call__(self, sched_ctx):
@@ -81,7 +81,7 @@ else:
 
 				class LibWrapper(ModTask):
 					def __init__(self): ModTask.__init__(self,
-						variant_name + ',wrapper',
+						variant_name + '--wrapper',
 						ModTask.Kinds.LIB, static_wrapper and static_build_cfg or build_cfg)
 
 					def __call__(self, sched_ctx):
@@ -114,7 +114,7 @@ else:
 
 				class MainProg(ModTask):
 					def __init__(self): ModTask.__init__(self,
-						variant_name + ',main',
+						variant_name + '--main',
 						ModTask.Kinds.PROG, static_prog and static_build_cfg or build_cfg, 'default')
 
 					def __call__(self, sched_ctx):
