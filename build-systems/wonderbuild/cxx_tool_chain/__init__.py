@@ -618,7 +618,7 @@ class _BatchCompileTask(ProjectTask):
 		sched_ctx.lock.release()
 		try:
 			if not silent:
-				color = color_bg_fg_rgb((0, 100, 150), (255, 255, 255))
+				color = color_bg_fg_rgb((0, 150, 180), (255, 255, 255))
 				if self.cfg.pic: pic = 'pic'; color += ';1'
 				else: pic = 'non-pic';
 				s = [str(s) for s in self.sources]
@@ -921,7 +921,7 @@ class ModTask(ModDepPhases, ProjectTask):
 						if self.cfg.pic: pic = 'pic'; color += ';1'
 						else: pic = 'non-pic'
 						desc = 'linking ' + shared + ' ' + pic + ' program'
-					elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = color_bg_fg_rgb((50, 150, 150), (255, 255, 255))
+					elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = color_bg_fg_rgb((180, 150, 80), (255, 255, 255))
 					else: desc = 'linking shared lib'; color = color_bg_fg_rgb((150, 150, 0), (255, 255, 255))
 					plus = not self.ld and '+' or ''
 					if __debug__ and is_debug: s = [plus + self._obj_name(s) + '(' + str(s) + ')' for s in sources]
