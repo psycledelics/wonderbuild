@@ -767,7 +767,7 @@ class ModTask(ModDepPhases, ProjectTask):
 		else:
 			# For shared libs and programs, we need all deps before linking.
 			# We schedule them in advance, and don't wait for them right now, but just before linking.
-			deps = self.topologically_sorted_unique_deep_deps(expose_private_deep_deps=True)
+			deps = self.topologically_sorted_unique_deep_deps(expose_private_deep_deps=True) # XXX or is expose_private_deep_deps=None enough?
 			deps_mod_phases = [dep.mod_phase for dep in deps if dep.mod_phase is not None]
 			sched_ctx.parallel_no_wait(*deps_mod_phases)
 		for x in self.do_deps_cxx_phases(sched_ctx): yield x
