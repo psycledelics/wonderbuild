@@ -175,6 +175,7 @@ class Impl(object):
 		if cfg.shared: args.append('-shared')
 		elif cfg.static_prog: args.append('-static') # we can have both -shared and -static but that's not very useful
 		args.append('-Wl,-rpath=$ORIGIN' + os.sep + cfg.fhs.lib.rel_path(cfg.fhs.bin))
+		args.append('-Wl,-rpath-link=' + cfg.bld_rel_path(cfg.fhs.lib))
 		for p in cfg.lib_paths: args.append('-L' + cfg.bld_rel_path(p))
 		for l in cfg.libs: args.append('-l' + l)
 		if len(cfg.static_libs):
