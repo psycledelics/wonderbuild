@@ -32,6 +32,8 @@ else:
 			build_cfg = build_cfg.new_or_clone()
 			build_cfg.include_paths.append(src_dir)
 			
+			#build_cfg.pic = True
+
 			build_cfg.shared = True
 			build_cfg.static_prog = False
 			
@@ -129,3 +131,4 @@ else:
 			variant(sched_ctx, False, True, True)
 			variant(sched_ctx, False, True, False)
 			variant(sched_ctx, False, False, False)
+			#variant(sched_ctx, False, False, True)
