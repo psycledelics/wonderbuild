@@ -624,7 +624,7 @@ class _BatchCompileTask(ProjectTask):
 		sched_ctx.lock.release()
 		try:
 			if not silent:
-				color = color_bg_fg_rgb((0, 50, 130), (255, 255, 255))
+				color = color_bg_fg_rgb((0, 100, 150), (255, 255, 255))
 				if self.cfg.pic: pic = 'pic'; color += ';1'
 				else: pic = 'non-pic';
 				s = [str(s) for s in self.sources]
@@ -893,15 +893,15 @@ class ModTask(ModDepPhasesWithCfg, ProjectTask):
 				if self.ld: sources = self.sources
 				else: sources = changed_sources
 				if not silent:
-					if not self.ld: desc = 'archiving and indexing static lib'; color = color_bg_fg_rgb((0, 100, 100), (255, 255, 255))
+					if not self.ld: desc = 'archiving and indexing static lib'; color = color_bg_fg_rgb((120, 100, 120), (255, 255, 255))
 					elif self.kind == ModTask.Kinds.PROG:
-						if self.cfg.pic: pic = 'pic'; color = '1'
-						else: pic = 'non-pic'; color = ''
-						if self.cfg.static_prog: shared = 'static'; color += color_bg_fg_rgb((255, 255, 255), (0, 0, 0))
-						else: shared = 'dynamic'; color += color_bg_fg_rgb((0, 130, 0), (255, 255, 255))
+						if self.cfg.static_prog: shared = 'static'; color = color_bg_fg_rgb((0, 180, 0), (255, 255, 255))
+						else: shared = 'dynamic'; color = color_bg_fg_rgb((130, 180, 0), (255, 255, 255))
+						if self.cfg.pic: pic = 'pic'; color += ';1'
+						else: pic = 'non-pic'
 						desc = 'linking ' + shared + ' ' + pic + ' program'
-					elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = color_bg_fg_rgb((50, 130, 130), (255, 255, 255))
-					else: desc = 'linking shared lib'; color = color_bg_fg_rgb((130, 130, 0), (255, 255, 255))
+					elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = color_bg_fg_rgb((50, 150, 150), (255, 255, 255))
+					else: desc = 'linking shared lib'; color = color_bg_fg_rgb((150, 150, 0), (255, 255, 255))
 					plus = not self.ld and '+' or ''
 					if __debug__ and is_debug: s = [plus + self._obj_name(s) + '(' + str(s) + ')' for s in sources]
 					else: s = [plus + self._obj_name(s) for s in sources]
