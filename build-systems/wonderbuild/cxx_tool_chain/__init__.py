@@ -351,33 +351,22 @@ class ModDepPhases(object):
 			expose_private_deep_deps and self._private_topologically_sorted_unique_deep_deps or \
 			self._public_topologically_sorted_unique_deep_deps
 		except AttributeError:
-			layers = []
-			self._dep_depths(layers, 0, True, expose_private_deep_deps)
-			
-			late_layers = []; seen = set()
-			for layer in reversed(layers): # reversed so that static libs appear after their clients
-				late_layer = []
-				for dep in layer:
-					if dep not in seen: seen.add(dep); late_layer.append(dep) # ordering matters for sig
-				late_layers.append(late_layer)
-			
-			result = []
-			for layer in reversed(late_layers): # reversed so that static libs appear after their clients
-				for dep in layer: result.append(dep) # ordering matters for sig
-
+			result = deque(); seen = set() # ordering matters for sig, and static libs must appear after their clients
+			for dep in self.all_deps: dep._dep_depths(result, seen, True, expose_private_deep_deps)
 			if expose_private_deep_deps is None: self._private_cut_topologically_sorted_unique_deep_deps = result
 			elif expose_private_deep_deps: self._private_topologically_sorted_unique_deep_deps = result
 			else: self._public_topologically_sorted_unique_deep_deps = result
 			return result
 		
-	def _dep_depths(self, layers, depth, expose_private_deps, expose_private_deep_deps):
+	def _dep_depths(self, result, seen, expose_private_deps, expose_private_deep_deps):
+		if self in seen: return
+		seen.add(self)
 		for dep in expose_private_deps and self.all_deps or self.public_deps:
-			try: layers[depth].append(dep)
-			except IndexError: layers.append([dep])
 			if expose_private_deep_deps is None:
-				dep._dep_depths(layers, depth + 1, dep.expose_private_deep_deps, dep.expose_private_deep_deps and None)
+				dep._dep_depths(result, seen, dep.expose_private_deep_deps, dep.expose_private_deep_deps and None)
 			else:
-				dep._dep_depths(layers, depth + 1, expose_private_deep_deps, expose_private_deep_deps)
+				dep._dep_depths(result, seen, expose_private_deep_deps, expose_private_deep_deps)
+		result.appendleft(self)
 
 class _PreCompileTask(ModDepPhases, ProjectTask):
 	def __init__(self, name, base_cfg):
