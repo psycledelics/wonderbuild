@@ -120,8 +120,7 @@ class BuildCfg(ClientCfg, Task):
 				sig.update(k)
 				v = self.defines[k]
 				if v is not None: sig.update(v)
-			# XXX not good to sign the sorted include path (this is due to topologically_sorted_unique_deep_deps not returning always the same order)
-			for p in sorted(p.abs_path for p in self.include_paths): sig.update(p)
+			for p in self.include_paths: sig.update(p.abs_path)
 			if self.pch is not None: sig.update(self.pch.abs_path)
 			for i in self.includes: sig.update(i.abs_path)
 			for f in self.cxx_flags: sig.update(f)
@@ -136,13 +135,9 @@ class BuildCfg(ClientCfg, Task):
 			sig = Sig(self._common_sig)
 			sig.update(str(self.shared))
 			sig.update(str(self.static_prog))
-			# XXX not good to sign the sorted lib path  (this is due to topologically_sorted_unique_deep_deps not returning always the same order)			
-			for p in sorted(p.abs_path for p in self.lib_paths): sig.update(p)
-			self.libs.sort();
+			for p in self.lib_paths: sig.update(p.abs_path)
 			for l in self.libs: sig.update(l)
-			self.static_libs.sort()
 			for l in self.static_libs: sig.update(l)
-			self.shared_libs.sort()
 			for l in self.shared_libs: sig.update(l)
 			sig.update(self.impl.common_mod_env_sig)
 			sig = self.__common_mod_sig = sig.digest()
@@ -348,7 +343,7 @@ class ModDepPhases(object):
 		deps = self.topologically_sorted_unique_deep_deps(expose_private_deep_deps=False)
 		cxx_phases = [dep.cxx_phase for dep in deps if dep.cxx_phase is not None]
 		for x in sched_ctx.parallel_wait(*cxx_phases): yield x
-		for dep in deps: dep.apply_cxx_to(self.cfg)
+		for dep in deps: dep.apply_cxx_to(self.cfg) # ordering matters for sig
 
 	def topologically_sorted_unique_deep_deps(self, expose_private_deep_deps):
 		try: return \
@@ -356,33 +351,30 @@ class ModDepPhases(object):
 			expose_private_deep_deps and self._private_topologically_sorted_unique_deep_deps or \
 			self._public_topologically_sorted_unique_deep_deps
 		except AttributeError:
-			dep_depths = {}
-			self._dep_depths(dep_depths, 0, True, expose_private_deep_deps)
-
-			depth_deps = {}
-			for dep, depth in dep_depths.iteritems(): # XXX random order here
-				try: depth_deps[depth].append(dep)
-				except KeyError: depth_deps[depth] = [dep]
-
+			layers = []
+			self._dep_depths(layers, 0, True, expose_private_deep_deps)
+			
 			result = []
-			for depth in xrange(len(depth_deps)): result += depth_deps[depth]
+			seen = set()
+			for layer in reversed(layers): # reversed to prevent static libs from appearing sooner than their clients
+				for dep in layer:
+					if dep not in seen:
+						seen.add(dep)
+						result.append(dep) # ordering matters for sig
 
 			if expose_private_deep_deps is None: self._private_cut_topologically_sorted_unique_deep_deps = result
 			elif expose_private_deep_deps: self._private_topologically_sorted_unique_deep_deps = result
 			else: self._public_topologically_sorted_unique_deep_deps = result
 			return result
 		
-	def _dep_depths(self, dep_depths, depth, expose_private_deps, expose_private_deep_deps):
+	def _dep_depths(self, layers, depth, expose_private_deps, expose_private_deep_deps):
 		for dep in expose_private_deps and self.all_deps or self.public_deps:
-			try: d = dep_depths[dep]
-			except KeyError:
-				dep_depths[dep] = depth
-				if expose_private_deep_deps is None:
-					dep._dep_depths(dep_depths, depth + 1, dep.expose_private_deep_deps, dep.expose_private_deep_deps and None)
-				else:
-					dep._dep_depths(dep_depths, depth + 1, expose_private_deep_deps, expose_private_deep_deps)
+			try: layers[depth].append(dep)
+			except IndexError: layers.append([dep])
+			if expose_private_deep_deps is None:
+				dep._dep_depths(layers, depth + 1, dep.expose_private_deep_deps, dep.expose_private_deep_deps and None)
 			else:
-				if d < depth: dep_depths[dep] = depth
+				dep._dep_depths(layers, depth + 1, expose_private_deep_deps, expose_private_deep_deps)
 
 class _PreCompileTask(ModDepPhases, ProjectTask):
 	def __init__(self, name, base_cfg):
@@ -864,7 +856,8 @@ class ModTask(ModDepPhases, ProjectTask):
 		#       Linking programs needs all deps, however.
 		for x in sched_ctx.parallel_wait(*tasks): yield x
 		if self.ld:
-			for dep in self.topologically_sorted_unique_deep_deps(expose_private_deep_deps=None): dep.apply_mod_to(self.cfg)
+			for dep in self.topologically_sorted_unique_deep_deps(expose_private_deep_deps=None):
+				dep.apply_mod_to(self.cfg) # ordering matters for sig
 			if not need_process:
 				for dep in self.all_deps:
 					# When a dependant lib is a static archive, or changes its type from static to shared, we need to relink.
