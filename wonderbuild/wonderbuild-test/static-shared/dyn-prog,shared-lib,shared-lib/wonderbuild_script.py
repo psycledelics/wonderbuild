@@ -22,7 +22,7 @@ from wonderbuild.script import ScriptTask, ScriptLoaderTask
 class Wonderbuild(ScriptTask):
 	def __call__(self, sched_ctx):
 
-		src_dir = self.src_dir / 'src'
+		src_dir = self.src_dir.parent / 'src'
 
 		from wonderbuild.cxx_tool_chain import UserBuildCfgTask, ModTask
 		from wonderbuild.install import InstallTask
@@ -39,6 +39,7 @@ class Wonderbuild(ScriptTask):
 			def __init__(self): ModTask.__init__(self, 'impl', ModTask.Kinds.LIB, build_cfg)
 
 			def __call__(self, sched_ctx):
+				self.result = True
 				self.cxx_phase = LibImpl.Install(self.project, self.name + '-headers')
 				for x in ModTask.__call__(self, sched_ctx): yield x
 
@@ -69,6 +70,7 @@ class Wonderbuild(ScriptTask):
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [lib_impl]
+				self.result = True
 				self.cxx_phase = LibWrapper.Install(self.project, self.name + '-headers')
 				for x in ModTask.__call__(self, sched_ctx): yield x
 

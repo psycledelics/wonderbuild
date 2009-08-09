@@ -32,7 +32,7 @@ else:
 		def __call__(self, sched_ctx):
 			for x in sched_ctx.parallel_wait(
 				*(
-					ScriptLoaderTask.shared(self.project, self.src_dir.parent / dir) \
+					ScriptLoaderTask.shared(self.project, self.src_dir / dir) \
 					for dir in (
 						'static-shared',
 						'pre-compiled'

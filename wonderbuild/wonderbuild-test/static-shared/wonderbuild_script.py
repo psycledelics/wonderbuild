@@ -24,12 +24,12 @@ else:
 		def __call__(self, sched_ctx):
 			for x in sched_ctx.parallel_wait(
 				*(
-					ScriptLoaderTask.shared(self.project, self.src_dir.parent / dir) \
+					ScriptLoaderTask.shared(self.project, self.src_dir / dir) \
 					for dir in (
 						'dyn-prog,shared-lib,shared-lib',
-						'dyn-prog,static-lib,shared-lib',
-						'dyn-prog,static-lib,static-lib',
-						'static-prog,static-lib,static-lib'
+						#'dyn-prog,static-lib,shared-lib',
+						#'dyn-prog,static-lib,static-lib',
+						#'static-prog,static-lib,static-lib'
 					)
 				)
 			): yield x

@@ -1,8 +1,6 @@
-#include <foo/foo.hpp>
-#include <bar/bar.hpp>
+#include <wrapper/wrapper.hpp>
 
 int main() {
-	foo();
-	bar();
+	wrapper();
 	return 0;
 }

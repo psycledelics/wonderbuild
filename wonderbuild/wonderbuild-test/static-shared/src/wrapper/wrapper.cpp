@@ -1,9 +1,7 @@
-#include "foo.hpp"
+#include "wrapper.hpp"
+#include <impl/impl.hpp>
 #include <iostream>
 
-void foo() {
-	std::cout << "foo\n";
-	#if defined __GNUG__
-		#warning foo
-	#endif
+void wrapper() {
+	impl();
 }

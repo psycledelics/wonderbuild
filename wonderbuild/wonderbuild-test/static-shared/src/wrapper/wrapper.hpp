@@ -1,19 +1,15 @@
-#ifndef FOO__FOO_HPP
-#define FOO__FOO_HPP
+#ifndef WRAPPER__WRAPPER_HPP
+#define WRAPPER__WRAPPER_HPP
 #pragma once
 
 #if !defined _WIN32 || FOO < 0
-	#define FOO_LINK
+	#define WRAPPER__LINK
 #elif FOO
-	#define FOO_LINK __declspec(dllexport)
+	#define WRAPPER__LINK __declspec(dllexport)
 #else
-	#define FOO_LINK __declspec(dllimport)
+	#define WRAPPER__LINK __declspec(dllimport)
 #endif
 
-#if 0
-	#include "bar.hpp"
-#endif
-
-FOO_LINK void foo();
+WRAPPER__LINK void wrapper();
 
 #endif
