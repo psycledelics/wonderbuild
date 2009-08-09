@@ -352,21 +352,20 @@ class ModDepPhases(object):
 			self._public_topologically_sorted_unique_deep_deps
 		except AttributeError:
 			result = deque(); seen = set() # ordering matters for sig, and static libs must appear after their clients
-			self._dep_depths(result, seen, True, True, expose_private_deep_deps)
+			self._topologically_sorted_unique_deep_deps(result, seen, True, True, expose_private_deep_deps)
 			if expose_private_deep_deps is None: self._private_cut_topologically_sorted_unique_deep_deps = result
 			elif expose_private_deep_deps: self._private_topologically_sorted_unique_deep_deps = result
 			else: self._public_topologically_sorted_unique_deep_deps = result
 			return result
 
-	def _dep_depths(self, result, seen, root, expose_private_deps, expose_private_deep_deps):
+	def _topologically_sorted_unique_deep_deps(self, result, seen, root, expose_private_deps, expose_private_deep_deps):
 		if not root:
 			if self in seen: return
 			seen.add(self)
 		for dep in expose_private_deps and self.all_deps or self.public_deps:
-			if expose_private_deep_deps is None:
-				dep._dep_depths(result, seen, False, dep.expose_private_deep_deps, dep.expose_private_deep_deps and None)
-			else:
-				dep._dep_depths(result, seen, False, expose_private_deep_deps, expose_private_deep_deps)
+			if expose_private_deep_deps is None: dep._topologically_sorted_unique_deep_deps(result, seen, False,
+				dep.expose_private_deep_deps, dep.expose_private_deep_deps and None)
+			else: dep._topologically_sorted_unique_deep_deps(result, seen, False, expose_private_deep_deps, expose_private_deep_deps)
 		if not root: result.appendleft(self)
 
 class _PreCompileTask(ModDepPhases, ProjectTask):
