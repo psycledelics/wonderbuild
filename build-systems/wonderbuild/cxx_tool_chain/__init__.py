@@ -354,10 +354,16 @@ class ModDepPhases(object):
 			layers = []
 			self._dep_depths(layers, 0, True, expose_private_deep_deps)
 			
-			result = []; seen = set()
+			late_layers = []; seen = set()
 			for layer in reversed(layers): # reversed so that static libs appear after their clients
+				late_layer = []
 				for dep in layer:
-					if dep not in seen: seen.add(dep); result.append(dep) # ordering matters for sig
+					if dep not in seen: seen.add(dep); late_layer.append(dep) # ordering matters for sig
+				late_layers.append(late_layer)
+			
+			result = []
+			for layer in reversed(late_layers): # reversed so that static libs appear after their clients
+				for dep in layer: result.append(dep) # ordering matters for sig
 
 			if expose_private_deep_deps is None: self._private_cut_topologically_sorted_unique_deep_deps = result
 			elif expose_private_deep_deps: self._private_topologically_sorted_unique_deep_deps = result
