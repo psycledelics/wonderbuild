@@ -43,9 +43,9 @@ class Wonderbuild(ScriptTask):
 			def __init__(self): PreCompileTasks.__init__(self, 'pch', build_cfg)
 
 			def __call__(self, sched_ctx):
-				self.public_deps = [std_math, glibmm]
+				self.public_deps = [std_math]
 				req = self.public_deps
-				opt = [std_math, glibmm]
+				opt = [glibmm]
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
@@ -53,7 +53,7 @@ class Wonderbuild(ScriptTask):
 			
 			def do_cxx_phase(self):
 				self.source_text
-				if std_math: self._source_text += '\n#include <cmath>'
+				self._source_text += '\n#include <cmath>'
 				if glibmm: self._source_text += '\n#include <glibmm.h>'
 
 			@property
@@ -106,7 +106,7 @@ class Wonderbuild(ScriptTask):
 			def __init__(self): ModTask.__init__(self, 'main', ModTask.Kinds.PROG, build_cfg, 'default')
 
 			def __call__(self, sched_ctx):
-				self.public_deps = [lib_foo]
+				self.public_deps = [lib_foo, pch.prog_task]
 				req = self.public_deps
 				opt = [glibmm]
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x

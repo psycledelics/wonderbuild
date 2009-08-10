@@ -1,8 +1,6 @@
-#include <foo/foo.hpp>
-#include <bar/bar.hpp>
+#include <foo/foo2.hpp>
 
 int main() {
-	foo();
-	bar();
+	foo2();
 	return 0;
 }
