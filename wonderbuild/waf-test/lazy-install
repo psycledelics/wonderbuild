@@ -1,3 +1,4 @@
 #! /bin/sh
 
-$(dirname $0)/lazy --destdir=$(pwd)/++install install "$@"
+cd $(dirname $0) &&
+./lazy --destdir=$(pwd)/++install install "$@"
