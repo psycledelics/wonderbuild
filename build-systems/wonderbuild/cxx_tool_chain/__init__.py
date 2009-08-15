@@ -519,33 +519,38 @@ class PreCompileTasks(ModDepPhases, ProjectTask):
 	def source_text(self): return '#error ' + str(self.__class__) + ' did not redefine default source text.\n'
 
 	@property
+	def pic_task(self):
+		try: return self._pic_task
+		except AttributeError:
+			self._pic_task = PreCompileTasks._PicOrNotTask(self, pic=True)
+			return self._pic_task
+
+	@property
+	def non_pic_task(self):
+		try: return self._non_pic_task
+		except AttributeError:
+			self._non_pic_task = PreCompileTasks._PicOrNotTask(self, pic=False)
+			return self._non_pic_task
+
+	def pic_or_not(self, cfg):
+		if cfg.shared or cfg.pic: return self.pic_task
+		else: return self.non_pic_task
+
+	@property
 	def lib_task(self):
 		try: return self._lib_task
 		except AttributeError:
-			self._create_tasks()
+			if self.cfg.shared or self.cfg.pic: self._lib_task = self.pic_task
+			else: self._lib_task = self.non_pic_task
 			return self._lib_task
 
 	@property
 	def prog_task(self):
 		try: return self._prog_task
 		except AttributeError:
-			self._create_tasks()
+			if self.cfg.pic: self._prog_task = self.pic_task
+			else: self._prog_task = self.non_pic_task
 			return self._prog_task
-
-	def _create_tasks(self):
-		pic_task = non_pic_task = None
-		if self.cfg.shared or self.cfg.pic:
-			pic_task = PreCompileTasks._PicOrNotTask(self, pic = True)
-			self._lib_task = pic_task
-		else:
-			non_pic_task = PreCompileTasks._PicOrNotTask(self, pic = False)
-			self._lib_task = non_pic_task
-		if self.cfg.pic:
-			if pic_task is None: pic_task = PreCompileTasks._PicOrNotTask(self, pic = True)
-			self._prog_task = pic_task
-		else:
-			if non_pic_task is None: non_pic_task = PreCompileTasks._PicOrNotTask(self, pic = False)
-			self._prog_task = non_pic_task
 
 	class _PicOrNotTask(_PreCompileTask):
 		def __init__(self, parent_task, pic):
@@ -751,7 +756,7 @@ class ModTask(ModDepPhases, ProjectTask):
 		else:
 			# For shared libs and programs, we need all deps before linking.
 			# We schedule them in advance, and don't wait for them right now, but just before linking.
-			deps = self.topologically_sorted_unique_deep_deps(expose_private_deep_deps=True) # XXX or is expose_private_deep_deps=None enough?
+			deps = self.topologically_sorted_unique_deep_deps(expose_private_deep_deps=None)
 			deps_mod_phases = [dep.mod_phase for dep in deps if dep.mod_phase is not None]
 			sched_ctx.parallel_no_wait(*deps_mod_phases)
 		for x in self.do_deps_cxx_phases(sched_ctx): yield x

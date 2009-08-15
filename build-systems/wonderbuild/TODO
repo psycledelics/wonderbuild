@@ -27,5 +27,6 @@
 * c lang support.
 
 * don't make target_dir methods depend on target methods, but rather the reverse, so that users may choose to "install" to another dir
+  This has impact on the impl classes, where --rpath, --rpath-link, and -L flags use fhs.lib
 
 * versionned libs.
