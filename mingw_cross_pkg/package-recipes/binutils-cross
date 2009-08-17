@@ -29,7 +29,7 @@
 
 set -eux
 
-VERSION_binutils=2.19.1
+VERSION_binutils=2.18.50-20080109-2
 
 case "$1" in
 

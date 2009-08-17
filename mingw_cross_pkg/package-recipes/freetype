@@ -29,7 +29,7 @@
 
 set -eux
 
-VERSION_freetype=2.3.9
+VERSION_freetype=2.3.5
 
 case "$1" in
 

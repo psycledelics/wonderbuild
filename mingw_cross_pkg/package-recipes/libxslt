@@ -29,7 +29,7 @@
 
 set -eux
 
-VERSION_libxslt=1.1.24
+VERSION_libxslt=1.1.23
 
 case "$1" in
 

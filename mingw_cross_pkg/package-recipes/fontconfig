@@ -29,7 +29,7 @@
 
 set -eux
 
-VERSION_fontconfig=2.7.1
+VERSION_fontconfig=2.5.91
 
 case "$1" in
 
