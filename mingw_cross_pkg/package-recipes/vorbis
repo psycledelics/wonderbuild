@@ -29,7 +29,7 @@
 
 set -eux
 
-VERSION_vorbis=1.2.0
+VERSION_vorbis=1.2.3
 
 case "$1" in
 

@@ -29,7 +29,7 @@
 
 set -eux
 
-VERSION_w32api=3.11
+VERSION_w32api=3.13-mingw32
 
 case "$1" in
 

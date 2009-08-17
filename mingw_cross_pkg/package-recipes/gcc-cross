@@ -29,7 +29,7 @@
 
 set -eux
 
-VERSION_gcc=4.2.1-2
+VERSION_gcc=4.4.0
 
 case "$1" in
 

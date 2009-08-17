@@ -29,7 +29,7 @@
 
 set -eux
 
-VERSION_libgpg_error=1.6
+VERSION_libgpg_error=1.7
 
 case "$1" in
 
