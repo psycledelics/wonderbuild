@@ -27,8 +27,6 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.cxx_tool_chain import UserBuildCfgTask, PkgConfigCheckTask, BuildCheckTask, PreCompileTasks, ModTask
 		from wonderbuild.std_checks.std_math import StdMathCheckTask
 		from wonderbuild.install import InstallTask
-	
-		glibmm = PkgConfigCheckTask.shared(self.project, ['glibmm-2.4 >= 2.4'])
 
 		build_cfg = UserBuildCfgTask.shared(self.project)
 		for x in sched_ctx.parallel_wait(build_cfg): sched_ctx = yield x
@@ -36,6 +34,10 @@ class Wonderbuild(ScriptTask):
 
 		check_cfg = build_cfg.clone()
 		std_math = StdMathCheckTask.shared(check_cfg)
+
+		pe = build_cfg.target_platform_binary_format_is_pe
+
+		if not pe: glibmm = PkgConfigCheckTask.shared(self.project, ['glibmm-2.4 >= 2.4'])
 
 		build_cfg.include_paths.append(src_dir)
 
@@ -45,7 +47,8 @@ class Wonderbuild(ScriptTask):
 			def __call__(self, sched_ctx):
 				self.public_deps = [std_math]
 				req = self.public_deps
-				opt = [glibmm]
+				opt = []
+				if not pe: opt += [glibmm]
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
@@ -54,7 +57,7 @@ class Wonderbuild(ScriptTask):
 			def do_cxx_phase(self):
 				self.source_text
 				self._source_text += '\n#include <cmath>'
-				if glibmm: self._source_text += '\n#include <glibmm.h>'
+				if not pe and glibmm: self._source_text += '\n#include <glibmm.h>'
 
 			@property
 			def source_text(self):
@@ -73,7 +76,8 @@ class Wonderbuild(ScriptTask):
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
 				req = self.private_deps
-				opt = [std_math, glibmm]
+				opt = [std_math]
+				if not pe: opt += [glibmm]
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
@@ -110,7 +114,8 @@ class Wonderbuild(ScriptTask):
 			def __call__(self, sched_ctx):
 				self.public_deps = [lib_foo, pch.prog_task]
 				req = self.public_deps
-				opt = [glibmm]
+				opt = []
+				if not pe: opt += [glibmm]
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
