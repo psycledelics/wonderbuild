@@ -2,7 +2,7 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2009-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-from logger import silent, is_debug, debug
+from logger import silent, is_debug, debug, color_bg_fg_rgb
 from task import ProjectTask
 from option_cfg import OptionCfg
 from fhs import FHS
@@ -111,9 +111,8 @@ class InstallTask(ProjectTask, OptionCfg):
 							list = [t[2] for t in install_tuples]
 							list.sort()
 							self.print_desc_multi_column_format(
- 								'installing ' + self.name + ' from ' + str(self.trim_prefix) +
-								' to ' + str(self.dest_dir),
-								list, '47;34'
+ 								str(self.dest_dir)+ ': installing ' + self.name + ' from ' + str(self.trim_prefix),
+								list, color_bg_fg_rgb((220, 220, 220), (70, 100, 150))
 							)
 						for t in install_tuples:
 							s, dest = t[0], t[1]

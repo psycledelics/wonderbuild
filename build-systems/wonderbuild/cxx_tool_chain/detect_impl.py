@@ -4,7 +4,7 @@
 
 from wonderbuild.logger import out, colored, is_debug, debug, silent
 from wonderbuild.subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
-from wonderbuild.check_task import CheckTask
+from wonderbuild.check_task import CheckTask, ok_color, failed_color
 from wonderbuild.std_checks import BinaryFormatPeCheckTask, PicFlagDefinesPicCheckTask
 
 class DetectImplCheckTask(CheckTask):
@@ -30,8 +30,8 @@ class DetectImplCheckTask(CheckTask):
 	
 	@property
 	def result_display(self):
-		if not self.result: return 'not found', '31'
-		else: return str(self.kind) + ' version ' + '.'.join(str(v) for v in self.version), '32'
+		if not self.result: return 'not found', failed_color
+		else: return str(self.kind) + ' version ' + '.'.join(str(v) for v in self.version), ok_color
 
 	@property
 	def result(self): return self.kind is not None

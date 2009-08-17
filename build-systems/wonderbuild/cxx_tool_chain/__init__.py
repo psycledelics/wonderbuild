@@ -11,7 +11,7 @@ from wonderbuild.signature import Sig
 from wonderbuild.option_cfg import OptionCfg
 from wonderbuild.fhs import FHS
 from wonderbuild.task import Task, ProjectTask
-from wonderbuild.check_task import CheckTask
+from wonderbuild.check_task import CheckTask, ok_color, failed_color
 from wonderbuild.subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 
 class ClientCfg(object):
@@ -473,9 +473,10 @@ class _PreCompileTask(ModDepPhases, ProjectTask):
 				if __debug__ and is_debug: debug('task: skip: no change: ' + str(self.header))
 			else:
 				if not silent: 
-					if self.cfg.pic: pic = 'pic'; color = '7;1;35'
-					else: pic = 'non-pic'; color = '7;35'
-					self.print_desc('pre-compiling ' + pic + ' c++ ' + str(self.header), color)
+					color = color_bg_fg_rgb((130, 50, 130), (255, 255, 255))
+					if self.cfg.pic: pic = 'pic'; color += ';1'
+					else: pic = 'non-pic'
+					self.print_desc(str(self.header) + ': pre-compiling ' + pic + ' c++', color)
 				dir = self.header.parent
 				dir.make_dir(dir.parent)
 				f = open(self.header.path, 'w')
@@ -1005,10 +1006,10 @@ class _PkgConfigFlagsTask(_PkgConfigTask):
 
 	if __debug__ and is_debug:
 		@property
-		def result_display(self): return ' '.join(self.result), '32'
+		def result_display(self): return ' '.join(self.result), ok_color
 	else:
 		@property
-		def result_display(self): return 'ok', '32'
+		def result_display(self): return 'ok', ok_color
 
 	def apply_to(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
 

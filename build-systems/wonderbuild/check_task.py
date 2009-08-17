@@ -3,8 +3,12 @@
 # copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 from task import ProjectTask
-from logger import out, colored, is_debug, debug, silent
+from logger import out, colored, color_bg_fg_rgb, is_debug, debug, silent
 import multi_column_formatting
+
+ok_color = color_bg_fg_rgb((240, 255, 240), (0, 170, 0))
+failed_color = color_bg_fg_rgb((255, 240, 240), (170, 0, 0))
+_announce_color = color_bg_fg_rgb((240, 240, 255), (0, 0, 170))
 
 class CheckTask(ProjectTask):
 	@classmethod
@@ -25,14 +29,14 @@ class CheckTask(ProjectTask):
 
 	def print_check(self, desc):
 		if __debug__ and is_debug:
-			out.write(colored('34', 'wonderbuild: task: checking for ' + desc + ' ...') + '\n')
+			out.write(colored(_announce_color, 'wonderbuild: task: checking for ' + desc + ' ...') + '\n')
 			#out.flush()
 	
 	def print_check_result(self, desc, result, color):
 		if __debug__ and is_debug:
-			out.write(colored('34', 'wonderbuild: task: ... checked for ' + desc + ': ') + colored(color, result) + '\n')
+			out.write(colored(_announce_color, 'wonderbuild: task: ... checked for ' + desc + ':') + ' ' + colored(color, result) + '\n')
 		else:
-			out.write(colored('34', 'wonderbuild: task: checked for ' + desc + ': ') + colored(color, result) + '\n')
+			out.write(colored(_announce_color, 'wonderbuild: task: checked for ' + desc + ':') + ' ' + colored(color, result) + '\n')
 		#out.flush()
 
 	@property
@@ -47,8 +51,8 @@ class CheckTask(ProjectTask):
 	
 	@property
 	def result_display(self):
-		if self.result: return 'yes', '32'
-		else: return 'no', '31'
+		if self.result: return 'yes', ok_color
+		else: return 'no', failed_color
 
 	### the results vs result thing is to be removed
 

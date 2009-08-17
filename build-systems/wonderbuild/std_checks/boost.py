@@ -4,7 +4,7 @@
 
 import sys, os
 
-from wonderbuild.cxx_tool_chain import MultiBuildCheckTask, BuildCheckTask
+from wonderbuild.cxx_tool_chain import MultiBuildCheckTask, BuildCheckTask, ok_color, failed_color
 from wonderbuild.signature import Sig
 from wonderbuild.logger import silent, is_debug, debug
 
@@ -179,8 +179,8 @@ class BoostCheckTask(MultiBuildCheckTask):
 			@property
 			def result_display(self):
 				version = self.int_version is not None and ' (found version ' + str(self.lib_version).replace('_', '.') + ')' or ''
-				if self.result: return 'yes' + version, '32'
-				else: return 'no' + version, '31'
+				if self.result: return 'yes' + version, ok_color
+				else: return 'no' + version, failed_color
 
 	def find_max_include_above_min(self, dir):
 		include_path = None
