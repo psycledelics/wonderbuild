@@ -267,7 +267,8 @@ class Impl(object):
 		args = cfg.cxx_args + ['-xc++', '-'] # TODO -xc for C
 		if build_check_task.pipe_preproc: args.append('-E')
 		else:
-			if os.name == 'posix': o = os.devnull
+			# when cross-compiling from linux to windows: /dev/null: final close failed: Inappropriate ioctl for device
+			if os.name == 'posix' and not cfg.target_platform_binary_format_is_pe: o = os.devnull
 			else:
 				if not build_check_task.compile: o = 'a.i'
 				elif not build_check_task.link: o = 'a.o'
