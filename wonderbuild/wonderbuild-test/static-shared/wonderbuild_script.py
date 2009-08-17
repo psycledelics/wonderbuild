@@ -60,10 +60,12 @@ else:
 						for x in ModTask.__call__(self, sched_ctx): yield x
 
 					def do_mod_phase(self):
+						self.cfg.defines['IMPL'] = self.cfg.shared and '1' or '-1'
 						for s in (src_dir / 'impl').find_iter(in_pats = ('*.cpp',)): self.sources.append(s)
 
 					def apply_cxx_to(self, cfg):
 						if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+						if not self.cfg.shared: cfg.defines['IMPL'] = '-1'
 					
 					class Install(InstallTask):
 						@property
@@ -93,10 +95,12 @@ else:
 						for x in ModTask.__call__(self, sched_ctx): yield x
 
 					def do_mod_phase(self):
+						self.cfg.defines['WRAPPER'] = self.cfg.shared and '1' or '-1'
 						for s in (src_dir / 'wrapper').find_iter(in_pats = ('*.cpp',)): self.sources.append(s)
 
 					def apply_cxx_to(self, cfg):
 						if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+						if not self.cfg.shared: cfg.defines['WRAPPER'] = '-1'
 
 					class Install(InstallTask):
 						@property

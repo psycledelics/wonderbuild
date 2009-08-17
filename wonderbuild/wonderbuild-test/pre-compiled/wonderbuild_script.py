@@ -81,10 +81,12 @@ class Wonderbuild(ScriptTask):
 				for x in ModTask.__call__(self, sched_ctx): yield x
 				
 			def do_mod_phase(self):
+				self.cfg.defines['FOO'] = self.cfg.shared and '1' or '-1'
 				for s in (src_dir / 'foo').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 
 			def apply_cxx_to(self, cfg):
 				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+				if not self.cfg.shared: cfg.defines['FOO'] = '-1'
 
 			class Install(InstallTask):
 				@property
