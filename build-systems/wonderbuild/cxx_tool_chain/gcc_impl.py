@@ -14,7 +14,10 @@ need_sep_fix = os.sep != '/'
 class Impl(object):
 
 	@staticmethod
-	def parse_version(out, err): return tuple(int(v) for v in out.rstrip('\n').split('.'))
+	def parse_version(out, err):
+		v = out.rstrip('\n').split('.')
+		v[-1] = v[-1].split('-')[0]
+		return tuple(int(i) for i in v)
 
 	@staticmethod
 	def progs(cfg):
