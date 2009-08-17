@@ -19,7 +19,7 @@ case $1 in
 		echo The GLib library of C routines
 	;;
 	deps)
-		echo gcc gettext libiconv pkg-config
+		echo gcc-cross gettext libiconv pkg-config-cross
 	;;
 	download)
 		tar tfj glib-$version.tar.bz2 &>/dev/null ||

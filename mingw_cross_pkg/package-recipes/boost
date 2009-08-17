@@ -18,7 +18,7 @@ case $1 in
 	    echo Boost C++ Libraries
 	    ;;
 	deps)
-	    echo gcc
+	    echo gcc-cross
 	    ;;
 	download | unpack | build | continue-build | clean-build)
 		version_=$(echo $version | sed 's:\.:\_:g')

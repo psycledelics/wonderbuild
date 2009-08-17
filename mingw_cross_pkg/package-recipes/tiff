@@ -51,7 +51,7 @@ description)
     ;;
 
 deps)
-    echo gcc zlib jpeg pthreads
+    echo gcc-cross zlib jpeg pthreads
     ;;
     
 download)

@@ -51,7 +51,7 @@ description)
     ;;
 
 deps)
-    echo gcc gettext
+    echo gcc-cross gettext
     ;;
     
 download)

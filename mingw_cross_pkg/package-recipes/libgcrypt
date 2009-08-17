@@ -52,7 +52,7 @@ description)
 
 deps)
     # Note: ligcrypt's configure script checks for the availability of libpth (GNU Pth library)
-    echo gcc libgpg-error
+    echo gcc-cross libgpg-error
     ;;
     
 download)

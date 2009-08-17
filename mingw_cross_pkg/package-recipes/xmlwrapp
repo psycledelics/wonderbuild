@@ -53,7 +53,7 @@ description)
 deps)
 	# libxslt and libxml2 have pkg-config files but xmlwrapp's configure script uses xml2-config and xslt-config.
 	# However, if pkg-config is available, xmlwrap creates a pkg-config file for itself.
-    echo gcc libxslt libxml2 pkg-config
+    echo gcc-cross libxslt libxml2 pkg-config-cross
     ;;
     
 download)

@@ -65,8 +65,8 @@ deps)
 	# or (on systems supporting shared libraries, excluding AIX)
 	# * first gettext, then libiconv, then gettext again.
 	#
-	#echo gcc libiconv
-	echo gcc
+	#echo gcc-cross libiconv
+	echo gcc-cross
 	;;
     
 download)

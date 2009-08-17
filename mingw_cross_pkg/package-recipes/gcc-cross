@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-# pkg-config package recipe for MinGW cross pkg tool.
+# gcc package recipe for MinGW cross pkg tool.
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2008 Johan Boule <bohan@jabber.org>
 #
@@ -22,65 +22,73 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #---
-#   pkg-config
+#   MinGW GCC
 #
-#   http://pkg-config.freedesktop.org/
+#   http://mingw.sourceforge.net/
 #---
 
 set -eux
 
-VERSION_pkg_config=0.23
+VERSION_gcc=4.2.1-2
 
 case "$1" in
 
 version)
-    echo $VERSION_pkg_config
+    echo $VERSION_gcc
     ;;
 
 new-version)
     VERSION=`
-        wget -q -O- 'http://pkgconfig.freedesktop.org/' |
-        $SED -n 's,.*current release of pkg-config is version \([0-9][^ ]*\) and.*,\1,p' | 
+        wget -q -O- 'http://sourceforge.net/project/showfiles.php?group_id=2435' |
+        $SED -n 's,.*gcc-\([4-9][^>]*\)-src\.tar.*,\1,p' | 
         head -1`
     test -n "$VERSION"
-    $SED "s,^VERSION_pkg_config=.*,VERSION_pkg_config=$VERSION," -i "$0"
+    $SED "s,^VERSION_gcc=.*,VERSION_gcc=$VERSION," -i "$0"
     ;;
 
 description)
-    echo manage compile and link flags for libraries
+    echo The GNU Compiler Collection
     ;;
 
 deps)
-    echo gcc
+	echo binutils-cross mingw-runtime w32api
     ;;
     
 download)
-    tar tfz "pkg-config-$VERSION_pkg_config.tar.gz" &>/dev/null ||
-    wget -c "http://pkgconfig.freedesktop.org/releases/pkg-config-$VERSION_pkg_config.tar.gz"
+    tar tfz "gcc-$VERSION_gcc-src.tar.gz" &>/dev/null ||
+    wget -c "http://$(cat $RECIPES/mirrors/sourceforge)/mingw/gcc-$VERSION_gcc-src.tar.gz"
     ;;
 
 unpack)
-    tar xfz "pkg-config-$VERSION_pkg_config.tar.gz"
+    tar xfz "gcc-$VERSION_gcc-src.tar.gz"
     ;;
 
 build | continue-build)
-	cd "pkg-config-$VERSION_pkg_config"
+	cd "gcc-$VERSION_gcc-src"
 	case "$1" in
 		build)
-			pkg-config --exists glib-2.0 2>/dev/null && glib=--with-installed-glib || glib=
 			./configure \
-				--prefix="$PREFIX/$TARGET" \
-				$glib
+				--target="$TARGET" \
+				--prefix="$PREFIX" \
+				--enable-languages="c,c++" \
+				--enable-version-specific-runtime-libs \
+				--with-gcc \
+				--with-gnu-ld \
+				--with-gnu-as \
+				--disable-nls \
+				--disable-shared \
+				--without-x \
+				--enable-threads=win32 \
+				--disable-win32-registry \
+				--enable-sjlj-exceptions
 		;;
 	esac
-	$MAKE install DESTDIR=$DESTDIR
-    install -d "$DESTDIR/$PREFIX/bin"
-    rm -f "$DESTDIR/$PREFIX/bin/$TARGET-pkg-config"
-    ln -s "../$TARGET/bin/pkg-config" "$DESTDIR/$PREFIX/bin/$TARGET-pkg-config"
+	$MAKE all install DESTDIR=$DESTDIR
 	;;
 
 clean-build)
-	rm -Rf "pkg-config-$VERSION_pkg_config"
+	rm -Rf "gcc-$VERSION_gcc-src"
 	;;
 
 esac
+

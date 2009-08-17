@@ -52,7 +52,7 @@ description)
     ;;
 
 deps)
-    echo gcc
+    echo gcc-cross
     ;;
     
 download)

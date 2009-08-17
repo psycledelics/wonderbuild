@@ -51,7 +51,7 @@ description)
     ;;
 
 deps)
-    echo gcc pkg-config ogg
+    echo gcc-cross pkg-config-cross ogg
     ;;
     
 download)

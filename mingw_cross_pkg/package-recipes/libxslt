@@ -53,7 +53,7 @@ description)
 deps)
 	# libxslt's configure script by default checks the availability of libgcrypt and use it if found.
 	# libxml2 has a pkg-config file, but libxslt's configure script uses xml2-config.
-    echo gcc libxml2 libgcrypt
+    echo gcc-cross libxml2 libgcrypt
     ;;
     
 download)
