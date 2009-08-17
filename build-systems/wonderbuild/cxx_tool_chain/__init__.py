@@ -588,7 +588,7 @@ class _BatchCompileTask(ProjectTask):
 	@property
 	def cfg(self): return self.mod_task.cfg
 
-	def __str__(self): return 'batch-compile ' + ' '.join([str(s) for s in self.sources])
+	def __str__(self): return 'batch-compile ' + self.mod_task.name + ': ' + ' '.join([str(s) for s in self.sources])
 
 	@property
 	def uid(self): return self.mod_task.uid
@@ -611,7 +611,7 @@ class _BatchCompileTask(ProjectTask):
 				else: pic = 'non-pic';
 				s = [str(s) for s in self.sources]
 				s.sort()
-				self.print_desc_multi_column_format('batch-compiling ' + pic + ' objects from c++', s, color)
+				self.print_desc_multi_column_format(str(self.mod_task.target) + ': batch-compiling ' + pic + ' objects from c++', s, color)
 			self._actual_sources = []
 			for s in self.sources:
 				node = self.target_dir / self.mod_task._unique_base_name(s)
@@ -916,7 +916,7 @@ class ModTask(ModDepPhases, ProjectTask):
 					else: s = [plus + self._obj_name(s) for s in sources]
 					if removed_obj_names is not None: s += ['-' + o for o in removed_obj_names]
 					s.sort()
-					self.print_desc_multi_column_format(desc + ' ' + str(self.target) + ' from objects', s, color)
+					self.print_desc_multi_column_format(str(self.target) + ': ' + desc + ' from objects', s, color)
 				self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources], removed_obj_names)
 				self.persistent = self._mod_sig, self.ld, source_states
 			finally: sched_ctx.lock.acquire()
