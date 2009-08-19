@@ -48,13 +48,24 @@ else:
 				if profile is None: r = run(options, option_collector)
 				else:
 					import cProfile
-					# cProfile is only able to profile one thread
-					options['jobs'] = 1 # overrides possible previous jobs options
-					cProfile.run('from wonderbuild.main import run; run(options, option_collector)', profile)
+					cProfile.run(
+'''
+from wonderbuild.main import run
+from wonderbuild.options import parse_args, OptionCollector
+options = parse_args(sys.argv[1:])
+option_collector = OptionCollector()
+option_collector.known_options.add('profile')
+# cProfile is only able to profile one thread
+options['jobs'] = 1 # overrides possible previous jobs options
+run(options, option_collector)
+''',
+						profile
+					)
 					import pstats
 					s = pstats.Stats(profile)
 					#s.sort_stats('time').print_stats(45)
 					s.sort_stats('cumulative').reverse_order().print_stats()
+					r = 0
 			finally:
 				t = time.time() - t
 				print >> sys.stderr, colored('2', 'wonderbuild: build time: ' + str(t) + 's')
