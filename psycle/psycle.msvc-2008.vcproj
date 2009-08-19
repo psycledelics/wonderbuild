@@ -577,6 +577,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\psycle\host\Psy3Saver.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\Psy3Saver.hpp"
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\host\Riff.cpp"
 					>
 				</File>
