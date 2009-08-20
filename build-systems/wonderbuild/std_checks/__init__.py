@@ -19,11 +19,11 @@ class BinaryFormatCheckTask(BuildCheckTask):
 	@property
 	def source_text(self): return \
 		'#if defined __ELF__\n' \
-		'	wonderbuild: elf\n' \
+		'	elf\n' \
 		'#elif defined __APPLE__ and defined __MACH__\n' \
-		'	wonderbuild: mac-o\n' \
+		'	mac-o\n' \
 		'#elif defined _WIN32 || defined __CYGWIN__ || defined __MSYS__ || defined _UWIN\n' \
-		'	wonderbuild: pe\n' \
+		'	pe\n' \
 		'#else\n' \
 		'	#error unkown binary format\n' \
 		'#endif\n'
@@ -32,7 +32,7 @@ class BinaryFormatCheckTask(BuildCheckTask):
 		for x in BuildCheckTask.do_check_and_set_result(self, sched_ctx): yield x
 		r, out = self.results
 		if not r: self.results = False, None
-		else: self.results = True, out.split('\n')[-2][len('	wonderbuild: '):]
+		else: self.results = True, out.split('\n')[-2][1:]
 	
 	@property
 	def result(self): return self.results[0]
