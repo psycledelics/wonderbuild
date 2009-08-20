@@ -5,7 +5,7 @@
 from wonderbuild.logger import out, colored, is_debug, debug, silent
 from wonderbuild.subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 from wonderbuild.check_task import CheckTask, ok_color, failed_color
-from wonderbuild.std_checks import BinaryFormatElfCheckTask, BinaryFormatMacOCheckTask, BinaryFormatPeCheckTask, PicFlagDefinesPicCheckTask
+from wonderbuild.std_checks import BinaryFormatCheckTask, PicFlagDefinesPicCheckTask
 
 class DetectImplCheckTask(CheckTask):
 	@staticmethod
@@ -57,21 +57,14 @@ class DetectImplCheckTask(CheckTask):
 			if 'ar' not in o: cfg.ar_prog = ar_prog
 			if 'ranlib' not in o: cfg.ranlib_prog = ranlib_prog
 			
-			elf = BinaryFormatElfCheckTask.shared(cfg)
+			binary_format = BinaryFormatCheckTask.shared(cfg)
 			pic = PicFlagDefinesPicCheckTask.shared(cfg)
 			cfg.pic_flag_defines_pic = True # allows it to be reentrant during the check itself
-			for x in sched_ctx.parallel_wait(elf, pic): yield x
+			for x in sched_ctx.parallel_wait(binary_format, pic): yield x
+			cfg.target_platform_binary_format_is_elf = binary_format.format == 'elf'
+			cfg.target_platform_binary_format_is_mac_o = binary_format.format == 'mac-o'
+			cfg.target_platform_binary_format_is_pe = binary_format.format == 'pe'
 			cfg.pic_flag_defines_pic = pic.result
-			cfg.target_platform_binary_format_is_elf = elf.result
-			if elf.result:
-				cfg.target_platform_binary_format_is_pe = False
-				cfg.target_platform_binary_format_is_mac_o = False
-			else:
-				mac_o = BinaryFormatMacOCheckTask.shared(cfg)
-				pe = BinaryFormatPeCheckTask.shared(cfg)
-				for x in sched_ctx.parallel_wait(mac_o, pe): yield x
-				cfg.target_platform_binary_format_is_mac_o = mac_o.result
-				cfg.target_platform_binary_format_is_pe = pe.result
 	
 	def do_check_and_set_result(self, sched_ctx):
 		if False: yield

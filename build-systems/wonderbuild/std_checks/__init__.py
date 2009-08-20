@@ -2,57 +2,48 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2006-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-from wonderbuild.cxx_tool_chain import BuildCheckTask
+from wonderbuild.cxx_tool_chain import BuildCheckTask, ok_color, failed_color
 
 # gcc -E -dM -std=c++98 -x c++-header /dev/null | sort
 
-class BinaryFormatElfCheckTask(BuildCheckTask):
+class BinaryFormatCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared(base_cfg):
-		try: return base_cfg.project.target_platform_binary_format_is_elf
+		try: return base_cfg.project.target_platform_binary_format
 		except AttributeError:
-			task = base_cfg.project.target_platform_binary_format_is_elf = BinaryFormatElfCheckTask(base_cfg)
+			task = base_cfg.project.target_platform_binary_format = BinaryFormatCheckTask(base_cfg)
 			return task
 
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'binary-format-elf', base_cfg, compile=False)
-
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'binary-format', base_cfg, pipe_preproc=True)
+	
 	@property
 	def source_text(self): return \
-		'#if !defined __ELF__\n' \
-		'	#error the target platform binary format is not elf\n' \
+		'#if defined __ELF__\n' \
+		'	wonderbuild: elf\n' \
+		'#elif defined __APPLE__ and defined __MACH__\n' \
+		'	wonderbuild: mac-o\n' \
+		'#elif defined _WIN32 || defined __CYGWIN__ || defined __MSYS__ || defined _UWIN\n' \
+		'	wonderbuild: pe\n' \
+		'#else\n' \
+		'	#error unkown binary format\n' \
 		'#endif\n'
-
-class BinaryFormatMacOCheckTask(BuildCheckTask):
-	@staticmethod
-	def shared(base_cfg):
-		try: return base_cfg.project.target_platform_binary_format_is_mac_o
-		except AttributeError:
-			task = base_cfg.project.target_platform_binary_format_is_mac_o = BinaryFormatMacOCheckTask(base_cfg)
-			return task
-
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'binary-format-mac-o', base_cfg, compile=False)
-
+	
+	def do_check_and_set_result(self, sched_ctx):
+		for x in BuildCheckTask.do_check_and_set_result(self, sched_ctx): yield x
+		r, out = self.results
+		if not r: self.results = False, None
+		else: self.results = True, out.split('\n')[-2][len('	wonderbuild: '):]
+	
 	@property
-	def source_text(self): return \
-		'#if !defined __APPLE__ || !defined __MACH__\n' \
-		'	#error the target platform binary format is not mac-o\n' \
-		'#endif\n'
-
-class BinaryFormatPeCheckTask(BuildCheckTask):
-	@staticmethod
-	def shared(base_cfg):
-		try: return base_cfg.project.target_platform_binary_format_is_pe
-		except AttributeError:
-			task = base_cfg.project.target_platform_binary_format_is_pe = BinaryFormatPeCheckTask(base_cfg)
-			return task
-		
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'binary-format-pe', base_cfg, compile=False)
-
+	def result(self): return self.results[0]
+	
 	@property
-	def source_text(self): return \
-		'#if !defined _WIN32 && !defined __CYGWIN__ && !defined __MSYS__ && !defined _UWIN\n' \
-		'	#error the target platform binary format is not pe\n' \
-		'#endif\n'
+	def format(self): return self.results[1]
+	
+	@property
+	def result_display(self):
+		if self.result: return self.format, ok_color
+		else: return 'unkown (neither of elf, mac-o, nor pe)', failed_color
 
 class MSWindowsCheckTask(BuildCheckTask):
 	@staticmethod
