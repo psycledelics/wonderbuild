@@ -22,6 +22,22 @@ class BinaryFormatElfCheckTask(BuildCheckTask):
 		'	#error the target platform binary format is not elf\n' \
 		'#endif\n'
 
+class BinaryFormatMacOCheckTask(BuildCheckTask):
+	@staticmethod
+	def shared(base_cfg):
+		try: return base_cfg.project.target_platform_binary_format_is_mac_o
+		except AttributeError:
+			task = base_cfg.project.target_platform_binary_format_is_mac_o = BinaryFormatMacOCheckTask(base_cfg)
+			return task
+
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'binary-format-mac-o', base_cfg, compile=False)
+
+	@property
+	def source_text(self): return \
+		'#if !defined __APPLE__ || !defined __MACH__\n' \
+		'	#error the target platform binary format is not mac-o\n' \
+		'#endif\n'
+
 class BinaryFormatPeCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared(base_cfg):

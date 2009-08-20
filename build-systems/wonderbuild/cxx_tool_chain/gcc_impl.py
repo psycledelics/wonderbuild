@@ -175,7 +175,9 @@ class Impl(object):
 	@staticmethod
 	def cfg_ld_args(cfg):
 		args = [cfg.ld_prog]
-		if cfg.shared: args.append('-shared')
+		if cfg.shared:
+			if cfg.target_platform_binary_format_is_mac_o: args.append('-dynamiclib')
+			else: args.append('-shared')
 		elif cfg.static_prog: args.append('-static') # we can have both -shared and -static but that's not very useful
 		rpath = '-Wl,-rpath=$ORIGIN' + os.sep + cfg.fhs.lib.rel_path(cfg.fhs.bin)
 		if need_sep_fix: rpath = rpath.replace('\\', '/') # when cross-compiling from windows
