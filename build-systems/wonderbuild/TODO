@@ -1,5 +1,7 @@
 * when a precompiled header task detects a change in a header and rebuilds the pch, dependent tasks aren't rebuilt.
 
+* concatenate all the compiler checks about predefined macros into one, including the version.
+
 * record the compiler abs path in sig, determined via the PATH env var.
 
 * build checks should include headers in the sig.
