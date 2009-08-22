@@ -33,3 +33,5 @@
   This has impact on the impl classes, where --rpath, --rpath-link, and -L flags use fhs.lib
 
 * versionned libs.
+
+* the <class>.shared functions should allow to share an instance at other levels than the project.
