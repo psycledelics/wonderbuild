@@ -182,9 +182,9 @@ def create_fbuild(libs):
 from fbuild.path import Path
 import fbuild.builders.cxx
 
-def build():
+def build(ctx):
     src_dir = Path('.')
-    static = fbuild.builders.cxx.guess_static()
+    static = fbuild.builders.cxx.guess_static(ctx)
     flags = ['-g', '-O0', '-Wall']
     defines = ['BENCH']
     include_paths = [src_dir]
