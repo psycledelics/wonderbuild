@@ -22,10 +22,10 @@ def build(bld):
 	test_name = 'static-shared' #bld.srcnode.name
 	src_dir = 'src'
 	
-	bld.install_headers(
-		includes=[src_dir],
-		headers=[src_dir + '/print.hpp']
-	)
+	#bld.install_headers(
+	#	includes=[src_dir],
+	#	headers=[src_dir + '/print.hpp']
+	#)
 	
 	def variant(static_prog, static_wrapper, static_impl):
 		variant_name = \
@@ -52,7 +52,7 @@ def build(bld):
 			types=(static_prog and 'static' or 'shared',),
 			sources=[src_dir + '/main'],
 			includes=[src_dir],
-			uselib_local=[wrapper.name]
+			uselib_local=[wrapper.name] + (static_wrapper and [impl.name] or []) # workaround for bug
 		)
 	variant(True, True, True)
 	variant(False, True, True)
