@@ -25,7 +25,8 @@ else:
 			from wonderbuild.cxx_tool_chain import UserBuildCfgTask, ModTask
 			from wonderbuild.install import InstallTask
 
-			src_dir = self.src_dir / 'src'
+			test_name = self.src_dir.name
+			src_dir = self.src_dir.parent / 'src'
 
 			build_cfg = UserBuildCfgTask.shared(self.project)
 			for x in sched_ctx.parallel_wait(build_cfg): sched_ctx = yield x
@@ -43,15 +44,15 @@ else:
 
 			def variant(sched_ctx, static_prog, static_wrapper, static_impl):
 				variant_name = \
-					(static_prog and 'static' or 'dyn') + '-prog--' + \
-					(static_wrapper and 'static' or 'shared') + '-wrapper--' + \
-					(static_impl and 'static' or 'shared') + '-impl'
+					(static_prog and 'st' or 'sh') + '-' + \
+					(static_wrapper and 'st' or 'sh') + '-' + \
+					(static_impl and 'st' or 'sh')
 
 				# dependencies: MainProg -> LibWrapper -> LibImpl
 
 				class LibImpl(ModTask):
 					def __init__(self): ModTask.__init__(self,
-						variant_name + '--impl',
+						test_name + '--' + variant_name + '--impl',
 						ModTask.Kinds.LIB, static_impl and static_build_cfg or build_cfg)
 
 					def __call__(self, sched_ctx):
@@ -80,12 +81,12 @@ else:
 								return self._sources
 	
 						@property
-						def dest_dir(self): return self.fhs.include / variant_name
+						def dest_dir(self): return self.fhs.include / test_name / variant_name
 				lib_impl = LibImpl()
 
 				class LibWrapper(ModTask):
 					def __init__(self): ModTask.__init__(self,
-						variant_name + '--wrapper',
+						test_name + '--' + variant_name + '--wrapper',
 						ModTask.Kinds.LIB, static_wrapper and static_build_cfg or build_cfg)
 
 					def __call__(self, sched_ctx):
@@ -115,12 +116,12 @@ else:
 								return self._sources
 	
 						@property
-						def dest_dir(self): return self.fhs.include / variant_name
+						def dest_dir(self): return self.fhs.include / test_name / variant_name
 				lib_wrapper = LibWrapper()
 
 				class MainProg(ModTask):
 					def __init__(self): ModTask.__init__(self,
-						variant_name + '--main',
+						test_name + '--' + variant_name + '--main',
 						ModTask.Kinds.PROG, static_prog and static_build_cfg or build_cfg, 'default')
 
 					def __call__(self, sched_ctx):

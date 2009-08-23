@@ -22,7 +22,8 @@ from wonderbuild.script import ScriptTask, ScriptLoaderTask
 class Wonderbuild(ScriptTask):
 	def __call__(self, sched_ctx):
 
-		src_dir = self.src_dir / 'src'
+		test_name = self.src_dir.name
+		src_dir = self.src_dir.parent / 'src'
 
 		from wonderbuild.cxx_tool_chain import UserBuildCfgTask, PkgConfigCheckTask, BuildCheckTask, PreCompileTasks, ModTask
 		from wonderbuild.std_checks.std_math import StdMathCheckTask
@@ -70,8 +71,8 @@ class Wonderbuild(ScriptTask):
 					return self._source_text
 		pch = Pch()
 
-		class LibFoo(ModTask):
-			def __init__(self): ModTask.__init__(self, 'foo', ModTask.Kinds.LIB, build_cfg)
+		class LibImpl(ModTask):
+			def __init__(self): ModTask.__init__(self, test_name + '--impl', ModTask.Kinds.LIB, build_cfg)
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
@@ -81,16 +82,16 @@ class Wonderbuild(ScriptTask):
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
-				self.cxx_phase = LibFoo.Install(self.project, self.name + '-headers')
+				self.cxx_phase = LibImpl.Install(self.project, self.name + '-headers')
 				for x in ModTask.__call__(self, sched_ctx): yield x
 				
 			def do_mod_phase(self):
-				self.cfg.defines['FOO'] = self.cfg.shared and '1' or '-1'
-				for s in (src_dir / 'foo').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
+				self.cfg.defines['IMPL'] = self.cfg.shared and '1' or '-1'
+				for s in (src_dir / 'impl').find_iter(in_pats = ('*.cpp',)): self.sources.append(s)
 
 			def apply_cxx_to(self, cfg):
 				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
-				if not self.cfg.shared: cfg.defines['FOO'] = '-1'
+				if not self.cfg.shared: cfg.defines['IMPL'] = '-1'
 
 			class Install(InstallTask):
 				@property
@@ -101,19 +102,59 @@ class Wonderbuild(ScriptTask):
 					try: return self._sources
 					except AttributeError:
 						self._sources = []
-						for s in (self.trim_prefix / 'foo').find_iter(in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)): self._sources.append(s)
+						for s in (self.trim_prefix / 'impl').find_iter(in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',)): self._sources.append(s)
 						return self._sources
 		
 				@property
-				def dest_dir(self): return self.fhs.include
-		lib_foo = LibFoo()
+				def dest_dir(self): return self.fhs.include / test_name
+		lib_impl = LibImpl()
 	
-		class MainProg(ModTask):
-			def __init__(self): ModTask.__init__(self, 'main', ModTask.Kinds.PROG, build_cfg, 'default')
+		class LibWrapper(ModTask):
+			def __init__(self): ModTask.__init__(self, test_name + '--wrapper', ModTask.Kinds.LIB, build_cfg)
 
 			def __call__(self, sched_ctx):
-				self.public_deps = [lib_foo, pch.prog_task]
-				req = self.public_deps
+				self.public_deps = [lib_impl]
+				self.private_deps = [pch.lib_task]
+				req = self.public_deps + self.private_deps
+				opt = [std_math]
+				if not pe: opt += [glibmm]
+				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
+				self.result = min(bool(r) for r in req)
+				self.public_deps += [x for x in opt if x]
+				self.cxx_phase = LibWrapper.Install(self.project, self.name + '-headers')
+				for x in ModTask.__call__(self, sched_ctx): yield x
+				
+			def do_mod_phase(self):
+				self.cfg.defines['WRAPPER'] = self.cfg.shared and '1' or '-1'
+				for s in (src_dir / 'wrapper').find_iter(in_pats = ('*.cpp',)): self.sources.append(s)
+
+			def apply_cxx_to(self, cfg):
+				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+				if not self.cfg.shared: cfg.defines['WRAPPER'] = '-1'
+
+			class Install(InstallTask):
+				@property
+				def trim_prefix(self): return src_dir
+
+				@property
+				def sources(self):
+					try: return self._sources
+					except AttributeError:
+						self._sources = []
+						for s in (self.trim_prefix / 'wrapper').find_iter(in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',)): self._sources.append(s)
+						return self._sources
+		
+				@property
+				def dest_dir(self): return self.fhs.include / test_name
+		lib_wrapper = LibWrapper()
+
+		class MainProg(ModTask):
+			def __init__(self): ModTask.__init__(self, test_name + '--main', ModTask.Kinds.PROG, build_cfg, 'default')
+
+			def __call__(self, sched_ctx):
+				self.public_deps = [lib_wrapper]
+				self.private_deps = [pch.prog_task]
+				req = self.public_deps + self.private_deps
 				opt = []
 				if not pe: opt += [glibmm]
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
@@ -122,5 +163,5 @@ class Wonderbuild(ScriptTask):
 				for x in ModTask.__call__(self, sched_ctx): yield x
 				
 			def do_mod_phase(self):
-				for s in (src_dir / 'main').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
+				for s in (src_dir / 'main').find_iter(in_pats = ('*.cpp',)): self.sources.append(s)
 		main_prog = MainProg()
