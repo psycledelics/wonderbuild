@@ -858,10 +858,10 @@ class ModTask(ModDepPhases, ProjectTask):
 		#       Linking programs needs all deps, however.
 		for x in sched_ctx.parallel_wait(*tasks): yield x
 		if self.ld:
-			for dep in self.topologically_sorted_unique_deep_deps(expose_private_deep_deps=None):
-				dep.apply_mod_to(self.cfg) # ordering matters for sig
+			deps = self.topologically_sorted_unique_deep_deps(expose_private_deep_deps=None)
+			for dep in deps: dep.apply_mod_to(self.cfg) # ordering matters for sig
 			if not need_process:
-				for dep in self.all_deps:
+				for dep in deps:
 					# When a dependant lib is a static archive, or changes its type from static to shared, we need to relink.
 					# When the check-missing option is on, we also relink to check that external symbols still exist.
 					try: need_process = dep._needed_process and (not dep.ld or dep._type_changed or self.cfg.check_missing)
