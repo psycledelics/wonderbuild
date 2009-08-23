@@ -16,7 +16,7 @@ def set_options(opt):
 def configure(conf):
 	conf.check_tool('compiler_cxx')
 	conf.env.PREFIX = os.path.join(conf.blddir, os.pardir, '++install')
-
+	if conf.env['CXX_NAME'] == 'gcc': conf.env.append_value('LINKFLAGS', '-Wl,--as-needed')
 	
 def build(bld):
 	test_name = 'static-shared' #bld.srcnode.name
@@ -52,7 +52,7 @@ def build(bld):
 			types=(static_prog and 'static' or 'shared',),
 			sources=[src_dir + '/main'],
 			includes=[src_dir],
-			uselib_local=[wrapper.name] + (static_wrapper and [impl.name] or []) # workaround for bug
+			uselib_local=[wrapper.name]
 		)
 	variant(True, True, True)
 	variant(False, True, True)
