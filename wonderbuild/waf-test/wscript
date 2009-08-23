@@ -15,6 +15,7 @@ def set_options(opt):
 
 def configure(conf):
 	conf.check_tool('compiler_cxx')
+	conf.env.PREFIX = os.path.join(conf.blddir, os.pardir, '++install')
 	
 	#print conf.env.DEST_OS, conf.env.DEST_BINFMT, conf.env.DEST_CPU
 
