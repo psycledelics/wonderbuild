@@ -31,7 +31,7 @@ else:
 			build_cfg = UserBuildCfgTask.shared(self.project)
 			for x in sched_ctx.parallel_wait(build_cfg): sched_ctx = yield x
 			build_cfg = build_cfg.new_or_clone()
-			build_cfg.include_paths.append(src_dir)
+			if not src_dir in build_cfg.include_paths: build_cfg.include_paths.append(src_dir)
 			
 			#build_cfg.pic = True
 

@@ -32,6 +32,7 @@ class Wonderbuild(ScriptTask):
 		build_cfg = UserBuildCfgTask.shared(self.project)
 		for x in sched_ctx.parallel_wait(build_cfg): sched_ctx = yield x
 		build_cfg = build_cfg.new_or_clone()
+		if not src_dir in build_cfg.include_paths: build_cfg.include_paths.append(src_dir)
 
 		check_cfg = build_cfg.clone()
 		std_math = StdMathCheckTask.shared(check_cfg)
@@ -39,8 +40,6 @@ class Wonderbuild(ScriptTask):
 		pe = build_cfg.target_platform_binary_format_is_pe
 
 		if not pe: glibmm = PkgConfigCheckTask.shared(self.project, ['glibmm-2.4 >= 2.4'])
-
-		build_cfg.include_paths.append(src_dir)
 
 		class Pch(PreCompileTasks):
 			def __init__(self): PreCompileTasks.__init__(self, 'pch', build_cfg)
@@ -65,6 +64,7 @@ class Wonderbuild(ScriptTask):
 				try: return self._source_text
 				except AttributeError:
 					self._source_text = \
+						'#include <print.hpp>\n' \
 						'#include <string>\n' \
 						'#include <sstream>\n' \
 						'#include <iostream>'
