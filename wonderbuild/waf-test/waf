@@ -1,4 +1,4 @@
 #! /bin/sh
 
-$(dirname $0)/../waf/waf-light "$@" &&
+$(dirname $0)/../waf-commit/waf-light "$@" &&
 tree -AF $(dirname $0)
