@@ -125,8 +125,8 @@ class BuildCfg(ClientCfg, Task):
 				v = self.defines[k]
 				if v is not None: sig.update(v)
 			for p in self.include_paths: sig.update(p.abs_path)
-			if self.pch is not None: sig.update(self.pch.abs_path)
-			for i in self.includes: sig.update(i.abs_path)
+			if self.pch is not None: sig.update(self.pch.sig)
+			for i in self.includes: sig.update(i.sig)
 			for f in self.cxx_flags: sig.update(f)
 			sig.update(self.impl.cxx_env_sig)
 			sig = self._cxx_sig = sig.digest()
