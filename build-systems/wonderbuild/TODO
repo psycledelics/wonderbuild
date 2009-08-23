@@ -35,3 +35,5 @@
 * versionned libs.
 
 * the <class>.shared functions should allow to share an instance at other levels than the project.
+
+* some mecanism to set default values for options is needed.
