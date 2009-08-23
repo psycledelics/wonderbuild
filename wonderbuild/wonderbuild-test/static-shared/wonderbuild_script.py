@@ -76,7 +76,7 @@ else:
 						def sources(self):
 							try: return self._sources
 							except AttributeError:
-								self._sources = []
+								self._sources = [self.trim_prefix / 'print.hpp']
 								for s in (self.trim_prefix / 'impl').find_iter(in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',)): self._sources.append(s)
 								return self._sources
 	
