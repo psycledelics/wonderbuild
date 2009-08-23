@@ -3,6 +3,11 @@
 set -x &&
 
 jobs=4 &&
+wonderbuild=../../wonderbuild.py &&
+fbuild=../../fbuild/fbuild-light &&
+waf=../../waf/waf-light &&
+scons=../../scons/src/ &&
+jython='java -jar ../../jython/jython.jar' &&
 
 measure() {
 	if which time; then time "$@"; else case "$SHELL" in bash) time "$@";; *) bash -c "time $*";; esac; fi
@@ -24,18 +29,18 @@ main() {
 
 	case $tool in
 		wonderbuild)
-			measure ../../wonderbuild.py --bld-dir=build-$tool --cxx=g++ --jobs=$jobs "$@"
+			measure $wonderbuild         --bld-dir=build-$tool --cxx=g++ --jobs=$jobs "$@"
 		;;
 	
 		wonderbuild-on-jython)
-			measure java -jar ../../jython/jython.jar ../../wonderbuild.py --bld-dir=build-$tool --cxx=g++ --jobs=$jobs "$@"
+			measure $jython $wonderbuild --bld-dir=build-$tool --cxx=g++ --jobs=$jobs "$@"
 		;;
 
 		fbuild)
 			# fbuild lacks a silent option!
-			if test -x ../../fbuild/fbuild-light.dev-null
-			then measure ../../fbuild/fbuild-light.dev-null --buildroot=build-$tool --jobs=$jobs "$@"
-			else measure ../../fbuild/fbuild-light --buildroot=build-$tool --jobs=$jobs "$@"
+			if test -x $fbuild.dev-null
+			then measure $fbuild.dev-null --buildroot=build-$tool --jobs=$jobs "$@"
+			else measure $fbuild          --buildroot=build-$tool --jobs=$jobs "$@"
 			fi
 		;;
 	
@@ -45,9 +50,9 @@ main() {
 				../../waf/waf-light configure
 			fi &&
 			# waf lacks a silent option!
-			if test -x ../../waf/waf-light.dev-null
-			then measure ../../waf/waf-light.dev-null --jobs=$jobs "$@"
-			else measure ../../waf/waf-light --jobs=$jobs "$@"
+			if test -x $waf.dev-null
+			then measure $waf.dev-null --jobs=$jobs "$@"
+			else measure $waf          --jobs=$jobs "$@"
 			fi
 		;;
 
@@ -61,20 +66,20 @@ main() {
 				java -jar ../../jython/jython.jar ../../waf/waf-light configure
 			fi &&
 			# waf lacks a silent option!
-			if test -x ../../waf/waf-light-on-jython.dev-null
-			then measure ../../waf/waf-light-on-jython.dev-null --jobs=$jobs "$@"
-			else measure java -jar ../../jython/jython.jar ../../waf/waf-light --jobs=$jobs "$@"
+			if test -x $waf-on-jython.dev-null
+			then measure $waf-on-jython.dev-null --jobs=$jobs "$@"
+			else measure $jython $waf            --jobs=$jobs "$@"
 			fi
 		;;
 
 		scons)
-			SCONS_LIB_DIR=$(pwd)/../../scons/src/engine \
-				measure python ../../scons/src/script/scons.py --no-cache --jobs=$jobs "$@"
+			SCONS_LIB_DIR=$(cd $scons && pwd)/engine \
+				measure python $scons/script/scons.py  --no-cache --jobs=$jobs "$@"
 		;;
 
 		scons-on-jython)
-			SCONS_LIB_DIR=$(pwd)/../../scons/src/engine \
-				measure java -jar ../../jython/jython.jar ../../scons/src/script/scons.py --no-cache --jobs=$jobs "$@"
+			SCONS_LIB_DIR=$(cd $scons && pwd)/engine \
+				measure $jython $scons/script/scons.py --no-cache --jobs=$jobs "$@"
 		;;
 
 		make)
