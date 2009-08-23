@@ -47,7 +47,7 @@ main() {
 		waf)
 			if ! test -d build-$tool
 			then
-				../../waf/waf-light configure
+				$waf configure
 			fi &&
 			# waf lacks a silent option!
 			if test -x $waf.dev-null
@@ -63,7 +63,7 @@ main() {
 			fi &&
 			if ! test -d build-waf
 			then
-				java -jar ../../jython/jython.jar ../../waf/waf-light configure
+				$jython $waf configure
 			fi &&
 			# waf lacks a silent option!
 			if test -x $waf-on-jython.dev-null
