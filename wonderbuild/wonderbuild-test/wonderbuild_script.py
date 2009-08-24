@@ -82,5 +82,6 @@ else:
 				f1 = Foo.shared(project, 0, 2000, 2)
 				f2 = Foo.shared(project, 1000, 3000, 2)
 				for x in sched_ctx.parallel_wait(f1, f2): yield x
-				print f1.result, f2.result
+				print f1.result
+				print f2.result
 
