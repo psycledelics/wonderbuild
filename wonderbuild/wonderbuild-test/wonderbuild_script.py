@@ -68,9 +68,9 @@ else:
 							x0, x1, y = self.x0, self.x1, self.y
 							if x1 - x0 > 100:
 								x = (x0 + x1) // 2
-								tasks = Foo.shared(project, x0, x, y), Foo.shared(project, x, x1, y)
 								sched_ctx.lock.acquire() # we need to reacquire the lock before yielding back into the scheduler
 								try:
+									tasks = Foo.shared(project, x0, x, y), Foo.shared(project, x, x1, y)
 									for x in sched_ctx.parallel_wait(*tasks): yield x
 								finally: sched_ctx.lock.release()
 								self.result = tasks[0].result + tasks[1].result
