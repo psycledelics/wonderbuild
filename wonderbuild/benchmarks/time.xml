@@ -445,7 +445,6 @@
 					<li>Waf version was somewhere after 1.5.9 (svn rev 6671)</li>
 					<li>Python version was 2.5.2</li>
 					<li>Jam version was 2.5</li>
-					<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
 					<li>CMake version was 2.4.7</li>
 					<li>Make version was gnu make 3.81</li>
 					<li>Makedepend was version 1.0.1</li>
