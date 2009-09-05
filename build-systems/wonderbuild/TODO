@@ -1,12 +1,6 @@
 * concatenate all the compiler checks about predefined macros into one, including the version.
   already done for the binary format check, just need to put all the rest here.
 
-* find prog abs paths via the PATH env var.
-
-* build checks should include headers in the sig.
-
-* pkg-config checks should include .pc file timestamp in the sig.
-
 * when a loadable module depends on a lib, that lib can't be a non-pic one.
 
 * --help shouldn't create the build dir.
@@ -37,3 +31,9 @@
 * some mecanism to set default values for options is needed.
 
 * review the messages printed when a required dep isn't available.
+
+* detecting external libs/progs changes:
+	- find prog abs paths via the PATH env var.
+	- build checks should include headers in the sig.
+	- pkg-config checks should include .pc file timestamp in the sig.
+
