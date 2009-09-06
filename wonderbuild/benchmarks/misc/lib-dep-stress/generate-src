@@ -52,3 +52,36 @@ if __name__ == '__main__':
 			f.write('}\n')
 		finally:
 			f.close()
+			
+	f = open('configure.ac', 'w')
+	try:
+		f.write('AC_INIT([lib-dep-stress], [1.0.0])\n')
+		f.write('AC_CONFIG_AUX_DIR([autotools-aux])\n')
+		f.write('AM_INIT_AUTOMAKE([foreign subdir-objects nostdinc no-define tar-pax dist-bzip2])\n')
+		f.write('AM_PROG_LIBTOOL\n')
+		f.write('AC_CONFIG_HEADERS([unused-config.hpp])\n')
+		f.write('AC_CONFIG_FILES([Makefile])\n')
+		f.write('AC_OUTPUT\n')
+	finally: f.close()
+	f = open('Makefile.am', 'w')
+	try:
+		f.write('AM_CPPFLAGS = -I$(srcdir)/src -DWRAPPER\n')
+		f.write('AM_CXXFLAGS = -g -O0 -Wall\n')
+		f.write('lib_LTLIBRARIES = \n')
+		for i in xrange(count):
+			f.write('lib_LTLIBRARIES += libwrapper' + str(i) + '.la\n')
+			f.write('libwrapper' + str(i) + '_la_SOURCES = src/wrapper' + str(i) + '/wrapper_even.cpp src/wrapper' + str(i) + '/wrapper_odd.cpp\n')
+			f.write('libwrapper' + str(i) + '_la_LIBADD =')
+			for j in xrange(i): f.write( ' libwrapper' + str(j) + '.la')
+			f.write('\n')
+		f.write('noinst_PROGRAMS = main\n')
+		f.write('main_SOURCES = src/main.cpp\n')
+		f.write('main_LDADD = libwrapper' + str(count - 1) + '.la\n')
+	finally: f.close()
+
+'''
+To test the autotools part, do:
+	autoreconf --install --symlink &&
+	rm -Rf ++autotools && mkdir ++autotools &&
+	(cd ++autotools && ../configure --config-cache --disable-shared CXXFLAGS= && time make --jobs=4 --silent)
+'''
