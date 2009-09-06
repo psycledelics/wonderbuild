@@ -590,146 +590,146 @@
 					</bars>
 				</part>
 			</part>
-		</part>
-		<part caption='Times with big headers (and pre-compilation)' anchor='pch'>
-			Here the benchmark was modified to add a <code>#include &lt;boost/spirit.hpp></code> in every header.
-			<br/>
-			It clearly demonstrates the advantage of pre-compilation as soon as the size of the headers become significant.
-			<br/><br/>
-			All tests were run with 4 jobs on the same quad core system,
-			ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
-			<part caption='Tool versions'>
-				<ul>
-					<li>Waf version was 1.5.3</li>
-					<li>Python version was 2.5.2</li>
-					<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
-					<li>CMake version was 2.4.7</li>
-					<li>Make version was gnu make 3.81</li>
-					<li>Makedepend was version 1.0.1</li>
-					<li>Shell was dash (not bash) version 0.5.4</li>
-					<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
-				</ul>
-			</part>
-			<part caption='Initial full build'>
-				<part caption='With scan of system-wide headers'>
-					<bars scale='20' unit='m'>
-						<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
-						<bar name='wonderbuild'   value='  7.38'>-MD gcc deps</bar>
-						<bar-section>Using batch compilation, but no pre-compiled headers</bar-section>
-						<bar name='wonderbuild'   value=' 20.93'>-MD gcc deps</bar>
-						<bar-section>Using neither</bar-section>
-						<bar name='cmake'         value=' 20.43'>with scan of deps in /usr/include (closer to gcc -MD)</bar>
-						<bar name='waf'           value=' 21.63'>-MMD gcc deps, timestamp signatures</bar>
-						<bar name='waf'           value=' 21.63'>waf deps, timestamp signatures</bar>
-						<bar name='autotools'     value=' 26.61'>-MD gcc deps (non recursive)</bar>
-					</bars>
+			<part caption='Times with big headers (and pre-compilation)' anchor='pch'>
+				Here the benchmark was modified to add a <code>#include &lt;boost/spirit.hpp></code> in every header.
+				<br/>
+				It clearly demonstrates the advantage of pre-compilation as soon as the size of the headers become significant.
+				<br/><br/>
+				All tests were run with 4 jobs on the same quad core system,
+				ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
+				<part caption='Tool versions'>
+					<ul>
+						<li>Waf version was 1.5.3</li>
+						<li>Python version was 2.5.2</li>
+						<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
+						<li>CMake version was 2.4.7</li>
+						<li>Make version was gnu make 3.81</li>
+						<li>Makedepend was version 1.0.1</li>
+						<li>Shell was dash (not bash) version 0.5.4</li>
+						<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
+					</ul>
 				</part>
-				<part caption='Without scan of system-wide headers'>
-					<bars scale='20' unit='m'>
-						<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
-						<bar name='wonderbuild'   value='  7.13'>-MMD gcc deps</bar>
-						<bar-section>Using batch compilation, but no pre-compiled headers</bar-section>
-						<bar name='wonderbuild'   value=' 20.50'>-MMD gcc deps</bar>
-						<bar-section>Using neither</bar-section>
-						<bar name='cmake'         value=' 19.42'>without scan of system wide headers (like gcc -MMD)</bar>
-						<bar name='waf'           value=' 21.92'>-MD gcc deps, timestamp signatures</bar>
-						<bar name='scons'         value=' 23.25'>with fast tuning options</bar>
-						<bar name='autotools'     value=' 26.75'>-MMD gcc deps (non recursive)</bar>
-					</bars>
+				<part caption='Initial full build'>
+					<part caption='With scan of system-wide headers'>
+						<bars scale='20' unit='m'>
+							<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value='  7.38'>-MD gcc deps</bar>
+							<bar-section>Using batch compilation, but no pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 20.93'>-MD gcc deps</bar>
+							<bar-section>Using neither</bar-section>
+							<bar name='cmake'         value=' 20.43'>with scan of deps in /usr/include (closer to gcc -MD)</bar>
+							<bar name='waf'           value=' 21.63'>-MMD gcc deps, timestamp signatures</bar>
+							<bar name='waf'           value=' 21.63'>waf deps, timestamp signatures</bar>
+							<bar name='autotools'     value=' 26.61'>-MD gcc deps (non recursive)</bar>
+						</bars>
+					</part>
+					<part caption='Without scan of system-wide headers'>
+						<bars scale='20' unit='m'>
+							<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value='  7.13'>-MMD gcc deps</bar>
+							<bar-section>Using batch compilation, but no pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 20.50'>-MMD gcc deps</bar>
+							<bar-section>Using neither</bar-section>
+							<bar name='cmake'         value=' 19.42'>without scan of system wide headers (like gcc -MMD)</bar>
+							<bar name='waf'           value=' 21.92'>-MD gcc deps, timestamp signatures</bar>
+							<bar name='scons'         value=' 23.25'>with fast tuning options</bar>
+							<bar name='autotools'     value=' 26.75'>-MMD gcc deps (non recursive)</bar>
+						</bars>
+					</part>
+					<part caption='Broken tools'>
+						<bars scale='20' unit='m'>
+							<bar-section>Using batch compilation, but no pre-compiled headers</bar-section>
+							<bar name='waf'           value=' 21.51'>waf deps, timestamp signatures <span style='color: red'>batch-compilation currently has broken dependency-handling</span></bar>
+							<bar-section>Using neither</bar-section>
+							<bar name='toy makefiles' value='180.00'>(recursive) <span style='color: red'>UNFINISHED: did not manage to complete within several hours, due to makedepend being extremely slow!</span></bar>
+						</bars>
+					</part>
 				</part>
-				<part caption='Broken tools'>
-					<bars scale='20' unit='m'>
-						<bar-section>Using batch compilation, but no pre-compiled headers</bar-section>
-						<bar name='waf'           value=' 21.51'>waf deps, timestamp signatures <span style='color: red'>batch-compilation currently has broken dependency-handling</span></bar>
-						<bar-section>Using neither</bar-section>
-						<bar name='toy makefiles' value='180.00'>(recursive) <span style='color: red'>UNFINISHED: did not manage to complete within several hours, due to makedepend being extremely slow!</span></bar>
-					</bars>
+				<part caption='Big partial rebuild'>
+					After touch lib_17/*.hpp => rebuild of 585 object files from c++ and 33 static libs
+					<part caption='With scan of system-wide headers'>
+						<bars scale='3'>
+							<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 53'>-MD gcc deps</bar>
+							<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value='151'>-MD gcc deps</bar>
+							<bar-section>Using neither</bar-section>
+							<bar name='waf'           value='162'>-MD gcc deps, timestamp signatures</bar>
+							<bar name='cmake'         value='170'>with scan of deps in /usr/include (closer to gcc -MD)</bar>
+							<bar name='autotools'     value='241'>-MD gcc deps (non recursive)</bar>
+						</bars>
+					</part>
+					<part caption='Without scan of system-wide headers'>
+						<bars scale='3'>
+							<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 53'>-MMD gcc deps</bar>
+							<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value='147'>-MMD gcc deps</bar>
+							<bar-section>Using neither</bar-section>
+							<bar name='cmake'         value='138'>without scan of system wide headers (like gcc -MMD)</bar>
+							<bar name='waf'           value='158'>-MMD gcc deps, timestamp signatures</bar>
+							<bar name='waf'           value='159'>waf deps, timestamp signatures</bar>
+							<bar name='scons'         value='185'>with fast tuning options</bar>
+							<bar name='autotools'     value='197'>-MMD gcc deps (non recursive)</bar>
+						</bars>
+					</part>
 				</part>
-			</part>
-			<part caption='Big partial rebuild'>
-				After touch lib_17/*.hpp => rebuild of 585 object files from c++ and 33 static libs
-				<part caption='With scan of system-wide headers'>
-					<bars scale='3'>
-						<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
-						<bar name='wonderbuild'   value=' 53'>-MD gcc deps</bar>
-						<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
-						<bar name='wonderbuild'   value='151'>-MD gcc deps</bar>
-						<bar-section>Using neither</bar-section>
-						<bar name='waf'           value='162'>-MD gcc deps, timestamp signatures</bar>
-						<bar name='cmake'         value='170'>with scan of deps in /usr/include (closer to gcc -MD)</bar>
-						<bar name='autotools'     value='241'>-MD gcc deps (non recursive)</bar>
-					</bars>
+				<part caption='Small partial rebuild'>
+					After touch lib_17/class_17.hpp => rebuild of 26 object files from c++ and 8 static libs
+					<part caption='With scan of system-wide headers'>
+						<bars scale='50'>
+							<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 3.13'>-MD gcc deps</bar>
+							<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value='10.36'>-MD gcc deps</bar>
+							<bar-section>Using neither</bar-section>
+							<bar name='waf'           value='12.02'>-MD gcc deps, timestamp signatures</bar>
+							<bar name='cmake'         value='29.20'>with scan of deps in /usr/include (closer to gcc -MD)</bar>
+							<bar name='autotools'     value='50.44'>-MD gcc deps (non recursive)</bar>
+						</bars>
+					</part>
+					<part caption='Without scan of system-wide headers'>
+						<bars scale='50'>
+							<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 3.01'>-MMD gcc deps</bar>
+							<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 7.52'>-MMD gcc deps</bar>
+							<bar-section>Using neither</bar-section>
+							<bar name='cmake'         value=' 7.82'>without scan of system wide headers (like gcc -MMD)</bar>
+							<bar name='waf'           value=' 8.57'>waf deps, timestamp signatures</bar>
+							<bar name='waf'           value=' 8.65'>-MMD gcc deps, timestamp signatures</bar>
+							<bar name='autotools'     value='11.92'>-MMD gcc deps (non recursive)</bar>
+							<bar name='scons'         value='33.85'>with fast tuning options</bar>
+						</bars>
+					</part>
 				</part>
-				<part caption='Without scan of system-wide headers'>
-					<bars scale='3'>
-						<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
-						<bar name='wonderbuild'   value=' 53'>-MMD gcc deps</bar>
-						<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
-						<bar name='wonderbuild'   value='147'>-MMD gcc deps</bar>
-						<bar-section>Using neither</bar-section>
-						<bar name='cmake'         value='138'>without scan of system wide headers (like gcc -MMD)</bar>
-						<bar name='waf'           value='158'>-MMD gcc deps, timestamp signatures</bar>
-						<bar name='waf'           value='159'>waf deps, timestamp signatures</bar>
-						<bar name='scons'         value='185'>with fast tuning options</bar>
-						<bar name='autotools'     value='197'>-MMD gcc deps (non recursive)</bar>
-					</bars>
-				</part>
-			</part>
-			<part caption='Small partial rebuild'>
-				After touch lib_17/class_17.hpp => rebuild of 26 object files from c++ and 8 static libs
-				<part caption='With scan of system-wide headers'>
-					<bars scale='50'>
-						<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
-						<bar name='wonderbuild'   value=' 3.13'>-MD gcc deps</bar>
-						<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
-						<bar name='wonderbuild'   value='10.36'>-MD gcc deps</bar>
-						<bar-section>Using neither</bar-section>
-						<bar name='waf'           value='12.02'>-MD gcc deps, timestamp signatures</bar>
-						<bar name='cmake'         value='29.20'>with scan of deps in /usr/include (closer to gcc -MD)</bar>
-						<bar name='autotools'     value='50.44'>-MD gcc deps (non recursive)</bar>
-					</bars>
-				</part>
-				<part caption='Without scan of system-wide headers'>
-					<bars scale='50'>
-						<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
-						<bar name='wonderbuild'   value=' 3.01'>-MMD gcc deps</bar>
-						<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
-						<bar name='wonderbuild'   value=' 7.52'>-MMD gcc deps</bar>
-						<bar-section>Using neither</bar-section>
-						<bar name='cmake'         value=' 7.82'>without scan of system wide headers (like gcc -MMD)</bar>
-						<bar name='waf'           value=' 8.57'>waf deps, timestamp signatures</bar>
-						<bar name='waf'           value=' 8.65'>-MMD gcc deps, timestamp signatures</bar>
-						<bar name='autotools'     value='11.92'>-MMD gcc deps (non recursive)</bar>
-						<bar name='scons'         value='33.85'>with fast tuning options</bar>
-					</bars>
-				</part>
-			</part>
-			<part caption='No-op rebuild'>
-				<part caption='With scan of system-wide headers'>
-					<bars scale='50'>
-						<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
-						<bar name='wonderbuild'   value=' 0.70'>-MD gcc deps</bar>
-						<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
-						<bar name='wonderbuild'   value=' 4.64'>-MD gcc deps</bar>
-						<bar-section>Using neither</bar-section>
-						<bar name='waf'           value=' 4.58'>-MD gcc deps, timestamp signatures</bar>
-						<bar name='cmake'         value='22.13'>with scan of deps in /usr/include (closer to gcc -MD)</bar>
-						<bar name='autotools'     value='41.54'>-MD gcc deps (non recursive)</bar>
-					</bars>
-				</part>
-				<part caption='Without scan of system-wide headers'>
-					<bars scale='50'>
-						<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
-						<bar name='wonderbuild'   value=' 0.69'>-MMD gcc deps</bar>
-						<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
-						<bar name='wonderbuild'   value=' 0.69'>-MMD gcc deps</bar>
-						<bar-section>Using neither</bar-section>
-						<bar name='waf'           value=' 1.13'>-MMD gcc deps, timestamp signatures</bar>
-						<bar name='waf'           value=' 1.13'>waf deps, timestamp signatures</bar>
-						<bar name='cmake'         value=' 1.39'>without scan of system wide headers (like gcc -MMD)</bar>
-						<bar name='autotools'     value=' 2.05'>-MMD gcc deps (non recursive)</bar>
-						<bar name='scons'         value='27.48'>with fast tuning options</bar>
-					</bars>
+				<part caption='No-op rebuild'>
+					<part caption='With scan of system-wide headers'>
+						<bars scale='50'>
+							<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 0.70'>-MD gcc deps</bar>
+							<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 4.64'>-MD gcc deps</bar>
+							<bar-section>Using neither</bar-section>
+							<bar name='waf'           value=' 4.58'>-MD gcc deps, timestamp signatures</bar>
+							<bar name='cmake'         value='22.13'>with scan of deps in /usr/include (closer to gcc -MD)</bar>
+							<bar name='autotools'     value='41.54'>-MD gcc deps (non recursive)</bar>
+						</bars>
+					</part>
+					<part caption='Without scan of system-wide headers'>
+						<bars scale='50'>
+							<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 0.69'>-MMD gcc deps</bar>
+							<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 0.69'>-MMD gcc deps</bar>
+							<bar-section>Using neither</bar-section>
+							<bar name='waf'           value=' 1.13'>-MMD gcc deps, timestamp signatures</bar>
+							<bar name='waf'           value=' 1.13'>waf deps, timestamp signatures</bar>
+							<bar name='cmake'         value=' 1.39'>without scan of system wide headers (like gcc -MMD)</bar>
+							<bar name='autotools'     value=' 2.05'>-MMD gcc deps (non recursive)</bar>
+							<bar name='scons'         value='27.48'>with fast tuning options</bar>
+						</bars>
+					</part>
 				</part>
 			</part>
 		</part>
