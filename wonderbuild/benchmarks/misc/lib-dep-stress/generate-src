@@ -12,7 +12,7 @@ if __name__ == '__main__':
 	try:
 		f.write('#include <wrapper' + str(count - 1) + '/wrapper.hpp>\n')
 		f.write('int main() {\n')
-		f.write('\twrapper_even_' + str(count -1) + '();\n')
+		f.write('\twrapper_even_' + str(count - 1) + '();\n')
 		f.write('\treturn 0;\n')
 		f.write('}\n')
 	finally:
