@@ -571,7 +571,7 @@
 					</ul>
 				</part>
 				<part caption='Initial full build'>
-					<bars scale='8'>
+					<bars scale='9'>
 						<bar-section>Using static libs</bar-section>
 						<bar name='wonderbuild'   value='26.96'>gcc deps</bar>
 						<bar name='waf'           value='41.59'>waf cpp, timestamp signatures</bar>
@@ -581,7 +581,7 @@
 					</bars>
 				</part>
 				<part caption='No-op rebuild'>
-					<bars scale='40'>
+					<bars scale='60'>
 						<bar-section>Using static libs</bar-section>
 						<bar name='wonderbuild'   value=' 0.37'>gcc deps</bar>
 						<bar name='waf'           value='13.87'>waf cpp, timestamp signatures</bar>
