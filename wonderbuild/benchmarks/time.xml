@@ -560,7 +560,8 @@
 				ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
 				<br/>
 				Here we used <a href='misc/lib-dep-stress'/> to stress the dependencies between libraries<br/>
-				The generate-src script was asked to generate 100 libraries.
+				The generate-src script was asked to generate 200 libraries, each library N depending on all libraries from 0 through N -1.<br/>
+				This lead to a total of N * (N -1) dependencies with N = 200, thus 19900 dependencies.
 				<part caption='Tool versions'>
 					<ul>
 						<li>Waf version was somewhere after 1.5.9 (svn rev 6671)</li>
