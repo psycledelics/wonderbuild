@@ -559,7 +559,7 @@
 				Here we used <a href='misc/lib-dep-stress'/> to stress the dependencies between libraries.
 				<br/>
 				The generate-src script was asked to generate 200 libraries, each library N depending on all libraries from 0 through N -1.<br/>
-				This lead to a total of N * (N -1) dependencies with N = 200, thus 19900 dependencies.
+				This lead to a total of N * (N -1) / 2 dependencies with N = 200, thus 19900 dependencies.
 				<br/><br/>
 				All tests were run with 4 jobs on the same quad core system,
 				ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
