@@ -4,6 +4,13 @@
 
 import os
 
+# REMEMBER: libraries are linked one by one by default, if you want to remove
+# that constraint, you will have to change something....
+import Task, Constants
+#Task.algotype = Constants.NORMAL
+Task.algotype = Constants.MAXPARALLEL
+#Task.algotype = Constants.MAXJOBS
+
 APPNAME = 'lib-dep-stress'
 VERSION = '1.0.0'
 srcdir = '.'
@@ -23,21 +30,23 @@ def configure(conf):
 def build(bld):
 	#kind = 'cshlib'
 	kind = 'cstaticlib'
+	
 	count = 0
 	for x in bld.srcnode.find_dir('src').find_iter(in_pat=('wrapper*',), prune_pat=('*',), dir=True): count += 1
-	wrappers = []
+
 	for i in xrange(count):
-		wrapper = bld.new_task_gen(features=['cxx', kind])
-		wrapper.target = 'wrapper' + str(i)
-		wrapper.includes = 'src'
-		wrapper.source = [
-			'src/wrapper' + str(i) + '/wrapper_even.cpp',
-			'src/wrapper' + str(i) + '/wrapper_odd.cpp'
-		]
-		wrapper.uselib_local = [w.target for w in wrappers[:i]]
-		wrappers.append(wrapper)
-	main = bld.new_task_gen(features=['cxx', 'cprogram'])
-	main.target = 'main'
-	main.includes = 'src'
-	main.source = 'src/main.cpp'
-	main.uselib_local = wrappers[-1].target
+		bld.new_task_gen(
+			features=['cxx', kind],
+			target = 'wrapper' + str(i),
+			includes = 'src',
+			source = ['src/wrapper' + str(i) + '/wrapper_even.cpp', 'src/wrapper' + str(i) + '/wrapper_odd.cpp'],
+			uselib_local = ['wrapper' + str(j) for j in xrange(i)]
+		)
+
+	bld.new_task_gen(
+		features=['cxx', 'cprogram'],
+		target='main',
+		includes = 'src',
+		source = 'src/main.cpp',
+		uselib_local = 'wrapper' + str(count - 1)
+	)
