@@ -43,7 +43,7 @@ else:
 					self.i = i
 	
 				def __call__(self, sched_ctx):
-					self.private_deps = [wrappers[j] for j in xrange(self.i)]
+					self.private_deps = wrappers[:self.i]
 					self.result = True
 					for x in ModTask.__call__(self, sched_ctx): yield x
 
