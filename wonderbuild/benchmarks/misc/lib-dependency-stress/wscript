@@ -17,14 +17,23 @@ def configure(conf):
 	conf.env.CXXDEFINES = ['WRAPPER']
 
 def build(bld):
+	#kind = 'shlib'
+	kind = 'staticlib'
 	count = 0
 	for x in bld.srcnode.find_dir('src').find_iter(in_pat=('wrapper*',), prune_pat=('*',), dir=True): count += 1
 	wrappers = []
 	for i in xrange(count):
-		wrapper = bld.new_task_gen('cxx', 'shlib')
+		wrapper = bld.new_task_gen('cxx', kind)
 		wrapper.target = 'wrapper' + str(i)
 		wrapper.includes = 'src'
-		wrapper.source = 'src/wrapper' + str(i) + '/wrapper.cpp'
+		wrapper.source = [
+			'src/wrapper' + str(i) + '/wrapper_even.cpp',
+			'src/wrapper' + str(i) + '/wrapper_odd.cpp'
+		]
 		wrapper.uselib_local = ' '.join(wrappers[j].target for j in xrange(i))
 		wrappers.append(wrapper)
-
+	main = bld.new_task_gen('cxx', 'program')
+	main.target = 'main'
+	main.includes = 'src'
+	main.source = 'src/main.cpp'
+	main.uselib_local = wrappers[count - 1].target

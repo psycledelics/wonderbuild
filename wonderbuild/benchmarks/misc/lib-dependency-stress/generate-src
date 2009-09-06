@@ -7,21 +7,53 @@ if __name__ == '__main__':
 	os.chdir(os.path.dirname(__file__))
 	count = int(sys.argv[1])
 	for i in xrange(count):
-		dir = os.path.join('src', 'wrapper' + str(i))
-		if not os.path.exists(dir): os.makedirs(dir)
+		dir = 'src'
+		if not os.path.exists(dir): os.mkdir(dir)
+		f = open(os.path.join(dir, 'main.cpp'), 'wb')
+		try:
+			if count % 2 != 0:
+				even = count - 1
+				odd = count - 2
+			else:
+				even = count - 2
+				odd = count - 1
+			f.write('#include <wrapper' + str(count - 1) + '/wrapper.hpp>\n')
+			f.write('#include <wrapper' + str(count - 2) + '/wrapper.hpp>\n')
+			f.write('int main() {\n')
+			f.write('\twrapper_even_' + str(even) + '();\n')
+			f.write('\twrapper_odd_' + str(odd) + '();\n')
+			f.write('\treturn 0;\n')
+			f.write('}\n')
+		finally:
+			f.close()
+		dir = os.path.join(dir, 'wrapper' + str(i))
+		if not os.path.exists(dir): os.mkdir(dir)
 		f = open(os.path.join(dir, 'wrapper.hpp'), 'wb')
 		try:
 			f.write('#ifndef WRAPPER' + str(i) + '\n')
 			f.write('#define WRAPPER' + str(i) + '\n')
-			f.write('void wrapper' + str(i) + '();\n')
+			f.write('void wrapper_even_' + str(i) + '();\n')
+			f.write('void wrapper_odd_' + str(i) + '();\n')
 			f.write('#endif\n')
 		finally:
 			f.close()
-		f = open(os.path.join(dir, 'wrapper.cpp'), 'wb')
+		f = open(os.path.join(dir, 'wrapper_even.cpp'), 'wb')
 		try:
-			for j in xrange(i): f.write('#include <wrapper' + str(j) + '/wrapper.hpp>\n')
-			f.write('void wrapper' + str(i) + '() {\n')
-			for j in xrange(i): f.write('\twrapper' + str(j) + '();\n')
+			for j in xrange(0, i, 2): f.write('#include <wrapper' + str(j) + '/wrapper.hpp>\n')
+			f.write('#include <iostream>\n')
+			f.write('void wrapper_even_' + str(i) + '() {\n')
+			for j in xrange(0, i, 2): f.write('\twrapper_even_' + str(j) + '();\n')
+			if i % 2 == 0: f.write('\tstd::cout << ' + str(i) + " << '\\n';\n")
+			f.write('}\n')
+		finally:
+			f.close()
+		f = open(os.path.join(dir, 'wrapper_odd.cpp'), 'wb')
+		try:
+			for j in xrange(1, i, 2): f.write('#include <wrapper' + str(j) + '/wrapper.hpp>\n')
+			f.write('#include <iostream>\n')
+			f.write('void wrapper_odd_' + str(i) + '() {\n')
+			for j in xrange(1, i, 2): f.write('\twrapper_odd_' + str(j) + '();\n')
+			if i % 2 != 0: f.write('\tstd::cout << ' + str(i) + " << '\\n';\n")
 			f.write('}\n')
 		finally:
 			f.close()

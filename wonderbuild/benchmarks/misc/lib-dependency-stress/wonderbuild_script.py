@@ -30,7 +30,7 @@ else:
 				def __call__(self, sched_ctx):
 					for x in UserBuildCfgTask.__call__(self, sched_ctx): yield x
 					self.cxx_flags = ['-g', '-O0', '-Wall']
-					#self.shared = self.pic = False
+					self.shared = self.pic = False
 					self.defines['WRAPPER'] = None
 					self.include_paths.append(src_dir)
 		
@@ -48,9 +48,22 @@ else:
 					for x in ModTask.__call__(self, sched_ctx): yield x
 
 				def do_mod_phase(self):
-					self.sources = [src_dir / ('wrapper' + str(self.i)) / 'wrapper.cpp']
+					for s in (src_dir / ('wrapper' + str(self.i))).find_iter(in_pats=('*.cpp',)): self.sources.append(s)
 
 			count = 0
 			for n in src_dir.find_iter(in_pats = ('wrapper*',), prune_pats = ('*',)): count += 1
 			wrappers = [Wrapper(i) for i in xrange(count)]
-			self.project.add_task_aliases(wrappers[-1].mod_phase, 'default')
+			
+			class Main(ModTask):
+				def __init__(self):
+					ModTask.__init__(self, 'main', ModTask.Kinds.PROG, build_cfg)
+	
+				def __call__(self, sched_ctx):
+					self.private_deps = wrappers[-1:]
+					self.result = True
+					for x in ModTask.__call__(self, sched_ctx): yield x
+
+				def do_mod_phase(self):
+					self.sources = [src_dir / 'main.cpp']
+
+			self.project.add_task_aliases(Main().mod_phase, 'default')
