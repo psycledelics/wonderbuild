@@ -34,7 +34,7 @@ def build(bld):
 			'src/wrapper' + str(i) + '/wrapper_even.cpp',
 			'src/wrapper' + str(i) + '/wrapper_odd.cpp'
 		]
-		wrapper.uselib_local = ' '.join(wrappers[j].target for j in xrange(i))
+		wrapper.uselib_local = [w.target for w in wrappers[:i]]
 		wrappers.append(wrapper)
 	main = bld.new_task_gen('cxx', 'program')
 	main.target = 'main'
