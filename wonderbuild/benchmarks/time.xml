@@ -484,14 +484,14 @@
 		</part>
 		<part caption='Scalability' anchor='scalability'>
 			<part caption='Increasing the number of files and includes'>
-				All tests were run with 4 jobs on the same quad core system,
-				ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
-				<br/>
 				Here we compare two different <a href='gen-bench'/> invocations:<br/>
 				- the reference one called with the parameters 50 100 15 5 (50 libs, 10000 files, 104500 #includes)<br/>
 				- with another one called with the parameters 100 200 30 10 (100 libs, 40000 files, 818000 #includes).
 				<br/>
 				The results are the time ratio between the latter and the former.
+				<br/><br/>
+				All tests were run with 4 jobs on the same quad core system,
+				ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
 				<part caption='Tool versions'>
 					<ul>
 						<li>Scons version was 1.2.0</li>
@@ -556,12 +556,13 @@
 				</part>
 			</part>
 			<part caption='Stressing the dependencies between libraries' anchor='scalability-lib-deps'>
-				All tests were run with 4 jobs on the same quad core system,
-				ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
+				Here we used <a href='misc/lib-dep-stress'/> to stress the dependencies between libraries.
 				<br/>
-				Here we used <a href='misc/lib-dep-stress'/> to stress the dependencies between libraries.<br/>
 				The generate-src script was asked to generate 200 libraries, each library N depending on all libraries from 0 through N -1.<br/>
 				This lead to a total of N * (N -1) dependencies with N = 200, thus 19900 dependencies.
+				<br/><br/>
+				All tests were run with 4 jobs on the same quad core system,
+				ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
 				<part caption='Tool versions'>
 					<ul>
 						<li>Waf version was somewhere after 1.5.9 (svn rev 6671)</li>
