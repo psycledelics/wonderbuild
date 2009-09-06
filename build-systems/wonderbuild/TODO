@@ -1,3 +1,5 @@
+* fs: add a before dump callback to filter which nodes need to be saved.
+
 * concatenate all the compiler checks about predefined macros into one, including the version.
   already done for the binary format check, just need to put all the rest here.
 
