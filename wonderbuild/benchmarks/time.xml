@@ -565,7 +565,7 @@
 				ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
 				<part caption='Tool versions'>
 					<ul>
-						<li>Waf version was somewhere after 1.5.9 (svn rev 6671)</li>
+						<li>Waf version was somewhere after 1.5.9 (svn rev 6674 with issue #520 proposed patch)</li>
 						<li>Python version was 2.5.2</li>
 						<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
 					</ul>
@@ -573,21 +573,21 @@
 				<part caption='Initial full build'>
 					<bars scale='8'>
 						<bar-section>Using static libs</bar-section>
-						<bar name='wonderbuild'   value=' 26.96'>gcc deps</bar>
-						<bar name='waf'           value=' 40.51'>waf cpp, timestamp signatures <span style='color: red'>failed to link the program due to wrong lib ordering</span></bar>
+						<bar name='wonderbuild'   value='26.96'>gcc deps</bar>
+						<bar name='waf'           value='41.59'>waf cpp, timestamp signatures</bar>
 						<bar-section>Using shared libs</bar-section>
-						<bar name='wonderbuild'   value=' 74.68'>gcc deps</bar>
-						<bar name='waf'           value='102.44'>waf cpp, timestamp signatures</bar>
+						<bar name='wonderbuild'   value='74.68'>gcc deps</bar>
+						<bar name='waf'           value='92.98'>waf cpp, timestamp signatures</bar>
 					</bars>
 				</part>
 				<part caption='No-op rebuild'>
 					<bars scale='40'>
 						<bar-section>Using static libs</bar-section>
 						<bar name='wonderbuild'   value=' 0.37'>gcc deps</bar>
-						<bar name='waf'           value='12.55'>waf cpp, timestamp signatures <span style='color: red'>failed to link the program due to wrong lib ordering</span></bar>
+						<bar name='waf'           value='13.87'>waf cpp, timestamp signatures</bar>
 						<bar-section>Using shared libs</bar-section>
 						<bar name='wonderbuild'   value=' 0.54'>gcc deps</bar>
-						<bar name='waf'           value='22.26'>waf cpp, timestamp signatures</bar>
+						<bar name='waf'           value='13.79'>waf cpp, timestamp signatures</bar>
 					</bars>
 				</part>
 			</part>
