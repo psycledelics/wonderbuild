@@ -6,27 +6,27 @@ if __name__ == '__main__':
 	import sys, os
 	os.chdir(os.path.dirname(__file__))
 	count = int(sys.argv[1])
+	src_dir = 'src'
+	if not os.path.exists(src_dir): os.mkdir(src_dir)
+	f = open(os.path.join(src_dir, 'main.cpp'), 'wb')
+	try:
+		if count % 2 != 0:
+			even = count - 1
+			odd = count - 2
+		else:
+			even = count - 2
+			odd = count - 1
+		f.write('#include <wrapper' + str(count - 1) + '/wrapper.hpp>\n')
+		f.write('#include <wrapper' + str(count - 2) + '/wrapper.hpp>\n')
+		f.write('int main() {\n')
+		f.write('\twrapper_even_' + str(even) + '();\n')
+		f.write('\twrapper_odd_' + str(odd) + '();\n')
+		f.write('\treturn 0;\n')
+		f.write('}\n')
+	finally:
+		f.close()
 	for i in xrange(count):
-		dir = 'src'
-		if not os.path.exists(dir): os.mkdir(dir)
-		f = open(os.path.join(dir, 'main.cpp'), 'wb')
-		try:
-			if count % 2 != 0:
-				even = count - 1
-				odd = count - 2
-			else:
-				even = count - 2
-				odd = count - 1
-			f.write('#include <wrapper' + str(count - 1) + '/wrapper.hpp>\n')
-			f.write('#include <wrapper' + str(count - 2) + '/wrapper.hpp>\n')
-			f.write('int main() {\n')
-			f.write('\twrapper_even_' + str(even) + '();\n')
-			f.write('\twrapper_odd_' + str(odd) + '();\n')
-			f.write('\treturn 0;\n')
-			f.write('}\n')
-		finally:
-			f.close()
-		dir = os.path.join(dir, 'wrapper' + str(i))
+		dir = os.path.join(src_dir, 'wrapper' + str(i))
 		if not os.path.exists(dir): os.mkdir(dir)
 		f = open(os.path.join(dir, 'wrapper.hpp'), 'wb')
 		try:
