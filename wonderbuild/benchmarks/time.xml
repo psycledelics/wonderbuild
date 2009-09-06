@@ -483,75 +483,111 @@
 			</part>
 		</part>
 		<part caption='Scalability' anchor='scalability'>
-			All tests were run with 4 jobs on the same quad core system,
-			ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
-			<br/>
-			Here we compare two different <a href='gen-bench'/> invocations:<br/>
-			- the reference one called with the parameters 50 100 15 5 (50 libs, 10000 files, 104500 #includes)<br/>
-			- with another one called with the parameters 100 200 30 10 (100 libs, 40000 files, 818000 #includes).
-			<br/>
-			The results are the time ratio between the latter and the former.
-			<part caption='Tool versions'>
-				<ul>
-					<li>Scons version was 1.2.0</li>
-					<li>Waf version was somewhere after 1.5.9 (svn rev 6671)</li>
-					<li>Python version was 2.5.2</li>
-					<li>Jam version was 2.5</li>
-					<li>CMake version was 2.4.7</li>
-					<li>Make version was gnu make 3.81</li>
-					<li>Makedepend was version 1.0.1</li>
-					<li>Shell was dash (not bash) version 0.5.4</li>
-					<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
-				</ul>
-			</part>
-			<part caption='Initial full build'>
-				<bars scale='100' unit=' times'>
-					<bar name='wonderbuild'   value='4.28'>(131.77s / 30.8s) gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
-					<bar name='jam'           value='4.34'>(154.35s / 35.6s) <span style='color: red'>missed header deps!</span></bar>
-					<bar name='cmake'         value='4.39'>(164.50s / 37.5s) without scan of system wide headers (like gcc -MMD)</bar>
-					<bar name='waf'           value='4.82'>(226.56s / 47.0s) gcc deps, timestamp signatures</bar>
-					<bar name='waf'           value='6.83'>(323.08s / 47.3s) waf cpp, timestamp signatures</bar>
-				</bars>
-			</part>
-			<part caption='Big partial rebuild'>
-				After touch lib_17/*.hpp => rebuild of 3291 object files from c++ and 83 static libs
+			<part caption='Increasing the number of files and includes'>
+				All tests were run with 4 jobs on the same quad core system,
+				ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
 				<br/>
-				(The reference benchmark rebuilt 585 object files from c++ and 33 static libs)
-				<br/><br/>
-				<bars scale='100' unit=' times'>
-					<bar name='wonderbuild' value='5.82'>(25.59s / 4.40s) gcc deps</bar>
-					<bar name='jam'         value='6.58'>(27.98s / 4.25s) <span style='color: red'>missed header deps!</span></bar>
-					<bar name='cmake'       value='5.99'>(36.86s / 6.15s) without scan of system wide headers (like gcc -MMD)</bar>
-					<bar name='waf'         value='7.02'>(52.06s / 7.42s) gcc deps, timestamp signatures</bar>
-					<bar name='waf'         value='8.00'>(59.35s / 7.42s) waf cpp, timestamp signatures</bar>
-				</bars>
-			</part>
-			<part caption='Small partial rebuild'>
-				After touch lib_17/class_17.hpp => rebuild of 37 object files from c++ and 13 static libs
+				Here we compare two different <a href='gen-bench'/> invocations:<br/>
+				- the reference one called with the parameters 50 100 15 5 (50 libs, 10000 files, 104500 #includes)<br/>
+				- with another one called with the parameters 100 200 30 10 (100 libs, 40000 files, 818000 #includes).
 				<br/>
-				(The reference benchmark rebuilt 26 object files from c++ and 8 static libs)
-				<br/><br/>
-				<bars scale='100' unit=' times'>
-					<bar name='wonderbuild' value='4.10'>( 3.44s / 0.84s) gcc deps</bar>
-					<bar name='jam'         value='5.41'>( 4.38s / 0.81s) <span style='color: red'>missed header deps!</span></bar>
-					<bar name='cmake'       value='4.61'>( 7.84s / 1.70s) without scan of system wide headers (like gcc -MMD)</bar>
-					<bar name='waf'         value='4.34'>(10.55s / 2.43s) waf cpp, timestamp signatures</bar>
-					<bar name='waf'         value='4.37'>(10.63s / 2.43s) gcc deps, timestamp signatures</bar>
-				</bars>
+				The results are the time ratio between the latter and the former.
+				<part caption='Tool versions'>
+					<ul>
+						<li>Scons version was 1.2.0</li>
+						<li>Waf version was somewhere after 1.5.9 (svn rev 6671)</li>
+						<li>Python version was 2.5.2</li>
+						<li>Jam version was 2.5</li>
+						<li>CMake version was 2.4.7</li>
+						<li>Make version was gnu make 3.81</li>
+						<li>Makedepend was version 1.0.1</li>
+						<li>Shell was dash (not bash) version 0.5.4</li>
+						<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
+					</ul>
+				</part>
+				<part caption='Initial full build'>
+					<bars scale='100' unit=' times'>
+						<bar name='wonderbuild'   value='4.28'>(131.77s / 30.8s) gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
+						<bar name='jam'           value='4.34'>(154.35s / 35.6s) <span style='color: red'>missed header deps!</span></bar>
+						<bar name='cmake'         value='4.39'>(164.50s / 37.5s) without scan of system wide headers (like gcc -MMD)</bar>
+						<bar name='waf'           value='4.82'>(226.56s / 47.0s) gcc deps, timestamp signatures</bar>
+						<bar name='waf'           value='6.83'>(323.08s / 47.3s) waf cpp, timestamp signatures</bar>
+					</bars>
+				</part>
+				<part caption='Big partial rebuild'>
+					After touch lib_17/*.hpp => rebuild of 3291 object files from c++ and 83 static libs
+					<br/>
+					(The reference benchmark rebuilt 585 object files from c++ and 33 static libs)
+					<br/><br/>
+					<bars scale='100' unit=' times'>
+						<bar name='wonderbuild' value='5.82'>(25.59s / 4.40s) gcc deps</bar>
+						<bar name='jam'         value='6.58'>(27.98s / 4.25s) <span style='color: red'>missed header deps!</span></bar>
+						<bar name='cmake'       value='5.99'>(36.86s / 6.15s) without scan of system wide headers (like gcc -MMD)</bar>
+						<bar name='waf'         value='7.02'>(52.06s / 7.42s) gcc deps, timestamp signatures</bar>
+						<bar name='waf'         value='8.00'>(59.35s / 7.42s) waf cpp, timestamp signatures</bar>
+					</bars>
+				</part>
+				<part caption='Small partial rebuild'>
+					After touch lib_17/class_17.hpp => rebuild of 37 object files from c++ and 13 static libs
+					<br/>
+					(The reference benchmark rebuilt 26 object files from c++ and 8 static libs)
+					<br/><br/>
+					<bars scale='100' unit=' times'>
+						<bar name='wonderbuild' value='4.10'>( 3.44s / 0.84s) gcc deps</bar>
+						<bar name='jam'         value='5.41'>( 4.38s / 0.81s) <span style='color: red'>missed header deps!</span></bar>
+						<bar name='cmake'       value='4.61'>( 7.84s / 1.70s) without scan of system wide headers (like gcc -MMD)</bar>
+						<bar name='waf'         value='4.34'>(10.55s / 2.43s) waf cpp, timestamp signatures</bar>
+						<bar name='waf'         value='4.37'>(10.63s / 2.43s) gcc deps, timestamp signatures</bar>
+					</bars>
+				</part>
+				<part caption='No-op rebuild'>
+					<bars scale='100' unit=' times'>
+						<bar name='wonderbuild'   value='4.70'>(2.96s / 0.63s) gcc deps</bar>
+						<bar name='jam'           value='5.77'>(4.10s / 0.71s) <span style='color: red'>missed header deps!</span></bar>
+						<bar name='cmake'         value='4.87'>(6.77s / 1.39s) without scan of system wide headers (like gcc -MMD)</bar>
+						<bar name='waf'           value='4.43'>(7.31s / 1.65s) waf cpp, timestamp signatures</bar>
+						<bar name='waf'           value='4.45'>(7.35s / 1.65s) gcc deps, timestamp signatures</bar>
+					</bars>
+				</part>
+				<part caption='Broken tools'>
+					<bars scale='20'>
+						<bar name='toy makefiles' value='0'>(recursive) <span style='color: red'>UNFINISHED: makedepend did not manage to compute the include dependencies (error:  out of space: increase MAXFILES)</span></bar>
+					</bars>
+				</part>
 			</part>
-			<part caption='No-op rebuild'>
-				<bars scale='100' unit=' times'>
-					<bar name='wonderbuild'   value='4.70'>(2.96s / 0.63s) gcc deps</bar>
-					<bar name='jam'           value='5.77'>(4.10s / 0.71s) <span style='color: red'>missed header deps!</span></bar>
-					<bar name='cmake'         value='4.87'>(6.77s / 1.39s) without scan of system wide headers (like gcc -MMD)</bar>
-					<bar name='waf'           value='4.43'>(7.31s / 1.65s) waf cpp, timestamp signatures</bar>
-					<bar name='waf'           value='4.45'>(7.35s / 1.65s) gcc deps, timestamp signatures</bar>
-				</bars>
-			</part>
-			<part caption='Broken tools'>
-				<bars scale='20'>
-					<bar name='toy makefiles' value='0'>(recursive) <span style='color: red'>UNFINISHED: makedepend did not manage to compute the include dependencies (error:  out of space: increase MAXFILES)</span></bar>
-				</bars>
+			<part caption='Stressing the dependencies between libraries' anchor='scalability-lib-deps'>
+				All tests were run with 4 jobs on the same quad core system,
+				ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
+				<br/>
+				Here we used <a href='misc/lib-dep-stress'/> to stress the dependencies between libraries<br/>
+				The generate-src script was asked to generate 100 libraries.
+				<part caption='Tool versions'>
+					<ul>
+						<li>Waf version was somewhere after 1.5.9 (svn rev 6671)</li>
+						<li>Python version was 2.5.2</li>
+						<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
+					</ul>
+				</part>
+				<part caption='Initial full build'>
+					<bars scale='8'>
+						<bar-section>Using static libs</bar-section>
+						<bar name='wonderbuild'   value=' 26.96'>gcc deps</bar>
+						<bar name='waf'           value=' 40.51'>waf cpp, timestamp signatures <span style='color: red'>failed to link the program due to wrong lib ordering</span></bar>
+						<bar-section>Using shared libs</bar-section>
+						<bar name='wonderbuild'   value=' 74.68'>gcc deps</bar>
+						<bar name='waf'           value='102.44'>waf cpp, timestamp signatures</bar>
+					</bars>
+				</part>
+				<part caption='No-op rebuild'>
+					<bars scale='40'>
+						<bar-section>Using static libs</bar-section>
+						<bar name='wonderbuild'   value=' 0.37'>gcc deps</bar>
+						<bar name='waf'           value='12.55'>waf cpp, timestamp signatures <span style='color: red'>failed to link the program due to wrong lib ordering</span></bar>
+						<bar-section>Using shared libs</bar-section>
+						<bar name='wonderbuild'   value=' 0.54'>gcc deps</bar>
+						<bar name='waf'           value='22.26'>waf cpp, timestamp signatures</bar>
+					</bars>
+				</part>
 			</part>
 		</part>
 		<part caption='Times with big headers (and pre-compilation)' anchor='pch'>
