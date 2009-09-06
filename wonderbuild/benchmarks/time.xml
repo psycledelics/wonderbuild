@@ -122,16 +122,16 @@
 			<part caption='Initial full build'>
 				<bars scale='5'>
 					<bar-section>Using batch compilation</bar-section>
-					<bar name='wonderbuild'   value=' 29.4'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
-					<bar name='waf'           value=' 38.2'>max 50 srcs/batch, waf cpp, shutil, timestamp signatures</bar>
-					<bar name='waf'           value=' 39.7'>max 50 srcs/batch, waf cpp, mv, timestamp signatures</bar>
+					<bar name='wonderbuild'   value=' 30.8'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
+					<bar name='waf'           value=' 38.2'>(OLD BENCHMARK OF OLD VERSION) max 50 srcs/batch, waf cpp, shutil, timestamp signatures</bar>
+					<bar name='waf'           value=' 39.7'>(OLD BENCHMARK OF OLD VERSION) max 50 srcs/batch, waf cpp, mv, timestamp signatures</bar>
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='toy makefiles' value=' 32.9'>without scan of system-wide headers, (recursive)</bar>
 					<bar name='toy makefiles' value=' 33.4'>with scan of system-wide headers, (recursive)</bar>
 					<bar name='jam'           value=' 35.6'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='cmake'         value=' 37.5'>without scan of system wide headers (like gcc -MMD)</bar>
-					<bar name='waf'           value=' 42.8'>gcc deps, timestamp signatures</bar>
-					<bar name='waf'           value=' 45.6'>waf cpp, timestamp signatures</bar>
+					<bar name='waf'           value=' 47.0'>gcc deps, timestamp signatures</bar>
+					<bar name='waf'           value=' 47.3'>waf cpp, timestamp signatures</bar>
 					<bar name='fbuild'        value=' 74.3'>(timestamp signatures only, content hashing disabled)</bar>
 					<bar name='scons'         value='131.0'>with fast tuning options</bar>
 					<bar name='scons'         value='137.7'>with default options</bar>
@@ -143,16 +143,15 @@
 				<br/><br/>
 				<bars scale='20'>
 					<bar-section>Using batch compilation</bar-section>
-					<bar name='wonderbuild'   value=' 4.28'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
-					<bar name='waf'           value=' 6.42'>max 50 srcs/batch, waf cpp, shutil, timestamp signatures</bar>
-					<bar name='waf'           value=' 6.64'>max 50 srcs/batch, waf cpp, mv, timestamp signatures</bar>
+					<bar name='wonderbuild'   value=' 4.40'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
+					<bar name='waf'           value=' 6.42'>(OLD BENCHMARK OF OLD VERSION) max 50 srcs/batch, waf cpp, shutil, timestamp signatures</bar>
+					<bar name='waf'           value=' 6.64'>(OLD BENCHMARK OF OLD VERSION) max 50 srcs/batch, waf cpp, mv, timestamp signatures</bar>
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='jam'           value=' 4.25'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 4.66'>without scan of system-wide headers, (recursive)</bar>
 					<bar name='toy makefiles' value=' 5.05'>with scan of system-wide headers, (recursive)</bar>
 					<bar name='cmake'         value=' 6.15'>without scan of system wide headers (like gcc -MMD)</bar>
-					<bar name='waf'           value=' 6.75'>gcc deps, timestamp signatures</bar>
-					<bar name='waf'           value=' 6.89'>waf cpp, timestamp signatures</bar>
+					<bar name='waf'           value=' 7.42'>(same with gcc deps and waf cpp), timestamp signatures</bar>
 					<bar name='fbuild'        value='24.71'>(timestamp signatures only, content hashing disabled)</bar>
 					<bar name='autotools'     value='29.64'>(non recursive)</bar>
 					<bar name='scons'         value='39.58'>(with fast tuning options)</bar>
@@ -164,13 +163,13 @@
 				<bars scale='60'>
 					<bar-section>Using batch compilation</bar-section>
 					<bar name='wonderbuild'   value=' 0.84'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
-					<bar name='waf'           value=' 1.90'>max 50 srcs/batch, waf cpp (same with shutil or mv), timestamp signatures</bar>
+					<bar name='waf'           value=' 1.90'>(OLD BENCHMARK OF OLD VERSION) max 50 srcs/batch, waf cpp (same with shutil or mv), timestamp signatures</bar>
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='jam'           value=' 0.81'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 1.01'>without scan of system-wide headers, (recursive)</bar>
 					<bar name='toy makefiles' value=' 1.42'>with scan of system-wide headers, (recursive)</bar>
 					<bar name='cmake'         value=' 1.70'>without scan of system wide headers (like gcc -MMD)</bar>
-					<bar name='waf'           value=' 1.94'>(same with gcc deps and waf cpp), timestamp signatures</bar>
+					<bar name='waf'           value=' 2.43'>(same with gcc deps and waf cpp), timestamp signatures</bar>
 					<bar name='autotools'     value=' 4.63'>(non recursive)</bar>
 					<bar name='fbuild'        value=' 6.80'>(timestamp signatures only, content hashing disabled)</bar>
 					<bar name='scons'         value='24.37'>(with fast tuning options)</bar>
@@ -181,9 +180,9 @@
 					<bar name='wonderbuild'   value=' 0.63'>gcc deps</bar>
 					<bar name='jam'           value=' 0.71'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 0.79'>without scan of system-wide headers, (recursive)</bar>
-					<bar name='waf'           value=' 1.21'>(timestamp signatures)</bar>
 					<bar name='toy makefiles' value=' 1.23'>with scan of system-wide headers, (recursive)</bar>
 					<bar name='cmake'         value=' 1.39'>without scan of system wide headers (like gcc -MMD)</bar>
+					<bar name='waf'           value=' 1.65'>(timestamp signatures)</bar>
 					<bar name='autotools'     value=' 2.05'>(non recursive)</bar>
 					<bar name='fbuild'        value=' 2.97'>(timestamp signatures only, content hashing disabled)</bar>
 					<bar name='scons'         value='23.25'>with fast tuning options</bar>
@@ -510,7 +509,8 @@
 					<bar name='wonderbuild'   value='4.28'>(131.77s / 30.8s) gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
 					<bar name='jam'           value='4.34'>(154.35s / 35.6s) <span style='color: red'>missed header deps!</span></bar>
 					<bar name='cmake'         value='4.39'>(164.50s / 37.5s) without scan of system wide headers (like gcc -MMD)</bar>
-					<bar name='waf'           value='7.09'>(323.08s / 45.6s) waf cpp, timestamp signatures</bar>
+					<bar name='waf'           value='4.82'>(226.56s / 47.0s) gcc deps, timestamp signatures</bar>
+					<bar name='waf'           value='6.83'>(323.08s / 47.3s) waf cpp, timestamp signatures</bar>
 				</bars>
 			</part>
 			<part caption='Big partial rebuild'>
@@ -520,9 +520,10 @@
 				<br/><br/>
 				<bars scale='100' unit=' times'>
 					<bar name='wonderbuild' value='5.82'>(25.59s / 4.40s) gcc deps</bar>
-					<bar name='cmake'       value='5.99'>(36.86s / 6.15s) without scan of system wide headers (like gcc -MMD)</bar>
 					<bar name='jam'         value='6.58'>(27.98s / 4.25s) <span style='color: red'>missed header deps!</span></bar>
-					<bar name='waf'         value='8.61'>(59.35s / 6.89s) waf cpp, timestamp signatures</bar>
+					<bar name='cmake'       value='5.99'>(36.86s / 6.15s) without scan of system wide headers (like gcc -MMD)</bar>
+					<bar name='waf'         value='7.02'>(52.06s / 7.42s) gcc deps, timestamp signatures</bar>
+					<bar name='waf'         value='8.00'>(59.35s / 7.42s) waf cpp, timestamp signatures</bar>
 				</bars>
 			</part>
 			<part caption='Small partial rebuild'>
@@ -532,17 +533,19 @@
 				<br/><br/>
 				<bars scale='100' unit=' times'>
 					<bar name='wonderbuild' value='4.10'>( 3.44s / 0.84s) gcc deps</bar>
-					<bar name='cmake'       value='4.61'>( 7.84s / 1.70s) without scan of system wide headers (like gcc -MMD)</bar>
 					<bar name='jam'         value='5.41'>( 4.38s / 0.81s) <span style='color: red'>missed header deps!</span></bar>
-					<bar name='waf'         value='5.44'>(10.55s / 1.94s) waf cpp, timestamp signatures</bar>
+					<bar name='cmake'       value='4.61'>( 7.84s / 1.70s) without scan of system wide headers (like gcc -MMD)</bar>
+					<bar name='waf'         value='4.34'>(10.55s / 2.43s) waf cpp, timestamp signatures</bar>
+					<bar name='waf'         value='4.37'>(10.63s / 2.43s) gcc deps, timestamp signatures</bar>
 				</bars>
 			</part>
 			<part caption='No-op rebuild'>
 				<bars scale='100' unit=' times'>
 					<bar name='wonderbuild'   value='4.70'>(2.96s / 0.63s) gcc deps</bar>
-					<bar name='cmake'         value='4.87'>(6.77s / 1.39s) without scan of system wide headers (like gcc -MMD)</bar>
 					<bar name='jam'           value='5.77'>(4.10s / 0.71s) <span style='color: red'>missed header deps!</span></bar>
-					<bar name='waf'           value='6.04'>(7.31s / 1.21s) (timestamp signatures)</bar>
+					<bar name='cmake'         value='4.87'>(6.77s / 1.39s) without scan of system wide headers (like gcc -MMD)</bar>
+					<bar name='waf'           value='4.43'>(7.31s / 1.65s) waf cpp, timestamp signatures</bar>
+					<bar name='waf'           value='4.45'>(7.35s / 1.65s) gcc deps, timestamp signatures</bar>
 				</bars>
 			</part>
 			<part caption='Broken tools'>
