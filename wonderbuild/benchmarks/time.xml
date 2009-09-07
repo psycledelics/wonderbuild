@@ -558,36 +558,77 @@
 			<part caption='Stressing the dependencies between libraries' anchor='scalability-lib-deps'>
 				Here we used <a href='misc/lib-dep-stress'/> to stress the dependencies between libraries.
 				<br/>
-				The generate-src script was asked to generate 200 libraries, each library N depending on all libraries from 0 through N -1.<br/>
-				This lead to a total of N * (N -1) / 2 dependencies with N = 200, thus 19900 dependencies.
+				The generate-src script was asked to generate N libraries, each library n depending on all libraries from 0 through n -1.<br/>
+				This lead to a total of N * (N -1) / 2 dependencies.
+				<br/>
+				Thus:
+				- with 200 libs => 19900 dependencies,<br/>
+				- with 100 libs =>  4950 dependencies,<br/>
+				- with  50 libs =>  1225 dependencies.<br/>
 				<br/><br/>
 				All tests were run with 4 jobs on the same quad core system,
 				ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
 				<part caption='Tool versions'>
 					<ul>
-						<li>Waf version was somewhere after 1.5.9 (svn rev 6674 with issue #520 proposed patch)</li>
+						<li>Waf version was somewhere after 1.5.9 (svn rev 6674 with issue #522's optim patch)</li>
 						<li>Python version was 2.5.2</li>
 						<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
 					</ul>
 				</part>
 				<part caption='Initial full build'>
 					<bars scale='9'>
-						<bar-section>Using static libs</bar-section>
+						<bar-section>With  50 libs =>  1225 dependencies, using static libs</bar-section>
+						<bar name='wonderbuild'   value='   6.73'>gcc deps</bar>
+						<bar name='waf'           value='   7.04'>waf cpp, timestamp signatures, manually-ordered deps</bar>
+						<bar name='autotools'     value='  77.53'>(non recursive)</bar>
+						<bar-section>With  50 libs =>  1225 dependencies, using shared libs</bar-section>
+						<bar name='wonderbuild'   value='  9.38'>gcc deps</bar>
+						<bar name='waf'           value='  10.44'>waf cpp, timestamp signatures</bar>
+						<bar name='autotools'     value='  79.26'>(non recursive)</bar>
+						<bar-section>With 100 libs =>  4950 dependencies, using static libs</bar-section>
+						<bar name='wonderbuild'   value='  13.17'>gcc deps</bar>
+						<bar name='waf'           value='  14.23'>waf cpp, timestamp signatures, manually-ordered deps</bar>
+						<bar name='autotools'     value='1301.95'>(non recursive)</bar>
+						<bar-section>With 100 libs =>  4950 dependencies, using shared libs</bar-section>
+						<bar name='wonderbuild'   value='20.33'>gcc deps</bar>
+						<bar name='waf'           value='23.57'>waf cpp, timestamp signatures</bar>
+						<bar name='autotools'     value='1295.55'>(non recursive)</bar>
+						<bar-section>With 200 libs => 19900 dependencies, using static libs</bar-section>
 						<bar name='wonderbuild'   value='26.96'>gcc deps</bar>
-						<bar name='waf'           value='41.59'>waf cpp, timestamp signatures</bar>
-						<bar-section>Using shared libs</bar-section>
+						<bar name='waf'           value='30.19'>waf cpp, timestamp signatures, manually-ordered deps</bar>
+						<bar name='autotools'     value=' 0'>(non recursive)<span style='color: red'>UNFINISHED: did not manage to complete within reasonable time, due to libtool being extremely slow!</span></bar>
+						<bar-section>With 200 libs => 19900 dependencies, using shared libs</bar-section>
 						<bar name='wonderbuild'   value='74.68'>gcc deps</bar>
-						<bar name='waf'           value='92.98'>waf cpp, timestamp signatures</bar>
+						<bar name='waf'           value='91.23'>waf cpp, timestamp signatures</bar>
+						<bar name='autotools'     value=' 0'>(non recursive)<span style='color: red'>UNFINISHED: did not manage to complete within reasonable time, due to libtool being extremely slow!</span></bar>
 					</bars>
 				</part>
 				<part caption='No-op rebuild'>
 					<bars scale='60'>
-						<bar-section>Using static libs</bar-section>
+						<bar-section>With  50 libs =>  1225 dependencies, using static libs</bar-section>
+						<bar name='wonderbuild'   value=' 0.07'>gcc deps</bar>
+						<bar name='autotools'     value=' 0.23'>(non recursive)</bar>
+						<bar name='waf'           value=' 0.23'>waf cpp, timestamp signatures, manually-ordered deps</bar>
+						<bar-section>With  50 libs =>  1225 dependencies, using shared libs</bar-section>
+						<bar name='wonderbuild'   value=' 0.09'>gcc deps</bar>
+						<bar name='autotools'     value=' 0.23'>(non recursive)</bar>
+						<bar name='waf'           value=' 0.40'>waf cpp, timestamp signatures</bar>
+						<bar-section>With 100 libs =>  4950 dependencies, using static libs</bar-section>
+						<bar name='wonderbuild'   value=' 0.16'>gcc deps</bar>
+						<bar name='autotools'     value=' 0.49'>(non recursive)</bar>
+						<bar name='waf'           value=' 0.57'>waf cpp, timestamp signatures, manually-ordered deps</bar>
+						<bar-section>With 100 libs =>  4950 dependencies, using shared libs</bar-section>
+						<bar name='wonderbuild'   value=' 0.19'>gcc deps</bar>
+						<bar name='autotools'     value=' 0.49'>(non recursive)</bar>
+						<bar name='waf'           value=' 1.82'>waf cpp, timestamp signatures</bar>
+						<bar-section>With 200 libs => 19900 dependencies, using static libs</bar-section>
 						<bar name='wonderbuild'   value=' 0.37'>gcc deps</bar>
-						<bar name='waf'           value='13.87'>waf cpp, timestamp signatures</bar>
-						<bar-section>Using shared libs</bar-section>
+						<bar name='waf'           value=' 1.95'>waf cpp, timestamp signatures, manually-ordered deps</bar>
+						<bar name='autotools'     value=' 0'>(non recursive)<span style='color: red'>UNFINISHED: did not manage to complete within reasonable time, due to libtool being extremely slow!</span></bar>
+						<bar-section>With 200 libs => 19900 dependencies, using shared libs</bar-section>
 						<bar name='wonderbuild'   value=' 0.54'>gcc deps</bar>
-						<bar name='waf'           value='13.79'>waf cpp, timestamp signatures</bar>
+						<bar name='waf'           value='11.87'>waf cpp, timestamp signatures</bar>
+						<bar name='autotools'     value=' 0'>(non recursive)<span style='color: red'>UNFINISHED: did not manage to complete within reasonable time, due to libtool being extremely slow!</span></bar>
 					</bars>
 				</part>
 			</part>

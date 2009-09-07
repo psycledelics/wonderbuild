@@ -40,7 +40,7 @@ def build(bld):
 			target = 'wrapper' + str(i),
 			includes = 'src',
 			source = ['src/wrapper' + str(i) + '/wrapper_even.cpp', 'src/wrapper' + str(i) + '/wrapper_odd.cpp'],
-			uselib_local = ['wrapper' + str(j) for j in xrange(i)]
+			uselib_local = ['wrapper' + str(j) for j in reversed(xrange(i))] # reversed because patch for issue #520 was rejected
 		)
 
 	bld.new_task_gen(
