@@ -596,15 +596,15 @@
 						<bar-section>With 200 libs => 19900 dependencies, using static libs</bar-section>
 						<bar name='wonderbuild'   value='26.96'>gcc deps</bar>
 						<bar name='waf'           value='30.19'>waf cpp, timestamp signatures, manually-ordered deps</bar>
-						<bar name='autotools'     value=' 0'>(non recursive)<span style='color: red'>UNFINISHED: did not manage to complete within reasonable time, due to libtool being extremely slow!</span></bar>
+						<bar name='autotools'     value=' 0'>(non recursive)<span style='color: red'> UNFINISHED: did not manage to complete within reasonable time, due to libtool being extremely slow!</span></bar>
 						<bar-section>With 200 libs => 19900 dependencies, using shared libs</bar-section>
 						<bar name='wonderbuild'   value='74.68'>gcc deps</bar>
 						<bar name='waf'           value='91.23'>waf cpp, timestamp signatures</bar>
-						<bar name='autotools'     value=' 0'>(non recursive)<span style='color: red'>UNFINISHED: did not manage to complete within reasonable time, due to libtool being extremely slow!</span></bar>
+						<bar name='autotools'     value=' 0'>(non recursive)<span style='color: red'> UNFINISHED: did not manage to complete within reasonable time, due to libtool being extremely slow!</span></bar>
 					</bars>
 				</part>
 				<part caption='No-op rebuild'>
-					<bars scale='80'>
+					<bars scale='75'>
 						<bar-section>With  50 libs =>  1225 dependencies, using static libs</bar-section>
 						<bar name='wonderbuild'   value=' 0.07'>gcc deps</bar>
 						<bar name='autotools'     value=' 0.23'>(non recursive)</bar>
@@ -624,11 +624,11 @@
 						<bar-section>With 200 libs => 19900 dependencies, using static libs</bar-section>
 						<bar name='wonderbuild'   value=' 0.37'>gcc deps</bar>
 						<bar name='waf'           value=' 1.95'>waf cpp, timestamp signatures, manually-ordered deps</bar>
-						<bar name='autotools'     value=' 0'>(non recursive)<span style='color: red'>UNFINISHED: did not manage to complete within reasonable time, due to libtool being extremely slow!</span></bar>
+						<bar name='autotools'     value=' 0'>(non recursive)<span style='color: red'> UNFINISHED: did not manage to complete within reasonable time, due to libtool being extremely slow!</span></bar>
 						<bar-section>With 200 libs => 19900 dependencies, using shared libs</bar-section>
 						<bar name='wonderbuild'   value=' 0.54'>gcc deps</bar>
 						<bar name='waf'           value='11.87'>waf cpp, timestamp signatures</bar>
-						<bar name='autotools'     value=' 0'>(non recursive)<span style='color: red'>UNFINISHED: did not manage to complete within reasonable time, due to libtool being extremely slow!</span></bar>
+						<bar name='autotools'     value=' 0'>(non recursive)<span style='color: red'> UNFINISHED: did not manage to complete within reasonable time, due to libtool being extremely slow!</span></bar>
 					</bars>
 				</part>
 			</part>
