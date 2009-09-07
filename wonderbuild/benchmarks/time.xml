@@ -561,7 +561,7 @@
 				The generate-src script was asked to generate N libraries, each library n depending on all libraries from 0 through n -1.<br/>
 				This lead to a total of N * (N -1) / 2 dependencies.
 				<br/>
-				Thus:
+				Thus:<br/>
 				- with 200 libs => 19900 dependencies,<br/>
 				- with 100 libs =>  4950 dependencies,<br/>
 				- with  50 libs =>  1225 dependencies.
