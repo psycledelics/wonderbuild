@@ -564,7 +564,7 @@
 				Thus:
 				- with 200 libs => 19900 dependencies,<br/>
 				- with 100 libs =>  4950 dependencies,<br/>
-				- with  50 libs =>  1225 dependencies.<br/>
+				- with  50 libs =>  1225 dependencies.
 				<br/><br/>
 				All tests were run with 4 jobs on the same quad core system,
 				ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
