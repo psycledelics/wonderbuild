@@ -59,7 +59,6 @@ def create_lib(lib_number, classes, internal_includes, external_includes):
 		create_hpp(lib_number, classname)
 		create_cpp(lib_number, classname, classes, internal_includes, external_includes)
 	for sub in (
-		create_waf_sub,
 		create_scons_sub,
 		create_cmake_sub,
 		create_autotools_sub,
@@ -170,7 +169,7 @@ class Wonderbuild(ScriptTask):
 				if use_pch: pch.lib_task.apply_to(self.cfg)
 				self.cfg.defines['BENCH_LIB'] = self.i
 				sub_src_dir = src_dir / self.name
-				for s in sub_src_dir.find_iter(in_pats = ['*.cpp']): self.sources.append(s)
+				for s in sub_src_dir.find_iter(in_pats=('*.cpp',)): self.sources.append(s)
 
 		for n in src_dir.find_iter(in_pats = ('lib_*',), prune_pats = ('*',)):
 			self.project.add_task_aliases(BenchLib(n.name, n.name[len('lib_'):]).mod_phase, 'default')
@@ -212,30 +211,16 @@ def configure(conf):
 	#conf.check_tool('batched_cc')
 
 def build(bld):
-	bld.add_subdirs('%(subs)s')
-''' % {
-	'subs': ' '.join([lib_dir(i) for i in xrange(libs)])
-})
-
-def create_waf_sub(lib_number, classes):
-	f = open('wscript', 'w')
-	f.write('''\
-def set_options(opt): pass
-
-def configure(conf): pass
-
-def build(bld):
-	obj = bld.new_task_gen('cxx', 'staticlib')
-	obj.target = '%(tgt)s'
-	obj.cxxflags = ['-g', '-O0', '-Wall']
-	obj.defines = ['BENCH', 'BENCH_LIB=%(num)s']
-	obj.includes = '..'
-	obj.source = '%(src)s'
-''' % {
-	'num': str(lib_number),
-	'tgt': lib_name(lib_number),
-	'src': ' '.join(['class_' + str(i) + '.cpp' for i in xrange(classes)])
-})
+	for n in bld.srcnode.find_iter(in_pat=('lib_*',), prune_pat=('*',), dir=True):
+		obj = bld.new_task_gen(
+			features=['cxx', 'cstaticlib'],
+			target=n.name,
+			cxxflags=['-g', '-O0', '-Wall'],
+			defines=['BENCH', 'BENCH_LIB=' + n.name[len('lib_'):]],
+			includes = '.',
+			source = [s.relpath_gen(bld.path) for s in n.find_iter(in_pat=('*.cpp',))]
+		)
+''')
 
 def create_scons(libs):
 	f = open('SConstruct', 'w')
