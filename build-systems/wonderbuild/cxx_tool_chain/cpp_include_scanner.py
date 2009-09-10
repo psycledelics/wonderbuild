@@ -24,6 +24,7 @@ class IncludeScanner(object):
 		not_found = set() # contains either nodes (for #include "") or paths (for #include <>)
 		seen = self._scan_deps(source, paths, not_found)
 		return seen, not_found
+
 	def _scan_deps(self, source, paths, not_found, seen = None):
 		if __debug__ and is_debug: debug('cpp: dep       : ' + source.path)
 

@@ -18,8 +18,7 @@ class FileSystem(object):
 		try: self.root, old_cwd = persistent[str(self.__class__)]
 		except KeyError:
 			if  __debug__ and is_debug: debug('fs: all anew')
-			self.root = Node(None, os.sep)
-			self.root._is_dir = True
+			self.root = RootNode()
 			persistent[str(self.__class__)] = self.root, cwd
 		else:
 			if old_cwd != cwd:
@@ -39,7 +38,7 @@ class FileSystem(object):
 		self.cur._fs = self
 		self.cur._is_dir = True
 		self.cur._exists = True
-	
+
 ignore_names = set(['.git', '.bzr', '.hg', '_MTN', '_darcs', '.svn'])
 if False: # old stuff not widely used anymore, so it's not enabled by default
 	ignore_names.add('{arch}')
@@ -47,7 +46,7 @@ if False: # old stuff not widely used anymore, so it's not enabled by default
 	ignore_names.add('CVS')
 	ignore_names.add('RCS')
 	ignore_names.add('SCCS')
-ignore_pats = set(['*~', '#*#'])
+ignore_pats = set(('*~', '#*#'))
 
 def ignore(name):
 	return name in ignore_names or \
@@ -122,7 +121,7 @@ class Node(object):
 				else: self._exists = True
 			return self._exists
 	
-	def make_dir(self, parent_node_to_lock = None):
+	def make_dir(self, parent_node_to_lock=None):
 		if __debug__ and is_debug: debug('fs: os.makedirs: ' + self.path + os.sep)
 		if parent_node_to_lock is None:
 			if not self.exists: os.makedirs(self.path)
@@ -234,7 +233,7 @@ class Node(object):
 			elif self._old_children is not None: self._children.update(self._old_children)
 		return self._children
 
-	def find_iter(self, in_pats = ['*'], ex_pats = None, prune_pats = None):
+	def find_iter(self, in_pats=('*',), ex_pats=None, prune_pats=None):
 		if __debug__ and is_debug: debug('fs: find_iter  : ' + self.path + os.sep + ' ' + str(in_pats) + ' ' + str(ex_pats) + ' ' + str(prune_pats))
 		for name, node in self.actual_children.iteritems():
 			matched = False
@@ -284,10 +283,10 @@ class Node(object):
 
 	@property
 	def path(self):
-		if self._path is None: self._path = self.rel_path(self.fs.cur, allow_abs = True)
+		if self._path is None: self._path = self.rel_path(self.fs.cur, allow_abs=True)
 		return self._path
 
-	def rel_path(self, from_node, allow_abs = False):
+	def rel_path(self, from_node, allow_abs=False):
 		path = []
 		node1 = self
 		node2 = from_node
@@ -338,3 +337,22 @@ class Node(object):
 		if parent._children is not None and name in parent._children: del parent._children[name]
 		if parent._actual_children is not None and name in parent._actual_children: del parent._actual_children[name]
 		if parent._old_children is not None and name in parent._old_children: del parent._old_children[name]
+
+	def _remove_unused_children(self):
+		c = {}; used = False
+		for name, node in self._children.iteritems():
+			try: node._sig
+			except AttributeError:
+				if node._children is None or node._remove_unused_children(): continue
+			c[name] = node; used = True
+		self._children = used and c or None
+		return not used
+
+class RootNode(Node):
+	def __getstate__(self):
+		if self._children is not None: self._remove_unused_children()
+		return Node.__getstate__(self)
+	
+	def __init__(self):
+		Node.__init__(self, None, os.sep)
+		self._is_dir = True
