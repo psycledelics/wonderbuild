@@ -186,8 +186,8 @@
 					<bar name='toy makefiles' value=' 1.23'>with scan of system-wide headers, (recursive)</bar>
 					<bar name='cmake'         value=' 1.39'>without scan of system wide headers (like gcc -MMD)</bar>
 					<bar name='waf'           value=' 1.65'>(timestamp signatures)</bar>
-					<bar name='waf'           value=' 2.10'>(timestamp signatures), dynamically looking for sources</bar>
 					<bar name='autotools'     value=' 2.05'>(non recursive)</bar>
+					<bar name='waf'           value=' 2.10'>(timestamp signatures), dynamically looking for sources</bar>
 					<bar name='fbuild'        value=' 2.97'>(timestamp signatures only, content hashing disabled, dynamically looking for sources)</bar>
 					<bar name='scons'         value='23.25'>with fast tuning options</bar>
 					<bar name='scons'         value='35.97'>with default options</bar>
