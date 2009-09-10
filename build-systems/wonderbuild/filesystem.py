@@ -338,19 +338,19 @@ class Node(object):
 		if parent._actual_children is not None and name in parent._actual_children: del parent._actual_children[name]
 		if parent._old_children is not None and name in parent._old_children: del parent._old_children[name]
 
-	def _remove_unused_children(self):
+	def _purge_unused_children(self):
 		c = {}; used = False
 		for name, node in self._children.iteritems():
 			try: node._sig
 			except AttributeError:
-				if node._children is None or node._remove_unused_children(): continue
+				if node._children is None or node._purge_unused_children(): continue
 			c[name] = node; used = True
 		self._children = used and c or None
 		return not used
 
 class RootNode(Node):
 	def __getstate__(self):
-		if self._children is not None: self._remove_unused_children()
+		if self._children is not None: self._purge_unused_children()
 		return Node.__getstate__(self)
 	
 	def __init__(self):
