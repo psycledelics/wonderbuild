@@ -32,7 +32,6 @@
 
 * review the messages printed when a required dep isn't available.
 
-* either add some --recheck option or detect external libs/progs changes:
+* either add some --recheck option and/or detect fine-grain external libs/progs changes:
 	- find prog abs paths via the PATH env var.
 	- build checks should include headers in the sig (doable on gcc).
-	- pkg-config checks should include .pc file timestamp in the sig.
