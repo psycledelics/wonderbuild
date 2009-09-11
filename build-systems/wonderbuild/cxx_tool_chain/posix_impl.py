@@ -34,7 +34,7 @@ class Impl(object):
 		args = [cfg.cxx_prog]
 		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
-			else: args.append('-D' + k + '=' + v)
+			else: args.append('-D' + k + '=' + repr(v)[1:-1]) # note: assumes that cpp and python string escaping works the same way
 		for p in cfg.include_paths: args.append('-I' + cfg.bld_rel_path(p))
 		args += cfg.cxx_flags
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: posix: cxx: ' + str(args))

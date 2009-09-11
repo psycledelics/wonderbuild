@@ -65,7 +65,7 @@ class Impl(object):
 		#if cfg.pic: args.append('-fPIC')
 		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
-			else: args.append('-D' + k + '=' + v)
+			else: args.append('-D' + k + '=' + repr(v)[1:-1]) # note: assumes that cpp and python escaping works the same way
 		for p in cfg.include_paths: args.append('-I' + cfg.bld_rel_path(p))
 		if cfg.pch is not None: args += ['-Winvalid-pch', '-include', cfg.bld_rel_path(cfg.pch)]
 		for i in cfg.includes: args += ['-include', cfg.bld_rel_path(i)]

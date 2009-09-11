@@ -44,7 +44,7 @@ class Impl(object):
 		if cfg.pic: pass #args.append('-fPIC')
 		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
-			else: args.append('-D' + k + '=' + v)
+			else: args.append('-D' + k + '=' + repr(v)[1:-1]) # note: assumes that cpp and python escaping works the same way
 		if cfg.pch is not None:
 			pch = cfg.pch.parent / self.precompile_task_target_name(cfg.pch.name)
 			args += [
