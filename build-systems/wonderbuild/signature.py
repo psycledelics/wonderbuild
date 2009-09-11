@@ -6,6 +6,8 @@ try: from hashlib import md5 as _Sig
 except ImportError: from md5 import md5 as _Sig
 
 class Sig(object):
-	def __init__(self, s): self._sig = Sig(s + '\0')
+	def __init__(self, s=None):
+		if s is None: self._sig = _Sig()
+		else: self._sig = _Sig(s + '\0')
 	def update(self, s): self._sig.update(s + '\0')
 	def digest(self): return self._sig.digest()
