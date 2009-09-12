@@ -56,17 +56,15 @@ class BoostCheckTask(MultiBuildCheckTask):
 				
 			# damn cygwin installs boost headers in e.g. /usr/include/boost-1_33_1/
 			dir = self.project.fs.root / 'usr' / 'include'
-			try:
-				include_path = self.find_max_include_above_min(dir)
-				if include_path is None:
-					self.results = failed
-					return
-				read_version = BoostCheckTask.ReadVersion(self, include_path)
-				for x in sched_ctx.parallel_wait(read_version): yield x
-				if not read_version:
-					self.results = failed
-					return
-			finally: pass # dir.forget()
+			include_path = self.find_max_include_above_min(dir)
+			if include_path is None:
+				self.results = failed
+				return
+			read_version = BoostCheckTask.ReadVersion(self, include_path)
+			for x in sched_ctx.parallel_wait(read_version): yield x
+			if not read_version:
+				self.results = failed
+				return
 		
 		selected_source_texts = [self.source_texts()[lib] for lib in self.lib_names]
 		lib_version = '-' + read_version.lib_version
