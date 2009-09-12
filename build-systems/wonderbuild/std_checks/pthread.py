@@ -14,8 +14,9 @@ class PThreadCheckTask(BuildCheckTask):
 		else: cfg.libs.append('pthread')
 
 	@property
-	def source_text(self): return \
-		'#include <pthread.h>\n' \
-		'void pthread() {\n' \
-		'	pthread_t self(pthread_self());\n' \
-		'}'
+	def source_text(self): return '''\
+#include <pthread.h>
+void pthread() {
+	pthread_t self(pthread_self());
+}
+'''

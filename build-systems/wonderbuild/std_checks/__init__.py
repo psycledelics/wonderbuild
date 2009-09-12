@@ -19,13 +19,13 @@ class BinaryFormatCheckTask(BuildCheckTask):
 	@property
 	def source_text(self): return \
 		'#if defined __ELF__\n' \
-		'	elf\n' \
+		'\telf\n' \
 		'#elif defined __APPLE__ and defined __MACH__\n' \
-		'	mac-o\n' \
+		'\tmac-o\n' \
 		'#elif defined _WIN32 || defined __CYGWIN__ || defined __MSYS__ || defined _UWIN\n' \
-		'	pe\n' \
+		'\tpe\n' \
 		'#else\n' \
-		'	#error unkown binary format\n' \
+		'\t#error unkown binary format\n' \
 		'#endif\n'
 	
 	def do_check_and_set_result(self, sched_ctx):
@@ -58,7 +58,7 @@ class MSWindowsCheckTask(BuildCheckTask):
 	@property
 	def source_text(self): return \
 		'#if !defined _WIN32\n' \
-		'	#error the target platform is not mswindows\n' \
+		'\t#error the target platform is not mswindows\n' \
 		'#endif\n'
 
 class CygwinCheckTask(BuildCheckTask):
@@ -74,7 +74,7 @@ class CygwinCheckTask(BuildCheckTask):
 	@property
 	def source_text(self): return \
 		'#if !defined __CYGWIN__\n' \
-		'	#error the target platform is not cygwin\n' \
+		'\t#error the target platform is not cygwin\n' \
 		'#endif\n'
 
 class MingwCheckTask(BuildCheckTask):
@@ -90,7 +90,7 @@ class MingwCheckTask(BuildCheckTask):
 	@property
 	def source_text(self): return \
 		'#if !defined __MINGW32__\n' \
-		'	#error this is not mingw gcc\n' \
+		'\t#error this is not mingw gcc\n' \
 		'#endif\n'
 
 class PicFlagDefinesPicCheckTask(BuildCheckTask):
@@ -109,7 +109,7 @@ class PicFlagDefinesPicCheckTask(BuildCheckTask):
 	@property
 	def source_text(self): return \
 		'#if !defined __PIC__ && !defined __pic__\n' \
-		'	#error no pic\n' \
+		'\t#error no pic\n' \
 		'#endif\n'
 
 class AutoLinkSupportCheckTask(BuildCheckTask):
@@ -127,7 +127,7 @@ class AutoLinkSupportCheckTask(BuildCheckTask):
 		try: return self._source_text
 		except AttributeError:
 			self._source_text = \
-				"""
+				'''
 					// check below is the same as in <boost/config/auto_link.hpp>
 					#if !( \\
 							defined __BORLANDC__ || \\
@@ -137,5 +137,5 @@ class AutoLinkSupportCheckTask(BuildCheckTask):
 					)
 						#error no auto link support
 					#endif
-				"""
+				'''
 			return self._source_text

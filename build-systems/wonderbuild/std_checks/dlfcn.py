@@ -32,21 +32,21 @@ class DlfcnCheckTask(MultiBuildCheckTask):
 		if self.dl: cfg.libs.append('dl')
 
 	@property
-	def source_text(self): return (
-		'#include <dlfcn.h>\n'
-		'void dlfcn() {\n'
-		'	void * lib(dlopen("lib", RTLD_LAZY));\n'
-		'	void * sym(dlsym(lib, "sym"));\n'
-		'	char * error(dlerror());\n'
-		'	int result(dlclose(lib));\n'
-		'	int const modes(\n'
-		'		RTLD_LAZY || RTLD_NOW || RTLD_GLOBAL || RTLD_LOCAL\n'
-		'		#if defined RTLD_DEFAULT && defined RTLD_NEXT\n'
-		'			|| RTLD_DEFAULT || RTLD_NEXT\n'
-		'		#endif\n'
-		'	);\n'
-		'}'
-	)
+	def source_text(self): return '''\
+#include <dlfcn.h>
+void dlfcn() {
+	void * lib(dlopen("lib", RTLD_LAZY));
+	void * sym(dlsym(lib, "sym"));
+	char * error(dlerror());
+	int result(dlclose(lib));
+	int const modes(
+		RTLD_LAZY || RTLD_NOW || RTLD_GLOBAL || RTLD_LOCAL
+		#if defined RTLD_DEFAULT && defined RTLD_NEXT
+			|| RTLD_DEFAULT || RTLD_NEXT
+		#endif
+	);
+}
+'''
 	
 	class SubCheckTask(BuildCheckTask):
 		def __init__(self, outer, dl):

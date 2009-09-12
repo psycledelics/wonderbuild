@@ -111,7 +111,7 @@ class InstallTask(ProjectTask, OptionCfg):
 							list = [t[2] for t in install_tuples]
 							list.sort()
 							self.print_desc_multi_column_format(
- 								str(self.dest_dir)+ ': installing ' + self.name + ' from ' + str(self.trim_prefix),
+								str(self.dest_dir)+ ': installing ' + self.name + ' from ' + str(self.trim_prefix),
 								list, color_bg_fg_rgb((220, 220, 220), (70, 100, 150))
 							)
 						for t in install_tuples:

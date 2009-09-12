@@ -187,7 +187,7 @@ class Scheduler(object):
 									if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': task: ' + str(task) + ', in task pushed on stack: ' + str(in_task))
 									self._task_stack.append(in_task)
 									in_task._sched_stacked = True
-								 	notify += 1
+									notify += 1
 							self._todo_count += notify
 							if notify > 1: self._cond.notify(notify - 1)
 							continue

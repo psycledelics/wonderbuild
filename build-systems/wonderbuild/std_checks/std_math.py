@@ -39,14 +39,15 @@ class StdMathCheckTask(MultiBuildCheckTask):
 		if self.m: cfg.libs.append('m')
 
 	@property
-	def source_text(self): return \
-		'#include <cmath>\n' \
-		'double math() {\n' \
-		'	float  const f(std::sin(1.f));\n' \
-		'	double const d(std::sin(1. ));\n' \
-		'	return d + f;\n' \
-		'}'
-		
+	def source_text(self): return '''\
+#include <cmath>
+double math() {
+	float  const f(std::sin(1.f));
+	double const d(std::sin(1. ));
+	return d + f;
+}
+'''
+	
 	class SubCheckTask(BuildCheckTask):
 		def __init__(self, outer, m):
 			BuildCheckTask.__init__(self, outer.name + '-with' + (not m and 'out' or '') + '-lm', outer.base_cfg)

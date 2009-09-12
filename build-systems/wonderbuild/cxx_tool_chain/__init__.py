@@ -321,7 +321,7 @@ class ModDepPhases(object):
 		#for x in self.do_check_phase(sched_ctx): yield x
 		#if self.result and len(self.all_deps) != 0:
 			for x in sched_ctx.parallel_wait(*self.all_deps): yield x
-			#self.result = min(bool(dep) for dep in self.all_deps)	
+			#self.result = min(bool(dep) for dep in self.all_deps)
 
 	def _get_result(self):
 		try: return self._result
@@ -777,7 +777,7 @@ class ModTask(ModDepPhases, ProjectTask):
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
 			if self.ld:
 				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask.shared(self.project, self.cfg.pkg_config,
-				 	# XXX pkg-config and static/shared (alternative is self.cfg.static_prog or not self.cfg.shared)
+					# XXX pkg-config and static/shared (alternative is self.cfg.static_prog or not self.cfg.shared)
 					expose_private_deep_deps=self.cfg.static_prog)
 				sched_ctx.parallel_no_wait(pkg_config_ld_flags_task)
 		self.do_mod_phase()
