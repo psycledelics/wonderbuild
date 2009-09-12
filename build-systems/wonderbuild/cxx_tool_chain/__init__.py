@@ -255,7 +255,6 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 		OptionCfg.__init__(self, project)
 		
 	def __call__(self, sched_ctx):
-		o = self.options
 		try:
 			old_sig, self.check_missing, \
 			self.cxx_prog, self.cxx_flags, self.pic, \
@@ -266,6 +265,8 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 		if old_sig != self.options_sig:
 			if __debug__ and is_debug: debug('cfg: cxx: user: parsing options')
 
+			o = self.options
+			
 			self.check_missing = 'check-missing' in o
 
 			if 'cxx' in o: self.cxx_prog = o['cxx']

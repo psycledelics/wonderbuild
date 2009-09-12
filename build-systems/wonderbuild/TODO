@@ -32,3 +32,6 @@
 	- find prog abs paths via the PATH env var.
 	- build checks should include headers in the sig (doable on gcc).
 	- pkg-config needs the --rechecks option.
+
+* fs: currently nodes aren't saved if sig wasn't called.
+  this is wrong since we may build only parts of the tasks.

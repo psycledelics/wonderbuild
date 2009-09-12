@@ -35,10 +35,10 @@ class InstallTask(ProjectTask, OptionCfg):
 		except KeyError: old_sig = None
 		if old_sig != self.options_sig:
 			if __debug__ and is_debug: debug('cfg: install: user: parsing options')
+
 			o = self.options
 
-			if 'check-missing' in o: self.check_missing = o['check-missing'] == 'yes'
-			else: self.check_missing = False
+			self.check_missing = 'check-missing' in o
 
 			self.project.persistent[str(self.__class__)] = self.options_sig, self.check_missing
 
@@ -115,7 +115,7 @@ class InstallTask(ProjectTask, OptionCfg):
 								list, color_bg_fg_rgb((220, 220, 220), (70, 100, 150))
 							)
 						for t in install_tuples:
-							s, dest = t[0], t[1]
+							s, dest = t[0], t[1]#, t[2]
 							if dest.exists: os.remove(dest.path)
 							else: dest.parent.make_dir()
 							install(s.path, dest.path)
