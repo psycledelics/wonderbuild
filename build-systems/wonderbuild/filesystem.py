@@ -116,7 +116,10 @@ class Node(object):
 		try: return self._exists
 		except AttributeError:
 			if self._time is not None: self._exists = True
-			elif self.parent._actual_children is not None: self._exists = self.name in self.parent._actual_children
+			elif self.parent._actual_children is not None:
+				self._exists = self.name in self.parent._actual_children
+			elif self.parent._old_children is not None and self.parent.time == self.parent._old_time:
+				self._exists = self.name in self.parent._old_children
 			else:
 				try: self._do_stat()
 				except OSError: self._exists = False
@@ -348,7 +351,20 @@ class Node(object):
 	def _purge_unused_children(self):
 		c = {}; used = False
 		for name, node in self._children.iteritems():
-			if node._used or node._children is not None and not node._purge_unused_children(): c[name] = node; used = True
+			if node._used:
+				try: self._exists
+				except AttributeError:
+					if self._time is not None: pass
+					elif self.parent._actual_children is not None:
+						if self.name not in self.parent._actual_children: continue
+					elif self.parent._old_children is not None:
+						if self.parent.time == self.parent._old_time:
+							if self.name not in self.parent._old_children: continue
+						elif self.name not in self.parent.actual_children: continue
+				else:
+					if not self._exists: continue
+			elif node._children is None or node._purge_unused_children(): continue
+			c[name] = node; used = True
 		self._children = used and c or None
 		if __debug__ and is_debug and not used: debug('fs: unused     : ' + str(self))
 		return not used
