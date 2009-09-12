@@ -90,7 +90,15 @@ else:
 				(rgb[2] >= a and 4 or 0)
 			)
 		def color_bg_fg_rgb(bg, fg):
-			return '4' + _merge_rgb(bg) + ';3' + _merge_rgb(fg)
+			bgs = _merge_rgb(bg)
+			fgs = _merge_rgb(fg)
+			if bgs == fgs:
+				bga = (bg[0] + bg[1] + bg[2]) // 3
+				fga = (fg[0] + fg[1] + fg[2]) // 3
+				white = '7'
+				if fga > bga: fgs = white
+				else: bgs = white
+			return '4' + bgs + ';3' + fgs
 	elif colors == 16:
 		def _merge_rgb(rgb):
 			a = (rgb[0] + rgb[1] + rgb[2]) // 3
@@ -102,7 +110,15 @@ else:
 			# TODO bright black is never used
 			return str(c)
 		def color_bg_fg_rgb(bg, fg):
-			return '48;5;' + _merge_rgb(bg) + ';38;5;' + _merge_rgb(fg)
+			bgs = _merge_rgb(bg)
+			fgs = _merge_rgb(fg)
+			if bgs == fgs:
+				bga = (bg[0] + bg[1] + bg[2]) // 3
+				fga = (fg[0] + fg[1] + fg[2]) // 3
+				white = _merge_rgb((255, 255, 255))
+				if fga > bga: fgs = white
+				else: bgs = white
+			return '48;5;' + bgs + ';38;5;' + fgs
 	elif colors == 88 or colors == 256:
 		_map_r = []
 		_map_g = []
