@@ -108,7 +108,6 @@ class BuildCfg(ClientCfg, Task):
 			#sig.update(str(self.pic_flag_defines_pic))
 			sig.update(self.kind)
 			sig.update(str(self.version))
-			sig.update(str(self.check_missing))
 			if len(self.pkg_config): sig.update(_PkgConfigTask.env_sig())
 			sig = self.__common_sig = sig.digest()
 			return sig
