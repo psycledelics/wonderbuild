@@ -31,6 +31,11 @@
 * some mecanism to set default values for options is needed.
 
 * review the messages printed when a required dep isn't available.
+	wonderbuild: failed: deps of module ++wonderbuild/staged-install/usr/local/bin/psycle-player.exe
+		requires the following dep: deps of module ++wonderbuild/staged-install/usr/local/bin/psycle-core.dll
+	wonderbuild: failed: deps of module /cygdrive/x/sf/psycle-cygwin/trunk/build-systems/++wonderbuild/staged-install/usr/local/bin/psycle-core.dll
+		requires the following dep: check pkg-config --exists libxml++-2.6
+
 
 * either add some --recheck option and detect fine-grain external libs/progs changes:
 	- find prog abs paths via the PATH env var.
