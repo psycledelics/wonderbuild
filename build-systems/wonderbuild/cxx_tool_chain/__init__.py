@@ -68,9 +68,7 @@ class BuildCfg(ClientCfg, Task):
 		self.fhs = FHS.shared(project)
 		self.impl = self.kind = self.version = None
 		# following two used only in the impl, so could be moved there
-		self.target_platform_binary_format_is_elf = None
-		self.target_platform_binary_format_is_pe = None
-		self.target_platform_binary_format_is_mac_o = None
+		self.dest_platform_binary_format = None
 		self.pic_flag_defines_pic = None
 
 	def clone(self, class_ = None):
@@ -91,9 +89,7 @@ class BuildCfg(ClientCfg, Task):
 		c.impl = self.impl
 		c.kind = self.kind
 		c.version = self.version
-		c.target_platform_binary_format_is_elf = self.target_platform_binary_format_is_elf
-		c.target_platform_binary_format_is_pe = self.target_platform_binary_format_is_pe
-		c.target_platform_binary_format_is_mac_o = self.target_platform_binary_format_is_mac_o
+		c.dest_platform_binary_format = self.dest_platform_binary_format
 		c.pic_flag_defines_pic = self.pic_flag_defines_pic
 		return c
 
@@ -104,7 +100,7 @@ class BuildCfg(ClientCfg, Task):
 			sig = Sig(self.impl.common_env_sig)
 			e = os.environ.get('PATH', None)
 			if e is not None: sig.update(e)
-			#sig.update(str(self.target_platform_binary_format_is_pe))
+			#sig.update(self.dest_platform_binary_format)
 			#sig.update(str(self.pic_flag_defines_pic))
 			sig.update(self.kind)
 			sig.update(str(self.version))

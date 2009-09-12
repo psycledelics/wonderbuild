@@ -152,8 +152,7 @@ class Impl(object):
 
 	@staticmethod
 	def mod_task_target_dir(mod_task):
-		if mod_task.kind == mod_task.Kinds.PROG or \
-			mod_task.cfg.shared and mod_task.cfg.target_platform_binary_format_is_pe: return mod_task.cfg.fhs.bin
+		if mod_task.kind == mod_task.Kinds.PROG: return mod_task.cfg.fhs.bin
 		else: return mod_task.cfg.fhs.lib
 
 	@staticmethod

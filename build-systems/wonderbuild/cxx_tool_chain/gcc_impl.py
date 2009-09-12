@@ -176,7 +176,7 @@ class Impl(object):
 	def cfg_ld_args(cfg):
 		args = [cfg.ld_prog]
 		if cfg.shared:
-			if cfg.target_platform_binary_format_is_mac_o: args.append('-dynamiclib')
+			if cfg.dest_platform_binary_format == 'mac-o': args.append('-dynamiclib')
 			else: args.append('-shared')
 		elif cfg.static_prog: args.append('-static') # we can have both -shared and -static but that's not very useful
 		rpath = '-Wl,-rpath=$ORIGIN' + os.sep + cfg.fhs.lib.rel_path(cfg.fhs.bin)
@@ -213,7 +213,7 @@ class Impl(object):
 		if mod_task.ld:
 			args = mod_task.cfg.ld_args
 			args = [args[0], '-o' + mod_task_target_path] + obj_paths + args[1:]
-			if mod_task.cfg.target_platform_binary_format_is_pe:
+			if mod_task.cfg.dest_platform_binary_format == 'pe':
 				args.append('-Wl,--enable-auto-import') # supress informational messages
 				if False and mod_task.cfg.shared: # mingw doesn't need import libs
 					args.append('-Wl,--out-implib,' + (mod_task.cfg.fhs.lib / ('lib' + mod_task.target.name + '.dll.a')).rel_path(cwd))
@@ -240,7 +240,7 @@ class Impl(object):
 
 	@staticmethod
 	def mod_task_target_dev_dir(mod_task):
-		if mod_task.cfg.shared and mod_task.cfg.target_platform_binary_format_is_pe: return mod_task.cfg.fhs.bin # mingw doesn't need import libs
+		if mod_task.cfg.shared and mod_task.cfg.dest_platform_binary_format == 'pe': return mod_task.cfg.fhs.bin # mingw doesn't need import libs
 		else: return mod_task.cfg.fhs.lib
 
 	@staticmethod
@@ -249,16 +249,16 @@ class Impl(object):
 	@staticmethod
 	def mod_task_target_dir(mod_task):
 		if mod_task.kind == mod_task.Kinds.PROG or \
-			mod_task.cfg.shared and mod_task.cfg.target_platform_binary_format_is_pe: return mod_task.cfg.fhs.bin
+			mod_task.cfg.shared and mod_task.cfg.dest_platform_binary_format == 'pe': return mod_task.cfg.fhs.bin
 		else: return mod_task.cfg.fhs.lib
 
 	@staticmethod
 	def mod_task_target_name(mod_task):
 		if mod_task.kind == mod_task.Kinds.PROG:
-			if mod_task.cfg.target_platform_binary_format_is_pe: return mod_task.name + '.exe'
+			if mod_task.cfg.dest_platform_binary_format == 'pe': return mod_task.name + '.exe'
 			else: return mod_task.name
 		elif mod_task.cfg.shared:
-			if mod_task.cfg.target_platform_binary_format_is_pe: return mod_task.name + '.dll'
+			if mod_task.cfg.dest_platform_binary_format == 'pe': return mod_task.name + '.dll'
 			else: return 'lib' + mod_task.name + '.so'
 		else: return 'lib' + mod_task.name + '.a'
 
@@ -270,7 +270,7 @@ class Impl(object):
 		if build_check_task.pipe_preproc: args.append('-E')
 		else:
 			# when cross-compiling from linux to windows: /dev/null: final close failed: Inappropriate ioctl for device
-			if os.name == 'posix' and not cfg.target_platform_binary_format_is_pe: o = os.devnull
+			if os.name == 'posix' and not cfg.dest_platform_binary_format == 'pe': o = os.devnull
 			else:
 				if not build_check_task.compile: o = 'a.i'
 				elif not build_check_task.link: o = 'a.o'

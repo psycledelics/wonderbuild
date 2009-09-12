@@ -9,9 +9,9 @@ from wonderbuild.cxx_tool_chain import BuildCheckTask, ok_color, failed_color
 class BinaryFormatCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared(base_cfg):
-		try: return base_cfg.project.target_platform_binary_format
+		try: return base_cfg.project.dest_platform_binary_format
 		except AttributeError:
-			task = base_cfg.project.target_platform_binary_format = BinaryFormatCheckTask(base_cfg)
+			task = base_cfg.project.dest_platform_binary_format = BinaryFormatCheckTask(base_cfg)
 			return task
 
 	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'binary-format', base_cfg, pipe_preproc=True)

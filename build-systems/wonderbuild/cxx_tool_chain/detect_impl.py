@@ -61,9 +61,7 @@ class DetectImplCheckTask(CheckTask):
 			pic = PicFlagDefinesPicCheckTask.shared(cfg)
 			cfg.pic_flag_defines_pic = True # allows it to be reentrant during the check itself
 			for x in sched_ctx.parallel_wait(binary_format, pic): yield x
-			cfg.target_platform_binary_format_is_elf = binary_format.format == 'elf'
-			cfg.target_platform_binary_format_is_mac_o = binary_format.format == 'mac-o'
-			cfg.target_platform_binary_format_is_pe = binary_format.format == 'pe'
+			cfg.dest_platform_binary_format = binary_format.format
 			cfg.pic_flag_defines_pic = pic.result
 	
 	def do_check_and_set_result(self, sched_ctx):
