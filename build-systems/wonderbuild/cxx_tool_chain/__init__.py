@@ -220,10 +220,10 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 		help['check-missing'] = (None, 'check for missing built files (rebuilds files you manually deleted in the build dir)')
 
 		help['cxx']           = ('<prog>', 'use <prog> as c++ compiler')
-		help['cxx-flags']     = ('[flags]', 'use specific c++ compiler flags')
+		help['cxx-flags']     = ('[flags]', 'use specific c++ compiler flags', 'CXXFLAGS env var: ' + os.environ.get('CXXFLAGS', '(not set)'))
 		help['ld']            = ('<prog>', 'use <prog> as shared lib and program linker')
-		help['ld-flags']      = ('[flags]', 'use specific linker flags')
-		help['ar']            = ('<prog>', 'use <prog> as static lib archiver', 'ar')
+		help['ld-flags']      = ('[flags]', 'use specific linker flags', 'LDFLAGS env var: ' + os.environ.get('LDFLAGS', '(not set)'))
+		help['ar']            = ('<prog>', 'use <prog> as static lib archiver', 'ar on posix')
 		help['ranlib']        = ('<prog>', 'use <prog> as static lib archive indexer', 'the posix ar s flag is used instead')
 		
 		help['static'] = ('<libs|full>',
