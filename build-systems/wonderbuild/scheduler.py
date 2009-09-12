@@ -197,7 +197,7 @@ class Scheduler(object):
 					for out_task in task._sched_out_tasks:
 						out_task._sched_in_task_todo_count -= 1
 						if not out_task._sched_stacked and out_task._sched_in_task_todo_count == 0:
-							if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': task:' + str(task) + ', out task pushed on stack: ' + str(out_task))
+							if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': task: ' + str(task) + ', out task pushed on stack: ' + str(out_task))
 							self._task_stack.append(out_task)
 							out_task._sched_stacked = True
 							notify += 1

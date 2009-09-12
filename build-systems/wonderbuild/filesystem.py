@@ -56,48 +56,50 @@ if __debug__ and is_debug: all_abs_paths = set()
 
 class Node(object):
 	__slots__ = (
-		'parent', 'name', '_is_dir', '_children', '_actual_children', '_old_children', '_old_time', '_time', '_sig',
+		'parent', 'name', '_is_dir', '_children', '_actual_children', '_old_children', '_old_time', '_time', '_sig', '_used',
 		'_path', '_abs_path', '_height', '_fs', '_exists', '_lock'
 	)
 
 	def __getstate__(self):
 		if self._is_dir:
-			return self.parent, self.name, self._path, \
+			return self.parent, self.name, self._path, self._used, \
 				self._children, self._actual_children or self._old_children, self._time or self._old_time
 		else:
-			return self.parent, self.name, self._path
+			return self.parent, self.name, self._path, self._used
 
 	def __setstate__(self, data):
-		self._is_dir = len(data) != 3
+		self._is_dir = len(data) != 4
 		if self._is_dir:
-			self.parent, self.name, self._path, self._children, self._old_children, self._old_time = data
+			self.parent, self.name, self._path, self._used, self._children, self._old_children, self._old_time = data
 			self._actual_children = self._time = None
 		else:
-			self.parent, self.name, self._path = data
+			self.parent, self.name, self._path, self._used = data
 			self._actual_children = self._time = self._children = self._old_children = self._old_time = None
 
 	def __init__(self, parent, name):
 		self.parent = parent
 		self.name = name
 		self._path = self._is_dir = self._children = self._actual_children = self._old_children = self._time = self._old_time = None
+		self._used = False
 		if __debug__ and is_debug:
 			global all_abs_paths
 			assert parent is not None or name == os.sep, (parent, name)
 			assert parent is None or os.sep not in name, (parent.abs_path, name)
 			assert parent is not None or name not in all_abs_paths, (parent, name)
 			assert parent is None or os.path.join(parent.abs_path, name) not in all_abs_paths, (parent.abs_path, name)
-			debug('fs: new node: ' + self.abs_path)
+			debug('fs: new node   : ' + self.abs_path)
 			all_abs_paths.add(self.abs_path)
 		# no need: if parent is not None: parent.children[name] = self
 	
 	def __str__(self): return self.path
 	
 	def _do_stat(self):
-		if __debug__ and is_debug: debug('fs: os.stat    : ' + self.path)
+		if __debug__ and is_debug: debug('fs: os.stat    : ' + str(self))
 		try: st = os.stat(self.path)
 		except OSError, e:
 			if e.errno != errno.ENOENT: raise
 			# may be a broken symlink
+			if __debug__ and is_debug: debug('fs: os.lstat   : ' + str(self))
 			st = os.lstat(self.path)
 		self._is_dir = stat.S_ISDIR(st.st_mode)
 		self._time = st.st_mtime
@@ -122,14 +124,17 @@ class Node(object):
 			return self._exists
 	
 	def make_dir(self, parent_node_to_lock=None):
-		if __debug__ and is_debug: debug('fs: os.makedirs: ' + self.path + os.sep)
 		if parent_node_to_lock is None:
-			if not self.exists: os.makedirs(self.path)
+			if not self.exists:
+				if __debug__ and is_debug: debug('fs: os.makedirs: ' + str(self) + os.sep)
+				os.makedirs(self.path)
 		else:
 			lock = parent_node_to_lock.lock
 			lock.acquire()
 			try:
-				if not self.exists: os.makedirs(self.path)
+				if not self.exists:
+					if __debug__ and is_debug: debug('fs: os.makedirs: ' + str(self) + os.sep + ' (locking: ' + str(parent_node_to_lock) + os.sep + ')')
+					os.makedirs(self.path)
 			finally: lock.release()
 		self._exists = self._is_dir = True
 
@@ -148,20 +153,21 @@ class Node(object):
 		def sig(self):
 			try: return self._sig
 			except AttributeError:
-				if __debug__ and is_debug: debug('fs: sig        : ' + self.path)
+				if __debug__ and is_debug: debug('fs: sig        : ' + str(self))
 				if self.is_dir:
 					sigs = [n.sig for n in self.actual_children.itervalues()]
 					sigs.sort()
 					sig = self._sig = Sig(''.join(sigs)).digest()
 				else:
 					sig = self._sig = str(self.time)
+				self._used = True
 				return sig
 	else: # use hash sum sig
 		@property
 		def sig(self):
 			try: return self._sig
 			except AttributeError:
-				if __debug__ and is_debug: debug('fs: sig        : ' + self.path)
+				if __debug__ and is_debug: debug('fs: sig        : ' + str(self))
 				if self.is_dir:
 					sigs = [n.sig for n in self.actual_children.itervalues()]
 					sigs.sort()
@@ -171,6 +177,7 @@ class Node(object):
 					try: sig = Sig(f.read())
 					finally: f.close()
 				sig = self._sig = sig.digest()
+				self._used = True
 				return sig
 	
 	@property
@@ -189,7 +196,7 @@ class Node(object):
 						else: self._merge(child, node)
 			else:
 				self._actual_children = {}
-				if __debug__ and is_debug: debug('fs: os.listdir : ' + self.path + os.sep)
+				if __debug__ and is_debug: debug('fs: os.listdir : ' + str(self) + os.sep)
 				if self._children is None:
 					self._children = {}
 					for name in os.listdir(self.path):
@@ -204,7 +211,7 @@ class Node(object):
 	
 	def _merge(self, cur, old):
 		if __debug__ and is_debug:
-			debug('fs: merge      : ' + cur.path)
+			debug('fs: merge      : ' + str(cur))
 			assert cur.path == old.path
 		if cur._children is None:
 			cur._children = old._old_children
@@ -234,7 +241,7 @@ class Node(object):
 		return self._children
 
 	def find_iter(self, in_pats=('*',), ex_pats=None, prune_pats=None):
-		if __debug__ and is_debug: debug('fs: find_iter  : ' + self.path + os.sep + ' ' + str(in_pats) + ' ' + str(ex_pats) + ' ' + str(prune_pats))
+		if __debug__ and is_debug: debug('fs: find_iter  : ' + str(self) + os.sep + ' ' + str(in_pats) + ' ' + str(ex_pats) + ' ' + str(prune_pats))
 		for name, node in self.actual_children.iteritems():
 			matched = False
 			if ex_pats is not None:
@@ -331,7 +338,7 @@ class Node(object):
 
 	def forget(self):
 		"detach the node from its parent. This is used to cut from the tree the branches we don't want to dump in the pickle"
-		if __debug__ and is_debug: debug('fs: forget: ' + str(self))
+		if __debug__ and is_debug: debug('fs: forget     : ' + str(self))
 		name = self.name
 		parent = self.parent
 		if parent._children is not None and name in parent._children: del parent._children[name]
@@ -341,11 +348,9 @@ class Node(object):
 	def _purge_unused_children(self):
 		c = {}; used = False
 		for name, node in self._children.iteritems():
-			try: node._sig
-			except AttributeError:
-				if node._children is None or node._purge_unused_children(): continue
-			c[name] = node; used = True
+			if node._used or node._children is not None and not node._purge_unused_children(): c[name] = node; used = True
 		self._children = used and c or None
+		if __debug__ and is_debug and not used: debug('fs: unused     : ' + str(self))
 		return not used
 
 class RootNode(Node):
