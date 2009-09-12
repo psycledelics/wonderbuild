@@ -352,17 +352,16 @@ class Node(object):
 		c = {}; used = False
 		for name, node in self._children.iteritems():
 			if node._used:
-				try: self._exists
+				try: node._exists
 				except AttributeError:
-					if self._time is not None: pass
-					elif self.parent._actual_children is not None:
-						if self.name not in self.parent._actual_children: continue
-					elif self.parent._old_children is not None:
-						if self.parent.time == self.parent._old_time:
-							if self.name not in self.parent._old_children: continue
-						elif self.name not in self.parent.actual_children: continue
+					if self._actual_children is not None:
+						if name not in self._actual_children: continue
+					elif self._old_children is not None:
+						if self.time == self._old_time:
+							if name not in self._old_children: continue
+						elif name not in self.actual_children: continue
 				else:
-					if not self._exists: continue
+					if not node._exists: continue
 			elif node._children is None or node._purge_unused_children(): continue
 			c[name] = node; used = True
 		self._children = used and c or None
