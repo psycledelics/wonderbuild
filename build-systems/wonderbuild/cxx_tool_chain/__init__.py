@@ -333,7 +333,12 @@ class ModDepPhases(object):
 
 	def do_ensure_deps(self): 
 		for dep in self.all_deps:
-			if not dep: raise UserReadableException, str(self) + ' requires the following dep: ' + str(dep)
+			if not dep:
+				desc = str(self.mod_phase or self.cxx_phase or self) + ' requires the following dep: '
+				try: dep.do_ensure_deps()
+				except UserReadableException, e: desc += str(dep.mod_phase or dep.cxx_phase or dep) + ',\nand ' + str(e)
+				else: desc += str(dep)
+				raise UserReadableException, desc
 	
 	def _applied(self, cfg, what):
 		uid = str(id(self)) + '#' + what

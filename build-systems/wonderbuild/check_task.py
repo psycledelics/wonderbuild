@@ -84,7 +84,7 @@ class CheckTask(ProjectTask):
 		s = \
 			'For Debian-based distributions, use \'apt-cache search ' + search + ' to look for the packages.\n' \
 			'For Cygwin, use \'cygcheck --package-query ' + search + '\' to look for the packages.\n' \
-			'If you don''t find them in your distribution\'s packages, you may go to ' + url + ' .'
+			'If you don\'t find them in your distribution\'s packages, you may go to ' + url + ' .'
 		from wonderbuild.subprocess_wrapper import exec_subprocess_pipe
 		for args in (
 			('apt-cache', 'search', search),
