@@ -219,7 +219,7 @@ def build(bld):
 			defines=['BENCH', 'BENCH_LIB=' + n.name[len('lib_'):]],
 			includes = '.',
 			source = [s.relpath_gen(bld.srcnode) for s in n.find_iter(in_pat=('*.cpp',))]
-		)
+		); obj.source.sort() # issue #527 was not fixed
 ''')
 
 def create_scons(libs):
