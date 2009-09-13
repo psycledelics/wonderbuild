@@ -56,31 +56,33 @@ if __debug__ and is_debug: all_abs_paths = set()
 
 class Node(object):
 	__slots__ = (
-		'parent', 'name', '_is_dir', '_children', '_actual_children', '_old_children', '_old_time', '_time', '_sig', '_used',
-		'_path', '_abs_path', '_height', '_fs', '_exists', '_lock'
+		'parent', 'name', '_is_dir', '_children', '_actual_children', '_old_children', '_old_time', '_time', '_sig',
+		'_used', '_old_used', '_path', '_abs_path', '_height', '_fs', '_exists', '_lock'
 	)
 
 	def __getstate__(self):
 		if self._is_dir:
-			return self.parent, self.name, self._path, self._used, \
+			return self.parent, self.name, self._path, self._used or self._old_used, \
 				self._children, self._actual_children or self._old_children, self._time or self._old_time
 		else:
-			return self.parent, self.name, self._path, self._used
+			return self.parent, self.name, self._path, self._used or self._old_used
 
 	def __setstate__(self, data):
 		self._is_dir = len(data) != 4
 		if self._is_dir:
-			self.parent, self.name, self._path, self._used, self._children, self._old_children, self._old_time = data
-			self._actual_children = self._time = None
+			self.parent, self.name, self._path, self._old_used, \
+			self._children, self._old_children, self._old_time = data
 		else:
-			self.parent, self.name, self._path, self._used = data
-			self._actual_children = self._time = self._children = self._old_children = self._old_time = None
+			self.parent, self.name, self._path, self._old_used = data
+			self._children = self._old_children = self._old_time = None
+		self._actual_children = self._time = None
+		self._used = False
 
 	def __init__(self, parent, name):
 		self.parent = parent
 		self.name = name
 		self._path = self._is_dir = self._children = self._actual_children = self._old_children = self._time = self._old_time = None
-		self._used = False
+		self._used = self._old_used = False
 		if __debug__ and is_debug:
 			global all_abs_paths
 			assert parent is not None or name == os.sep, (parent, name)
@@ -157,13 +159,13 @@ class Node(object):
 			try: return self._sig
 			except AttributeError:
 				if __debug__ and is_debug: debug('fs: sig        : ' + str(self))
+				self._used = True
 				if self.is_dir:
 					sigs = [n.sig for n in self.actual_children.itervalues()]
 					sigs.sort()
 					sig = self._sig = Sig(''.join(sigs)).digest()
 				else:
 					sig = self._sig = str(self.time)
-				self._used = True
 				return sig
 	else: # use hash sum sig
 		@property
@@ -171,6 +173,7 @@ class Node(object):
 			try: return self._sig
 			except AttributeError:
 				if __debug__ and is_debug: debug('fs: sig        : ' + str(self))
+				self._used = True
 				if self.is_dir:
 					sigs = [n.sig for n in self.actual_children.itervalues()]
 					sigs.sort()
@@ -180,7 +183,6 @@ class Node(object):
 					try: sig = Sig(f.read())
 					finally: f.close()
 				sig = self._sig = sig.digest()
-				self._used = True
 				return sig
 	
 	@property
@@ -350,20 +352,11 @@ class Node(object):
 
 	def _purge_unused_children(self):
 		c = {}; used = False
-		for name, node in self._children.iteritems():
-			if node._used:
-				try: node._exists
-				except AttributeError:
-					if self._actual_children is not None:
-						if name not in self._actual_children: continue
-					elif self._old_children is not None:
-						if self.time == self._old_time:
-							if name not in self._old_children: continue
-						elif name not in self.actual_children: continue
-				else:
-					if not node._exists: continue
-			elif node._children is None or node._purge_unused_children(): continue
-			c[name] = node; used = True
+		for node in self._children.itervalues():
+			try: node._sig
+			except AttributeError:
+				if node._used or (not node._old_used and (node._children is None or node._purge_unused_children())): continue
+			c[node.name] = node; used = True
 		self._children = used and c or None
 		if __debug__ and is_debug and not used: debug('fs: unused     : ' + str(self))
 		return not used
