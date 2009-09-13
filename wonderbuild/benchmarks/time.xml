@@ -487,6 +487,23 @@
 			</part>
 		</part>
 		<part caption='Scalability' anchor='scalability'>
+			<!--part caption='Polluting the source dir with unused files'>
+				no-op, total files in all of the 50 lib dirs, waf rev 6692
+				wonderbuild  10000:  0.65s,  1600952 bytes
+				wonderbuild  60000:  1.95s,  4186951 bytes
+				wonderbuild 110000:  3.35s,  7024188 bytes
+				wonderbuild 210000:  5.96s, 12512308 bytes
+				wonderbuild 110000:  3.34s,  7324188 bytes
+				wonderbuild  60000:  1.97s,  4430002 bytes
+				wonderbuild  10000:  0.66s,  1707579 bytes
+				        waf  10000:  2.11s,  2109958 bytes
+				        waf  60000:  5.09s,  5125231 bytes (ar!)
+				        waf 110000:  8.05s,  8176926 bytes (ar!)
+				        waf 210000: 13.86s, 14276034 bytes (ar!)
+				        waf 110000:  8.06s,  8181390 bytes
+				        waf  60000:  5.09s,  5134239 bytes (ar!)
+				        waf  10000:  2.12s,  2148034 bytes (ar!)
+			</part-->
 			<part caption='Increasing the number of files and includes'>
 				Here we compare two different <a href='gen-bench'/> invocations:<br/>
 				- the reference one called with the parameters 50 100 15 5 (50 libs, 10000 files, 104500 #includes)<br/>
