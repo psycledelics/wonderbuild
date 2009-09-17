@@ -18,6 +18,7 @@ measure() {
 dummy_change() {
 	for file
 	do
+		echo changing $file &&
 		echo >> $file
 	done
 } &&
@@ -26,7 +27,12 @@ main() {
 	op=$1 && shift &&
 	tool=$1 && shift &&
 	
-	change=$(case $tool in fabricate) echo dummy_change;; *) echo touch;; esac) &&
+	change=$(
+		case $tool in
+			fabricate) echo dummy_change;;
+			*) echo touch;;
+		esac
+	) &&
 	
 	cd $(dirname $0)/bench-$tool &&
 
@@ -131,6 +137,10 @@ main() {
 		;;
 
 		fabricate)
+			if test $op = reset
+			then
+				rm -f lib_*/*.o lib_*/*.a
+			fi &&
 			if ! test -e $(basename $fabricate)
 			then
 				ln -s $fabricate .

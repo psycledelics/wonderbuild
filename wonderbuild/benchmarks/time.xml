@@ -142,7 +142,7 @@
 					<bar name='scons'         value='137.7'>with default options</bar>
 					<bar name='autotools'     value='188.0'>(non recursive)</bar>
 					<bar-section>Not using batch compilation, with only one CPU</bar-section>
-					<bar name='fabricate'     value='171.7'>(hash sum signatures)</bar>
+					<bar name='fabricate'     value='188.3'>(hash sum signatures) (bizarrely 172s the first run)</bar>
 				</bars>
 			</part>
 			<part caption='Big partial rebuild'>
