@@ -77,6 +77,9 @@
 			<br/>
 			The fbuild script finds source files dynamically instead of relying on a hard-coded file list.
 		</part>
+		<part caption='Fabricate'>
+			The Fabricate part of the <a href='gen-bench'/> script was contributed by Michael Haggerty.
+		</part>
 		<part caption='Wonderbuild'>
 			Wonderbuild used either gcc's generated deps as a side-effect of compilation (-MMD option),
 			or a custom dumb include scanner, with no condition nor macro evaluation.
@@ -117,6 +120,7 @@
 					<li>Shell was dash (not bash) version 0.5.4</li>
 					<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
 					<li>FBuild version was 0.1</li>
+					<li>Fabricate version was subversion revision 48</li>
 				</ul>
 			</part>
 			<part caption='Initial full build'>
@@ -137,6 +141,8 @@
 					<bar name='scons'         value='131.0'>with fast tuning options</bar>
 					<bar name='scons'         value='137.7'>with default options</bar>
 					<bar name='autotools'     value='188.0'>(non recursive)</bar>
+					<bar-section>Not using batch compilation, with only one CPU</bar-section>
+					<bar name='fabricate'     value='171.7'>(hash sum signatures)</bar>
 				</bars>
 			</part>
 			<part caption='Big partial rebuild'>
@@ -157,6 +163,8 @@
 					<bar name='fbuild'        value='24.71'>(timestamp signatures only, content hashing disabled, dynamically looking for sources)</bar>
 					<bar name='autotools'     value='29.64'>(non recursive)</bar>
 					<bar name='scons'         value='39.58'>(with fast tuning options)</bar>
+					<bar-section>Not using batch compilation, with only one CPU</bar-section>
+					<bar name='fabricate'     value='26.90'>(hash sum signatures)</bar>
 				</bars>
 			</part>
 			<part caption='Small partial rebuild'>
@@ -176,6 +184,8 @@
 					<bar name='autotools'     value=' 4.63'>(non recursive)</bar>
 					<bar name='fbuild'        value=' 6.80'>(timestamp signatures only, content hashing disabled, dynamically looking for sources)</bar>
 					<bar name='scons'         value='24.37'>(with fast tuning options)</bar>
+					<bar-section>Not using batch compilation, with only one CPU</bar-section>
+					<bar name='fabricate'     value=' 6.01'>(hash sum signatures)</bar>
 				</bars>
 			</part>
 			<part caption='No-op rebuild'>
@@ -191,6 +201,8 @@
 					<bar name='fbuild'        value=' 2.97'>(timestamp signatures only, content hashing disabled, dynamically looking for sources)</bar>
 					<bar name='scons'         value='23.25'>with fast tuning options</bar>
 					<bar name='scons'         value='35.97'>with default options</bar>
+					<bar-section>Not using batch compilation, with only one CPU</bar-section>
+					<bar name='fabricate'     value=' 4.99'>(hash sum signatures)</bar>
 				</bars>
 			</part>
 		</part>

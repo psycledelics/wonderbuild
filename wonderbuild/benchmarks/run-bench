@@ -8,23 +8,33 @@ fbuild=../../fbuild/fbuild-light &&
 waf=../../waf/waf-light &&
 scons=../../scons/src/ &&
 jython='java -jar ../../jython/jython.jar' &&
+fabricate='../../fabricate/fabricate.py' &&
 
 measure() {
 	if which time; then time "$@"; else case "$SHELL" in bash) time "$@";; *) bash -c "time $*";; esac; fi
 	#strace -fF "$@"
 } &&
 
+dummy_change() {
+	for file
+	do
+		echo >> $file
+	done
+} &&
+
 main() {
 	op=$1 && shift &&
 	tool=$1 && shift &&
+	
+	change=$(case $tool in fabricate) echo dummy_change;; *) echo touch;; esac) &&
 	
 	cd $(dirname $0)/bench-$tool &&
 
 	case $op in
 		reset) rm -Rf build-$tool ;;
 		no-op) ;;
-		small) touch lib_17/class_17.hpp ;;
-		big)   touch lib_17/*.hpp ;;
+		small) $change lib_17/class_17.hpp ;;
+		big)   $change lib_17/*.hpp ;;
 	esac &&
 
 	case $tool in
@@ -118,6 +128,14 @@ main() {
 				(cd build-$tool && cmake ..)
 			fi &&
 			measure make -C build-$tool -r --jobs=$jobs "$@"
+		;;
+
+		fabricate)
+			if ! test -e $(basename $fabricate)
+			then
+				ln -s $fabricate .
+			fi &&
+			measure python ./build.py
 		;;
 	esac
 } &&

@@ -17,7 +17,8 @@ cp -R bench bench-waf-on-jython &&
 cp -R bench bench-scons &&
 cp -R bench bench-scons-on-jython &&
 cp -R bench bench-cmake &&
-cp -R bench bench-autotools && 
+cp -R bench bench-autotools &&
+cp -R bench bench-fabricate &&
 
 cd bench-autotools &&
 find . -type f -name Makefile -exec rm {} \; &&
