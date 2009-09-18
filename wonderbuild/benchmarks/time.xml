@@ -527,7 +527,6 @@
 				ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
 				<part caption='Tool versions'>
 					<ul>
-						<li>Scons version was 1.2.0</li>
 						<li>Waf version was somewhere after 1.5.9 (svn rev 6671)</li>
 						<li>Fabricate version was subversion revision 48</li>
 						<li>Python version was 2.5.2</li>
@@ -610,6 +609,9 @@
 					<ul>
 						<li>Waf version was somewhere after 1.5.9 (svn rev 6674 with issue #522's optim patch)</li>
 						<li>Python version was 2.5.2</li>
+						<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
+						<li>Make version was gnu make 3.81</li>
+						<li>Shell was dash (not bash) version 0.5.4</li>
 						<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
 					</ul>
 				</part>
