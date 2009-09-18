@@ -111,6 +111,8 @@
 				<ul>
 					<li>Scons version was 1.2.0</li>
 					<li>Waf version was somewhere after 1.5.7 (svn rev 6260)</li>
+					<li>FBuild version was 0.1</li>
+					<li>Fabricate version was subversion revision 48</li>
 					<li>Python version was 2.5.2, except for FBuild where it was version 3.1</li>
 					<li>Jam version was 2.5</li>
 					<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
@@ -119,8 +121,6 @@
 					<li>Makedepend was version 1.0.1</li>
 					<li>Shell was dash (not bash) version 0.5.4</li>
 					<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
-					<li>FBuild version was 0.1</li>
-					<li>Fabricate version was subversion revision 48</li>
 				</ul>
 			</part>
 			<part caption='Initial full build'>
@@ -529,6 +529,7 @@
 					<ul>
 						<li>Scons version was 1.2.0</li>
 						<li>Waf version was somewhere after 1.5.9 (svn rev 6671)</li>
+						<li>Fabricate version was subversion revision 48</li>
 						<li>Python version was 2.5.2</li>
 						<li>Jam version was 2.5</li>
 						<li>CMake version was 2.4.7</li>
