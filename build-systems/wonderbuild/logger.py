@@ -74,13 +74,12 @@ if out_is_dumb:
 	def color_bg_fg_rgb(bg, fg): return ''
 else:
 	def colored(color, s): return '\33[' + color + 'm' + s + '\33[0m'
-	if _curses:
-		colors = curses.tigetnum('colors')
-		if \
-			colors == 8 and \
-			os.environ.get('TERM', None) == 'xterm' and \
-			os.environ.get('COLORTERM', None) == 'gnome-terminal': colors = 256
+	if _curses: colors = curses.tigetnum('colors')
 	else: colors = 8
+	if \
+		colors == 8 and \
+		os.environ.get('TERM', None) == 'xterm' and \
+		os.environ.get('COLORTERM', None) == 'gnome-terminal': colors = 256
 	if colors == 8:
 		def _merge_rgb(rgb):
 			a = (rgb[0] + rgb[1] + rgb[2]) // 3
