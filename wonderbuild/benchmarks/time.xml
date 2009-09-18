@@ -142,7 +142,7 @@
 					<bar name='scons'         value='137.7'>with default options</bar>
 					<bar name='autotools'     value='188.0'>(non recursive)</bar>
 					<bar-section>Not using batch compilation, with only one CPU</bar-section>
-					<bar name='fabricate'     value='188.3'>(bizarrely 172s the first run) (hash sum signatures)</bar>
+					<bar name='fabricate'     value='188.3'>(bizarrely 172s the first run) (hash sum signatures) <span style='color: red'>(only one CPU supported)</span></bar>
 				</bars>
 			</part>
 			<part caption='Big partial rebuild'>
@@ -164,7 +164,7 @@
 					<bar name='autotools'     value='29.64'>(non recursive)</bar>
 					<bar name='scons'         value='39.58'>(with fast tuning options)</bar>
 					<bar-section>Not using batch compilation, with only one CPU</bar-section>
-					<bar name='fabricate'     value='26.90'>(hash sum signatures)</bar>
+					<bar name='fabricate'     value='26.90'>(hash sum signatures) <span style='color: red'>(only one CPU supported)</span></bar>
 				</bars>
 			</part>
 			<part caption='Small partial rebuild'>
@@ -185,7 +185,7 @@
 					<bar name='fbuild'        value=' 6.80'>(timestamp signatures only, content hashing disabled, dynamically looking for sources)</bar>
 					<bar name='scons'         value='24.37'>(with fast tuning options)</bar>
 					<bar-section>Not using batch compilation, with only one CPU</bar-section>
-					<bar name='fabricate'     value=' 6.01'>(hash sum signatures)</bar>
+					<bar name='fabricate'     value=' 6.01'>(hash sum signatures) <span style='color: red'>(only one CPU supported)</span></bar>
 				</bars>
 			</part>
 			<part caption='No-op rebuild'>
@@ -202,7 +202,7 @@
 					<bar name='scons'         value='23.25'>with fast tuning options</bar>
 					<bar name='scons'         value='35.97'>with default options</bar>
 					<bar-section>Not using batch compilation, with only one CPU</bar-section>
-					<bar name='fabricate'     value=' 4.99'>(hash sum signatures)</bar>
+					<bar name='fabricate'     value=' 4.99'>(hash sum signatures) <span style='color: red'>(only one CPU supported)</span></bar>
 				</bars>
 			</part>
 		</part>
@@ -546,7 +546,7 @@
 						<bar name='cmake'       value='4.39'>( 164.50s /  37.5s) without scan of system wide headers (like gcc -MMD)</bar>
 						<bar name='waf'         value='4.82'>( 226.56s /  47.0s) gcc deps, timestamp signatures</bar>
 						<bar name='waf'         value='6.83'>( 323.08s /  47.3s) waf cpp, timestamp signatures</bar>
-						<bar name='fabricate'   value='6.42'>(1209.33s / 188.3s) (bizarrely 932s the first run) (hash sum signatures)</bar>
+						<bar name='fabricate'   value='6.42'>(1209.33s / 188.3s) (bizarrely 932s the first run) (hash sum signatures) <span style='color: red'>(only one CPU supported)</span></bar>
 					</bars>
 				</part>
 				<part caption='Big partial rebuild'>
@@ -560,7 +560,7 @@
 						<bar name='cmake'       value='5.99'>( 36.86s /  6.15s) without scan of system wide headers (like gcc -MMD)</bar>
 						<bar name='waf'         value='7.02'>( 52.06s /  7.42s) gcc deps, timestamp signatures</bar>
 						<bar name='waf'         value='8.00'>( 59.35s /  7.42s) waf cpp, timestamp signatures</bar>
-						<bar name='fabricate'   value='9.21'>(247.82s / 26.90s) (hash sum signatures)</bar>
+						<bar name='fabricate'   value='9.21'>(247.82s / 26.90s) (hash sum signatures) <span style='color: red'>(only one CPU supported)</span></bar>
 					</bars>
 				</part>
 				<part caption='Small partial rebuild'>
@@ -574,7 +574,7 @@
 						<bar name='cmake'       value='4.61'>( 7.84s / 1.70s) without scan of system wide headers (like gcc -MMD)</bar>
 						<bar name='waf'         value='4.34'>(10.55s / 2.43s) waf cpp, timestamp signatures</bar>
 						<bar name='waf'         value='4.37'>(10.63s / 2.43s) gcc deps, timestamp signatures</bar>
-						<bar name='fabricate'   value='7.84'>(47.12s / 6.01s) (hash sum signatures)</bar>
+						<bar name='fabricate'   value='7.84'>(47.12s / 6.01s) (hash sum signatures) <span style='color: red'>(only one CPU supported)</span></bar>
 					</bars>
 				</part>
 				<part caption='No-op rebuild'>
@@ -584,7 +584,7 @@
 						<bar name='cmake'       value='4.87'>( 6.77s / 1.39s) without scan of system wide headers (like gcc -MMD)</bar>
 						<bar name='waf'         value='4.43'>( 7.31s / 1.65s) waf cpp, timestamp signatures</bar>
 						<bar name='waf'         value='4.45'>( 7.35s / 1.65s) gcc deps, timestamp signatures</bar>
-						<bar name='fabricate'   value='8.93'>(44.57s / 4.99s) (hash sum signatures)</bar>
+						<bar name='fabricate'   value='8.93'>(44.57s / 4.99s) (hash sum signatures) <span style='color: red'>(only one CPU supported)</span></bar>
 					</bars>
 				</part>
 				<part caption='Broken tools'>
