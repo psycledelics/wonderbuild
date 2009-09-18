@@ -176,7 +176,7 @@ else:
 		def color_bg_fg_rgb(bg, fg): return ''
 
 if __name__ == '__main__':
-	# 8 colors (3-bit: bgr with 1 on bit per channel)
+	# 8 colors (3-bit: bgr with 1 bit per channel)
 	for i in xrange(8):
 		bg = '4' + str(i)
 		fg = 7 - i
@@ -187,7 +187,7 @@ if __name__ == '__main__':
 		out.write(colored(bg + ';30', '00'))
 		out.write(' ')
 	out.write('\n')
-	# 16 colors (4-bit: bgr with 1 on bit per channel, and 1 bit for highlight)
+	# 16 colors (4-bit: bgr with 1 bit per channel, and 1 bit for highlight)
 	for i in xrange(16):
 		bg = '48;5;' + str(i)
 		fg = (i + 8) % 16
