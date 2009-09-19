@@ -145,7 +145,7 @@ main() {
 			then
 				ln -s $fabricate .
 			fi &&
-			measure python ./fabricate_script.py
+			measure python ./fabricate_script.py "$@"
 		;;
 	esac
 } &&
