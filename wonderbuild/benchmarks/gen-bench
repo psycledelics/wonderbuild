@@ -40,15 +40,16 @@ def main(argv):
 
 	for tool in (
 		create_wonderbuild,
-		create_fbuild,
 		create_waf,
 		create_scons,
+		create_fbuild,
+		create_fabricate,
+		#create_yabs,
 		create_autotools,
 		create_cmake,
 		create_makefile_rec,
 		create_jam,
 		create_msvc,
-		create_fabricate,
 	): tool(libs)
 
 	for i in xrange(libs): create_lib(i, classes, internal_includes, external_includes)
