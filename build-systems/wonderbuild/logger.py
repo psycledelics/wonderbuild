@@ -83,6 +83,7 @@ else:
 	if colors == 8:
 		def _merge_rgb(rgb):
 			a = (rgb[0] + rgb[1] + rgb[2]) // 3
+			if a == 0: return '0'
 			return str(
 				(rgb[0] >= a and 1 or 0) + \
 				(rgb[1] >= a and 2 or 0) + \
@@ -101,6 +102,7 @@ else:
 	elif colors == 16:
 		def _merge_rgb(rgb):
 			a = (rgb[0] + rgb[1] + rgb[2]) // 3
+			if a == 0: return '0'
 			c = \
 				(rgb[0] >= a and 1 or 0) + \
 				(rgb[1] >= a and 2 or 0) + \
