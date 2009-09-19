@@ -28,8 +28,8 @@ def configure(conf):
 	conf.env.CXXDEFINES = ['WRAPPER']
 
 def build(bld):
-	#kind = 'cshlib'
-	kind = 'cstaticlib'
+	kind = 'cshlib'
+	#kind = 'cstaticlib'
 	
 	count = 0
 	for x in bld.srcnode.find_dir('src').find_iter(in_pat=('wrapper*',), prune_pat=('*',), dir=True): count += 1

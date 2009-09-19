@@ -224,6 +224,46 @@ def build(bld):
 		); obj.source.sort() # issue #527 was not fixed
 ''')
 
+def create_fabricate(libs):
+	f = open('fabricate_script.py', 'w')
+	f.write('''\
+import fabricate
+
+COMPILER = 'g++'
+CXXFLAGS = ['-g', '-O0', '-Wall', '-pipe']
+ARCHIVER = 'ar'
+
+for lib in (
+''')
+	for i in xrange(libs): f.write("\t\'lib_%d\',\n" % (i,))
+	f.write('''\
+): execfile('%s/fabricate_subscript.py' % (lib,))
+''')
+
+def create_fabricate_sub(lib_number, classes):
+	f = open('fabricate_subscript.py', 'w')
+	f.write("CPPDEFINES = ['-DBENCH', '-DBENCH_LIB=%d']\n\n" % (lib_number,))
+	f.write('''\
+klasses = (
+''')
+	for i in xrange(classes): f.write("\t'class_%d',\n" % (i,))
+	f.write('''\
+)
+
+for klass in klasses: fabricate.run(
+	COMPILER, CXXFLAGS, CPPDEFINES,
+	'-I.',
+	'-I%(lib)s',
+	'-o', '%(lib)s/%%s.o' %% (klass,),
+	'-c', '%(lib)s/%%s.cpp' %% (klass,),
+)
+
+fabricate.run(
+	ARCHIVER, 'crus', '%(lib)s/%(lib)s.a',
+	['%(lib)s/%%s.o' %% (klass,) for klass in klasses],
+)
+''' % {'lib': 'lib_%d' % (lib_number,)})
+
 def create_scons(libs):
 	f = open('SConstruct', 'w')
 	f.write('''\
@@ -460,52 +500,5 @@ def create_msvc_sub(lib_number, classes):
 	'tgt': lib_name(lib_number),
 	'src': '\n'.join(['		<File RelativePath="class_%s.cpp"/>' % str(i) for i in xrange(classes)])
 })
-
-def create_fabricate(libs):
-	f = file("build.py", "w")
-
-	f.write("""\
-import fabricate
-
-COMPILER = 'g++'
-CCFLAGS = ['-g', '-O0', '-Wall', '-pipe']
-ARCHIVE = 'ar'
-
-""")
-	f.write("libs = [\n")
-	for i in xrange(libs):
-		f.write("\t\'lib_%d\',\n" % (i,))
-	f.write("\t]\n\n")
-
-	f.write("""\
-for lib in libs:
-	execfile('%s/subbuild.py' % (lib,))
-
-""")
-
-def create_fabricate_sub(lib_number, classes):
-	f = open('subbuild.py', 'w')
-	f.write("DEFINES = ['-DBENCH', '-DBENCH_LIB=%d']\n\n" % (lib_number,))
-	f.write("klasses = [\n")
-	for i in xrange(classes):
-		f.write("\t\'class_%d\',\n" % (i,))
-	f.write("\t]\n\n")
-
-	f.write("""\
-for klass in klasses:
-	fabricate.run(
-		COMPILER, CCFLAGS, DEFINES,
-		'-I.',
-		'-I%(lib)s',
-		'-o', '%(lib)s/%%s.o' %% (klass,),
-		'-c', '%(lib)s/%%s.cpp' %% (klass,),
-		)
-
-fabricate.run(
-	ARCHIVE, 'crus', '%(lib)s/%(lib)s.a',
-	['%(lib)s/%%s.o' %% (klass,) for klass in klasses],
-	)
-
-""" % {'lib' : 'lib_%d' % (lib_number,)})
 
 if __name__ == "__main__": main(sys.argv)
