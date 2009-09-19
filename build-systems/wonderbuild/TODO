@@ -9,7 +9,7 @@
 
 * standard flags flavors for debug, release, and strip.
 
-* cannot test tty on jython.
+* cannot test tty on jython (should look at the underlying platform hidden behind the jvm).
 
 * integrate binreloc.
 
