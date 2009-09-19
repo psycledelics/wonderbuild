@@ -9,23 +9,14 @@ rm -Rf bench bench-* &&
 
 cp -R bench bench-wonderbuild &&
 cp -R bench bench-wonderbuild-on-jython &&
-cp -R bench bench-fbuild &&
-cp -R bench bench-make &&
-cp -R bench bench-jam &&
 cp -R bench bench-waf &&
 cp -R bench bench-waf-on-jython &&
 cp -R bench bench-scons &&
 cp -R bench bench-scons-on-jython &&
-cp -R bench bench-cmake &&
-cp -R bench bench-autotools &&
+cp -R bench bench-fbuild &&
 cp -R bench bench-fabricate &&
-
-cd bench-autotools &&
-find . -type f -name Makefile -exec rm {} \; &&
-if false
-then
-	autoreconf --install --symlink &&
-	mkdir build-autotools &&
-	cd build-autotools &&
-	../configure --disable-shared CXXFLAGS=
-fi
+cp -R bench bench-yabs &&
+cp -R bench bench-make &&
+cp -R bench bench-jam &&
+cp -R bench bench-cmake &&
+cp -R bench bench-autotools && find bench-autotools -type f -name Makefile -exec rm {} \;
