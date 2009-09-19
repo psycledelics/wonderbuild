@@ -35,4 +35,3 @@
 
 * purge of unused nodes: it's sage to purge children that arent signed and aren't part of actual_children or old_children
 
-* 8-color rxvt
