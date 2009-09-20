@@ -360,7 +360,9 @@ class Node(object):
 				if node._children is None or node._global_purge_unused_children(): continue
 			c[node.name] = node; used = True
 		self._children = used and c or None
-		if __debug__ and is_debug and not used: debug('fs: unused     : ' + str(self))
+		if not used:
+			self._actual_children = self._old_children = None
+			if __debug__ and is_debug: debug('fs: unused     : ' + str(self))
 		return not used
 
 	def _partial_purge_unused_children(self):
@@ -371,7 +373,9 @@ class Node(object):
 				if node._used or (not node._old_used and (node._children is None or node._partial_purge_unused_children())): continue
 			c[node.name] = node; used = True
 		self._children = used and c or None
-		if __debug__ and is_debug and not used: debug('fs: unused     : ' + str(self))
+		if not used:
+			self._actual_children = self._old_children = None
+			if __debug__ and is_debug: debug('fs: unused     : ' + str(self))
 		return not used
 
 class RootNode(Node):
