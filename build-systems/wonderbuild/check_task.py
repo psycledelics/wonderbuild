@@ -16,8 +16,8 @@ class CheckTask(ProjectTask):
 		return class_(*args, **kw)
 		# uid = str(class_)
 		#try: instance = holder.shared[uid]
-		#except AttributeError: instance = class_(project, *args, **kw); holder.shared = {uid: instance}
-		#except KeyError: instance = holder.shared[uid] = class_(project, *args, **kw)
+		#except AttributeError: instance = class_(*args, **kw); holder.shared = {uid: instance}
+		#except KeyError: instance = holder.shared[uid] = class_(*args, **kw)
 		#return instance
 	
 	def __init__(self, project): ProjectTask.__init__(self, project)
