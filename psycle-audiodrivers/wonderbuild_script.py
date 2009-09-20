@@ -54,7 +54,9 @@ class Wonderbuild(ScriptTask):
 		dsound = DSoundCheckTask.shared(check_cfg)
 
 		class AudioDriversMod(ModTask):
-			def __init__(self): ModTask.__init__(self, 'psycle-audiodrivers', ModTask.Kinds.LIB, cfg, 'psycle-audiodrivers', 'default')
+			def __init__(self):
+				name = 'psycle-audiodrivers'
+				ModTask.__init__(self, name, ModTask.Kinds.LIB, cfg, (name, 'default'))
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]

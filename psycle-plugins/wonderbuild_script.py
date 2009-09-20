@@ -45,7 +45,7 @@ class Wonderbuild(ScriptTask):
 
 		class UniformMod(ModTask):
 			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):
-				ModTask.__init__(self, name, kind, cfg, name, 'default')
+				ModTask.__init__(self, name, kind, cfg, (name, 'default'))
 				self.path = path
 				if deps is not None: self.public_deps += deps
 
@@ -87,7 +87,7 @@ class Wonderbuild(ScriptTask):
 					except AttributeError:
 						self._sources = []
 						if self.outer.path.exists:
-							for s in self.outer.path.find_iter(in_pats = ('*.hpp','*.h'),
+							for s in self.outer.path.find_iter(in_pats = ('*.hpp', '*.h'),
 								ex_pats = ('*.private.hpp',), prune_pats = ('todo',)): self._sources.append(s)
 						for h in ('.hpp', '.h'):
 							f = self.outer.path.parent / (self.outer.path.name + h)

@@ -56,9 +56,9 @@ class Wonderbuild(ScriptTask):
 		boost_test = BoostCheckTask.shared((1, 33), ('unit_test_framework',), check_cfg)
 
 		class HelpersMathMod(ModTask):
-			def __init__(self): ModTask.__init__(self, 'psycle-helpers-math', ModTask.Kinds.HEADERS, cfg, 'psycle-helpers-math', 'default',
-				cxx_phase=HelpersMathMod.InstallHeaders()
-			)
+			def __init__(self):
+				name = 'psycle-helpers-math'
+				ModTask.__init__(self, name, ModTask.Kinds.HEADERS, cfg, (name, 'default'), cxx_phase=HelpersMathMod.InstallHeaders())
 				
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
@@ -89,7 +89,9 @@ class Wonderbuild(ScriptTask):
 						return self._sources
 
 		class HelpersMod(ModTask):
-			def __init__(self): ModTask.__init__(self, 'psycle-helpers', ModTask.Kinds.LIB, cfg, 'psycle-helpers', 'default')
+			def __init__(self):
+				name = 'psycle-helpers'
+				ModTask.__init__(self, name, ModTask.Kinds.LIB, cfg, (name, 'default'))
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
@@ -128,7 +130,9 @@ class Wonderbuild(ScriptTask):
 						return self._sources
 						
 		class UnitTestMod(ModTask):
-			def __init__(self): ModTask.__init__(self, 'psycle-helpers-unit-tests', ModTask.Kinds.PROG, cfg, 'psycle-helpers-unit-tests', 'default')
+			def __init__(self):
+				name = 'psycle-helpers-unit-tests'
+				ModTask.__init__(self, name, ModTask.Kinds.PROG, cfg, (name, 'default'))
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.prog_task, universalis, boost_test]

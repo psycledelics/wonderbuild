@@ -88,7 +88,8 @@ class Wonderbuild(ScriptTask):
 
 		class UniversalisMod(ModTask):
 			def __init__(self):
-				ModTask.__init__(self, 'universalis', ModTask.Kinds.LIB, cfg, 'universalis', 'default')
+				name = 'universalis'
+				ModTask.__init__(self, name, ModTask.Kinds.LIB, cfg, (name, 'default'))
 				self.cxx_phase = UniversalisMod.InstallHeaders(self.project, self.name + '-headers')
 				
 			def __call__(self, sched_ctx):
@@ -142,7 +143,9 @@ class Wonderbuild(ScriptTask):
 						return self._sources
 
 		class UnitTestMod(ModTask):
-			def __init__(self): ModTask.__init__(self, 'universalis-unit-tests', ModTask.Kinds.PROG, cfg, 'universalis-unit-tests', 'default')
+			def __init__(self):
+				name = 'universalis-unit-tests'
+				ModTask.__init__(self, name, ModTask.Kinds.PROG, cfg, (name, 'default'))
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.prog_task, universalis, boost_test]

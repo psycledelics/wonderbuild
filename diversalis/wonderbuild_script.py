@@ -40,9 +40,9 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.install import InstallTask
 
 		class DiversalisMod(ModTask):
-			def __init__(self): ModTask.__init__(self, 'diversalis', ModTask.Kinds.HEADERS, cfg, 'diversalis', 'default',
-				cxx_phase=DiversalisMod.InstallHeaders()
-			)
+			def __init__(self):
+				name = 'diversalis'
+				ModTask.__init__(self, name, ModTask.Kinds.HEADERS, cfg, (name, 'default'), cxx_phase=DiversalisMod.InstallHeaders())
 				
 			def __call__(self, sched_ctx):
 				self.result = True

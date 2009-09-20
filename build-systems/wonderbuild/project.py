@@ -73,7 +73,7 @@ class Project(Task):
 		finally:
 			if gc_enabled: gc.enable()
 
-		self.fs = FileSystem(self.persistent, global_purge=aliases is None)
+		self.fs = FileSystem(self.persistent, global_purge=aliases is None and not self.list_aliases)
 		self.top_src_dir = self.fs.cur / src_path
 		self.bld_dir = self.fs.cur / bld_path
 
@@ -98,7 +98,6 @@ class Project(Task):
 	def __call__(self, sched_ctx):
 		try:
 			if self.list_aliases:
-				if 'help' in self.options: return
 				keys = self.task_aliases.keys()
 				keys.sort()
 				for k in keys:
@@ -113,7 +112,6 @@ class Project(Task):
 				for x in sched_ctx.parallel_wait(*tasks): yield x
 				self.processsing = False
 		finally:
-			if 'help' in self.options: return
 			if False and __debug__ and is_debug: print self.persistent
 			gc_enabled = gc.isenabled()
 			if gc_enabled:

@@ -636,14 +636,14 @@ class ModTask(ModDepPhases, ProjectTask):
 		LIB = 2 # TODO allow the developer to specify that a lib is not dll-aware
 		LOADABLE = 3
 
-	def __init__(self, name, kind, base_cfg, *aliases, **kw):
-		if len(aliases) == 0: aliases = (name,)
+	def __init__(self, name, kind, base_cfg, aliases=None, **kw):
 		ModDepPhases.__init__(self)
 		ProjectTask.__init__(self, base_cfg.project)
 		self.name = name
 		self.kind = kind
 		self.base_cfg = base_cfg
 		self.sources = []
+		if aliases is None: aliases = (name,)
 		if kind == ModTask.Kinds.HEADERS:
 			#self.cxx_phase = ModTask._CxxPhaseCallbackTask(self)
 			self.cxx_phase = kw['cxx_phase']
@@ -978,9 +978,8 @@ class _PkgConfigTask(CheckTask):
 	def uid(self):
 		try: return self._uid
 		except AttributeError:
-			pkgs = self.pkgs
-			pkgs.sort()
-			self._uid = ' '.join(pkgs) + ' ' + ' '.join(self.what_args)
+			self.pkgs.sort()
+			self._uid = ' '.join(self.pkgs) + ' ' + ' '.join(self.what_args)
 			return self._uid
 
 	@property
@@ -988,9 +987,7 @@ class _PkgConfigTask(CheckTask):
 		try: return self._sig
 		except AttributeError:
 			sig = Sig(_PkgConfigTask.env_sig())
-			pkgs = self.pkgs
-			pkgs.sort()
-			for p in pkgs: sig.update(p)
+			for p in self.pkgs: sig.update(p)
 			sig = self._sig = sig.digest()
 			return sig
 
@@ -1005,7 +1002,7 @@ class _PkgConfigTask(CheckTask):
 class _PkgConfigFlagsTask(_PkgConfigTask):
 	def do_check_and_set_result(self, sched_ctx):
 		if False: yield
-		r, out, err = exec_subprocess_pipe(self.args, silent = True)
+		r, out, err = exec_subprocess_pipe(self.args, silent=True)
 		if r != 0: raise Exception, r
 		self.results = out.split()
 

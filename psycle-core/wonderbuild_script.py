@@ -49,7 +49,9 @@ class Wonderbuild(ScriptTask):
 		zlib = ZLibCheckTask.shared(check_cfg)
 
 		class CoreMod(ModTask):
-			def __init__(self): ModTask.__init__(self, 'psycle-core', ModTask.Kinds.LIB, cfg, 'psycle-core', 'default')
+			def __init__(self):
+				name = 'psycle-core'
+				ModTask.__init__(self, name, ModTask.Kinds.LIB, cfg, (name, 'default'))
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]

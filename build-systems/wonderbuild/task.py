@@ -29,7 +29,7 @@ class Task(object):
 		#
 		# for x in (again_more_sub_task_1, again_more_sub_task_2, ...): yield x
 
-	def print_desc(self, desc, color = '7;1'):
+	def print_desc(self, desc, color='7;1'):
 		out.write(colored(color, 'wonderbuild: task: ' + desc) + '\n')
 		#out.flush()
 		
@@ -46,13 +46,13 @@ class Task(object):
 		#out.flush()
 
 class ProjectTask(Task):
-	def __init__(self, project, *aliases): #XXX aliases as keyword
+	def __init__(self, project, aliases=None): #XXX aliases as keyword
 		Task.__init__(self)
 		self.project = project
-		project.add_task_aliases(self, *aliases)
+		if aliases is not None: project.add_task_aliases(self, *aliases)
 	
 	@property
-	def uid(self): pass
+	def uid(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
 	
 	def _get_persistent(self): return self.project.persistent[self.uid]
 	def _set_persistent(self, value): self.project.persistent[self.uid] = value
