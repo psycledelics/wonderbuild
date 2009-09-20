@@ -37,7 +37,7 @@ class Wonderbuild(ScriptTask):
 
 		class UniformMod(ModTask):
 			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):
-				ModTask.__init__(self, name, kind, cfg, name, 'default')
+				ModTask.__init__(self, name, kind, cfg, (name, 'default'))
 				self.path = path
 				if deps is not None: self.public_deps += deps
 
