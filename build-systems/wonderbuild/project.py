@@ -13,14 +13,14 @@ from logger import is_debug, debug, colored
 if __debug__ and is_debug: import time
 
 class Project(Task):
-	known_options = set(['src-dir', 'bld-dir', 'aliases', 'list-aliases'])
+	known_options = set(['src-dir', 'bld-dir', 'tasks', 'list-tasks'])
 
 	@staticmethod
 	def generate_option_help(help):
 		help['src-dir'] = ('<dir>', 'use <dir> as the source dir', 'current working dir: ' + os.getcwd())
 		help['bld-dir'] = ('<dir>', 'use <dir> as the build dir', '<src-dir>' + os.sep + '++wonderbuild')
-		help['aliases'] = ('<name,...>', 'build tasks with aliases <name,...>, comma-separated list', 'default')
-		help['list-aliases'] = (None, 'list the available task aliases')
+		help['tasks'] = ('<name,...>', 'build tasks with names <name,...>, comma-separated list', 'default')
+		help['list-tasks'] = (None, 'list the available task names')
 
 	def __init__(self, options, option_collector):
 		Task.__init__(self)
@@ -36,10 +36,10 @@ class Project(Task):
 		
 		if src_path == bld_path: raise Exception, 'build dir and source dir are the same'
 
-		self.list_aliases = 'list-aliases' in options
+		self.list_aliases = 'list-tasks' in options
 
 		self.task_aliases = {} # {name: [tasks]}
-		aliases = options.get('aliases', None)
+		aliases = options.get('tasks', None)
 		if aliases is not None:
 			if len(aliases): self.requested_task_aliases = aliases.split(',')
 			else: self.requested_task_aliases = (None,)
@@ -50,13 +50,13 @@ class Project(Task):
 		gc_enabled = gc.isenabled()
 		if gc_enabled:
 			try: gc.disable()
-			except NotImplementedError: pass # jython uses gc of the jvm
-		try:
+			except NotImplementedError: pass # jython uses the gc of the jvm
+		try: # python2.4 does not support try-except-finally
 			try:
 				try: f = open(os.path.join(bld_path, 'persistent.pickle'), 'rb')
 				except IOError: raise
 				else:
-					try:
+					try: # python2.4 does not support try-except-finally
 						try:
 							if __debug__ and is_debug: t0 = time.time()
 							pickle_abi_sig = cPickle.load(f)
@@ -73,7 +73,7 @@ class Project(Task):
 		finally:
 			if gc_enabled: gc.enable()
 
-		self.fs = FileSystem(self.persistent)
+		self.fs = FileSystem(self.persistent, global_purge=aliases is None)
 		self.top_src_dir = self.fs.cur / src_path
 		self.bld_dir = self.fs.cur / bld_path
 
@@ -114,12 +114,11 @@ class Project(Task):
 				self.processsing = False
 		finally:
 			if 'help' in self.options: return
-			#self.bld_dir.forget()
 			if False and __debug__ and is_debug: print self.persistent
 			gc_enabled = gc.isenabled()
 			if gc_enabled:
 				try: gc.disable()
-				except NotImplementedError: pass # jython uses gc of the jvm
+				except NotImplementedError: pass # jython uses the gc of the jvm
 			try:
 				path = os.path.join(self.bld_dir.path, 'persistent.pickle')
 				if __debug__ and is_debug: t0 = time.time()

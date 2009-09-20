@@ -33,5 +33,5 @@
 	- build checks should include headers in the sig (doable on gcc).
 	- pkg-config needs the --rechecks option.
 
-* purge of unused nodes: it's sage to purge children that arent signed and aren't part of actual_children or old_children
-
+* the path to colorgcc shouldn't be signed, but rather the path to the real compiler.
+  this stupidly triggers rebuild when changing from non-tty to tty or vice versa.

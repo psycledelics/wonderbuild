@@ -13,7 +13,8 @@ USE_HASH_SUM = False
 if USE_HASH_SUM: from signature import Sig
 
 class FileSystem(object):
-	def __init__(self, persistent):
+	def __init__(self, persistent, global_purge=True):
+		self._global_purge = global_purge
 		cwd = os.getcwd()
 		try: self.root, old_cwd = persistent[str(self.__class__)]
 		except KeyError:
@@ -334,6 +335,7 @@ class Node(object):
 			return self._abs_path
 
 	def clear(self):
+		if __debug__ and is_debug: debug('fs: clear      : ' + str(self))
 		self._time = None
 		try: del self._sig
 		except AttributeError: pass
@@ -350,12 +352,23 @@ class Node(object):
 		if parent._actual_children is not None and name in parent._actual_children: del parent._actual_children[name]
 		if parent._old_children is not None and name in parent._old_children: del parent._old_children[name]
 
-	def _purge_unused_children(self):
+	def _global_purge_unused_children(self):
 		c = {}; used = False
 		for node in self._children.itervalues():
 			try: node._sig
 			except AttributeError:
-				if node._used or (not node._old_used and (node._children is None or node._purge_unused_children())): continue
+				if node._children is None or node._global_purge_unused_children(): continue
+			c[node.name] = node; used = True
+		self._children = used and c or None
+		if __debug__ and is_debug and not used: debug('fs: unused     : ' + str(self))
+		return not used
+
+	def _partial_purge_unused_children(self):
+		c = {}; used = False
+		for node in self._children.itervalues():
+			try: node._sig
+			except AttributeError:
+				if node._used or (not node._old_used and (node._children is None or node._partial_purge_unused_children())): continue
 			c[node.name] = node; used = True
 		self._children = used and c or None
 		if __debug__ and is_debug and not used: debug('fs: unused     : ' + str(self))
@@ -363,7 +376,9 @@ class Node(object):
 
 class RootNode(Node):
 	def __getstate__(self):
-		if self._children is not None: self._purge_unused_children()
+		if self._children is not None:
+			if self._fs._global_purge: self._global_purge_unused_children()
+			else: self._partial_purge_unused_children()
 		return Node.__getstate__(self)
 	
 	def __init__(self):
