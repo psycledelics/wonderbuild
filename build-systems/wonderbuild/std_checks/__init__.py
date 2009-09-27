@@ -78,6 +78,8 @@ class BinaryFormatCheckTask(BuildCheckTask):
 	  #define WONDERBUILD__ARCH "hppa"
 #elif defined __powerpc__
 	  #define WONDERBUILD__ARCH "powerpc"
+#else
+	  #define WONDERBUILD__ARCH "unknown"
 #endif
 WONDERBUILD__BIN_FMT
 WONDERBUILD__OS
