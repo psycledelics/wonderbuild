@@ -67,7 +67,8 @@ class BuildCfg(ClientCfg, Task):
 		self.check_missing = False
 		self.fhs = FHS.shared(project)
 		self.impl = self.kind = self.version = None
-		# following two used only in the impl, so could be moved there
+		self.dest_platform_os = None
+		self.dest_platform_arch = None
 		self.dest_platform_binary_format = None
 		self.pic_flag_defines_pic = None
 
@@ -89,6 +90,8 @@ class BuildCfg(ClientCfg, Task):
 		c.impl = self.impl
 		c.kind = self.kind
 		c.version = self.version
+		c.dest_platform_os = self.dest_platform_os
+		c.dest_platform_arch = self.dest_platform_arch
 		c.dest_platform_binary_format = self.dest_platform_binary_format
 		c.pic_flag_defines_pic = self.pic_flag_defines_pic
 		return c
