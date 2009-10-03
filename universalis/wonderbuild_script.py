@@ -40,7 +40,6 @@ class Wonderbuild(ScriptTask):
 
 		from wonderbuild import UserReadableException
 		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, PreCompileTasks, ModTask
-		from wonderbuild.std_checks import MSWindowsCheckTask
 		from wonderbuild.std_checks.std_math import StdMathCheckTask
 		from wonderbuild.std_checks.dlfcn import DlfcnCheckTask
 		from wonderbuild.std_checks.pthread import PThreadCheckTask
@@ -56,7 +55,6 @@ class Wonderbuild(ScriptTask):
 		pthread = PThreadCheckTask.shared(check_cfg)
 		boost = BoostCheckTask.shared((1, 33), ('signals', 'thread', 'filesystem', 'date_time'), check_cfg)
 		boost_test = BoostCheckTask.shared((1, 33), ('unit_test_framework',), check_cfg)
-		mswindows = MSWindowsCheckTask.shared(check_cfg)
 		winmm = WinMMCheckTask.shared(check_cfg)
 
 		class Pch(PreCompileTasks):
@@ -98,10 +96,10 @@ class Wonderbuild(ScriptTask):
 				req = self.public_deps + self.private_deps
 				opt = [dlfcn, pthread, glibmm]
 				sched_ctx.parallel_no_wait(winmm)
-				for x in sched_ctx.parallel_wait(mswindows, *(req + opt)): yield x
+				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
-				if self.result and mswindows:
+				if self.result and self.cfg.dest_platform.os == 'win':
 					for x in sched_ctx.parallel_wait(winmm): yield x
 					if winmm: self.public_deps.append(winmm)
 					else: self.result = False
@@ -109,7 +107,8 @@ class Wonderbuild(ScriptTask):
 
 			def do_ensure_deps(self):
 				if not boost: raise UserReadableException, self.name + ' requires the following boost libs: ' + boost.help
-				if mswindows and not winmm: raise UserReadableException, 'on mswindows, ' + self.name + ' requires microsoft\'s windows multimedia extensions: ' + winmm.help
+				if self.cfg.dest_platform.os == 'win' and not winmm: raise UserReadableException, \
+					'on mswindows, ' + self.name + ' requires microsoft\'s windows multimedia extensions: ' + winmm.help
 				ModTask.do_ensure_deps(self)
 			
 			def do_mod_phase(self):

@@ -5,14 +5,14 @@
 from wonderbuild.logger import out, colored, is_debug, debug, silent
 from wonderbuild.subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 from wonderbuild.check_task import CheckTask, ok_color, failed_color
-from wonderbuild.std_checks import BinaryFormatCheckTask, PicFlagDefinesPicCheckTask
+from wonderbuild.std_checks import DestPlatformCheckTask, PicFlagDefinesPicCheckTask
 
 class DetectImplCheckTask(CheckTask):
 	@staticmethod
 	def shared(user_build_cfg):
-		try: return user_build_cfg.project.cxx_detect_impl
+		try: return user_build_cfg.project._cxx_detect_impl
 		except AttributeError:
-			instance = user_build_cfg.project.cxx_detect_impl = DetectImplCheckTask(user_build_cfg)
+			instance = user_build_cfg.project._cxx_detect_impl = DetectImplCheckTask(user_build_cfg)
 			return instance
 			
 	def __init__(self, user_build_cfg):
@@ -26,7 +26,7 @@ class DetectImplCheckTask(CheckTask):
 	def uid(self): return str(self.__class__)
 
 	@property
-	def desc(self): return 'c++-compiler'
+	def desc(self): return 'c++-tool-chain'
 	
 	@property
 	def result_display(self):
@@ -57,12 +57,14 @@ class DetectImplCheckTask(CheckTask):
 			if 'ar' not in o: cfg.ar_prog = ar_prog
 			if 'ranlib' not in o: cfg.ranlib_prog = ranlib_prog
 			
-			binary_format = BinaryFormatCheckTask.shared(cfg)
+			dest_platform = DestPlatformCheckTask.shared(cfg)
 			pic = PicFlagDefinesPicCheckTask.shared(cfg)
-			cfg.pic_flag_defines_pic = True # allows it to be reentrant during the check itself
-			for x in sched_ctx.parallel_wait(binary_format, pic): yield x
-			cfg.dest_platform_binary_format = binary_format.format
-			cfg.pic_flag_defines_pic = pic.result
+			cfg.dest_platform.pic_flag_defines_pic = True # allows it to be reentrant during the check itself
+			for x in sched_ctx.parallel_wait(dest_platform, pic): yield x
+			cfg.dest_platform.bin_fmt = dest_platform.bin_fmt
+			cfg.dest_platform.os = dest_platform.os
+			cfg.dest_platform.arch = dest_platform.arch
+			cfg.dest_platform.pic_flag_defines_pic = pic.result
 	
 	def do_check_and_set_result(self, sched_ctx):
 		if False: yield

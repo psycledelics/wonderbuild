@@ -54,7 +54,14 @@ class ClientCfg(object):
 		cfg.shared_libs += self.shared_libs
 		cfg.ld_flags += self.ld_flags
 		cfg.pkg_config += self.pkg_config
-		
+
+class DestPlatform(object):
+	def __init__(self):
+		self.bin_fmt = None
+		self.os = None
+		self.arch = None
+		self.pic_flag_defines_pic = None
+			
 class BuildCfg(ClientCfg, Task):
 	def __init__(self, project):
 		ClientCfg.__init__(self, project)
@@ -67,10 +74,7 @@ class BuildCfg(ClientCfg, Task):
 		self.check_missing = False
 		self.fhs = FHS.shared(project)
 		self.impl = self.kind = self.version = None
-		self.dest_platform_os = None
-		self.dest_platform_arch = None
-		self.dest_platform_binary_format = None
-		self.pic_flag_defines_pic = None
+		self.dest_platform = DestPlatform()
 
 	def clone(self, class_ = None):
 		if class_ is None: class_ = self.__class__
@@ -90,10 +94,7 @@ class BuildCfg(ClientCfg, Task):
 		c.impl = self.impl
 		c.kind = self.kind
 		c.version = self.version
-		c.dest_platform_os = self.dest_platform_os
-		c.dest_platform_arch = self.dest_platform_arch
-		c.dest_platform_binary_format = self.dest_platform_binary_format
-		c.pic_flag_defines_pic = self.pic_flag_defines_pic
+		c.dest_platform = self.dest_platform
 		return c
 
 	@property
@@ -103,10 +104,9 @@ class BuildCfg(ClientCfg, Task):
 			sig = Sig(self.impl.common_env_sig)
 			e = os.environ.get('PATH', None)
 			if e is not None: sig.update(e)
-			#sig.update(self.dest_platform_binary_format)
-			#sig.update(str(self.pic_flag_defines_pic))
 			sig.update(self.kind)
 			sig.update(str(self.version))
+			#sig.update(self.dest_platform.sig)
 			if len(self.pkg_config): sig.update(_PkgConfigTask.env_sig())
 			sig = self.__common_sig = sig.digest()
 			return sig

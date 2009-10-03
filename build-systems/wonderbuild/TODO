@@ -1,6 +1,3 @@
-* concatenate all the compiler checks about predefined macros into one, including the version.
-  already done for the binary format check, just need to put all the rest here.
-
 * when a loadable module depends on a lib, that lib can't be a non-pic one.
 
 * --help shouldn't create the build dir.

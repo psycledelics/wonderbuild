@@ -6,15 +6,15 @@ from wonderbuild.cxx_tool_chain import BuildCheckTask, ok_color, failed_color
 
 # gcc -E -dM -std=c++98 -x c++-header /dev/null | sort
 
-class BinaryFormatCheckTask(BuildCheckTask):
+class DestPlatformCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared(base_cfg):
-		try: return base_cfg.project.dest_platform_binary_format
+		try: return base_cfg.project._cxx_compiler_dest_platform
 		except AttributeError:
-			task = base_cfg.project.dest_platform_binary_format = BinaryFormatCheckTask(base_cfg)
+			task = base_cfg.project._cxx_compiler_dest_platform = DestPlatformCheckTask(base_cfg)
 			return task
 
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'binary-format', base_cfg, pipe_preproc=True)
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'dest-platform', base_cfg, pipe_preproc=True)
 	
 	@property
 	def source_text(self): return '''\
@@ -27,6 +27,7 @@ class BinaryFormatCheckTask(BuildCheckTask):
 #else
 	#error unkown binary format
 #endif
+
 #if defined __linux__
 	#define WONDERBUILD__OS "linux"
 #elif defined __GNU__
@@ -60,6 +61,7 @@ class BinaryFormatCheckTask(BuildCheckTask):
 #else
 	#error unkown operating system
 #endif
+
 #if defined __x86_64__
 	  #define WONDERBUILD__ARCH "x86_64"
 #elif defined __i386__
@@ -81,6 +83,7 @@ class BinaryFormatCheckTask(BuildCheckTask):
 #else
 	  #define WONDERBUILD__ARCH "unknown"
 #endif
+
 WONDERBUILD__BIN_FMT
 WONDERBUILD__OS
 WONDERBUILD__ARCH
@@ -98,7 +101,7 @@ WONDERBUILD__ARCH
 	def result(self): return self.results[0]
 	
 	@property
-	def format(self): return self.results[1]
+	def bin_fmt(self): return self.results[1]
 
 	@property
 	def os(self): return self.results[2]
@@ -108,8 +111,8 @@ WONDERBUILD__ARCH
 
 	@property
 	def result_display(self):
-		if self.result: return self.format, ok_color
-		else: return 'unkown (neither of elf, mac-o, nor pe)', failed_color
+		if self.result: return 'bin-fmt: ' + self.bin_fmt + ', os: ' + self.os + ', arch: ' + self.arch, ok_color
+		else: return 'unkown', failed_color
 
 def unversioned_sys_platform_to_binary_format(unversioned_sys_platform):
 	"infers the binary format from the unversioned_sys_platform name."
@@ -147,44 +150,12 @@ def unversioned_sys_platform():
 	if s.endswith('os2') and s != 'sunos2': return s
 	return re.split('\d+$', s)[0]
 
-class MSWindowsCheckTask(BuildCheckTask):
-	@staticmethod
-	def shared(base_cfg):
-		try: return base_cfg.project.target_platform_is_mswindows
-		except AttributeError:
-			task = base_cfg.project.target_platform_is_mswindows = MSWindowsCheckTask(base_cfg)
-			return task
-
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'ms-windows', base_cfg, compile=False)
-
-	@property
-	def source_text(self): return \
-		'#if !defined _WIN32\n' \
-		'\t#error the target platform is not mswindows\n' \
-		'#endif\n'
-
-class CygwinCheckTask(BuildCheckTask):
-	@staticmethod
-	def shared(base_cfg):
-		try: return base_cfg.project.target_platform_is_cygwin
-		except AttributeError:
-			task = base_cfg.project.target_platform_is_cygwin = CygwinCheckTask(base_cfg)
-			return task
-
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'cygwin', base_cfg, compile=False)
-
-	@property
-	def source_text(self): return \
-		'#if !defined __CYGWIN__\n' \
-		'\t#error the target platform is not cygwin\n' \
-		'#endif\n'
-
 class MingwCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared(base_cfg):
-		try: return base_cfg.project.cxx_compiler_is_mingw
+		try: return base_cfg.project._cxx_compiler_is_mingw
 		except AttributeError:
-			task = base_cfg.project.cxx_compiler_is_mingw = MingwCheckTask(base_cfg)
+			task = base_cfg.project._cxx_compiler_is_mingw = MingwCheckTask(base_cfg)
 			return task
 
 	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'mingw', base_cfg, compile=False)
@@ -198,9 +169,9 @@ class MingwCheckTask(BuildCheckTask):
 class PicFlagDefinesPicCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared(base_cfg):
-		try: return base_cfg.project.cxx_compiler_pic_flag_defines_pic
+		try: return base_cfg.project._cxx_compiler_pic_flag_defines_pic
 		except AttributeError:
-			task = base_cfg.project.cxx_compiler_pic_flag_defines_pic = PicFlagDefinesPicCheckTask(base_cfg)
+			task = base_cfg.project._cxx_compiler_pic_flag_defines_pic = PicFlagDefinesPicCheckTask(base_cfg)
 			return task
 
 	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'pic-flag-defines-pic', base_cfg, compile=False)
@@ -217,9 +188,9 @@ class PicFlagDefinesPicCheckTask(BuildCheckTask):
 class AutoLinkSupportCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared(base_cfg):
-		try: return base_cfg.project.cxx_compiler_has_auto_link_support
+		try: return base_cfg.project._cxx_tool_chain_has_auto_link_support
 		except AttributeError:
-			task = base_cfg.project.cxx_compiler_has_auto_link_support = AutoLinkSupportCheckTask(base_cfg)
+			task = base_cfg.project._cxx_tool_chain_has_auto_link_support = AutoLinkSupportCheckTask(base_cfg)
 			return task
 
 	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'auto-link-support', base_cfg, compile=False)
