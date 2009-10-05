@@ -2,6 +2,7 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
+from option_cfg import OptionCfg
 from task import ProjectTask
 from logger import out, colored, color_bg_fg_rgb, is_debug, debug, silent
 import multi_column_formatting
@@ -10,7 +11,14 @@ ok_color = color_bg_fg_rgb((240, 255, 240), (0, 170, 0))
 failed_color = color_bg_fg_rgb((255, 240, 240), (170, 0, 0))
 _announce_color = color_bg_fg_rgb((240, 240, 255), (0, 0, 170))
 
-class CheckTask(ProjectTask):
+class CheckTask(ProjectTask, OptionCfg):
+
+	known_options = set(['recheck'])
+
+	@staticmethod
+	def generate_option_help(help):
+		help['recheck'] = (None, 'perform configuration checks again', 'do not recheck')
+
 	@classmethod
 	def shared(class_, *args, **kw):
 		return class_(*args, **kw)
@@ -20,7 +28,9 @@ class CheckTask(ProjectTask):
 		#except KeyError: instance = holder.shared[uid] = class_(*args, **kw)
 		#return instance
 	
-	def __init__(self, project): ProjectTask.__init__(self, project)
+	def __init__(self, project):
+		ProjectTask.__init__(self, project)
+		OptionCfg.__init__(self, project)
 
 	@property
 	def sig(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
@@ -69,17 +79,19 @@ class CheckTask(ProjectTask):
 	results = property(_get_results, _set_results)
 
 	def __call__(self, sched_ctx):
-		try: old_sig, self._results = self.persistent
-		except KeyError: old_sig = None
-		if old_sig == self.sig:
-			if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
-		else:
-			if not silent:
-				desc = self.desc
-				self.print_check(desc)
-			for x in self.do_check_and_set_result(sched_ctx): yield x
-			self.persistent = self.sig, self.results
-			if not silent: self.print_check_result(desc, *self.result_display)
+		if 'recheck' not in self.options:
+			try: old_sig, self._results = self.persistent
+			except KeyError: pass
+			else:
+				if old_sig == self.sig:
+					if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
+					return
+		if not silent:
+			desc = self.desc
+			self.print_check(desc)
+		for x in self.do_check_and_set_result(sched_ctx): yield x
+		self.persistent = self.sig, self.results
+		if not silent: self.print_check_result(desc, *self.result_display)
 
 	def help_package(self, search, url):
 		s = \

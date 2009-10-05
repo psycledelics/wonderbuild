@@ -25,10 +25,5 @@
 
 * the <class>.shared functions should allow to share an instance at other levels than the project.
 
-* add some --recheck option and detect fine-grain external libs/progs changes:
-	- find prog abs paths via the PATH env var.
-	- build checks should include headers in the sig (doable on gcc).
-	- pkg-config needs the --rechecks option.
-
 * the path to colorgcc shouldn't be signed, but rather the path to the real compiler.
   this stupidly triggers rebuild when changing from non-tty to tty or vice versa.
