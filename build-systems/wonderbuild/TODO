@@ -24,6 +24,7 @@
 * versionned libs.
 
 * the <class>.shared functions should allow to share an instance at other levels than the project.
+  also, share the pkg-config checks (the --recheck option triggers the check several times).
 
 * the path to colorgcc shouldn't be signed, but rather the path to the real compiler.
   this stupidly triggers rebuild when changing from non-tty to tty or vice versa.
