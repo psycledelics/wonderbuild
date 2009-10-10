@@ -39,7 +39,8 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, ModTask
 		from wonderbuild.install import InstallTask
 
-		xml = PkgConfigCheckTask.shared(project, ['libxml++-2.6'])
+		check_cfg = cfg.clone()
+		xml = PkgConfigCheckTask.shared(check_cfg.shared_checks, project, ['libxml++-2.6'])
 
 		class PlayerMod(ModTask):
 			def __init__(self):

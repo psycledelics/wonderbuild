@@ -5,7 +5,11 @@
 from wonderbuild.cxx_tool_chain import BuildCheckTask
 
 class MultitheadingSupportCheckTask(BuildCheckTask):
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'multithreading-support', base_cfg)
+
+	@staticmethod
+	def shared_uid(*args, **kw): return 'multithreading-support'
+
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, base_cfg, self.shared_uid())
 
 	def apply_to(self, cfg):
 		# some documentation is available in <boost/config/requires_threads.hpp>

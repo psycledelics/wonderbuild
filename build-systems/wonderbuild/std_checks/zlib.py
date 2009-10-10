@@ -5,21 +5,23 @@
 from wonderbuild.cxx_tool_chain import BuildCheckTask
 
 class ZLibCheckTask(BuildCheckTask):
-	def __init__(self, base_cfg, min_version = '0x1000'):
-		BuildCheckTask.__init__(self, 'zlib', base_cfg)
+
+	@staticmethod
+	def shared_uid(base_cfg, min_version='0x1000', *args, **kw): return 'zlib-' + str(min_version)
+
+	def __init__(self, base_cfg, min_version='0x1000'):
+		BuildCheckTask.__init__(self, base_cfg, self.shared_uid(base_cfg, min_version))
 		self.min_version = min_version
 
-	def apply_to(self, cfg):
-		cfg.libs.append('z')
+	def apply_to(self, cfg): cfg.libs.append('z')
 
 	@property
-	def source_text(self): return \
-		"""\
-			#include <zlib.h>
-			#if ZLIB_VERNUM < %s
-				#error zlib version too old
-			#endif
-			void zlib() {
-				// todo do something with it for a complete check
-			}
-		""" % str(self.min_version)
+	def source_text(self): return '''\
+#include <zlib.h>
+#if ZLIB_VERNUM < %s
+	#error zlib version too old
+#endif
+void zlib() {
+	// todo do something with it for a complete check
+}
+''' % str(self.min_version)

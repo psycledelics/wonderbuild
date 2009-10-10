@@ -47,13 +47,9 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.std_checks.boost import BoostCheckTask
 		from wonderbuild.install import InstallTask
 
-		cfg = UserBuildCfgTask.shared(project)
-		for x in sched_ctx.parallel_wait(cfg): yield x
-		cfg = cfg.new_or_clone()
-		
 		check_cfg = cfg.clone()
-		std_math = StdMathCheckTask.shared(check_cfg)
-		boost_test = BoostCheckTask.shared((1, 33), ('unit_test_framework',), check_cfg)
+		std_math = StdMathCheckTask.shared(check_cfg.shared_checks, check_cfg)
+		boost_test = BoostCheckTask.shared(check_cfg.shared_checks, check_cfg, (1, 33), ('unit_test_framework',))
 
 		class HelpersMathMod(ModTask):
 			def __init__(self):

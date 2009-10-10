@@ -5,27 +5,34 @@
 from wonderbuild.cxx_tool_chain import BuildCheckTask
 
 class OpenGLCheckTask(BuildCheckTask):
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'opengl', base_cfg)
+
+	@staticmethod
+	def shared_uid(*args, **kw): return 'opengl'
+
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, base_cfg, self.shared_uid())
 
 	def apply_to(self, cfg):
 		cfg.defines['GL_GLEXT_PROTOTYPES'] = None
 		cfg.libs.append('GL')
 
 	@property
-	def source_text(self): return \
-		"""\
-			#if defined __APPLE__
-				#include <OpenGL/OpenGL.h>
-			#else
-				#include <GL/gl.h>
-			#endif
-			void gl() {
-				// todo do something with it for a complete check
-			}
-		"""
+	def source_text(self): return '''\
+#if defined __APPLE__
+	#include <OpenGL/OpenGL.h>
+#else
+	#include <GL/gl.h>
+#endif
+void gl() {
+	// todo do something with it for a complete check
+}
+'''
 
 class OpenGLUCheckTask(BuildCheckTask):
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'openglu', base_cfg)
+
+	@staticmethod
+	def shared_uid(*args, **kw): return 'openglu'
+
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, base_cfg, self.shared_uid())
 	
 	def __call__(self, sched_ctx):
 		self.public_deps = [OpenGLCheckTask.shared(self.base_cfg)]
@@ -34,20 +41,23 @@ class OpenGLUCheckTask(BuildCheckTask):
 	def apply_to(self, cfg): cfg.libs.append('GLU')
 
 	@property
-	def source_text(self): return \
-		"""\
-			#if defined __APPLE__
-				#include <OpenGL/glu.h>
-			#else
-				#include <GL/glu.h>
-			#endif
-			void glu() {
-				// todo do something with it for a complete check
-			}
-		"""
+	def source_text(self): return '''\
+#if defined __APPLE__
+	#include <OpenGL/glu.h>
+#else
+	#include <GL/glu.h>
+#endif
+void glu() {
+	// todo do something with it for a complete check
+}
+'''
 
 class OpenGLUTCheckTask(BuildCheckTask):
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'openglut', base_cfg)
+
+	@staticmethod
+	def shared_uid(*args, **kw): return 'openglut'
+
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, base_cfg, self.shared_uid())
 
 	def __call__(self, sched_ctx):
 		self.public_deps = [OpenGLUCheckTask.shared(self.base_cfg)]
@@ -56,14 +66,13 @@ class OpenGLUTCheckTask(BuildCheckTask):
 	def apply_to(self, cfg): cfg.libs.append('glut')
 
 	@property
-	def source_text(self): return \
-		"""\
-			#if defined __APPLE__
-				#include <GLUT/glut.h>
-			#else
-				#include <GL/glut.h>
-			#endif
-			void glut() {
-				// todo do something with it for a complete check
-			}
-		"""
+	def source_text(self): return '''\
+#if defined __APPLE__
+	#include <GLUT/glut.h>
+#else
+	#include <GL/glut.h>
+#endif
+void glut() {
+	// todo do something with it for a complete check
+}
+'''

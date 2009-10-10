@@ -57,3 +57,4 @@ class ProjectTask(Task):
 	def _get_persistent(self): return self.project.persistent[self.uid]
 	def _set_persistent(self, value): self.project.persistent[self.uid] = value
 	persistent = property(_get_persistent, _set_persistent)
+

@@ -36,8 +36,6 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.std_checks.pthread import PThreadCheckTask
 		from wonderbuild.std_checks.boost import BoostCheckTask
 		
-		glibmm = PkgConfigCheckTask.shared(project, ['glibmm-2.4 >= 2.4', 'gmodule-2.0 >= 2.0', 'gthread-2.0 >= 2.0'])
-
 		self._cfg = cfg = UserBuildCfgTask.shared(project)
 		for x in sched_ctx.parallel_wait(cfg): yield x
 		cfg = cfg.new_or_clone()
@@ -48,10 +46,11 @@ class Wonderbuild(ScriptTask):
 			cfg.cxx_flags += ['-EHa', '-MD'] # basic compilation flags required
 
 		check_cfg = cfg.clone()
-		std_math = StdMathCheckTask.shared(check_cfg)
-		dlfcn = DlfcnCheckTask.shared(check_cfg)
-		pthread = PThreadCheckTask.shared(check_cfg)
-		boost = BoostCheckTask.shared((1, 33), ('signals', 'thread', 'filesystem', 'date_time'), check_cfg)
+		glibmm = PkgConfigCheckTask.shared(check_cfg.shared_checks, project, ['glibmm-2.4 >= 2.4', 'gmodule-2.0 >= 2.0', 'gthread-2.0 >= 2.0'])
+		std_math = StdMathCheckTask.shared(check_cfg.shared_checks, check_cfg)
+		dlfcn = DlfcnCheckTask.shared(check_cfg.shared_checks, check_cfg)
+		pthread = PThreadCheckTask.shared(check_cfg.shared_checks, check_cfg)
+		boost = BoostCheckTask.shared(check_cfg.shared_checks, check_cfg, (1, 33), ('signals', 'thread', 'filesystem', 'date_time'))
 
 from wonderbuild.cxx_tool_chain import PreCompileTasks
 

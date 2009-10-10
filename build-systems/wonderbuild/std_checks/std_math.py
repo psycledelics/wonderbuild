@@ -5,14 +5,11 @@
 from wonderbuild.cxx_tool_chain import MultiBuildCheckTask, BuildCheckTask, ok_color, failed_color
 
 class StdMathCheckTask(MultiBuildCheckTask):
-	@staticmethod
-	def shared(base_cfg):
-		try: return base_cfg.project.std_math_check_task
-		except AttributeError:
-			task = base_cfg.project.std_math_check_task = StdMathCheckTask(base_cfg)
-			return task
 
-	def __init__(self, base_cfg): MultiBuildCheckTask.__init__(self, 'c++-std-math', base_cfg)
+	@staticmethod
+	def shared_uid(*args, **kw): return 'c++-std-math'
+
+	def __init__(self, base_cfg): MultiBuildCheckTask.__init__(self, base_cfg, self.shared_uid())
 		
 	def do_check_and_set_result(self, sched_ctx):
 		t = StdMathCheckTask.SubCheckTask(self, True)
@@ -50,7 +47,7 @@ double math() {
 	
 	class SubCheckTask(BuildCheckTask):
 		def __init__(self, outer, m):
-			BuildCheckTask.__init__(self, outer.name + '-with' + (not m and 'out' or '') + '-lm', outer.base_cfg)
+			BuildCheckTask.__init__(self, outer.base_cfg, outer.name + '-with' + (not m and 'out' or '') + '-lm')
 			self.outer = outer
 			self.m = m
 

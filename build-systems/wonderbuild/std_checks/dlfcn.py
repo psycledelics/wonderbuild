@@ -5,7 +5,11 @@
 from wonderbuild.cxx_tool_chain import MultiBuildCheckTask, BuildCheckTask, ok_color, failed_color
 
 class DlfcnCheckTask(MultiBuildCheckTask):
-	def __init__(self, base_cfg): MultiBuildCheckTask.__init__(self, 'posix-dlfcn', base_cfg)
+
+	@staticmethod
+	def shared_uid(*args, **kw): return 'posix-dlfcn'
+
+	def __init__(self, base_cfg): MultiBuildCheckTask.__init__(self, base_cfg, self.shared_uid())
 		
 	def do_check_and_set_result(self, sched_ctx):
 		t = DlfcnCheckTask.SubCheckTask(self, True)
@@ -50,7 +54,7 @@ void dlfcn() {
 	
 	class SubCheckTask(BuildCheckTask):
 		def __init__(self, outer, dl):
-			BuildCheckTask.__init__(self, outer.name + '-with' + (not dl and 'out' or '') + '-ldl', outer.base_cfg)
+			BuildCheckTask.__init__(self, outer.base_cfg, outer.name + '-with' + (not dl and 'out' or '') + '-ldl')
 			self.outer = outer
 			self.dl = dl
 

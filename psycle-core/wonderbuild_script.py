@@ -43,10 +43,9 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.std_checks.zlib import ZLibCheckTask
 		from wonderbuild.install import InstallTask
 
-		xml = PkgConfigCheckTask.shared(project, ['libxml++-2.6'])
-
 		check_cfg = cfg.clone()
-		zlib = ZLibCheckTask.shared(check_cfg)
+		xml = PkgConfigCheckTask.shared(check_cfg.shared_checks, project, ['libxml++-2.6'])
+		zlib = ZLibCheckTask.shared(check_cfg.shared_checks, check_cfg)
 
 		class CoreMod(ModTask):
 			def __init__(self):

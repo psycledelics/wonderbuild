@@ -47,15 +47,14 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.std_checks.winmm import WinMMCheckTask
 		from wonderbuild.install import InstallTask
 		
-		glibmm = PkgConfigCheckTask.shared(project, ['glibmm-2.4 >= 2.4', 'gmodule-2.0 >= 2.0', 'gthread-2.0 >= 2.0'])
-
 		check_cfg = cfg.clone()
-		std_math = StdMathCheckTask.shared(check_cfg)
-		dlfcn = DlfcnCheckTask.shared(check_cfg)
-		pthread = PThreadCheckTask.shared(check_cfg)
-		boost = BoostCheckTask.shared((1, 33), ('signals', 'thread', 'filesystem', 'date_time'), check_cfg)
-		boost_test = BoostCheckTask.shared((1, 33), ('unit_test_framework',), check_cfg)
-		winmm = WinMMCheckTask.shared(check_cfg)
+		glibmm = PkgConfigCheckTask.shared(check_cfg.shared_checks, project, ['glibmm-2.4 >= 2.4', 'gmodule-2.0 >= 2.0', 'gthread-2.0 >= 2.0'])
+		std_math = StdMathCheckTask.shared(check_cfg.shared_checks, check_cfg)
+		dlfcn = DlfcnCheckTask.shared(check_cfg.shared_checks, check_cfg)
+		pthread = PThreadCheckTask.shared(check_cfg.shared_checks, check_cfg)
+		boost = BoostCheckTask.shared(check_cfg.shared_checks, check_cfg, (1, 33), ('signals', 'thread', 'filesystem', 'date_time'))
+		boost_test = BoostCheckTask.shared(check_cfg.shared_checks, check_cfg, (1, 33), ('unit_test_framework',))
+		winmm = WinMMCheckTask.shared(check_cfg.shared_checks, check_cfg)
 
 		class Pch(PreCompileTasks):
 			def __init__(self): PreCompileTasks.__init__(self, 'pch', cfg)

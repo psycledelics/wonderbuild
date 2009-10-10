@@ -5,20 +5,23 @@
 from wonderbuild.cxx_tool_chain import BuildCheckTask
 
 class DSoundCheckTask(BuildCheckTask):
-	def __init__(self, base_cfg, min_version = 'Ox900'):
-		BuildCheckTask.__init__(self, 'ms-dsound', base_cfg)
+
+	@staticmethod
+	def shared_uid(base_cfg, min_version='Ox900', *args, **kw): return 'ms-dsound-' + str(min_version)
+
+	def __init__(self, base_cfg, min_version='Ox900'):
+		BuildCheckTask.__init__(self, base_cfg, self.shared_uid(base_cfg, min_version))
 		self.min_version = min_version
 
 	def apply_to(self, cfg): cfg.libs.append('dsound')
 
 	@property
-	def source_text(self): return \
-		"""\
-			#include <dsound.h>
-			#if DIRECTSOUND_VERSION < %s
-				#error microsoft direct sound version too old
-			#endif
-			void microsoft_direct_sound() {
-				// todo do something with it for a complete check
-			}
-		""" % str(self.min_version)
+	def source_text(self): return '''\
+#include <dsound.h>
+#if DIRECTSOUND_VERSION < %s
+	#error microsoft direct sound version too old
+#endif
+void microsoft_direct_sound() {
+	// todo do something with it for a complete check
+}
+''' % str(self.min_version)

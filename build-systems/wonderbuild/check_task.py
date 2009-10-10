@@ -20,13 +20,15 @@ class CheckTask(ProjectTask, OptionCfg):
 		help['recheck'] = (None, 'perform configuration checks again', 'do not recheck')
 
 	@classmethod
-	def shared(class_, *args, **kw):
-		return class_(*args, **kw)
-		# uid = str(class_)
-		#try: instance = holder.shared[uid]
-		#except AttributeError: instance = class_(*args, **kw); holder.shared = {uid: instance}
-		#except KeyError: instance = holder.shared[uid] = class_(*args, **kw)
-		#return instance
+	def shared(class_, holder, *args, **kw):
+		uid = class_.shared_uid(*args, **kw)
+		try: instance = holder._shared_checks[uid]
+		except AttributeError: instance = class_(*args, **kw); holder._shared_checks = {uid: instance}
+		except KeyError: instance = holder._shared_checks[uid] = class_(*args, **kw)
+		return instance
+	
+	@classmethod
+	def shared_uid(class_, *args, **kw): raise Exception, str(class_) + ' did not redefine the class method.'
 	
 	def __init__(self, project):
 		ProjectTask.__init__(self, project)

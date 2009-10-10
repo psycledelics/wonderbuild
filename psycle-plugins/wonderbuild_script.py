@@ -39,9 +39,12 @@ class Wonderbuild(ScriptTask):
 		cfg = common.cfg.new_or_clone()
 
 		from wonderbuild import UserReadableException
-		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, ModTask
+		from wonderbuild.cxx_tool_chain import ModTask
 		from wonderbuild.std_checks.dlfcn import DlfcnCheckTask
 		from wonderbuild.install import InstallTask
+
+		check_cfg = cfg.clone()
+		dlfcn = DlfcnCheckTask.shared(check_cfg.shared_checks, check_cfg)
 
 		class UniformMod(ModTask):
 			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):
@@ -184,7 +187,5 @@ class Wonderbuild(ScriptTask):
 		if False: # [bohan] i haven't found this one listed in the closed-source dir, but i can't find its sources either!
 			guido_volume = UniformMod(n + 'guido-volume', p / '?????!!!!!!!!')
 		
-		check_cfg = cfg.clone()
-		dlfcn = DlfcnCheckTask.shared(check_cfg)
 		for x in sched_ctx.parallel_wait(dlfcn): yield x
 		if dlfcn: psycle_plugin_check = UniformMod('psycle-plugin-check', src_dir / 'psycle' / 'plugin_check', kind=ModTask.Kinds.PROG)

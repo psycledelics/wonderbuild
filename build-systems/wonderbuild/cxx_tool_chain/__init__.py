@@ -75,6 +75,7 @@ class BuildCfg(ClientCfg, Task):
 		self.fhs = FHS.shared(project)
 		self.impl = self.kind = self.version = None
 		self.dest_platform = DestPlatform()
+		self.shared_checks = project # TODO hardcoded
 
 	def clone(self, class_ = None):
 		if class_ is None: class_ = self.__class__
@@ -95,6 +96,7 @@ class BuildCfg(ClientCfg, Task):
 		c.kind = self.kind
 		c.version = self.version
 		c.dest_platform = self.dest_platform
+		c.shared_checks = self.shared_checks
 		return c
 
 	@property
@@ -239,13 +241,13 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 
 	@staticmethod
 	def shared(project):
-		try: build_cfg_task = project.cxx_user_build_cfg_task
-		except AttributeError: build_cfg_task = project.cxx_user_build_cfg_task = UserBuildCfgTask(project)
+		try: build_cfg_task = project._cxx_user_build_cfg_task
+		except AttributeError: build_cfg_task = project._cxx_user_build_cfg_task = UserBuildCfgTask(project)
 		return build_cfg_task
 	
 	def new_or_clone(self):
-		try: build_cfg = self.project.cxx_user_build_cfg
-		except AttributeError: build_cfg = self.project.cxx_user_build_cfg = self
+		try: build_cfg = self.project._cxx_user_build_cfg
+		except AttributeError: build_cfg = self.project._cxx_user_build_cfg = self
 		else: build_cfg = build_cfg.clone()
 		return build_cfg
 	
@@ -298,7 +300,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 
 		if True or 'help' not in o: # XXX needs to be done because check tasks need the cfg impl sig
 			from detect_impl import DetectImplCheckTask
-			detect_impl = DetectImplCheckTask.shared(self)
+			detect_impl = DetectImplCheckTask.shared(self.shared_checks, self)
 			for x in sched_ctx.parallel_wait(detect_impl): yield x
 			if self.impl is None: raise UserReadableException, 'no supported c++ compiler found'
 
@@ -389,7 +391,7 @@ class _PreCompileTask(ModDepPhases, ProjectTask):
 		except AttributeError:
 			self._cfg = self.base_cfg.clone()
 			return self._cfg
-
+	
 	def __call__(self, sched_ctx):
 		for x in ModDepPhases.__call__(self, sched_ctx): yield x
 		self.cxx_phase = _PreCompileTask._CxxPhaseCallbackTask(self)
@@ -443,7 +445,7 @@ class _PreCompileTask(ModDepPhases, ProjectTask):
 		self.do_cxx_phase()
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, because we don't need pkg-config cxx flags in the cfg sig
-			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.project, self.cfg.pkg_config)
+			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.cfg.shared_checks, self.project, self.cfg.pkg_config)
 			for x in sched_ctx.parallel_wait(pkg_config_cxx_flags_task): yield x
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
 		sched_ctx.lock.release()
@@ -771,11 +773,11 @@ class ModTask(ModDepPhases, ProjectTask):
 		for x in self.do_deps_cxx_phases(sched_ctx): yield x
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, because we don't need pkg-config cxx flags in the cfg sig
-			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.project, self.cfg.pkg_config)
+			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.cfg.shared_checks, self.project, self.cfg.pkg_config)
 			for x in sched_ctx.parallel_wait(pkg_config_cxx_flags_task): yield x
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
 			if self.ld:
-				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask.shared(self.project, self.cfg.pkg_config,
+				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask.shared(self.cfg.shared_checks, self.project, self.cfg.pkg_config,
 					# XXX pkg-config and static/shared (alternative is self.cfg.static_prog or not self.cfg.shared)
 					expose_private_deep_deps=self.cfg.static_prog)
 				sched_ctx.parallel_no_wait(pkg_config_ld_flags_task)
@@ -952,6 +954,12 @@ class ModTask(ModDepPhases, ProjectTask):
 			return sig
 
 class _PkgConfigTask(CheckTask):
+
+	@classmethod
+	def shared_uid(class_, project, pkgs, *args, **kw):
+		pkgs.sort()
+		return str(class_) + ' ' + ' '.join(pkgs)
+
 	def __init__(self, project, pkgs):
 		CheckTask.__init__(self, project)
 		self.pkgs = pkgs
@@ -1003,6 +1011,7 @@ class _PkgConfigTask(CheckTask):
 		return sig.digest()
 
 class _PkgConfigFlagsTask(_PkgConfigTask):
+
 	def do_check_and_set_result(self, sched_ctx):
 		if False: yield
 		r, out, err = exec_subprocess_pipe(self.args, silent=True)
@@ -1019,15 +1028,6 @@ class _PkgConfigFlagsTask(_PkgConfigTask):
 	def apply_to(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
 
 class _PkgConfigCxxFlagsTask(_PkgConfigFlagsTask):
-	@classmethod
-	def shared(class_, project, pkgs):
-		try: pkg_configs = project.cxx_pkg_configs
-		except AttributeError: pkg_configs = project.cxx_pkg_configs = {}
-		key = '--cflags ' + ' '.join(pkgs)
-		try: return pkg_configs[key]
-		except KeyError:
-			task = pkg_configs[key] = class_(project, pkgs)
-			return task
 
 	@property
 	def what_desc(self): return 'cxx flags'
@@ -1038,15 +1038,12 @@ class _PkgConfigCxxFlagsTask(_PkgConfigFlagsTask):
 	def apply_to(self, cfg): cfg.cxx_flags += self.result
 
 class _PkgConfigLdFlagsTask(_PkgConfigFlagsTask):
+
 	@classmethod
-	def shared(class_, project, pkgs, expose_private_deep_deps):
-		try: pkg_configs = project.cxx_pkg_configs
-		except AttributeError: pkg_configs = project.cxx_pkg_configs = {}
-		key = '--libs' + (expose_private_deep_deps and ' --static ' or ' ') + ' '.join(pkgs)
-		try: return pkg_configs[key]
-		except KeyError:
-			task = pkg_configs[key] = class_(project, pkgs, expose_private_deep_deps)
-			return task
+	def shared_uid(class_, project, pkgs, expose_private_deep_deps, *args, **kw):
+		uid = _PkgConfigFlagsTask.shared_uid(project, pkgs, expose_private_deep_deps, *args, **kw)
+		if expose_private_deep_deps: uid += ' --static'
+		return uid
 
 	def __init__(self, project, pkgs, expose_private_deep_deps):
 		_PkgConfigFlagsTask.__init__(self, project, pkgs)
@@ -1065,15 +1062,6 @@ class _PkgConfigLdFlagsTask(_PkgConfigFlagsTask):
 	def apply_to(self, cfg): cfg.ld_flags += self.result
 
 class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
-	@classmethod
-	def shared(class_, project, pkgs):
-		try: pkg_configs = project.cxx_pkg_configs
-		except AttributeError: pkg_configs = project.cxx_pkg_configs = {}
-		key = ' '.join(pkgs)
-		try: return pkg_configs[key]
-		except KeyError:
-			task = pkg_configs[key] = class_(project, pkgs)
-			return task
 
 	def __init__(self, *args, **kw):
 		ModDepPhases.__init__(self)
@@ -1103,7 +1091,11 @@ class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 		self.results = r == 0
 
 class MultiBuildCheckTask(CheckTask, ModDepPhases):
-	def __init__(self, name, base_cfg, pipe_preproc=False, compile=True, link=True):
+
+	@classmethod
+	def shared_uid(class_, base_cfg, name, *args, **kw): return name
+	
+	def __init__(self, base_cfg, name, pipe_preproc=False, compile=True, link=True):
 		CheckTask.__init__(self, base_cfg.project)
 		ModDepPhases.__init__(self)
 		self.name = name

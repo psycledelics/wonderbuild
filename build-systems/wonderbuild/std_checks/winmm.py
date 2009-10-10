@@ -5,20 +5,22 @@
 from wonderbuild.cxx_tool_chain import BuildCheckTask
 
 class WinMMCheckTask(BuildCheckTask):
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'ms-winmm', base_cfg)
 
-	def apply_to(self, cfg):
-		cfg.libs.append('winmm')
+	@staticmethod
+	def shared_uid(*args, **kw): return 'ms-winmm'
+
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, base_cfg, self.shared_uid())
+
+	def apply_to(self, cfg): cfg.libs.append('winmm')
 
 	@property
-	def source_text(self): return \
-		"""\
-			#include <windows.h>
-			#include <mmsystem.h>
-			void microsoft_mm_system() {
-				::UINT milliseconds(10);
-				::timeBeginPeriod(milliseconds);
-				::timeGetTime();
-				::timeEndPeriod(milliseconds);
-			}
-		"""
+	def source_text(self): return '''\
+#include <windows.h>
+#include <mmsystem.h>
+void microsoft_mm_system() {
+	::UINT milliseconds(10);
+	::timeBeginPeriod(milliseconds);
+	::timeGetTime();
+	::timeEndPeriod(milliseconds);
+}
+'''

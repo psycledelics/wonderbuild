@@ -7,14 +7,11 @@ from wonderbuild.cxx_tool_chain import BuildCheckTask, ok_color, failed_color
 # gcc -E -dM -std=c++98 -x c++-header /dev/null | sort
 
 class DestPlatformCheckTask(BuildCheckTask):
-	@staticmethod
-	def shared(base_cfg):
-		try: return base_cfg.project._cxx_compiler_dest_platform
-		except AttributeError:
-			task = base_cfg.project._cxx_compiler_dest_platform = DestPlatformCheckTask(base_cfg)
-			return task
 
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'dest-platform', base_cfg, pipe_preproc=True)
+	@staticmethod
+	def shared_uid(*args, **kw): return 'dest-platform'
+
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, base_cfg, self.shared_uid(), pipe_preproc=True)
 	
 	@property
 	def source_text(self): return '''\
@@ -151,64 +148,53 @@ def unversioned_sys_platform():
 	return re.split('\d+$', s)[0]
 
 class MingwCheckTask(BuildCheckTask):
-	@staticmethod
-	def shared(base_cfg):
-		try: return base_cfg.project._cxx_compiler_is_mingw
-		except AttributeError:
-			task = base_cfg.project._cxx_compiler_is_mingw = MingwCheckTask(base_cfg)
-			return task
 
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'mingw', base_cfg, compile=False)
+	@staticmethod
+	def shared_uid(*args, **kw): return 'mingw'
+
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, base_cfg, self.shared_uid(), compile=False)
 
 	@property
-	def source_text(self): return \
-		'#if !defined __MINGW32__\n' \
-		'\t#error this is not mingw gcc\n' \
-		'#endif\n'
+	def source_text(self): return '''\
+#if !defined __MINGW32__
+	#error this is not mingw gcc
+#endif
+'''
 
 class PicFlagDefinesPicCheckTask(BuildCheckTask):
-	@staticmethod
-	def shared(base_cfg):
-		try: return base_cfg.project._cxx_compiler_pic_flag_defines_pic
-		except AttributeError:
-			task = base_cfg.project._cxx_compiler_pic_flag_defines_pic = PicFlagDefinesPicCheckTask(base_cfg)
-			return task
 
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'pic-flag-defines-pic', base_cfg, compile=False)
+	@staticmethod
+	def shared_uid(*args, **kw): return 'pic-flag-defines-pic'
+
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, base_cfg, self.shared_uid(), compile=False)
 
 	def apply_to(self, cfg):
 		cfg.pic = True
 
 	@property
-	def source_text(self): return \
-		'#if !defined __PIC__ && !defined __pic__\n' \
-		'\t#error no pic\n' \
-		'#endif\n'
+	def source_text(self): return '''\
+#if !defined __PIC__ && !defined __pic__
+	#error no pic
+#endif
+'''
 
 class AutoLinkSupportCheckTask(BuildCheckTask):
-	@staticmethod
-	def shared(base_cfg):
-		try: return base_cfg.project._cxx_tool_chain_has_auto_link_support
-		except AttributeError:
-			task = base_cfg.project._cxx_tool_chain_has_auto_link_support = AutoLinkSupportCheckTask(base_cfg)
-			return task
 
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'auto-link-support', base_cfg, compile=False)
+	@staticmethod
+	def shared_uid(*args, **kw): return 'auto-link-support'
+
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, base_cfg, self.shared_uid(), compile=False)
 
 	@property
 	def source_text(self):
-		try: return self._source_text
-		except AttributeError:
-			self._source_text = \
-				'''
-					// check below is the same as in <boost/config/auto_link.hpp>
-					#if !( \\
-							defined __BORLANDC__ || \\
-							__MWERKS__ >= 0x3000 && _WIN32 || \\
-							defined __ICL && defined _MSC_EXTENSIONS && _MSC_VER >= 1200 || \\
-							!defined __ICL && defined _MSC_VER \\
-					)
-						#error no auto link support
-					#endif
-				'''
-			return self._source_text
+		return '''\
+// check below is the same as in <boost/config/auto_link.hpp>
+#if !( \\
+		defined __BORLANDC__ || \\
+		__MWERKS__ >= 0x3000 && _WIN32 || \\
+		defined __ICL && defined _MSC_EXTENSIONS && _MSC_VER >= 1200 || \\
+		!defined __ICL && defined _MSC_VER \\
+)
+	#error no auto link support
+#endif
+'''

@@ -5,7 +5,11 @@
 from wonderbuild.cxx_tool_chain import BuildCheckTask
 
 class PThreadCheckTask(BuildCheckTask):
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, 'posix-thread', base_cfg)
+
+	@staticmethod
+	def shared_uid(*args, **kw): return 'posix-thread'
+
+	def __init__(self, base_cfg): BuildCheckTask.__init__(self, base_cfg, self.shared_uid())
 
 	def apply_to(self, cfg):
 		if cfg.kind == 'gcc': # TODO windows/cygwin platforms

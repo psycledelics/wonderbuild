@@ -8,12 +8,9 @@ from wonderbuild.check_task import CheckTask, ok_color, failed_color
 from wonderbuild.std_checks import DestPlatformCheckTask, PicFlagDefinesPicCheckTask
 
 class DetectImplCheckTask(CheckTask):
-	@staticmethod
-	def shared(user_build_cfg):
-		try: return user_build_cfg.project._cxx_detect_impl
-		except AttributeError:
-			instance = user_build_cfg.project._cxx_detect_impl = DetectImplCheckTask(user_build_cfg)
-			return instance
+
+	@classmethod
+	def shared_uid(class_, *args, **kw): return str(class_)
 			
 	def __init__(self, user_build_cfg):
 		CheckTask.__init__(self, user_build_cfg.project)
@@ -57,8 +54,8 @@ class DetectImplCheckTask(CheckTask):
 			if 'ar' not in o: cfg.ar_prog = ar_prog
 			if 'ranlib' not in o: cfg.ranlib_prog = ranlib_prog
 			
-			dest_platform = DestPlatformCheckTask.shared(cfg)
-			pic = PicFlagDefinesPicCheckTask.shared(cfg)
+			dest_platform = DestPlatformCheckTask.shared(cfg.shared_checks, cfg)
+			pic = PicFlagDefinesPicCheckTask.shared(cfg.shared_checks, cfg)
 			cfg.dest_platform.pic_flag_defines_pic = True # allows it to be reentrant during the check itself
 			for x in sched_ctx.parallel_wait(dest_platform, pic): yield x
 			cfg.dest_platform.bin_fmt = dest_platform.bin_fmt
