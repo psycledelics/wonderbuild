@@ -1,16 +1,13 @@
-* when a loadable module depends on a lib, that lib can't be a non-pic one.
+* when a loadable module depends on a lib, that lib can't be a non-pic one,
+  so, ideally, it should automatically be built as a loadable module too.
 
 * --help shouldn't create the build dir.
 
-* need a way to select a script from the command line, instead of --src-dir.
-
-* standard flags flavors for debug, release, and strip.
+* need a way to select a script from the command line instead of just a source dir (via --src-dir).
 
 * cannot test tty on jython (should look at the underlying platform hidden behind the jvm).
 
 * integrate binreloc.
-
-* rewrite colorgcc in python.
 
 * generate .pc files.
 
@@ -25,3 +22,8 @@
 
 * the path to colorgcc shouldn't be signed, but rather the path to the real compiler.
   this stupidly triggers rebuild when changing from non-tty to tty or vice versa.
+
+* rewrite colorgcc in python.
+
+* standard flags flavors for debug, release, and strip.
+  (not sure this is very useful)
