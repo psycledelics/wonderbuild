@@ -276,6 +276,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 			else:
 				e = os.environ.get('CXX', None)
 				if e is not None: self.cxx_prog = e
+				else: self.cxx_prog = None
 			if 'cxx-flags' in o: self.cxx_flags = o['cxx-flags'].split()
 			else:
 				e = os.environ.get('CXXFLAGS', None)
