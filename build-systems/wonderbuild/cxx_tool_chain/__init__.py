@@ -289,14 +289,14 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 			
 			self.pic = 'pic-static' in o # this is for programs and static libs only
 			
-			if 'ld' in o: self.ld_prog = o['ld']
+			self.ld_prog = o.get('ld', None)
 			if 'ld-flags' in o: self.ld_flags = o['ld-flags'].split()
 			else:
 				e = os.environ.get('LDFLAGS', None)
 				if e is not None: self.ld_flags = e.split()
 				else: self.ld_flags = []
-			if 'ar' in o: self.ar_prog = o['ar']
-			if 'ranlib' in o: self.ranlib_prog = o['ranlib']
+			self.ar_prog = o.get('ar', None)
+			self.ranlib_prog = o.get('ranlib', None)
 
 			self.project.persistent[str(self.__class__)] = \
 				self.options_sig, \
