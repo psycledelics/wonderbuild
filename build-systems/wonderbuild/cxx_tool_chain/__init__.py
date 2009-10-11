@@ -257,8 +257,11 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 		OptionCfg.__init__(self, project)
 		
 	def __call__(self, sched_ctx):
+		o = self.options
+		self.check_missing = 'check-missing' in o
+
 		try:
-			old_sig, self.check_missing, \
+			old_sig, \
 			self.cxx_prog, self.cxx_flags, self.pic, \
 			self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
 			self.ar_prog, self.ranlib_prog = \
@@ -266,10 +269,6 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 		except KeyError: old_sig = None
 		if old_sig != self.options_sig:
 			if __debug__ and is_debug: debug('cfg: cxx: user: parsing options')
-
-			o = self.options
-			
-			self.check_missing = 'check-missing' in o
 
 			if 'cxx' in o: self.cxx_prog = o['cxx']
 			if 'cxx-flags' in o: self.cxx_flags = o['cxx-flags'].split()
@@ -294,7 +293,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 			if 'ranlib' in o: self.ranlib_prog = o['ranlib']
 
 			self.project.persistent[str(self.__class__)] = \
-				self.options_sig, self.check_missing, \
+				self.options_sig, \
 				self.cxx_prog, self.cxx_flags, self.pic, \
 				self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
 				self.ar_prog, self.ranlib_prog
