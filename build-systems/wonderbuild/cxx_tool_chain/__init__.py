@@ -226,7 +226,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 		help['cxx-flags']     = ('[flags]', 'use specific c++ compiler flags', 'CXXFLAGS env var: ' + os.environ.get('CXXFLAGS', '(not set)'))
 		help['ld']            = ('<prog>', 'use <prog> as shared lib and program linker', 'LD env var: ' + os.environ.get('LD', '(not set)'))
 		help['ld-flags']      = ('[flags]', 'use specific linker flags', 'LDFLAGS env var: ' + os.environ.get('LDFLAGS', '(not set)'))
-		help['ar']            = ('<prog>', 'use <prog> as static lib archiver', 'AR env var: ' + os.environ.get('CXX', '(not set, defaults to ar on posix)'))
+		help['ar']            = ('<prog>', 'use <prog> as static lib archiver', 'AR env var: ' + os.environ.get('AR', '(not set, defaults to ar on posix)'))
 		help['ranlib']        = ('<prog>', 'use <prog> as static lib archive indexer', 'RANLIB env var: ' + os.environ.get('RANLIB', '(not set, defaults to using the ar s flag on posix)'))
 		
 		help['static'] = ('<libs|full>',
