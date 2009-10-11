@@ -16,7 +16,7 @@ class DetectImplCheckTask(CheckTask):
 	def shared(class_, cfg, *args, **kw): return CheckTask._shared(class_, cfg.shared_checks, cfg, *args, **kw)
 
 	def __init__(self, user_build_cfg):
-		CheckTask.__init__(self, user_build_cfg.project)
+		CheckTask.__init__(self, user_build_cfg.shared_checks)
 		self.user_build_cfg = user_build_cfg
 
 	@property

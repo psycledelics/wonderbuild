@@ -7,16 +7,16 @@ from signature import Sig
 from options import OptionDecl
 
 class OptionCfg(OptionDecl):
-	def __init__(self, project):
-		self.project = project
-		project.option_collector.option_decls.add(self.__class__)
+	def __init__(self, shared_task_holder):
+		self.shared_task_holder = shared_task_holder
+		shared_task_holder.option_collector.option_decls.add(self.__class__)
 
 	@property
-	def options(self): return self.project.options
+	def options(self): return self.shared_task_holder.options
 	
 	@property
 	def options_sig(self):
-		try: return self._options_sig # TODO this could actually be stored in the project since it's per (project, class)
+		try: return self._options_sig # TODO this could actually be stored in the shared_task_holder since it's per (shared_task_holder, class)
 		except AttributeError:
 			sig = Sig()
 			options = self.options

@@ -1110,7 +1110,7 @@ class MultiBuildCheckTask(CheckTask, ModDepPhases):
 	def shared(class_, cfg, *args, **kw): return CheckTask._shared(class_, cfg.shared_checks, cfg, *args, **kw)
 
 	def __init__(self, base_cfg, name, pipe_preproc=False, compile=True, link=True):
-		CheckTask.__init__(self, base_cfg.project)
+		CheckTask.__init__(self, base_cfg.shared_checks)
 		ModDepPhases.__init__(self)
 		self.name = name
 		self.base_cfg = base_cfg
@@ -1166,9 +1166,10 @@ class BuildCheckTask(MultiBuildCheckTask):
 	def bld_dir(self):
 		try: return self._bld_dir
 		except AttributeError:
-			self.project.bld_dir.lock.acquire()
-			try: self._bld_dir = self.project.bld_dir / 'checks' / self.name
-			finally: self.project.bld_dir.lock.release()
+			bld_dir = self.base_cfg.shared_checks.bld_dir
+			bld_dir.lock.acquire()
+			try: self._bld_dir = bld_dir / 'checks' / self.name
+			finally: bld_dir.lock.release()
 			return self._bld_dir
 
 	def do_check_and_set_result(self, sched_ctx):

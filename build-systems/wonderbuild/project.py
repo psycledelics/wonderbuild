@@ -5,14 +5,15 @@
 import sys, os, gc, cPickle
 
 from wonderbuild import abi_sig, UserReadableException
-from task import Task
+from task import Task, SharedTaskHolder
 from script import ScriptLoaderTask
 from filesystem import FileSystem
 from logger import is_debug, debug, colored
 
 if __debug__ and is_debug: import time
 
-class Project(Task):
+class Project(Task, SharedTaskHolder):
+
 	known_options = set(['src-dir', 'bld-dir', 'tasks', 'list-tasks'])
 
 	@staticmethod
@@ -24,8 +25,6 @@ class Project(Task):
 
 	def __init__(self, options, option_collector):
 		Task.__init__(self)
-		self.options = options
-		self.option_collector = option_collector
 		option_collector.option_decls.add(self.__class__)
 	
 		src_path = options.get('src-dir', None)
@@ -62,20 +61,22 @@ class Project(Task):
 							pickle_abi_sig = cPickle.load(f)
 							if pickle_abi_sig != abi_sig:
 								print >> sys.stderr, colored('33', 'wonderbuild: abi sig changed: discarding persistent pickle file, full rebuild will be performed')
-								self.persistent = {}
-							else: self.persistent = cPickle.load(f)
+								persistent = {}
+							else: persistent = cPickle.load(f)
 							if __debug__ and is_debug: debug('project: pickle: load time: ' + str(time.time() - t0) + ' s')
 						except Exception, e:
 							print >> sys.stderr, 'could not load pickle:', e
 							raise
 					finally: f.close()
-			except: self.persistent = {}
+			except: persistent = {}
 		finally:
 			if gc_enabled: gc.enable()
 
-		self.fs = FileSystem(self.persistent, global_purge=aliases is None and not self.list_aliases)
+		self.fs = FileSystem(persistent, global_purge=aliases is None and not self.list_aliases)
 		self.top_src_dir = self.fs.cur / src_path
-		self.bld_dir = self.fs.cur / bld_path
+		bld_dir = self.fs.cur / bld_path
+		
+		SharedTaskHolder.__init__(self, persistent, options, option_collector, bld_dir)
 
 	def add_task_aliases(self, task, *aliases):
 		if self.processsing: return # no need to add aliases during processing

@@ -3,7 +3,7 @@
 # copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 from option_cfg import OptionCfg
-from task import ProjectTask
+from task import SharedTask
 from logger import out, colored, color_bg_fg_rgb, is_debug, debug, silent
 import multi_column_formatting
 
@@ -11,7 +11,7 @@ ok_color = color_bg_fg_rgb((240, 255, 240), (0, 170, 0))
 failed_color = color_bg_fg_rgb((255, 240, 240), (170, 0, 0))
 _announce_color = color_bg_fg_rgb((240, 240, 255), (0, 0, 170))
 
-class CheckTask(ProjectTask, OptionCfg):
+class CheckTask(SharedTask, OptionCfg):
 
 	known_options = set(['recheck'])
 
@@ -19,23 +19,9 @@ class CheckTask(ProjectTask, OptionCfg):
 	def generate_option_help(help):
 		help['recheck'] = (None, 'perform configuration checks again', 'do not recheck')
 
-	@classmethod
-	def shared(class_, *args, **kw): return CheckTask._shared(class_, *args, **kw)
-
-	@staticmethod
-	def _shared(class_, holder, *args, **kw):
-		uid = class_.shared_uid(*args, **kw)
-		try: instance = holder._shared_checks[uid]
-		except AttributeError: instance = class_(*args, **kw); holder._shared_checks = {uid: instance}
-		except KeyError: instance = holder._shared_checks[uid] = class_(*args, **kw)
-		return instance
-	
-	@classmethod
-	def shared_uid(class_, *args, **kw): raise Exception, str(class_) + ' did not redefine the class method.'
-	
-	def __init__(self, project):
-		ProjectTask.__init__(self, project)
-		OptionCfg.__init__(self, project)
+	def __init__(self, shared_task_holder):
+		SharedTask.__init__(self, shared_task_holder)
+		OptionCfg.__init__(self, shared_task_holder)
 
 	@property
 	def sig(self): raise Exception, str(self.__class__) + ' did not redefine the property.'

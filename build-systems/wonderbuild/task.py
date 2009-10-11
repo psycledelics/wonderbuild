@@ -6,6 +6,7 @@ from logger import is_debug, debug, out, cols, colored
 import multi_column_formatting
 
 class Task(object):
+
 	def __init__(self):
 		self._sched_stacked = self._sched_processed = False
 		self._sched_in_task_todo_count = 0
@@ -45,16 +46,50 @@ class Task(object):
 			out.write('\n'.join(lines))
 		#out.flush()
 
-class ProjectTask(Task):
-	def __init__(self, project, aliases=None):
+class SharedTaskHolder(object):
+
+	def __init__(self, persistent, options, option_collector, bld_dir):
+		self.persistent = persistent
+		self.options = options
+		self.option_collector = option_collector
+		self.bld_dir = bld_dir
+		self._shared_tasks = {}
+
+class SharedTask(Task):
+		
+	@classmethod
+	def shared(class_, *args, **kw): return SharedTask._shared(class_, *args, **kw)
+
+	@staticmethod
+	def _shared(class_, holder, *args, **kw):
+		uid = class_.shared_uid(*args, **kw)
+		try: instance = holder._shared_tasks[uid]
+		except KeyError: instance = holder._shared_tasks[uid] = class_(*args, **kw)
+		#try: instance.uid
+		#except AttributeError: instance.uid = uid
+		instance.shared_task_holder = holder
+		return instance
+	
+	def __init__(self, holder):
 		Task.__init__(self)
+		self._holder = holder
+
+	@classmethod
+	def shared_uid(class_, *args, **kw): raise Exception, str(class_) + ' did not redefine the class method.'
+
+	#@property
+	#def uid(self)
+
+	def _get_persistent(self): return self._holder.persistent[self.uid]
+	def _set_persistent(self, value): self._holder.persistent[self.uid] = value
+	persistent = property(_get_persistent, _set_persistent)
+
+class ProjectTask(SharedTask):
+
+	def __init__(self, project, aliases=None):
+		SharedTask.__init__(self, project)
 		self.project = project
 		if aliases is not None: project.add_task_aliases(self, *aliases)
 	
 	@property
 	def uid(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
-	
-	def _get_persistent(self): return self.project.persistent[self.uid]
-	def _set_persistent(self, value): self.project.persistent[self.uid] = value
-	persistent = property(_get_persistent, _set_persistent)
-
