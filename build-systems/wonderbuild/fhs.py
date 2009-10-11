@@ -10,6 +10,8 @@ from option_cfg import OptionCfg
 
 class FHS(OptionCfg):
 	'options for the Filesystem Hierarchy Standard'
+	
+	signed_os_environ = set(['DESTDIR', 'PREFIX'])
 
 	signed_options = set([
 		'install-dest-dir',
@@ -20,8 +22,8 @@ class FHS(OptionCfg):
 
 	@staticmethod
 	def generate_option_help(help):
-		help['install-dest-dir']   = ('<dir>', 'use <dir> as staged install prefix', '<bld-dir>/staged-install')
-		help['install-prefix-dir'] = ('<abs-dir>', 'use <abs-dir> as final install prefix', '/usr/local')
+		help['install-dest-dir']   = ('<dir>', 'use <dir> as staged install prefix', 'DESTDIR env var: ' + os.environ.get('DESTDIR', '(not set, defaults to <bld-dir>/staged-install)'))
+		help['install-prefix-dir'] = ('<abs-dir>', 'use <abs-dir> as final install prefix', 'PREFIX env var: ' + os.environ.get('PREFIX', '(not set, defaults to /usr/local)'))
 
 	@staticmethod
 	def shared(project):
@@ -42,11 +44,11 @@ class FHS(OptionCfg):
 			if __debug__ and is_debug: debug('cfg: fhs: parsing options')
 			o = self.options
 
-			if 'install-dest-dir' in o: self.dest = self.project.fs.cur / o['install-dest-dir']
+			dest = o.get('install-dest-dir', None) or os.environ.get('DESTDIR', None)
+			if dest is not None: self.dest = project.fs.cur / dest
 			else: self.dest = project.bld_dir / 'staged-install'
 			
-			if 'install-prefix-dir' in o: self.prefix_path = o['install-prefix-dir']
-			else: self.prefix_path = os.path.join(os.sep, 'usr', 'local')
+			self.prefix_path = o.get('install-prefix-dir', None) or os.environ.get('PREFIX', None) or os.path.join(os.sep, 'usr', 'local')
 			if self.prefix_path.startswith(os.sep): self.prefix_path = self.prefix_path[len(os.sep):]
 			else: raise Exception, 'invalid install-prefix-dir option: prefix must be an absolute path. got: ' + self.prefix_path
 			

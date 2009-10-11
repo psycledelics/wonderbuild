@@ -83,6 +83,9 @@ class InstallTask(ProjectTask, OptionDecl):
 							if not dest.exists:
 								if __debug__ and is_debug: debug('task: target missing: ' + str(dest))
 								changed_sources.append(s)
+				if len(changed_sources) == 0:
+					# it's self.dest_dir that changed
+					changed_sources = self.sources
 			if len(changed_sources) == 0:
 				if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 			else:
