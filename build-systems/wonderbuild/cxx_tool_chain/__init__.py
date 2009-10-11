@@ -300,7 +300,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 
 		if True or 'help' not in o: # XXX needs to be done because check tasks need the cfg impl sig
 			from detect_impl import DetectImplCheckTask
-			detect_impl = DetectImplCheckTask.shared(self.shared_checks, self)
+			detect_impl = DetectImplCheckTask.shared(self)
 			for x in sched_ctx.parallel_wait(detect_impl): yield x
 			if self.impl is None: raise UserReadableException, 'no supported c++ compiler found'
 
@@ -445,7 +445,7 @@ class _PreCompileTask(ModDepPhases, ProjectTask):
 		self.do_cxx_phase()
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, because we don't need pkg-config cxx flags in the cfg sig
-			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.cfg.shared_checks, self.project, self.cfg.pkg_config)
+			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.cfg)
 			for x in sched_ctx.parallel_wait(pkg_config_cxx_flags_task): yield x
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
 		sched_ctx.lock.release()
@@ -773,11 +773,11 @@ class ModTask(ModDepPhases, ProjectTask):
 		for x in self.do_deps_cxx_phases(sched_ctx): yield x
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, because we don't need pkg-config cxx flags in the cfg sig
-			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.cfg.shared_checks, self.project, self.cfg.pkg_config)
+			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.cfg)
 			for x in sched_ctx.parallel_wait(pkg_config_cxx_flags_task): yield x
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
 			if self.ld:
-				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask.shared(self.cfg.shared_checks, self.project, self.cfg.pkg_config,
+				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask.shared(self.cfg,
 					# XXX pkg-config and static/shared (alternative is self.cfg.static_prog or not self.cfg.shared)
 					expose_private_deep_deps=self.cfg.static_prog)
 				sched_ctx.parallel_no_wait(pkg_config_ld_flags_task)
@@ -956,12 +956,18 @@ class ModTask(ModDepPhases, ProjectTask):
 class _PkgConfigTask(CheckTask):
 
 	@classmethod
-	def shared_uid(class_, project, pkgs, *args, **kw):
+	def shared_uid(class_, cfg, pkgs, *args, **kw): return _PkgConfigTask._shared_uid(class_, pkgs)
+
+	@staticmethod
+	def _shared_uid(class_, pkgs):
 		pkgs.sort()
 		return str(class_) + ' ' + ' '.join(pkgs)
 
-	def __init__(self, project, pkgs):
-		CheckTask.__init__(self, project)
+	@classmethod
+	def shared(class_, cfg, *args, **kw): return CheckTask._shared(class_, cfg.shared_checks, cfg, *args, **kw)
+
+	def __init__(self, cfg, pkgs):
+		CheckTask.__init__(self, cfg.project)
 		self.pkgs = pkgs
 
 	@property
@@ -1012,6 +1018,11 @@ class _PkgConfigTask(CheckTask):
 
 class _PkgConfigFlagsTask(_PkgConfigTask):
 
+	@classmethod
+	def shared_uid(class_, cfg, *args, **kw): return _PkgConfigTask._shared_uid(class_, cfg.pkg_config)
+
+	def __init__(self, cfg): _PkgConfigTask.__init__(self, cfg, cfg.pkg_config)
+
 	def do_check_and_set_result(self, sched_ctx):
 		if False: yield
 		r, out, err = exec_subprocess_pipe(self.args, silent=True)
@@ -1040,13 +1051,13 @@ class _PkgConfigCxxFlagsTask(_PkgConfigFlagsTask):
 class _PkgConfigLdFlagsTask(_PkgConfigFlagsTask):
 
 	@classmethod
-	def shared_uid(class_, project, pkgs, expose_private_deep_deps, *args, **kw):
-		uid = _PkgConfigFlagsTask.shared_uid(project, pkgs, expose_private_deep_deps, *args, **kw)
+	def shared_uid(class_, cfg, expose_private_deep_deps, *args, **kw):
+		uid = _PkgConfigFlagsTask._shared_uid(class_, cfg.pkg_config)
 		if expose_private_deep_deps: uid += ' --static'
 		return uid
 
-	def __init__(self, project, pkgs, expose_private_deep_deps):
-		_PkgConfigFlagsTask.__init__(self, project, pkgs)
+	def __init__(self, cfg, expose_private_deep_deps):
+		_PkgConfigFlagsTask.__init__(self, cfg)
 		self.expose_private_deep_deps = expose_private_deep_deps
 
 	@property
@@ -1092,9 +1103,12 @@ class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 
 class MultiBuildCheckTask(CheckTask, ModDepPhases):
 
-	@classmethod
-	def shared_uid(class_, base_cfg, name, *args, **kw): return name
+	@staticmethod
+	def shared_uid(base_cfg, name, *args, **kw): return name
 	
+	@classmethod
+	def shared(class_, cfg, *args, **kw): return CheckTask._shared(class_, cfg.shared_checks, cfg, *args, **kw)
+
 	def __init__(self, base_cfg, name, pipe_preproc=False, compile=True, link=True):
 		CheckTask.__init__(self, base_cfg.project)
 		ModDepPhases.__init__(self)

@@ -12,6 +12,9 @@ class DetectImplCheckTask(CheckTask):
 	@classmethod
 	def shared_uid(class_, *args, **kw): return str(class_)
 			
+	@classmethod
+	def shared(class_, cfg, *args, **kw): return CheckTask._shared(class_, cfg.shared_checks, cfg, *args, **kw)
+
 	def __init__(self, user_build_cfg):
 		CheckTask.__init__(self, user_build_cfg.project)
 		self.user_build_cfg = user_build_cfg
@@ -54,8 +57,8 @@ class DetectImplCheckTask(CheckTask):
 			if 'ar' not in o: cfg.ar_prog = ar_prog
 			if 'ranlib' not in o: cfg.ranlib_prog = ranlib_prog
 			
-			dest_platform = DestPlatformCheckTask.shared(cfg.shared_checks, cfg)
-			pic = PicFlagDefinesPicCheckTask.shared(cfg.shared_checks, cfg)
+			dest_platform = DestPlatformCheckTask.shared(cfg)
+			pic = PicFlagDefinesPicCheckTask.shared(cfg)
 			cfg.dest_platform.pic_flag_defines_pic = True # allows it to be reentrant during the check itself
 			for x in sched_ctx.parallel_wait(dest_platform, pic): yield x
 			cfg.dest_platform.bin_fmt = dest_platform.bin_fmt

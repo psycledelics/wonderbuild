@@ -49,7 +49,7 @@ class BoostCheckTask(MultiBuildCheckTask):
 
 	def do_check_and_set_result(self, sched_ctx):
 		failed = False, None, None
-		read_version = BoostCheckTask.ReadVersion.shared(self.base_cfg.shared_checks, self)
+		read_version = BoostCheckTask.ReadVersion.shared(self)
 		for x in sched_ctx.parallel_wait(read_version): yield x
 		include_path = None
 		if not read_version:
@@ -63,7 +63,7 @@ class BoostCheckTask(MultiBuildCheckTask):
 			if include_path is None:
 				self.results = failed
 				return
-			read_version = BoostCheckTask.ReadVersion.shared(self.base_cfg.shared_checks, self, include_path)
+			read_version = BoostCheckTask.ReadVersion.shared(self, include_path)
 			for x in sched_ctx.parallel_wait(read_version): yield x
 			if not read_version:
 				self.results = failed
@@ -104,13 +104,13 @@ class BoostCheckTask(MultiBuildCheckTask):
 			if not all_in_one: self.results = failed
 			else: self.results = True, include_path, cfg_link_libs
 
-		auto_link_support = AutoLinkSupportCheckTask.shared(self.base_cfg.shared_checks, self.base_cfg)
+		auto_link_support = AutoLinkSupportCheckTask.shared(self.base_cfg)
 		for x in sched_ctx.parallel_wait(auto_link_support): yield x
 		if auto_link_support:
 			for x in link_check(auto_link=True): yield x
 		else:
 			if self.base_cfg.kind == 'gcc':
-				mingw_check_task = MingwCheckTask.shared(self.base_cfg.shared_checks, self.base_cfg)
+				mingw_check_task = MingwCheckTask.shared(self.base_cfg)
 				for x in sched_ctx.parallel_wait(mingw_check_task): yield x
 				toolset = mingw_check_task.result and '-mgw' or '-gcc'
 				versioned_toolset = toolset + str(self.base_cfg.version[0]) + str(self.base_cfg.version[1])
@@ -139,6 +139,9 @@ class BoostCheckTask(MultiBuildCheckTask):
 		def shared_uid(outer, include_path=None, *args, **kw): return \
 			'boost-' + '.'.join(str(i) for i in outer.min_version_tuple) + \
 			(include_path and '-path-' + include_path.abs_path.replace(os.sep, ',').replace(os.pardir, '_') or '')
+
+		@classmethod
+		def shared(class_, outer, *args, **kw): return BuildCheckTask._shared(class_, outer.base_cfg.shared_checks, outer, *args, **kw)
 
 		def __init__(self, outer, include_path=None):
 			BuildCheckTask.__init__(self, outer.base_cfg, self.shared_uid(outer, include_path), pipe_preproc=True)

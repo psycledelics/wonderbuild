@@ -44,7 +44,7 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.install import InstallTask
 
 		check_cfg = cfg.clone()
-		dlfcn = DlfcnCheckTask.shared(check_cfg.shared_checks, check_cfg)
+		dlfcn = DlfcnCheckTask.shared(check_cfg)
 
 		class UniformMod(ModTask):
 			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):

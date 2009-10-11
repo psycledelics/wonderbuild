@@ -44,12 +44,12 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.install import InstallTask
 
 		check_cfg = cfg.clone()
-		gstreamer = PkgConfigCheckTask.shared(check_cfg.shared_checks, project, ['gstreamer-0.10 >= 0.10', 'gstreamer-plugins-base-0.10 >= 0.10'])
-		jack = PkgConfigCheckTask.shared(check_cfg.shared_checks, project, ['jack >= 0.101.1'])
-		alsa = PkgConfigCheckTask.shared(check_cfg.shared_checks, project, ['alsa >= 1.0'])
-		gtkmm = PkgConfigCheckTask.shared(check_cfg.shared_checks, project, ['gtkmm-2.4 >= 2.4'])
-		gnomecanvasmm = PkgConfigCheckTask.shared(check_cfg.shared_checks, project, ['libgnomecanvasmm-2.6 >= 2.6'])
-		dsound = DSoundCheckTask.shared(check_cfg.shared_checks, check_cfg)
+		gstreamer = PkgConfigCheckTask.shared(check_cfg, ['gstreamer-0.10 >= 0.10', 'gstreamer-plugins-base-0.10 >= 0.10'])
+		jack = PkgConfigCheckTask.shared(check_cfg, ['jack >= 0.101.1'])
+		alsa = PkgConfigCheckTask.shared(check_cfg, ['alsa >= 1.0'])
+		gtkmm = PkgConfigCheckTask.shared(check_cfg, ['gtkmm-2.4 >= 2.4'])
+		gnomecanvasmm = PkgConfigCheckTask.shared(check_cfg, ['libgnomecanvasmm-2.6 >= 2.6'])
+		dsound = DSoundCheckTask.shared(check_cfg)
 
 		for x in sched_ctx.parallel_wait(gstreamer, jack, alsa, dsound, gtkmm, gnomecanvasmm): yield x
 

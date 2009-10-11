@@ -48,8 +48,8 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.install import InstallTask
 
 		check_cfg = cfg.clone()
-		std_math = StdMathCheckTask.shared(check_cfg.shared_checks, check_cfg)
-		boost_test = BoostCheckTask.shared(check_cfg.shared_checks, check_cfg, (1, 33), ('unit_test_framework',))
+		std_math = StdMathCheckTask.shared(check_cfg)
+		boost_test = BoostCheckTask.shared(check_cfg, (1, 33), ('unit_test_framework',))
 
 		class HelpersMathMod(ModTask):
 			def __init__(self):

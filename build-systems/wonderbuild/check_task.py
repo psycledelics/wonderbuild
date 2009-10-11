@@ -20,7 +20,10 @@ class CheckTask(ProjectTask, OptionCfg):
 		help['recheck'] = (None, 'perform configuration checks again', 'do not recheck')
 
 	@classmethod
-	def shared(class_, holder, *args, **kw):
+	def shared(class_, *args, **kw): return CheckTask._shared(class_, *args, **kw)
+
+	@staticmethod
+	def _shared(class_, holder, *args, **kw):
 		uid = class_.shared_uid(*args, **kw)
 		try: instance = holder._shared_checks[uid]
 		except AttributeError: instance = class_(*args, **kw); holder._shared_checks = {uid: instance}

@@ -44,8 +44,8 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.install import InstallTask
 
 		check_cfg = cfg.clone()
-		xml = PkgConfigCheckTask.shared(check_cfg.shared_checks, project, ['libxml++-2.6'])
-		zlib = ZLibCheckTask.shared(check_cfg.shared_checks, check_cfg)
+		xml = PkgConfigCheckTask.shared(check_cfg, ['libxml++-2.6'])
+		zlib = ZLibCheckTask.shared(check_cfg)
 
 		class CoreMod(ModTask):
 			def __init__(self):
