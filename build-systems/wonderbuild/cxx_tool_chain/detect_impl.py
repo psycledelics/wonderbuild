@@ -49,13 +49,17 @@ class DetectImplCheckTask(CheckTask):
 		cfg.version = self.version
 		if cfg.impl is None: self._select_impl()
 		if cfg.impl is not None:
-			o = cfg.options
 			# set the programs
 			cxx_prog, ld_prog, ar_prog, ranlib_prog = cfg.impl.progs(cfg)
-			if 'cxx' not in o: cfg.cxx_prog = cxx_prog
-			if 'ld' not in o: cfg.ld_prog = ld_prog
-			if 'ar' not in o: cfg.ar_prog = ar_prog
-			if 'ranlib' not in o: cfg.ranlib_prog = ranlib_prog
+			if __debug__ and is_debug:
+				debug('cfg: ' + self.desc + ': cxx: ' + cxx_prog)
+				debug('cfg: ' + self.desc + ': ld: ' + ld_prog)
+				debug('cfg: ' + self.desc + ': ar: ' + ar_prog)
+				debug('cfg: ' + self.desc + ': ranlib: ' + ranlib_prog)
+			if cfg.cxx_prog is None: cfg.cxx_prog = cxx_prog
+			if cfg.ld_prog is None: cfg.ld_prog = ld_prog
+			if cfg.ar_prog is None: cfg.ar_prog = ar_prog
+			if cfg.ranlib_prog is None: cfg.ranlib_prog = ranlib_prog
 			
 			dest_platform = DestPlatformCheckTask.shared(cfg)
 			pic = PicFlagDefinesPicCheckTask.shared(cfg)

@@ -203,7 +203,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 		if class_ is None: class_ = BuildCfg
 		return class_.clone(self, class_)
 
-	signed_os_environ = set(['PATH', 'CXX', 'CXXFLAGS', 'LDFLAGS'])
+	signed_os_environ = set(['PATH', 'CXX', 'CXXFLAGS', 'LD', 'LDFLAGS', 'AR', 'RANLIB'])
 
 	signed_options = set([
 		'cxx',
@@ -224,10 +224,10 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 
 		help['cxx']           = ('<prog>', 'use <prog> as c++ compiler', 'CXX env var: ' + os.environ.get('CXX', '(not set)'))
 		help['cxx-flags']     = ('[flags]', 'use specific c++ compiler flags', 'CXXFLAGS env var: ' + os.environ.get('CXXFLAGS', '(not set)'))
-		help['ld']            = ('<prog>', 'use <prog> as shared lib and program linker')
+		help['ld']            = ('<prog>', 'use <prog> as shared lib and program linker', 'LD env var: ' + os.environ.get('LD', '(not set)'))
 		help['ld-flags']      = ('[flags]', 'use specific linker flags', 'LDFLAGS env var: ' + os.environ.get('LDFLAGS', '(not set)'))
-		help['ar']            = ('<prog>', 'use <prog> as static lib archiver', 'ar on posix')
-		help['ranlib']        = ('<prog>', 'use <prog> as static lib archive indexer', 'the posix ar s flag is used instead')
+		help['ar']            = ('<prog>', 'use <prog> as static lib archiver', 'AR env var: ' + os.environ.get('CXX', '(not set, defaults to ar on posix)'))
+		help['ranlib']        = ('<prog>', 'use <prog> as static lib archive indexer', 'RANLIB env var: ' + os.environ.get('RANLIB', '(not set, defaults to using the ar s flag on posix)'))
 		
 		help['static'] = ('<libs|full>',
 			'libs: build libs as static archives (rather than dynamic, shared libs),\n'
@@ -272,11 +272,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 		if old_sig != self.options_sig:
 			if __debug__ and is_debug: debug('cfg: cxx: user: parsing options')
 
-			if 'cxx' in o: self.cxx_prog = o['cxx']
-			else:
-				e = os.environ.get('CXX', None)
-				if e is not None: self.cxx_prog = e
-				else: self.cxx_prog = None
+			self.cxx_prog = o.get('cxx', None) or os.environ.get('CXX', None)
 			if 'cxx-flags' in o: self.cxx_flags = o['cxx-flags'].split()
 			else:
 				e = os.environ.get('CXXFLAGS', None)
@@ -289,14 +285,21 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 			
 			self.pic = 'pic-static' in o # this is for programs and static libs only
 			
-			self.ld_prog = o.get('ld', None)
+			self.ld_prog = o.get('ld', None) or os.environ.get('LD', None)
 			if 'ld-flags' in o: self.ld_flags = o['ld-flags'].split()
 			else:
 				e = os.environ.get('LDFLAGS', None)
 				if e is not None: self.ld_flags = e.split()
 				else: self.ld_flags = []
-			self.ar_prog = o.get('ar', None)
-			self.ranlib_prog = o.get('ranlib', None)
+			self.ar_prog = o.get('ar', None) or os.environ.get('AR', None)
+			self.ranlib_prog = o.get('ranlib', None) or os.environ.get('RANLIB', None)
+			
+			if self.cxx_prog is not None: self.print_desc('user-build-cfg: cxx: ' + self.cxx_prog)
+			if len(self.cxx_flags) != 0: self.print_desc('user-build-cfg: cxx flags: ' + str(self.cxx_flags))
+			if self.ld_prog is not None: self.print_desc('user-build-cfg: ld: ' + self.ld_prog)
+			if len(self.ld_flags) != 0: self.print_desc('user-build-cfg: ld flags: ' + str(self.ld_flags))
+			if self.ar_prog is not None: self.print_desc('user-build-cfg: ar: ' + self.ar_prog)
+			if self.ranlib_prog is not None: self.print_desc('user-build-cfg: ranlib: ' + self.ranlib_prog)
 
 			self.project.persistent[str(self.__class__)] = \
 				self.options_sig, \
