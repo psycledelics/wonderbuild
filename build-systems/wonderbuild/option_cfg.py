@@ -2,12 +2,13 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
+import os
 from signature import Sig
-
 from options import OptionDecl
 
 class OptionCfg(OptionDecl):
 	signed_options = set()
+	signed_os_environ = set()
 
 	def __init__(self, shared_task_holder):
 		self.shared_task_holder = shared_task_holder
@@ -24,6 +25,11 @@ class OptionCfg(OptionDecl):
 			options = self.options
 			for name in self.__class__.signed_options:
 				value = options.get(name, None)
+				if value is not None:
+					if len(value) != 0: sig.update(value)
+					else: sig.update('\0')
+			for name in self.__class__.signed_os_environ:
+				value = os.environ.get(name, None)
 				if value is not None:
 					if len(value) != 0: sig.update(value)
 					else: sig.update('\0')

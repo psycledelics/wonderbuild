@@ -203,6 +203,8 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 		if class_ is None: class_ = BuildCfg
 		return class_.clone(self, class_)
 
+	signed_os_environ = set(['PATH', 'CXX', 'CXXFLAGS', 'LDFLAGS'])
+
 	signed_options = set([
 		'cxx',
 		'cxx-flags',
@@ -220,7 +222,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 	def generate_option_help(help):
 		help['check-missing'] = (None, 'check for missing built files (rebuilds files you manually deleted in the build dir)')
 
-		help['cxx']           = ('<prog>', 'use <prog> as c++ compiler')
+		help['cxx']           = ('<prog>', 'use <prog> as c++ compiler', 'CXX env var: ' + os.environ.get('CXX', '(not set)'))
 		help['cxx-flags']     = ('[flags]', 'use specific c++ compiler flags', 'CXXFLAGS env var: ' + os.environ.get('CXXFLAGS', '(not set)'))
 		help['ld']            = ('<prog>', 'use <prog> as shared lib and program linker')
 		help['ld-flags']      = ('[flags]', 'use specific linker flags', 'LDFLAGS env var: ' + os.environ.get('LDFLAGS', '(not set)'))
@@ -271,10 +273,13 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 			if __debug__ and is_debug: debug('cfg: cxx: user: parsing options')
 
 			if 'cxx' in o: self.cxx_prog = o['cxx']
+			else:
+				e = os.environ.get('CXX', None)
+				if e is not None: self.cxx_prog = e
 			if 'cxx-flags' in o: self.cxx_flags = o['cxx-flags'].split()
 			else:
-				flags = os.environ.get('CXXFLAGS', None)
-				if flags is not None: self.cxx_flags = flags.split()
+				e = os.environ.get('CXXFLAGS', None)
+				if e is not None: self.cxx_flags = e.split()
 				else: self.cxx_flags = []
 
 			static = o.get('static', None)
@@ -286,8 +291,8 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 			if 'ld' in o: self.ld_prog = o['ld']
 			if 'ld-flags' in o: self.ld_flags = o['ld-flags'].split()
 			else:
-				flags = os.environ.get('LDFLAGS', None)
-				if flags is not None: self.ld_flags = flags.split()
+				e = os.environ.get('LDFLAGS', None)
+				if e is not None: self.ld_flags = e.split()
 				else: self.ld_flags = []
 			if 'ar' in o: self.ar_prog = o['ar']
 			if 'ranlib' in o: self.ranlib_prog = o['ranlib']

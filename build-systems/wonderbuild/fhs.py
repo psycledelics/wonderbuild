@@ -12,7 +12,6 @@ class FHS(OptionCfg):
 	'options for the Filesystem Hierarchy Standard'
 
 	signed_options = set([
-		'bld-dir',
 		'install-dest-dir',
 		'install-prefix-dir'
 	])
