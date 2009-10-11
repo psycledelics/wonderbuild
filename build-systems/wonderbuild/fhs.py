@@ -11,10 +11,13 @@ from option_cfg import OptionCfg
 class FHS(OptionCfg):
 	'options for the Filesystem Hierarchy Standard'
 
-	known_options = set([
+	signed_options = set([
+		'bld-dir',
 		'install-dest-dir',
 		'install-prefix-dir'
 	])
+	
+	known_options = signed_options
 
 	@staticmethod
 	def generate_option_help(help):

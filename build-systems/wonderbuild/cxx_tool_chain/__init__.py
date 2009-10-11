@@ -203,8 +203,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 		if class_ is None: class_ = BuildCfg
 		return class_.clone(self, class_)
 
-	known_options = set([
-		'check-missing',
+	signed_options = set([
 		'cxx',
 		'cxx-flags',
 		'ld',
@@ -214,6 +213,8 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 		'static',
 		'pic-static'
 	])
+
+	known_options = signed_options | set(['check-missing'])
 
 	@staticmethod
 	def generate_option_help(help):

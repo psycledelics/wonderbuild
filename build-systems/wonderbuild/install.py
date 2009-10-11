@@ -4,7 +4,7 @@
 
 from logger import silent, is_debug, debug, color_bg_fg_rgb
 from task import ProjectTask
-from option_cfg import OptionCfg
+from options import OptionDecl
 from fhs import FHS
 from signature import Sig
 
@@ -19,7 +19,7 @@ if os.name == 'posix':
 else: # hard links unavailable, do a copy instead
 	install = shutil.copy2
 
-class InstallTask(ProjectTask, OptionCfg):
+class InstallTask(ProjectTask, OptionDecl):
 	known_options = set(['check-missing'])
 
 	@staticmethod
@@ -27,20 +27,9 @@ class InstallTask(ProjectTask, OptionCfg):
 	
 	def __init__(self, project, name):
 		ProjectTask.__init__(self, project)
-		OptionCfg.__init__(self, project)
 		self.name = name
 		self.fhs = FHS.shared(project)
-
-		try: old_sig, self.check_missing = self.project.persistent[str(self.__class__)]
-		except KeyError: old_sig = None
-		if old_sig != self.options_sig:
-			if __debug__ and is_debug: debug('cfg: install: user: parsing options')
-
-			o = self.options
-
-			self.check_missing = 'check-missing' in o
-
-			self.project.persistent[str(self.__class__)] = self.options_sig, self.check_missing
+		self.check_missing = 'check-missing' in self.project.options
 
 	def __str__(self): return \
 		'install ' + self.name + ' from ' + str(self.trim_prefix) + \

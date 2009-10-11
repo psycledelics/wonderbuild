@@ -7,6 +7,8 @@ from signature import Sig
 from options import OptionDecl
 
 class OptionCfg(OptionDecl):
+	signed_options = set()
+
 	def __init__(self, shared_task_holder):
 		self.shared_task_holder = shared_task_holder
 		shared_task_holder.option_collector.option_decls.add(self.__class__)
@@ -20,7 +22,7 @@ class OptionCfg(OptionDecl):
 		except AttributeError:
 			sig = Sig()
 			options = self.options
-			for name in self.__class__.known_options:
+			for name in self.__class__.signed_options:
 				value = options.get(name, None)
 				if value is not None:
 					if len(value) != 0: sig.update(value)

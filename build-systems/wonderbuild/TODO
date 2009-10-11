@@ -27,3 +27,5 @@
 
 * standard flags flavors for debug, release, and strip.
   (not sure this is very useful)
+  
+* experiment with beta-mode like tup.
