@@ -52,7 +52,7 @@ class ProjectTask(Task):
 		if aliases is not None: project.add_task_aliases(self, *aliases)
 	
 	@property
-	def uid(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
+	def uid(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
 	
 	def _get_persistent(self): return self.project.persistent[self.uid]
 	def _set_persistent(self, value): self.project.persistent[self.uid] = value

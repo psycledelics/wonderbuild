@@ -60,7 +60,7 @@ class InstallTask(ProjectTask, OptionCfg):
 	
 	def __call__(self, sched_ctx):
 		if False: yield
-		try: old_sig, sigs = self.project.persistent[self.uid]
+		try: old_sig, sigs = self.persistent
 		except KeyError:
 			if __debug__ and is_debug: debug('task: no state: ' + str(self))
 			old_sig = None
@@ -119,6 +119,6 @@ class InstallTask(ProjectTask, OptionCfg):
 							if dest.exists: os.remove(dest.path)
 							else: dest.parent.make_dir()
 							install(s.path, dest.path)
-						self.project.persistent[self.uid] = sig, sigs
+						self.persistent = sig, sigs
 					finally: self.dest_dir.lock.release()
 				finally: sched_ctx.lock.acquire()

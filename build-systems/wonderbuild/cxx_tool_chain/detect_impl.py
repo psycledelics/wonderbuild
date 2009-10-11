@@ -20,7 +20,7 @@ class DetectImplCheckTask(CheckTask):
 	def sig(self): return self.user_build_cfg.options_sig
 
 	@property
-	def uid(self): return str(self.__class__)
+	def uid(self): return self.shared_uid()
 
 	@property
 	def desc(self): return 'c++-tool-chain'

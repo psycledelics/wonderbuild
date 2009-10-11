@@ -37,9 +37,6 @@ class CheckTask(ProjectTask, OptionCfg):
 	@property
 	def sig(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
 
-	@property
-	def uid(self): Exception, str(self.__class__) + ' did not redefine the property.'
-
 	def print_check(self, desc):
 		if __debug__ and is_debug:
 			out.write(colored(_announce_color, 'wonderbuild: task: checking for ' + desc + ' ...') + '\n')

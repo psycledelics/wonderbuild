@@ -998,7 +998,7 @@ class _PkgConfigTask(CheckTask):
 		try: return self._sig
 		except AttributeError:
 			sig = Sig(_PkgConfigTask.env_sig())
-			for p in self.pkgs: sig.update(p)
+			for p in self.pkgs: sig.update(p) # pkgs are part of the uid anyway
 			sig = self._sig = sig.digest()
 			return sig
 
