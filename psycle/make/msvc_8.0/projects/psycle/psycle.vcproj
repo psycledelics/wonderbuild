@@ -432,11 +432,11 @@
 				Name="file"
 				>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\abstractiff.cpp"
+					RelativePath="$(SolutionDir)\..\..\src\psycle\host\abstractiff.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\abstractiff.hpp"
+					RelativePath="$(SolutionDir)\..\..\src\psycle\host\abstractiff.hpp"
 					>
 				</File>
 				<File
@@ -448,11 +448,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\eaiff.cpp"
+					RelativePath="$(SolutionDir)\..\..\src\psycle\host\eaiff.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\eaiff.hpp"
+					RelativePath="$(SolutionDir)\..\..\src\psycle\host\eaiff.hpp"
 					>
 				</File>
 				<File
@@ -477,14 +477,6 @@
 				</File>
 				<File
 					RelativePath="$(SolutionDir)\..\..\src\psycle\host\Riff.hpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\WaveFile.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\WaveFile.hpp"
 					>
 				</File>
 				<File
@@ -995,11 +987,11 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\TransformPatternDlg.cpp"
+						RelativePath="$(SolutionDir)\..\..\src\psycle\host\TransformPatternDlg.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\TransformPatternDlg.hpp"
+						RelativePath="$(SolutionDir)\..\..\src\psycle\host\TransformPatternDlg.hpp"
 						>
 					</File>
 				</Filter>
@@ -1114,6 +1106,10 @@
 				<Filter
 					Name="machine"
 					>
+					<File
+						RelativePath="$(SolutionDir)\..\..\src\psycle\host\convert_internal_machines.hpp"
+						>
+					</File>
 					<File
 						RelativePath="$(SolutionDir)\..\..\src\psycle\host\internal_machines.cpp"
 						>

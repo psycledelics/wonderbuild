@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.10"
+	Name="zlib"
+	ProjectGUID="{69C0ACBE-EA30-4F1E-9B41-A1DD71C33DE2}"
+	Keyword="MakeFileProj">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="unpack|Win32"
+			OutputDirectory="$(SolutionDir)\..\..\..\include"
+			IntermediateDirectory="$(SolutionDir)\output\$(ConfigurationName)\$(ProjectName)\intermediate_output"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="cmd.exe /c build.cmd"
+				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd &amp;&amp; build.cmd&quot;"
+				CleanCommandLine="cmd.exe /c clean.cmd"/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="commands"
+			Filter="">
+			<File
+				RelativePath=".\build.cmd">
+			</File>
+			<File
+				RelativePath=".\clean.cmd">
+			</File>
+		</Filter>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

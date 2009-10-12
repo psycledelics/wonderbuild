@@ -3,7 +3,7 @@
 
 [Setup]
 AppName=Psycle Modular Music Creation Studio
-AppVerName=Psycle 1.8.5
+AppVerName=Psycle 1.8.6
 AppPublisher=psycledelics
 AppPublisherURL=http://psycle.sourceforge.net/
 AppSupportURL=http://psycle.pastnotecut.org/
@@ -17,16 +17,16 @@ OutputBaseFilename=PsycleInstallerSSE
 SetupIconFile=..\..\pixmaps\psycle.ico
 Compression=lzma
 SolidCompression=true
-VersionInfoVersion=1.8.5
+VersionInfoVersion=1.8.6
 VersionInfoCompany=psycledelics
 VersionInfoDescription=Psycle Installer
-VersionInfoCopyright=2000-2007 psycledelics
+VersionInfoCopyright=2000-2009 psycledelics
 SetupLogging=false
-AppCopyright=© psycledelics 2000-2007
+AppCopyright=© psycledelics 2000-2009
 PrivilegesRequired=poweruser
 AllowRootDirectory=true
 ShowLanguageDialog=auto
-AppVersion=1.8.5
+AppVersion=1.8.6
 AppID={{8E7D0A7F-B85F-44DC-8C1C-2A2C27BAEA0B}
 UninstallDisplayIcon={app}\psycle.exe
 ChangesAssociations=true
@@ -113,4 +113,4 @@ begin
 	Result := istool_download(CurPage);
 end;
 [_ISToolDownload]
-Source: http://ovh.dl.sourceforge.net/sourceforge/psycle/Psycle-VST-Bundle.exe; DestDir: {tmp}; DestName: Vst-Bundle.exe; Components: " VstPack"; Tasks: ; Languages: 
+Source: http://downloads.sourceforge.net/project/psycle/psycle/1.8.5/psycle-1.8.5-vst-bundle.exe?use_mirror=heanet; DestDir: {tmp}; DestName: Vst-Bundle.exe; Components: " VstPack"; Tasks: ; Languages: 
