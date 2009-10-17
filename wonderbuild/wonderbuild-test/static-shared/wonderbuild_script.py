@@ -122,7 +122,7 @@ else:
 				class MainProg(ModTask):
 					def __init__(self): ModTask.__init__(self,
 						test_name + '--' + variant_name + '--main',
-						ModTask.Kinds.PROG, static_prog and static_build_cfg or build_cfg, 'default')
+						ModTask.Kinds.PROG, static_prog and static_build_cfg or build_cfg, ('default',))
 
 					def __call__(self, sched_ctx):
 						self.public_deps = [lib_wrapper]

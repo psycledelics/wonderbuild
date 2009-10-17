@@ -37,9 +37,9 @@ class Wonderbuild(ScriptTask):
 		check_cfg = build_cfg.clone()
 		std_math = StdMathCheckTask.shared(check_cfg)
 
-		pe = build_cfg.target_platform_binary_format_is_pe
+		pe = build_cfg.dest_platform.bin_fmt == 'pe'
 
-		if not pe: glibmm = PkgConfigCheckTask.shared(self.project, ['glibmm-2.4 >= 2.4'])
+		if not pe: glibmm = PkgConfigCheckTask.shared(check_cfg, ['glibmm-2.4 >= 2.4'])
 
 		class Pch(PreCompileTasks):
 			def __init__(self): PreCompileTasks.__init__(self, 'pch', build_cfg)
@@ -149,7 +149,7 @@ class Wonderbuild(ScriptTask):
 		lib_wrapper = LibWrapper()
 
 		class MainProg(ModTask):
-			def __init__(self): ModTask.__init__(self, test_name + '--main', ModTask.Kinds.PROG, build_cfg, 'default')
+			def __init__(self): ModTask.__init__(self, test_name + '--main', ModTask.Kinds.PROG, build_cfg, ('default',))
 
 			def __call__(self, sched_ctx):
 				self.public_deps = [lib_wrapper]
