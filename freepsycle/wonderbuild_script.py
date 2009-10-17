@@ -71,6 +71,10 @@ class Wonderbuild(ScriptTask):
 			
 			def do_mod_phase(self):
 				self.cfg.include_paths.appendleft(src_dir)
+				self.cfg.defines['UNIVERSALIS__META__PACKAGE__NAME'] = '"freepsycle"'
+				self.cfg.defines['UNIVERSALIS__META__PACKAGE__VERSION'] = 0
+				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
+				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
 				if self.path.exists:
 					for s in self.path.find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 				else: self.sources.append(self.path.parent / (self.path.name + '.cpp'))
