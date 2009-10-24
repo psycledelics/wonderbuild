@@ -1,3 +1,5 @@
+* add a check to simply test whether the user-provided compiler flags are correct.
+
 * when a loadable module depends on a lib, that lib can't be a non-pic one,
   so, ideally, it should automatically be built as a loadable module too.
 
