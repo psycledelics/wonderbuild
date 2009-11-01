@@ -1194,11 +1194,11 @@
 						Name="interface"
 						>
 						<File
-							RelativePath="$(SolutionDir)\..\..\src\psycle\plugin.hpp"
+							RelativePath="$(SolutionDir)\..\..\..\psycle-plugins\src\psycle\plugins\plugin.hpp"
 							>
 						</File>
 						<File
-							RelativePath="$(SolutionDir)\..\..\src\psycle\plugin_interface.hpp"
+							RelativePath="$(SolutionDir)\..\..\..\psycle-plugins\src\psycle\plugin_interface.hpp"
 							>
 						</File>
 					</Filter>
