@@ -3,7 +3,7 @@
 
 [Setup]
 AppName=Psycle Modular Music Creation Studio
-AppVerName=Psycle 1.8.5
+AppVerName=Psycle 1.8.6.1
 AppPublisher=psycledelics
 AppPublisherURL=http://psycle.sourceforge.net/
 AppSupportURL=http://psycle.pastnotecut.org/
@@ -13,11 +13,11 @@ DefaultGroupName=Psycle
 AllowNoIcons=true
 InfoBeforeFile=..\..\psycle\doc\for-end-users\readme.txt
 InfoAfterFile=..\..\psycle\doc\for-end-users\whatsnew.txt
-OutputBaseFilename=PsycleInstallerSSE2
+OutputBaseFilename=PsycleInstaller
 SetupIconFile=..\..\psycle\pixmaps\psycle.ico
 Compression=lzma
 SolidCompression=true
-VersionInfoVersion=1.8.5
+VersionInfoVersion=1.8.6.1
 VersionInfoCompany=psycledelics
 VersionInfoDescription=Psycle Installer
 VersionInfoCopyright=2000-2009 psycledelics
@@ -26,7 +26,7 @@ AppCopyright=© psycledelics 2000-2009
 PrivilegesRequired=poweruser
 AllowRootDirectory=true
 ShowLanguageDialog=auto
-AppVersion=1.8.5
+AppVersion=1.8.6.1
 AppID={{8E7D0A7F-B85F-44DC-8C1C-2A2C27BAEA0B}
 UninstallDisplayIcon={app}\psycle.exe
 ChangesAssociations=true
@@ -42,7 +42,6 @@ Name: Delete_registry_settings; Description: deletes the existing settings in th
 
 [Files]
 Source: ..\msvc\output\release\bin\psycle.exe; DestDir: {app}; Flags: ignoreversion; Tasks: ; Languages: ; Components: Application
-Source: ..\msvc\output\release\bin\zlib1.dll; DestDir: {app}; Flags: ignoreversion; Components: Application
 Source: ..\msvc\output\release\bin\boost_filesystem-vc90-mt-1_38.dll; DestDir: {app}; Flags: ignoreversion; Components: Application
 Source: ..\msvc\output\release\bin\boost_thread-vc90-mt-1_38.dll; DestDir: {app}; Flags: ignoreversion; Components: Application
 Source: ..\msvc\output\release\bin\universalis.dll; DestDir: {app}; Flags: ignoreversion; Components: Application
@@ -113,4 +112,4 @@ begin
 	Result := istool_download(CurPage);
 end;
 [_ISToolDownload]
-Source: http://ovh.dl.sourceforge.net/sourceforge/psycle/Psycle-VST-Bundle.exe; DestDir: {tmp}; DestName: Vst-Bundle.exe; Components: " VstPack"; Tasks: ; Languages: 
+Source: http://downloads.sourceforge.net/project/psycle/psycle/1.8.5/psycle-1.8.5-vst-bundle.exe?use_mirror=heanet; DestDir: {tmp}; DestName: Vst-Bundle.exe; Components: " VstPack"; Tasks: ; Languages: 
