@@ -3,7 +3,7 @@
 
 [Setup]
 AppName=Psycle Modular Music Creation Studio
-AppVerName=Psycle 1.8.6
+AppVerName=Psycle 1.8.6.1
 AppPublisher=psycledelics
 AppPublisherURL=http://psycle.sourceforge.net/
 AppSupportURL=http://psycle.pastnotecut.org/
@@ -17,7 +17,7 @@ OutputBaseFilename=PsycleInstallervc2005
 SetupIconFile=..\..\pixmaps\psycle.ico
 Compression=lzma
 SolidCompression=true
-VersionInfoVersion=1.8.6
+VersionInfoVersion=1.8.6.1
 VersionInfoCompany=psycledelics
 VersionInfoDescription=Psycle Installer
 VersionInfoCopyright=2000-2009 psycledelics
@@ -26,7 +26,7 @@ AppCopyright=© psycledelics 2000-2009
 PrivilegesRequired=poweruser
 AllowRootDirectory=true
 ShowLanguageDialog=auto
-AppVersion=1.8.6
+AppVersion=1.8.6.1
 AppID={{8E7D0A7F-B85F-44DC-8C1C-2A2C27BAEA0B}
 UninstallDisplayIcon={app}\psycle.exe
 ChangesAssociations=true
