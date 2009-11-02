@@ -163,12 +163,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.vd.fastverb"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "boost", "projects\boost\boost.vcproj", "{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.voskomo.gamefx", "projects\psycle-plugins\gamefx.vcproj", "{485B9E85-CBC7-4B27-8AD2-5DD97234FBED}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.gamefx", "projects\psycle-plugins\gamefx.vcproj", "{485B9E85-CBC7-4B27-8AD2-5DD97234FBED}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.voskomo.blitz", "projects\psycle-plugins\blitz.vcproj", "{C55834ED-9038-4D48-AE49-122834E68B25}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle.plugins.blitz", "projects\psycle-plugins\blitz.vcproj", "{C55834ED-9038-4D48-AE49-122834E68B25}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
@@ -586,7 +586,6 @@ Global
 		{520E5BA9-4E94-45B7-A37F-EEB90EFF86A7}.debug|win32.Build.0 = debug|Win32
 		{520E5BA9-4E94-45B7-A37F-EEB90EFF86A7}.documentation|win32.ActiveCfg = debug|Win32
 		{520E5BA9-4E94-45B7-A37F-EEB90EFF86A7}.release|win32.ActiveCfg = release|Win32
-		{520E5BA9-4E94-45B7-A37F-EEB90EFF86A7}.release|win32.Build.0 = release|Win32
 		{520E5BA9-4E94-45B7-A37F-EEB90EFF86A7}.unpack|win32.ActiveCfg = debug|Win32
 		{16A3B78E-D26B-4057-A524-9158B9559D9F}.debug|win32.ActiveCfg = debug|Win32
 		{16A3B78E-D26B-4057-A524-9158B9559D9F}.debug|win32.Build.0 = debug|Win32
@@ -846,13 +845,11 @@ Global
 		{923A9CFD-C2B2-4A53-952B-EC9CD8413704}.debug|win32.Build.0 = debug|Win32
 		{923A9CFD-C2B2-4A53-952B-EC9CD8413704}.documentation|win32.ActiveCfg = debug|Win32
 		{923A9CFD-C2B2-4A53-952B-EC9CD8413704}.release|win32.ActiveCfg = release|Win32
-		{923A9CFD-C2B2-4A53-952B-EC9CD8413704}.release|win32.Build.0 = release|Win32
 		{923A9CFD-C2B2-4A53-952B-EC9CD8413704}.unpack|win32.ActiveCfg = debug|Win32
 		{E6905023-50A7-49E0-A5DE-5C0D26414B8D}.debug|win32.ActiveCfg = debug|Win32
 		{E6905023-50A7-49E0-A5DE-5C0D26414B8D}.debug|win32.Build.0 = debug|Win32
 		{E6905023-50A7-49E0-A5DE-5C0D26414B8D}.documentation|win32.ActiveCfg = debug|Win32
 		{E6905023-50A7-49E0-A5DE-5C0D26414B8D}.release|win32.ActiveCfg = release|Win32
-		{E6905023-50A7-49E0-A5DE-5C0D26414B8D}.release|win32.Build.0 = release|Win32
 		{E6905023-50A7-49E0-A5DE-5C0D26414B8D}.unpack|win32.ActiveCfg = debug|Win32
 		{B78DFE59-051A-43FD-B489-785A3982541C}.debug|win32.ActiveCfg = debug|Win32
 		{B78DFE59-051A-43FD-B489-785A3982541C}.debug|win32.Build.0 = debug|Win32
