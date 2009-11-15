@@ -131,7 +131,7 @@ class Wonderbuild(ScriptTask):
 				ModTask.__init__(self, name, ModTask.Kinds.PROG, cfg, (name, 'default'))
 
 			def __call__(self, sched_ctx):
-				self.private_deps = [pch.prog_task, universalis, boost_test]
+				self.private_deps = [pch.prog_task, helpers, boost_test]
 				req = self.all_deps
 				for x in sched_ctx.parallel_wait(*req): yield x
 				self.result = min(bool(r) for r in req)
@@ -142,6 +142,6 @@ class Wonderbuild(ScriptTask):
 				self.sources.append(src_dir / 'unit_tests.cpp')
 
 		self._math_mod_dep_phases = helpers_math = HelpersMathMod()
-		self._mod_dep_phases = mod_dep_phases = HelpersMod()
+		self._mod_dep_phases = helpers = HelpersMod()
 		for x in sched_ctx.parallel_wait(boost_test): yield x
 		if boost_test: unit_tests = UnitTestMod()
