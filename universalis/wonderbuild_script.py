@@ -48,7 +48,7 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.install import InstallTask
 		
 		check_cfg = cfg.clone()
-		glibmm = PkgConfigCheckTask.shared(check_cfg, ['glibmm-2.4 >= 2.4', 'gmodule-2.0 >= 2.0', 'gthread-2.0 >= 2.0'])
+		glibmm = PkgConfigCheckTask.shared(check_cfg, ['glibmm-2.4', 'gmodule-2.0', 'gthread-2.0'])
 		std_math = StdMathCheckTask.shared(check_cfg)
 		dlfcn = DlfcnCheckTask.shared(check_cfg)
 		pthread = PThreadCheckTask.shared(check_cfg)
