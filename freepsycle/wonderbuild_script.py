@@ -49,12 +49,12 @@ class Wonderbuild(ScriptTask):
 		alsa = PkgConfigCheckTask.shared(check_cfg, ['alsa >= 1.0'])
 		gtkmm = PkgConfigCheckTask.shared(check_cfg, ['gtkmm-2.4'])
 		gnomecanvasmm = PkgConfigCheckTask.shared(check_cfg, ['libgnomecanvasmm-2.6'])
-		cluttermm = PkgConfigCheckTask.shared(check_cfg, ['clutter >= 0.6'])
-		cluttermm_1_0 = PkgConfigCheckTask.shared(check_cfg, ['clutter-1.0'])
-		cluttermm_0_9 = PkgConfigCheckTask.shared(check_cfg, ['clutter-0.9'])
-		cluttermm_0_8 = PkgConfigCheckTask.shared(check_cfg, ['clutter-0.8'])
-		cluttermm_0_7 = PkgConfigCheckTask.shared(check_cfg, ['clutter-0.7'])
-		cluttermm_0_6 = PkgConfigCheckTask.shared(check_cfg, ['clutter-0.6'])
+		cluttermm = PkgConfigCheckTask.shared(check_cfg, ['clutter-gtk >= 0.6'])
+		cluttermm_1_0 = PkgConfigCheckTask.shared(check_cfg, ['clutter-gtk-1.0'])
+		cluttermm_0_9 = PkgConfigCheckTask.shared(check_cfg, ['clutter-gtk-0.9'])
+		cluttermm_0_8 = PkgConfigCheckTask.shared(check_cfg, ['clutter-gtk-0.8'])
+		cluttermm_0_7 = PkgConfigCheckTask.shared(check_cfg, ['clutter-gtk-0.7'])
+		cluttermm_0_6 = PkgConfigCheckTask.shared(check_cfg, ['clutter-gtk-0.6'])
 		dsound = DSoundCheckTask.shared(check_cfg)
 
 		for x in sched_ctx.parallel_wait(
