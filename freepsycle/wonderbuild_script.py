@@ -49,9 +49,10 @@ class Wonderbuild(ScriptTask):
 		alsa = PkgConfigCheckTask.shared(check_cfg, ['alsa >= 1.0'])
 		gtkmm = PkgConfigCheckTask.shared(check_cfg, ['gtkmm-2.4 >= 2.4'])
 		gnomecanvasmm = PkgConfigCheckTask.shared(check_cfg, ['libgnomecanvasmm-2.6 >= 2.6'])
+		cluttermm = PkgConfigCheckTask.shared(check_cfg, ['clutter-0.6 >= 0.6'])
 		dsound = DSoundCheckTask.shared(check_cfg)
 
-		for x in sched_ctx.parallel_wait(gstreamer, jack, alsa, dsound, gtkmm, gnomecanvasmm): yield x
+		for x in sched_ctx.parallel_wait(gstreamer, jack, alsa, dsound, gtkmm, gnomecanvasmm, cluttermm): yield x
 
 		class UniformMod(ModTask):
 			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):
@@ -170,7 +171,7 @@ class Wonderbuild(ScriptTask):
 			src_dir / 'psycle' / 'tests' / 'random_notes',
 			deps=(host, paths, default_output, sequence, decay, additioner, sine), kind=ModTask.Kinds.PROG)
 
-		if gtkmm and gnomecanvasmm:
+		if gtkmm and gnomecanvasmm and cluttermm:
 			gui = UniformMod('freepsycle-gui',
 				src_dir / 'psycle' / 'front_ends' / 'gui',
-				deps=(host, paths, gtkmm, gnomecanvasmm), kind=ModTask.Kinds.PROG)
+				deps=(host, paths, gtkmm, gnomecanvasmm, cluttermm), kind=ModTask.Kinds.PROG)
