@@ -54,7 +54,7 @@ class Wonderbuild(ScriptTask):
 		cluttermm_0_9 = PkgConfigCheckTask.shared(check_cfg, ['clutter-gtk-0.9'])
 		cluttermm_0_8 = PkgConfigCheckTask.shared(check_cfg, ['clutter-gtk-0.8'])
 		cluttermm_0_7 = PkgConfigCheckTask.shared(check_cfg, ['clutter-gtk-0.7'])
-		cluttermm_0_6 = PkgConfigCheckTask.shared(check_cfg, ['clutter-gtk-0.6'])
+		cluttermm_0_6 = PkgConfigCheckTask.shared(check_cfg, ['clutter-gtk-0.6 >= 0.6'])
 		dsound = DSoundCheckTask.shared(check_cfg)
 
 		for x in sched_ctx.parallel_wait(
