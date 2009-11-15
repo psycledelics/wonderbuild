@@ -34,7 +34,7 @@ class Wonderbuild(ScriptTask):
 		cfg = cfg.new_or_clone()
 
 		check_cfg = cfg.clone()
-		clutter = PkgConfigCheckTask.shared(check_cfg, ['clutter-0.6 >= 0.6'])
+		clutter = PkgConfigCheckTask.shared(check_cfg, ['clutter-gtk-0.6 >= 0.6'])
 
 		class UniformMod(ModTask):
 			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):
