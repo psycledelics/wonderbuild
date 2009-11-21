@@ -28,7 +28,7 @@ class Wonderbuild(ScriptTask):
 
 	def __call__(self, sched_ctx):
 		project = self.project
-		top_src_dir = self.src_dir.parent
+		top_src_dir = self.src_dir.parent.parent
 		
 		from wonderbuild.cxx_tool_chain import UserBuildCfgTask, PkgConfigCheckTask
 		from wonderbuild.std_checks.std_math import StdMathCheckTask
