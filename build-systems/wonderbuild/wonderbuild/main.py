@@ -30,7 +30,11 @@ else:
 				import logger
 				logger.use_options(options)
 				option_collector.option_decls.add(logger)
-	
+
+				import subprocess_wrapper
+				subprocess_wrapper.use_options(options)
+				option_collector.option_decls.add(subprocess_wrapper)
+
 				option_collector.known_options.add('debug')
 				if 'help' in options: option_collector.help['debug'] = ('[passwd]', 'use the python rpdb2/winpdb debugger', 'prompt for password if none given')
 				debug = options.get('debug', None)

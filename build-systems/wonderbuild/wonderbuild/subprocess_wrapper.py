@@ -6,8 +6,19 @@ import sys, subprocess
 
 from logger import out, is_debug, debug, colored
 
+known_options = set(['eclipse-cdt-discovery'])
+
+def generate_option_help(help):
+	help['eclipse-cdt-discovery'] = (None, 'output subprocess command lines in a way suitable for the eclipse cdt discovery to scan them')
+
+eclipse_cdt_discovery = False
+def use_options(options):
+	global eclipse_cdt_discovery
+	eclipse_cdt_discovery = 'eclipse-cdt-discovery' in options
+
 def exec_subprocess(args, env = None, cwd = None):
 	if __debug__ and is_debug: debug('exec: ' + str(cwd) + ' ' + str(env) + ' ' + str(args))
+	if eclipse_cdt_discovery: print >> sys.stdout, 'make: Entering directory `' + str(cwd) + "'\n" + ' '.join(args)
 	return subprocess.call(
 		args = args,
 		bufsize = -1,
