@@ -8,7 +8,7 @@ if __name__ == '__main__':
 	sys.argv.append('--src-dir=' + dir)
 	try: from wonderbuild.main import main
 	except ImportError:
-		dir = os.path.abspath(os.path.join(dir, os.pardir, 'build-systems'))
+		dir = os.path.abspath(os.path.join(dir, os.pardir, 'build-systems', 'wonderbuild'))
 		if dir not in sys.path: sys.path.append(dir)
 		try: from wonderbuild.main import main
 		except ImportError:

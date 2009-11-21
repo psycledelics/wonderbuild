@@ -8,7 +8,7 @@ if __name__ == '__main__':
 	sys.argv.append('--src-dir=' + dir)
 	try: from wonderbuild.main import main
 	except ImportError:
-		dir = os.path.abspath(os.path.join(dir, os.pardir, 'build-systems'))
+		dir = os.path.abspath(os.path.join(dir, os.pardir, 'build-systems', 'wonderbuild'))
 		if dir not in sys.path: sys.path.append(dir)
 		try: from wonderbuild.main import main
 		except ImportError:
@@ -31,7 +31,7 @@ class Wonderbuild(ScriptTask):
 		top_src_dir = self.src_dir.parent
 		src_dir = self.src_dir / 'src'
 
-		common = ScriptLoaderTask.shared(project, top_src_dir / 'build-systems' / 'wonderbuild_script_common')
+		common = ScriptLoaderTask.shared(project, top_src_dir / 'build-systems' / 'wonderbuild' / 'wonderbuild_script_common')
 		for x in sched_ctx.parallel_wait(common): yield x
 		self._common = common = common.script_task
 		cfg = common.cfg.new_or_clone()
