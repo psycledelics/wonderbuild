@@ -27,6 +27,7 @@ sources_or_headers = \
 	$$PSYCLE_CORE_DIR/src/psycle/core/convert_internal_machines.private \
 	$$PSYCLE_CORE_DIR/src/psycle/core/cstdint \
 	$$PSYCLE_CORE_DIR/src/psycle/core/eventdriver \
+	$$PSYCLE_CORE_DIR/src/psycle/core/exceptions \ 
 	$$PSYCLE_CORE_DIR/src/psycle/core/file \
 	$$PSYCLE_CORE_DIR/src/psycle/core/fileio \
 	$$PSYCLE_CORE_DIR/src/psycle/core/filterhelper \
@@ -71,7 +72,9 @@ sources_or_headers = \
 	$$PSYCLE_CORE_DIR/src/psycle/core/xmsampler \
 	$$PSYCLE_CORE_DIR/src/psycle/core/zipreader \
 	$$PSYCLE_CORE_DIR/src/psycle/core/zipwriter \
-	$$PSYCLE_CORE_DIR/src/psycle/core/zipwriterstream
+	$$PSYCLE_CORE_DIR/src/psycle/core/zipwriterstream \
+	$$PSYCLE_CORE_DIR/src/seib/vst/CVSTHost.Seib \
+	$$PSYCLE_CORE_DIR/src/seib/vst/EffectWnd 
 
 SOURCES_PRESERVE_PATH += $$sources(sources_or_headers)
 HEADERS += $$headers(sources_or_headers)

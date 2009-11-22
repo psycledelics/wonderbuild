@@ -130,7 +130,7 @@ class Wonderbuild(ScriptTask):
 		jme_gamefx = UniformMod(n + 'gamefx', p / 'jme' / 'gamefx')
 		josepma_drums = UniformMod(n + 'jmdrum', p / 'jm_drums')
 		karlkox_surround = UniformMod(n + 'karlkox-surround', p / 'surround')
-		ladspa_gverb = UniformMod(n + 'gverb', p / 'gverb')
+		ladspa_gverb = UniformMod(n + 'ladspa-gverb', p / 'gverb')
 		legasynth_303 = UniformMod(n + 'legasynth-303', p / 'legasynth')
 		m3 = UniformMod(n + 'm3', p / 'm3')
 		moreamp_eq = UniformMod(n + 'maeq', p / 'moreamp_eq')
