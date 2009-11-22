@@ -17,14 +17,17 @@ def use_options(options):
 	eclipse_cdt_discovery = 'eclipse-cdt-discovery' in options
 
 def exec_subprocess(args, env = None, cwd = None):
-	if __debug__ and is_debug: debug('exec: ' + str(cwd) + ' ' + str(env) + ' ' + str(args))
-	if eclipse_cdt_discovery: print >> sys.stdout, 'make: Entering directory `' + str(cwd) + "'\n" + ' '.join(args)
-	return subprocess.call(
+	cwd = str(cwd)
+	if __debug__ and is_debug: debug('exec: ' + cwd + ' ' + str(env) + ' ' + str(args))
+	if eclipse_cdt_discovery: print >> sys.stdout, 'make: Entering directory `' + cwd + "'\n" + ' '.join(args)
+	r = subprocess.call(
 		args = args,
 		bufsize = -1,
 		env = env,
 		cwd = cwd
 	)
+	if eclipse_cdt_discovery: print >> sys.stdout, 'make: Leaving directory `' + cwd + "'"
+	return r
 
 def exec_subprocess_pipe(args, input = None, env = None, cwd = None, silent = False):
 	if __debug__ and is_debug: debug('exec: pipe: ' + str(cwd) + ' ' + str(env) + ' ' + str(args))
