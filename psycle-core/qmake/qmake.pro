@@ -60,7 +60,6 @@ sources_or_headers = \
 	$$PSYCLE_CORE_DIR/src/psycle/core/sequencer \
 	$$PSYCLE_CORE_DIR/src/psycle/core/signalslib \
 	$$PSYCLE_CORE_DIR/src/psycle/core/singlepattern \
-	$$PSYCLE_CORE_DIR/src/psycle/core/sequencer \
 	$$PSYCLE_CORE_DIR/src/psycle/core/song \
 	$$PSYCLE_CORE_DIR/src/psycle/core/songserializer \
 	$$PSYCLE_CORE_DIR/src/psycle/core/timesignature \
