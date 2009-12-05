@@ -251,10 +251,6 @@
 					>
 				</File>
 				<File
-					RelativePath="src\psycle\core\cstdint.h"
-					>
-				</File>
-				<File
 					RelativePath="src\psycle\core\eventdriver.cpp"
 					>
 				</File>
