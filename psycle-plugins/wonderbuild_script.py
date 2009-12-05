@@ -39,12 +39,24 @@ class Wonderbuild(ScriptTask):
 		cfg = common.cfg.new_or_clone()
 
 		from wonderbuild import UserReadableException
-		from wonderbuild.cxx_tool_chain import ModTask
+		from wonderbuild.cxx_tool_chain import ModTask, BuildCheckTask
 		from wonderbuild.std_checks.dlfcn import DlfcnCheckTask
 		from wonderbuild.install import InstallTask
 
 		check_cfg = cfg.clone()
 		dlfcn = DlfcnCheckTask.shared(check_cfg)
+
+		class StkCheckTask(BuildCheckTask):
+			@staticmethod
+			def shared_uid(*args, **kw): return 'stk'
+
+			def __init__(self, base_cfg): BuildCheckTask.__init__(self, base_cfg, self.shared_uid())
+
+			def apply_to(self, cfg): cfg.libs.extend(['stk', 'asound', 'jack']) # stk uses alsa and jack!
+
+			@property
+			def source_text(self): return '#include <stk/Stk.h>'
+		stk = StkCheckTask.shared(check_cfg)
 
 		class UniformMod(ModTask):
 			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):
@@ -187,5 +199,11 @@ class Wonderbuild(ScriptTask):
 		if False: # [bohan] i haven't found this one listed in the closed-source dir, but i can't find its sources either!
 			guido_volume = UniformMod(n + 'guido-volume', p / '?????!!!!!!!!')
 		
-		for x in sched_ctx.parallel_wait(dlfcn): yield x
+		for x in sched_ctx.parallel_wait(dlfcn, stk): yield x
+
+		if stk:
+			#stk_plucked = UniformMod(n + 'stk-plucked', p / 'stk' / 'stk.plucked', deps=(stk,))
+			stk_rev = UniformMod(n + 'stk-rev', p / 'stk' / 'stk.reverbs', deps=(stk,))
+			stk_shakers = UniformMod(n + 'stk-shakers', p / 'stk' / 'stk.shakers', deps=(stk,))
+
 		if dlfcn: psycle_plugin_check = UniformMod('psycle-plugin-check', src_dir / 'psycle' / 'plugin_check', kind=ModTask.Kinds.PROG)
