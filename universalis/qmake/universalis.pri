@@ -12,9 +12,6 @@ isEmpty(universalis_included) {
 	INCLUDEPATH *= $$UNIVERSALIS_DIR/src $$UNIVERSALIS_DIR/src/universalis/stdlib/future_std_include
 	DEPENDPATH  *= $$UNIVERSALIS_DIR/src $$UNIVERSALIS_DIR/src/universalis/stdlib/future_std_include
 
-	INCLUDEPATH *= $$UNIVERSALIS_DIR/qmake/src
-	DEPENDPATH  *= $$UNIVERSALIS_DIR/qmake/src
-
 	!contains(TARGET, universalis) {
 		CONFIG *= link_prl
 		LIBPATH *= $$UNIVERSALIS_BUILD_DIR

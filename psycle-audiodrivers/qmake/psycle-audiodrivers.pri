@@ -9,24 +9,26 @@ isEmpty(psycle_audiodrivers_included) {
 
 		system(pkg-config --exists alsa) {
 			message( "pkg-config thinks alsa libs are available..." )
+			PKGCONFIG *= alsa 
 			DEFINES *= PSYCLE__ALSA_AVAILABLE # This is used in the source to determine when to include alsa-specific things.
 		}
 
 		system(pkg-config --exists jack) {
 			message( "pkg-config thinks jack libs are available..." )
+			PKGCONFIG *= jack 
 			DEFINES *= PSYCLE__JACK_AVAILABLE # This is used in the source to determine when to include jack-specific things.
 		}
 
 		system(pkg-config --exists esound) {
 			message( "pkg-config thinks esound libs are available..." )
+			PKGCONFIG *= esound
 			DEFINES *= PSYCLE__ESOUND_AVAILABLE # This is used in the source to determine when to include esound-specific things.
 		}
 
-		false { # gstreamer output is unfinished (we could rip the code from freepsycle, which has it complete)
-			system(pkg-config --exists gstreamer) {
-				message( "pkg-config thinks gstreamer libs are available..." )
-				DEFINES *= PSYCLE__GSTREAMER_AVAILABLE # This is used in the source to determine when to include gstreamer-specific things.
-			}
+		system(pkg-config --exists gstreamer-0.10 gstreamer-plugins-base-0.10) {
+			message( "pkg-config thinks gstreamer libs are available..." )
+			PKGCONFIG *= gstreamer-0.10 gstreamer-plugins-base-0.10
+			DEFINES *= PSYCLE__GSTREAMER_AVAILABLE # This is used in the source to determine when to include gstreamer-specific things.
 		}
 
 		false { # note: the net audio output driver is probably not (well) polished/tested anyway. pulse through alsa is a good alternative.

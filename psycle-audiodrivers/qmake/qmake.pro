@@ -26,19 +26,15 @@ sources_or_headers = \
 
 unix {
 	contains(DEFINES, PSYCLE__ALSA_AVAILABLE) {
-		PKGCONFIG *= alsa 
 		sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/alsaout
 	}
 	contains(DEFINES, PSYCLE__JACK_AVAILABLE) {
-		PKGCONFIG *= jack 
 		sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/jackout
 	}
 	contains(DEFINES, PSYCLE__ESOUND_AVAILABLE) {
-		PKGCONFIG *= esound
 		sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/esoundout
 	}
 	contains(DEFINES, PSYCLE__GSTREAMER_AVAILABLE) {
-		PKGCONFIG *= gstreamer
 		sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/gstreamerout
 	}
 	contains(DEFINES, PSYCLE__NET_AUDIO_AVAILABLE) {
