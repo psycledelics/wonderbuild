@@ -52,6 +52,9 @@ class Wonderbuild(ScriptTask):
 		pthread = PThreadCheckTask.shared(check_cfg)
 		boost = BoostCheckTask.shared(check_cfg, (1, 33), ('signals', 'thread', 'filesystem', 'date_time'))
 
+		cfg.defines['UNIVERSALIS__META__PACKAGE__NAME'] = '"psycle"'
+		cfg.defines['UNIVERSALIS__META__PACKAGE__VERSION'] = 1
+
 from wonderbuild.cxx_tool_chain import PreCompileTasks
 
 class Pch(PreCompileTasks):

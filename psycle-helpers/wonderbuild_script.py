@@ -103,6 +103,8 @@ class Wonderbuild(ScriptTask):
 
 			def do_mod_phase(self):
 				self.cfg.include_paths.appendleft(src_dir)
+				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
+				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
 				for s in (src_dir / 'psycle' / 'helpers').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo', 'math')): self.sources.append(s)
 
 			def apply_cxx_to(self, cfg):
@@ -139,6 +141,8 @@ class Wonderbuild(ScriptTask):
 
 			def do_mod_phase(self):
 				self.cfg.include_paths.appendleft(src_dir)
+				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
+				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
 				self.sources.append(src_dir / 'unit_tests.cpp')
 
 		self._math_mod_dep_phases = helpers_math = HelpersMathMod()

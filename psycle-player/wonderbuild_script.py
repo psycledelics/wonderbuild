@@ -57,6 +57,8 @@ class Wonderbuild(ScriptTask):
 				for x in ModTask.__call__(self, sched_ctx): yield x
 
 			def do_mod_phase(self):
+				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
+				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
 				if xml: self.cfg.defines['PSYCLE__LIBXMLPP_AVAILABLE'] = None
 				self.cfg.include_paths.appendleft(src_dir)
 				for s in (src_dir / 'psycle' / 'player').find_iter(

@@ -123,7 +123,7 @@ class BuildCfg(ClientCfg, Task):
 			for k in sorted(self.defines.iterkeys()):
 				sig.update(k)
 				v = self.defines[k]
-				if v is not None: sig.update(v)
+				if v is not None: sig.update(repr(str(v))[1:-1])
 			for p in self.include_paths: sig.update(p.abs_path)
 			if self.pch is not None: sig.update(self.pch.sig)
 			for i in self.includes: sig.update(i.sig)

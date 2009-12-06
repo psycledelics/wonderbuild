@@ -112,6 +112,8 @@ class Wonderbuild(ScriptTask):
 			
 			def do_mod_phase(self):
 				self.cfg.defines['UNIVERSALIS__SOURCE'] = self.cfg.shared and '1' or '-1'
+				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
+				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
 				self.cfg.include_paths.extend([src_dir, src_dir / 'universalis' / 'stdlib' / 'future_std_include'])
 				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 			
@@ -154,6 +156,8 @@ class Wonderbuild(ScriptTask):
 
 			def do_mod_phase(self):
 				self.cfg.include_paths.appendleft(src_dir)
+				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
+				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
 				self.sources.append(src_dir / 'unit_tests.cpp')
 		
 		common._pch = pch = Pch() # overrides the common pch
