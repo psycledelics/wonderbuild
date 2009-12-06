@@ -61,7 +61,7 @@ class Wonderbuild(ScriptTask):
 				self.private_deps = [pch.lib_task]
 				self.public_deps = [helpers]
 				req = self.public_deps + self.private_deps
-				opt = [alsa, jack, esound, dsound, winmm] # gstreamer, netaudio, asio
+				opt = [alsa, jack, esound, dsound, winmm, gstreamer] # netaudio, asio
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.result = min(bool(r) for r in req)
 				self.public_deps += [o for o in opt if o]
@@ -75,8 +75,8 @@ class Wonderbuild(ScriptTask):
 				if esound: d['PSYCLE__ESOUND_AVAILABLE'] = None
 				if dsound: d['PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE'] = None
 				if winmm:  d['PSYCLE__MICROSOFT_MME_AVAILABLE'] = None
+				if gstreamer: d['PSYCLE__GSTREAMER_AVAILABLE'] = None
 				if False:
-					if gstreamer: d['PSYCLE__GSTREAMER_AVAILABLE'] = None
 					if netaudio:  d['PSYCLE__NET_AUDIO_AVAILABLE'] = None
 					if asio:      d['PSYCLE__STEINBERG_ASIO_AVAILABLE'] = None
 			
@@ -92,8 +92,8 @@ class Wonderbuild(ScriptTask):
 				if esound: s.append(dir / 'esoundout.cpp')
 				if dsound: s.append(dir / 'microsoftdirectsoundout.cpp')
 				if winmm:  s.append(dir / 'microsoftmmewaveout.cpp')
+				if gstreamer: s.append(dir / 'gstreamerout.cpp')
 				if False:
-					if gstreamer: s.append(dir / 'gstreamerout.cpp')
 					if netaudio:  s.append(dir / 'netaudioout.cpp')
 					if asio:      s.append(dir / 'asioout.cpp')
 
@@ -122,8 +122,8 @@ class Wonderbuild(ScriptTask):
 						if esound: s.append(dir / 'esoundout.h')
 						if dsound: s.append(dir / 'microsoftdirectsoundout.h')
 						if winmm:  s.append(dir / 'microsoftmmewaveout.h')
+						if gstreamer: s.append(dir / 'gstreamerout.h')
 						if False:
-							if gstreamer: s.append(dir / 'gstreamerout.h')
 							if netaudio:  s.append(dir / 'netaudioout.h')
 							if asio:      s.append(dir / 'asioout.h')
 						return s
