@@ -270,7 +270,7 @@
 						>
 					</File>
 					<File
-						RelativePath="src\psycle\helpers\math\fast_unspecified_round_to_integer.hpp"
+						RelativePath="src\psycle\helpers\math\rint.hpp"
 						>
 					</File>
 					<File

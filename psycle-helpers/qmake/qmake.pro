@@ -34,7 +34,7 @@ sources_or_headers = \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/clip \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/erase_all_nans_infinities_and_denormals \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/erase_denormals \
-	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/fast_unspecified_round_to_integer \
+	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/rint \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/log \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/math \
