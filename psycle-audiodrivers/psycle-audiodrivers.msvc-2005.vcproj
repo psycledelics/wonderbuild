@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="psycle-audiodrivers"
 	ProjectGUID="{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}"
+	RootNamespace="psycle-audiodrivers"
 	>
 	<Platforms>
 		<Platform
@@ -224,7 +225,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
-			RelativePathToProject="..\psycle-helpers\psycle-helpers.msvc-2005.vcproj"
+			RelativePathToProject="..\..\psycle-helpers\psycle-helpers.msvc-2005.vcproj"
 		/>
 	</References>
 	<Files>
