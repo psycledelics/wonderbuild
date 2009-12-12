@@ -244,6 +244,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\psycle\audiodrivers\asiointerface.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\audiodrivers\asiointerface.h"
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\audiodrivers\audiodriver.cpp"
 					>
 				</File>
