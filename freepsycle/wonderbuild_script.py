@@ -145,7 +145,7 @@ class Wonderbuild(ScriptTask):
 				deps=(resource, stream, alsa))
 			if default_output_impl is None: default_output_impl = alsa_output
 
-		if jack:
+		if jack and False: # unfinished
 			jack_output = UniformMod('freepsycle-plugin-output-jack',
 				src_dir / 'psycle' / 'plugins' / 'outputs' / 'jack',
 				deps=(resource, stream, jack))
