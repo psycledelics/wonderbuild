@@ -583,4 +583,4 @@ else
 }
 
 # TODO
-# xxx.cpp:(.text._ZN3psy4core6Player4WorkEPvRi[psy::core::Player::Work(void*, int&)]+0x1b): undefined reference to `psy::core::Player::Work(int)'
+# xxx.cpp:(.text._ZN3psy4core6Player4WorkEPvRi[psycle::core::Player::Work(void*, int&)]+0x1b): undefined reference to `psycle::core::Player::Work(int)'
