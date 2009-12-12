@@ -247,10 +247,6 @@
 					>
 				</File>
 				<File
-					RelativePath="src\psycle\helpers\ring_buffer.hpp"
-					>
-				</File>
-				<File
 					RelativePath="src\psycle\helpers\scale.hpp"
 					>
 				</File>

@@ -49,7 +49,6 @@ sources_or_headers = \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/msriff \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/riff \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/riffwave \
-	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/ring_buffer \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/scale
 
 SOURCES_PRESERVE_PATH += $$sources(sources_or_headers)
