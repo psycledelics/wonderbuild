@@ -674,6 +674,22 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\psycle\host\Command.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\Command.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\CommandManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\CommandManager.hpp"
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\host\DummyGui.cpp"
 					>
 				</File>
@@ -1256,6 +1272,18 @@
 						RelativePath="src\psycle\host\TransformPatternDlg.hpp"
 						>
 					</File>
+					<Filter
+						Name="Commands"
+						>
+						<File
+							RelativePath=".\src\psycle\host\EnterNoteCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\EnterNoteCommand.hpp"
+							>
+						</File>
+					</Filter>
 				</Filter>
 				<Filter
 					Name="monitors"
