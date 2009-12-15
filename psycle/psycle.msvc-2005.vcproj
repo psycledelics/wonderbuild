@@ -1276,11 +1276,11 @@
 						Name="Commands"
 						>
 						<File
-							RelativePath=".\src\psycle\host\EnterNoteCommand.cpp"
+							RelativePath=".\src\psycle\host\EnterDataCommand.cpp"
 							>
 						</File>
 						<File
-							RelativePath=".\src\psycle\host\EnterNoteCommand.hpp"
+							RelativePath=".\src\psycle\host\EnterDataCommand.hpp"
 							>
 						</File>
 					</Filter>
