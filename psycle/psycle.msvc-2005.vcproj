@@ -1276,6 +1276,14 @@
 						Name="Commands"
 						>
 						<File
+							RelativePath=".\src\psycle\host\DeleteBlockCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\DeleteBlockCommand.hpp"
+							>
+						</File>
+						<File
 							RelativePath=".\src\psycle\host\EnterDataCommand.cpp"
 							>
 						</File>
