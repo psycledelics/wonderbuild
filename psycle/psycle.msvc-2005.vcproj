@@ -1291,6 +1291,14 @@
 							RelativePath=".\src\psycle\host\EnterDataCommand.hpp"
 							>
 						</File>
+						<File
+							RelativePath=".\src\psycle\host\PasteBlockCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\PasteBlockCommand.hpp"
+							>
+						</File>
 					</Filter>
 				</Filter>
 				<Filter
