@@ -1276,6 +1276,22 @@
 						Name="Commands"
 						>
 						<File
+							RelativePath=".\src\psycle\host\BlockTransposeCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\BlockTransposeCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\ClearCurrCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\ClearCurrCommand.hpp"
+							>
+						</File>
+						<File
 							RelativePath=".\src\psycle\host\DeleteBlockCommand.cpp"
 							>
 						</File>
@@ -1284,11 +1300,27 @@
 							>
 						</File>
 						<File
+							RelativePath=".\src\psycle\host\DeleteCurrCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\DeleteCurrCommand.hpp"
+							>
+						</File>
+						<File
 							RelativePath=".\src\psycle\host\EnterDataCommand.cpp"
 							>
 						</File>
 						<File
 							RelativePath=".\src\psycle\host\EnterDataCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\InsertCurrCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\InsertCurrCommand.hpp"
 							>
 						</File>
 						<File
