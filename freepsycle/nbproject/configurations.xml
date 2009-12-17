@@ -1,0 +1,2028 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="62">
+  <logicalFolder name="root" displayName="root" projectFiles="true">
+    <df name="psycle-top-src-dir" root="..">
+      <df name="build-systems">
+        <df name="eclipse">
+        </df>
+        <df name="msvc">
+          <df name="projects">
+            <df name="boost">
+            </df>
+            <df name="direct-sound">
+            </df>
+            <df name="pre-compiled-headers">
+              <in>pre_compiled_headers.cpp</in>
+            </df>
+            <df name="zlib">
+            </df>
+          </df>
+          <df name="properties">
+          </df>
+        </df>
+        <df name="mswindows-installer">
+        </df>
+        <df name="netbeans">
+        </df>
+        <df name="qmake">
+        </df>
+        <df name="src">
+          <df name="pre-compiled">
+            <in>boost.private.hpp</in>
+            <in>microsoft.private.hpp</in>
+            <in>posix.private.hpp</in>
+            <in>standard.private.hpp</in>
+          </df>
+          <in>forced-include.private.hpp</in>
+          <in>pre-compiled.private.hpp</in>
+        </df>
+        <df name="wonderbuild">
+          <df name="wonderbuild">
+            <df name="cxx_tool_chain">
+            </df>
+            <df name="std_checks">
+            </df>
+          </df>
+        </df>
+      </df>
+      <df name="buildbot">
+        <df name="master">
+          <df name="psycle-trunk">
+          </df>
+          <df name="public_html">
+          </df>
+        </df>
+        <df name="slaves">
+          <df name="alk.retropaganda.info">
+            <df name="info">
+            </df>
+            <df name="psycle-trunk">
+            </df>
+          </df>
+          <df name="anechoid.retropaganda.info--sid-chroot">
+            <df name="info">
+            </df>
+            <df name="psycle-trunk">
+              <df name="dummy">
+              </df>
+              <df name="freepsycle">
+              </df>
+              <df name="psycle-core">
+              </df>
+              <df name="psycle-helpers">
+              </df>
+              <df name="psycle-player">
+              </df>
+              <df name="psycle-plugins">
+              </df>
+              <df name="qpsycle">
+              </df>
+              <df name="universalis">
+              </df>
+            </df>
+            <df name="psycle-trunk.shared">
+            </df>
+          </df>
+          <df name="bohan.retropaganda.info">
+            <df name="info">
+            </df>
+          </df>
+          <df name="factoid.retropaganda.info--edgy-chroot">
+            <df name="info">
+            </df>
+            <df name="psycle-trunk">
+            </df>
+          </df>
+          <df name="factoid.retropaganda.info--sid-chroot">
+            <df name="info">
+            </df>
+            <df name="psycle-trunk">
+              <df name="dummy">
+              </df>
+              <df name="freepsycle">
+              </df>
+              <df name="psycle-core">
+              </df>
+              <df name="psycle-helpers">
+              </df>
+              <df name="psycle-player">
+              </df>
+              <df name="psycle-plugins">
+              </df>
+              <df name="qpsycle">
+              </df>
+              <df name="universalis">
+              </df>
+            </df>
+            <df name="psycle-trunk.shared">
+            </df>
+          </df>
+          <df name="winux.retropaganda.info">
+            <df name="info">
+            </df>
+            <df name="psycle-trunk">
+            </df>
+          </df>
+        </df>
+      </df>
+      <df name="diversalis">
+        <df name="src">
+          <df name="diversalis">
+            <df name="detail">
+              <in>configuration.hpp</in>
+              <in>project.hpp</in>
+              <in>stringized.hpp</in>
+            </df>
+            <in>compiler.hpp</in>
+            <in>cpu.hpp</in>
+            <in>diversalis.hpp</in>
+            <in>os.hpp</in>
+            <in>stdlib.hpp</in>
+          </df>
+        </df>
+      </df>
+      <df name="external-packages">
+        <df name="7za">
+        </df>
+        <df name="asio-2.1">
+          <df name="common">
+            <in>asio.cpp</in>
+            <in>asio.h</in>
+            <in>asiodrvr.cpp</in>
+            <in>asiodrvr.h</in>
+            <in>asiosys.h</in>
+            <in>combase.cpp</in>
+            <in>combase.h</in>
+            <in>debugmessage.cpp</in>
+            <in>dllentry.cpp</in>
+            <in>iasiodrv.h</in>
+            <in>register.cpp</in>
+            <in>wxdebug.h</in>
+          </df>
+          <df name="driver">
+            <df name="asiosample">
+              <df name="asiosample">
+              </df>
+              <in>asiosmpl.cpp</in>
+              <in>asiosmpl.h</in>
+              <in>macnanosecs.cpp</in>
+              <in>mactimer.cpp</in>
+              <in>makesamp.cpp</in>
+              <in>wintimer.cpp</in>
+            </df>
+          </df>
+          <df name="host">
+            <df name="mac">
+              <in>asioshlib.cpp</in>
+              <in>codefragments.cpp</in>
+              <in>codefragments.hpp</in>
+            </df>
+            <df name="pc">
+              <in>asiolist.cpp</in>
+              <in>asiolist.h</in>
+            </df>
+            <df name="sample">
+              <in>hostsample.cpp</in>
+            </df>
+            <in>ASIOConvertSamples.cpp</in>
+            <in>ASIOConvertSamples.h</in>
+            <in>asiodrivers.cpp</in>
+            <in>asiodrivers.h</in>
+            <in>ginclude.h</in>
+          </df>
+        </df>
+        <df name="boost-1.33.1">
+        </df>
+        <df name="boost-1.35.0">
+        </df>
+        <df name="boost-1.38.0">
+        </df>
+        <df name="dsound-9">
+          <df name="include">
+            <in>dsound.h</in>
+          </df>
+          <df name="lib-mswindows-mingw-cxxabi-1002">
+          </df>
+          <df name="lib-mswindows-msvc-cxxabi">
+          </df>
+        </df>
+        <df name="fluidsynth">
+          <in>audio.h</in>
+          <in>config.h</in>
+          <in>config_macos.h</in>
+          <in>config_macosx.h</in>
+          <in>config_macosx_pb.h</in>
+          <in>config_win32.h</in>
+          <in>event.h</in>
+          <in>fluid_adriver.c</in>
+          <in>fluid_adriver.h</in>
+          <in>fluid_alsa.c</in>
+          <in>fluid_alsa2.c</in>
+          <in>fluid_aufile.c</in>
+          <in>fluid_chan.c</in>
+          <in>fluid_chan.h</in>
+          <in>fluid_chorus.c</in>
+          <in>fluid_chorus.h</in>
+          <in>fluid_cmd.c</in>
+          <in>fluid_cmd.h</in>
+          <in>fluid_conv.c</in>
+          <in>fluid_conv.h</in>
+          <in>fluid_coreaudio.c</in>
+          <in>fluid_defsfont.c</in>
+          <in>fluid_defsfont.h</in>
+          <in>fluid_dll.c</in>
+          <in>fluid_dsound.c</in>
+          <in>fluid_dsp_core.c</in>
+          <in>fluid_dsp_float.c</in>
+          <in>fluid_dsp_simple.c</in>
+          <in>fluid_dsp_sse.c</in>
+          <in>fluid_event.c</in>
+          <in>fluid_event_priv.h</in>
+          <in>fluid_gen.c</in>
+          <in>fluid_gen.h</in>
+          <in>fluid_hash.c</in>
+          <in>fluid_hash.h</in>
+          <in>fluid_io.c</in>
+          <in>fluid_io.h</in>
+          <in>fluid_jack.c</in>
+          <in>fluid_ladspa.c</in>
+          <in>fluid_ladspa.h</in>
+          <in>fluid_lash.c</in>
+          <in>fluid_lash.h</in>
+          <in>fluid_list.c</in>
+          <in>fluid_list.h</in>
+          <in>fluid_mdriver.c</in>
+          <in>fluid_mdriver.h</in>
+          <in>fluid_midi.c</in>
+          <in>fluid_midi.h</in>
+          <in>fluid_midi_router.c</in>
+          <in>fluid_midi_router.h</in>
+          <in>fluid_midishare.c</in>
+          <in>fluid_mod.c</in>
+          <in>fluid_mod.h</in>
+          <in>fluid_oss.c</in>
+          <in>fluid_phase.h</in>
+          <in>fluid_portaudio.c</in>
+          <in>fluid_ramsfont.c</in>
+          <in>fluid_ramsfont.h</in>
+          <in>fluid_rev.c</in>
+          <in>fluid_rev.h</in>
+          <in>fluid_seq.c</in>
+          <in>fluid_seqbind.c</in>
+          <in>fluid_settings.c</in>
+          <in>fluid_settings.h</in>
+          <in>fluid_sfont.h</in>
+          <in>fluid_sndmgr.c</in>
+          <in>fluid_sse.h</in>
+          <in>fluid_strtok.c</in>
+          <in>fluid_strtok.h</in>
+          <in>fluid_synth.c</in>
+          <in>fluid_synth.h</in>
+          <in>fluid_sys.c</in>
+          <in>fluid_sys.h</in>
+          <in>fluid_tuning.c</in>
+          <in>fluid_tuning.h</in>
+          <in>fluid_voice.c</in>
+          <in>fluid_voice.h</in>
+          <in>fluid_winmidi.c</in>
+          <in>fluidsynth.c</in>
+          <in>fluidsynth.h</in>
+          <in>fluidsynth_priv.h</in>
+          <in>gen.h</in>
+          <in>log.h</in>
+          <in>midi.h</in>
+          <in>misc.h</in>
+          <in>mod.h</in>
+          <in>ramsfont.h</in>
+          <in>seq.h</in>
+          <in>seqbind.h</in>
+          <in>settings.h</in>
+          <in>sfont.h</in>
+          <in>shell.h</in>
+          <in>synth.h</in>
+          <in>types.h</in>
+          <in>version.h</in>
+          <in>voice.h</in>
+        </df>
+        <df name="foobar2000">
+          <in>component_client.cpp</in>
+        </df>
+        <df name="libjdkmidi">
+        </df>
+        <df name="stk">
+          <in>ADSR.cpp</in>
+          <in>ADSR.h</in>
+          <in>BiQuad.cpp</in>
+          <in>BiQuad.h</in>
+          <in>Delay.cpp</in>
+          <in>Delay.h</in>
+          <in>DelayA.cpp</in>
+          <in>DelayA.h</in>
+          <in>DelayL.cpp</in>
+          <in>DelayL.h</in>
+          <in>Effect.cpp</in>
+          <in>Effect.h</in>
+          <in>Envelope.cpp</in>
+          <in>Envelope.h</in>
+          <in>Filter.cpp</in>
+          <in>Filter.h</in>
+          <in>Generator.cpp</in>
+          <in>Generator.h</in>
+          <in>Instrmnt.cpp</in>
+          <in>Instrmnt.h</in>
+          <in>JCRev.cpp</in>
+          <in>JCRev.h</in>
+          <in>NRev.cpp</in>
+          <in>NRev.h</in>
+          <in>Noise.cpp</in>
+          <in>Noise.h</in>
+          <in>OnePole.cpp</in>
+          <in>OnePole.h</in>
+          <in>OneZero.cpp</in>
+          <in>OneZero.h</in>
+          <in>PRCRev.cpp</in>
+          <in>PRCRev.h</in>
+          <in>Plucked.cpp</in>
+          <in>Plucked.h</in>
+          <in>Shakers.cpp</in>
+          <in>Shakers.h</in>
+          <in>Skini.cpp</in>
+          <in>Skini.h</in>
+          <in>stk.cpp</in>
+          <in>stk.h</in>
+        </df>
+        <df name="stk-4.2.0">
+          <df name="bin">
+          </df>
+          <df name="doc">
+            <df name="doxygen">
+              <df name="images">
+              </df>
+            </df>
+            <df name="html">
+              <df name="Papers">
+              </df>
+              <df name="tutorial">
+              </df>
+            </df>
+          </df>
+          <df name="include">
+            <in>ADSR.h</in>
+            <in>Asymp.h</in>
+            <in>BandedWG.h</in>
+            <in>BeeThree.h</in>
+            <in>BiQuad.h</in>
+            <in>BlowBotl.h</in>
+            <in>BlowHole.h</in>
+            <in>BowTable.h</in>
+            <in>Bowed.h</in>
+            <in>Brass.h</in>
+            <in>Chorus.h</in>
+            <in>Clarinet.h</in>
+            <in>Delay.h</in>
+            <in>DelayA.h</in>
+            <in>DelayL.h</in>
+            <in>Drummer.h</in>
+            <in>Echo.h</in>
+            <in>Effect.h</in>
+            <in>Envelope.h</in>
+            <in>FM.h</in>
+            <in>FMVoices.h</in>
+            <in>Filter.h</in>
+            <in>Flute.h</in>
+            <in>FormSwep.h</in>
+            <in>Function.h</in>
+            <in>Generator.h</in>
+            <in>HevyMetl.h</in>
+            <in>Instrmnt.h</in>
+            <in>JCRev.h</in>
+            <in>JetTable.h</in>
+            <in>Mandolin.h</in>
+            <in>Mesh2D.h</in>
+            <in>Messager.h</in>
+            <in>MidiFileIn.h</in>
+            <in>Modal.h</in>
+            <in>ModalBar.h</in>
+            <in>Modulate.h</in>
+            <in>Moog.h</in>
+            <in>Mutex.h</in>
+            <in>NRev.h</in>
+            <in>Noise.h</in>
+            <in>OnePole.h</in>
+            <in>OneZero.h</in>
+            <in>PRCRev.h</in>
+            <in>PercFlut.h</in>
+            <in>Phonemes.h</in>
+            <in>PitShift.h</in>
+            <in>PluckTwo.h</in>
+            <in>Plucked.h</in>
+            <in>PoleZero.h</in>
+            <in>ReedTable.h</in>
+            <in>Resonate.h</in>
+            <in>Rhodey.h</in>
+            <in>RtAudio.h</in>
+            <in>RtDuplex.h</in>
+            <in>RtError.h</in>
+            <in>RtMidi.h</in>
+            <in>RtWvIn.h</in>
+            <in>RtWvOut.h</in>
+            <in>Sampler.h</in>
+            <in>Saxofony.h</in>
+            <in>Shakers.h</in>
+            <in>Simple.h</in>
+            <in>SingWave.h</in>
+            <in>Sitar.h</in>
+            <in>Skini.h</in>
+            <in>Socket.h</in>
+            <in>Sphere.h</in>
+            <in>StifKarp.h</in>
+            <in>Stk.h</in>
+            <in>SubNoise.h</in>
+            <in>Table.h</in>
+            <in>TcpWvIn.h</in>
+            <in>TcpWvOut.h</in>
+            <in>Thread.h</in>
+            <in>TubeBell.h</in>
+            <in>TwoPole.h</in>
+            <in>TwoZero.h</in>
+            <in>Vector3D.h</in>
+            <in>VoicForm.h</in>
+            <in>Voicer.h</in>
+            <in>WaveLoop.h</in>
+            <in>Whistle.h</in>
+            <in>Wurley.h</in>
+            <in>WvIn.h</in>
+            <in>WvOut.h</in>
+          </df>
+          <df name="projects">
+            <df name="demo">
+              <df name="Debug">
+              </df>
+              <df name="Release">
+              </df>
+              <df name="scores">
+              </df>
+              <df name="tcl">
+                <df name="bitmaps">
+                </df>
+              </df>
+              <in>Md2Skini.cpp</in>
+              <in>demo.cpp</in>
+              <in>utilities.cpp</in>
+              <in>utilities.h</in>
+            </df>
+            <df name="effects">
+              <df name="Debug">
+              </df>
+              <df name="Release">
+              </df>
+              <df name="tcl">
+              </df>
+              <in>effects.cpp</in>
+            </df>
+            <df name="examples">
+              <df name="Debug">
+              </df>
+              <df name="midifiles">
+              </df>
+              <df name="rawwaves">
+              </df>
+              <df name="Release">
+              </df>
+              <df name="scores">
+              </df>
+              <in>bethree.cpp</in>
+              <in>controlbee.cpp</in>
+              <in>crtsine.cpp</in>
+              <in>foursine.cpp</in>
+              <in>io.cpp</in>
+              <in>play.cpp</in>
+              <in>playsmf.cpp</in>
+              <in>record.cpp</in>
+              <in>rtsine.cpp</in>
+              <in>sine.cpp</in>
+              <in>sineosc.cpp</in>
+              <in>tcpIn.cpp</in>
+              <in>tcpOut.cpp</in>
+              <in>threebees.cpp</in>
+            </df>
+            <df name="ragamatic">
+              <df name="Debug">
+              </df>
+              <df name="rawwaves">
+              </df>
+              <df name="Release">
+              </df>
+              <df name="tcl">
+                <df name="bitmaps">
+                </df>
+              </df>
+              <in>Drone.cpp</in>
+              <in>Drone.h</in>
+              <in>Tabla.cpp</in>
+              <in>Tabla.h</in>
+              <in>VoicDrum.cpp</in>
+              <in>VoicDrum.h</in>
+              <in>ragamat.cpp</in>
+            </df>
+          </df>
+          <df name="rawwaves">
+            <in>makefunc.c</in>
+            <in>makemidi.c</in>
+            <in>makewavs.c</in>
+          </df>
+          <df name="src">
+            <df name="asio">
+              <in>asio.cpp</in>
+              <in>asio.h</in>
+              <in>asiodrivers.cpp</in>
+              <in>asiodrivers.h</in>
+              <in>asiodrvr.h</in>
+              <in>asiolist.cpp</in>
+              <in>asiolist.h</in>
+              <in>asiosys.h</in>
+              <in>ginclude.h</in>
+              <in>iasiodrv.h</in>
+            </df>
+            <df name="Debug">
+            </df>
+            <df name="Release">
+            </df>
+            <in>ADSR.cpp</in>
+            <in>Asymp.cpp</in>
+            <in>BandedWG.cpp</in>
+            <in>BeeThree.cpp</in>
+            <in>BiQuad.cpp</in>
+            <in>BlowBotl.cpp</in>
+            <in>BlowHole.cpp</in>
+            <in>BowTable.cpp</in>
+            <in>Bowed.cpp</in>
+            <in>Brass.cpp</in>
+            <in>Chorus.cpp</in>
+            <in>Clarinet.cpp</in>
+            <in>Delay.cpp</in>
+            <in>DelayA.cpp</in>
+            <in>DelayL.cpp</in>
+            <in>Drummer.cpp</in>
+            <in>Echo.cpp</in>
+            <in>Effect.cpp</in>
+            <in>Envelope.cpp</in>
+            <in>FM.cpp</in>
+            <in>FMVoices.cpp</in>
+            <in>Filter.cpp</in>
+            <in>Flute.cpp</in>
+            <in>FormSwep.cpp</in>
+            <in>Function.cpp</in>
+            <in>Generator.cpp</in>
+            <in>HevyMetl.cpp</in>
+            <in>Instrmnt.cpp</in>
+            <in>JCRev.cpp</in>
+            <in>JetTable.cpp</in>
+            <in>Mandolin.cpp</in>
+            <in>Mesh2D.cpp</in>
+            <in>Messager.cpp</in>
+            <in>MidiFileIn.cpp</in>
+            <in>Modal.cpp</in>
+            <in>ModalBar.cpp</in>
+            <in>Modulate.cpp</in>
+            <in>Moog.cpp</in>
+            <in>Mutex.cpp</in>
+            <in>NRev.cpp</in>
+            <in>Noise.cpp</in>
+            <in>OnePole.cpp</in>
+            <in>OneZero.cpp</in>
+            <in>PRCRev.cpp</in>
+            <in>PercFlut.cpp</in>
+            <in>Phonemes.cpp</in>
+            <in>PitShift.cpp</in>
+            <in>PluckTwo.cpp</in>
+            <in>Plucked.cpp</in>
+            <in>PoleZero.cpp</in>
+            <in>ReedTable.cpp</in>
+            <in>Resonate.cpp</in>
+            <in>Rhodey.cpp</in>
+            <in>RtAudio.cpp</in>
+            <in>RtDuplex.cpp</in>
+            <in>RtMidi.cpp</in>
+            <in>RtWvIn.cpp</in>
+            <in>RtWvOut.cpp</in>
+            <in>Sampler.cpp</in>
+            <in>Saxofony.cpp</in>
+            <in>Shakers.cpp</in>
+            <in>Simple.cpp</in>
+            <in>SingWave.cpp</in>
+            <in>Sitar.cpp</in>
+            <in>Skini.cpp</in>
+            <in>Socket.cpp</in>
+            <in>Sphere.cpp</in>
+            <in>StifKarp.cpp</in>
+            <in>Stk.cpp</in>
+            <in>SubNoise.cpp</in>
+            <in>Table.cpp</in>
+            <in>TcpWvIn.cpp</in>
+            <in>TcpWvOut.cpp</in>
+            <in>Thread.cpp</in>
+            <in>TubeBell.cpp</in>
+            <in>TwoPole.cpp</in>
+            <in>TwoZero.cpp</in>
+            <in>Vector3D.cpp</in>
+            <in>VoicForm.cpp</in>
+            <in>Voicer.cpp</in>
+            <in>WaveLoop.cpp</in>
+            <in>Whistle.cpp</in>
+            <in>Wurley.cpp</in>
+            <in>WvIn.cpp</in>
+            <in>WvOut.cpp</in>
+          </df>
+        </df>
+        <df name="vst-2.4">
+          <df name="vst2.x">
+            <in>aeffect.h</in>
+            <in>aeffectx.h</in>
+            <in>vstfxstore.h</in>
+          </df>
+        </df>
+        <df name="winamp-2">
+          <in>in2.h</in>
+          <in>out.h</in>
+        </df>
+        <df name="zlib-1.2.3">
+          <df name="include">
+            <in>zconf.h</in>
+            <in>zlib.h</in>
+          </df>
+          <df name="lib-mswindows-cabi">
+          </df>
+        </df>
+      </df>
+      <df name="freepsycle">
+        <df name="doc">
+        </df>
+        <df name="gnome">
+        </df>
+        <df name="pixmaps">
+        </df>
+        <df name="src">
+          <df name="psycle">
+            <df name="detail">
+              <in>configuration.private.hpp</in>
+              <in>project.hpp</in>
+              <in>project.private.hpp</in>
+            </df>
+            <df name="engine">
+              <in>buffer.cpp</in>
+              <in>buffer.hpp</in>
+              <in>engine.hpp</in>
+              <in>event.hpp</in>
+              <in>exception.hpp</in>
+              <in>forward_declarations.hpp</in>
+              <in>graph.cpp</in>
+              <in>graph.hpp</in>
+              <in>named.hpp</in>
+              <in>reference_counter.hpp</in>
+              <in>sample.hpp</in>
+              <in>sequence.cpp</in>
+              <in>sequence.hpp</in>
+            </df>
+            <df name="front_ends">
+              <df name="gui">
+                <in>color.hpp</in>
+                <in>contraption.cpp</in>
+                <in>contraption.hpp</in>
+                <in>coordinates.hpp</in>
+                <in>forward_declarations.hpp</in>
+                <in>graph.cpp</in>
+                <in>graph.hpp</in>
+                <in>lock.cpp</in>
+                <in>lock.hpp</in>
+                <in>main.cpp</in>
+                <in>main.hpp</in>
+                <in>root.cpp</in>
+                <in>root.hpp</in>
+              </df>
+            </df>
+            <df name="generic">
+              <df name="test">
+                <in>test.cpp</in>
+                <in>test.hpp</in>
+              </df>
+              <in>base.hpp</in>
+              <in>typenames.hpp</in>
+              <in>wrappers.hpp</in>
+            </df>
+            <df name="host">
+              <df name="schedulers">
+                <in>multi_threaded.cpp</in>
+                <in>multi_threaded.hpp</in>
+                <in>single_threaded.cpp</in>
+                <in>single_threaded.hpp</in>
+              </df>
+              <in>forward_declarations.hpp</in>
+              <in>graph.cpp</in>
+              <in>graph.hpp</in>
+              <in>host.cpp</in>
+              <in>host.hpp</in>
+              <in>plugin_resolver.cpp</in>
+              <in>plugin_resolver.hpp</in>
+              <in>scheduler.cpp</in>
+              <in>scheduler.hpp</in>
+            </df>
+            <df name="plugins">
+              <df name="outputs">
+                <df name="todo">
+                  <in>asio.cpp</in>
+                  <in>asio.hpp</in>
+                </df>
+                <in>alsa.cpp</in>
+                <in>alsa.hpp</in>
+                <in>direct_sound.cpp</in>
+                <in>direct_sound.hpp</in>
+                <in>dummy.cpp</in>
+                <in>dummy.hpp</in>
+                <in>gstreamer.cpp</in>
+                <in>gstreamer.hpp</in>
+                <in>jack.cpp</in>
+                <in>jack.hpp</in>
+              </df>
+              <in>additioner.cpp</in>
+              <in>additioner.hpp</in>
+              <in>bipolar_filter.cpp</in>
+              <in>bipolar_filter.hpp</in>
+              <in>decay.cpp</in>
+              <in>decay.hpp</in>
+              <in>multiplier.cpp</in>
+              <in>multiplier.hpp</in>
+              <in>output.cpp</in>
+              <in>output.hpp</in>
+              <in>plugin.hpp</in>
+              <in>resource.cpp</in>
+              <in>resource.hpp</in>
+              <in>sequence.cpp</in>
+              <in>sequence.hpp</in>
+              <in>sine.cpp</in>
+              <in>sine.hpp</in>
+              <in>template.cpp</in>
+              <in>template.hpp</in>
+            </df>
+            <df name="stream">
+              <df name="formats">
+                <df name="riff_wave">
+                  <in>format.cpp</in>
+                  <in>format.hpp</in>
+                </df>
+              </df>
+              <in>format.hpp</in>
+            </df>
+            <df name="tests">
+              <df name="random_notes">
+                <df name="todo">
+                  <in>grammar.cpp</in>
+                </df>
+                <in>main.cpp</in>
+                <in>main.hpp</in>
+              </df>
+            </df>
+            <in>engine.hpp</in>
+            <in>host.hpp</in>
+            <in>paths.cpp</in>
+            <in>paths.hpp</in>
+          </df>
+        </df>
+      </df>
+      <df name="psycle">
+        <df name="doc">
+          <df name="for-end-users">
+            <df name="psycle-midi-2.2b">
+            </df>
+          </df>
+          <df name="old">
+          </df>
+          <df name="Psycle Help">
+          </df>
+        </df>
+        <df name="pixmaps">
+        </df>
+        <df name="src">
+          <df name="psycle">
+            <df name="host">
+              <df name="player_plugins">
+                <df name="foobar">
+                  <in>foo_psy.cpp</in>
+                  <in>resources.hpp</in>
+                </df>
+                <df name="winamp">
+                  <in>WinampDriver.cpp</in>
+                  <in>WinampDriver.hpp</in>
+                  <in>fake_progressDialog.hpp</in>
+                  <in>in_psycle.cpp</in>
+                  <in>resources.hpp</in>
+                  <in>shrunk_newachine.cpp</in>
+                  <in>shrunk_newmachine.hpp</in>
+                </df>
+              </df>
+              <df name="resources">
+                <df name="MasterMachine">
+                </df>
+                <df name="Slider">
+                </df>
+                <in>resources.hpp</in>
+              </df>
+              <in>ASIOConfig.cpp</in>
+              <in>ASIOConfig.hpp</in>
+              <in>ASIOInterface.cpp</in>
+              <in>ASIOInterface.hpp</in>
+              <in>AudioDriver.cpp</in>
+              <in>AudioDriver.hpp</in>
+              <in>Bitmap.hpp</in>
+              <in>Canvas.cpp</in>
+              <in>Canvas.hpp</in>
+              <in>ChildView.cpp</in>
+              <in>ChildView.hpp</in>
+              <in>ConfigDlg.cpp</in>
+              <in>ConfigDlg.hpp</in>
+              <in>Configuration.cpp</in>
+              <in>Configuration.hpp</in>
+              <in>Constants.hpp</in>
+              <in>DSoundConfig.cpp</in>
+              <in>DSoundConfig.hpp</in>
+              <in>DataCompression.cpp</in>
+              <in>DataCompression.hpp</in>
+              <in>Ddc.hpp</in>
+              <in>DirectSound.cpp</in>
+              <in>DirectSound.hpp</in>
+              <in>DirectoryDlg.cpp</in>
+              <in>DirectoryDlg.hpp</in>
+              <in>Dither.cpp</in>
+              <in>Dither.hpp</in>
+              <in>Dsp.cpp</in>
+              <in>Dsp.hpp</in>
+              <in>DummyGui.cpp</in>
+              <in>DummyGui.hpp</in>
+              <in>EffectGui.cpp</in>
+              <in>EffectGui.hpp</in>
+              <in>EnvDialog.cpp</in>
+              <in>EnvDialog.hpp</in>
+              <in>ExListBox.cpp</in>
+              <in>ExListBox.h</in>
+              <in>FFT.cpp</in>
+              <in>FFT.hpp</in>
+              <in>FileIO.cpp</in>
+              <in>FileIO.hpp</in>
+              <in>FileIT.cpp</in>
+              <in>FileIT.hpp</in>
+              <in>FileXM.cpp</in>
+              <in>FileXM.hpp</in>
+              <in>Filter.cpp</in>
+              <in>Filter.hpp</in>
+              <in>FrameMachine.cpp</in>
+              <in>FrameMachine.hpp</in>
+              <in>FrameMixerMachine.cpp</in>
+              <in>FrameMixerMachine.hpp</in>
+              <in>GearRackDlg.cpp</in>
+              <in>GearRackDlg.hpp</in>
+              <in>GearTracker.cpp</in>
+              <in>GearTracker.hpp</in>
+              <in>GeneratorGui.cpp</in>
+              <in>GeneratorGui.hpp</in>
+              <in>Global.cpp</in>
+              <in>Global.hpp</in>
+              <in>GreetDialog.cpp</in>
+              <in>GreetDialog.hpp</in>
+              <in>Helpers.cpp</in>
+              <in>Helpers.hpp</in>
+              <in>ITModule2.cpp</in>
+              <in>ITModule2.h</in>
+              <in>InfoDlg.cpp</in>
+              <in>InfoDlg.hpp</in>
+              <in>InputHandler.cpp</in>
+              <in>InputHandler.hpp</in>
+              <in>InstPreview.cpp</in>
+              <in>InstPreview.hpp</in>
+              <in>Instrument.cpp</in>
+              <in>Instrument.hpp</in>
+              <in>InstrumentEditor.cpp</in>
+              <in>InstrumentEditor.hpp</in>
+              <in>InterpolateCurveDlg.cpp</in>
+              <in>InterpolateCurveDlg.hpp</in>
+              <in>It.cpp</in>
+              <in>It.hpp</in>
+              <in>KeyConfigDlg.cpp</in>
+              <in>KeyConfigDlg.hpp</in>
+              <in>KeybHandler.private.hpp</in>
+              <in>Loggers.hpp</in>
+              <in>LoggingWindow.cpp</in>
+              <in>LoggingWindow.hpp</in>
+              <in>MacProp.cpp</in>
+              <in>MacProp.hpp</in>
+              <in>Machine.cpp</in>
+              <in>Machine.hpp</in>
+              <in>MachineGui.cpp</in>
+              <in>MachineGui.hpp</in>
+              <in>MachineView.cpp</in>
+              <in>MachineView.hpp</in>
+              <in>MainFrm.cpp</in>
+              <in>MainFrm.hpp</in>
+              <in>MasterDlg.cpp</in>
+              <in>MasterDlg.hpp</in>
+              <in>MasterGui.cpp</in>
+              <in>MasterGui.hpp</in>
+              <in>MersenneTwister.cpp</in>
+              <in>MersenneTwister.hpp</in>
+              <in>MidiInput.cpp</in>
+              <in>MidiInput.hpp</in>
+              <in>MidiInputDlg.cpp</in>
+              <in>MidiInputDlg.hpp</in>
+              <in>MidiLearn.cpp</in>
+              <in>MidiLearn.hpp</in>
+              <in>MidiMonitorDlg.cpp</in>
+              <in>MidiMonitorDlg.hpp</in>
+              <in>MixerGui.cpp</in>
+              <in>MixerGui.hpp</in>
+              <in>MouseHandler.private.hpp</in>
+              <in>NativeGui.cpp</in>
+              <in>NativeGui.hpp</in>
+              <in>NewMachine.cpp</in>
+              <in>NewMachine.hpp</in>
+              <in>NewVal.cpp</in>
+              <in>NewVal.hpp</in>
+              <in>OutputDlg.cpp</in>
+              <in>OutputDlg.hpp</in>
+              <in>PatDlg.cpp</in>
+              <in>PatDlg.hpp</in>
+              <in>Player.cpp</in>
+              <in>Player.hpp</in>
+              <in>Plugin.cpp</in>
+              <in>Plugin.hpp</in>
+              <in>PresetsDlg.cpp</in>
+              <in>PresetsDlg.hpp</in>
+              <in>ProgressDialog.cpp</in>
+              <in>ProgressDialog.hpp</in>
+              <in>Project.cpp</in>
+              <in>Project.hpp</in>
+              <in>ProjectData.cpp</in>
+              <in>ProjectData.hpp</in>
+              <in>Psy3Saver.cpp</in>
+              <in>Psy3Saver.hpp</in>
+              <in>Psycle.cpp</in>
+              <in>Psycle.hpp</in>
+              <in>RecorderGui.cpp</in>
+              <in>RecorderGui.hpp</in>
+              <in>Registry.cpp</in>
+              <in>Registry.hpp</in>
+              <in>Riff.cpp</in>
+              <in>Riff.hpp</in>
+              <in>SInstance.cpp</in>
+              <in>SInstance.h</in>
+              <in>Sampler.cpp</in>
+              <in>Sampler.hpp</in>
+              <in>SamplerGui.cpp</in>
+              <in>SamplerGui.hpp</in>
+              <in>SaveWavDlg.cpp</in>
+              <in>SaveWavDlg.hpp</in>
+              <in>ScrollableDlgBar.cpp</in>
+              <in>ScrollableDlgBar.hpp</in>
+              <in>SeqView.cpp</in>
+              <in>SeqView.hpp</in>
+              <in>SkinDlg.cpp</in>
+              <in>SkinDlg.hpp</in>
+              <in>Song.cpp</in>
+              <in>Song.hpp</in>
+              <in>SongStructs.hpp</in>
+              <in>SongpDlg.cpp</in>
+              <in>SongpDlg.hpp</in>
+              <in>SpecialKeys.cpp</in>
+              <in>SpecialKeys.hpp</in>
+              <in>SwingFillDlg.cpp</in>
+              <in>SwingFillDlg.hpp</in>
+              <in>TransformPatternDlg.cpp</in>
+              <in>TransformPatternDlg.hpp</in>
+              <in>Version.hpp</in>
+              <in>VolumeDlg.cpp</in>
+              <in>VolumeDlg.hpp</in>
+              <in>VstEffectWnd.cpp</in>
+              <in>VstEffectWnd.hpp</in>
+              <in>VstFxGui.cpp</in>
+              <in>VstFxGui.hpp</in>
+              <in>VstGenGui.cpp</in>
+              <in>VstGenGui.hpp</in>
+              <in>VstHost.cpp</in>
+              <in>VstHost.hpp</in>
+              <in>VstHost24.cpp</in>
+              <in>VstHost24.hpp</in>
+              <in>VstParamList.cpp</in>
+              <in>VstParamList.hpp</in>
+              <in>WavFileDlg.cpp</in>
+              <in>WavFileDlg.hpp</in>
+              <in>WaveEdAmplifyDialog.cpp</in>
+              <in>WaveEdAmplifyDialog.hpp</in>
+              <in>WaveEdChildView.cpp</in>
+              <in>WaveEdChildView.hpp</in>
+              <in>WaveEdCrossfadeDialog.cpp</in>
+              <in>WaveEdCrossfadeDialog.hpp</in>
+              <in>WaveEdFrame.cpp</in>
+              <in>WaveEdFrame.hpp</in>
+              <in>WaveEdInsertSilenceDialog.cpp</in>
+              <in>WaveEdInsertSilenceDialog.hpp</in>
+              <in>WaveEdMixDialog.cpp</in>
+              <in>WaveEdMixDialog.hpp</in>
+              <in>WaveInMacDlg.cpp</in>
+              <in>WaveInMacDlg.hpp</in>
+              <in>WaveOut.cpp</in>
+              <in>WaveOut.hpp</in>
+              <in>WaveOutDialog.cpp</in>
+              <in>WaveOutDialog.hpp</in>
+              <in>WireDlg.cpp</in>
+              <in>WireDlg.hpp</in>
+              <in>WireGui.cpp</in>
+              <in>WireGui.hpp</in>
+              <in>XMFile.hpp</in>
+              <in>XMInstrument.cpp</in>
+              <in>XMInstrument.hpp</in>
+              <in>XMSampler.cpp</in>
+              <in>XMSampler.hpp</in>
+              <in>XMSamplerMixerPage.cpp</in>
+              <in>XMSamplerMixerPage.hpp</in>
+              <in>XMSamplerUI.cpp</in>
+              <in>XMSamplerUI.hpp</in>
+              <in>XMSamplerUIGeneral.cpp</in>
+              <in>XMSamplerUIGeneral.hpp</in>
+              <in>XMSamplerUIInst.cpp</in>
+              <in>XMSamplerUIInst.hpp</in>
+              <in>XMSamplerUISample.cpp</in>
+              <in>XMSamplerUISample.hpp</in>
+              <in>XMSongExport.cpp</in>
+              <in>XMSongExport.hpp</in>
+              <in>XMSongLoader.cpp</in>
+              <in>XMSongLoader.hpp</in>
+              <in>XmSamplerGui.cpp</in>
+              <in>XmSamplerGui.hpp</in>
+              <in>Zap.hpp</in>
+              <in>configuration_options.hpp</in>
+              <in>convert_internal_machines.hpp</in>
+              <in>exceptions.hpp</in>
+              <in>internal_machines.cpp</in>
+              <in>internal_machines.hpp</in>
+              <in>mfc_namespace.hpp</in>
+              <in>patternview.cpp</in>
+              <in>patternview.hpp</in>
+            </df>
+          </df>
+          <df name="seib-vsthost">
+            <in>CVSTHost.Seib.cpp</in>
+            <in>CVSTHost.Seib.hpp</in>
+            <in>EffectWnd.cpp</in>
+            <in>EffectWnd.hpp</in>
+          </df>
+        </df>
+      </df>
+      <df name="psycle-audiodrivers">
+        <df name="qmake">
+        </df>
+        <df name="src">
+          <df name="asio">
+            <in>asio.cpp</in>
+            <in>asio.private.hpp</in>
+            <in>asiodrivers.cpp</in>
+            <in>asiolist.cpp</in>
+          </df>
+          <df name="psycle">
+            <df name="audiodrivers">
+              <in>alsaout.cpp</in>
+              <in>alsaout.h</in>
+              <in>asiointerface.cpp</in>
+              <in>asiointerface.h</in>
+              <in>audiodriver.cpp</in>
+              <in>audiodriver.h</in>
+              <in>esoundout.cpp</in>
+              <in>esoundout.h</in>
+              <in>gstreamerout.cpp</in>
+              <in>gstreamerout.h</in>
+              <in>jackout.cpp</in>
+              <in>jackout.h</in>
+              <in>microsoftdirectsoundout.cpp</in>
+              <in>microsoftdirectsoundout.h</in>
+              <in>microsoftmmewaveout.cpp</in>
+              <in>microsoftmmewaveout.h</in>
+              <in>netaudioout.cpp</in>
+              <in>netaudioout.h</in>
+              <in>wavefileout.cpp</in>
+              <in>wavefileout.h</in>
+            </df>
+          </df>
+        </df>
+      </df>
+      <df name="psycle-core">
+        <df name="qmake">
+        </df>
+        <df name="src">
+          <df name="psycle">
+            <df name="core">
+              <in>commands.h</in>
+              <in>config.hpp</in>
+              <in>config.private.hpp</in>
+              <in>constants.h</in>
+              <in>convert_internal_machines.cpp</in>
+              <in>convert_internal_machines.private.hpp</in>
+              <in>eventdriver.cpp</in>
+              <in>eventdriver.h</in>
+              <in>exceptions.h</in>
+              <in>file.cpp</in>
+              <in>file.h</in>
+              <in>fileio.cpp</in>
+              <in>fileio.h</in>
+              <in>filterhelper.h</in>
+              <in>fwd.hpp</in>
+              <in>instpreview.cpp</in>
+              <in>instpreview.h</in>
+              <in>instrument.cpp</in>
+              <in>instrument.h</in>
+              <in>internal_machines.cpp</in>
+              <in>internal_machines.h</in>
+              <in>internalhost.cpp</in>
+              <in>internalhost.hpp</in>
+              <in>ladspa.h</in>
+              <in>ladspahost.cpp</in>
+              <in>ladspahost.hpp</in>
+              <in>ladspamachine.cpp</in>
+              <in>ladspamachine.h</in>
+              <in>machine.cpp</in>
+              <in>machine.h</in>
+              <in>machinefactory.cpp</in>
+              <in>machinefactory.h</in>
+              <in>machinehost.cpp</in>
+              <in>machinehost.hpp</in>
+              <in>machinekey.cpp</in>
+              <in>machinekey.hpp</in>
+              <in>mixer.cpp</in>
+              <in>mixer.h</in>
+              <in>nativehost.cpp</in>
+              <in>nativehost.hpp</in>
+              <in>patternevent.cpp</in>
+              <in>patternevent.h</in>
+              <in>patternsequence.cpp</in>
+              <in>patternsequence.h</in>
+              <in>player.cpp</in>
+              <in>player.h</in>
+              <in>playertimeinfo.cpp</in>
+              <in>playertimeinfo.h</in>
+              <in>plugin.cpp</in>
+              <in>plugin.h</in>
+              <in>plugincatcher.cpp</in>
+              <in>plugincatcher.h</in>
+              <in>pluginfinder.cpp</in>
+              <in>pluginfinder.h</in>
+              <in>plugininfo.cpp</in>
+              <in>plugininfo.h</in>
+              <in>preset.cpp</in>
+              <in>preset.h</in>
+              <in>psy2filter.cpp</in>
+              <in>psy2filter.h</in>
+              <in>psy3filter.cpp</in>
+              <in>psy3filter.h</in>
+              <in>psy4filter.cpp</in>
+              <in>psy4filter.h</in>
+              <in>psyfilterbase.h</in>
+              <in>sampler.cpp</in>
+              <in>sampler.h</in>
+              <in>sequencer.cpp</in>
+              <in>sequencer.h</in>
+              <in>signalslib.h</in>
+              <in>singlepattern.cpp</in>
+              <in>singlepattern.h</in>
+              <in>song.cpp</in>
+              <in>song.h</in>
+              <in>songserializer.cpp</in>
+              <in>songserializer.h</in>
+              <in>timesignature.cpp</in>
+              <in>timesignature.h</in>
+              <in>vsthost.cpp</in>
+              <in>vsthost.h</in>
+              <in>vstplugin.cpp</in>
+              <in>vstplugin.h</in>
+              <in>xminstrument.cpp</in>
+              <in>xminstrument.h</in>
+              <in>xml.cpp</in>
+              <in>xml.h</in>
+              <in>xmsampler.cpp</in>
+              <in>xmsampler.h</in>
+              <in>zipreader.cpp</in>
+              <in>zipreader.h</in>
+              <in>zipwriter.cpp</in>
+              <in>zipwriter.h</in>
+              <in>zipwriterstream.cpp</in>
+              <in>zipwriterstream.h</in>
+            </df>
+          </df>
+          <df name="seib">
+            <df name="vst">
+              <in>CVSTHost.Seib.cpp</in>
+              <in>CVSTHost.Seib.hpp</in>
+              <in>EffectWnd.cpp</in>
+              <in>EffectWnd.hpp</in>
+            </df>
+          </df>
+        </df>
+      </df>
+      <df name="psycle-helpers">
+        <df name="qmake">
+        </df>
+        <df name="src">
+          <df name="psycle">
+            <df name="helpers">
+              <df name="math">
+                <in>clip.hpp</in>
+                <in>erase_all_nans_infinities_and_denormals.hpp</in>
+                <in>erase_denormals.hpp</in>
+                <in>log.hpp</in>
+                <in>math.hpp</in>
+                <in>pi.hpp</in>
+                <in>remainder.hpp</in>
+                <in>rint.hpp</in>
+                <in>round.hpp</in>
+                <in>sine.hpp</in>
+                <in>sine_cosine.hpp</in>
+                <in>sine_sequence.hpp</in>
+                <in>truncate.hpp</in>
+              </df>
+              <df name="todo">
+                <in>ring_buffer.hpp</in>
+              </df>
+              <in>abstractiff.cpp</in>
+              <in>abstractiff.hpp</in>
+              <in>appleaiff.cpp</in>
+              <in>appleaiff.hpp</in>
+              <in>binread.cpp</in>
+              <in>binread.hpp</in>
+              <in>datacompression.cpp</in>
+              <in>datacompression.hpp</in>
+              <in>dither.cpp</in>
+              <in>dither.hpp</in>
+              <in>dsp.cpp</in>
+              <in>dsp.hpp</in>
+              <in>eaiff.cpp</in>
+              <in>eaiff.hpp</in>
+              <in>fft.cpp</in>
+              <in>fft.hpp</in>
+              <in>filter.cpp</in>
+              <in>filter.hpp</in>
+              <in>helpers.cpp</in>
+              <in>helpers.hpp</in>
+              <in>math.hpp</in>
+              <in>mersennetwister.cpp</in>
+              <in>mersennetwister.hpp</in>
+              <in>msriff.cpp</in>
+              <in>msriff.hpp</in>
+              <in>riff.cpp</in>
+              <in>riff.hpp</in>
+              <in>riffwave.cpp</in>
+              <in>riffwave.hpp</in>
+              <in>scale.hpp</in>
+            </df>
+          </df>
+          <in>unit_tests.cpp</in>
+        </df>
+      </df>
+      <df name="psycle-player">
+        <df name="qmake">
+        </df>
+        <df name="src">
+          <df name="psycle">
+            <df name="player">
+              <in>configuration.cpp</in>
+              <in>configuration.hpp</in>
+              <in>main.cpp</in>
+            </df>
+          </df>
+        </df>
+      </df>
+      <df name="psycle-plugins">
+        <df name="closed-source">
+          <df name="arguru">
+          </df>
+          <df name="cyanphase">
+          </df>
+          <df name="j-hamaide">
+          </df>
+          <df name="ninereeds.and.7900">
+          </df>
+          <df name="sond">
+          </df>
+        </df>
+        <df name="msvc">
+        </df>
+        <df name="presets">
+        </df>
+        <df name="src">
+          <df name="psycle">
+            <df name="plugins">
+              <df name="alk_muter">
+                <in>alk_muter.cpp</in>
+              </df>
+              <df name="arguru_distortion">
+                <in>arguru_distortion.cpp</in>
+              </df>
+              <df name="arguru_goaslicer">
+                <in>arguru_goaslicer.cpp</in>
+              </df>
+              <df name="arguru_reverb">
+                <in>AllPass.cpp</in>
+                <in>AllPass.hpp</in>
+                <in>CombFilter.cpp</in>
+                <in>CombFilter.hpp</in>
+                <in>LowPass.cpp</in>
+                <in>LowPass.hpp</in>
+                <in>arguru_reverb.cpp</in>
+              </df>
+              <df name="arguru_synth_2_final">
+                <in>SynthTrack.cpp</in>
+                <in>SynthTrack.hpp</in>
+                <in>arguru_synth_2_final.cpp</in>
+                <in>filter.cpp</in>
+                <in>filter.hpp</in>
+              </df>
+              <df name="arguru_xfilter">
+                <in>arguru_xfilter.cpp</in>
+                <in>filter_x.cpp</in>
+                <in>filter_x.hpp</in>
+              </df>
+              <df name="audacity">
+                <df name="compressor">
+                  <in>Compressor.cpp</in>
+                  <in>Compressor.h</in>
+                  <in>plugin.cpp</in>
+                </df>
+                <in>phaser.cpp</in>
+                <in>wahwah.cpp</in>
+              </df>
+              <df name="bexphase">
+                <in>bexphase.cpp</in>
+              </df>
+              <df name="druttis">
+                <df name="blwtbl">
+                  <in>blwtbl.cpp</in>
+                  <in>blwtbl.h</in>
+                </df>
+                <df name="dsp">
+                  <in>Biquad.cpp</in>
+                  <in>Biquad.h</in>
+                  <in>Dsp.cpp</in>
+                  <in>Dsp.h</in>
+                  <in>DspMath.h</in>
+                  <in>Envelope.cpp</in>
+                  <in>Envelope.h</in>
+                  <in>Filter.cpp</in>
+                  <in>Filter.h</in>
+                  <in>Formant.cpp</in>
+                  <in>Formant.h</in>
+                  <in>Inertia.cpp</in>
+                  <in>Inertia.h</in>
+                  <in>Waveform.cpp</in>
+                  <in>Waveform.h</in>
+                </df>
+                <df name="DspLib">
+                  <in>AllPass.h</in>
+                  <in>Chorus.h</in>
+                  <in>Delay.h</in>
+                  <in>DspAlgs.h</in>
+                  <in>Phaser.h</in>
+                  <in>afloat.h</in>
+                </df>
+                <df name="eq3">
+                  <in>eq3.cpp</in>
+                </df>
+                <df name="FeedMe">
+                  <in>CTrack.cpp</in>
+                  <in>CTrack.h</in>
+                  <in>FeedMe.cpp</in>
+                </df>
+                <df name="Koruz">
+                  <in>Koruz.cpp</in>
+                </df>
+                <df name="Phantom">
+                  <in>CVoice.cpp</in>
+                  <in>CVoice.h</in>
+                  <in>Chorus.h</in>
+                  <in>Phantom.cpp</in>
+                </df>
+                <df name="PluckedString">
+                  <in>AMath.h</in>
+                  <in>BiQuad.cpp</in>
+                  <in>BiQuad.h</in>
+                  <in>CEnvelope.cpp</in>
+                  <in>CEnvelope.h</in>
+                  <in>CVoice.cpp</in>
+                  <in>CVoice.h</in>
+                  <in>DLineN.cpp</in>
+                  <in>DLineN.h</in>
+                  <in>PluckedString.cpp</in>
+                </df>
+                <df name="slicit">
+                  <in>Slicit.cpp</in>
+                </df>
+                <df name="sublime">
+                  <in>Globals.cpp</in>
+                  <in>Globals.h</in>
+                  <in>Shared.cpp</in>
+                  <in>Shared.h</in>
+                  <in>Sublime.cpp</in>
+                  <in>Voice.cpp</in>
+                  <in>Voice.h</in>
+                </df>
+                <in>CDsp.cpp</in>
+                <in>CDsp.h</in>
+                <in>CEnvelope.cpp</in>
+                <in>CEnvelope.h</in>
+                <in>wtfmlib.h</in>
+              </df>
+              <df name="dw">
+                <df name="eq">
+                  <in>dw_eq.cpp</in>
+                </df>
+                <df name="granulizer">
+                  <in>dw_granulizer.cpp</in>
+                </df>
+                <df name="guitremolo">
+                  <in>dw_tremolo-gui.cpp</in>
+                  <in>resources.hpp</in>
+                </df>
+                <df name="iopan">
+                  <in>dw_iopan.cpp</in>
+                </df>
+                <df name="tremolo">
+                  <in>dw_tremolo.cpp</in>
+                </df>
+                <in>dw_filter.cpp</in>
+                <in>dw_filter.hpp</in>
+              </df>
+              <df name="fluid_synth_sf2_player">
+                <in>FS_sf2_player.cpp</in>
+              </df>
+              <df name="graue">
+                <df name="softsat">
+                  <in>softsat.cpp</in>
+                </df>
+              </df>
+              <df name="gverb">
+                <in>gverb.cpp</in>
+                <in>gverb.h</in>
+                <in>gverbdsp.cpp</in>
+                <in>gverbdsp.h</in>
+                <in>ladspa_gverb.cpp</in>
+              </df>
+              <df name="gzero_synth">
+                <in>SynthTrack.cpp</in>
+                <in>SynthTrack.hpp</in>
+                <in>filter.cpp</in>
+                <in>filter.hpp</in>
+                <in>gzero_synth.cpp</in>
+              </df>
+              <df name="jm_drums">
+                <in>drum.cpp</in>
+                <in>drum.hpp</in>
+                <in>jm_drums.cpp</in>
+                <in>oscillator.cpp</in>
+                <in>oscillator.hpp</in>
+              </df>
+              <df name="jme">
+                <df name="blitz">
+                  <df name="songs">
+                  </df>
+                  <in>aaf.cpp</in>
+                  <in>aaf.h</in>
+                  <in>atlantisfilter.cpp</in>
+                  <in>atlantisfilter.h</in>
+                  <in>blitz.cpp</in>
+                  <in>blitz.h</in>
+                  <in>filter.cpp</in>
+                  <in>filter.h</in>
+                  <in>lfo.cpp</in>
+                  <in>lfo.h</in>
+                  <in>pwm.cpp</in>
+                  <in>pwm.h</in>
+                  <in>voice.cpp</in>
+                  <in>voice.h</in>
+                </df>
+                <df name="gamefx">
+                  <df name="songs">
+                  </df>
+                  <in>aaf.cpp</in>
+                  <in>aaf.h</in>
+                  <in>filter.cpp</in>
+                  <in>filter.h</in>
+                  <in>gamefx.cpp</in>
+                  <in>voice.cpp</in>
+                  <in>voice.h</in>
+                </df>
+              </df>
+              <df name="legasynth">
+                <df name="303">
+                  <in>303_voice.cpp</in>
+                  <in>303_voice.h</in>
+                </df>
+                <df name="lib">
+                  <in>chorus.cpp</in>
+                  <in>chorus.h</in>
+                  <in>voice.cpp</in>
+                  <in>voice.h</in>
+                </df>
+                <in>legasynth_303.cpp</in>
+              </df>
+              <df name="m3">
+                <in>m3.cpp</in>
+                <in>track.cpp</in>
+                <in>track.hpp</in>
+              </df>
+              <df name="moreamp_eq">
+                <in>maEqualizer.h</in>
+                <in>moreamp_eq.cpp</in>
+              </df>
+              <df name="pooplog_autopan">
+                <in>pooplog_autopan.cpp</in>
+              </df>
+              <df name="pooplog_delay">
+                <in>filter.cpp</in>
+                <in>filter.h</in>
+                <in>pooplog_delay.cpp</in>
+              </df>
+              <df name="pooplog_delay_light">
+                <in>filter.cpp</in>
+                <in>pooplog_delay.cpp</in>
+              </df>
+              <df name="pooplog_filter">
+                <in>filter.cpp</in>
+                <in>filter.h</in>
+                <in>pooplog_filter.cpp</in>
+              </df>
+              <df name="pooplog_lofi">
+                <in>pooplog_lofi.cpp</in>
+              </df>
+              <df name="pooplog_scratch">
+                <in>pooplog_scratch.cpp</in>
+              </df>
+              <df name="pooplog_scratch_2">
+                <in>pooplog_scratch_2.cpp</in>
+              </df>
+              <df name="pooplog_synth">
+                <in>SynthTrack.cpp</in>
+                <in>SynthTrack.h</in>
+                <in>filter.cpp</in>
+                <in>filter.h</in>
+                <in>pooplog_synth.cpp</in>
+              </df>
+              <df name="pooplog_synth_light">
+                <in>SynthTrack.cpp</in>
+                <in>filter.cpp</in>
+                <in>pooplog_synth.cpp</in>
+              </df>
+              <df name="pooplog_synth_ultralight">
+                <in>SynthTrack.cpp</in>
+                <in>filter.cpp</in>
+                <in>pooplog_synth.cpp</in>
+              </df>
+              <df name="stk">
+                <in>stk.plucked.cpp</in>
+                <in>stk.reverbs.cpp</in>
+                <in>stk.shakers.cpp</in>
+              </df>
+              <df name="surround">
+                <in>biquad.hpp</in>
+                <in>surround.cpp</in>
+              </df>
+              <df name="vincenzo_demasi">
+                <df name="vdAllPass">
+                  <in>allpassfilter.hpp</in>
+                  <in>vdAllPass.cpp</in>
+                  <in>vdAllPass.hpp</in>
+                </df>
+                <df name="vdEcho">
+                  <in>combfilter.hpp</in>
+                  <in>vdEcho.cpp</in>
+                  <in>vdEcho.hpp</in>
+                </df>
+                <df name="vdNoiseGate">
+                  <in>lowpassfilter.hpp</in>
+                  <in>vdNoiseGate.cpp</in>
+                  <in>vdNoiseGate.hpp</in>
+                </df>
+                <df name="vsFastVerb">
+                  <in>fastverbfilter.hpp</in>
+                  <in>vdFastVerb.cpp</in>
+                  <in>vdFastVerb.hpp</in>
+                </df>
+                <in>vdabout.hpp</in>
+              </df>
+              <df name="y_midi">
+                <in>gmnames.h</in>
+                <in>y_midi.cpp</in>
+                <in>y_midi.hpp</in>
+              </df>
+              <df name="yezar_freeverb">
+                <in>AllPass.cpp</in>
+                <in>AllPass.hpp</in>
+                <in>CombFilter.cpp</in>
+                <in>CombFilter.hpp</in>
+                <in>LowPass.cpp</in>
+                <in>LowPass.hpp</in>
+                <in>RevModel.cpp</in>
+                <in>RevModel.hpp</in>
+                <in>comb.cpp</in>
+                <in>comb.hpp</in>
+                <in>tuning.hpp</in>
+                <in>yezar_freeverb.cpp</in>
+              </df>
+              <df name="zephod_super_fm">
+                <in>envelope.cpp</in>
+                <in>envelope.hpp</in>
+                <in>zephod_superfm.cpp</in>
+              </df>
+              <in>SChorus.cpp</in>
+              <in>crasher.cpp</in>
+              <in>delay.cpp</in>
+              <in>distortion.cpp</in>
+              <in>filter_2_poles.cpp</in>
+              <in>flanger.cpp</in>
+              <in>gainer.cpp</in>
+              <in>haas.cpp</in>
+              <in>negative.cpp</in>
+              <in>plugin.hpp</in>
+              <in>ring_modulator.cpp</in>
+            </df>
+            <in>plugin_check.cpp</in>
+            <in>plugin_interface.hpp</in>
+          </df>
+        </df>
+      </df>
+      <df name="qpsycle">
+        <df name="colorschemes">
+        </df>
+        <df name="qmake">
+        </df>
+        <df name="src">
+          <df name="gui">
+            <df name="configdlg">
+              <in>audiopage.cpp</in>
+              <in>audiopage.hpp</in>
+              <in>behaviourpage.cpp</in>
+              <in>behaviourpage.hpp</in>
+              <in>configdlg.cpp</in>
+              <in>configdlg.hpp</in>
+              <in>dirspage.cpp</in>
+              <in>dirspage.hpp</in>
+              <in>lookspage.cpp</in>
+              <in>lookspage.hpp</in>
+            </df>
+            <df name="machineview">
+              <in>effectgui.cpp</in>
+              <in>effectgui.hpp</in>
+              <in>generatorgui.cpp</in>
+              <in>generatorgui.hpp</in>
+              <in>machinegui.cpp</in>
+              <in>machinegui.hpp</in>
+              <in>machinetweakdlg.cpp</in>
+              <in>machinetweakdlg.hpp</in>
+              <in>machineview.cpp</in>
+              <in>machineview.hpp</in>
+              <in>mastergui.cpp</in>
+              <in>mastergui.hpp</in>
+              <in>mixertweakdlg.cpp</in>
+              <in>mixertweakdlg.hpp</in>
+              <in>newmachinedlg.cpp</in>
+              <in>newmachinedlg.hpp</in>
+              <in>wiredlg.cpp</in>
+              <in>wiredlg.hpp</in>
+              <in>wiregui.cpp</in>
+              <in>wiregui.hpp</in>
+            </df>
+            <df name="patternview">
+              <in>linenumbercolumn.cpp</in>
+              <in>linenumbercolumn.hpp</in>
+              <in>patterndraw.cpp</in>
+              <in>patterndraw.hpp</in>
+              <in>patterngrid.cpp</in>
+              <in>patterngrid.hpp</in>
+              <in>patternview.cpp</in>
+              <in>patternview.hpp</in>
+              <in>trackheader.cpp</in>
+              <in>trackheader.hpp</in>
+            </df>
+            <df name="sequencer">
+              <in>beatruler.cpp</in>
+              <in>beatruler.hpp</in>
+              <in>sequencerarea.cpp</in>
+              <in>sequencerarea.hpp</in>
+              <in>sequencerdraw.cpp</in>
+              <in>sequencerdraw.hpp</in>
+              <in>sequenceritem.cpp</in>
+              <in>sequenceritem.hpp</in>
+              <in>sequencerline.cpp</in>
+              <in>sequencerline.hpp</in>
+              <in>sequencerview.cpp</in>
+              <in>sequencerview.hpp</in>
+            </df>
+            <df name="waveview">
+              <in>waveamp.cpp</in>
+              <in>waveamp.hpp</in>
+              <in>wavedisplay.cpp</in>
+              <in>wavedisplay.hpp</in>
+              <in>waveview.cpp</in>
+              <in>waveview.hpp</in>
+            </df>
+            <in>configuration.cpp</in>
+            <in>configuration.hpp</in>
+            <in>global.cpp</in>
+            <in>global.hpp</in>
+            <in>inputhandler.cpp</in>
+            <in>inputhandler.hpp</in>
+            <in>logconsole.cpp</in>
+            <in>logconsole.hpp</in>
+            <in>mainwindow.cpp</in>
+            <in>mainwindow.hpp</in>
+            <in>patternbox.cpp</in>
+            <in>patternbox.hpp</in>
+            <in>samplebrowser.cpp</in>
+            <in>samplebrowser.hpp</in>
+            <in>undoframework.cpp</in>
+            <in>undoframework.hpp</in>
+          </df>
+          <df name="images">
+          </df>
+          <df name="mididrivers">
+            <in>alsaseqin.cpp</in>
+            <in>alsaseqin.hpp</in>
+          </df>
+          <df name="model">
+            <in>instrumentsmodel.cpp</in>
+            <in>instrumentsmodel.hpp</in>
+          </df>
+          <in>qpsycle.cpp</in>
+          <in>qpsyclePch.hpp</in>
+        </df>
+        <in>qrc_qpsycle.cpp</in>
+      </df>
+      <df name="tools">
+      </df>
+      <df name="universalis">
+        <df name="qmake">
+        </df>
+        <df name="src">
+          <df name="universalis">
+            <df name="compiler">
+              <df name="detail">
+                <df name="gnu">
+                  <in>diagnostics.hpp</in>
+                  <in>typeof.hpp</in>
+                </df>
+                <df name="microsoft">
+                  <in>assume.hpp</in>
+                  <in>namespace.hpp</in>
+                  <in>optimizations.hpp</in>
+                  <in>warnings.hpp</in>
+                </df>
+                <df name="pragmatic">
+                  <in>align.hpp</in>
+                  <in>asm.hpp</in>
+                  <in>attribute.hpp</in>
+                  <in>auto_link.hpp</in>
+                  <in>calling_convention.hpp</in>
+                  <in>const_function.hpp</in>
+                  <in>demangle.cpp</in>
+                  <in>demangle.hpp</in>
+                  <in>deprecated.hpp</in>
+                  <in>dynamic_link.hpp</in>
+                  <in>finally.hpp</in>
+                  <in>hardware_exception.hpp</in>
+                  <in>pack.hpp</in>
+                  <in>pragmas.hpp</in>
+                  <in>thread_local_storage.hpp</in>
+                  <in>virtual.hpp</in>
+                  <in>weak.hpp</in>
+                </df>
+                <df name="standard">
+                  <in>restrict.hpp</in>
+                  <in>wchar_t.hpp</in>
+                </df>
+              </df>
+              <df name="dynamic_link">
+                <in>begin.hpp</in>
+                <in>end.hpp</in>
+              </df>
+              <df name="exceptions">
+                <in>ellipsis.cpp</in>
+                <in>ellipsis.hpp</in>
+              </df>
+              <in>cast.hpp</in>
+              <in>compiler.hpp</in>
+              <in>concatenated.hpp</in>
+              <in>location.hpp</in>
+              <in>numeric.hpp</in>
+              <in>stringized.hpp</in>
+              <in>template_constructors.hpp</in>
+              <in>token.hpp</in>
+              <in>typenameof.hpp</in>
+              <in>virtual_factory.hpp</in>
+            </df>
+            <df name="cpu">
+              <df name="atomic">
+                <in>compare_and_swap.hpp</in>
+              </df>
+              <df name="detail">
+              </df>
+              <df name="exceptions">
+                <in>code_description.cpp</in>
+                <in>code_description.hpp</in>
+                <in>fpu.hpp</in>
+              </df>
+              <df name="todo">
+                <df name="detail">
+                  <in>bits.hpp</in>
+                </df>
+                <in>bits.hpp</in>
+              </df>
+              <in>cpu.hpp</in>
+              <in>exception.cpp</in>
+              <in>exception.hpp</in>
+              <in>memory_barriers.hpp</in>
+            </df>
+            <df name="detail">
+              <in>configuration.hpp</in>
+              <in>configuration.private.hpp</in>
+              <in>project.hpp</in>
+              <in>project.private.hpp</in>
+            </df>
+            <df name="os">
+              <df name="detail">
+                <df name="microsoft">
+                  <in>max_path.hpp</in>
+                </df>
+                <in>check_version.cpp</in>
+                <in>check_version.hpp</in>
+              </df>
+              <df name="dynamic_link">
+                <in>main.hpp</in>
+                <in>main.private.hpp</in>
+                <in>resolver.cpp</in>
+                <in>resolver.hpp</in>
+              </df>
+              <df name="exceptions">
+                <in>code_description.cpp</in>
+                <in>code_description.hpp</in>
+              </df>
+              <df name="paths">
+                <df name="injection">
+                  <in>implementation.hpp</in>
+                  <in>interface.hpp</in>
+                </df>
+                <in>implementation.hpp</in>
+                <in>interface.hpp</in>
+              </df>
+              <df name="todo">
+                <df name="bohan">
+                  <in>signal.hpp</in>
+                  <in>which.hpp</in>
+                </df>
+              </df>
+              <in>aligned_memory_alloc.hpp</in>
+              <in>clocks.cpp</in>
+              <in>clocks.hpp</in>
+              <in>cpu_affinity.hpp</in>
+              <in>exception.cpp</in>
+              <in>exception.hpp</in>
+              <in>loggers.cpp</in>
+              <in>loggers.hpp</in>
+              <in>os.hpp</in>
+              <in>paths.cpp</in>
+              <in>paths.hpp</in>
+              <in>terminal.cpp</in>
+              <in>terminal.hpp</in>
+              <in>thread_name.cpp</in>
+              <in>thread_name.hpp</in>
+            </df>
+            <df name="stdlib">
+              <df name="detail">
+                <in>allocators.cpp</in>
+                <in>allocators.hpp</in>
+                <in>boost_xtime.hpp</in>
+                <in>duration.hpp</in>
+                <in>hiresolution_clock.hpp</in>
+                <in>iso646.hpp</in>
+                <in>utc_time.hpp</in>
+              </df>
+              <df name="exceptions">
+                <in>code_description.cpp</in>
+                <in>code_description.hpp</in>
+              </df>
+              <df name="future_std_include">
+              </df>
+              <in>allocators.hpp</in>
+              <in>condition.hpp</in>
+              <in>date_time.hpp</in>
+              <in>mutex.hpp</in>
+              <in>ndebug.hpp</in>
+              <in>stdc_secure_lib.hpp</in>
+              <in>stdint.hpp</in>
+              <in>stdlib.hpp</in>
+              <in>thread.hpp</in>
+            </df>
+            <in>compiler.hpp</in>
+            <in>cpu.hpp</in>
+            <in>exception.cpp</in>
+            <in>exception.hpp</in>
+            <in>os.hpp</in>
+            <in>stdlib.hpp</in>
+            <in>universalis.hpp</in>
+          </df>
+          <in>unit_tests.cpp</in>
+        </df>
+      </df>
+      <df name="wonderbuild">
+      </df>
+      <df name="www">
+        <df name="blogs">
+          <df name="satoshi">
+          </df>
+        </df>
+      </df>
+    </df>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false">
+      <itemPath>../build-systems/netbeans/Makefile</itemPath>
+      <itemPath>netbeans-Makefile.mk</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceFolderFilter>^(nbproject|\+\+.*)$</sourceFolderFilter>
+  <sourceRootList>
+    <Elem>..</Elem>
+  </sourceRootList>
+  <projectmakefile>netbeans-Makefile.mk</projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <compilerSet>GNU|GNU</compilerSet>
+        <cRequired>false</cRequired>
+        <platform>2</platform>
+      </toolsSet>
+      <makefileType>
+        <makeTool>
+          <buildCommandWorkingDir>../build-systems/netbeans</buildCommandWorkingDir>
+          <buildCommand>${MAKE}</buildCommand>
+          <cleanCommand>${MAKE} clean</cleanCommand>
+          <executablePath>../build-systems/wonderbuild/++wonderbuild/staged-install/usr/local/bin/freepsycle-gui</executablePath>
+          <ccTool>
+            <incDir>
+              <pElem>/usr/lib/gtkmm-2.4/include</pElem>
+              <pElem>/usr/include/gstreamer-0.10</pElem>
+              <pElem>/usr/include/gtk-2.0</pElem>
+              <pElem>/usr/include/pangomm-1.4</pElem>
+              <pElem>/usr/include/atkmm-1.6</pElem>
+              <pElem>/usr/include/cairo</pElem>
+              <pElem>/usr/include/clutter-0.6/clutter-gtk</pElem>
+              <pElem>/usr/include/gtkmm-2.4</pElem>
+              <pElem>/usr/include/pixman-1</pElem>
+              <pElem>/usr/lib/gtk-2.0/include</pElem>
+              <pElem>/usr/include/alsa</pElem>
+              <pElem>/usr/lib/glib-2.0/include</pElem>
+              <pElem>/usr/include/libart-2.0</pElem>
+              <pElem>/usr/include/freetype2</pElem>
+              <pElem>/usr/include/cairomm-1.0</pElem>
+              <pElem>/usr/include/atk-1.0</pElem>
+              <pElem>/usr/include/libpng12</pElem>
+              <pElem>/usr/include/gdkmm-2.4</pElem>
+              <pElem>/usr/include/libxml2</pElem>
+              <pElem>/usr/include/clutter-0.6</pElem>
+              <pElem>/usr/include/glib-2.0</pElem>
+              <pElem>/usr/include/libgnomecanvas-2.0</pElem>
+              <pElem>/usr/lib/libgnomecanvasmm-2.6/include</pElem>
+              <pElem>/usr/lib/glibmm-2.4/include</pElem>
+              <pElem>/usr/include/glibmm-2.4</pElem>
+              <pElem>/usr/lib/gdkmm-2.4/include</pElem>
+              <pElem>/usr/include/pango-1.0</pElem>
+              <pElem>/usr/include/gail-1.0</pElem>
+              <pElem>/usr/include/libxml++-2.6</pElem>
+              <pElem>/usr/lib/libxml++-2.6/include</pElem>
+              <pElem>/usr/include/libgnomecanvasmm-2.6</pElem>
+              <pElem>/usr/include/sigc++-2.0</pElem>
+              <pElem>/usr/lib/sigc++-2.0/include</pElem>
+              <pElem>../diversalis/src</pElem>
+              <pElem>../universalis/src</pElem>
+              <pElem>../universalis/src/universalis/stdlib/future_std_include</pElem>
+              <pElem>../psycle-helpers/src</pElem>
+              <pElem>../psycle-core/src</pElem>
+              <pElem>../psycle-plugins/src</pElem>
+              <pElem>../psycle-audiodrivers/src</pElem>
+              <pElem>../psycle-player/src</pElem>
+              <pElem>../freepsycle/src</pElem>
+            </incDir>
+            <preprocessorList>
+              <Elem>PNG_NO_MMX_CODE</Elem>
+              <Elem>PSYCLE__LIBXMLPP_AVAILABLE</Elem>
+              <Elem>PSYCLE__JACK_AVAILABLE</Elem>
+              <Elem>PSYCLE__ALSA_AVAILABLE</Elem>
+            </preprocessorList>
+          </ccTool>
+        </makeTool>
+      </makefileType>
+    </conf>
+  </confs>
+</configurationDescriptor>
