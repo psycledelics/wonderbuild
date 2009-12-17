@@ -1331,6 +1331,30 @@
 							RelativePath=".\src\psycle\host\PasteBlockCommand.hpp"
 							>
 						</File>
+						<File
+							RelativePath=".\src\psycle\host\PatDeleteCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\PatDeleteCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\PatPasteCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\PatPasteCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\PatTransposeCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\PatTransposeCommand.hpp"
+							>
+						</File>
 					</Filter>
 				</Filter>
 				<Filter
