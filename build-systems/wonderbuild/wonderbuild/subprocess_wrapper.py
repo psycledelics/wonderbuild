@@ -6,19 +6,19 @@ import sys, subprocess
 
 from logger import out, is_debug, debug, colored
 
-known_options = set(['eclipse-cdt-discovery'])
+known_options = set(['make-like-messages'])
 
 def generate_option_help(help):
-	help['eclipse-cdt-discovery'] = (None, 'output subprocess command lines in a way suitable for the eclipse cdt discovery to scan them')
+	help['make-like-messages'] = (None, 'output messages like the make build tool when executing subprocess command lines')
 
-eclipse_cdt_discovery = False
+make_like_messages = False
 def use_options(options):
-	global eclipse_cdt_discovery
-	eclipse_cdt_discovery = 'eclipse-cdt-discovery' in options
+	global make_like_messages
+	make_like_messages = 'make-like-messages' in options
 
 def exec_subprocess(args, env = None, cwd = None):
 	if __debug__ and is_debug: debug('exec: ' + str(cwd) + ' ' + str(env) + ' ' + str(args))
-	do_msg = cwd is not None and eclipse_cdt_discovery
+	do_msg = cwd is not None and make_like_messages
 	if do_msg: print >> sys.stdout, 'make: Entering directory `' + cwd + "'\n" + ' '.join(args)
 	r = subprocess.call(
 		args = args,
