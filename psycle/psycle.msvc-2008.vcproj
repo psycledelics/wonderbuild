@@ -661,6 +661,22 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\psycle\host\Command.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\Command.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\CommandManager.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\CommandManager.hpp"
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\host\DummyGui.cpp"
 					>
 				</File>
@@ -1243,6 +1259,90 @@
 						RelativePath="src\psycle\host\TransformPatternDlg.hpp"
 						>
 					</File>
+					<Filter
+						Name="Commands"
+						>
+						<File
+							RelativePath=".\src\psycle\host\BlockTransposeCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\BlockTransposeCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\ClearCurrCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\ClearCurrCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\DeleteBlockCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\DeleteBlockCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\DeleteCurrCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\DeleteCurrCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\EnterDataCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\EnterDataCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\InsertCurrCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\InsertCurrCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\PasteBlockCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\PasteBlockCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\PatDeleteCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\PatDeleteCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\PatPasteCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\PatPasteCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\PatTransposeCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\PatTransposeCommand.hpp"
+							>
+						</File>
+					</Filter>
 				</Filter>
 				<Filter
 					Name="monitors"
