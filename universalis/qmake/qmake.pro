@@ -107,11 +107,6 @@ sources_or_headers = \
 	$$UNIVERSALIS_DIR/src/universalis/universalis
 
 SOURCES_PRESERVE_PATH += $$sources(sources_or_headers)
-HEADERS += $$headers(sources_or_headers) \
-	$$UNIVERSALIS_DIR/src/universalis/stdlib/future_std_include/condition \
-	$$UNIVERSALIS_DIR/src/universalis/stdlib/future_std_include/date_time \
-	$$UNIVERSALIS_DIR/src/universalis/stdlib/future_std_include/mutex \
-	$$UNIVERSALIS_DIR/src/universalis/stdlib/future_std_include/cstdint \
-	$$UNIVERSALIS_DIR/src/universalis/stdlib/future_std_include/thread
+HEADERS += $$headers(sources_or_headers)
 
 include($$COMMON_DIR/display-vars.pri)

@@ -941,30 +941,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<Filter
-			Name="standard headers"
-			>
-			<File
-				RelativePath="src\universalis\stdlib\future_std_include\condition"
-				>
-			</File>
-			<File
-				RelativePath="src\universalis\stdlib\future_std_include\cstdint"
-				>
-			</File>
-			<File
-				RelativePath="src\universalis\stdlib\future_std_include\date_time"
-				>
-			</File>
-			<File
-				RelativePath="src\universalis\stdlib\future_std_include\mutex"
-				>
-			</File>
-			<File
-				RelativePath="src\universalis\stdlib\future_std_include\thread"
-				>
-			</File>
-		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

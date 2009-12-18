@@ -66,7 +66,7 @@
 	//#include <csignal>
 	//#include <cstdarg>
 	#include <cstddef>
-	#include <cstdint> // C1999, so not in C++1998
+	//#include <cstdint> // C1999, so not in C++1998
 	#include <cstdio>
 	#include <cstdlib>
 	#include <cstring>
