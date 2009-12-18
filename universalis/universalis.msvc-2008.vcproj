@@ -803,7 +803,7 @@
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\stdlib\stdint.hpp"
+					RelativePath="src\universalis\stdlib\cstdint.hpp"
 					>
 				</File>
 				<File
