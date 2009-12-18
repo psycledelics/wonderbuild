@@ -20,7 +20,7 @@
 <builder buildPath="${project_loc}" id="cdt.managedbuild.target.gnu.builder.base.279072933" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.795274890" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base">
 <option id="gnu.cpp.compiler.option.preprocessor.def.2078739358" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
-<listOptionValue builtIn="false" value="__PRETTY_FUNCTION__=&quot;(unknown-function)&quot;"/>
+<listOptionValue builtIn="false" value="DIVERSALIS__COMPILER__ECLIPSE"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.237355109" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 </tool>
