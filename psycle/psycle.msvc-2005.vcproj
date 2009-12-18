@@ -1273,7 +1273,7 @@
 						>
 					</File>
 					<Filter
-						Name="Commands"
+						Name="commands"
 						>
 						<File
 							RelativePath=".\src\psycle\host\BlockTransposeCommand.cpp"
@@ -1400,6 +1400,38 @@
 						RelativePath="src\psycle\host\WireDlg.hpp"
 						>
 					</File>
+				</Filter>
+				<Filter
+					Name="sequence"
+					>
+					<Filter
+						Name="commands"
+						>
+						<File
+							RelativePath=".\src\psycle\host\SeqCloneCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqCloneCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqDeleteCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqDeleteCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqPasteCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqPasteCommand.hpp"
+							>
+						</File>
+					</Filter>
 				</Filter>
 			</Filter>
 			<Filter
