@@ -4,6 +4,8 @@
 	Version="9.00"
 	Name="psycle-helpers"
 	ProjectGUID="{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
+	RootNamespace="psycle-helpers"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -224,7 +226,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{B78DFE59-051A-43FD-B489-775A4982581C}"
-			RelativePathToProject="..\universalis\universalis.msvc-2008.vcproj"
+			RelativePathToProject="..\..\universalis\universalis.msvc-2008.vcproj"
 		/>
 	</References>
 	<Files>
@@ -235,11 +237,11 @@
 				Name="helpers"
 				>
 				<File
-					RelativePath="src\psycle\helpers\helpers.cpp"
+					RelativePath=".\src\psycle\helpers\hexstring_to_integer.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\psycle\helpers\helpers.hpp"
+					RelativePath=".\src\psycle\helpers\hexstring_to_integer.hpp"
 					>
 				</File>
 				<File
@@ -248,6 +250,14 @@
 				</File>
 				<File
 					RelativePath="src\psycle\helpers\scale.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\helpers\value_mapper.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\helpers\value_mapper.hpp"
 					>
 				</File>
 				<Filter
@@ -266,10 +276,6 @@
 						>
 					</File>
 					<File
-						RelativePath="src\psycle\helpers\math\rint.hpp"
-						>
-					</File>
-					<File
 						RelativePath="src\psycle\helpers\math\log.hpp"
 						>
 					</File>
@@ -283,6 +289,10 @@
 					</File>
 					<File
 						RelativePath="src\psycle\helpers\math\remainder.hpp"
+						>
+					</File>
+					<File
+						RelativePath="src\psycle\helpers\math\rint.hpp"
 						>
 					</File>
 					<File
