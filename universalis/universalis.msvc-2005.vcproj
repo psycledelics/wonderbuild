@@ -39,7 +39,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="UNIVERSALIS__SOURCE=1;UNIVERSALIS__META__PACKAGE__NAME=psycle"
+				PreprocessorDefinitions="UNIVERSALIS__SOURCE=1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -161,7 +161,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="UNIVERSALIS__SOURCE=1;UNIVERSALIS__META__PACKAGE__NAME=psycle"
+				PreprocessorDefinitions="UNIVERSALIS__SOURCE=1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"

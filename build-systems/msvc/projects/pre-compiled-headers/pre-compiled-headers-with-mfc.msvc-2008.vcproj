@@ -264,6 +264,10 @@
 	</References>
 	<Files>
 		<File
+			RelativePath="$(TopSrcDir)\build-systems\src\forced-include.private.hpp"
+			>
+		</File>
+		<File
 			RelativePath="$(TopSrcDir)\build-systems\src\pre-compiled.private.hpp"
 			>
 		</File>

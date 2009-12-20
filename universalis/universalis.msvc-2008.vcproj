@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="universalis"
 	ProjectGUID="{B78DFE59-051A-43FD-B489-775A4982581C}"
+	RootNamespace="universalis"
 	>
 	<Platforms>
 		<Platform
@@ -71,6 +72,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -96,7 +100,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-								PreprocessorDefinitions="UNIVERSALIS__SOURCE=1"
+				PreprocessorDefinitions="UNIVERSALIS__SOURCE=1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -127,6 +131,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -154,7 +161,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-								PreprocessorDefinitions="UNIVERSALIS__SOURCE=1"
+				PreprocessorDefinitions="UNIVERSALIS__SOURCE=1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -185,6 +192,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -212,7 +222,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-								PreprocessorDefinitions="UNIVERSALIS__SOURCE=1"
+				PreprocessorDefinitions="UNIVERSALIS__SOURCE=1"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -245,6 +255,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -252,7 +265,7 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
-			RelativePathToProject="..\build-systems\msvc\projects\pre-compiled-headers\pre-compiled-headers.msvc-2008.vcproj"
+			RelativePathToProject=".\projects\pre-compiled-headers\pre-compiled-headers.msvc-2008.vcproj"
 		/>
 	</References>
 	<Files>
@@ -261,6 +274,10 @@
 			>
 			<File
 				RelativePath="src\universalis\compiler.hpp"
+				>
+			</File>
+			<File
+				RelativePath="src\universalis\cpu.hpp"
 				>
 			</File>
 			<File
@@ -273,10 +290,6 @@
 			</File>
 			<File
 				RelativePath="src\universalis\os.hpp"
-				>
-			</File>
-			<File
-				RelativePath="src\universalis\cpu.hpp"
 				>
 			</File>
 			<File
@@ -512,7 +525,7 @@
 							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)\universalis,os,exception.obj"
 						/>
-						</FileConfiguration>
+					</FileConfiguration>
 					<FileConfiguration
 						Name="debug|x64"
 						>
@@ -687,6 +700,10 @@
 				Name="cpu"
 				>
 				<File
+					RelativePath="src\universalis\cpu\cpu.hpp"
+					>
+				</File>
+				<File
 					RelativePath="src\universalis\cpu\exception.cpp"
 					>
 					<FileConfiguration
@@ -724,10 +741,6 @@
 				</File>
 				<File
 					RelativePath="src\universalis\cpu\exception.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\universalis\cpu\cpu.hpp"
 					>
 				</File>
 				<Filter
@@ -795,15 +808,15 @@
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\stdlib\stdlib.hpp"
-					>
-				</File>
-				<File
 					RelativePath="src\universalis\stdlib\stdc_secure_lib.hpp"
 					>
 				</File>
 				<File
 					RelativePath="src\universalis\stdlib\cstdint.hpp"
+					>
+				</File>
+				<File
+					RelativePath="src\universalis\stdlib\stdlib.hpp"
 					>
 				</File>
 				<File
@@ -896,15 +909,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\diversalis\src\diversalis\cpu.hpp"
+				>
+			</File>
+			<File
 				RelativePath="..\diversalis\src\diversalis\diversalis.hpp"
 				>
 			</File>
 			<File
 				RelativePath="..\diversalis\src\diversalis\os.hpp"
-				>
-			</File>
-			<File
-				RelativePath="..\diversalis\src\diversalis\cpu.hpp"
 				>
 			</File>
 			<File
@@ -929,4 +942,6 @@
 			</Filter>
 		</Filter>
 	</Files>
+	<Globals>
+	</Globals>
 </VisualStudioProject>
