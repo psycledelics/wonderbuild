@@ -3,8 +3,8 @@
 	ProjectType="Visual C++"
 	Version="9.00"
 	Name="psycle-plugins/druttis-phantom"
-	RootNameSpace="phantom"
 	ProjectGUID="{A517216B-EE2E-4473-B342-2842C5F5BCBC}"
+	RootNamespace="phantom"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -260,10 +260,6 @@
 	<Files>
 		<File
 			RelativePath="..\src\psycle\plugins\druttis\DspLib\afloat.h"
-			>
-		</File>
-		<File
-			RelativePath="..\src\psycle\plugins\druttis\DspLib\AllPass.cpp"
 			>
 		</File>
 		<File

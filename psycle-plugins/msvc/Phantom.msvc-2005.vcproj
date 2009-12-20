@@ -263,10 +263,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\druttis\DspLib\AllPass.cpp"
-			>
-		</File>
-		<File
 			RelativePath="..\src\psycle\plugins\druttis\DspLib\AllPass.h"
 			>
 		</File>
