@@ -70,9 +70,13 @@ class Wonderbuild(ScriptTask):
 				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
 				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
 				self.cfg.include_paths.appendleft(top_src_dir / 'psycle-plugins' / 'src')
+				self.cfg.include_paths.appendleft(top_src_dir / 'external-packages' / 'vst-2.4')
 				for s in (src_dir / 'psycle' / 'core').find_iter(
 					in_pats = ('*.cpp',), prune_pats = ('todo',), ex_pats = ('psy4filter.cpp',)
 				): self.sources.append(s)
+				for s in (src_dir / 'seib' / 'vst').find_iter(
+					in_pats = ('*,coo',), prune_pats = ('todo',)
+				): self.sources.append(s);
 
 			class InstallHeaders(InstallTask):
 				@property
