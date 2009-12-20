@@ -22,12 +22,18 @@
 <option id="gnu.cpp.compiler.option.preprocessor.def.2078739358" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 <listOptionValue builtIn="false" value="DIVERSALIS__COMPILER__ECLIPSE"/>
 </option>
+<option id="gnu.cpp.compiler.option.include.paths.858042292" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/psycle/diversalis/src}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/psycle/universalis/src}&quot;"/>
+</option>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.237355109" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 </tool>
 </toolChain>
 </folderInfo>
 <sourceEntries>
-<entry excluding="diversalis/src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+<entry excluding="universalis/src|diversalis/src" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="diversalis/src"/>
+<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="universalis/src"/>
 </sourceEntries>
 </configuration>
 </storageModule>
