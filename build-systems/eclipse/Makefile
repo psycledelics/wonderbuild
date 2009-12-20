@@ -4,4 +4,4 @@ all:
 	$(dir)/wonderbuild_script.py --cxx-flags='-g3 -gdwarf-2'
 
 clean:
-	rm -Rvf $(dir)/++wonderbuild
+	rm -Rfv $(dir)/++wonderbuild

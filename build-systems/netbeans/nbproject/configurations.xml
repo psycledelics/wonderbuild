@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="62">
+  <logicalFolder name="root" displayName="root" projectFiles="true">
+    <df name="diversalis" root="../../diversalis/src"/>
+    <df name="freepsycle" root="../../freepsycle/src"/>
+    <df name="psycle-audiodrivers" root="../../psycle-audiodrivers/src"/>
+    <df name="psycle-core" root="../../psycle-core/src"/>
+    <df name="psycle-helpers" root="../../psycle-helpers/src"/>
+    <df name="psycle-player" root="../../psycle-player/src"/>
+    <df name="universalis" root="../../universalis/src"/>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false">
+      <itemPath>nbproject/project.xml</itemPath>
+      <itemPath>nbproject/configurations.xml</itemPath>
+      <itemPath>Makefile-netbeans.mk</itemPath>
+      <itemPath>Makefile-custom.mk</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceFolderFilter>^(nbproject|\+\+.*)$</sourceFolderFilter>
+  <sourceRootList>
+    <Elem>../../diversalis/src</Elem>
+    <Elem>../../universalis/src</Elem>
+    <Elem>../../freepsycle/src</Elem>
+    <Elem>../../psycle-helpers/src</Elem>
+    <Elem>../../psycle-audiodrivers/src</Elem>
+    <Elem>../../psycle-core/src</Elem>
+    <Elem>../../psycle-player/src</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile-netbeans.mk</projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <compilerSet>GNU|GNU</compilerSet>
+        <platform>2</platform>
+      </toolsSet>
+      <makefileType>
+        <makeTool>
+          <buildCommandWorkingDir></buildCommandWorkingDir>
+          <buildCommand>${MAKE} -f Makefile-custom.mk</buildCommand>
+          <cleanCommand>${MAKE} -f Makefile-custom.mk clean</cleanCommand>
+          <executablePath>../wonderbuild/++wonderbuild/staged-install/usr/local/bin/freepsycle-test-random-notes</executablePath>
+          <ccTool>
+            <incDir>
+              <pElem>/usr/lib/gtkmm-2.4/include</pElem>
+              <pElem>/usr/include/gstreamer-0.10</pElem>
+              <pElem>/usr/include/gtk-2.0</pElem>
+              <pElem>/usr/include/pangomm-1.4</pElem>
+              <pElem>/usr/include/atkmm-1.6</pElem>
+              <pElem>/usr/include/cairo</pElem>
+              <pElem>/usr/include/clutter-0.6/clutter-gtk</pElem>
+              <pElem>/usr/include/gtkmm-2.4</pElem>
+              <pElem>/usr/include/pixman-1</pElem>
+              <pElem>/usr/lib/gtk-2.0/include</pElem>
+              <pElem>/usr/include/alsa</pElem>
+              <pElem>/usr/lib/glib-2.0/include</pElem>
+              <pElem>/usr/include/libart-2.0</pElem>
+              <pElem>/usr/include/freetype2</pElem>
+              <pElem>/usr/include/cairomm-1.0</pElem>
+              <pElem>/usr/include/atk-1.0</pElem>
+              <pElem>/usr/include/libpng12</pElem>
+              <pElem>/usr/include/gdkmm-2.4</pElem>
+              <pElem>/usr/include/libxml2</pElem>
+              <pElem>/usr/include/clutter-0.6</pElem>
+              <pElem>/usr/include/glib-2.0</pElem>
+              <pElem>/usr/include/libgnomecanvas-2.0</pElem>
+              <pElem>/usr/lib/libgnomecanvasmm-2.6/include</pElem>
+              <pElem>/usr/lib/glibmm-2.4/include</pElem>
+              <pElem>/usr/include/glibmm-2.4</pElem>
+              <pElem>/usr/lib/gdkmm-2.4/include</pElem>
+              <pElem>/usr/include/pango-1.0</pElem>
+              <pElem>/usr/include/gail-1.0</pElem>
+              <pElem>/usr/include/libxml++-2.6</pElem>
+              <pElem>/usr/lib/libxml++-2.6/include</pElem>
+              <pElem>/usr/include/libgnomecanvasmm-2.6</pElem>
+              <pElem>/usr/include/sigc++-2.0</pElem>
+              <pElem>/usr/lib/sigc++-2.0/include</pElem>
+              <pElem>../../diversalis/src</pElem>
+              <pElem>../../universalis/src</pElem>
+              <pElem>../../psycle-helpers/src</pElem>
+              <pElem>../../psycle-core/src</pElem>
+              <pElem>../../psycle-plugins/src</pElem>
+              <pElem>../../psycle-audiodrivers/src</pElem>
+              <pElem>../../psycle-player/src</pElem>
+              <pElem>../../freepsycle/src</pElem>
+            </incDir>
+            <preprocessorList>
+              <Elem>DIVERSALIS__COMPILER__NETBEANS</Elem>
+              <Elem>PNG_NO_MMX_CODE</Elem>
+              <Elem>PSYCLE__LIBXMLPP_AVAILABLE</Elem>
+              <Elem>PSYCLE__JACK_AVAILABLE</Elem>
+              <Elem>PSYCLE__ALSA_AVAILABLE</Elem>
+            </preprocessorList>
+          </ccTool>
+        </makeTool>
+      </makefileType>
+    </conf>
+  </confs>
+</configurationDescriptor>
