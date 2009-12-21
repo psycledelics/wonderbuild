@@ -20,7 +20,7 @@ cmd='gdb --ex run --ex bt --args' &&
 driver=gstreamer &&
 
 # song to play (passed as argument or default to a demo)
-song=${1:-psycle/doc/Example - classic sounds demo.psy}
+song=${1:-psycle/doc/Example - classic sounds demo.psy} &&
 
 # LD_LIBRARY_PATH is needed for valgrind.
 # PSYCLE_PATH makes sure we don't get the path from the user config file in the home dir.

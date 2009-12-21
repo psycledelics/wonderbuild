@@ -5,7 +5,6 @@
 	Name="psycle"
 	ProjectGUID="{C6292BF4-9E87-4176-9101-A3D29D074B35}"
 	RootNamespace="psycle"
-	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -77,6 +76,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -138,6 +140,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -202,6 +207,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -262,6 +270,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -1273,6 +1284,22 @@
 							>
 						</File>
 						<File
+							RelativePath=".\src\psycle\host\ChangeGenCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\ChangeGenCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\ChangeInsCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\ChangeInsCommand.hpp"
+							>
+						</File>
+						<File
 							RelativePath=".\src\psycle\host\ClearCurrCommand.cpp"
 							>
 						</File>
@@ -1326,6 +1353,14 @@
 						</File>
 						<File
 							RelativePath=".\src\psycle\host\PatDeleteCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\PatHelperCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\PatHelperCommand.hpp"
 							>
 						</File>
 						<File
@@ -1405,6 +1440,30 @@
 							>
 						</File>
 						<File
+							RelativePath=".\src\psycle\host\SeqDecLenCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqDecLenCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqDecLongCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqDecLongCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqDecShortCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqDecShortCommand.hpp"
+							>
+						</File>
+						<File
 							RelativePath=".\src\psycle\host\SeqDeleteCommand.cpp"
 							>
 						</File>
@@ -1413,11 +1472,67 @@
 							>
 						</File>
 						<File
+							RelativePath=".\src\psycle\host\SeqHelperCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqHelperCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqIncLenCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqIncLenCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqIncLongCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqIncLongCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqIncShortCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqIncShortCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqInsCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqInsCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqNewCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqNewCommand.hpp"
+							>
+						</File>
+						<File
 							RelativePath=".\src\psycle\host\SeqPasteCommand.cpp"
 							>
 						</File>
 						<File
 							RelativePath=".\src\psycle\host\SeqPasteCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqSortCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqSortCommand.hpp"
 							>
 						</File>
 					</Filter>
