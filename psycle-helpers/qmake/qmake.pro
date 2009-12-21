@@ -30,7 +30,7 @@ sources_or_headers = \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/eaiff \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/fft \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/filter \
-	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/helpers \
+	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/hexstring_to_integer \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/clip \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/erase_all_nans_infinities_and_denormals \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/erase_denormals \
@@ -49,7 +49,8 @@ sources_or_headers = \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/msriff \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/riff \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/riffwave \
-	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/scale
+	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/scale \
+	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/value_mapper
 
 SOURCES_PRESERVE_PATH += $$sources(sources_or_headers)
 HEADERS += $$headers(sources_or_headers)
