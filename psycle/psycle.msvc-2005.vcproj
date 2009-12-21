@@ -1284,6 +1284,22 @@
 							>
 						</File>
 						<File
+							RelativePath=".\src\psycle\host\ChangeGenCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\ChangeGenCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\ChangeInsCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\ChangeInsCommand.hpp"
+							>
+						</File>
+						<File
 							RelativePath=".\src\psycle\host\ClearCurrCommand.cpp"
 							>
 						</File>
@@ -1424,6 +1440,30 @@
 							>
 						</File>
 						<File
+							RelativePath=".\src\psycle\host\SeqDecLenCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqDecLenCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqDecLongCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqDecLongCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqDecShortCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqDecShortCommand.hpp"
+							>
+						</File>
+						<File
 							RelativePath=".\src\psycle\host\SeqDeleteCommand.cpp"
 							>
 						</File>
@@ -1437,6 +1477,30 @@
 						</File>
 						<File
 							RelativePath=".\src\psycle\host\SeqHelperCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqIncLenCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqIncLenCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqIncLongCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqIncLongCommand.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqIncShortCommand.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SeqIncShortCommand.hpp"
 							>
 						</File>
 						<File
