@@ -36,9 +36,9 @@ sources_or_headers = \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/erase_denormals \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/rint \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math \
+	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/constants \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/log \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/math \
-	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/pi \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/remainder \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/round \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/sine_cosine \
