@@ -20,7 +20,6 @@ DESTDIR = $$BUILD_DIR # Where the final executable goes.
 #PRECOMPILED_HEADER = $$TOP_SRC_DIR/build-systems/src/forced-include.private.hpp
 
 sources_or_headers = \
-	$$UNIVERSALIS_DIR/src/universalis/compiler/cast \
 	$$UNIVERSALIS_DIR/src/universalis/compiler/compiler \
 	$$UNIVERSALIS_DIR/src/universalis/compiler/concatenated \
 	$$UNIVERSALIS_DIR/src/universalis/compiler/detail/gnu/diagnostics \
@@ -56,10 +55,8 @@ sources_or_headers = \
 	$$UNIVERSALIS_DIR/src/universalis/compiler/location \
 	$$UNIVERSALIS_DIR/src/universalis/compiler/numeric \
 	$$UNIVERSALIS_DIR/src/universalis/compiler/stringized \
-	$$UNIVERSALIS_DIR/src/universalis/compiler/template_constructors \
 	$$UNIVERSALIS_DIR/src/universalis/compiler/token \
 	$$UNIVERSALIS_DIR/src/universalis/compiler/typenameof \
-	$$UNIVERSALIS_DIR/src/universalis/compiler/virtual_factory \
 	$$UNIVERSALIS_DIR/src/universalis/detail/configuration \
 	$$UNIVERSALIS_DIR/src/universalis/detail/project \
 	$$UNIVERSALIS_DIR/src/universalis/exception \

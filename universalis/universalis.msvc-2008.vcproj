@@ -304,10 +304,6 @@
 				Name="compiler"
 				>
 				<File
-					RelativePath="src\universalis\compiler\cast.hpp"
-					>
-				</File>
-				<File
 					RelativePath="src\universalis\compiler\compiler.hpp"
 					>
 				</File>
@@ -328,19 +324,11 @@
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\compiler\template_constructors.hpp"
-					>
-				</File>
-				<File
 					RelativePath="src\universalis\compiler\token.hpp"
 					>
 				</File>
 				<File
 					RelativePath="src\universalis\compiler\typenameof.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\universalis\compiler\virtual_factory.hpp"
 					>
 				</File>
 				<Filter
