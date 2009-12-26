@@ -97,7 +97,7 @@ class Wonderbuild(ScriptTask):
 				if gstreamer: s.append(dir / 'gstreamerout.cpp')
 				if False:
 					if netaudio:  s.append(dir / 'netaudioout.cpp')
-					if asio:      s.append(dir / 'asioout.cpp')
+					if asio:      s.append(dir / 'asiointerface.cpp')
 
 			def apply_cxx_to(self, cfg):
 				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
