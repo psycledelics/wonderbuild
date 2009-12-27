@@ -44,7 +44,7 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.install import InstallTask
 
 		check_cfg = cfg.clone()
-		gstreamer = PkgConfigCheckTask.shared(check_cfg, ['gstreamer-0.10', 'gstreamer-plugins-base-0.10'])
+		gstreamer = PkgConfigCheckTask.shared(check_cfg, ['gstreamer-0.10'])
 		jack = PkgConfigCheckTask.shared(check_cfg, ['jack >= 0.101.1'])
 		alsa = PkgConfigCheckTask.shared(check_cfg, ['alsa >= 1.0'])
 		gtkmm = PkgConfigCheckTask.shared(check_cfg, ['gtkmm-2.4'])

@@ -48,7 +48,7 @@ class Wonderbuild(ScriptTask):
 		alsa = PkgConfigCheckTask.shared(check_cfg, ['alsa >= 1.0'])
 		jack = PkgConfigCheckTask.shared(check_cfg, ['jack >= 0.101.1'])
 		esound = PkgConfigCheckTask.shared(check_cfg, ['esound'])
-		gstreamer = PkgConfigCheckTask.shared(check_cfg, ['gstreamer-0.10 >= 0.10 gstreamer-plugins-base-0.10 >= 0.10'])
+		gstreamer = PkgConfigCheckTask.shared(check_cfg, ['gstreamer-0.10 >= 0.10'])
 		winmm = WinMMCheckTask.shared(check_cfg)
 		dsound = DSoundCheckTask.shared(check_cfg)
 
