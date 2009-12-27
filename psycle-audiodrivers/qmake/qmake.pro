@@ -25,6 +25,9 @@ sources_or_headers = \
 	$$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/wavefileout
 
 unix {
+	contains(DEFINES, PSYCLE__GSTREAMER_AVAILABLE) {
+		sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/gstreamerout
+	}
 	contains(DEFINES, PSYCLE__ALSA_AVAILABLE) {
 		sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/alsaout
 	}
@@ -33,9 +36,6 @@ unix {
 	}
 	contains(DEFINES, PSYCLE__ESOUND_AVAILABLE) {
 		sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/esoundout
-	}
-	contains(DEFINES, PSYCLE__GSTREAMER_AVAILABLE) {
-		sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/gstreamerout
 	}
 	contains(DEFINES, PSYCLE__NET_AUDIO_AVAILABLE) {
 		LIBS *= $$linkLibs(audio)

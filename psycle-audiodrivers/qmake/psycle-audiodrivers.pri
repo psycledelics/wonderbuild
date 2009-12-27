@@ -7,6 +7,12 @@ isEmpty(psycle_audiodrivers_included) {
 	unix {
 		CONFIG *= link_pkgconfig # adds support for pkg-config via the PKG_CONFIG var
 
+		system(pkg-config --exists gstreamer-0.10) {
+			message( "pkg-config thinks gstreamer libs are available..." )
+			PKGCONFIG *= gstreamer-0.10 gstreamer-plugins-base-0.10
+			DEFINES *= PSYCLE__GSTREAMER_AVAILABLE # This is used in the source to determine when to include gstreamer-specific things.
+		}
+
 		system(pkg-config --exists alsa) {
 			message( "pkg-config thinks alsa libs are available..." )
 			PKGCONFIG *= alsa 
@@ -25,13 +31,7 @@ isEmpty(psycle_audiodrivers_included) {
 			DEFINES *= PSYCLE__ESOUND_AVAILABLE # This is used in the source to determine when to include esound-specific things.
 		}
 
-		system(pkg-config --exists gstreamer-0.10 gstreamer-plugins-base-0.10) {
-			message( "pkg-config thinks gstreamer libs are available..." )
-			PKGCONFIG *= gstreamer-0.10 gstreamer-plugins-base-0.10
-			DEFINES *= PSYCLE__GSTREAMER_AVAILABLE # This is used in the source to determine when to include gstreamer-specific things.
-		}
-
-		false { # note: the net audio output driver is probably not (well) polished/tested anyway. pulse through alsa is a good alternative.
+		false { # these drivers need testing
 			# FIXME: not sure how to test for netaudio...
 			exists(/usr/include/audio/audiolib.h) {
 				DEFINES *= PSYCLE__NET_AUDIO_AVAILABLE # This is used in the source to determine when to include net-audio-specific things.
@@ -59,12 +59,12 @@ isEmpty(psycle_audiodrivers_included) {
 			DEFINES *= PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE # This is used in the source to determine when to include direct-sound-specific things.
 		}
 
-		true { # FIXME: not sure how to test for mme...
+		false { # these drivers need testing
+			# FIXME: not sure how to test for mme...
 			message("Assuming you have microsoft mme.")
 			DEFINES *= PSYCLE__MICROSOFT_MME_AVAILABLE # This is used in the source to determine when to include mme-specific things.
-		}
 
-		false { # FIXME: asio needs to be built as a lib, which is rather cubersome, or embeeded into qpsycle itself, which sucks...
+			# FIXME: asio needs to be built as a lib, which is rather cubersome, or embeeded into qpsycle itself, which sucks...
 			message("Blergh... steinberg asio.")
 			DEFINES *= PSYCLE__STEINBERG_ASIO_AVAILABLE # This is used in the source to determine when to include asio-specific things.
 		}

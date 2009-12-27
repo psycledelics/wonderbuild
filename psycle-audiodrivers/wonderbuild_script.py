@@ -70,15 +70,15 @@ class Wonderbuild(ScriptTask):
 
 			def _apply_defines(self, cfg):
 				d = cfg.defines
-				if alsa:   d['PSYCLE__ALSA_AVAILABLE'] = None
-				if jack:   d['PSYCLE__JACK_AVAILABLE'] = None
-				if esound: d['PSYCLE__ESOUND_AVAILABLE'] = None
-				if dsound: d['PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE'] = None
-				if winmm:  d['PSYCLE__MICROSOFT_MME_AVAILABLE'] = None
 				if gstreamer: d['PSYCLE__GSTREAMER_AVAILABLE'] = None
-				if False:
+				if alsa:      d['PSYCLE__ALSA_AVAILABLE'] = None
+				if esound:    d['PSYCLE__ESOUND_AVAILABLE'] = None
+				if dsound:    d['PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE'] = None
+				if False: # these drivers need testing
+					if jack:      d['PSYCLE__JACK_AVAILABLE'] = None
 					if netaudio:  d['PSYCLE__NET_AUDIO_AVAILABLE'] = None
 					if asio:      d['PSYCLE__STEINBERG_ASIO_AVAILABLE'] = None
+					if winmm:     d['PSYCLE__MICROSOFT_MME_AVAILABLE'] = None
 			
 			def do_mod_phase(self):
 				self.cfg.include_paths.appendleft(src_dir)
@@ -89,15 +89,15 @@ class Wonderbuild(ScriptTask):
 				dir = src_dir / 'psycle' / 'audiodrivers'
 				s.append(dir / 'audiodriver.cpp')
 				s.append(dir / 'wavefileout.cpp')
-				if alsa:   s.append(dir / 'alsaout.cpp')
-				if jack:   s.append(dir / 'jackout.cpp')
-				if esound: s.append(dir / 'esoundout.cpp')
-				if dsound: s.append(dir / 'microsoftdirectsoundout.cpp')
-				if winmm:  s.append(dir / 'microsoftmmewaveout.cpp')
 				if gstreamer: s.append(dir / 'gstreamerout.cpp')
-				if False:
+				if alsa:      s.append(dir / 'alsaout.cpp')
+				if esound:    s.append(dir / 'esoundout.cpp')
+				if dsound:    s.append(dir / 'microsoftdirectsoundout.cpp')
+				if False: # these drivers need testing
+					if jack:      s.append(dir / 'jackout.cpp')
 					if netaudio:  s.append(dir / 'netaudioout.cpp')
 					if asio:      s.append(dir / 'asiointerface.cpp')
+					if winmm:     s.append(dir / 'microsoftmmewaveout.cpp')
 
 			def apply_cxx_to(self, cfg):
 				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
@@ -119,15 +119,15 @@ class Wonderbuild(ScriptTask):
 						dir = src_dir / 'psycle' / 'audiodrivers'
 						s.append(dir / 'audiodriver.h')
 						s.append(dir / 'wavefileout.h')
-						if alsa:   s.append(dir / 'alsaout.h')
-						if jack:   s.append(dir / 'jackout.h')
-						if esound: s.append(dir / 'esoundout.h')
-						if dsound: s.append(dir / 'microsoftdirectsoundout.h')
-						if winmm:  s.append(dir / 'microsoftmmewaveout.h')
 						if gstreamer: s.append(dir / 'gstreamerout.h')
-						if False:
+						if alsa:      s.append(dir / 'alsaout.h')
+						if esound:    s.append(dir / 'esoundout.h')
+						if dsound:    s.append(dir / 'microsoftdirectsoundout.h')
+						if False: # these drivers need testing
+							if jack:      s.append(dir / 'jackout.h')
 							if netaudio:  s.append(dir / 'netaudioout.h')
 							if asio:      s.append(dir / 'asioout.h')
+							if winmm:     s.append(dir / 'microsoftmmewaveout.h')
 						return s
 
 		self._mod_dep_phases = mod_dep_phases = AudioDriversMod()
