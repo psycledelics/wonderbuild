@@ -60,7 +60,10 @@
             <in>test.hpp</in>
           </df>
           <in>base.hpp</in>
+          <in>cast.hpp</in>
+          <in>template_constructors.hpp</in>
           <in>typenames.hpp</in>
+          <in>virtual_factory.hpp</in>
           <in>wrappers.hpp</in>
         </df>
         <df name="host">
@@ -286,11 +289,11 @@
         <df name="helpers">
           <df name="math">
             <in>clip.hpp</in>
+            <in>constants.hpp</in>
             <in>erase_all_nans_infinities_and_denormals.hpp</in>
             <in>erase_denormals.hpp</in>
             <in>log.hpp</in>
             <in>math.hpp</in>
-            <in>pi.hpp</in>
             <in>remainder.hpp</in>
             <in>rint.hpp</in>
             <in>round.hpp</in>
@@ -320,8 +323,8 @@
           <in>fft.hpp</in>
           <in>filter.cpp</in>
           <in>filter.hpp</in>
-          <in>helpers.cpp</in>
-          <in>helpers.hpp</in>
+          <in>hexstring_to_integer.cpp</in>
+          <in>hexstring_to_integer.hpp</in>
           <in>math.hpp</in>
           <in>mersennetwister.cpp</in>
           <in>mersennetwister.hpp</in>
@@ -332,6 +335,8 @@
           <in>riffwave.cpp</in>
           <in>riffwave.hpp</in>
           <in>scale.hpp</in>
+          <in>value_mapper.cpp</in>
+          <in>value_mapper.hpp</in>
         </df>
       </df>
       <in>unit_tests.cpp</in>
@@ -391,16 +396,13 @@
             <in>ellipsis.cpp</in>
             <in>ellipsis.hpp</in>
           </df>
-          <in>cast.hpp</in>
           <in>compiler.hpp</in>
           <in>concatenated.hpp</in>
           <in>location.hpp</in>
           <in>numeric.hpp</in>
           <in>stringized.hpp</in>
-          <in>template_constructors.hpp</in>
           <in>token.hpp</in>
           <in>typenameof.hpp</in>
-          <in>virtual_factory.hpp</in>
         </df>
         <df name="cpu">
           <df name="atomic">
@@ -586,6 +588,7 @@
               <Elem>PSYCLE__JACK_AVAILABLE</Elem>
               <Elem>PSYCLE__ALSA_AVAILABLE</Elem>
               <Elem>PSYCLE__GSTREAMER_AVAILABLE</Elem>
+              <Elem>PSYCLE__ESOUND_AVAILABLE</Elem>
             </preprocessorList>
           </ccTool>
         </makeTool>
