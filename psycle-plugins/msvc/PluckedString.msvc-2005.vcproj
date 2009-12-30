@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="psycle-plugins/druttis-plucked-string"
-	RootNamespace="plucked-string"
+	RootNamespace="pluckedString"
 	ProjectGUID="{CCBCA650-988B-4454-954E-3F25121AE411}"
 	TargetFrameworkVersion="131072"
 	>
