@@ -4,17 +4,7 @@ isEmpty(boost_included) {
 
 	unix {
 		macx: LIBS *= $$linkLibs(boost_signals-1_33_1 boost_thread-1_33_1)
-		else {
-			# The stable debian version 4.0 ("etch") doesn't have libs with the "-mt" suffix yet,
-			# so we need to use the backward compatible symlinks until a new stable debian version is released.
-			system(test -f /etc/debian_version) { # test if running debian-based distribution...
-				LIBS *= $$linkLibs(boost_signals)
-				LIBS *= $$linkLibs(boost_thread)
-			} else {
-				LIBS *= $$linkLibs(boost_signals-mt)
-				LIBS *= $$linkLibs(boost_thread-mt)
-			}
-		}
+		else: LIBS *= $$linkLibs(boost_signals-mt boost_thread-mt)
 	} else: win32 {
 		win32-g++:            BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.33.1
 		else: win32-msvc2008: BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.35.0
