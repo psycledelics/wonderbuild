@@ -288,11 +288,7 @@
 						>
 					</File>
 					<File
-						RelativePath="src\psycle\helpers\math\remainder.hpp"
-						>
-					</File>
-					<File
-						RelativePath="src\psycle\helpers\math\rint.hpp"
+						RelativePath="src\psycle\helpers\math\lrint.hpp"
 						>
 					</File>
 					<File
@@ -300,19 +296,19 @@
 						>
 					</File>
 					<File
-						RelativePath="src\psycle\helpers\math\sine.hpp"
+						RelativePath="src\psycle\helpers\math\sin.hpp"
 						>
 					</File>
 					<File
-						RelativePath="src\psycle\helpers\math\sine_cosine.hpp"
+						RelativePath="src\psycle\helpers\math\sincos.hpp"
 						>
 					</File>
 					<File
-						RelativePath="src\psycle\helpers\math\sine_sequence.hpp"
+						RelativePath="src\psycle\helpers\math\sinseq.hpp"
 						>
 					</File>
 					<File
-						RelativePath="src\psycle\helpers\math\truncate.hpp"
+						RelativePath="src\psycle\helpers\math\trunc.hpp"
 						>
 					</File>
 				</Filter>

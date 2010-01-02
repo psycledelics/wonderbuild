@@ -39,12 +39,11 @@ sources_or_headers = \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/constants \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/log \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/math \
-	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/remainder \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/round \
-	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/sine_cosine \
-	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/sine \
-	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/sine_sequence \
-	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/truncate \
+	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/sin \
+	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/sincos \
+	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/sinseq \
+	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/trunc \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/mersennetwister \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/msriff \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/riff \

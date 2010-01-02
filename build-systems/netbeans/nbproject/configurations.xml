@@ -294,13 +294,12 @@
             <in>erase_denormals.hpp</in>
             <in>log.hpp</in>
             <in>math.hpp</in>
-            <in>remainder.hpp</in>
-            <in>rint.hpp</in>
+            <in>lrint.hpp</in>
             <in>round.hpp</in>
-            <in>sine.hpp</in>
-            <in>sine_cosine.hpp</in>
-            <in>sine_sequence.hpp</in>
-            <in>truncate.hpp</in>
+            <in>sin.hpp</in>
+            <in>sincos.hpp</in>
+            <in>sinseq.hpp</in>
+            <in>trunc.hpp</in>
           </df>
           <df name="todo">
             <in>ring_buffer.hpp</in>
