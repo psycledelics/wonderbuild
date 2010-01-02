@@ -31,19 +31,18 @@ sources_or_headers = \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/fft \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/filter \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/hexstring_to_integer \
+	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/clip \
+	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/constants \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/erase_all_nans_infinities_and_denormals \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/erase_denormals \
-	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/rint \
-	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math \
-	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/constants \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/log \
+	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/lrint \
+	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/lround \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/math \
-	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/round \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/sin \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/sincos \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/sinseq \
-	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/math/trunc \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/mersennetwister \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/msriff \
 	$$PSYCLE_HELPERS_DIR/src/psycle/helpers/riff \

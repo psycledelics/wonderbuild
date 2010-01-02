@@ -293,13 +293,12 @@
             <in>erase_all_nans_infinities_and_denormals.hpp</in>
             <in>erase_denormals.hpp</in>
             <in>log.hpp</in>
-            <in>math.hpp</in>
             <in>lrint.hpp</in>
-            <in>round.hpp</in>
+            <in>lround.hpp</in>
+            <in>math.hpp</in>
             <in>sin.hpp</in>
             <in>sincos.hpp</in>
             <in>sinseq.hpp</in>
-            <in>trunc.hpp</in>
           </df>
           <df name="todo">
             <in>ring_buffer.hpp</in>

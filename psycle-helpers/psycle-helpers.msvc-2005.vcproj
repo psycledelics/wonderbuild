@@ -292,7 +292,7 @@
 						>
 					</File>
 					<File
-						RelativePath="src\psycle\helpers\math\round.hpp"
+						RelativePath="src\psycle\helpers\math\lround.hpp"
 						>
 					</File>
 					<File
@@ -305,10 +305,6 @@
 					</File>
 					<File
 						RelativePath="src\psycle\helpers\math\sinseq.hpp"
-						>
-					</File>
-					<File
-						RelativePath="src\psycle\helpers\math\trunc.hpp"
 						>
 					</File>
 				</Filter>
