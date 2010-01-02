@@ -220,7 +220,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 
 	@staticmethod
 	def generate_option_help(help):
-		help['check-missing'] = (None, 'check for missing built files (rebuilds files you manually deleted in the build dir)')
+		help['check-missing'] = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'yes')
 
 		help['cxx']           = ('<prog>', 'use <prog> as c++ compiler', 'CXX env var: ' + os.environ.get('CXX', '(not set)'))
 		help['cxx-flags']     = ('[flags]', 'use specific c++ compiler flags', 'CXXFLAGS env var: ' + os.environ.get('CXXFLAGS', '(not set)'))
@@ -260,7 +260,8 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 		
 	def __call__(self, sched_ctx):
 		o = self.options
-		self.check_missing = 'check-missing' in o
+
+		self.check_missing = o.get('check-missing', 'yes') != 'no'
 
 		try:
 			old_sig, \

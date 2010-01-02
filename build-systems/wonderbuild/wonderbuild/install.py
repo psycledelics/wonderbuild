@@ -23,13 +23,13 @@ class InstallTask(ProjectTask, OptionDecl):
 	known_options = set(['check-missing'])
 
 	@staticmethod
-	def generate_option_help(help): help['check-missing'] = (None, 'check for missing built files (rebuilds files you manually deleted in the build dir)')
+	def generate_option_help(help): help['check-missing'] = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'yes')
 	
 	def __init__(self, project, name):
 		ProjectTask.__init__(self, project)
 		self.name = name
 		self.fhs = FHS.shared(project)
-		self.check_missing = 'check-missing' in self.project.options
+		self.check_missing = self.project.options.get('check-missing', 'yes') != 'no'
 
 	def __str__(self): return \
 		'install ' + self.name + ' from ' + str(self.trim_prefix) + \
@@ -83,7 +83,7 @@ class InstallTask(ProjectTask, OptionDecl):
 							if not dest.exists:
 								if __debug__ and is_debug: debug('task: target missing: ' + str(dest))
 								changed_sources.append(s)
-				if len(changed_sources) == 0:
+				if len(changed_sources) == 0 and old_sig != sig:
 					# it's self.dest_dir that changed
 					changed_sources = self.sources
 			if len(changed_sources) == 0:
