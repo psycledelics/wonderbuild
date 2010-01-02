@@ -7,6 +7,7 @@ if __name__ == '__main__':
 	path = '/tmp/test'
 
 	while True:
+		os.unlink(path)
 		file = open(path, 'wb')
 		file.write('test')
 		file.close()
