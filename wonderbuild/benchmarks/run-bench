@@ -45,11 +45,11 @@ main() {
 
 	case $tool in
 		wonderbuild)
-			measure $wonderbuild         --bld-dir=build-$tool --cxx=g++ --jobs=$jobs "$@"
+			measure $wonderbuild         --bld-dir=build-$tool --cxx=g++ --jobs=$jobs --check-missing=no "$@"
 		;;
 	
 		wonderbuild-on-jython)
-			measure $jython $wonderbuild --bld-dir=build-$tool --cxx=g++ --jobs=$jobs "$@"
+			measure $jython $wonderbuild --bld-dir=build-$tool --cxx=g++ --jobs=$jobs --check-missing=no "$@"
 		;;
 
 		fbuild)
