@@ -14,7 +14,7 @@ if USE_HASH_SUM: from signature import Sig
 
 class FileSystem(object):
 	def __init__(self, persistent, global_purge=True):
-		self._global_purge = global_purge
+		self.global_purge = global_purge
 		cwd = os.getcwd()
 		try: self.root, old_cwd = persistent[str(self.__class__)]
 		except KeyError:
@@ -381,7 +381,7 @@ class Node(object):
 class RootNode(Node):
 	def __getstate__(self):
 		if self._children is not None:
-			if self._fs._global_purge: self._global_purge_unused_children()
+			if self._fs.global_purge: self._global_purge_unused_children()
 			else: self._partial_purge_unused_children()
 		return Node.__getstate__(self)
 	

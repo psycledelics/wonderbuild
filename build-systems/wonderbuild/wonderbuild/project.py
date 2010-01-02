@@ -112,6 +112,7 @@ class Project(Task, SharedTaskHolder):
 				self.processsing = True
 				for x in sched_ctx.parallel_wait(*tasks): yield x
 				self.processsing = False
+		except: self.fs.global_purge = False # some task failed, so not all the tasks have been evaluated => we can't do the global purge of unused nodes
 		finally:
 			if False and __debug__ and is_debug: print self.persistent
 			gc_enabled = gc.isenabled()
