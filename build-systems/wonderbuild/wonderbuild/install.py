@@ -65,6 +65,7 @@ class InstallTask(ProjectTask, OptionDecl):
 			if old_sig is None:
 				sigs = {}
 				changed_sources = self.sources
+				removed_sources = []
 				need_process = True
 			else:
 				changed_sources = []
@@ -86,15 +87,15 @@ class InstallTask(ProjectTask, OptionDecl):
 								if __debug__ and is_debug: debug('task: target missing: ' + str(dest))
 								changed_sources.append(s)
 				if len(changed_sources) != 0: need_process = True
-				# remove old sources
+				# deinstall removed sources
 				removed_sources = []
 				for s in sigs:
 					if not s in self.sources: removed_sources.append(s)
 				if len(removed_sources) != 0:
-					# Some sources has been removed from the list of sources.
+					# Some sources have been removed from the list of sources.
 					need_process = True
 				elif not need_process and old_sig != sig:
-					# it's self.dest_dir that changed
+					# it's self.dest_dir that changed (non exclusive, actually)
 					changed_sources = self.sources
 					need_process = True
 			if not need_process:
