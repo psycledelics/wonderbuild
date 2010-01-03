@@ -61,9 +61,11 @@ class InstallTask(ProjectTask, OptionDecl):
 		if old_sig == sig and not self.check_missing:
 				if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 		else:
+			need_process = False
 			if old_sig is None:
 				sigs = {}
 				changed_sources = self.sources
+				need_process = True
 			else:
 				changed_sources = []
 				for s in self.sources:
@@ -83,10 +85,19 @@ class InstallTask(ProjectTask, OptionDecl):
 							if not dest.exists:
 								if __debug__ and is_debug: debug('task: target missing: ' + str(dest))
 								changed_sources.append(s)
-				if len(changed_sources) == 0 and old_sig != sig:
+				if len(changed_sources) != 0: need_process = True
+				# remove old sources
+				removed_sources = []
+				for s in sigs:
+					if not s in self.sources: removed_sources.append(s)
+				if len(removed_sources) != 0:
+					# Some sources has been removed from the list of sources.
+					need_process = True
+				elif not need_process and old_sig != sig:
 					# it's self.dest_dir that changed
 					changed_sources = self.sources
-			if len(changed_sources) == 0:
+					need_process = True
+			if not need_process:
 				if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 			else:
 				for s in changed_sources: sigs[s] = s.sig
@@ -98,19 +109,27 @@ class InstallTask(ProjectTask, OptionDecl):
 						for s in changed_sources:
 							rel_path = s.rel_path(self.trim_prefix)
 							dest = self.dest_dir / rel_path
-							install_tuples.append((s, dest, rel_path))
+							install_tuples.append((s, dest, False, rel_path))
+						for s in removed_sources:
+							rel_path = s.rel_path(self.trim_prefix)
+							dest = self.dest_dir / rel_path
+							install_tuples.append((s, dest, True, rel_path))
 						if not silent:
-							list = [t[2] for t in install_tuples]
+							list = [(t[2] and '-' or '+') + t[3] for t in install_tuples]
 							list.sort()
 							self.print_desc_multi_column_format(
 								str(self.dest_dir)+ ': installing ' + self.name + ' from ' + str(self.trim_prefix),
 								list, color_bg_fg_rgb((220, 220, 220), (70, 100, 150))
 							)
 						for t in install_tuples:
-							s, dest = t[0], t[1]#, t[2]
-							if dest.exists: os.remove(dest.path)
-							else: dest.parent.make_dir()
-							install(s.path, dest.path)
+							s, dest, deinstall = t[0], t[1], t[2],# t[3]
+							if deinstall:
+								if dest.exists: os.remove(dest.path)
+								del sigs[s]
+							else:
+								if dest.exists: os.remove(dest.path)
+								else: dest.parent.make_dir()
+								install(s.path, dest.path)
 						self.persistent = sig, sigs
 					finally: self.dest_dir.lock.release()
 				finally: sched_ctx.lock.acquire()

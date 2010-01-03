@@ -887,11 +887,11 @@ class ModTask(ModDepPhases, ProjectTask):
 						break
 			if len(self.cfg.pkg_config) != 0:
 				self.cfg.ld_sig # compute the signature before, because we don't need pkg-config ld flags in the cfg sig
-		if not need_process and state[0] != self._mod_sig:
-				if __debug__ and is_debug: debug('task: mod sig changed: ' + str(self))
-				changed_sources = self.sources
-				need_process = True
-		if not need_process:
+		if state[0] != self._mod_sig:
+			if __debug__ and is_debug: debug('task: mod sig changed: ' + str(self))
+			changed_sources = self.sources
+			need_process = True
+		elif not need_process:
 			implicit_deps = state[2]
 			if len(implicit_deps) > len(self.sources):
 				# Some source has been removed from the list of sources to build.
@@ -907,7 +907,7 @@ class ModTask(ModDepPhases, ProjectTask):
 			sched_ctx.lock.release()
 			try:
 				implicit_deps = state[2]
-				if len(implicit_deps) == len(self.sources):
+				if len(implicit_deps) == len(self.sources): # (yes this is correct, even if it looks strange)
 					source_states = implicit_deps
 					removed_obj_names = None
 				else:
