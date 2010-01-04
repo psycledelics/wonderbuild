@@ -202,6 +202,6 @@ class Wonderbuild(ScriptTask):
 		for x in sched_ctx.parallel_wait(stk): yield x
 
 		if stk:
-			#stk_plucked = UniformMod(n + 'stk-plucked', p / 'stk' / 'stk.plucked', deps=(stk,))
+			stk_plucked = UniformMod(n + 'stk-plucked', p / 'stk' / 'stk.plucked', deps=(stk,))
 			stk_rev = UniformMod(n + 'stk-rev', p / 'stk' / 'stk.reverbs', deps=(stk,))
 			stk_shakers = UniformMod(n + 'stk-shakers', p / 'stk' / 'stk.shakers', deps=(stk,))
