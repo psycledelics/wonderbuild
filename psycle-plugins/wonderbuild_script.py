@@ -146,6 +146,7 @@ class Wonderbuild(ScriptTask):
 		legasynth_303 = UniformMod(n + 'legasynth-303', p / 'legasynth')
 		m3 = UniformMod(n + 'm3', p / 'm3')
 		moreamp_eq = UniformMod(n + 'maeq', p / 'moreamp_eq')
+		nrs_7900_fractal = UniformMod(n + 'nrs-7900-fractal', p / 'ninereeds_7900')
 		pooplog_autopan = UniformMod(n + 'pooplog-autopan', p / 'pooplog_autopan')
 		pooplog_delay = UniformMod(n + 'pooplog-delay', p / 'pooplog_delay')
 		pooplog_delay_light = UniformMod(n + 'pooplog-delay-light', p / 'pooplog_delay_light')
