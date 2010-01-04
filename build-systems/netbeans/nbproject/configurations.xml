@@ -130,10 +130,11 @@
           <in>format.hpp</in>
         </df>
         <df name="tests">
+          <df name="classic_player">
+            <in>main.cpp</in>
+            <in>main.hpp</in>
+          </df>
           <df name="random_notes">
-            <df name="todo">
-              <in>grammar.cpp</in>
-            </df>
             <in>main.cpp</in>
             <in>main.hpp</in>
           </df>

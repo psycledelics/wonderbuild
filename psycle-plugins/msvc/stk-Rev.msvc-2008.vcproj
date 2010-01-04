@@ -262,59 +262,59 @@
 			Name="stk"
 			>
 			<File
-				RelativePath="..\..\external-packages\stk\Delay.cpp"
+				RelativePath="..\..\external-packages\stk-0\stk\Delay.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk\Delay.h"
+				RelativePath="..\..\external-packages\stk-0\stk\Delay.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk\Effect.cpp"
+				RelativePath="..\..\external-packages\stk-0\stk\Effect.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk\Effect.h"
+				RelativePath="..\..\external-packages\stk-0\stk\Effect.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk\Filter.cpp"
+				RelativePath="..\..\external-packages\stk-0\stk\Filter.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk\Filter.h"
+				RelativePath="..\..\external-packages\stk-0\stk\Filter.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk\JCRev.cpp"
+				RelativePath="..\..\external-packages\stk-0\stk\JCRev.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk\JCRev.h"
+				RelativePath="..\..\external-packages\stk-0\stk\JCRev.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk\NRev.cpp"
+				RelativePath="..\..\external-packages\stk-0\stk\NRev.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk\NRev.h"
+				RelativePath="..\..\external-packages\stk-0\stk\NRev.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk\PRCRev.cpp"
+				RelativePath="..\..\external-packages\stk-0\stk\PRCRev.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk\PRCRev.h"
+				RelativePath="..\..\external-packages\stk-0\stk\PRCRev.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk\Stk.cpp"
+				RelativePath="..\..\external-packages\stk-0\stk\Stk.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk\Stk.h"
+				RelativePath="..\..\external-packages\stk-0\stk\Stk.h"
 				>
 			</File>
 		</Filter>
