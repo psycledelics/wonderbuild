@@ -121,6 +121,7 @@ class Wonderbuild(ScriptTask):
 		arguru_reverb = UniformMod(n + 'arguru-reverb', p / 'arguru_reverb')
 		arguru_synth = UniformMod(n + 'arguru-synth-2f', p / 'arguru_synth_2_final')
 		arguru_yezar_freeverb = UniformMod(n + 'arguru-freeverb', p / 'yezar_freeverb')
+		arguru_compressor = UniformMod(n + 'arguru-compressor', p / 'arguru_compressor')
 		audacity_compressor = UniformMod(n + 'audacity-compressor', p / 'audacity' / 'compressor')
 		audacity_phaser = UniformMod(n + 'audacity-phaser', p / 'audacity' / 'phaser')
 		audacity_wahwah = UniformMod(n + 'wahwah', p / 'audacity' / 'wahwah')
