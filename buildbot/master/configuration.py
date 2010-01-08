@@ -442,7 +442,8 @@ else:
 			)
 		}
 	)
-	BuildmasterConfig['schedulers'].append(
+	# qpsycle automatic building disabled for the time being
+	if False: BuildmasterConfig['schedulers'].append(
 		Scheduler(
 			name = 'qpsycle',
 			builderNames = ['qpsycle'],
