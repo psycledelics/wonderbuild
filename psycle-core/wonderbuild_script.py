@@ -61,12 +61,13 @@ class Wonderbuild(ScriptTask):
 				self.cxx_phase = CoreMod.InstallHeaders(self.project, self.name + '-headers')
 				for x in ModTask.__call__(self, sched_ctx): yield x
 			
-			def apply_cxx_to(self, cfg):
-				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
-				ModTask.apply_cxx_to(self, cfg)
+			def _apply_defines(self, cfg):
+				d = cfg.defines
+				if xml: d['PSYCLE__CORE__CONFIG__LIBXMLPP_AVAILABLE'] = None
 
 			def do_mod_phase(self):
 				self.cfg.include_paths.appendleft(src_dir)
+				self._apply_defines(self.cfg)
 				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
 				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
 				self.cfg.include_paths.appendleft(top_src_dir / 'psycle-plugins' / 'src')
@@ -77,6 +78,11 @@ class Wonderbuild(ScriptTask):
 				for s in (src_dir / 'seib' / 'vst').find_iter(
 					in_pats = ('*,coo',), prune_pats = ('todo',)
 				): self.sources.append(s);
+
+			def apply_cxx_to(self, cfg):
+				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+				self._apply_defines(self.cfg)
+				ModTask.apply_cxx_to(self, cfg)
 
 			class InstallHeaders(InstallTask):
 				@property
