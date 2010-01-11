@@ -34,7 +34,7 @@ class Wonderbuild(ScriptTask):
 		common = ScriptLoaderTask.shared(project, top_src_dir / 'build-systems' / 'wonderbuild' / 'wonderbuild_script_common')
 		for x in sched_ctx.parallel_wait(common): yield x
 		self._common = common = common.script_task
-		cfg = common.cfg.new_or_clone()
+		cfg = common.cfg.clone()
 
 		from wonderbuild.cxx_tool_chain import ModTask
 		from wonderbuild.install import InstallTask

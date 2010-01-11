@@ -30,13 +30,13 @@ class Wonderbuild(ScriptTask):
 
 		universalis = ScriptLoaderTask.shared(project, top_src_dir / 'universalis')
 		helpers = ScriptLoaderTask.shared(project, top_src_dir / 'psycle-helpers')
-		for x in sched_ctx.parallel_wait(helpers): yield x
+		for x in sched_ctx.parallel_wait(universalis, helpers): yield x
 		universalis = universalis.script_task
 		self._common = common = universalis.common
 		universalis = universalis.mod_dep_phases
 		helpers_math = helpers.script_task.math_mod_dep_phases
 		pch = common.pch
-		cfg = common.cfg.new_or_clone()
+		cfg = common.cfg.clone()
 
 		from wonderbuild import UserReadableException
 		from wonderbuild.cxx_tool_chain import ModTask, BuildCheckTask

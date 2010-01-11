@@ -34,7 +34,7 @@ class Wonderbuild(ScriptTask):
 		self._common = common = core.common
 		core = core.mod_dep_phases
 		pch = common.pch
-		cfg = common.cfg.new_or_clone()
+		cfg = common.cfg.clone()
 
 		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, ModTask
 		from wonderbuild.install import InstallTask

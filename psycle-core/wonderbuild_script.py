@@ -37,7 +37,7 @@ class Wonderbuild(ScriptTask):
 		self._common = common = audiodrivers.common
 		audiodrivers = audiodrivers.mod_dep_phases
 		pch = common.pch
-		cfg = common.cfg.new_or_clone()
+		cfg = common.cfg.clone()
 
 		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, ModTask
 		from wonderbuild.std_checks.zlib import ZLibCheckTask
@@ -81,7 +81,7 @@ class Wonderbuild(ScriptTask):
 
 			def apply_cxx_to(self, cfg):
 				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
-				self._apply_defines(self.cfg)
+				self._apply_defines(cfg)
 				ModTask.apply_cxx_to(self, cfg)
 
 			class InstallHeaders(InstallTask):

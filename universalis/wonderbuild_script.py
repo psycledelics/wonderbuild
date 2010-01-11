@@ -36,7 +36,7 @@ class Wonderbuild(ScriptTask):
 		diversalis = diversalis.script_task
 		self._common = common = diversalis.common
 		diversalis = diversalis.mod_dep_phases
-		cfg = common.cfg.new_or_clone()
+		cfg = common.cfg.clone()
 
 		from wonderbuild import UserReadableException
 		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, PreCompileTasks, ModTask

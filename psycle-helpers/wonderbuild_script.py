@@ -40,7 +40,7 @@ class Wonderbuild(ScriptTask):
 		self._common = common = universalis.common
 		universalis = universalis.mod_dep_phases
 		pch = common.pch
-		cfg = common.cfg.new_or_clone()
+		cfg = common.cfg.clone()
 
 		from wonderbuild.cxx_tool_chain import UserBuildCfgTask, ModTask
 		from wonderbuild.std_checks.std_math import StdMathCheckTask
