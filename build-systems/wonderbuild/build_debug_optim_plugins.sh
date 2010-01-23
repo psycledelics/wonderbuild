@@ -14,7 +14,7 @@ psycle-player/wonderbuild_script.py  --install-dest-dir=/ --install-prefix-dir=$
 # choose either gdb, valgrind, alleyoop ...
 #cmd=valgrind &&
 #cmd="alleyoop --recursive $(pwd) --" &&
-cmd='gdb --ex run --ex bt --args' &&
+cmd='gdb --ex run --ex quit --args' &&
 
 # choose the audio driver (gstreamer, alsa, esd ...)
 #driver=alsa &&
