@@ -334,46 +334,6 @@
 				>
 			</File>
 			<Filter
-				Name="devices"
-				>
-				<Filter
-					Name="output"
-					>
-					<File
-						RelativePath="src\psycle\host\ASIOInterface.cpp"
-						>
-					</File>
-					<File
-						RelativePath="src\psycle\host\ASIOInterface.hpp"
-						>
-					</File>
-					<File
-						RelativePath="src\psycle\host\AudioDriver.cpp"
-						>
-					</File>
-					<File
-						RelativePath="src\psycle\host\AudioDriver.hpp"
-						>
-					</File>
-					<File
-						RelativePath="src\psycle\host\DirectSound.cpp"
-						>
-					</File>
-					<File
-						RelativePath="src\psycle\host\DirectSound.hpp"
-						>
-					</File>
-					<File
-						RelativePath="src\psycle\host\WaveOut.cpp"
-						>
-					</File>
-					<File
-						RelativePath="src\psycle\host\WaveOut.hpp"
-						>
-					</File>
-				</Filter>
-			</Filter>
-			<Filter
 				Name="resources"
 				Filter="*.bmp"
 				>
