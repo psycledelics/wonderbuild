@@ -8,8 +8,8 @@ cd $(dirname $0)/../.. &&
 dest=/tmp/psycle-player-test &&
 
 # build the plugins separately so that we can use different compiler flags
-common_flags='-ggdb3 -Wall -Wstrict-aliasing=2 -Winit-self -Wfloat-equal' && # -Wpadded
-psycle-plugins/wonderbuild_script.py --install-dest-dir=/ --install-prefix-dir=$dest --cxx-flags="$common_flags -O3 -DNDEBUG -fno-strict-aliasing " &&
+common_flags='-ggdb3 -Wall -Wstrict-aliasing=2 -Winit-self' && # -Wfloat-equal -Wpadded
+psycle-plugins/wonderbuild_script.py --install-dest-dir=/ --install-prefix-dir=$dest --cxx-flags="$common_flags -O3 -DNDEBUG" &&
 psycle-player/wonderbuild_script.py  --install-dest-dir=/ --install-prefix-dir=$dest --cxx-flags="$common_flags -O3 -DNDEBUG" &&
 
 # choose either gdb, valgrind, alleyoop ...
