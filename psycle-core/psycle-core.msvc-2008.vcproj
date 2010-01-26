@@ -388,19 +388,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\psycle\core\pattern.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\core\pattern.h"
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\core\patternevent.cpp"
 					>
 				</File>
 				<File
 					RelativePath="src\psycle\core\patternevent.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\core\patternsequence.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\core\patternsequence.h"
 					>
 				</File>
 				<File
@@ -496,6 +496,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\psycle\core\sequence.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\core\sequence.h"
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\core\sequencer.cpp"
 					>
 				</File>
@@ -509,14 +517,6 @@
 				</File>
 				<File
 					RelativePath="src\psycle\core\sigslot.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\core\singlepattern.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\core\singlepattern.h"
 					>
 				</File>
 				<File

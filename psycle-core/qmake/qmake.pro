@@ -44,8 +44,8 @@ sources_or_headers = \
 	$$PSYCLE_CORE_DIR/src/psycle/core/machinekey \
 	$$PSYCLE_CORE_DIR/src/psycle/core/mixer \
 	$$PSYCLE_CORE_DIR/src/psycle/core/nativehost \
+	$$PSYCLE_CORE_DIR/src/psycle/core/pattern \
 	$$PSYCLE_CORE_DIR/src/psycle/core/patternevent \
-	$$PSYCLE_CORE_DIR/src/psycle/core/patternsequence \
 	$$PSYCLE_CORE_DIR/src/psycle/core/player \
 	$$PSYCLE_CORE_DIR/src/psycle/core/playertimeinfo \
 	$$PSYCLE_CORE_DIR/src/psycle/core/plugin \
@@ -57,9 +57,9 @@ sources_or_headers = \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psy3filter \
 	$$PSYCLE_CORE_DIR/src/psycle/core/psyfilterbase \
 	$$PSYCLE_CORE_DIR/src/psycle/core/sampler \
+	$$PSYCLE_CORE_DIR/src/psycle/core/sequence \
 	$$PSYCLE_CORE_DIR/src/psycle/core/sequencer \
 	$$PSYCLE_CORE_DIR/src/psycle/core/signalslib \
-	$$PSYCLE_CORE_DIR/src/psycle/core/singlepattern \
 	$$PSYCLE_CORE_DIR/src/psycle/core/song \
 	$$PSYCLE_CORE_DIR/src/psycle/core/songserializer \
 	$$PSYCLE_CORE_DIR/src/psycle/core/timesignature \

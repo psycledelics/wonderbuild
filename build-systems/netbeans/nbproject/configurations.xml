@@ -222,8 +222,8 @@
           <in>nativehost.hpp</in>
           <in>patternevent.cpp</in>
           <in>patternevent.h</in>
-          <in>patternsequence.cpp</in>
-          <in>patternsequence.h</in>
+          <in>pattern.cpp</in>
+          <in>pattern.h</in>
           <in>player.cpp</in>
           <in>player.h</in>
           <in>playertimeinfo.cpp</in>
@@ -250,8 +250,8 @@
           <in>sequencer.cpp</in>
           <in>sequencer.h</in>
           <in>signalslib.h</in>
-          <in>singlepattern.cpp</in>
-          <in>singlepattern.h</in>
+          <in>pattern.cpp</in>
+          <in>pattern.h</in>
           <in>song.cpp</in>
           <in>song.h</in>
           <in>songserializer.cpp</in>
