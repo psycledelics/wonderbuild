@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="boost"
 	ProjectGUID="{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}"
 	Keyword="MakeFileProj"
@@ -9,6 +9,9 @@
 	<Platforms>
 		<Platform
 			Name="Win32"
+		/>
+		<Platform
+			Name="x64"
 		/>
 	</Platforms>
 	<ToolFiles>
@@ -21,8 +24,27 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="cmd.exe /c build.cmd 1.33.1 8.0-cxxabi-1400"
-				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd &amp;&amp; build.cmd 1.33.1 8.0-cxxabi-1400&quot;"
+				BuildCommandLine="cmd.exe /c build.cmd 1.41.0 8.0-cxxabi-1400"
+				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd &amp;&amp; build.cmd 1.41.0 8.0-cxxabi-1400&quot;"
+				CleanCommandLine="cmd.exe /c clean.cmd"
+				Output=""
+				PreprocessorDefinitions=""
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="unpack|x64"
+			ConfigurationType="0"
+			InheritedPropertySheets="..\..\properties\top_output_dir.vsprops;..\..\properties\top_src_dir.vsprops;..\..\properties\platform_x64.vsprops"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="cmd.exe /c build.cmd 1.41.0 8.0-cxxabi-1400-64-bit"
+				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd &amp;&amp; build.cmd 1.41.0 8.0-cxxabi-1400-64-bit&quot;"
 				CleanCommandLine="cmd.exe /c clean.cmd"
 				Output=""
 				PreprocessorDefinitions=""
