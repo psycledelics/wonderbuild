@@ -115,7 +115,7 @@ class InstallTask(ProjectTask, OptionDecl):
 							rel_path = s.rel_path(self.trim_prefix)
 							dest = self.dest_dir / rel_path
 							install_tuples.append((s, dest, True, rel_path))
-						if not silent:
+						if not silent and len(install_tuples) != 0:
 							list = [(t[2] and '-' or '+') + t[3] for t in install_tuples]
 							list.sort()
 							self.print_desc_multi_column_format(
