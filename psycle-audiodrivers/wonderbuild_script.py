@@ -101,10 +101,13 @@ class Wonderbuild(ScriptTask):
 					except AttributeError:
 						self._sources = []
 						if self.outer.path.exists:
-							for s in self.outer.path.find_iter(
-								in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)): self._sources.append(s)
-						f = self.outer.path.parent / (self.outer.path.name + '.hpp')
-						if f.exists: self._sources.append(f)
+							for s in self.outer.path.find_iter(in_pats = ('*.hpp', '*.h'),
+								ex_pats = ('*.private.hpp',), prune_pats = ('todo',)): self._sources.append(s)
+						for h in ('.hpp', '.h'):
+							f = self.outer.path.parent / (self.outer.path.name + h)
+							if f.exists:
+								self._sources.append(f)
+								break
 						return self._sources
 		
 		class AudioDriverMod(UniformMod):
@@ -202,16 +205,17 @@ class Wonderbuild(ScriptTask):
 						self._sources = s = []
 						dir = src_dir / 'psycle' / 'audiodrivers'
 						s.append(dir / 'audiodriver.h')
-						s.append(dir / 'wavefileout.h')
-						if gstreamer: s.append(dir / 'gstreamerout.h')
-						if alsa:      s.append(dir / 'alsaout.h')
-						if esound:    s.append(dir / 'esoundout.h')
-						if dsound:    s.append(dir / 'microsoftdirectsoundout.h')
-						if False: # these drivers need testing
-							if jack:      s.append(dir / 'jackout.h')
-							if netaudio:  s.append(dir / 'netaudioout.h')
-							if asio:      s.append(dir / 'asioout.h')
-							if winmm:     s.append(dir / 'microsoftmmewaveout.h')
+						if False: # done now in individual driver tasks
+							s.append(dir / 'wavefileout.h')
+							if gstreamer: s.append(dir / 'gstreamerout.h')
+							if alsa:      s.append(dir / 'alsaout.h')
+							if esound:    s.append(dir / 'esoundout.h')
+							if dsound:    s.append(dir / 'microsoftdirectsoundout.h')
+							if False: # these drivers need testing
+								if jack:      s.append(dir / 'jackout.h')
+								if netaudio:  s.append(dir / 'netaudioout.h')
+								if asio:      s.append(dir / 'asioout.h')
+								if winmm:     s.append(dir / 'microsoftmmewaveout.h')
 						return s
 
 		self._mod_dep_phases = mod_dep_phases = AudioDriversMod()
