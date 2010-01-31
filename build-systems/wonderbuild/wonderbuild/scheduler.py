@@ -21,6 +21,7 @@ else:
 		cpu_count = int(os.environ.get('NUMBER_OF_PROCESSORS', 1)) # env var defined on mswindows
 		#_, cpu_count, __ = int(exec_subprocess_pipe(['sysctl', '-n', 'hw.ncpu']))
 
+_jobs = cpu_count * 2 # at least two threads per core is always better for i/o bound tasks
 _default_timeout = 3600.0
 
 class Scheduler(object):
@@ -28,11 +29,11 @@ class Scheduler(object):
 
 	@staticmethod
 	def generate_option_help(help):
-		help['jobs'] = ('<count>', 'use <count> threads in the scheduler to process the tasks', 'autodetected: ' + str(cpu_count))
+		help['jobs'] = ('<count>', 'use <count> threads in the scheduler to process the tasks', 'autodetected: ' + str(_jobs))
 		help['timeout'] = ('<seconds>', 'wait at most <seconds> for a task to complete before considering it\'s busted', str(_default_timeout))
 
 	def __init__(self, options):
-		self.thread_count = int(options.get('jobs', cpu_count))
+		self.thread_count = int(options.get('jobs', _jobs))
 		self.timeout = float(options.get('timeout', _default_timeout))
 
 	class Context(object):
