@@ -500,7 +500,11 @@
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\os\cpu_affinity.hpp"
+					RelativePath="src\universalis\os\sched.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\universalis\os\sched.hpp"
 					>
 				</File>
 				<File

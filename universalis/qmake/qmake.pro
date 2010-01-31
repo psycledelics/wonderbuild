@@ -20,6 +20,7 @@ DESTDIR = $$BUILD_DIR # Where the final executable goes.
 #PRECOMPILED_HEADER = $$TOP_SRC_DIR/build-systems/src/forced-include.private.hpp
 
 sources_or_headers = \
+	$$UNIVERSALIS_DIR/src/universalis/compiler \
 	$$UNIVERSALIS_DIR/src/universalis/compiler/compiler \
 	$$UNIVERSALIS_DIR/src/universalis/compiler/concatenated \
 	$$UNIVERSALIS_DIR/src/universalis/compiler/detail/gnu/diagnostics \
@@ -51,7 +52,6 @@ sources_or_headers = \
 	$$UNIVERSALIS_DIR/src/universalis/compiler/dynamic_link/begin \
 	$$UNIVERSALIS_DIR/src/universalis/compiler/dynamic_link/end \
 	$$UNIVERSALIS_DIR/src/universalis/compiler/exceptions/ellipsis \
-	$$UNIVERSALIS_DIR/src/universalis/compiler \
 	$$UNIVERSALIS_DIR/src/universalis/compiler/location \
 	$$UNIVERSALIS_DIR/src/universalis/compiler/numeric \
 	$$UNIVERSALIS_DIR/src/universalis/compiler/stringized \
@@ -60,15 +60,14 @@ sources_or_headers = \
 	$$UNIVERSALIS_DIR/src/universalis/detail/configuration \
 	$$UNIVERSALIS_DIR/src/universalis/detail/project \
 	$$UNIVERSALIS_DIR/src/universalis/exception \
+	$$UNIVERSALIS_DIR/src/universalis/os \
 	$$UNIVERSALIS_DIR/src/universalis/os/clocks \
-	$$UNIVERSALIS_DIR/src/universalis/os/cpu_affinity \
 	$$UNIVERSALIS_DIR/src/universalis/os/detail/check_version \
 	$$UNIVERSALIS_DIR/src/universalis/os/detail/microsoft/max_path \
 	$$UNIVERSALIS_DIR/src/universalis/os/dynamic_link/main \
 	$$UNIVERSALIS_DIR/src/universalis/os/dynamic_link/resolver \
 	$$UNIVERSALIS_DIR/src/universalis/os/exception \
 	$$UNIVERSALIS_DIR/src/universalis/os/exceptions/code_description \
-	$$UNIVERSALIS_DIR/src/universalis/os \
 	$$UNIVERSALIS_DIR/src/universalis/os/loggers \
 	$$UNIVERSALIS_DIR/src/universalis/os/os \
 	$$UNIVERSALIS_DIR/src/universalis/os/paths \
@@ -76,14 +75,16 @@ sources_or_headers = \
 	$$UNIVERSALIS_DIR/src/universalis/os/paths/injection/implementation \
 	$$UNIVERSALIS_DIR/src/universalis/os/paths/injection/interface \
 	$$UNIVERSALIS_DIR/src/universalis/os/paths/interface \
+	$$UNIVERSALIS_DIR/src/universalis/os/sched \
 	$$UNIVERSALIS_DIR/src/universalis/os/terminal \
 	$$UNIVERSALIS_DIR/src/universalis/os/thread_name \
+	$$UNIVERSALIS_DIR/src/universalis/cpu \
 	$$UNIVERSALIS_DIR/src/universalis/cpu/atomic/compare_and_swap \
+	$$UNIVERSALIS_DIR/src/universalis/cpu/cpu \
 	$$UNIVERSALIS_DIR/src/universalis/cpu/exception \
 	$$UNIVERSALIS_DIR/src/universalis/cpu/exceptions/code_description \
-	$$UNIVERSALIS_DIR/src/universalis/cpu/exceptions/fpu \
-	$$UNIVERSALIS_DIR/src/universalis/processor \
-	$$UNIVERSALIS_DIR/src/universalis/cpu/processor \
+	$$UNIVERSALIS_DIR/src/universalis/cpu/memory_barriers \
+	$$UNIVERSALIS_DIR/src/universalis/stdlib \
 	$$UNIVERSALIS_DIR/src/universalis/stdlib/allocators \
 	$$UNIVERSALIS_DIR/src/universalis/stdlib/condition \
 	$$UNIVERSALIS_DIR/src/universalis/stdlib/date_time \
@@ -94,7 +95,6 @@ sources_or_headers = \
 	$$UNIVERSALIS_DIR/src/universalis/stdlib/detail/iso646 \
 	$$UNIVERSALIS_DIR/src/universalis/stdlib/detail/utc_time \
 	$$UNIVERSALIS_DIR/src/universalis/stdlib/exceptions/code_description \
-	$$UNIVERSALIS_DIR/src/universalis/stdlib \
 	$$UNIVERSALIS_DIR/src/universalis/stdlib/mutex \
 	$$UNIVERSALIS_DIR/src/universalis/stdlib/ndebug \
 	$$UNIVERSALIS_DIR/src/universalis/stdlib/stdlib \
