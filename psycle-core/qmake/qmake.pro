@@ -25,6 +25,7 @@ sources_or_headers = \
 	$$PSYCLE_CORE_DIR/src/psycle/core/constants \
 	$$PSYCLE_CORE_DIR/src/psycle/core/convert_internal_machines \
 	$$PSYCLE_CORE_DIR/src/psycle/core/convert_internal_machines.private \
+	$$PSYCLE_CORE_DIR/src/psycle/core/cpu_time_clock \
 	$$PSYCLE_CORE_DIR/src/psycle/core/eventdriver \
 	$$PSYCLE_CORE_DIR/src/psycle/core/exceptions \ 
 	$$PSYCLE_CORE_DIR/src/psycle/core/file \
