@@ -1,11 +1,11 @@
 TARGET = psycle-core
+TEMPLATE = lib # This project builds a library.
 
 # include the base stuff shared amongst all qmake projects.
 include(../../build-systems/qmake/common.pri)
 
 include(psycle-core.pri)
 
-TEMPLATE = lib # This project builds a library.
 !CONFIG(shared): CONFIG *= staticlib # Note: Since shared is in CONFIG by default, you will need to pass CONFIG-=shared on qmake's command line to build a static archive.
 CONFIG *= create_prl
 
