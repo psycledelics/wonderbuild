@@ -21,8 +21,8 @@ CONFIG *= precompile_header
 PRECOMPILED_HEADER = $$TOP_SRC_DIR/build-systems/src/forced-include.private.hpp
 
 SOURCES_PRESERVE_PATH += \
-	$$files($$PSYCLE_HELPERS_DIR/src/psycle/helpers/*.cpp)
+	$$findFiles($$PSYCLE_HELPERS_DIR/src/psycle/helpers, *.cpp)
 HEADERS += \
-	$$files($$PSYCLE_HELPERS_DIR/src/psycle/helpers/*.hpp)
+	$$findFiles($$PSYCLE_HELPERS_DIR/src/psycle/helpers, *.hpp)
 
 include($$COMMON_DIR/display-vars.pri)

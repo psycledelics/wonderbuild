@@ -25,9 +25,9 @@ DEPENDPATH  *= $$PSYCLE_PLAYER_DIR/src
 #PRECOMPILED_HEADER = $$PSYCLE_PLAYER_DIR/src/psycle/player/psyclePlayerPch.hpp
 
 SOURCES_PRESERVE_PATH += \
-	$$files($$PSYCLE_PLAYER_DIR/src/psycle/player/*.cpp)
+	$$findFiles($$PSYCLE_PLAYER_DIR/src/psycle/player, *.cpp)
 HEADERS += \
-	$$files($$PSYCLE_PLAYER_DIR/src/psycle/player/*.hpp)
+	$$findFiles($$PSYCLE_PLAYER_DIR/src/psycle/player, *.hpp)
 
 false: win32 {
 	RC_FILE = $$QPSYCLE_DIR/src/psycle-player.rc 

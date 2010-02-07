@@ -74,7 +74,6 @@ isEmpty(common_included) {
 				path = $$1
 				pattern = $$2
 				result = $$system(find $$path -name \'$$pattern\')
-				message("yyy" $$p)
 				return($$result)
 			}
 		} else: win32: {
