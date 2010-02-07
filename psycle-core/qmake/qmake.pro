@@ -36,6 +36,7 @@ sources_or_headers = \
 	$$PSYCLE_CORE_DIR/src/psycle/core/instrument \
 	$$PSYCLE_CORE_DIR/src/psycle/core/internal_machines \
 	$$PSYCLE_CORE_DIR/src/psycle/core/internalhost \
+	$$PSYCLE_CORE_DIR/src/psycle/core/internalkeys \
 	$$PSYCLE_CORE_DIR/src/psycle/core/ladspa \
 	$$PSYCLE_CORE_DIR/src/psycle/core/ladspahost \
 	$$PSYCLE_CORE_DIR/src/psycle/core/ladspamachine \
