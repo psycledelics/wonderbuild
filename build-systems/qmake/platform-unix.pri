@@ -4,8 +4,6 @@ isEmpty(platform_unix_included) {
 
 	unix {
 		verbose: message("System is unix")
-		TOP_SRC_DIR = $$system(cd ../.. && pwd)
-		verbose: message("Top src dir is $$TOP_SRC_DIR")
 
 		# math and dynamic loader
 		LIBS *= $$linkLibs(m dl)

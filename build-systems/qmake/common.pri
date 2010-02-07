@@ -4,13 +4,14 @@ isEmpty(common_included) {
 	common_included = 1
 	verbose: message("common included")
 	
-	CONFIG *= no_include_pwd # do not add '.' to INCPATH (no '-I.' in compiler command line)
-
+	build_pass:  message("===================== $$TARGET ($$TEMPLATE) (build pass) ========")
+	else:        message("===================== $$TARGET ($$TEMPLATE) =====================")
+	
 	defineReplace(pathToVarName) {
 		s = $$replace($$1, \.\., _)
 		return($$replace(s, [/\\\\], _))
 	}
-	
+
 	# addSubdirs(subdirs, deps): adds directories to the project that depend on other directories
 	defineTest(addSubdirs) {
 		isEmpty(2): message("Sub dir: $$1")
@@ -29,6 +30,9 @@ isEmpty(common_included) {
 		export(SUBDIRS)
 	}
 
+	# omit the current directory from the final INCLUDEPATH (no '-I.' in compiler command line)
+	CONFIG *= no_include_pwd
+	
 	# Define a new compiler that compiles ../src/foo/bar.cpp to $$OBJECTS_DIR/src/foo/bar.o instead of $$OBJECTS_DIR/bar.o
 	# To use it, add the .cpp to the SOURCES_PRESERVE_PATH var instead of the SOURCES var.
 	{
@@ -55,7 +59,34 @@ isEmpty(common_included) {
 		QMAKE_EXTRA_COMPILERS = cxx_to_object_preserve_path
 	}
 
-
+	false { # qmake segfaults!
+		defineReplace(findFiles) {
+			path = $$1
+			pattern = $$2
+			result = $$files($$path/$$pattern)
+			entries = $$files($$path/*)
+			for(entry, entries): result += $$findFiles($$entry/$$pattern)
+			return($$result)
+		}
+	} else {
+		unix: {
+			defineReplace(findFiles) {
+				path = $$1
+				pattern = $$2
+				result = $$system(find $$path -name \'$$pattern\')
+				message("yyy" $$p)
+				return($$result)
+			}
+		} else: win32: {
+			defineReplace(findFiles) {
+				path = $$replace(1, /, \\\\)
+				pattern = $$2
+				result = $$system(dir /s /b $$path\\$$pattern)
+				return($$result)
+			}
+		}
+	}
+	
 	defineReplace(sources) {
 		variable = $$1
 		list = $$eval($$variable)
@@ -66,7 +97,7 @@ isEmpty(common_included) {
 		}
 		return($$result)
 	}
-	
+
 	defineReplace(headers) {
 		variable = $$1
 		list = $$eval($$variable)
@@ -81,57 +112,54 @@ isEmpty(common_included) {
 		}
 		return($$result)
 	}
-	
-	isEqual(TEMPLATE, "subdirs"): message("===================== $$TARGET ($$TEMPLATE) =====================")
-	else {
-		!build_pass:              message("===================== $$TARGET ($$TEMPLATE) =====================")
-		else:                     message("===================== $$TARGET ($$TEMPLATE) (build pass) ========")
 
-		# Check to see what build mode has been specified.
-		CONFIG(debug):CONFIG(release) {
-			warning("debug and release are both specified, separately, in CONFIG. \
-				This is possibly not what you want.  Consider using CONFIG+=debug_and_release if \
-				you want to build debug and release versions concurrently, or CONFIG-=release \
-				or CONFIG-=debug if you want just one mode.")
-		}
-
-		# Note: qmake has different default settings on unix and win32 platforms!
-		# Default on unix:  debug, release are set, but not debug_and_release.
-		# Default on win32: debug, release, debug_and_release are all set.
-		# Both default settings, however, lead to a release build when
-		# invoking "make" without specifying any target.
-		# The difference is, by default, you can't invoke "make release" nor "make debug" on unix,
-		# while you can do so on win32.
-
-		# Print messages or warnings
-		!CONFIG(debug):!CONFIG(release):!CONFIG(debug_and_release): {
-			warning("None of debug, release nor debug_and_release were specified in CONFIG.")
-			message("Release is the default.")
-		}
-		CONFIG(debug_and_release): message("Configured to make both Makefile.Debug and Makefile.Release.")
-		CONFIG(debug):!CONFIG(release): message("Configured to make a debug mode Makefile.")
-		!CONFIG(debug):CONFIG(release): message("Configured to make a release mode Makefile.")
-		CONFIG(debug):CONFIG(release):!CONFIG(debug_and_release): warning("Release overrides debug.")
-		CONFIG(debug):CONFIG(release):CONFIG(debug_and_release): warning("Check above which is the default, debug or release.")
-		!CONFIG(debug):!CONFIG(release):CONFIG(debug_and_release): message("Release is the default.")
-
-
-		# we use these c++ language features
-		CONFIG *= rtti exceptions thread
-
-		# qmake decides to feed the 'ar' command from script files (ar -M < script) whenever there are
-		# more than QMAKE_LINK_OBJECT_MAX files to put in the archive.
-		# The idea is probably to avoid reaching the command line length limit.
-		# Unfortunatly, these scripts don't allow '+' characters in paths.
-		# A quick workaround is to disable the use of scripts by setting a high-enough limit that's unlikely to be reached.
-		# This is mostly needed for the win32 platform where qmake defaults to a rather low value for QMAKE_LINK_OBJECT_MAX.
-		QMAKE_LINK_OBJECT_MAX = 10000
-
-		include(platform.pri)
-
-		COMMON_DIR = $$TOP_SRC_DIR/build-systems/qmake
-	
-		INCLUDEPATH *= $$TOP_SRC_DIR/build-systems/src
-		DEPENDPATH  *= $$TOP_SRC_DIR/build-systems/src
+	# Check to see what build mode has been specified.
+	CONFIG(debug):CONFIG(release) {
+		warning("debug and release are both specified, separately, in CONFIG. \
+			This is possibly not what you want.  Consider using CONFIG+=debug_and_release if \
+			you want to build debug and release versions concurrently, or CONFIG-=release \
+			or CONFIG-=debug if you want just one mode.")
 	}
+
+	# Note: qmake has different default settings on unix and win32 platforms!
+	# Default on unix:  debug, release are set, but not debug_and_release.
+	# Default on win32: debug, release, debug_and_release are all set.
+	# Both default settings, however, lead to a release build when
+	# invoking "make" without specifying any target.
+	# The difference is, by default, you can't invoke "make release" nor "make debug" on unix,
+	# while you can do so on win32.
+
+	# Print messages or warnings
+	!CONFIG(debug):!CONFIG(release):!CONFIG(debug_and_release): {
+		warning("None of debug, release nor debug_and_release were specified in CONFIG.")
+		message("Release is the default.")
+	}
+	CONFIG(debug_and_release): message("Configured to make both Makefile.Debug and Makefile.Release.")
+	CONFIG(debug):!CONFIG(release): message("Configured to make a debug mode Makefile.")
+	!CONFIG(debug):CONFIG(release): message("Configured to make a release mode Makefile.")
+	CONFIG(debug):CONFIG(release):!CONFIG(debug_and_release): warning("Release overrides debug.")
+	CONFIG(debug):CONFIG(release):CONFIG(debug_and_release): warning("Check above which is the default, debug or release.")
+	!CONFIG(debug):!CONFIG(release):CONFIG(debug_and_release): message("Release is the default.")
+
+
+	# we use these c++ language features
+	CONFIG *= rtti exceptions thread
+
+	# qmake decides to feed the 'ar' command from script files (ar -M < script) whenever there are
+	# more than QMAKE_LINK_OBJECT_MAX files to put in the archive.
+	# The idea is probably to avoid reaching the command line length limit.
+	# Unfortunatly, these scripts don't allow '+' characters in paths.
+	# A quick workaround is to disable the use of scripts by setting a high-enough limit that's unlikely to be reached.
+	# This is mostly needed for the win32 platform where qmake defaults to a rather low value for QMAKE_LINK_OBJECT_MAX.
+	QMAKE_LINK_OBJECT_MAX = 10000
+	
+	unix: TOP_SRC_DIR = $$system(cd ../.. && pwd)
+	else: win32: TOP_SRC_DIR = $$system(cd ..\\.. && cd)
+	verbose: message("Top src dir is $$TOP_SRC_DIR")
+
+	COMMON_DIR = $$TOP_SRC_DIR/build-systems/qmake
+	INCLUDEPATH *= $$TOP_SRC_DIR/build-systems/src
+	DEPENDPATH  *= $$TOP_SRC_DIR/build-systems/src
+
+	include(platform.pri)
 }
