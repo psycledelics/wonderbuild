@@ -83,9 +83,9 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="debug|x64"
+			Name="release|Win32"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\use_pre_compiled_header_with_mfc.vsprops;..\build-systems\msvc\properties\program.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\use_pre_compiled_header_with_mfc.vsprops;..\build-systems\msvc\properties\program.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
 			UseOfMFC="2"
 			ManagedExtensions="0"
 			ExcludeBuckets="5;6;8;15;16;18;20"
@@ -104,7 +104,6 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
-				TargetEnvironment="3"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -149,9 +148,9 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="release|Win32"
+			Name="debug|x64"
 			ConfigurationType="1"
-			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\use_pre_compiled_header_with_mfc.vsprops;..\build-systems\msvc\properties\program.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\use_pre_compiled_header_with_mfc.vsprops;..\build-systems\msvc\properties\program.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
 			UseOfMFC="2"
 			ManagedExtensions="0"
 			ExcludeBuckets="5;6;8;15;16;18;20"
@@ -170,6 +169,7 @@
 			/>
 			<Tool
 				Name="VCMIDLTool"
+				TargetEnvironment="3"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
@@ -526,22 +526,6 @@
 				Name="file"
 				>
 				<File
-					RelativePath="src\psycle\host\DataCompression.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\DataCompression.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\FileIO.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\FileIO.hpp"
-					>
-				</File>
-				<File
 					RelativePath="src\psycle\host\ITModule2.cpp"
 					>
 				</File>
@@ -555,14 +539,6 @@
 				</File>
 				<File
 					RelativePath=".\src\psycle\host\Psy3Saver.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\Riff.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\Riff.hpp"
 					>
 				</File>
 				<File
@@ -1504,10 +1480,6 @@
 							>
 						</File>
 					</Filter>
-				</Filter>
-				<Filter
-					Name="NewFilter1"
-					>
 				</Filter>
 			</Filter>
 		</Filter>

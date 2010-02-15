@@ -340,7 +340,7 @@
 						>
 					</File>
 					<File
-						RelativePath="src\psycle\helpers\filter.h"
+						RelativePath=".\src\psycle\helpers\filter.hpp"
 						>
 					</File>
 					<File
