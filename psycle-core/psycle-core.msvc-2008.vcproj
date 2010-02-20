@@ -320,6 +320,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\psycle\core\internalkeys.hpp"
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\core\ladspa.h"
 					>
 				</File>
