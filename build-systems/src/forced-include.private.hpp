@@ -10,7 +10,7 @@
 
 #define DIVERSALIS__OS__MICROSOFT__REQUIRED_VERSION 0x500 // win2k. defines WINVER, _WIN32_WINDOWS, and _WIN32_NT
 
-#define BOOST_FILESYSTEM_NO_DEPRECATED
+//#define BOOST_FILESYSTEM_NO_DEPRECATED
 
 #include <universalis/compiler/setup_warnings.hpp>
 #include <universalis/compiler/setup_optimizations.hpp>

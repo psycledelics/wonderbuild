@@ -110,7 +110,7 @@ class Wonderbuild(ScriptTask):
 				ModTask.do_ensure_deps(self)
 			
 			def do_mod_phase(self):
-				self.cfg.defines['UNIVERSALIS__SOURCE'] = self.cfg.shared and '1' or '-1'
+				if self.cfg.shared: self.cfg.defines['UNIVERSALIS__SHARED'] = None
 				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
 				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
 				self.cfg.include_paths.append(src_dir)
@@ -132,9 +132,9 @@ class Wonderbuild(ScriptTask):
 				def sources(self):
 					try: return self._sources
 					except AttributeError:
-						self._sources = []
-						for s in (self.trim_prefix / 'universalis').find_iter(
-							in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)): self._sources.append(s)
+						self._sources = [self.trim_prefix / 'universalis.hpp'] + \
+							list((self.trim_prefix / 'universalis').find_iter(
+								in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)))
 						return self._sources
 
 		class UnitTestMod(ModTask):
