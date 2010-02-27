@@ -7,16 +7,11 @@
 #define PSYCLE__BUILD_SYSTEMS__PRE_COMPILED__STANDARD__INCLUDED
 #pragma once
 
-#include <diversalis/compiler.hpp>
+#include <diversalis.hpp>
 #if defined DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION // if the compiler supports pre-compilation
 
 	#if defined DIVERSALIS__COMPILER__MICROSOFT
 		#pragma message("pre-compiling " __FILE__ " ...")
-	#endif
-
-	#if defined DIVERSALIS__COMPILER__MICROSOFT && !defined _CRT_SECURE_NO_DEPRECATE
-		/// don't warn when unsecure standard functions are used
-		#define _CRT_SECURE_NO_DEPRECATE
 	#endif
 
 	// c++ headers

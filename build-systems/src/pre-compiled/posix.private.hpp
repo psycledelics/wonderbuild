@@ -7,10 +7,9 @@
 #define PSYCLE__BUILD_SYSTEMS__PRE_COMPILED__POSIX__INCLUDED
 #pragma once
 
-#include <diversalis/compiler.hpp>
+#include <diversalis.hpp>
 #if defined DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION // if the compiler supports pre-compilation
 
-	#include <diversalis/os.hpp>
 	#if defined DIVERSALIS__OS__POSIX
 
 		#if defined DIVERSALIS__COMPILER__MICROSOFT

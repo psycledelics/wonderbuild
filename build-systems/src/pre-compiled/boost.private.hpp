@@ -7,7 +7,7 @@
 #define PSYCLE__BUILD_SYSTEMS__PRE_COMPILED__BOOST__INCLUDED
 #pragma once
 
-#include <diversalis/compiler.hpp>
+#include <diversalis.hpp>
 #if defined DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION // if the compiler supports pre-compilation
 
 	#if defined DIVERSALIS__COMPILER__MICROSOFT
