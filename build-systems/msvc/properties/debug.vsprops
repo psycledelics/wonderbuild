@@ -19,7 +19,7 @@
 		BufferSecurityCheck="true"
 		EnableFunctionLevelLinking="true"
 		FloatingPointExceptions="true"
-		DebugInformationFormat="4"
+		DebugInformationFormat="3"
 	/>
 	<Tool
 		Name="VCLinkerTool"

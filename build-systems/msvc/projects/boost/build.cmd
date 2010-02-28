@@ -3,7 +3,7 @@
 %~d0
 cd %~p0
 
-set output=..\..\output
+set output=..\..\output\%3
 set pkgdir=..\..\..\..\external-packages\boost-%1
 set libdir=lib-mswindows-msvc-%2
 
@@ -26,22 +26,22 @@ if not exist %output%\boost-%1-%2-stamp (
 	if not exist %output%\debug\bin (
 		mkdir %output%\debug\bin || exit /b 1
 	)
-	move %pkgdir%\%libdir%\*-gd-*.dll %output%\debug\bin || exit /b 1
+	move %pkgdir%\%libdir%\%3\*-gd-*.dll %output%\debug\bin || exit /b 1
 
 	if not exist %output%\debug\lib (
 		mkdir %output%\debug\lib || exit /b 1
 	)
-	move %pkgdir%\%libdir%\*-gd-*.lib %output%\debug\lib || exit /b 1
+	move %pkgdir%\%libdir%\%3\*-gd-*.lib %output%\debug\lib || exit /b 1
 
 	if not exist %output%\release\bin (
 		mkdir %output%\release\bin || exit /b 1
 	)
-	move %pkgdir%\%libdir%\*.dll %output%\release\bin || exit /b 1
+	move %pkgdir%\%libdir%\%3\*.dll %output%\release\bin || exit /b 1
 
 	if not exist %output%\release\lib (
 		mkdir %output%\release\lib || exit /b 1
 	)
-	move %pkgdir%\%libdir%\*.lib %output%\release\lib || exit /b 1
+	move %pkgdir%\%libdir%\%3\*.lib %output%\release\lib || exit /b 1
 
 	echo boost extracted > %output%\boost-%1-%2-stamp || exit /b 1
 	rmdir/s/q %pkgdir%\%libdir% || exit /b 1

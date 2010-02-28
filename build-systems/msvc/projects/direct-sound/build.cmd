@@ -3,9 +3,9 @@
 %~d0
 cd %~p0
 
-set output=..\..\output
+set output=..\..\output\%1
 set pkgdir=..\..\..\..\external-packages\dsound-9
-set libdir=lib-mswindows-msvc-cxxabi
+set libdir=lib-mswindows-msvc-cxxabi\%1
 
 if not exist %output%\direct-sound-stamp (
 

@@ -12,7 +12,7 @@
 	/>
 	<Tool
 		Name="VCCLCompilerTool"
-		MinimalRebuild="true"
+		MinimalRebuild="false"
 		ExceptionHandling="2"
 		WarningLevel="4"
 	/>

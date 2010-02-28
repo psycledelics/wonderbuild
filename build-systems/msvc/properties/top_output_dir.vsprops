@@ -8,6 +8,6 @@
 	>
 	<UserMacro
 		Name="TopOutputDir"
-		Value="$(SolutionDir)/output/$(ConfigurationName)"
+		Value="$(SolutionDir)/output/$(PlatformName)/$(ConfigurationName)"
 	/>
 </VisualStudioPropertySheet>

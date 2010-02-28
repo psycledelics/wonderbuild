@@ -25,9 +25,9 @@
 		&quot;$(TopSrcDir)/external-packages/zlib-1.2.3/include&quot;;
 		&quot;$(TopSrcDir)/external-packages/dsound-9/include&quot;;
 		&quot;$(TopSrcDir)/external-packages/boost-1.41.0/include&quot;;
-		&quot;$(TopSrcDir)/external-packages/asio-2.1/common&quot;;
-		&quot;$(TopSrcDir)/external-packages/asio-2.1/host&quot;;
-		&quot;$(TopSrcDir)/external-packages/asio-2.1/host/pc&quot;;
+		&quot;$(TopSrcDir)/external-packages/asio-2.2/common&quot;;
+		&quot;$(TopSrcDir)/external-packages/asio-2.2/host&quot;;
+		&quot;$(TopSrcDir)/external-packages/asio-2.2/host/pc&quot;;
 		&quot;$(TopSrcDir)/external-packages/stk-0&quot;;
 		&quot;$(TopSrcDir)/external-packages/&quot;;
 		&quot;$(TopSrcDir)/diversalis/src&quot;;

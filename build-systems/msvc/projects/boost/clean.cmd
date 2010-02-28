@@ -11,7 +11,7 @@ rem ============================================================================
 %~d0
 cd %~p0
 
-set output=..\..\output
+set output=..\..\output\%1
 
 pushd %output% && (
 	rem [bohan] delete the stamp file in any case, because the rest sometimes fails for unknown reasons
