@@ -11,16 +11,15 @@ rem ============================================================================
 %~d0
 cd %~p0
 
-set output=..\..\output
+set output=..\..\output\%1
 
 pushd %output% && (
 	rem [bohan] delete the stamp file in any case, because the rest sometimes fails for unknown reasons
-	del/q zlib_stamp || exit /b 1
+	del /q zlib-stamp || exit /b 1
 	popd
 ) && (
 	if exist %output% (
 		pushd %output% && (
-			del/s/q zlib_stamp || exit /b 1
 			del/s/q zlib.lib || exit /b 1
 			del/s/q zlib1.dll || exit /b 1
 			popd

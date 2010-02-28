@@ -104,11 +104,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "midi", "midi", "{0134E93B-1
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle", "..\..\psycle\psycle.msvc-2008.vcproj", "{C6292BF4-9E87-4176-9101-A3D29D074B35}"
 	ProjectSection(ProjectDependencies) = postProject
-		{28C015FB-3BDA-4B32-8D85-C652E9892216} = {28C015FB-3BDA-4B32-8D85-C652E9892216}
-		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1} = {69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}
-		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1} = {29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}
-		{B78DFE59-051A-43FD-B489-785A3982541C} = {B78DFE59-051A-43FD-B489-785A3982541C}
 		{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01} = {21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}
+		{B78DFE59-051A-43FD-B489-785A3982541C} = {B78DFE59-051A-43FD-B489-785A3982541C}
+		{28C015FB-3BDA-4B32-8D85-C652E9892216} = {28C015FB-3BDA-4B32-8D85-C652E9892216}
 	EndProjectSection
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -591,9 +589,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/stk-reverbs 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/druttis-sublime", "..\..\psycle-plugins\msvc\sublime.msvc-2008.vcproj", "{A5BF47C9-76B0-454D-8564-804E42CA3315}"
 	ProjectSection(ProjectDependencies) = postProject
-		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
-		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {984A85EE-BA08-473F-9ADB-1C1692DFD77F}
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {984A85EE-BA08-473F-9ADB-1C1692DFD77F}
+		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
 	EndProjectSection
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -620,9 +618,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/helpers/drut
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/druttis-slicit", "..\..\psycle-plugins\msvc\Slicit.msvc-2008.vcproj", "{6C83DB3F-10C7-4488-A20D-8C6985AFFC03}"
 	ProjectSection(ProjectDependencies) = postProject
-		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
-		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {984A85EE-BA08-473F-9ADB-1C1692DFD77F}
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {984A85EE-BA08-473F-9ADB-1C1692DFD77F}
+		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
 	EndProjectSection
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -631,9 +629,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/druttis-slic
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/druttis-eq3", "..\..\psycle-plugins\msvc\EQ3.msvc-2008.vcproj", "{1C7E86D5-7D35-4C8F-BDF0-6BE89FD0C58F}"
 	ProjectSection(ProjectDependencies) = postProject
-		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
-		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {984A85EE-BA08-473F-9ADB-1C1692DFD77F}
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+		{984A85EE-BA08-473F-9ADB-1C1692DFD77F} = {984A85EE-BA08-473F-9ADB-1C1692DFD77F}
+		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
 	EndProjectSection
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -678,8 +676,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/druttis-koru
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "universalis", "..\..\universalis\universalis.msvc-2008.vcproj", "{B78DFE59-051A-43FD-B489-775A4982581C}"
 	ProjectSection(ProjectDependencies) = postProject
-		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1} = {29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1} = {29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}
 	EndProjectSection
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -700,8 +698,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/helpers/flui
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/fluidsynth-sf2-player", "..\..\psycle-plugins\msvc\fs-sf2-player.msvc-2008.vcproj", "{E6905023-50A7-49E0-A5DE-5C0D26414B8D}"
 	ProjectSection(ProjectDependencies) = postProject
-		{923A9CFD-C2B2-4A53-952B-EC9CD8413704} = {923A9CFD-C2B2-4A53-952B-EC9CD8413704}
 		{28C015FB-3BDA-4B32-8D85-C652E9892216} = {28C015FB-3BDA-4B32-8D85-C652E9892216}
+		{923A9CFD-C2B2-4A53-952B-EC9CD8413704} = {923A9CFD-C2B2-4A53-952B-EC9CD8413704}
 	EndProjectSection
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -710,11 +708,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/fluidsynth-s
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-core", "..\..\psycle-core\psycle-core.msvc-2008.vcproj", "{B78DFE59-051A-43FD-B489-785A3982541C}"
 	ProjectSection(ProjectDependencies) = postProject
-		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1} = {69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}
 		{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0} = {69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}
-		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1} = {29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}
-		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
-		{B78DFE59-051A-43FD-B489-775A4982581C} = {B78DFE59-051A-43FD-B489-775A4982581C}
 	EndProjectSection
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -728,20 +722,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "projects\zlib\zlib.
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-helpers-unit-tests", "..\..\psycle-helpers\psycle-helpers-unit-tests.msvc-2008.vcproj", "{C6292BF4-9E87-4176-9101-A3D29D163B35}"
-	ProjectSection(ProjectDependencies) = postProject
-		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1} = {29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}
-		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
-		{B78DFE59-051A-43FD-B489-775A4982581C} = {B78DFE59-051A-43FD-B489-775A4982581C}
-	EndProjectSection
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "universalis-unit-tests", "..\..\universalis\universalis-unit-tests.msvc-2008.vcproj", "{15447E72-E8B4-4545-AC7B-091E68221C41}"
-	ProjectSection(ProjectDependencies) = postProject
-		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1} = {29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}
-	EndProjectSection
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
@@ -792,6 +778,7 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-audiodrivers", "..\..\psycle-audiodrivers\psycle-audiodrivers.msvc-2008.vcproj", "{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}"
 	ProjectSection(ProjectDependencies) = postProject
 		{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01} = {21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}
+		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1} = {69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}
 	EndProjectSection
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -1195,16 +1182,19 @@ Global
 		{B252B9E6-DBEA-4701-9F7B-9F4294B571D0}.unpack|win32.ActiveCfg = debug|Win32
 		{B252B9E6-DBEA-4701-9F7B-9F4294B571D0}.unpack|x64.ActiveCfg = release|x64
 		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}.debug|win32.ActiveCfg = unpack|Win32
+		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}.debug|win32.Build.0 = unpack|Win32
 		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}.debug|x64.ActiveCfg = unpack|x64
 		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}.debug|x64.Build.0 = unpack|x64
 		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}.documentation|win32.ActiveCfg = unpack|Win32
-		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}.documentation|x64.ActiveCfg = unpack|Win32
+		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}.documentation|x64.ActiveCfg = unpack|x64
 		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}.release|win32.ActiveCfg = unpack|Win32
 		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}.release|win32.Build.0 = unpack|Win32
-		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}.release|x64.ActiveCfg = unpack|Win32
+		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}.release|x64.ActiveCfg = unpack|x64
+		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}.release|x64.Build.0 = unpack|x64
 		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}.unpack|win32.ActiveCfg = unpack|Win32
 		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}.unpack|win32.Build.0 = unpack|Win32
-		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}.unpack|x64.ActiveCfg = unpack|Win32
+		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}.unpack|x64.ActiveCfg = unpack|x64
+		{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}.unpack|x64.Build.0 = unpack|x64
 		{485B9E85-CBC7-4B27-8AD2-5DD97234FBED}.debug|win32.ActiveCfg = debug|Win32
 		{485B9E85-CBC7-4B27-8AD2-5DD97234FBED}.debug|win32.Build.0 = debug|Win32
 		{485B9E85-CBC7-4B27-8AD2-5DD97234FBED}.debug|x64.ActiveCfg = debug|x64
@@ -1590,16 +1580,19 @@ Global
 		{B78DFE59-051A-43FD-B489-775A4982581C}.unpack|win32.ActiveCfg = debug|Win32
 		{B78DFE59-051A-43FD-B489-775A4982581C}.unpack|x64.ActiveCfg = release|x64
 		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}.debug|win32.ActiveCfg = unpack|Win32
+		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}.debug|win32.Build.0 = unpack|Win32
 		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}.debug|x64.ActiveCfg = unpack|x64
 		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}.debug|x64.Build.0 = unpack|x64
 		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}.documentation|win32.ActiveCfg = unpack|Win32
-		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}.documentation|x64.ActiveCfg = unpack|Win32
+		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}.documentation|x64.ActiveCfg = unpack|x64
 		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}.release|win32.ActiveCfg = unpack|Win32
 		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}.release|win32.Build.0 = unpack|Win32
-		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}.release|x64.ActiveCfg = unpack|Win32
+		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}.release|x64.ActiveCfg = unpack|x64
+		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}.release|x64.Build.0 = unpack|x64
 		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}.unpack|win32.ActiveCfg = unpack|Win32
 		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}.unpack|win32.Build.0 = unpack|Win32
-		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}.unpack|x64.ActiveCfg = unpack|Win32
+		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}.unpack|x64.ActiveCfg = unpack|x64
+		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}.unpack|x64.Build.0 = unpack|x64
 		{923A9CFD-C2B2-4A53-952B-EC9CD8413704}.debug|win32.ActiveCfg = debug|Win32
 		{923A9CFD-C2B2-4A53-952B-EC9CD8413704}.debug|win32.Build.0 = debug|Win32
 		{923A9CFD-C2B2-4A53-952B-EC9CD8413704}.debug|x64.ActiveCfg = debug|x64
@@ -1637,15 +1630,19 @@ Global
 		{B78DFE59-051A-43FD-B489-785A3982541C}.unpack|win32.ActiveCfg = debug|Win32
 		{B78DFE59-051A-43FD-B489-785A3982541C}.unpack|x64.ActiveCfg = release|x64
 		{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}.debug|win32.ActiveCfg = unpack|Win32
-		{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}.debug|x64.ActiveCfg = unpack|Win32
+		{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}.debug|win32.Build.0 = unpack|Win32
+		{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}.debug|x64.ActiveCfg = unpack|x64
+		{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}.debug|x64.Build.0 = unpack|x64
 		{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}.documentation|win32.ActiveCfg = unpack|Win32
-		{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}.documentation|x64.ActiveCfg = unpack|Win32
+		{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}.documentation|x64.ActiveCfg = unpack|x64
 		{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}.release|win32.ActiveCfg = unpack|Win32
 		{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}.release|win32.Build.0 = unpack|Win32
-		{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}.release|x64.ActiveCfg = unpack|Win32
+		{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}.release|x64.ActiveCfg = unpack|x64
+		{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}.release|x64.Build.0 = unpack|x64
 		{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}.unpack|win32.ActiveCfg = unpack|Win32
 		{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}.unpack|win32.Build.0 = unpack|Win32
-		{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}.unpack|x64.ActiveCfg = unpack|Win32
+		{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}.unpack|x64.ActiveCfg = unpack|x64
+		{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}.unpack|x64.Build.0 = unpack|x64
 		{C6292BF4-9E87-4176-9101-A3D29D163B35}.debug|win32.ActiveCfg = debug|Win32
 		{C6292BF4-9E87-4176-9101-A3D29D163B35}.debug|win32.Build.0 = debug|Win32
 		{C6292BF4-9E87-4176-9101-A3D29D163B35}.debug|x64.ActiveCfg = debug|x64

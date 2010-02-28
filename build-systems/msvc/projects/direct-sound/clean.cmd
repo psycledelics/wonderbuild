@@ -15,13 +15,12 @@ set output=..\..\output\%1
 
 pushd %output% && (
 	rem [bohan] delete the stamp file in any case, because the rest sometimes fails for unknown reasons
-	del/q direct_sound_stamp || exit /b 1
+	del /q direct-sound-stamp || exit /b 1
 	popd
 ) && (
 	if exist %output% (
 		pushd %output% && (
-			del/s/q direct_sound_stamp || exit /b 1
-			del/s/q dsound.lib || exit /b 1
+			del /s/q dsound.lib || exit /b 1
 			popd
 		)
 	)

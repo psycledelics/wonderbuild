@@ -5,6 +5,7 @@
 	Name="zlib"
 	ProjectGUID="{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}"
 	Keyword="MakeFileProj"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -24,9 +25,9 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="cmd.exe /c build.cmd"
-				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd &amp;&amp; build.cmd&quot;"
-				CleanCommandLine="cmd.exe /c clean.cmd"
+				BuildCommandLine="cmd.exe /c build.cmd $(PlatformName)"
+				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd $(PlatformName) &amp;&amp; build.cmd $(PlatformName)&quot;"
+				CleanCommandLine="cmd.exe /c clean.cmd $(PlatformName)"
 				Output=""
 				PreprocessorDefinitions=""
 				IncludeSearchPath=""
@@ -43,9 +44,9 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="cmd.exe /c build.cmd"
-				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd &amp;&amp; build.cmd&quot;"
-				CleanCommandLine="cmd.exe /c clean.cmd"
+				BuildCommandLine="cmd.exe /c build.cmd $(PlatformName)"
+				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd $(PlatformName) &amp;&amp; build.cmd $(PlatformName)&quot;"
+				CleanCommandLine="cmd.exe /c clean.cmd $(PlatformName)"
 				Output=""
 				PreprocessorDefinitions=""
 				IncludeSearchPath=""
