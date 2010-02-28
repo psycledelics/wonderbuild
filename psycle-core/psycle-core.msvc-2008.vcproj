@@ -5,6 +5,7 @@
 	Name="psycle-core"
 	ProjectGUID="{B78DFE59-051A-43FD-B489-785A3982541C}"
 	RootNamespace="psycle-core"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -261,14 +262,6 @@
 				</File>
 				<File
 					RelativePath="src\psycle\core\exceptions.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\core\file.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\core\file.h"
 					>
 				</File>
 				<File
