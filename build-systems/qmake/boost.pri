@@ -3,13 +3,13 @@ isEmpty(boost_included) {
 	verbose: message("boost included")
 
 	unix {
-		macx: LIBS *= $$linkLibs(boost_signals-1_33_1 boost_thread-1_33_1)
+		macx: LIBS *= $$linkLibs(boost_signals-1_41 boost_thread-1_41)
 		else: LIBS *= $$linkLibs(boost_signals-mt boost_thread-mt)
 	} else: win32 {
-		win32-g++:            BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.35.0
+		win32-g++:            BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.41.0
 		else: win32-msvc2008: BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.41.0
 		else: win32-msvc2005: BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.41.0
-		else: win32-msvc*:    BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.33.1
+		else: win32-msvc*:    BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.41.1
 		!exists($$BOOST_DIR) {
 			warning("The local boost dir does not exist: $${BOOST_DIR}. Make sure you have boost libs installed.")
 		} else {
@@ -22,7 +22,7 @@ isEmpty(boost_included) {
 					} else {
 						INCLUDEPATH *= $$BOOST_DIR/include
 						LIBPATH *= $$BOOST_DIR/lib-mswindows-mingw-cxxabi-1002
-						LIBS *= $$linkLibs(boost_signals-mgw-mt-1_35_1 boost_thread-mgw-mt-1_35_1 boost_filesystem-mgw-mt-1_35_1 winmm)
+						LIBS *= $$linkLibs(boost_signals-mgw-mt-1_41 boost_thread-mgw-mt-1_41 boost_filesystem-mgw-mt-1_41 winmm)
 						CONFIG+=local_boost
 					}
 				} else: win32-msvc2008 {
@@ -49,7 +49,7 @@ isEmpty(boost_included) {
 					} else {
 						INCLUDEPATH *= $$BOOST_DIR/include
 						LIBPATH *= $$BOOST_DIR/lib-mswindows-msvc-7.1-cxxabi-1310
-						LIBS *= $$linkLibs(boost_signals-vc71-mt-1_33_1 boost_thread-vc71-mt-1_33_1)
+						LIBS *= $$linkLibs(boost_signals-vc71-mt-1_33_1 boost_thread-vc71-mt-1_41)
 						CONFIG+=local_boost
 					}
 				} else {
@@ -60,8 +60,7 @@ isEmpty(boost_included) {
 		!CONFIG(local_boost) {
 			win32-g++: {
 				# We add the lib names of the version that's in the dev-pack:
-				LIBS *= $$linkLibs(boost_signals-mgw-mt-1_33_1 boost_thread-mgw-mt-1_33_1 boost_filesystem-mgw-mt-1_33_1 winmm)
-				#LIBS *= $$linkLibs(boost_signals-mgw34-mt-1_35 boost_thread-mgw34-mt-1_35)
+				LIBS *= $$linkLibs(boost_signals-mgw34-mt-1_41 boost_thread-mgw34-mt-1_41 boost_filesystem-mgw34-mt-1_41 winmm)
 			}
 			# For msvc, we can't do better than choosing a random version.. this will not work unless you're very lucky.
 			else: win32-msvc2008: LIBS *= $$linkLibs(boost_signals-vc90-mt-1_41 boost_thread-vc90-mt-1_41)
