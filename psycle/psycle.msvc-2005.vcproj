@@ -43,6 +43,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="PSYCLE__CORE__SHARED="
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -106,6 +107,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="PSYCLE__CORE__SHARED="
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -168,6 +170,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="PSYCLE__CORE__SHARED="
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -230,6 +233,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="PSYCLE__CORE__SHARED="
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"

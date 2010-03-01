@@ -51,10 +51,13 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -64,6 +67,9 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -102,10 +108,13 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -115,6 +124,9 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -153,10 +165,13 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -166,6 +181,9 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -204,10 +222,13 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -217,6 +238,9 @@
 			/>
 			<Tool
 				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -277,7 +301,7 @@
 					>
 				</File>
 				<File
-					RelativePath="src\psycle\core\fwd.h"
+					RelativePath="src\psycle\core\fwd.hpp"
 					>
 				</File>
 				<File
@@ -513,7 +537,7 @@
 					>
 				</File>
 				<File
-					RelativePath="src\psycle\core\sigslot.h"
+					RelativePath="src\psycle\core\cpu_time_clock.hpp"
 					>
 				</File>
 				<File
@@ -604,6 +628,26 @@
 					RelativePath="src\psycle\core\zipwriterstream.h"
 					>
 				</File>
+				<Filter
+					Name="detail"
+					>
+					<File
+						RelativePath=".\src\psycle\core\detail\config.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\psycle\core\detail\config.private.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\psycle\core\detail\project.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\psycle\core\detail\project.private.hpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="seib"
