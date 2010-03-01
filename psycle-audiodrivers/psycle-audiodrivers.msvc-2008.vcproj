@@ -260,10 +260,6 @@
 					>
 				</File>
 				<File
-					RelativePath="src\psycle\audiodrivers\dsound.h"
-					>
-				</File>
-				<File
 					RelativePath="src\psycle\audiodrivers\esoundout.cpp"
 					>
 				</File>
