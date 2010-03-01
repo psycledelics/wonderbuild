@@ -20,7 +20,7 @@
 	<Configurations>
 		<Configuration
 			Name="debug|Win32"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
 			>
 			<Tool
@@ -71,7 +71,7 @@
 		</Configuration>
 		<Configuration
 			Name="debug|x64"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
 			>
 			<Tool
@@ -122,7 +122,7 @@
 		</Configuration>
 		<Configuration
 			Name="release|Win32"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
 			>
 			<Tool
@@ -173,7 +173,7 @@
 		</Configuration>
 		<Configuration
 			Name="release|x64"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
 			>
 			<Tool
