@@ -20,8 +20,8 @@ pushd %output% && (
 ) && (
 	if exist %output% (
 		pushd %output% && (
-			del/s/q zlib.lib || exit /b 1
-			del/s/q zlib1.dll || exit /b 1
+			del/s/q zlibwapi.lib || exit /b 1
+			del/s/q zlibwapi.dll || exit /b 1
 			popd
 		)
 	)
