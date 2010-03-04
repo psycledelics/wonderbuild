@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="psycle"
 	ProjectGUID="{C6292BF4-9E87-4176-9101-A3D29D074B35}"
 	RootNamespace="psycle"
@@ -1463,26 +1463,6 @@
 					</Filter>
 				</Filter>
 			</Filter>
-		</Filter>
-		<Filter
-			Name="seib-vsthost"
-			>
-			<File
-				RelativePath="src\seib-vsthost\CVSTHost.Seib.cpp"
-				>
-			</File>
-			<File
-				RelativePath="src\seib-vsthost\CVSTHost.Seib.hpp"
-				>
-			</File>
-			<File
-				RelativePath="src\seib-vsthost\EffectWnd.cpp"
-				>
-			</File>
-			<File
-				RelativePath="src\seib-vsthost\EffectWnd.hpp"
-				>
-			</File>
 		</Filter>
 	</Files>
 	<Globals>
