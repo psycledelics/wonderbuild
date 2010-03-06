@@ -52,8 +52,8 @@ class Wonderbuild(ScriptTask):
 		std_math = StdMathCheckTask.shared(check_cfg)
 		dlfcn = DlfcnCheckTask.shared(check_cfg)
 		pthread = PThreadCheckTask.shared(check_cfg)
-		boost = BoostCheckTask.shared(check_cfg, (1, 33), ('signals', 'thread', 'filesystem', 'date_time'))
-		boost_test = BoostCheckTask.shared(check_cfg, (1, 33), ('unit_test_framework',))
+		boost = BoostCheckTask.shared(check_cfg, (1, 38), ('signals', 'thread', 'filesystem', 'date_time'))
+		boost_test = BoostCheckTask.shared(check_cfg, (1, 38), ('unit_test_framework',))
 		winmm = WinMMCheckTask.shared(check_cfg)
 
 		class Pch(PreCompileTasks):
