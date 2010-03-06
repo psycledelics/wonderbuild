@@ -50,7 +50,7 @@ class Wonderbuild(ScriptTask):
 		std_math = StdMathCheckTask.shared(check_cfg)
 		dlfcn = DlfcnCheckTask.shared(check_cfg)
 		pthread = PThreadCheckTask.shared(check_cfg)
-		boost = BoostCheckTask.shared(check_cfg, (1, 38), ('signals', 'thread', 'filesystem', 'date_time'))
+		boost = BoostCheckTask.shared(check_cfg, (1, 34, 1), ('signals', 'thread', 'filesystem', 'date_time'))
 
 		cfg.defines['UNIVERSALIS__META__PACKAGE__NAME'] = '"psycle"'
 		cfg.defines['UNIVERSALIS__META__PACKAGE__VERSION'] = 1

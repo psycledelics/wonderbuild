@@ -49,7 +49,7 @@ class Wonderbuild(ScriptTask):
 
 		check_cfg = cfg.clone()
 		std_math = StdMathCheckTask.shared(check_cfg)
-		boost_test = BoostCheckTask.shared(check_cfg, (1, 38), ('unit_test_framework',))
+		boost_test = BoostCheckTask.shared(check_cfg, (1, 34, 1), ('unit_test_framework',))
 
 		class HelpersMathMod(ModTask):
 			def __init__(self):
