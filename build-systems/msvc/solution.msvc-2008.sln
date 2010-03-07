@@ -609,6 +609,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/helpers/drut
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/helpers/druttis-blwtbl (bandwidth-limited wavetable)", "..\..\psycle-plugins\msvc\blwtbl.msvc-2008.vcproj", "{984A85EE-BA08-473F-9ADB-1C1692DFD77F}"
 	ProjectSection(ProjectDependencies) = postProject
+		{B78DFE59-051A-43FD-B489-775A4982581C} = {B78DFE59-051A-43FD-B489-775A4982581C}
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 	ProjectSection(WebsiteProperties) = preProject
