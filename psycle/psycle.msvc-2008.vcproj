@@ -507,6 +507,10 @@
 				Name="file"
 				>
 				<File
+					RelativePath=".\src\psycle\host\ITFile.h"
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\host\ITModule2.cpp"
 					>
 				</File>
