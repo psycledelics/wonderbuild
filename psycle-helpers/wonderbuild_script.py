@@ -125,7 +125,7 @@ class Wonderbuild(ScriptTask):
 					except AttributeError:
 						self._sources = []
 						for s in (self.trim_prefix / 'psycle' / 'helpers').find_iter(
-							in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo', 'math')): self._sources.append(s)
+							in_pats = ('*.hpp',), ex_pats = ('*.private.hpp', 'math.hpp'), prune_pats = ('todo', 'math')): self._sources.append(s)
 						return self._sources
 						
 		class UnitTestMod(ModTask):
