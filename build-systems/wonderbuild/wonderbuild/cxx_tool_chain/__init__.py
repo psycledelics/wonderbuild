@@ -626,7 +626,7 @@ class _BatchCompileTask(ProjectTask):
 		self.target_dir.actual_children # not needed, just an optimisation
 		sched_ctx.lock.release()
 		try:
-			if not silent:
+			if is_debug and not silent:
 				color = color_bg_fg_rgb((0, 150, 180), (255, 255, 255))
 				if self.cfg.pic: pic = 'pic'; color += ';1'
 				else: pic = 'non-pic';
@@ -859,6 +859,13 @@ class ModTask(ModDepPhases, ProjectTask):
 			for b in batches:
 				if len(b) == 0: break
 				tasks.append(_BatchCompileTask(self, b))
+			if not is_debug and not silent:
+				color = color_bg_fg_rgb((0, 150, 180), (255, 255, 255))
+				if self.cfg.pic: pic = 'pic'; color += ';1'
+				else: pic = 'non-pic';
+				s = [str(s) for s in changed_sources]
+				s.sort()
+				self.print_desc_multi_column_format(str(self.target) + ': batch-compiling ' + pic + ' objects from c++', s, color)
 		elif self.cfg.check_missing:
 			for t in self.targets:
 				if not t.exists:
