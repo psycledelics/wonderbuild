@@ -113,7 +113,6 @@ class Wonderbuild(ScriptTask):
 						if f.exists: self._sources.append(f)
 						return self._sources
 
-		paths = UniformMod('freepsycle-path', src_dir / 'psycle' / 'paths', kind=ModTask.Kinds.LIB)
 		engine = UniformMod('freepsycle-engine', src_dir / 'psycle' / 'engine', kind=ModTask.Kinds.LIB)
 		host = UniformMod('freepsycle-host', src_dir / 'psycle' / 'host', deps=(engine,), kind=ModTask.Kinds.LIB)
 		stream = UniformMod('freepsycle-stream', src_dir / 'psycle' / 'stream', kind=ModTask.Kinds.LIB)
@@ -175,16 +174,16 @@ class Wonderbuild(ScriptTask):
 
 		random_notes = UniformMod('freepsycle-test-random-notes',
 			src_dir / 'psycle' / 'tests' / 'random_notes',
-			deps=(host, paths, default_output, sequence, decay, additioner, sine), kind=ModTask.Kinds.PROG)
+			deps=(host, default_output, sequence, decay, additioner, sine), kind=ModTask.Kinds.PROG)
 
 		classic_player = UniformMod('freepsycle-test-classic-player',
 			src_dir / 'psycle' / 'tests' / 'classic_player',
-			deps=(host, paths, default_output, sequence, decay, additioner, sine), kind=ModTask.Kinds.PROG)
+			deps=(host, default_output, sequence, decay, additioner, sine), kind=ModTask.Kinds.PROG)
 
 		if gtkmm and gnomecanvasmm and (cluttermm or cluttermm_1_0 or cluttermm_0_9 or cluttermm_0_8 or cluttermm_0_7 or cluttermm_0_6):
 			gui = UniformMod('freepsycle-gui',
 				src_dir / 'psycle' / 'front_ends' / 'gui',
 				deps=(
-					host, paths, gtkmm, gnomecanvasmm,
+					host, gtkmm, gnomecanvasmm,
 					cluttermm or cluttermm_1_0 or cluttermm_0_9 or cluttermm_0_8 or cluttermm_0_7 or cluttermm_0_6
 				), kind=ModTask.Kinds.PROG)
