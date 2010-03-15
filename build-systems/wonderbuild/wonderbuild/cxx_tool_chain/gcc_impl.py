@@ -62,7 +62,6 @@ class Impl(object):
 	def cfg_cxx_args(cfg):
 		args = [cfg.cxx_prog, '-pipe']
 		if cfg.pic and cfg.dest_platform.pic_flag_defines_pic: args.append('-fPIC')
-		#if cfg.pic: args.append('-fPIC')
 		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + repr(str(v))[1:-1]) # note: assumes that cpp and python escaping works the same way
@@ -111,7 +110,7 @@ class Impl(object):
 
 	def process_cxx_task(self, cxx_task, lock):
 		cwd = cxx_task.target_dir
-		args = cxx_task.cfg.cxx_args + ['-c', '-MMD'] + [s.name for s in cxx_task._actual_sources]
+		args = cxx_task.cfg.cxx_args + ['-c', '-MMD'] + [s.abs_path for s in cxx_task._actual_sources]
 		implicit_deps = cxx_task.persistent_implicit_deps
 		if exec_subprocess(args, cwd=cwd.path) == 0:
 			succeeded_sources = zip(cxx_task.sources, cxx_task._actual_sources)

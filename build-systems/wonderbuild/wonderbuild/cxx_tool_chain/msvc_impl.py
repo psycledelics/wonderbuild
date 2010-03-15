@@ -84,7 +84,7 @@ class Impl(object):
 
 	def process_cxx_task(self, cxx_task, lock):
 		cwd = cxx_task.target_dir
-		args = cxx_task.cfg.cxx_args + ['-c'] + [s.name for s in cxx_task._actual_sources]
+		args = cxx_task.cfg.cxx_args + ['-c'] + [s.abs_path for s in cxx_task._actual_sources]
 		implicit_deps = cxx_task.persistent_implicit_deps
 		if exec_subprocess(args, cwd=cwd.path) == 0:
 			succeeded_sources = cxx_task.sources
