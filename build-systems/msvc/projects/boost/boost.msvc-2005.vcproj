@@ -4,6 +4,7 @@
 	Version="8,00"
 	Name="boost"
 	ProjectGUID="{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}"
+	RootNamespace="boost"
 	Keyword="MakeFileProj"
 	>
 	<Platforms>
@@ -24,9 +25,9 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="cmd.exe /c build.cmd 1.41.0 8.0-cxxabi-1400"
-				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd &amp;&amp; build.cmd 1.41.0 8.0-cxxabi-1400&quot;"
-				CleanCommandLine="cmd.exe /c clean.cmd"
+				BuildCommandLine="cmd.exe /c build.cmd 1.41.0 8.0-cxxabi-1400 $(PlatformName)"
+				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd $(PlatformName) &amp;&amp; build.cmd 1.41.0 8.0-cxxabi-1400 $(PlatformName)&quot;"
+				CleanCommandLine="cmd.exe /c clean.cmd $(PlatformName)"
 				Output=""
 				PreprocessorDefinitions=""
 				IncludeSearchPath=""
@@ -43,9 +44,9 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="cmd.exe /c build.cmd 1.41.0 8.0-cxxabi-1400-64-bit"
-				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd &amp;&amp; build.cmd 1.41.0 8.0-cxxabi-1400-64-bit&quot;"
-				CleanCommandLine="cmd.exe /c clean.cmd"
+				BuildCommandLine="cmd.exe /c build.cmd 1.41.0 8.0-cxxabi-1400 $(PlatformName)"
+				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd $(PlatformName) &amp;&amp; build.cmd 1.41.0 8.0-cxxabi-1400 $(PlatformName)&quot;"
+				CleanCommandLine="cmd.exe /c clean.cmd $(PlatformName)"
 				Output=""
 				PreprocessorDefinitions=""
 				IncludeSearchPath=""

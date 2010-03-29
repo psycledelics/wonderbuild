@@ -10,6 +10,9 @@
 		<Platform
 			Name="Win32"
 		/>
+		<Platform
+			Name="x64"
+		/>
 	</Platforms>
 	<ToolFiles>
 	</ToolFiles>
@@ -21,9 +24,28 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="cmd.exe /c build.cmd"
-				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd &amp;&amp; build.cmd&quot;"
-				CleanCommandLine="cmd.exe /c clean.cmd"
+				BuildCommandLine="cmd.exe /c build.cmd $(PlatformName)"
+				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd $(PlatformName) &amp;&amp; build.cmd $(PlatformName)&quot;"
+				CleanCommandLine="cmd.exe /c clean.cmd $(PlatformName)"
+				Output=""
+				PreprocessorDefinitions=""
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="unpack|x64"
+			ConfigurationType="0"
+			InheritedPropertySheets="..\..\properties\top_output_dir.vsprops;..\..\properties\top_src_dir.vsprops;..\..\properties\platform_x64.vsprops"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="cmd.exe /c build.cmd $(PlatformName)"
+				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd $(PlatformName) &amp;&amp; build.cmd $(PlatformName)&quot;"
+				CleanCommandLine="cmd.exe /c clean.cmd $(PlatformName)"
 				Output=""
 				PreprocessorDefinitions=""
 				IncludeSearchPath=""

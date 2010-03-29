@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="psycle"
 	ProjectGUID="{C6292BF4-9E87-4176-9101-A3D29D074B35}"
 	RootNamespace="psycle"
-	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -78,6 +77,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -140,6 +142,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -205,6 +210,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -266,6 +274,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -506,6 +517,10 @@
 			<Filter
 				Name="file"
 				>
+				<File
+					RelativePath=".\src\psycle\host\ITFile.h"
+					>
+				</File>
 				<File
 					RelativePath="src\psycle\host\ITModule2.cpp"
 					>
@@ -1463,26 +1478,6 @@
 					</Filter>
 				</Filter>
 			</Filter>
-		</Filter>
-		<Filter
-			Name="seib-vsthost"
-			>
-			<File
-				RelativePath="src\seib-vsthost\CVSTHost.Seib.cpp"
-				>
-			</File>
-			<File
-				RelativePath="src\seib-vsthost\CVSTHost.Seib.hpp"
-				>
-			</File>
-			<File
-				RelativePath="src\seib-vsthost\EffectWnd.cpp"
-				>
-			</File>
-			<File
-				RelativePath="src\seib-vsthost\EffectWnd.hpp"
-				>
-			</File>
 		</Filter>
 	</Files>
 	<Globals>
