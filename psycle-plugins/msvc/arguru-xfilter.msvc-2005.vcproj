@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="psycle-plugins/arguru-xfilter (aka cross-delay)"
-	RootNameSpace="arguru-xfilter"
 	ProjectGUID="{1B5F9342-46EE-4359-8178-DAB8BB37E979}"
-	TargetFrameworkVersion="131072"
+	RootNamespace="arguru-xfilter"
 	>
 	<Platforms>
 		<Platform
@@ -72,6 +71,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -130,6 +132,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -186,6 +191,9 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -247,6 +255,9 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -260,10 +271,6 @@
 	<Files>
 		<File
 			RelativePath="..\src\psycle\plugins\arguru_xfilter\arguru_xfilter.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\src\psycle\plugins\arguru_xfilter\filter_x.cpp"
 			>
 		</File>
 	</Files>
