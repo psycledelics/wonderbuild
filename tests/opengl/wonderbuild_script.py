@@ -8,7 +8,7 @@ if __name__ == '__main__':
 	sys.argv.append('--src-dir=' + dir)
 	try: from wonderbuild.main import main
 	except ImportError:
-		dir = os.path.abspath(os.path.join(dir, os.pardir, 'build-systems'))
+		dir = os.path.abspath(os.path.join(dir, os.pardir, 'build-systems', 'wonderbuild'))
 		if dir not in sys.path: sys.path.append(dir)
 		try: from wonderbuild.main import main
 		except ImportError:
@@ -26,6 +26,7 @@ else:
 				*(
 					ScriptLoaderTask.shared(self.project, dir) \
 					for dir in (
+						self.src_dir / 'gl' / 'examples',
 						self.src_dir / 'glut' / 'examples',
 						self.src_dir / 'glsl' / 'examples',
 						self.src_dir / 'gtkglextmm' / 'examples'

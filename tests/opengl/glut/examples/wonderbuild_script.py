@@ -8,7 +8,7 @@ if __name__ == '__main__':
 	sys.argv.append('--src-dir=' + dir)
 	try: from wonderbuild.main import main
 	except ImportError:
-		dir = os.path.abspath(os.path.join(dir, os.pardir, os.pardir, os.pardir, 'build-systems'))
+		dir = os.path.abspath(os.path.join(dir, os.pardir, os.pardir, os.pardir, 'build-systems', 'wonderbuild'))
 		if dir not in sys.path: sys.path.append(dir)
 		try: from wonderbuild.main import main
 		except ImportError:
@@ -87,5 +87,6 @@ class Wonderbuild(ScriptTask):
 						if f.exists: self._sources.append(f)
 						return self._sources
 
-		basic_shapes = UniformMod('basic-shapes', src_dir / 'basic_shapes', kind=ModTask.Kinds.PROG)
-		basic_shapes = UniformMod('transform', src_dir / 'transform', kind=ModTask.Kinds.PROG)
+		UniformMod('basic-shapes', src_dir / 'basic_shapes', kind=ModTask.Kinds.PROG)
+		UniformMod('transform', src_dir / 'transform', kind=ModTask.Kinds.PROG)
+		UniformMod('multilight', src_dir / 'multilight', kind=ModTask.Kinds.PROG)

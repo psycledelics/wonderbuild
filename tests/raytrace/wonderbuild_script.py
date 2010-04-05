@@ -8,7 +8,7 @@ if __name__ == '__main__':
 	sys.argv.append('--src-dir=' + dir)
 	try: from wonderbuild.main import main
 	except ImportError:
-		dir = os.path.abspath(os.path.join(dir, os.pardir, 'build-systems'))
+		dir = os.path.abspath(os.path.join(dir, os.pardir, 'build-systems', 'wonderbuild'))
 		if dir not in sys.path: sys.path.append(dir)
 		try: from wonderbuild.main import main
 		except ImportError:
@@ -40,10 +40,13 @@ class Wonderbuild(ScriptTask):
 
 		from wonderbuild import UserReadableException
 		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, ModTask
-		from wonderbuild.std_checks.dsound import DSoundCheckTask
+		from wonderbuild.std_checks.opengl import OpenGLUTCheckTask
 		from wonderbuild.install import InstallTask
 
-		gtkmm = PkgConfigCheckTask.shared(project, ['gtkmm-2.4 >= 2.4'])
+		check_cfg = cfg.clone()
+		#glut = OpenGLUTCheckTask.shared(check_cfg)
+		#gtkmm = PkgConfigCheckTask.shared(check_cfg, ['gtkmm-2.4 >= 2.4'])
+		gtkglextmm = PkgConfigCheckTask.shared(check_cfg, ['gtkglextmm-1.2 >= 1.2'])
 
 		class UniformMod(ModTask):
 			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):
@@ -54,7 +57,7 @@ class Wonderbuild(ScriptTask):
 			def __call__(self, sched_ctx):
 				if self.kind == ModTask.Kinds.PROG: self.private_deps = [pch.prog_task]
 				else: self.private_deps = [pch.lib_task]
-				self.public_deps += [universalis, helpers_math, gtkmm]
+				self.public_deps += [universalis, helpers_math, gtkglextmm]
 				req = self.all_deps
 				for x in sched_ctx.parallel_wait(*req): yield x
 				self.result = min(bool(r) for r in req)
