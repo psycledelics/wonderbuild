@@ -197,6 +197,7 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/arguru-synth", "..\..\psycle-plugins\msvc\arguru-synth-2f.msvc-2008.vcproj", "{4F58513B-F7E3-46CD-8196-9B3E4A07AF20}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+		{16F2DEB9-8F35-45C9-B460-732615F0C8D5} = {16F2DEB9-8F35-45C9-B460-732615F0C8D5}
 	EndProjectSection
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
