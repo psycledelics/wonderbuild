@@ -123,7 +123,7 @@
 <parser enabled="true"/>
 </scannerInfoProvider>
 </profile>
-<scannerConfigBuildInfo instanceId="0.763694034">
+<scannerConfigBuildInfo instanceId="0.763694034;0.763694034.;cdt.managedbuild.tool.gnu.cpp.compiler.base.795274890;cdt.managedbuild.tool.gnu.cpp.compiler.input.237355109">
 <autodiscovery enabled="false" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
 <profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 <buildOutputProvider>
@@ -158,7 +158,7 @@
 <profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
 <buildOutputProvider>
 <openAction enabled="true" filePath=""/>
-<parser enabled="false"/>
+<parser enabled="true"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
 <runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
@@ -206,7 +206,7 @@
 </scannerInfoProvider>
 </profile>
 </scannerConfigBuildInfo>
-<scannerConfigBuildInfo instanceId="0.763694034;0.763694034.;cdt.managedbuild.tool.gnu.cpp.compiler.base.795274890;cdt.managedbuild.tool.gnu.cpp.compiler.input.237355109">
+<scannerConfigBuildInfo instanceId="0.763694034">
 <autodiscovery enabled="false" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
 <profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 <buildOutputProvider>
@@ -241,7 +241,7 @@
 <profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
 <buildOutputProvider>
 <openAction enabled="true" filePath=""/>
-<parser enabled="true"/>
+<parser enabled="false"/>
 </buildOutputProvider>
 <scannerInfoProvider id="specsFile">
 <runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>

@@ -44,7 +44,7 @@ Some doc for the ModTask class:
 		This is where to set self.sources and self.cfg for building the object files.
 
 	Attribute cxx_phase:
-		This should a task that installs the public headers so that clients can start building their object files.
+		This should be a task that installs the public headers so that clients can start building their object files.
 
 	Method apply_cxx_to(self, cfg):
 		This is where to export flags to the cfg so that clients can start building their object files.
