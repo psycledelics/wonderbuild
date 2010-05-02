@@ -32,8 +32,7 @@ else:
 						'psycle-core',
 						'psycle-audiodrivers',
 						'psycle-player',
-						'psycle-plugins',
-						'freepsycle'
+						'psycle-plugins'
 					)
 				)
 			): yield x
