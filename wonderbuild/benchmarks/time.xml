@@ -85,7 +85,7 @@
 		<part caption='Tup'>
 			The Tup part of the <a href='gen-bench'/> script was contributed by Jed Brown.
 			<br/>
-			The fbuild script finds source files dynamically instead of relying on a hard-coded file list.
+			The tup scripts find source files dynamically instead of relying on a hard-coded file list.
 			This is far more maintainance-free, and the impact on speed is negligible.
 			<br/>
 			Tup itself was built with gcc's -O2 optimisation.
