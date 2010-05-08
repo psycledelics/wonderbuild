@@ -9,6 +9,8 @@ rm -Rf bench bench-* &&
 
 cp -R bench bench-wonderbuild &&
 cp -R bench bench-wonderbuild-on-jython &&
+cp -R bench bench-tup &&
+cp -R bench bench-tup-monitor &&
 cp -R bench bench-waf &&
 cp -R bench bench-waf-on-jython &&
 cp -R bench bench-scons &&

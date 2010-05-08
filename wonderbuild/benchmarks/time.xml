@@ -77,9 +77,18 @@
 			(in fbuild.path.Path, import time; def digest(self): return time.time() ).
 			<br/>
 			The fbuild script finds source files dynamically instead of relying on a hard-coded file list.
+			This is far more maintainance-free, and the impact on speed is negligible.
 		</part>
 		<part caption='Fabricate'>
 			The Fabricate part of the <a href='gen-bench'/> script was contributed by Michael Haggerty.
+		</part>
+		<part caption='Tup'>
+			The Tup part of the <a href='gen-bench'/> script was contributed by Jed Brown.
+			<br/>
+			The fbuild script finds source files dynamically instead of relying on a hard-coded file list.
+			This is far more maintainance-free, and the impact on speed is negligible.
+			<br/>
+			Tup itself was built with gcc's -O2 optimisation.
 		</part>
 		<part caption='Wonderbuild'>
 			Wonderbuild used either gcc's generated deps as a side-effect of compilation (-MMD option),
@@ -110,6 +119,7 @@
 			ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
 			<part caption='Tool versions'>
 				<ul>
+					<li>Tup version was 0.3-107-g8d046aa</li>
 					<li>Scons version was 1.2.0</li>
 					<li>Waf version was somewhere after 1.5.7 (svn rev 6260)</li>
 					<li>FBuild version was 0.1</li>
@@ -139,6 +149,8 @@
 					<bar name='waf'           value=' 47.3'>waf cpp, timestamp signatures</bar>
 					<bar name='waf'           value=' 49.3'>waf cpp, timestamp signatures, dynamically looking for sources</bar>
 					<bar name='fbuild'        value=' 74.3'>(timestamp signatures only, content hashing disabled, dynamically looking for sources)</bar>
+					<bar name='tup'           value=' 41.3'>with monitor</bar>
+					<bar name='tup'           value=' 86.2'>without monitor</bar>
 					<bar name='scons'         value='131.0'>with fast tuning options</bar>
 					<bar name='scons'         value='137.7'>with default options</bar>
 					<bar name='autotools'     value='188.0'>(non recursive)</bar>
@@ -158,6 +170,8 @@
 					<bar name='jam'           value=' 4.25'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 4.66'>without scan of system-wide headers, (recursive)</bar>
 					<bar name='toy makefiles' value=' 5.05'>with scan of system-wide headers, (recursive)</bar>
+					<bar name='tup'           value=' 5.54'>with monitor</bar>
+					<bar name='tup'           value=' 5.67'>without monitor</bar>
 					<bar name='cmake'         value=' 6.15'>without scan of system wide headers (like gcc -MMD)</bar>
 					<bar name='waf'           value=' 7.42'>(same with gcc deps and waf cpp), timestamp signatures</bar>
 					<bar name='waf'           value=' 8.00'>(same with gcc deps and waf cpp), timestamp signatures, dynamically looking for sources</bar>
@@ -176,6 +190,8 @@
 					<bar name='wonderbuild'   value=' 0.84'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib), (dynamically looking for sources)</bar>
 					<bar name='waf'           value=' 1.90'>(OLD BENCHMARK OF OLD VERSION) max 50 srcs/batch, waf cpp (same with shutil or mv), timestamp signatures</bar>
 					<bar-section>Not using batch compilation</bar-section>
+					<bar name='tup'           value=' 0.38'>with monitor</bar>
+					<bar name='tup'           value=' 0.52'>without monitor</bar>
 					<bar name='jam'           value=' 0.81'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 1.01'>without scan of system-wide headers, (recursive)</bar>
 					<bar name='toy makefiles' value=' 1.42'>with scan of system-wide headers, (recursive)</bar>
@@ -191,6 +207,8 @@
 			</part>
 			<part caption='No-op rebuild'>
 				<bars scale='60'>
+					<bar name='tup'           value=' 0.07'>with monitor</bar>
+					<bar name='tup'           value=' 0.15'>without monitor</bar>
 					<bar name='wonderbuild'   value=' 0.63'>gcc deps, (dynamically looking for sources)</bar>
 					<bar name='jam'           value=' 0.71'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 0.79'>without scan of system-wide headers, (recursive)</bar>
@@ -1001,3 +1019,4 @@
 		</part>
 	</part>
 </part>
+

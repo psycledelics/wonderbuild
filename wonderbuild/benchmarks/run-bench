@@ -4,6 +4,7 @@ set -x &&
 
 jobs=4 &&
 wonderbuild=../../wonderbuild.py &&
+tup=../../tup/tup &&
 fbuild=../../fbuild/fbuild-light &&
 waf=../../waf/waf-light &&
 scons=../../scons/src/ &&
@@ -37,7 +38,11 @@ main() {
 	cd $(dirname $0)/bench-$tool &&
 
 	case $op in
-		reset) rm -Rf build-$tool ;;
+		reset)
+			rm -Rf build-$tool &&
+			find . -name \*.o -delete &&
+			find . -name \*.a -delete
+			;;
 		no-op) ;;
 		small) $change lib_17/class_17.hpp ;;
 		big)   $change lib_17/*.hpp ;;
@@ -50,6 +55,34 @@ main() {
 	
 		wonderbuild-on-jython)
 			measure $jython $wonderbuild --bld-dir=build-$tool --cxx=g++ --jobs=$jobs --check-missing=no "$@"
+		;;
+
+		tup)
+			if test $op = reset
+			then
+				rm -Rf .tup
+			fi &&
+			if ! test -d .tup
+			then
+				$tup init
+			fi &&
+			#$tup config num_jobs $jobs
+			measure $tup upd -j$jobs "$@"
+		;;
+		
+		tup-monitor)
+			if test $op = reset
+			then
+				# TODO stop the monitor
+				rm -Rf .tup
+			fi &&
+			if ! test -d .tup
+			then
+				$tup init
+			fi &&
+			$tup monitor
+			#$tup config num_jobs $jobs
+			measure $tup upd -j$jobs "$@"
 		;;
 
 		fbuild)
