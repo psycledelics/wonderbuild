@@ -145,11 +145,11 @@
 					<bar name='toy makefiles' value=' 33.4'>with scan of system-wide headers, (recursive)</bar>
 					<bar name='jam'           value=' 35.6'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='cmake'         value=' 37.5'>without scan of system wide headers (like gcc -MMD)</bar>
+					<bar name='tup'           value=' 41.3'>with monitor</bar>
 					<bar name='waf'           value=' 47.0'>gcc deps, timestamp signatures</bar>
 					<bar name='waf'           value=' 47.3'>waf cpp, timestamp signatures</bar>
 					<bar name='waf'           value=' 49.3'>waf cpp, timestamp signatures, dynamically looking for sources</bar>
 					<bar name='fbuild'        value=' 74.3'>(timestamp signatures only, content hashing disabled, dynamically looking for sources)</bar>
-					<bar name='tup'           value=' 41.3'>with monitor</bar>
 					<bar name='tup'           value=' 86.2'>without monitor</bar>
 					<bar name='scons'         value='131.0'>with fast tuning options</bar>
 					<bar name='scons'         value='137.7'>with default options</bar>
