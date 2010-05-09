@@ -30,7 +30,7 @@ else:
 				def __call__(self, sched_ctx):
 					for x in UserBuildCfgTask.__call__(self, sched_ctx): yield x
 					self.cxx_flags = ['-g', '-O0', '-Wall']
-					self.shared = self.pic = False
+					self.shared = self.pic = True
 					self.defines['WRAPPER'] = None
 					self.include_paths.append(src_dir)
 		

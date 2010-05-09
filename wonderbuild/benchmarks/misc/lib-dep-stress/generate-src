@@ -52,7 +52,33 @@ if __name__ == '__main__':
 			f.write('}\n')
 		finally:
 			f.close()
-			
+	
+	f = open('Tuprules.tup', 'w')
+	try:
+		f.write('CXX = g++\n')
+		f.write('CXXFLAGS = -g -O0 -Wall -pipe -fPIC -Isrc\n')
+		f.write('LD = $(CXX)\n')
+		f.write('!cxx = |> $(CXX) $(CXXFLAGS) -c %f -o %o |>\n')
+		f.write('!ld = |> $(LD) -shared -o %o %f |>\n')
+		f.write('!ld_prog = |> $(LD) -o %o %f |>\n')
+	finally:
+		f.close()
+	f = open('Tupfile', 'w')
+	try:
+		f.write('include_rules\n')
+		for i in xrange(count):
+			f.write(': foreach src/wrapper' + str(i) + '/*.cpp |> !cxx |> src,wrapper' + str(i) + ',%B.o\n')
+			f.write(': src,wrapper' + str(i) + ',*.o ')
+			for j in xrange(i): f.write('libwrapper' + str(j) + '.so ')
+			f.write('|> !ld |> libwrapper' + str(i) + '.so\n')
+		f.write(': src/main.cpp |> !cxx |> src,%B.o\n')
+		f.write(': src,main.o ')
+		if True: # grrr, that's rather stupid and inserts spurious dependencies
+			for i in xrange(count - 1): f.write('libwrapper' + str(i) + '.so ')
+		f.write('libwrapper' + str(count - 1) + '.so |> !ld_prog |> main\n')
+	finally:
+		f.close()
+	
 	f = open('configure.ac', 'w')
 	try:
 		f.write('AC_INIT([lib-dep-stress], [1.0.0])\n')
