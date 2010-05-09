@@ -545,6 +545,7 @@
 				ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
 				<part caption='Tool versions'>
 					<ul>
+						<li>Tup version was 0.3-107-g8d046aa</li>
 						<li>Waf version was somewhere after 1.5.9 (svn rev 6671)</li>
 						<li>Fabricate version was subversion revision 48</li>
 						<li>Python version was 2.5.2</li>

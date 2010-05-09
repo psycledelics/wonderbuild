@@ -191,7 +191,7 @@ CXX = g++
 CXXFLAGS = -g -O0 -Wall -pipe -I..
 AR = ar
 
-!cpp = |> ^ CXX %f^ $(CXX) $(CXXFLAGS) -c %f -o %o |>
+!cxx = |> ^ CXX %f^ $(CXX) $(CXXFLAGS) -c %f -o %o |>
 !ar = |> ^ AR %o^ $(AR) crus %o %f |>
 ''')
 	finally: f.close()
@@ -200,7 +200,7 @@ def create_tup_sub(lib_number, classes):
 	f = open('Tupfile', 'w')
 	try: f.write('''\
 include_rules
-: foreach *.cpp |> !cpp |> %%B.o
+: foreach *.cpp |> !cxx |> %%B.o
 : *.o |> !ar |> %(tgt)s.a
 ''' % {'tgt': lib_name(lib_number)})
 	finally: f.close()
