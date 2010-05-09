@@ -145,7 +145,7 @@
 					<bar name='toy makefiles' value=' 33.4'>with scan of system-wide headers, (recursive)</bar>
 					<bar name='jam'           value=' 35.6'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='cmake'         value=' 37.5'>without scan of system wide headers (like gcc -MMD)</bar>
-					<bar name='tup'           value=' 41.3'>with monitor</bar>
+					<bar name='tup'           value=' 41.3'>with or without monitor</bar>
 					<bar name='waf'           value=' 47.0'>gcc deps, timestamp signatures</bar>
 					<bar name='waf'           value=' 47.3'>waf cpp, timestamp signatures</bar>
 					<bar name='waf'           value=' 49.3'>waf cpp, timestamp signatures, dynamically looking for sources</bar>
@@ -170,8 +170,7 @@
 					<bar name='jam'           value=' 4.25'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 4.66'>without scan of system-wide headers, (recursive)</bar>
 					<bar name='toy makefiles' value=' 5.05'>with scan of system-wide headers, (recursive)</bar>
-					<bar name='tup'           value=' 5.54'>with monitor</bar>
-					<bar name='tup'           value=' 5.67'>without monitor</bar>
+					<bar name='tup'           value=' 5.54'>with or without monitor</bar>
 					<bar name='cmake'         value=' 6.15'>without scan of system wide headers (like gcc -MMD)</bar>
 					<bar name='waf'           value=' 7.42'>(same with gcc deps and waf cpp), timestamp signatures</bar>
 					<bar name='waf'           value=' 8.00'>(same with gcc deps and waf cpp), timestamp signatures, dynamically looking for sources</bar>
@@ -191,7 +190,7 @@
 					<bar name='waf'           value=' 1.90'>(OLD BENCHMARK OF OLD VERSION) max 50 srcs/batch, waf cpp (same with shutil or mv), timestamp signatures</bar>
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='tup'           value=' 0.38'>with monitor</bar>
-					<bar name='tup'           value=' 0.52'>without monitor</bar>
+					<bar name='tup'           value=' 0.40'>without monitor</bar>
 					<bar name='jam'           value=' 0.81'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 1.01'>without scan of system-wide headers, (recursive)</bar>
 					<bar name='toy makefiles' value=' 1.42'>with scan of system-wide headers, (recursive)</bar>
@@ -208,7 +207,7 @@
 			<part caption='No-op rebuild'>
 				<bars scale='60'>
 					<bar name='tup'           value=' 0.07'>with monitor</bar>
-					<bar name='tup'           value=' 0.15'>without monitor</bar>
+					<bar name='tup'           value=' 0.08'>without monitor</bar>
 					<bar name='wonderbuild'   value=' 0.63'>gcc deps, (dynamically looking for sources)</bar>
 					<bar name='jam'           value=' 0.71'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 0.79'>without scan of system-wide headers, (recursive)</bar>
