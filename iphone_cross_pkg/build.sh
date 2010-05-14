@@ -26,7 +26,7 @@ then
 	pushd dmg-sdk &&
 	od -t x1 *.dmg | grep '^[0-7]*000 1f 8b' > offsets.txt &&
 	dd if=*.dmg skip=$(awk '{ print $1 }' offsets.txt | while read x; do dd if=*.dmg skip=$((0$x / 512)) count=1 | gunzip | cpio -t | grep -q MacOSX10.4u.sdk && echo $((0$x / 512)); done 2>/dev/null) | gunzip | pax -r
-	popd &&
+	popd
 fi &&
 test -d $SDK &&
 
