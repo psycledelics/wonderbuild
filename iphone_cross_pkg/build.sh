@@ -11,7 +11,10 @@ cd $(dirname $0) &&
 export PREFIX=$(pwd)/install &&
 
 # llvm
-svn co http://llvm.org/svn/llvm-project/llvm/trunk llvm-svn -r 42498 &&
+if ! test -d llvm-svn
+then
+	svn checkout -r42498 http://llvm.org/svn/llvm-project/llvm/trunk llvm-svn
+fi &&
 cd llvm-svn &&
 ./configure --prefix=$PREFIX --enable-optimized &&
 make ENABLE_OPTIMIZED=1 &&
@@ -35,7 +38,10 @@ test -d heavenly &&
 export HEAVENLY=$(pwd)/heavenly &&
 
 # iphone-dev
-svn checkout http://iphone-dev.googlecode.com/svn/trunk iphone-dev &&
+if ! test -d iphone-dev
+then
+	svn checkout http://iphone-dev.googlecode.com/svn/trunk iphone-dev
+fi &&
 cd iphone-dev &&
 
 # ???
