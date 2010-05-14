@@ -12,21 +12,21 @@ export PREFIX=$(pwd)/install &&
 
 # llvm
 svn co http://llvm.org/svn/llvm-project/llvm/trunk llvm-svn -r 42498 &&
-pushd llvm-svn &&
+cd llvm-svn &&
 ./configure --prefix=$PREFIX --enable-optimized &&
 make ENABLE_OPTIMIZED=1 &&
 make install &&
 export LLVMOBJDIR=$(pwd) &&
-popd &&
+cd .. &&
 
 # xcode dmg
 export SDK=$(pwd)/dmg-sdk/SDKs/MacOSX10.4u.sdk &&
 if ! test -d $SDK
 then
-	pushd dmg-sdk &&
+	cd dmg-sdk &&
 	od -t x1 *.dmg | grep '^[0-7]*000 1f 8b' > offsets.txt &&
 	dd if=*.dmg skip=$(awk '{ print $1 }' offsets.txt | while read x; do dd if=*.dmg skip=$((0$x / 512)) count=1 | gunzip | cpio -t | grep -q MacOSX10.4u.sdk && echo $((0$x / 512)); done 2>/dev/null) | gunzip | pax -r
-	popd
+	cd ..
 fi &&
 test -d $SDK &&
 
@@ -36,43 +36,43 @@ export HEAVENLY=$(pwd)/heavenly &&
 
 # iphone-dev
 svn checkout http://iphone-dev.googlecode.com/svn/trunk iphone-dev &&
-pushd iphone-dev &&
+cd iphone-dev &&
 
 # ???
 mkdir $PREFIX/arm-apple-darwin &&
 
 # iphone-dev odcctools
 mkdir -p build/odcctools &&
-pushd build/odcctools &&
+cd build/odcctools &&
 CFLAGS=-m32 LDFLAGS=-m32 ../../odcctools/configure --prefix=$PREFIX --target=arm-apple-darwin --disable-ld64
 make &&
 make install &&
-popd &&
+cd ../.. &&
 
 # iphone headers installation
-pushd include &&
+cd include &&
 ./configure --prefix=$PREFIX --with-macosx-sdk=$SDK &&
 bash install-headers.sh &&
-popd &&
+cd .. &&
 
 # iphone-dev csu
 mkdir -p build/csu &&
-pushd build/csu &&
+cd build/csu &&
 ../../csu/configure --prefix=$PREFIX --host=arm-apple-darwin
 make install &&
-popd &&
+cd ../.. &&
 
 # iphone-dec llvm-gcc
 mkdir -p build/llvm-gcc-4.0-iphone &&
-pushd build/llvm-gcc-4.0-iphone &&
+cd build/llvm-gcc-4.0-iphone &&
 ../../llvm-gcc-4.0-iphone/configure --prefix=$PREFIX --enable-llvm=$LLVMOBJDIR --with-heavenly=$HEAVENLY \
 	--enable-languages=c,c++,objc,obj-c++ --target=arm-apple-darwin --enable-sjlj-exceptions --enable-wchar_t=no \
 	--with-as=$PREFIX/bin/arm-apple-darwin-as \
 	--with-ld=$PREFIX/bin/arm-apple-darwin-ld &&
 make LLVM_VERSION_INFO=2.0-svn-iphone-dev-0.3-svn &&
 make install &&
-popd &&
+cd ../.. &&
 
-popd &&
+cd .. &&
 :
 
