@@ -102,7 +102,7 @@ Recipes should not override these methods, just use them.
 - DESTDIR / def dest_dir(self) -> path:
 	This method/variable returns the path were the package should put all the files to install.
 	For automake-based packages, you would pass this path to the "make install DESTDIR=" command.
-	For a package "foo", dest dir would would be an absolute path to xxx/++build/foo/dest/.
+	For a package "foo", dest dir would be an absolute path to xxx/++build/foo/dest/.
 
 - GMAKE, MAKE / def gmake(self):
 	returns the the name or path to the GNU make command ('gmake' instead of 'make' on *bsd systems)
@@ -136,7 +136,7 @@ This method should return a one-line description of the package.
 
 def deps(self) -> list
 
-This method should return list of packages this package depends on.
+This method should return the list of packages this package depends on.
 
 1.4.4 The download method
 -------------------------
