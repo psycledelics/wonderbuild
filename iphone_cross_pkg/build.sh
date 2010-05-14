@@ -44,7 +44,7 @@ mkdir $PREFIX/arm-apple-darwin &&
 # iphone-dev odcctools
 mkdir -p build/odcctools &&
 cd build/odcctools &&
-CFLAGS=-m32 LDFLAGS=-m32 ../../odcctools/configure --prefix=$PREFIX --target=arm-apple-darwin --disable-ld64
+CFLAGS='-g -O2 -m32' LDFLAGS=-m32 ../../odcctools/configure --prefix=$PREFIX --target=arm-apple-darwin --disable-ld64
 make &&
 make install &&
 cd ../.. &&
