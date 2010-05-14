@@ -45,7 +45,10 @@ fi &&
 cd iphone-dev &&
 
 # ???
-mkdir $PREFIX/arm-apple-darwin &&
+if ! test -d $PREFIX/arm-apple-darwin
+then
+	mkdir $PREFIX/arm-apple-darwin
+fi &&
 
 # iphone-dev odcctools
 mkdir -p build/odcctools &&
