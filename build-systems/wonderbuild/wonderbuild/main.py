@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2008-2010 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import sys, os
 
@@ -75,7 +75,7 @@ run(options, option_collector)
 				print >> sys.stderr, colored('2', 'wonderbuild: build time: ' + str(t) + 's')
 				if gc_enabled: gc.enable()
 		except UserReadableException, e:
-			print >> sys.stderr, colored('31;1', 'wonderbuild: failed: ') + colored('31', str(e))
+			print >> sys.stderr, '\a', colored('31;1', 'wonderbuild: failed: ') + colored('31', str(e))
 			r = 1
 		else:
 			if r != 0: print >> sys.stderr, colored('31;1', 'wonderbuild: failed: ') + colored('31', 'nonzero return code: ' + str(r))

@@ -1,7 +1,5 @@
 * add option not to relink when a dependent shared lib changes (if only implementation changes, relinking is unneeded)
 
-* emit bell char on build failure.
-
 * when a loadable module depends on a lib, that lib can't be a non-pic one,
   so, ideally, it should automatically be built as a loadable module too.
 
