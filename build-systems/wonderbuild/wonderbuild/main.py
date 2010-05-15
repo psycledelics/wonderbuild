@@ -75,7 +75,7 @@ run(options, option_collector)
 				print >> sys.stderr, colored('2', 'wonderbuild: build time: ' + str(t) + 's')
 				if gc_enabled: gc.enable()
 		except UserReadableException, e:
-			print >> sys.stderr, '\a', colored('31;1', 'wonderbuild: failed: ') + colored('31', str(e))
+			print >> sys.stderr, '\a' + colored('31;1', 'wonderbuild: failed: ') + colored('31', str(e))
 			r = 1
 		else:
 			if r != 0: print >> sys.stderr, colored('31;1', 'wonderbuild: failed: ') + colored('31', 'nonzero return code: ' + str(r))
