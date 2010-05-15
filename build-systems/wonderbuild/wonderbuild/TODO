@@ -1,5 +1,3 @@
-* add a check to simply test whether the user-provided compiler flags are correct.
-
 * add option not to relink when a dependent shared lib changes (if only implementation changes, relinking is unneeded)
 
 * emit bell char on build failure.

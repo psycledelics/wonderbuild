@@ -1,11 +1,12 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2007-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2007-2010 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
+from wonderbuild import UserReadableException
 from wonderbuild.logger import out, colored, is_debug, debug, silent
 from wonderbuild.subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 from wonderbuild.check_task import CheckTask, ok_color, failed_color
-from wonderbuild.std_checks import DestPlatformCheckTask, PicFlagDefinesPicCheckTask
+from wonderbuild.std_checks import ValidCfgCheckTask, DestPlatformCheckTask, PicFlagDefinesPicCheckTask
 
 class DetectImplCheckTask(CheckTask):
 
@@ -48,27 +49,28 @@ class DetectImplCheckTask(CheckTask):
 		cfg.kind = self.kind
 		cfg.version = self.version
 		if cfg.impl is None: self._select_impl()
-		if cfg.impl is not None:
-			# set the programs
-			cxx_prog, ld_prog, ar_prog, ranlib_prog = cfg.impl.progs(cfg)
-			if __debug__ and is_debug:
-				debug('cfg: ' + self.desc + ': cxx: ' + cxx_prog)
-				debug('cfg: ' + self.desc + ': ld: ' + ld_prog)
-				debug('cfg: ' + self.desc + ': ar: ' + ar_prog)
-				debug('cfg: ' + self.desc + ': ranlib: ' + ranlib_prog)
-			if cfg.cxx_prog is None: cfg.cxx_prog = cxx_prog
-			if cfg.ld_prog is None: cfg.ld_prog = ld_prog
-			if cfg.ar_prog is None: cfg.ar_prog = ar_prog
-			if cfg.ranlib_prog is None: cfg.ranlib_prog = ranlib_prog
-			
-			dest_platform = DestPlatformCheckTask.shared(cfg)
-			pic = PicFlagDefinesPicCheckTask.shared(cfg)
-			cfg.dest_platform.pic_flag_defines_pic = True # allows it to be reentrant during the check itself
-			for x in sched_ctx.parallel_wait(dest_platform, pic): yield x
-			cfg.dest_platform.bin_fmt = dest_platform.bin_fmt
-			cfg.dest_platform.os = dest_platform.os
-			cfg.dest_platform.arch = dest_platform.arch
-			cfg.dest_platform.pic_flag_defines_pic = pic.result
+		if cfg.impl is None: raise UserReadableException, str(self) + ': no supported c++ compiler found'
+		# set the programs
+		cxx_prog, ld_prog, ar_prog, ranlib_prog = cfg.impl.progs(cfg)
+		if __debug__ and is_debug:
+			debug('cfg: ' + self.desc + ': cxx: ' + cxx_prog)
+			debug('cfg: ' + self.desc + ': ld: ' + ld_prog)
+			debug('cfg: ' + self.desc + ': ar: ' + ar_prog)
+			debug('cfg: ' + self.desc + ': ranlib: ' + ranlib_prog)
+		if cfg.cxx_prog is None: cfg.cxx_prog = cxx_prog
+		if cfg.ld_prog is None: cfg.ld_prog = ld_prog
+		if cfg.ar_prog is None: cfg.ar_prog = ar_prog
+		if cfg.ranlib_prog is None: cfg.ranlib_prog = ranlib_prog
+		
+		valid_cfg = ValidCfgCheckTask.shared(cfg)
+		dest_platform = DestPlatformCheckTask.shared(cfg)
+		pic = PicFlagDefinesPicCheckTask.shared(cfg)
+		cfg.dest_platform.pic_flag_defines_pic = True # allows it to be reentrant during the check itself
+		for x in sched_ctx.parallel_wait(pic, dest_platform, valid_cfg): yield x
+		cfg.dest_platform.bin_fmt = dest_platform.bin_fmt
+		cfg.dest_platform.os = dest_platform.os
+		cfg.dest_platform.arch = dest_platform.arch
+		cfg.dest_platform.pic_flag_defines_pic = pic.result
 	
 	def do_check_and_set_result(self, sched_ctx):
 		if False: yield
@@ -135,4 +137,4 @@ class DetectImplCheckTask(CheckTask):
 		elif cfg.kind == 'posix':
 			from posix_impl import Impl
 			cfg.impl = Impl(self.project.persistent)
-		else: cfg.impl = cfg.version = None
+		else: cfg.impl = None
