@@ -20,7 +20,7 @@ class ValidCfgCheckTask(BuildCheckTask):
 
 	def __call__(self, sched_ctx):
 		for x in BuildCheckTask.__call__(self, sched_ctx): yield x
-		if not self: raise UserReadableException, str(self) + ': invalid user flags'
+		if not self: raise UserReadableException, str(self) + ': invalid user-provided flags'
 
 class DestPlatformCheckTask(BuildCheckTask):
 
