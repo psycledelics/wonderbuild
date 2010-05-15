@@ -65,8 +65,6 @@ class SharedTask(Task):
 		uid = class_.shared_uid(*args, **kw)
 		try: instance = holder._shared_tasks[uid]
 		except KeyError: instance = holder._shared_tasks[uid] = class_(*args, **kw)
-		#try: instance.uid
-		#except AttributeError: instance.uid = uid
 		instance.shared_task_holder = holder
 		return instance
 	
@@ -76,9 +74,6 @@ class SharedTask(Task):
 
 	@classmethod
 	def shared_uid(class_, *args, **kw): raise Exception, str(class_) + ' did not redefine the class method.'
-
-	#@property
-	#def uid(self)
 
 	def _get_persistent(self): return self._holder.persistent[self.uid]
 	def _set_persistent(self, value): self._holder.persistent[self.uid] = value
