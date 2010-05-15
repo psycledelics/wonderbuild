@@ -13,7 +13,7 @@
 
 * generate .pc files.
 
-* only the top-level script should have default tasks.
+* the caller of a script-loader-task should be able to choose wether to collect their default tasks.
 
 * c lang support.
 
