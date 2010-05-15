@@ -1,5 +1,3 @@
-* add option not to relink when a dependent shared lib changes (if only implementation changes, relinking is unneeded)
-
 * when a loadable module depends on a lib, that lib can't be a non-pic one,
   so, ideally, it should automatically be built as a loadable module too.
 
@@ -20,7 +18,7 @@
 * don't make target_dir methods depend on target methods, but rather the reverse, so that users may choose to "install" to another dir
   This has impact on the impl classes, where --rpath, --rpath-link, and -L flags use fhs.lib
 
-* versionned libs.
+* versionned libs. (also take care of relinking clients of shared libs when their version changed)
 
 * the path to colorgcc shouldn't be signed, but rather the path to the real compiler.
   this stupidly triggers rebuild when changing from non-tty to tty or vice versa.

@@ -72,6 +72,7 @@ class BuildCfg(ClientCfg, Task):
 		self.includes = deque()
 		self.pch = None
 		self.check_missing = False
+		self.ld_on_shared_dep_impl_change = False
 		self.fhs = FHS.shared(project)
 		self.impl = self.kind = self.version = None
 		self.dest_platform = DestPlatform()
@@ -91,6 +92,7 @@ class BuildCfg(ClientCfg, Task):
 		c.shared = self.shared
 		c.static_prog = self.static_prog
 		c.check_missing = self.check_missing
+		c.ld_on_shared_dep_impl_change = self.ld_on_shared_dep_impl_change
 		c.fhs = self.fhs
 		c.impl = self.impl
 		c.kind = self.kind
@@ -216,11 +218,13 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 		'pic-static'
 	])
 
-	known_options = signed_options | set(['check-missing'])
+	known_options = signed_options | set(['check-missing', 'relink-on-shared-dep-impl-change'])
 
 	@staticmethod
 	def generate_option_help(help):
 		help['check-missing'] = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'yes')
+
+		help['relink-on-shared-dep-impl-change'] = ('<yes|no>', 'relink clients of a shared lib if its implementation changed', 'no')
 
 		help['cxx']           = ('<prog>', 'use <prog> as c++ compiler', 'CXX env var: ' + os.environ.get('CXX', '(not set)'))
 		help['cxx-flags']     = ('[flags]', 'use specific c++ compiler flags', 'CXXFLAGS env var: ' + os.environ.get('CXXFLAGS', '(not set)'))
@@ -262,6 +266,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 		o = self.options
 
 		self.check_missing = o.get('check-missing', 'yes') != 'no'
+		self.ld_on_shared_dep_impl_change = o.get('relink-on-shared-dep-impl-change', 'no') == 'yes'
 
 		try:
 			old_sig, \
@@ -885,8 +890,8 @@ class ModTask(ModDepPhases, ProjectTask):
 			if not need_process:
 				for dep in deps:
 					# When a dependant lib is a static archive, or changes its type from static to shared, we need to relink.
-					# When the check-missing option is on, we also relink to check that external symbols still exist.
-					try: need_process = dep._needed_process and (not dep.ld or dep._type_changed or self.cfg.check_missing)
+					# When the relink-on-shared-dep-impl-change option is on, we also relink to check that external symbols still exist.
+					try: need_process = dep._needed_process and (not dep.ld or dep._type_changed or self.cfg.ld_on_shared_dep_impl_change)
 					except AttributeError: continue # not a lib task
 					if need_process:
 						if __debug__ and is_debug: debug('task: dep lib task changed: ' + str(self) + ' ' + str(dep))
