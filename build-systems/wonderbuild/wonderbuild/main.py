@@ -78,7 +78,7 @@ run(options, option_collector)
 			print >> sys.stderr, '\a' + colored('31;1', 'wonderbuild: failed: ') + colored('31', str(e))
 			r = 1
 		else:
-			if r != 0: print >> sys.stderr, colored('31;1', 'wonderbuild: failed: ') + colored('31', 'nonzero return code: ' + str(r))
+			if r != 0: print >> sys.stderr, '\a' + colored('31;1', 'wonderbuild: failed: ') + colored('31', 'nonzero return code: ' + str(r))
 		sys.exit(r)
 
 	def run(options, option_collector):
