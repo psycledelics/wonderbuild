@@ -139,6 +139,7 @@ class Impl(object):
 			sig = self._ld_env_sig = sig.digest()
 			return sig
 
+	#@staticmethod
 	def cfg_ld_args(self, cfg):
 		args = [cfg.ld_prog, '-nologo']
 		if cfg.shared: args.append('-dll')
