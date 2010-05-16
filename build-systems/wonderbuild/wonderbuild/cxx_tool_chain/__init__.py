@@ -447,6 +447,7 @@ class _PreCompileTask(ModDepPhases, ProjectTask):
 			self.pre_compile_task = pre_compile_task
 		
 		def __str__(self): return 'pre-compile ' + str(self.pre_compile_task.header)
+		
 		def __call__(self, sched_ctx):
 			for x in self.pre_compile_task._cxx_phase_callback(sched_ctx): yield x
 
@@ -630,7 +631,7 @@ class _BatchCompileTask(ProjectTask):
 		self.target_dir.actual_children # not needed, just an optimisation
 		sched_ctx.lock.release()
 		try:
-			if is_debug and not silent:
+			if __debug__ and is_debug and not silent:
 				color = color_bg_fg_rgb((0, 150, 180), (255, 255, 255))
 				if self.cfg.pic: pic = 'pic'; color += ';1'
 				else: pic = 'non-pic';
@@ -708,6 +709,7 @@ class ModTask(ModDepPhases, ProjectTask):
 
 	@property
 	def obj_dir(self):
+		''' the dir node where intermediate object files are placed'''
 		try: return self._obj_dir
 		except AttributeError:
 			self.project.bld_dir.lock.acquire()
@@ -717,6 +719,7 @@ class ModTask(ModDepPhases, ProjectTask):
 
 	@property
 	def targets(self):
+		''' the file nodes of all outputs: program, shared lib and its import lib, static archive. '''
 		try: return self._targets
 		except AttributeError:
 			self._targets = self.cfg.impl.mod_task_targets(self)
@@ -724,16 +727,23 @@ class ModTask(ModDepPhases, ProjectTask):
 	
 	@property
 	def target(self):
+		''' the file node of the runtime output: program, shared lib, or static archive.'''
 		try: return self._target
 		except AttributeError:
-			self._target = self.cfg.impl.mod_task_target_dir(self) / self.cfg.impl.mod_task_target_name(self)
+			self._target = self.target_dir / self.cfg.impl.mod_task_target_name(self)
 			return self._target
 
 	@property
-	def target_dir(self): return self.target.parent
+	def target_dir(self):
+		''' the dir node where the runtime output is placed, or where the static archive is placed. '''
+		try: return self._target_dir
+		except AttributeError:
+			self._target_dir = self.cfg.impl.mod_task_target_dir(self)
+			return self._target_dir
 	
 	@property
 	def target_dev_dir(self):
+		''' the dir node added to the library search path passed to clients in their linker command. '''
 		try: return self._target_dev_dir
 		except AttributeError:
 			self._target_dev_dir = self.cfg.impl.mod_task_target_dev_dir(self)
@@ -741,6 +751,7 @@ class ModTask(ModDepPhases, ProjectTask):
 
 	@property
 	def target_dev_name(self):
+		''' the library name passed to clients in their linker command. '''
 		try: return self._target_dev_name
 		except AttributeError:
 			self._target_dev_name = self.cfg.impl.mod_task_target_dev_name(self)
@@ -748,6 +759,8 @@ class ModTask(ModDepPhases, ProjectTask):
 
 	@property
 	def ld(self):
+		''' a boolean that indicates whether the module is created by a linker.
+			This is true for shared libs and programs, and false for static libs and header-only libs. '''
 		try: return self._ld
 		except AttributeError:
 			if self.kind == ModTask.Kinds.HEADERS: self._ld = False
