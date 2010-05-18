@@ -267,14 +267,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\yezar_freeverb\CombFilter.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\src\psycle\plugins\yezar_freeverb\LowPass.cpp"
-			>
-		</File>
-		<File
 			RelativePath="..\src\psycle\plugins\yezar_freeverb\RevModel.cpp"
 			>
 		</File>
