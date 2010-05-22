@@ -8,17 +8,15 @@ set -x &&
 
 cd $(dirname $0) &&
 
-export PREFIX=$(pwd)/install &&
-
 # llvm
 if ! test -d llvm-svn
 then
 	svn checkout -r42498 http://llvm.org/svn/llvm-project/llvm/trunk llvm-svn
 fi &&
 cd llvm-svn &&
-./configure --prefix=$PREFIX --enable-optimized &&
-make ENABLE_OPTIMIZED=1 &&
-make install &&
+#CC=gcc-4.1 CXX=g++-4.1 ./configure --enable-optimized &&
+#make ENABLE_OPTIMIZED=1 &&
+#make install &&
 export LLVMOBJDIR=$(pwd) &&
 cd .. &&
 
@@ -45,39 +43,40 @@ fi &&
 cd iphone-dev &&
 
 # ???
-if ! test -d $PREFIX/arm-apple-darwin
+if ! test -d /usr/local/arm-apple-darwin
 then
-	mkdir $PREFIX/arm-apple-darwin
+	mkdir /usr/local/arm-apple-darwin
 fi &&
 
 # iphone-dev odcctools
 mkdir -p build/odcctools &&
 cd build/odcctools &&
-CFLAGS='-g -O2 -m32' LDFLAGS=-m32 ../../odcctools/configure --prefix=$PREFIX --target=arm-apple-darwin --disable-ld64
+export INCPRIVEXT="-isysroot $SDK" &&
+CC=gcc-4.1 CXX=g++-4.1 ../../odcctools/configure --target=arm-apple-darwin --disable-ld64
 make &&
 make install &&
 cd ../.. &&
 
 # iphone headers installation
 cd include &&
-./configure --prefix=$PREFIX --with-macosx-sdk=$SDK &&
+./configure --with-macosx-sdk=$SDK &&
 bash install-headers.sh &&
 cd .. &&
 
 # iphone-dev csu
 mkdir -p build/csu &&
 cd build/csu &&
-../../csu/configure --prefix=$PREFIX --host=arm-apple-darwin
+../../csu/configure --host=arm-apple-darwin
 make install &&
 cd ../.. &&
 
-# iphone-dec llvm-gcc
+# iphone-dev llvm-gcc
 mkdir -p build/llvm-gcc-4.0-iphone &&
 cd build/llvm-gcc-4.0-iphone &&
-../../llvm-gcc-4.0-iphone/configure --prefix=$PREFIX --enable-llvm=$LLVMOBJDIR --with-heavenly=$HEAVENLY \
+CC=gcc-4.1 CXX=g++-4.1 ../../llvm-gcc-4.0-iphone/configure --enable-llvm=$LLVMOBJDIR --with-heavenly=$HEAVENLY \
 	--enable-languages=c,c++,objc,obj-c++ --target=arm-apple-darwin --enable-sjlj-exceptions --enable-wchar_t=no \
-	--with-as=$PREFIX/bin/arm-apple-darwin-as \
-	--with-ld=$PREFIX/bin/arm-apple-darwin-ld &&
+	--with-as=/usr/local/bin/arm-apple-darwin-as \
+	--with-ld=/usr/local/bin/arm-apple-darwin-ld &&
 make LLVM_VERSION_INFO=2.0-svn-iphone-dev-0.3-svn &&
 make install &&
 cd ../.. &&
