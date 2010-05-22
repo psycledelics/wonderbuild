@@ -14,9 +14,9 @@ then
 	svn checkout -r42498 http://llvm.org/svn/llvm-project/llvm/trunk llvm-svn
 fi &&
 cd llvm-svn &&
-#CC=gcc-4.1 CXX=g++-4.1 ./configure --enable-optimized &&
-#make ENABLE_OPTIMIZED=1 &&
-#make install &&
+CC=gcc-4.1 CXX=g++-4.1 ./configure --enable-optimized &&
+make ENABLE_OPTIMIZED=1 &&
+make install &&
 export LLVMOBJDIR=$(pwd) &&
 cd .. &&
 
