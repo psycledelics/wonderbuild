@@ -31,12 +31,12 @@ Index: iphonedevonlinux/firmware.list
 ===================================================================
 --- iphonedevonlinux/firmware.list	(revision 83)
 +++ iphonedevonlinux/firmware.list	(working copy)
-@@ -15,4 +15,4 @@
+@@ -15,4 +15,5 @@
  2.0.1	iPhone(2G)	http://appldnld.apple.com.edgesuite.net/content.info.apple.com/iPhone/061-5135.20080729.Vfgtr/iPhone1,1_2.0.1_5B108_Restore.ipsw
  2.0	iPhone(3G)	http://appldnld.apple.com.edgesuite.net/content.info.apple.com/iPhone/061-4955.20080710.bgt53/iPhone1,2_2.0_5A347_Restore.ipsw
  2.0	iPhone(2G)	http://appldnld.apple.com.edgesuite.net/content.info.apple.com/iPhone/061-4956.20080710.V50OI/iPhone1,1_2.0_5A347_Restore.ipsw
--
-+3.1.2	iPhone(3GS)	http://appldnld.apple.com.edgesuite.net/content.info.apple.com/iPhone/061-7270.20091008.phn32/iPhone2,1_3.1.2_7D11_Restore.ipsw
++3.1.2	iPhone(3G)	http://appldnld.apple.com.edgesuite.net/content.info.apple.com/iPhone/061-7270.20091008.phn32/iPhone2,1_3.1.2_7D11_Restore.ipsw
+ 
 Index: iphonedevonlinux/toolchain.sh
 ===================================================================
 --- iphonedevonlinux/toolchain.sh	(revision 83)
@@ -46,8 +46,8 @@ Index: iphonedevonlinux/toolchain.sh
  
  # What version of the toolchain are we building?
 -TOOLCHAIN_VERSION="3.1.2"
-+#TOOLCHAIN_VERSION="3.1.2"
-+TOOLCHAIN_VERSION="3.2"
++#TOOLCHAIN_VERSION="3.1.2" # for the firmware
++TOOLCHAIN_VERSION="3.2" # for the sdk
  
  #what device are we building for?
 -DEVICE="iPhone_3G"
@@ -64,3 +64,33 @@ Index: iphonedevonlinux/toolchain.sh
  [ -z $IPHONE_SDK_DMG ] && IPHONE_SDK_DMG="${FILES_DIR}/${IPHONE_SDK}"
  
  # URLS
+@@ -354,8 +355,10 @@
+ 
+ 	# Check which PACKAGE we have to extract. Apple does have different
+ 	# namings for it, depending on the SDK version. 
+-	if [ "${TOOLCHAIN_VERSION}" == "3.1.2" ] ; then
++	if [ "${TOOLCHAIN_VERSION}" == "3.2" ] ; then
+ 		PACKAGE="iPhoneSDKHeadersAndLibs.pkg"
++	elif [ "${TOOLCHAIN_VERSION}" == "3.1.2" ] ; then
++		PACKAGE="iPhoneSDKHeadersAndLibs.pkg"
+ 	elif [[ "`vercmp $SDK_VERSION $TOOLCHAIN_VERSION`" == "newer" ]]; then
+ 		PACKAGE="iPhoneSDK`echo $TOOLCHAIN_VERSION | sed 's/\./_/g' `.pkg"
+ 	else
+@@ -885,7 +888,7 @@
+ 	mkdir -p "$BUILD_DIR/cctools-iphone"
+ 	cd "$BUILD_DIR/cctools-iphone"
+ 
+-	CFLAGS="-m32" LDFLAGS="-m32" "${CCTOOLS_DIR}"/configure \
++	CFLAGS="-m32 -O2" LDFLAGS="-m32" "${CCTOOLS_DIR}"/configure \
+ 		--target="${TARGET}" \
+ 		--prefix="$PREFIX" \
+ 		--enable-ld64
+@@ -914,7 +917,7 @@
+ 		--with-as="$PREFIX"/bin/"${TARGET}"-as \
+ 		--with-ld="$PREFIX"/bin/"${TARGET}"-ld \
+ 		--enable-wchar_t=no \
+-		--with-gxx-include-dir=/usr/include/c++/4.2.1
++		--with-gxx-include-dir=/usr/include/c++/4.2
+ 	make clean > /dev/null
+ 	message_status "Building gcc-4.2-iphone..."
+ 	cecho bold "Build progress logged to: $BUILD_DIR/gcc-4.2-iphone/make.log"
