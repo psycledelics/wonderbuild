@@ -5,7 +5,7 @@ Index: iphonedevonlinux/apps/HelloWorldFirst/Makefile
 @@ -1,5 +1,4 @@
 -#CC = /path/to/my/toolchain/bin/arm-apple-darwin9-gcc
 -CC=arm-apple-darwin9-gcc
-+CC = /home/debian/psycle/branches/bohan/iphone_cross_pkg/iphonedevonlinux/toolchain/pre/bin/arm-apple-darwin9-gcc
++CC = $PREFIX/bin/arm-apple-darwin9-gcc
  LD = $(CC)
  
  # We build our first hello world.
