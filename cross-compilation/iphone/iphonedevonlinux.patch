@@ -101,7 +101,7 @@ Index: iphonedevonlinux/toolchain.sh
  		--with-ld="$PREFIX"/bin/"${TARGET}"-ld \
  		--enable-wchar_t=no \
 -		--with-gxx-include-dir=/usr/include/c++/4.2.1
-+		--with-gxx-include-dir=/usr/include/c++/4.2
++		#--with-gxx-include-dir=/usr/include/c++/4.2.1
  	make clean > /dev/null
  	message_status "Building gcc-4.2-iphone..."
  	cecho bold "Build progress logged to: $BUILD_DIR/gcc-4.2-iphone/make.log"
