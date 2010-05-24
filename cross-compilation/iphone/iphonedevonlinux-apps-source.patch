@@ -5,7 +5,7 @@ Index: iphonedevonlinux-apps-source/apps/tCube_v3/Makefile
 @@ -1,5 +1,4 @@
 -#CC = /path/to/my/toolchain/bin/arm-apple-darwin9-gcc
 -CC=arm-apple-darwin9-gcc
-+CC = $$PREFIX/bin/arm-apple-darwin9-gcc
++CC = $(PREFIX)/bin/arm-apple-darwin9-gcc
  LD = $(CC)
  
  # Here comes your IP of the ipod/iphone.
@@ -14,7 +14,7 @@ Index: iphonedevonlinux-apps-source/apps/tCube_v3/Makefile
  IMG=img/
  
 -LDFLAGS=	-isysroot ../../sdks/iPhoneOS3.0.sdk/ \
-+#LDFLAGS = -isysroot $$PREFIX/../../sdks/iPhoneOS*.sdk/ \
++#LDFLAGS = -isysroot $(PREFIX)/../../sdks/iPhoneOS*.sdk/
 +LDFLAGS = \
  		-lobjc \
  		-bind_at_load \
