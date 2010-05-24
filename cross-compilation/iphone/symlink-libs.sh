@@ -4,16 +4,23 @@ set -x &&
 
 cd $(dirname $0) &&
 
-for lib in System objc
+cd iphonedevonlinux &&
+
+sdk=$(echo sdks/iPhoneOS*.sdk) &&
+sys=toolchain/sys &&
+
+for lib in System objc stdc++.6
 do
+	path=usr/lib &&
 	ln -s \
-		../../../../sdks/iPhoneOS*.sdk/usr/lib/lib$lib.dylib \
-		iphonedevonlinux/toolchain/sys/usr/lib/ || :
+		../../../../$sdk/$path/lib$lib.dylib \
+		$sys/$path/ || :
 done &&
 
 for lib in Foundation CoreFoundation CoreGraphics UIKit
 do
+	path=System/Library/Frameworks/$lib.framework &&
 	ln -s \
-		../../../../../../sdks/iPhoneOS*.sdk/System/Library/Frameworks/$lib.framework/$lib \
-		iphonedevonlinux/toolchain/sys/System/Library/Frameworks/$lib.framework/ || :
+		../../../../../../$sdk/$path/$lib \
+		$sys/$path/ || :
 done

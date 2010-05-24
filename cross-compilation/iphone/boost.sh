@@ -17,7 +17,8 @@ eof
 bjam \
 	--toolset-root=$toolset_root \
 	toolset=gcc-arm \
-	target-os=iphone \
+	target-os=darwin \
 	threading=multi \
-	release
+	release \
+	"$@"
 
