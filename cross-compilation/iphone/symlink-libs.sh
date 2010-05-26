@@ -24,3 +24,4 @@ do
 		../../../../../../$sdk/$path/$lib \
 		$sys/$path/ || :
 done
+
