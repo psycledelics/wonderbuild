@@ -96,10 +96,10 @@ def main():
 	args = sys.argv[2:]
 	if '--help' in args and command in commands:
 		usage(command = command)
-	elif command == 'version' or command == '--version' or '--version' in args:
+	elif command in ('version', '--version') or '--version' in args:
 		sys.stdout.write(version)
 		sys.stdout.write('\n')
-	elif command == 'help' or command == '--help':
+	elif command in ('help', '--help'):
 		command = None
 		if len(args):
 			command = args[0]

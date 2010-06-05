@@ -8,6 +8,8 @@ root=$(pwd)/iphonedevonlinux/toolchain &&
 toolset_root=$root/pre/bin &&
 prefix=$root/sys/usr &&
 
+cp -f boost--gcc.jam.patched boost/boost_*/tools/build/v2/tools/gcc.jam &&
+
 cd boost/boost_* &&
 
 cat > tools/build/v2/user-config.jam <<eof
@@ -41,7 +43,7 @@ sh bootstrap.sh --prefix=$prefix &&
 	--toolset-root=$toolset_root \
 	--layout=system \
 	--toolset=gcc-arm \
-	--target-os=darwin \
+	target-os=darwin \
 	define=_LITTLE_ENDIAN \
 	threading=multi \
 	variant=release \
