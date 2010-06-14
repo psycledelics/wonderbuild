@@ -28,19 +28,19 @@ else:
 			test_name = self.src_dir.name
 			src_dir = self.src_dir.parent / 'src'
 
-			build_cfg = UserBuildCfgTask.shared(self.project)
-			for x in sched_ctx.parallel_wait(build_cfg): sched_ctx = yield x
-			build_cfg = build_cfg.new_or_clone()
-			if not src_dir in build_cfg.include_paths: build_cfg.include_paths.append(src_dir)
+			cfg = UserBuildCfgTask.shared(self.project)
+			for x in sched_ctx.parallel_wait(cfg): yield x
+			cfg = cfg.clone()
+			if not src_dir in cfg.include_paths: cfg.include_paths.append(src_dir)
 			
-			#build_cfg.pic = True
+			#cfg.pic = True
 
-			build_cfg.shared = True
-			build_cfg.static_prog = False
+			cfg.shared = True
+			cfg.static_prog = False
 			
-			static_build_cfg = build_cfg.clone()
-			static_build_cfg.shared = False
-			static_build_cfg.static_prog = True
+			static_cfg = cfg.clone()
+			static_cfg.shared = False
+			static_cfg.static_prog = True
 
 			def variant(sched_ctx, static_prog, static_wrapper, static_impl):
 				variant_name = \
@@ -53,7 +53,7 @@ else:
 				class LibImpl(ModTask):
 					def __init__(self): ModTask.__init__(self,
 						test_name + '--' + variant_name + '--impl',
-						ModTask.Kinds.LIB, static_impl and static_build_cfg or build_cfg)
+						ModTask.Kinds.LIB, static_impl and static_cfg or cfg)
 
 					def __call__(self, sched_ctx):
 						self.result = True
@@ -87,7 +87,7 @@ else:
 				class LibWrapper(ModTask):
 					def __init__(self): ModTask.__init__(self,
 						test_name + '--' + variant_name + '--wrapper',
-						ModTask.Kinds.LIB, static_wrapper and static_build_cfg or build_cfg)
+						ModTask.Kinds.LIB, static_wrapper and static_cfg or cfg)
 
 					def __call__(self, sched_ctx):
 						self.private_deps = [lib_impl]
@@ -122,7 +122,7 @@ else:
 				class MainProg(ModTask):
 					def __init__(self): ModTask.__init__(self,
 						test_name + '--' + variant_name + '--main',
-						ModTask.Kinds.PROG, static_prog and static_build_cfg or build_cfg, ('default',))
+						ModTask.Kinds.PROG, static_prog and static_cfg or cfg, ('default',))
 
 					def __call__(self, sched_ctx):
 						self.public_deps = [lib_wrapper]

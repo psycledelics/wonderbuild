@@ -29,9 +29,9 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.cxx_tool_chain import ModTask
 		from wonderbuild.install import InstallTask
 
-		self._cfg = cfg = UserBuildCfgTask.shared(project)
+		cfg = UserBuildCfgTask.shared(project)
 		for x in sched_ctx.parallel_wait(cfg): yield x
-		cfg = cfg.new_or_clone()
+		self._cfg = cfg = cfg.clone()
 
 		check_cfg = cfg.clone()
 		gtkglextmm = PkgConfigCheckTask.shared(check_cfg, ['gtkglextmm-1.2 >= 1.2'])

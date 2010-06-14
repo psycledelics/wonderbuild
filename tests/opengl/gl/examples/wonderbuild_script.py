@@ -30,9 +30,9 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.std_checks.opengl import OpenGLCheckTask
 		from wonderbuild.install import InstallTask
 
-		self._cfg = cfg = UserBuildCfgTask.shared(project)
+		cfg = UserBuildCfgTask.shared(project)
 		for x in sched_ctx.parallel_wait(cfg): yield x
-		cfg = cfg.new_or_clone()
+		self._cfg = cfg = cfg.clone()
 
 		check_cfg = cfg.clone()
 		gl = OpenGLCheckTask.shared(check_cfg)

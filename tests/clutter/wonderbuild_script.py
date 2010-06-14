@@ -29,9 +29,9 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, ModTask
 		from wonderbuild.install import InstallTask
 
-		self._cfg = cfg = UserBuildCfgTask.shared(project)
+		cfg = UserBuildCfgTask.shared(project)
 		for x in sched_ctx.parallel_wait(cfg): yield x
-		cfg = cfg.new_or_clone()
+		self._cfg = cfg = cfg.clone()
 
 		check_cfg = cfg.clone()
 		clutter = PkgConfigCheckTask.shared(check_cfg, ['clutter-gtk-0.6'])

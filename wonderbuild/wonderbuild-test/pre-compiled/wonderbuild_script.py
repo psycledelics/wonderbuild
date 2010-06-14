@@ -29,20 +29,20 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.std_checks.std_math import StdMathCheckTask
 		from wonderbuild.install import InstallTask
 
-		build_cfg = UserBuildCfgTask.shared(self.project)
-		for x in sched_ctx.parallel_wait(build_cfg): sched_ctx = yield x
-		build_cfg = build_cfg.new_or_clone()
-		if not src_dir in build_cfg.include_paths: build_cfg.include_paths.append(src_dir)
+		cfg = UserBuildCfgTask.shared(self.project)
+		for x in sched_ctx.parallel_wait(cfg): yield x
+		cfg = cfg.clone()
+		if not src_dir in cfg.include_paths: cfg.include_paths.append(src_dir)
 
-		check_cfg = build_cfg.clone()
+		check_cfg = cfg.clone()
 		std_math = StdMathCheckTask.shared(check_cfg)
 
-		pe = build_cfg.dest_platform.bin_fmt == 'pe'
+		pe = cfg.dest_platform.bin_fmt == 'pe'
 
 		if not pe: glibmm = PkgConfigCheckTask.shared(check_cfg, ['glibmm-2.4 >= 2.4'])
 
 		class Pch(PreCompileTasks):
-			def __init__(self): PreCompileTasks.__init__(self, 'pch', build_cfg)
+			def __init__(self): PreCompileTasks.__init__(self, 'pch', cfg)
 
 			def __call__(self, sched_ctx):
 				self.public_deps = [std_math]
@@ -72,7 +72,7 @@ class Wonderbuild(ScriptTask):
 		pch = Pch()
 
 		class LibImpl(ModTask):
-			def __init__(self): ModTask.__init__(self, test_name + '--impl', ModTask.Kinds.LIB, build_cfg)
+			def __init__(self): ModTask.__init__(self, test_name + '--impl', ModTask.Kinds.LIB, cfg)
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
@@ -110,7 +110,7 @@ class Wonderbuild(ScriptTask):
 		lib_impl = LibImpl()
 	
 		class LibWrapper(ModTask):
-			def __init__(self): ModTask.__init__(self, test_name + '--wrapper', ModTask.Kinds.LIB, build_cfg)
+			def __init__(self): ModTask.__init__(self, test_name + '--wrapper', ModTask.Kinds.LIB, cfg)
 
 			def __call__(self, sched_ctx):
 				self.public_deps = [lib_impl]
@@ -149,7 +149,7 @@ class Wonderbuild(ScriptTask):
 		lib_wrapper = LibWrapper()
 
 		class MainProg(ModTask):
-			def __init__(self): ModTask.__init__(self, test_name + '--main', ModTask.Kinds.PROG, build_cfg, ('default',))
+			def __init__(self): ModTask.__init__(self, test_name + '--main', ModTask.Kinds.PROG, cfg, ('default',))
 
 			def __call__(self, sched_ctx):
 				self.public_deps = [lib_wrapper]

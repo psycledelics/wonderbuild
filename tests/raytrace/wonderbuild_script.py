@@ -36,7 +36,7 @@ class Wonderbuild(ScriptTask):
 		universalis = universalis.mod_dep_phases
 		helpers_math = helpers.script_task.math_mod_dep_phases
 		pch = common.pch
-		cfg = common.cfg.new_or_clone()
+		cfg = common.cfg.clone()
 
 		from wonderbuild import UserReadableException
 		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, ModTask

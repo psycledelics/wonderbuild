@@ -3,13 +3,13 @@
 #pragma once
 
 #if !defined _WIN32 || IMPL < 0
-	#define IMPL__LINK
+	#define IMPL__DECL
 #elif IMPL
-	#define IMPL__LINK __declspec(dllexport)
+	#define IMPL__DECL __declspec(dllexport)
 #else
-	#define IMPL__LINK __declspec(dllimport)
+	#define IMPL__DECL __declspec(dllimport)
 #endif
 
-IMPL__LINK void impl();
+IMPL__DECL void impl();
 
 #endif

@@ -3,13 +3,13 @@
 #pragma once
 
 #if !defined _WIN32 || WRAPPER < 0
-	#define WRAPPER__LINK
+	#define WRAPPER__DECL
 #elif WRAPPER
-	#define WRAPPER__LINK __declspec(dllexport)
+	#define WRAPPER__DECL __declspec(dllexport)
 #else
-	#define WRAPPER__LINK __declspec(dllimport)
+	#define WRAPPER__DECL __declspec(dllimport)
 #endif
 
-WRAPPER__LINK void wrapper();
+WRAPPER__DECL void wrapper();
 
 #endif
