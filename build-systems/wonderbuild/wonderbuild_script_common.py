@@ -36,9 +36,9 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.std_checks.pthread import PThreadCheckTask
 		from wonderbuild.std_checks.boost import BoostCheckTask
 		
-		self._cfg = cfg = UserBuildCfgTask.shared(project)
+		cfg = UserBuildCfgTask.shared(project)
 		for x in sched_ctx.parallel_wait(cfg): yield x
-		cfg = cfg.new_or_clone()
+		self._cfg = cfg = cfg.clone()
 
 		if cfg.kind == 'msvc': # XXX flags are a mess with msvc
 			#cfg.defines['WINVER'] = '0x501' # select win xp explicitly because msvc 2008 defaults to vista

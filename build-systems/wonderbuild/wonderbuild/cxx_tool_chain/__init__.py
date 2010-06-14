@@ -252,12 +252,6 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 		except AttributeError: build_cfg_task = project._cxx_user_build_cfg_task = UserBuildCfgTask(project)
 		return build_cfg_task
 	
-	def new_or_clone(self):
-		try: build_cfg = self.project._cxx_user_build_cfg
-		except AttributeError: build_cfg = self.project._cxx_user_build_cfg = self
-		else: build_cfg = build_cfg.clone()
-		return build_cfg
-	
 	def __init__(self, project):
 		BuildCfg.__init__(self, project)
 		OptionCfg.__init__(self, project)
