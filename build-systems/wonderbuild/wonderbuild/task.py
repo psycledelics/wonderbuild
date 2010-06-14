@@ -64,27 +64,28 @@ class SharedTask(Task):
 	def _shared(class_, holder, *args, **kw):
 		uid = class_.shared_uid(*args, **kw)
 		try: instance = holder._shared_tasks[uid]
-		except KeyError: instance = holder._shared_tasks[uid] = class_(*args, **kw)
+		except KeyError: instance = holder._shared_tasks[uid] = class_(*args, **kw) # holder not passed tho it's in __init__
 		instance.shared_task_holder = holder
 		return instance
 	
 	def __init__(self, holder):
 		Task.__init__(self)
-		self._holder = holder
+		self.shared_task_holder = holder
 
 	@classmethod
 	def shared_uid(class_, *args, **kw): raise Exception, str(class_) + ' did not redefine the class method.'
 
-	def _get_persistent(self): return self._holder.persistent[self.uid]
-	def _set_persistent(self, value): self._holder.persistent[self.uid] = value
+	def _get_persistent(self): return self.shared_task_holder.persistent[self.uid]
+	def _set_persistent(self, value): self.shared_task_holder.persistent[self.uid] = value
 	persistent = property(_get_persistent, _set_persistent)
 
+	@property
+	def uid(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
+	
 class ProjectTask(SharedTask):
 
 	def __init__(self, project, aliases=None):
 		SharedTask.__init__(self, project)
 		self.project = project
 		if aliases is not None: project.add_task_aliases(self, *aliases)
-	
-	@property
-	def uid(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
+
