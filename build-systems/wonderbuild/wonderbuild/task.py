@@ -58,6 +58,9 @@ class SharedTaskHolder(object):
 class SharedTask(Task):
 		
 	@classmethod
+	def shared_uid(class_, *args, **kw): raise Exception, str(class_) + ' did not redefine the class method.'
+
+	@classmethod
 	def shared(class_, *args, **kw): return SharedTask._shared(class_, *args, **kw)
 
 	@staticmethod
@@ -71,9 +74,6 @@ class SharedTask(Task):
 	def __init__(self, holder):
 		Task.__init__(self)
 		self.shared_task_holder = holder
-
-	@classmethod
-	def shared_uid(class_, *args, **kw): raise Exception, str(class_) + ' did not redefine the class method.'
 
 	def _get_persistent(self): return self.shared_task_holder.persistent[self.uid]
 	def _set_persistent(self, value): self.shared_task_holder.persistent[self.uid] = value

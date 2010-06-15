@@ -14,6 +14,11 @@ need_sep_fix = os.sep != '/'
 class Impl(object):
 
 	@staticmethod
+	def _colorgcc(cfg):
+		if not out_is_dumb: return ((cfg.project.fs.cur / __file__).parent / 'colorgcc-arg')
+		else: return None
+
+	@staticmethod
 	def parse_version(out, err):
 		v = out.rstrip('\n').split('.')
 		v[-1] = v[-1].split('-')[0]
@@ -21,9 +26,7 @@ class Impl(object):
 
 	@staticmethod
 	def progs(cfg):
-		if not out_is_dumb and cfg.cxx_prog is None and cfg.ld_prog is None:
-			cxx_prog = ld_prog = ((cfg.project.fs.cur / __file__).parent / 'colorgcc').abs_path
-		else: cxx_prog, ld_prog = \
+		cxx_prog, ld_prog = \
 			cfg.cxx_prog or 'g++', \
 			cfg.ld_prog or cfg.cxx_prog or 'g++'
 		return cxx_prog, ld_prog, 'ar', 'ranlib' # for gnu ar, 'ar s' is used instead of ranlib
@@ -79,6 +82,8 @@ class Impl(object):
 		# TODO -xc-header for C
 		cwd = precompile_task.target_dir
 		args = precompile_task.cfg.cxx_args + ['-xc++-header', precompile_task.header.rel_path(cwd), '-MD']
+		colorgcc = Impl._colorgcc(precompile_task.cfg)
+		if colorgcc is not None: args = [colorgcc.rel_path(cwd)] + args
 		use_dir = False
 		if not use_dir:
 			dep_file = (precompile_task.target_dir / (precompile_task.header.name[:precompile_task.header.name.rfind('.')] + '.d'))
@@ -111,6 +116,8 @@ class Impl(object):
 	def process_cxx_task(self, cxx_task, lock):
 		cwd = cxx_task.target_dir
 		args = cxx_task.cfg.cxx_args + ['-c', '-MMD'] + [s.abs_path for s in cxx_task._actual_sources]
+		colorgcc = Impl._colorgcc(cxx_task.cfg)
+		if colorgcc is not None: args = [colorgcc.rel_path(cwd)] + args
 		implicit_deps = cxx_task.persistent_implicit_deps
 		if exec_subprocess(args, cwd=cwd.path) == 0:
 			succeeded_sources = zip(cxx_task.sources, cxx_task._actual_sources)
@@ -211,6 +218,8 @@ class Impl(object):
 		if mod_task.ld:
 			args = mod_task.cfg.ld_args
 			args = [args[0], '-o' + mod_task_target_path] + obj_paths + args[1:]
+			colorgcc = Impl._colorgcc(mod_task.cfg)
+			if colorgcc is not None: args = [colorgcc.rel_path(cwd)] + args
 			if mod_task.cfg.dest_platform.bin_fmt == 'pe':
 				args.append('-Wl,--enable-auto-import') # supress informational messages
 				if False and mod_task.cfg.shared: # mingw doesn't need import libs

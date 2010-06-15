@@ -14,9 +14,6 @@
 
 * versionned libs. (also take care of relinking clients of shared libs when their version changed)
 
-* the path to colorgcc shouldn't be signed, but rather the path to the real compiler.
-  this stupidly triggers rebuild when changing from non-tty to tty or vice versa.
-
 * rewrite colorgcc in python.
 
 * standard flags flavors for debug, release, and strip.
