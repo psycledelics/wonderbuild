@@ -16,8 +16,21 @@ def use_options(options):
 	global make_like_messages
 	make_like_messages = 'make-like-messages' in options
 
+if __debug__ and is_debug:
+	import os
+	def _env_diff(env):
+		env_diff = {}
+		if env is not None:
+			for k, v in env.iteritems():
+				try: vv = os.environ[k]
+				except KeyError: env_diff[k] = v
+				else:
+					if v != vv: env_diff[k] = v
+		return env_diff
+
 def exec_subprocess(args, env = None, cwd = None):
-	if __debug__ and is_debug: debug('exec: ' + str(cwd) + ' ' + str(env) + ' ' + str(args))
+	if __debug__ and is_debug:
+		debug('exec: ' + str(cwd) + ' ' + str(_env_diff(env)) + ' ' + str(args))
 	do_msg = cwd is not None and make_like_messages
 	if do_msg: print >> sys.stdout, 'make: Entering directory `' + cwd + "'\n" + ' '.join(args)
 	r = subprocess.call(
@@ -30,7 +43,7 @@ def exec_subprocess(args, env = None, cwd = None):
 	return r
 
 def exec_subprocess_pipe(args, input = None, env = None, cwd = None, silent = False):
-	if __debug__ and is_debug: debug('exec: pipe: ' + str(cwd) + ' ' + str(env) + ' ' + str(args))
+	if __debug__ and is_debug: debug('exec: pipe: ' + str(cwd) + ' ' + str(_env_diff(env)) + ' ' + str(args))
 	if input is not None:
 		_lock.acquire() # workaround for bug still present in python 2.5.2
 		try: p = subprocess.Popen(
