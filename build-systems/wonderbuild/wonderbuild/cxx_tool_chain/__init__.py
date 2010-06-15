@@ -77,6 +77,7 @@ class BuildCfg(ClientCfg, Task):
 		self.impl = self.kind = self.version = None
 		self.dest_platform = DestPlatform()
 		self.shared_checks = project # TODO hardcoded
+		self.use_source_abs_paths = False
 
 	def clone(self, class_ = None):
 		if class_ is None: class_ = self.__class__
@@ -99,6 +100,7 @@ class BuildCfg(ClientCfg, Task):
 		c.version = self.version
 		c.dest_platform = self.dest_platform
 		c.shared_checks = self.shared_checks
+		c.use_source_abs_paths = self.use_source_abs_paths
 		return c
 
 	@property
@@ -218,13 +220,15 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 		'pic-static'
 	])
 
-	known_options = signed_options | set(['check-missing', 'relink-on-shared-dep-impl-change'])
+	known_options = signed_options | set(['check-missing', 'relink-on-shared-dep-impl-change', 'source-abs-paths'])
 
 	@staticmethod
 	def generate_option_help(help):
 		help['check-missing'] = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'yes')
 
 		help['relink-on-shared-dep-impl-change'] = ('<yes|no>', 'relink clients of a shared lib if its implementation changed', 'no')
+
+		help['source-abs-paths'] = ('<yes|no>', 'use absolute paths for source input files to the compiler', 'no')
 
 		help['cxx']           = ('<prog>', 'use <prog> as c++ compiler', 'CXX env var: ' + os.environ.get('CXX', '(not set)'))
 		help['cxx-flags']     = ('[flags]', 'use specific c++ compiler flags', 'CXXFLAGS env var: ' + os.environ.get('CXXFLAGS', '(not set)'))
@@ -261,6 +265,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 
 		self.check_missing = o.get('check-missing', 'yes') != 'no'
 		self.ld_on_shared_dep_impl_change = o.get('relink-on-shared-dep-impl-change', 'no') == 'yes'
+		self.use_source_abs_paths = o.get('source-abs-paths', 'no') == 'yes'
 
 		try:
 			old_sig, \

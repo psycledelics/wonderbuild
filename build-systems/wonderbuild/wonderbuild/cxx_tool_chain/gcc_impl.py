@@ -115,7 +115,12 @@ class Impl(object):
 
 	def process_cxx_task(self, cxx_task, lock):
 		cwd = cxx_task.target_dir
-		args = cxx_task.cfg.cxx_args + ['-c', '-MMD'] + [s.abs_path for s in cxx_task._actual_sources]
+		args = cxx_task.cfg.cxx_args + ['-c', '-MMD'] + \
+			(cxx_task.cfg.use_source_abs_paths and \
+				[s.abs_path for s in cxx_task._actual_sources] or \
+				#[s.rel_path(cwd) for s in cxx_task._actual_sources] \
+				[s.name for s in cxx_task._actual_sources] \
+			)
 		colorgcc = Impl._colorgcc(cxx_task.cfg)
 		if colorgcc is not None: args = [colorgcc.rel_path(cwd)] + args
 		implicit_deps = cxx_task.persistent_implicit_deps
