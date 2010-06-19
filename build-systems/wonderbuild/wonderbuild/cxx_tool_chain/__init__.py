@@ -604,9 +604,9 @@ class PreCompileTasks(ModDepPhases, ProjectTask):
 
 	def do_cxx_phase(self): pass
 
-class _BatchCompileTask(ProjectTask):
+class _BatchCompileTask(Task):
 	def __init__(self, mod_task, sources):
-		ProjectTask.__init__(self, mod_task.project)
+		Task.__init__(self)
 		self.mod_task = mod_task
 		self.sources = sources
 
@@ -1000,7 +1000,7 @@ class _PkgConfigTask(CheckTask):
 	def shared(class_, cfg, *args, **kw): return CheckTask._shared(class_, cfg.shared_checks, cfg, *args, **kw)
 
 	def __init__(self, cfg, pkgs):
-		CheckTask.__init__(self, cfg.project)
+		CheckTask.__init__(self, cfg.shared_checks)
 		self.pkgs = pkgs
 
 	@property
