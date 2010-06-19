@@ -67,8 +67,10 @@ class SharedTask(Task):
 	def _shared(class_, holder, *args, **kw):
 		uid = class_.shared_uid(*args, **kw)
 		try: instance = holder._shared_tasks[uid]
-		except KeyError: instance = holder._shared_tasks[uid] = class_(*args, **kw) # holder not passed tho it's in __init__
-		instance.shared_task_holder = holder
+		except KeyError:
+			instance = holder._shared_tasks[uid] = class_(*args, **kw) # holder not passed since class_ is derived
+			instance.shared_task_holder = holder
+			#instance.uid = uid
 		return instance
 	
 	def __init__(self, holder):
