@@ -67,6 +67,7 @@ def _get_cols():
 	return 80
 cols = _get_cols()
 
+# Note: cannot test tty on jython (should look at the underlying platform hidden behind the jvm).
 out_is_dumb = os.environ.get('TERM', 'dumb') in ('dumb', 'emacs') or not out.isatty()
 if out_is_dumb:
 	def colored(color, s): return s

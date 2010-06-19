@@ -2,21 +2,16 @@
 
 * need a way to select a script from the command line instead of just a source dir (via --src-dir).
 
-* cannot test tty on jython (should look at the underlying platform hidden behind the jvm).
-
 * integrate binreloc.
 
 * generate .pc files.
 
 * the caller of a script-loader-task should be able to choose wether to collect their default tasks.
 
-* c lang support.
+* c, objc and objc++ lang support.
 
 * versionned libs. (also take care of relinking clients of shared libs when their version changed)
 
 * rewrite colorgcc in python.
 
-* standard flags flavors for debug, release, and strip.
-  (not sure this is very useful)
-  
 * experiment with beta-mode like tup.
