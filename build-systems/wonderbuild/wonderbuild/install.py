@@ -1,9 +1,9 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2009-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2009-2010 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 from logger import silent, is_debug, debug, color_bg_fg_rgb
-from task import ProjectTask
+from task import Task
 from options import OptionDecl
 from fhs import FHS
 from signature import Sig
@@ -19,25 +19,23 @@ if os.name == 'posix':
 else: # hard links unavailable, do a copy instead
 	install = shutil.copy2
 
-class InstallTask(ProjectTask, OptionDecl):
+class InstallTask(Task, OptionDecl):
 	known_options = set(['check-missing'])
 
 	@staticmethod
 	def generate_option_help(help): help['check-missing'] = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'yes')
 	
 	def __init__(self, project, name):
-		ProjectTask.__init__(self, project)
+		Task.__init__(self)
 		self.name = name
 		self.fhs = FHS.shared(project)
-		self.check_missing = self.project.options.get('check-missing', 'yes') != 'no'
+		self.check_missing = project.options.get('check-missing', 'yes') != 'no'
+		self._persistent = project.persistent
 
 	def __str__(self): return \
 		'install ' + self.name + ' from ' + str(self.trim_prefix) + \
 		' to ' + str(self.dest_dir) # + ': ' + ' '.join([s.rel_path(self.trim_prefix) for s in self.sources])
 
-	@property
-	def uid(self): return self.name
-	
 	@property
 	def trim_prefix(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
 	
@@ -49,7 +47,7 @@ class InstallTask(ProjectTask, OptionDecl):
 	
 	def __call__(self, sched_ctx):
 		if False: yield
-		try: old_sig, sigs = self.persistent
+		try: old_sig, sigs = self._persistent[self.name]
 		except KeyError:
 			if __debug__ and is_debug: debug('task: no state: ' + str(self))
 			old_sig = None
@@ -131,6 +129,6 @@ class InstallTask(ProjectTask, OptionDecl):
 								if dest.exists: os.remove(dest.path)
 								else: dest.parent.make_dir()
 								install(s.path, dest.path)
-						self.persistent = sig, sigs
+						self._persistent[self.name] = sig, sigs
 					finally: self.dest_dir.lock.release()
 				finally: sched_ctx.lock.acquire()
