@@ -50,25 +50,23 @@ class Project(Task, SharedTaskHolder):
 		if gc_enabled:
 			try: gc.disable()
 			except NotImplementedError: pass # jython uses the gc of the jvm
-		try: # python2.4 does not support try-except-finally
-			try:
-				try: f = open(os.path.join(bld_path, 'persistent.pickle'), 'rb')
-				except IOError: raise
-				else:
-					try: # python2.4 does not support try-except-finally
-						try:
-							if __debug__ and is_debug: t0 = time.time()
-							pickle_abi_sig = cPickle.load(f)
-							if pickle_abi_sig != abi_sig:
-								print >> sys.stderr, colored('33', 'wonderbuild: abi sig changed: discarding persistent pickle file, full rebuild will be performed')
-								persistent = {}
-							else: persistent = cPickle.load(f)
-							if __debug__ and is_debug: debug('project: pickle: load time: ' + str(time.time() - t0) + ' s')
-						except Exception, e:
-							print >> sys.stderr, 'could not load pickle:', e
-							raise
-					finally: f.close()
-			except: persistent = {}
+		try:
+			try: f = open(os.path.join(bld_path, 'persistent.pickle'), 'rb')
+			except IOError: raise
+			else:
+				try:
+					if __debug__ and is_debug: t0 = time.time()
+					pickle_abi_sig = cPickle.load(f)
+					if pickle_abi_sig != abi_sig:
+						print >> sys.stderr, colored('33', 'wonderbuild: abi sig changed: discarding persistent pickle file, full rebuild will be performed')
+						persistent = {}
+					else: persistent = cPickle.load(f)
+					if __debug__ and is_debug: debug('project: pickle: load time: ' + str(time.time() - t0) + ' s')
+				except Exception, e:
+					print >> sys.stderr, 'could not load pickle:', e
+					raise
+				finally: f.close()
+		except: persistent = {}
 		finally:
 			if gc_enabled: gc.enable()
 
