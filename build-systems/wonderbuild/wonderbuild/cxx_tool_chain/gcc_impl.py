@@ -55,7 +55,7 @@ class Impl(object):
 		try: return self._cxx_env_sig
 		except AttributeError:
 			sig = Sig()
-			for name in ('CPATH', 'CPLUS_INCLUDE_PATH'): # TODO C_INCLUDE_PATH for C
+			for name in ('CPATH', 'CPLUS_INCLUDE_PATH', 'C_INCLUDE_PATH'):
 				e = os.environ.get(name, None)
 				if e is not None: sig.update(e)
 			sig = self._cxx_env_sig = sig.digest()
@@ -79,9 +79,8 @@ class Impl(object):
 	def process_precompile_task(precompile_task, lock):
 		# some useful options: -Wmissing-include-dirs -Winvalid-pch -H -fpch-deps -Wp,-v
 		# to print the include search path: g++ -xc++ /dev/null -E -Wp,-v 2>&1 1>/dev/null | sed -e '/^[^ ]/d' -e 's,^ ,-I,'
-		# TODO -xc-header for C
 		cwd = precompile_task.target_dir
-		args = precompile_task.cfg.cxx_args + ['-xc++-header', precompile_task.header.rel_path(cwd), '-MD']
+		args = precompile_task.cfg.cxx_args + ['-x' + precompile_task.cfg.lang + '-header', precompile_task.header.rel_path(cwd), '-MD']
 		colorgcc = Impl._colorgcc(precompile_task.cfg)
 		if colorgcc is not None: args = [colorgcc.rel_path(cwd)] + args
 		use_dir = False
@@ -279,7 +278,7 @@ class Impl(object):
 	def process_build_check_task(build_check_task):
 		cwd = build_check_task.bld_dir
 		cfg = build_check_task.cfg
-		args = cfg.cxx_args + ['-xc++', '-'] # TODO -xc for C
+		args = cfg.cxx_args + ['-x' + cfg.lang, '-']
 		if build_check_task.pipe_preproc: args.append('-E')
 		else:
 			# when cross-compiling from linux to windows: /dev/null: final close failed: Inappropriate ioctl for device

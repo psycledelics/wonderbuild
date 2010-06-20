@@ -8,8 +8,6 @@
 
 * the caller of a script-loader-task should be able to choose wether to collect their default tasks.
 
-* c, objc and objc++ lang support.
-
 * versionned libs. (also take care of relinking clients of shared libs when their version changed)
 
 * rewrite colorgcc in python.

@@ -164,7 +164,7 @@ class Impl(object):
 	def process_build_check_task(build_check_task):
 		cwd = build_check_task.bld_dir
 		cfg = build_check_task.cfg
-		s = cwd / 'a.cpp' # TODO a.c for C
+		s = cwd / ('a.' + {'c++': 'cpp', 'c': 'c'}[cfg.lang])
 		f = open(s.path, 'w')
 		try: f.write(build_check_task._prog_source_text)
 		finally: f.close()

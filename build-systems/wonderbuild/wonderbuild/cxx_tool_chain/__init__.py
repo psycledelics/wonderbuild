@@ -76,8 +76,8 @@ class BuildCfg(ClientCfg, Task):
 		self.fhs = FHS.shared(project)
 		self.impl = self.kind = self.version = None
 		self.dest_platform = DestPlatform()
-		self.shared_checks = project # TODO hardcoded
 		self.use_source_abs_paths = False
+		self.shared_checks = project
 
 	def clone(self, class_ = None):
 		if class_ is None: class_ = self.__class__
@@ -426,7 +426,7 @@ class _PreCompileTask(ModDepPhases, Task):
 		try: return self._header
 		except AttributeError:
 			self._bld_dir.lock.acquire()
-			try: self._header = self._bld_dir / 'pre-compiled' / self.name / (self.name + '.private.hpp') # TODO .h for C
+			try: self._header = self._bld_dir / 'pre-compiled' / self.name / (self.name + '.private.' + {'c++': 'hpp', 'c': 'h', 'objective-c++': 'hpp', 'objective-c': 'h'}[self.cfg.lang])
 			finally: self._bld_dir.lock.release()
 			return self._header
 
