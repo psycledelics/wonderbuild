@@ -526,10 +526,10 @@ class _PreCompileTask(ModDepPhases, Task):
 			sig = self._sig = sig.digest()
 			return sig
 
-class PreCompileTasks(ModDepPhases, ProjectTask):
+class PreCompileTasks(ModDepPhases, Task):
 	def __init__(self, name, base_cfg):
 		ModDepPhases.__init__(self)
-		ProjectTask.__init__(self, base_cfg.project)
+		Task.__init__(self)
 		self.name = name
 		self.base_cfg = base_cfg
 
