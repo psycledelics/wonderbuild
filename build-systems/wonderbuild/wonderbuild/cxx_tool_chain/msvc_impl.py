@@ -74,8 +74,7 @@ class Impl(object):
 		if __debug__ and is_debug:
 			debug('cpp: deps found: ' + str(precompile_task.header) + ': ' + str([str(d) for d in deps]))
 			if len(not_found) != 0: debug('cpp: deps not found: ' + str(precompile_task.header) + ': '+ str([str(x) for x in not_found]))
-		dep_sigs = [d.sig for d in deps]
-		precompile_task.persistent = precompile_task.sig, deps, Sig(''.join(dep_sigs)).digest()
+		return deps
 
 	def precompile_task_target_name(self, header_name): return header_name[:header_name.rfind('.')] + self.precompile_task_target_ext
 

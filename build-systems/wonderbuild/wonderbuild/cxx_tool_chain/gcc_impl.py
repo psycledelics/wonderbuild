@@ -105,8 +105,7 @@ class Impl(object):
 		try: deps = [cwd / d for d in deps[deps.find(':') + 1:].split()]
 		finally: lock.release()
 		if __debug__ and is_debug: debug('cpp: gcc dep file: ' + str(dep_file) + ': ' + str([str(d) for d in deps]))
-		dep_sigs = [d.sig for d in deps]
-		precompile_task.persistent = precompile_task.sig, deps, Sig(''.join(dep_sigs)).digest()
+		return deps
 
 	def precompile_task_target_name(self, header_name): return header_name + self.precompile_task_target_ext
 

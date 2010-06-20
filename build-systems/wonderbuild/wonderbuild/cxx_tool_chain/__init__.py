@@ -391,7 +391,7 @@ class ModDepPhases(object):
 			else: dep._topologically_sorted_unique_deep_deps(result, seen, False, expose_private_deep_deps, expose_private_deep_deps)
 		if not root: result.appendleft(self)
 
-class _PreCompileTask(ModDepPhases, ProjectTask):
+class _PreCompileTask(ModDepPhases, ProjectTask): # Persistent
 	def __init__(self, name, base_cfg):
 		ModDepPhases.__init__(self)
 		ProjectTask.__init__(self, base_cfg.project)
@@ -465,7 +465,7 @@ class _PreCompileTask(ModDepPhases, ProjectTask):
 		sched_ctx.lock.release()
 		try:
 			changed = False
-			try: old_sig, deps, old_dep_sig = self.persistent
+			try: old_sig, deps, old_dep_sig = self.persistent # i.e.: self.project.persistent[self.name]
 			except KeyError:
 				if __debug__ and is_debug: debug('task: no state: ' + str(self))
 				changed = True
