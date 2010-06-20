@@ -259,6 +259,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 	def __init__(self, project):
 		BuildCfg.__init__(self, project)
 		OptionCfg.__init__(self, project)
+		self._persistent = project.persistent
 		
 	def __call__(self, sched_ctx):
 		o = self.options
@@ -272,7 +273,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 			self.cxx_prog, self.cxx_flags, self.pic, \
 			self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
 			self.ar_prog, self.ranlib_prog = \
-				self.project.persistent[str(self.__class__)]
+				self._persistent[str(self.__class__)]
 		except KeyError: old_sig = None
 		if old_sig != self.options_sig:
 			if __debug__ and is_debug: debug('cfg: cxx: user: parsing options')
@@ -306,7 +307,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 			if self.ar_prog is not None: self.print_desc('user-build-cfg: ar: ' + self.ar_prog)
 			if self.ranlib_prog is not None: self.print_desc('user-build-cfg: ranlib: ' + self.ranlib_prog)
 
-			self.project.persistent[str(self.__class__)] = \
+			self._persistent[str(self.__class__)] = \
 				self.options_sig, \
 				self.cxx_prog, self.cxx_flags, self.pic, \
 				self.shared, self.static_prog, self.ld_prog, self.ld_flags, \

@@ -10,28 +10,27 @@ class OptionCfg(OptionDecl):
 	signed_options = set()
 	signed_os_environ = set()
 
-	def __init__(self, shared_task_holder):
-		self.shared_task_holder = shared_task_holder
-		shared_task_holder.option_collector.option_decls.add(self.__class__)
+	def __init__(self, shared_holder):
+		self.__shared_holder = shared_holder
+		shared_holder.option_collector.option_decls.add(self.__class__)
 
 	@property
-	def options(self): return self.shared_task_holder.options
+	def options(self): return self.__shared_holder.options
 	
 	@property
 	def options_sig(self):
-		try: return self._options_sig # TODO this could actually be stored in the shared_task_holder since it's per (shared_task_holder, class)
-		except AttributeError:
-			sig = Sig()
-			options = self.options
-			for name in self.__class__.signed_options:
-				value = options.get(name, None)
-				if value is not None:
-					if len(value) != 0: sig.update(value)
-					else: sig.update('\0')
-			for name in self.__class__.signed_os_environ:
-				value = os.environ.get(name, None)
-				if value is not None:
-					if len(value) != 0: sig.update(value)
-					else: sig.update('\0')
-			sig = self._options_sig = sig.digest()
-			return sig
+		try: return self.__shared_holder.options_sigs[self.__class__]
+		except AttributeError: self.__shared_holder.options_sigs = {}
+		except KeyError: pass
+		sig = Sig()
+		options = self.__shared_holder.options
+		for name in self.__class__.signed_options:
+			sig.update(name)
+			value = options.get(name, None)
+			if value is not None: sig.update(value)
+		for name in self.__class__.signed_os_environ:
+			sig.update(name)
+			value = os.environ.get(name, None)
+			if value is not None: sig.update(value)
+		sig = self.__shared_holder.options_sigs[self.__class__] = sig.digest()
+		return sig
