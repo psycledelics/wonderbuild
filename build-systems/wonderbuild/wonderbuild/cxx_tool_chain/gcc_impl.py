@@ -46,7 +46,7 @@ class Impl(object):
 				'GCC_EXEC_PREFIX', 'COMPILER_PATH', 'LIBRARY_PATH'
 			):
 				e = os.environ.get(name, None)
-				if e is not None: sig.update(e)
+				if e is not None: sig.update(name + '=' + e)
 			sig = self._common_env_sig = sig.digest()
 			return sig
 
@@ -57,7 +57,7 @@ class Impl(object):
 			sig = Sig()
 			for name in ('CPATH', 'CPLUS_INCLUDE_PATH', 'C_INCLUDE_PATH'):
 				e = os.environ.get(name, None)
-				if e is not None: sig.update(e)
+				if e is not None: sig.update(name + '=' + e)
 			sig = self._cxx_env_sig = sig.digest()
 			return sig
 
@@ -177,7 +177,7 @@ class Impl(object):
 			sig = Sig()
 			for name in ('LIBRARY_PATH', 'GNUTARGET', 'LDEMULATION', 'COLLECT_NO_DEMANGLE'):
 				e = os.environ.get(name, None)
-				if e is not None: sig.update(e)
+				if e is not None: sig.update(name + '=' + e)
 			sig = self._ld_env_sig = sig.digest()
 			return sig
 

@@ -25,12 +25,10 @@ class OptionCfg(OptionDecl):
 		sig = Sig()
 		options = self.__shared_holder.options
 		for name in self.__class__.signed_options:
-			sig.update(name)
 			value = options.get(name, None)
-			if value is not None: sig.update(value)
+			if value is not None: sig.update(name + '=' + value)
 		for name in self.__class__.signed_os_environ:
-			sig.update(name)
 			value = os.environ.get(name, None)
-			if value is not None: sig.update(value)
+			if value is not None: sig.update(name + '=' + value)
 		sig = self.__shared_holder.options_sigs[self.__class__] = sig.digest()
 		return sig
