@@ -507,7 +507,9 @@ class _PreCompileTask(ModDepPhases, ProjectTask): # Persistent
 				try: f.write(self.source_text); f.write('\n')
 				finally: f.close()
 				self.header.clear() # if the user touched the header in the build dir!
-				self.cfg.impl.process_precompile_task(self, sched_ctx.lock)
+				deps = self.cfg.impl.process_precompile_task(self, sched_ctx.lock)
+				dep_sigs = [d.sig for d in deps]
+				self.persistent = self.sig, deps, Sig(''.join(dep_sigs)).digest()
 				if False:
 					# We create a file with a #error to ensure the pch is used.
 					f = open(self.header.path, 'w')
