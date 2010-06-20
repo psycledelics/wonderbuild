@@ -391,12 +391,15 @@ class ModDepPhases(object):
 			else: dep._topologically_sorted_unique_deep_deps(result, seen, False, expose_private_deep_deps, expose_private_deep_deps)
 		if not root: result.appendleft(self)
 
-class _PreCompileTask(ModDepPhases, ProjectTask): # Persistent
+class _PreCompileTask(ModDepPhases, Task):
 	def __init__(self, name, base_cfg):
 		ModDepPhases.__init__(self)
-		ProjectTask.__init__(self, base_cfg.project)
+		Task.__init__(self)
 		self.name = name
 		self.base_cfg = base_cfg
+		project = base_cfg.project
+		self._persistent = project.persistent
+		self._bld_dir = project.bld_dir
 
 	@property
 	def cfg(self):
@@ -419,15 +422,12 @@ class _PreCompileTask(ModDepPhases, ProjectTask): # Persistent
 	def __str__(self): return 'deps of pre-compilation of ' + str(self.header)
 
 	@property
-	def uid(self): return self.name
-
-	@property
 	def header(self):
 		try: return self._header
 		except AttributeError:
-			self.project.bld_dir.lock.acquire()
-			try: self._header = self.project.bld_dir / 'pre-compiled' / self.name / (self.name + '.private.hpp') # TODO .h for C
-			finally: self.project.bld_dir.lock.release()
+			self._bld_dir.lock.acquire()
+			try: self._header = self._bld_dir / 'pre-compiled' / self.name / (self.name + '.private.hpp') # TODO .h for C
+			finally: self._bld_dir.lock.release()
 			return self._header
 
 	@property
@@ -465,7 +465,7 @@ class _PreCompileTask(ModDepPhases, ProjectTask): # Persistent
 		sched_ctx.lock.release()
 		try:
 			changed = False
-			try: old_sig, deps, old_dep_sig = self.persistent # i.e.: self.project.persistent[self.name]
+			try: old_sig, deps, old_dep_sig = self._persistent[self.name]
 			except KeyError:
 				if __debug__ and is_debug: debug('task: no state: ' + str(self))
 				changed = True
@@ -509,7 +509,7 @@ class _PreCompileTask(ModDepPhases, ProjectTask): # Persistent
 				self.header.clear() # if the user touched the header in the build dir!
 				deps = self.cfg.impl.process_precompile_task(self, sched_ctx.lock)
 				dep_sigs = [d.sig for d in deps]
-				self.persistent = self.sig, deps, Sig(''.join(dep_sigs)).digest()
+				self._persistent[self.name] = self.sig, deps, Sig(''.join(dep_sigs)).digest()
 				if False:
 					# We create a file with a #error to ensure the pch is used.
 					f = open(self.header.path, 'w')
