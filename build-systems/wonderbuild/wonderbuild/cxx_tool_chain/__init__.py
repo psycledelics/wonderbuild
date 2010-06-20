@@ -426,7 +426,7 @@ class _PreCompileTask(ModDepPhases, Task, Persistent):
 		except AttributeError:
 			bld_dir = self.base_cfg.project.bld_dir
 			bld_dir.lock.acquire()
-			try: self._header = bld_dir / 'pre-compiled' / self.name / (self.name + '.private.' + {'c++': 'hpp', 'c': 'h', 'objective-c++': 'hpp', 'objective-c': 'h'}[self.cfg.lang])
+			try: self._header = bld_dir / 'pre-compiled' / self.name / (self.name + '.private.' + {'c++': 'hpp', 'c': 'h', 'objective-c++': 'hpp', 'objective-c': 'h'}[self.base_cfg.lang])
 			finally: bld_dir.lock.release()
 			return self._header
 
@@ -598,7 +598,6 @@ class PreCompileTasks(ModDepPhases, Task):
 				self.parent_task.do_cxx_phase()
 				self.parent_task._cxx_phase_done = True
 			self.cfg.pic = self.pic # this clones the parent cfg and changes the pic setting
-			print 'xxxxxxxxxx', self.pic, [str(p) for p in self.cfg.include_paths]
 			for x in _PreCompileTask.__call__(self, sched_ctx): yield x
 
 		def apply_cxx_to(self, cfg):
