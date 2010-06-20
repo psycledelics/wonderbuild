@@ -19,9 +19,9 @@ class CheckTask(SharedTask, OptionCfg):
 	def generate_option_help(help):
 		help['recheck'] = (None, 'perform configuration checks again', 'do not recheck')
 
-	def __init__(self, shared_task_holder):
-		SharedTask.__init__(self, shared_task_holder)
-		OptionCfg.__init__(self, shared_task_holder)
+	def __init__(self, persistent, uid, shared_options_holder):
+		SharedTask.__init__(self, persistent, uid)
+		OptionCfg.__init__(self, shared_options_holder)
 
 	@property
 	def sig(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
@@ -39,7 +39,7 @@ class CheckTask(SharedTask, OptionCfg):
 		#out.flush()
 
 	@property
-	def desc(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
+	def desc(self): return self.uid
 
 	def do_check_and_set_result(self, sched_ctx): raise Exception, str(self.__class__) + ' did not redefine the method.'
 

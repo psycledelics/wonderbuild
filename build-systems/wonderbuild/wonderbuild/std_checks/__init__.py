@@ -13,8 +13,6 @@ class ValidCfgCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared_uid(*args, **kw): return 'valid-cfg'
 
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, base_cfg, self.shared_uid())
-
 	@property
 	def source_text(self): return '' # the base class already adds a main() function
 
@@ -27,7 +25,7 @@ class DestPlatformCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared_uid(*args, **kw): return 'dest-platform'
 
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, base_cfg, self.shared_uid(), pipe_preproc=True)
+	def __init__(self, persistent, uid, base_cfg): BuildCheckTask.__init__(self, persistent, uid, base_cfg, pipe_preproc=True)
 	
 	@property
 	def source_text(self): return '''\
@@ -133,9 +131,7 @@ def unversioned_sys_platform_to_binary_format(unversioned_sys_platform):
 	if unversioned_sys_platform in ('linux', 'freebsd', 'netbsd', 'openbsd', 'sunos'): return 'elf'
 	elif unversioned_sys_platform == 'darwin': return 'mac-o'
 	elif unversioned_sys_platform in ('win', 'cygwin', 'uwin', 'msys'): return 'pe'
-	# TODO we assume all other operating systems are elf, which is not true.
-	# we may set this to 'unknown' and have ccroot and other tools handle the case "gracefully" (whatever that means).
-	return 'elf'
+	else: return None
 
 def unversioned_sys_platform():
 	"""returns an unversioned name from sys.platform.
@@ -168,7 +164,7 @@ class MingwCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared_uid(*args, **kw): return 'mingw'
 
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, base_cfg, self.shared_uid(), compile=False)
+	def __init__(self, persistent, uid, base_cfg): BuildCheckTask.__init__(self, persistent, uid, base_cfg, compile=False)
 
 	@property
 	def source_text(self): return '''\
@@ -182,10 +178,9 @@ class PicFlagDefinesPicCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared_uid(*args, **kw): return 'pic-flag-defines-pic'
 
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, base_cfg, self.shared_uid(), compile=False)
+	def __init__(self, persistent, uid, base_cfg): BuildCheckTask.__init__(self, persistent, uid, base_cfg, compile=False)
 
-	def apply_to(self, cfg):
-		cfg.pic = True
+	def apply_to(self, cfg): cfg.pic = True
 
 	@property
 	def source_text(self): return '''\
@@ -199,7 +194,7 @@ class AutoLinkSupportCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared_uid(*args, **kw): return 'auto-link-support'
 
-	def __init__(self, base_cfg): BuildCheckTask.__init__(self, base_cfg, self.shared_uid(), compile=False)
+	def __init__(self, persistent, uid, base_cfg): BuildCheckTask.__init__(self, persistent, uid, base_cfg, compile=False)
 
 	@property
 	def source_text(self):

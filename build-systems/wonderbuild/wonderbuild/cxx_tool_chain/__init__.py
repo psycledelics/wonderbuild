@@ -10,7 +10,7 @@ from wonderbuild.logger import out, is_debug, debug, colored, color_bg_fg_rgb, s
 from wonderbuild.signature import Sig
 from wonderbuild.option_cfg import OptionCfg
 from wonderbuild.fhs import FHS
-from wonderbuild.task import Task, ProjectTask
+from wonderbuild.task import Persistent, Task, ProjectTask
 from wonderbuild.check_task import CheckTask, ok_color, failed_color
 from wonderbuild.subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 
@@ -202,7 +202,7 @@ class BuildCfg(ClientCfg, Task):
 			if __debug__ and is_debug: debug('cfg: cxx: build: ar ranlib: ' + str(args))
 			return args
 
-class UserBuildCfgTask(BuildCfg, OptionCfg):
+class UserBuildCfgTask(BuildCfg, OptionCfg, Persistent):
 	def clone(self, class_ = None):
 		if class_ is None: class_ = BuildCfg
 		return class_.clone(self, class_)
@@ -259,7 +259,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 	def __init__(self, project):
 		BuildCfg.__init__(self, project)
 		OptionCfg.__init__(self, project)
-		self._persistent = project.persistent
+		Persistent.__init__(self, project.persistent, str(self.__class__))
 		
 	def __call__(self, sched_ctx):
 		o = self.options
@@ -273,7 +273,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 			self.cxx_prog, self.cxx_flags, self.pic, \
 			self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
 			self.ar_prog, self.ranlib_prog = \
-				self._persistent[str(self.__class__)]
+				self.persistent
 		except KeyError: old_sig = None
 		if old_sig != self.options_sig:
 			if __debug__ and is_debug: debug('cfg: cxx: user: parsing options')
@@ -307,7 +307,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg):
 			if self.ar_prog is not None: self.print_desc('user-build-cfg: ar: ' + self.ar_prog)
 			if self.ranlib_prog is not None: self.print_desc('user-build-cfg: ranlib: ' + self.ranlib_prog)
 
-			self._persistent[str(self.__class__)] = \
+			self.persistent = \
 				self.options_sig, \
 				self.cxx_prog, self.cxx_flags, self.pic, \
 				self.shared, self.static_prog, self.ld_prog, self.ld_flags, \
@@ -392,15 +392,13 @@ class ModDepPhases(object):
 			else: dep._topologically_sorted_unique_deep_deps(result, seen, False, expose_private_deep_deps, expose_private_deep_deps)
 		if not root: result.appendleft(self)
 
-class _PreCompileTask(ModDepPhases, Task):
+class _PreCompileTask(ModDepPhases, Task, Persistent):
 	def __init__(self, name, base_cfg):
 		ModDepPhases.__init__(self)
 		Task.__init__(self)
+		Persistent.__init__(self, base_cfg.project.persistent, name)
 		self.name = name
 		self.base_cfg = base_cfg
-		project = base_cfg.project
-		self._persistent = project.persistent
-		self._bld_dir = project.bld_dir
 
 	@property
 	def cfg(self):
@@ -426,9 +424,10 @@ class _PreCompileTask(ModDepPhases, Task):
 	def header(self):
 		try: return self._header
 		except AttributeError:
-			self._bld_dir.lock.acquire()
-			try: self._header = self._bld_dir / 'pre-compiled' / self.name / (self.name + '.private.' + {'c++': 'hpp', 'c': 'h', 'objective-c++': 'hpp', 'objective-c': 'h'}[self.cfg.lang])
-			finally: self._bld_dir.lock.release()
+			bld_dir = self.base_cfg.project.bld_dir
+			bld_dir.lock.acquire()
+			try: self._header = bld_dir / 'pre-compiled' / self.name / (self.name + '.private.' + {'c++': 'hpp', 'c': 'h', 'objective-c++': 'hpp', 'objective-c': 'h'}[self.cfg.lang])
+			finally: bld_dir.lock.release()
 			return self._header
 
 	@property
@@ -466,7 +465,7 @@ class _PreCompileTask(ModDepPhases, Task):
 		sched_ctx.lock.release()
 		try:
 			changed = False
-			try: old_sig, deps, old_dep_sig = self._persistent[self.name]
+			try: old_sig, deps, old_dep_sig = self.persistent
 			except KeyError:
 				if __debug__ and is_debug: debug('task: no state: ' + str(self))
 				changed = True
@@ -510,7 +509,7 @@ class _PreCompileTask(ModDepPhases, Task):
 				self.header.clear() # if the user touched the header in the build dir!
 				deps = self.cfg.impl.process_precompile_task(self, sched_ctx.lock)
 				dep_sigs = [d.sig for d in deps]
-				self._persistent[self.name] = self.sig, deps, Sig(''.join(dep_sigs)).digest()
+				self.persistent = self.sig, deps, Sig(''.join(dep_sigs)).digest()
 				if False:
 					# We create a file with a #error to ensure the pch is used.
 					f = open(self.header.path, 'w')
@@ -599,6 +598,7 @@ class PreCompileTasks(ModDepPhases, Task):
 				self.parent_task.do_cxx_phase()
 				self.parent_task._cxx_phase_done = True
 			self.cfg.pic = self.pic # this clones the parent cfg and changes the pic setting
+			print 'xxxxxxxxxx', self.pic, [str(p) for p in self.cfg.include_paths]
 			for x in _PreCompileTask.__call__(self, sched_ctx): yield x
 
 		def apply_cxx_to(self, cfg):
@@ -617,9 +617,6 @@ class _BatchCompileTask(Task):
 	def cfg(self): return self.mod_task.cfg
 
 	def __str__(self): return 'batch-compile ' + self.mod_task.name + ': ' + ' '.join([str(s) for s in self.sources])
-
-	@property
-	def uid(self): return self.mod_task.uid
 
 	@property
 	def target_dir(self): return self.mod_task.obj_dir
@@ -651,7 +648,7 @@ class _BatchCompileTask(Task):
 			self.cfg.impl.process_cxx_task(self, sched_ctx.lock)
 		finally: sched_ctx.lock.acquire()
 
-class ModTask(ModDepPhases, ProjectTask):
+class ModTask(ModDepPhases, ProjectTask, Persistent):
 	class Kinds(object):
 		HEADERS = 0
 		PROG = 1
@@ -661,6 +658,7 @@ class ModTask(ModDepPhases, ProjectTask):
 	def __init__(self, name, kind, base_cfg, aliases=None, **kw):
 		ModDepPhases.__init__(self)
 		ProjectTask.__init__(self, base_cfg.project)
+		Persistent.__init__(self, base_cfg.project.persistent, name)
 		self.name = name
 		self.kind = kind
 		self.base_cfg = base_cfg
@@ -705,9 +703,6 @@ class ModTask(ModDepPhases, ProjectTask):
 	def __str__(self):
 		if self.kind != ModTask.Kinds.HEADERS: return 'deps of module ' + str(self.target)
 		else: return 'deps of headers ' + self.name
-
-	@property
-	def uid(self): return self.name
 
 	@property
 	def obj_dir(self):
@@ -991,19 +986,13 @@ class ModTask(ModDepPhases, ProjectTask):
 
 class _PkgConfigTask(CheckTask):
 
-	@classmethod
-	def shared_uid(class_, cfg, pkgs, *args, **kw): return _PkgConfigTask._shared_uid(class_, pkgs)
-
 	@staticmethod
 	def _shared_uid(class_, pkgs):
 		pkgs.sort()
 		return str(class_) + ' ' + ' '.join(pkgs)
 
-	@classmethod
-	def shared(class_, cfg, *args, **kw): return CheckTask._shared(class_, cfg.shared_checks, cfg, *args, **kw)
-
-	def __init__(self, cfg, pkgs):
-		CheckTask.__init__(self, cfg.shared_checks)
+	def __init__(self, persistent, uid, cfg, pkgs):
+		CheckTask.__init__(self, persistent, uid, cfg.shared_checks)
 		self.pkgs = pkgs
 
 	@property
@@ -1028,20 +1017,10 @@ class _PkgConfigTask(CheckTask):
 	def args(self): return [self.prog] + self.pkgs + self.what_args
 
 	@property
-	def uid(self):
-		try: return self._uid
-		except AttributeError:
-			self.pkgs.sort()
-			self._uid = ' '.join(self.pkgs) + ' ' + ' '.join(self.what_args)
-			return self._uid
-
-	@property
 	def sig(self):
 		try: return self._sig
 		except AttributeError:
-			sig = Sig(_PkgConfigTask.env_sig())
-			for p in self.pkgs: sig.update(p) # pkgs are part of the uid anyway
-			sig = self._sig = sig.digest()
+			sig = self._sig = _PkgConfigTask.env_sig()
 			return sig
 
 	@staticmethod
@@ -1054,10 +1033,7 @@ class _PkgConfigTask(CheckTask):
 
 class _PkgConfigFlagsTask(_PkgConfigTask):
 
-	@classmethod
-	def shared_uid(class_, cfg, *args, **kw): return _PkgConfigTask._shared_uid(class_, cfg.pkg_config)
-
-	def __init__(self, cfg): _PkgConfigTask.__init__(self, cfg, cfg.pkg_config)
+	def __init__(self, persistent, uid, cfg): _PkgConfigTask.__init__(self, persistent, uid, cfg, cfg.pkg_config)
 
 	def do_check_and_set_result(self, sched_ctx):
 		if False: yield
@@ -1076,6 +1052,12 @@ class _PkgConfigFlagsTask(_PkgConfigTask):
 
 class _PkgConfigCxxFlagsTask(_PkgConfigFlagsTask):
 
+	@classmethod
+	def shared_uid(class_, cfg): return _PkgConfigFlagsTask._shared_uid(class_, cfg.pkg_config)
+
+	@classmethod
+	def shared(class_, cfg): return _PkgConfigFlagsTask._shared(class_, cfg.shared_checks, cfg)
+
 	@property
 	def what_desc(self): return 'cxx flags'
 	
@@ -1087,13 +1069,17 @@ class _PkgConfigCxxFlagsTask(_PkgConfigFlagsTask):
 class _PkgConfigLdFlagsTask(_PkgConfigFlagsTask):
 
 	@classmethod
-	def shared_uid(class_, cfg, expose_private_deep_deps, *args, **kw):
+	def shared_uid(class_, cfg, expose_private_deep_deps):
 		uid = _PkgConfigFlagsTask._shared_uid(class_, cfg.pkg_config)
 		if expose_private_deep_deps: uid += ' --static'
 		return uid
 
-	def __init__(self, cfg, expose_private_deep_deps):
-		_PkgConfigFlagsTask.__init__(self, cfg)
+	@classmethod
+	def shared(class_, cfg, expose_private_deep_deps):
+		return _PkgConfigFlagsTask._shared(class_, cfg.shared_checks, cfg, expose_private_deep_deps)
+
+	def __init__(self, persistent, uid, cfg, expose_private_deep_deps):
+		_PkgConfigFlagsTask.__init__(self, persistent, uid, cfg)
 		self.expose_private_deep_deps = expose_private_deep_deps
 
 	@property
@@ -1110,9 +1096,15 @@ class _PkgConfigLdFlagsTask(_PkgConfigFlagsTask):
 
 class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 
-	def __init__(self, *args, **kw):
+	@classmethod
+	def shared_uid(class_, cfg, pkgs): return _PkgConfigTask._shared_uid(class_, pkgs)
+
+	@classmethod
+	def shared(class_, cfg, pkgs): return _PkgConfigTask._shared(class_, cfg.shared_checks, cfg, pkgs)
+
+	def __init__(self, persistent, uid, cfg, pkgs):
 		ModDepPhases.__init__(self)
-		_PkgConfigTask.__init__(self, *args, **kw)
+		_PkgConfigTask.__init__(self, persistent, uid, cfg, pkgs)
 
 	def __call__(self, sched_ctx):
 		for x in ModDepPhases.__call__(self, sched_ctx): yield x
@@ -1140,15 +1132,17 @@ class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 class MultiBuildCheckTask(CheckTask, ModDepPhases):
 
 	@staticmethod
-	def shared_uid(base_cfg, name, *args, **kw): return name
+	def shared_uid(base_cfg, *args, **kw): raise Exception, str(MultiBuildCheckTask) + ' did not redefine the static method.'
 	
 	@classmethod
-	def shared(class_, cfg, *args, **kw): return CheckTask._shared(class_, cfg.shared_checks, cfg, *args, **kw)
+	def shared(class_, base_cfg, *args, **kw): return CheckTask._shared(class_, base_cfg.shared_checks, base_cfg, *args, **kw)
 
-	def __init__(self, base_cfg, name, pipe_preproc=False, compile=True, link=True):
-		CheckTask.__init__(self, base_cfg.shared_checks)
+	@staticmethod
+	def _shared(class_, base_cfg, *args, **kw): return CheckTask._shared(class_, base_cfg.shared_checks, *args, **kw)
+
+	def __init__(self, persistent, uid, base_cfg, pipe_preproc=False, compile=True, link=True):
+		CheckTask.__init__(self, persistent, uid, base_cfg.shared_checks)
 		ModDepPhases.__init__(self)
-		self.name = name
 		self.base_cfg = base_cfg
 		self.pipe_preproc = pipe_preproc
 		self.compile = compile
@@ -1186,12 +1180,6 @@ class MultiBuildCheckTask(CheckTask, ModDepPhases):
 			sig = self._sig = sig.digest()
 			return sig
 
-	@property
-	def uid(self): return self.name
-
-	@property
-	def desc(self): return self.name
-
 class BuildCheckTask(MultiBuildCheckTask):
 	@property
 	def _prog_source_text(self):
@@ -1204,7 +1192,7 @@ class BuildCheckTask(MultiBuildCheckTask):
 		except AttributeError:
 			bld_dir = self.base_cfg.shared_checks.bld_dir
 			bld_dir.lock.acquire()
-			try: self._bld_dir = bld_dir / 'checks' / self.name
+			try: self._bld_dir = bld_dir / 'checks' / self.uid
 			finally: bld_dir.lock.release()
 			return self._bld_dir
 
@@ -1215,12 +1203,12 @@ class BuildCheckTask(MultiBuildCheckTask):
 			dir = self.bld_dir
 			dir.make_dir(dir.parent)
 			r, out, err = self.cfg.impl.process_build_check_task(self)
-			if False: # no real need for a log file, the --verbose=exec option gives the same details
+			if 'recheck' in self.options: # no real need for a log file, the --verbose=exec option gives the same details
 				log = dir / 'build.log'
 				f = open(log.path, 'w')
 				try:
 					f.write(self._prog_source_text); f.write('\n')
-					f.write(str(self.cfg.cxx_args_cwd)); f.write('\n')
+					f.write(str(self.cfg.cxx_args)); f.write('\n')
 					f.write(str(self.cfg.ld_args)); f.write('\n')
 					f.write(out); f.write('\n')
 					f.write(err); f.write('\n')

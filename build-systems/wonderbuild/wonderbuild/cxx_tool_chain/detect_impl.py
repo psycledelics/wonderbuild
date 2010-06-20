@@ -10,25 +10,19 @@ from wonderbuild.std_checks import ValidCfgCheckTask, DestPlatformCheckTask, Pic
 
 class DetectImplCheckTask(CheckTask):
 
-	@classmethod
-	def shared_uid(class_, *args, **kw): return str(class_)
-			
-	@classmethod
-	def shared(class_, cfg, *args, **kw): return CheckTask._shared(class_, cfg.shared_checks, cfg, *args, **kw)
+	@staticmethod
+	def shared_uid(*args, **kw): return 'c++-tool-chain'
 
-	def __init__(self, user_build_cfg):
-		CheckTask.__init__(self, user_build_cfg.shared_checks)
+	@classmethod
+	def shared(class_, user_build_cfg): return CheckTask._shared(class_, user_build_cfg.shared_checks, user_build_cfg)
+
+	def __init__(self, persistent, uid, user_build_cfg):
+		CheckTask.__init__(self, persistent, uid, user_build_cfg.shared_checks)
 		self.user_build_cfg = user_build_cfg
 
 	@property
 	def sig(self): return self.user_build_cfg.options_sig
 
-	@property
-	def uid(self): return self.shared_uid()
-
-	@property
-	def desc(self): return 'c++-tool-chain'
-	
 	@property
 	def result_display(self):
 		if not self.result: return 'not found', failed_color

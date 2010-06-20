@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2006-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2006-2010 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 from wonderbuild.cxx_tool_chain import MultiBuildCheckTask, BuildCheckTask, ok_color, failed_color
 
@@ -9,14 +9,12 @@ class DlfcnCheckTask(MultiBuildCheckTask):
 	@staticmethod
 	def shared_uid(*args, **kw): return 'posix-dlfcn'
 
-	def __init__(self, base_cfg): MultiBuildCheckTask.__init__(self, base_cfg, self.shared_uid())
-		
 	def do_check_and_set_result(self, sched_ctx):
-		t = DlfcnCheckTask.SubCheckTask(self, True)
+		t = DlfcnCheckTask.SubCheckTask.shared(self, True)
 		for x in sched_ctx.parallel_wait(t): yield x
 		if t.result: self.results = t.result, t.dl
 		else:
-			t = DlfcnCheckTask.SubCheckTask(self, False)
+			t = DlfcnCheckTask.SubCheckTask.shared(self, False)
 			for x in sched_ctx.parallel_wait(t): yield x
 			if t.result: self.results = t.result, t.dl
 			else: self.results = False, None
@@ -53,8 +51,14 @@ void dlfcn() {
 '''
 	
 	class SubCheckTask(BuildCheckTask):
-		def __init__(self, outer, dl):
-			BuildCheckTask.__init__(self, outer.base_cfg, outer.name + '-with' + (not dl and 'out' or '') + '-ldl')
+		@staticmethod
+		def shared_uid(outer, dl): return outer.uid + '-with' + (not dl and 'out' or '') + '-ldl'
+		
+		@classmethod
+		def shared(class_, outer, dl): return BuildCheckTask._shared(class_, outer.base_cfg, outer, dl)
+
+		def __init__(self, persistent, uid, outer, dl):
+			BuildCheckTask.__init__(self, persistent, uid, outer.base_cfg)
 			self.outer = outer
 			self.dl = dl
 

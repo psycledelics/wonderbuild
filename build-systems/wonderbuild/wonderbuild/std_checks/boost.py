@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2006-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2006-2010 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import sys, os
 
@@ -17,9 +17,9 @@ class BoostCheckTask(MultiBuildCheckTask):
 		'boost-' + '.'.join(str(i) for i in min_version_tuple) + \
 		'-libs-' + ','.join(lib_names) 
 	
-	def __init__(self, base_cfg, min_version_tuple, lib_names):
+	def __init__(self, persistent, uid, base_cfg, min_version_tuple, lib_names):
 		# TODO remove useless trailing zeroes in the version tuple
-		MultiBuildCheckTask.__init__(self, base_cfg, self.shared_uid(base_cfg, min_version_tuple, lib_names))
+		MultiBuildCheckTask.__init__(self, persistent, uid, base_cfg)
 		self.min_version_tuple = min_version_tuple
 		self.lib_names = lib_names
 
@@ -81,11 +81,11 @@ class BoostCheckTask(MultiBuildCheckTask):
 				cfg_link_libs = ['boost_' + lib + variant for lib in self.lib_names]
 			outer = self
 			class AllInOneCheckTask(BuildCheckTask):
-				def __init__(self): BuildCheckTask.__init__(self, outer.base_cfg, 
+				@staticmethod
+				def shared_uid(base_cfg): return \
 					'boost-' + read_version.lib_version + \
 					'-link-' + ','.join(outer.lib_names) + \
 					variant
-				)
 			
 				@property
 				def source_text(self):
@@ -99,7 +99,7 @@ class BoostCheckTask(MultiBuildCheckTask):
 					self.cfg.libs += cfg_link_libs
 					for x in BuildCheckTask.do_check_and_set_result(self, sched_ctx): yield x
 
-			all_in_one = AllInOneCheckTask()
+			all_in_one = AllInOneCheckTask.shared(self.base_cfg)
 			for x in sched_ctx.parallel_wait(all_in_one): yield x
 			if not all_in_one: self.results = failed
 			else: self.results = True, include_path, cfg_link_libs
@@ -136,15 +136,15 @@ class BoostCheckTask(MultiBuildCheckTask):
 	class ReadVersion(BuildCheckTask):
 	
 		@staticmethod
-		def shared_uid(outer, include_path=None, *args, **kw): return \
+		def shared_uid(outer, include_path=None): return \
 			'boost-' + '.'.join(str(i) for i in outer.min_version_tuple) + \
 			(include_path and '-path-' + include_path.abs_path.replace(os.sep, ',').replace(os.pardir, '_') or '')
 
 		@classmethod
-		def shared(class_, outer, *args, **kw): return BuildCheckTask._shared(class_, outer.base_cfg.shared_checks, outer, *args, **kw)
+		def shared(class_, outer, include_path=None): return BuildCheckTask._shared(class_, outer.base_cfg, outer, include_path)
 
-		def __init__(self, outer, include_path=None):
-			BuildCheckTask.__init__(self, outer.base_cfg, self.shared_uid(outer, include_path), pipe_preproc=True)
+		def __init__(self, persistent, uid, outer, include_path=None):
+			BuildCheckTask.__init__(self, persistent, uid, outer.base_cfg, pipe_preproc=True)
 			self._outer = outer
 			self.include_path = include_path
 		

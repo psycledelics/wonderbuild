@@ -3,7 +3,7 @@
 # copyright 2009-2010 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 from logger import silent, is_debug, debug, color_bg_fg_rgb
-from task import Task
+from task import Persistent, Task
 from options import OptionDecl
 from fhs import FHS
 from signature import Sig
@@ -19,7 +19,7 @@ if os.name == 'posix':
 else: # hard links unavailable, do a copy instead
 	install = shutil.copy2
 
-class InstallTask(Task, OptionDecl):
+class InstallTask(Task, Persistent, OptionDecl):
 	known_options = set(['check-missing'])
 
 	@staticmethod
@@ -27,10 +27,10 @@ class InstallTask(Task, OptionDecl):
 	
 	def __init__(self, project, name):
 		Task.__init__(self)
+		Persistent.__init__(self, project.persistent, name)
 		self.name = name
 		self.fhs = FHS.shared(project)
 		self.check_missing = project.options.get('check-missing', 'yes') != 'no'
-		self._persistent = project.persistent
 
 	def __str__(self): return \
 		'install ' + self.name + ' from ' + str(self.trim_prefix) + \
@@ -47,7 +47,7 @@ class InstallTask(Task, OptionDecl):
 	
 	def __call__(self, sched_ctx):
 		if False: yield
-		try: old_sig, sigs = self._persistent[self.name]
+		try: old_sig, sigs = self.persistent
 		except KeyError:
 			if __debug__ and is_debug: debug('task: no state: ' + str(self))
 			old_sig = None
@@ -129,6 +129,6 @@ class InstallTask(Task, OptionDecl):
 								if dest.exists: os.remove(dest.path)
 								else: dest.parent.make_dir()
 								install(s.path, dest.path)
-						self._persistent[self.name] = sig, sigs
+						self.persistent = sig, sigs
 					finally: self.dest_dir.lock.release()
 				finally: sched_ctx.lock.acquire()

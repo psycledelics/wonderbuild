@@ -7,8 +7,9 @@ import os
 from logger import is_debug, debug
 from signature import Sig
 from option_cfg import OptionCfg
+from task import Persistent
 
-class FHS(OptionCfg):
+class FHS(OptionCfg, Persistent):
 	'options for the Filesystem Hierarchy Standard'
 	
 	signed_os_environ = set(['DESTDIR', 'PREFIX'])
@@ -34,10 +35,10 @@ class FHS(OptionCfg):
 
 	def __init__(self, project):
 		OptionCfg.__init__(self, project)
+		Persistent.__init__(self, project.persistent, str(self.__class__))
 		
 		try:
-			old_sig, self.dest, self.prefix_path = \
-				project.persistent[str(self.__class__)]
+			old_sig, self.dest, self.prefix_path = self.persistent
 		except KeyError: parse = True
 		else: parse = old_sig != self.options_sig
 		if parse:
@@ -52,8 +53,7 @@ class FHS(OptionCfg):
 			if self.prefix_path.startswith(os.sep): self.prefix_path = self.prefix_path[len(os.sep):]
 			else: raise Exception, 'invalid install-prefix-dir option: prefix must be an absolute path. got: ' + self.prefix_path
 			
-			project.persistent[str(self.__class__)] = \
-				self.options_sig, self.dest, self.prefix_path
+			self.persistent = self.options_sig, self.dest, self.prefix_path
 
 		def dir(s): return self.dest / self.prefix_path / s
 		self.bin = dir('bin')

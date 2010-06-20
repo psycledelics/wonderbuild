@@ -48,14 +48,13 @@ class Task(object):
 
 class Persistent(object):
 
-	def __init__(self, persistent): self._persistent = persistent
+	def __init__(self, persistent, uid):
+		self._persistent = persistent
+		self.uid = uid
 
 	def _get_persistent(self): return self._persistent[self.uid]
 	def _set_persistent(self, value): self._persistent[self.uid] = value
 	persistent = property(_get_persistent, _set_persistent)
-
-	@property
-	def uid(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
 
 class SharedTaskHolder(object):
 
@@ -72,27 +71,23 @@ class SharedTask(Task, Persistent):
 	def shared_uid(class_, *args, **kw): raise Exception, str(class_) + ' did not redefine the class method.'
 
 	@classmethod
-	def shared(class_, *args, **kw): return SharedTask._shared(class_, *args, **kw)
+	def shared(class_, holder, *args, **kw): return SharedTask._shared(class_, holder, *args, **kw)
 
 	@staticmethod
 	def _shared(class_, holder, *args, **kw):
 		uid = class_.shared_uid(*args, **kw)
 		try: instance = holder._shared_tasks[uid]
-		except KeyError:
-			instance = holder._shared_tasks[uid] = class_(*args, **kw) # holder not passed since class_ is derived
-			#instance.shared_task_holder = holder
-			#instance.uid = uid
+		except KeyError: instance = holder._shared_tasks[uid] = class_(holder.persistent, uid, *args, **kw)
 		return instance
 	
-	def __init__(self, holder):
+	def __init__(self, persistent, uid):
 		Task.__init__(self)
-		Persistent.__init__(self, holder.persistent)
-		self.shared_task_holder = holder
+		Persistent.__init__(self, persistent, uid)
 
-class ProjectTask(SharedTask):
+class ProjectTask(Task):
 
 	def __init__(self, project, aliases=None):
-		SharedTask.__init__(self, project)
+		Task.__init__(self)
 		self.project = project
 		if aliases is not None: project.add_task_aliases(self, *aliases)
 

@@ -5,7 +5,7 @@
 import sys, os, imp
 
 from logger import is_debug, debug
-from task import ProjectTask
+from task import Task
 
 default_script_file = 'wonderbuild_script.py'
 
@@ -21,20 +21,18 @@ def import_module(node):
 		file, script_path, data = imp.find_module(name, path)
 		return imp.load_module(modname, file, script_path, data)
 
-class ScriptLoaderTask(ProjectTask):
+class ScriptLoaderTask(Task):
 	@staticmethod
 	def shared(project, script):
-		try: script_loader_tasks = project.script_loader_tasks
-		except AttributeError: script_loader_tasks = project.script_loader_tasks = {}
-		else:
-			try: script_loader_task = script_loader_tasks[script]
-			except KeyError: pass
-			else: return script_loader_task
-		script_loader_task = script_loader_tasks[script] = ScriptLoaderTask(project, script)
+		try: return project.script_loader_tasks[script]
+		except AttributeError: project.script_loader_tasks = {}
+		except KeyError: pass
+		script_loader_task = project.script_loader_tasks[script] = ScriptLoaderTask(project, script)
 		return script_loader_task
 
 	def __init__(self, project, script):
-		ProjectTask.__init__(self, project)
+		Task.__init__(self)
+		self.project = project
 		self.script = script
 		
 	def __str__(self): return 'script ' + str(self.script) + ' (loading)'
@@ -50,9 +48,10 @@ class ScriptLoaderTask(ProjectTask):
 		try: return self._script_task
 		except AttributeError: raise Exception, 'did you forget to process the ' + str(self) + ' task?'
 
-class ScriptTask(ProjectTask):
+class ScriptTask(Task):
 	def __init__(self, project, src_dir):
-		ProjectTask.__init__(self, project)
+		Task.__init__(self)
+		self.project = project
 		self.src_dir = src_dir
 		
 	def __str__(self): return 'script ' + str(self.src_dir) + ' (execution)'
