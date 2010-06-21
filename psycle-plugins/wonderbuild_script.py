@@ -48,8 +48,6 @@ class Wonderbuild(ScriptTask):
 			@staticmethod
 			def shared_uid(*args, **kw): return 'stk'
 
-			def __init__(self, base_cfg): BuildCheckTask.__init__(self, base_cfg, self.shared_uid())
-
 			def apply_to(self, cfg): cfg.libs.extend(['stk', 'asound', 'jack']) # stk uses alsa and jack!
 
 			@property
