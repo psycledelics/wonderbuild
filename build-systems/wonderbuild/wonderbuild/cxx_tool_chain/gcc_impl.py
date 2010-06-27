@@ -68,7 +68,9 @@ class Impl(object):
 		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + repr(str(v))[1:-1]) # note: assumes that cpp and python escaping work the same way
-		for p in cfg.include_paths: args.append('-I' + cfg.bld_rel_path(p))
+		args += cfg.use_source_abs_paths and \
+			['-I' + cfg.bld_rel_path(p) for p in cfg.include_paths] or \
+			['-I' + p.abs_path for p in cfg.include_paths]
 		if cfg.pch is not None: args += ['-Winvalid-pch', '-include', cfg.bld_rel_path(cfg.pch)]
 		for i in cfg.includes: args += ['-include', cfg.bld_rel_path(i)]
 		args += cfg.cxx_flags
