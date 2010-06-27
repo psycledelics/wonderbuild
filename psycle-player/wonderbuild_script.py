@@ -45,7 +45,7 @@ class Wonderbuild(ScriptTask):
 		class PlayerMod(ModTask):
 			def __init__(self):
 				name = 'psycle-player'
-				ModTask.__init__(self, name, ModTask.Kinds.PROG, cfg, (name, 'default'))
+				ModTask.__init__(self, name, ModTask.Kinds.PROG, cfg)
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.prog_task, core]
@@ -66,3 +66,4 @@ class Wonderbuild(ScriptTask):
 				): self.sources.append(s)
 
 		player = PlayerMod()
+		self.default_tasks.append(player.mod_phase)

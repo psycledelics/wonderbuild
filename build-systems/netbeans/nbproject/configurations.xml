@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="62">
+<configurationDescriptor version="69">
   <logicalFolder name="root" displayName="root" projectFiles="true">
     <df name="diversalis" root="../../diversalis/src">
       <df name="diversalis">
         <df name="detail">
-          <in>configuration.hpp</in>
+          <in>config.hpp</in>
           <in>project.hpp</in>
-          <in>stringized.hpp</in>
+          <in>stringize.hpp</in>
         </df>
         <in>compiler.hpp</in>
         <in>cpu.hpp</in>
-        <in>diversalis.hpp</in>
         <in>os.hpp</in>
         <in>stdlib.hpp</in>
       </df>
+      <in>diversalis.hpp</in>
     </df>
     <df name="freepsycle" root="../../freepsycle/src">
       <df name="psycle">
         <df name="detail">
-          <in>configuration.private.hpp</in>
+          <in>config.hpp</in>
+          <in>config.private.hpp</in>
+          <in>decl.hpp</in>
           <in>project.hpp</in>
           <in>project.private.hpp</in>
         </df>
@@ -55,10 +57,6 @@
           </df>
         </df>
         <df name="generic">
-          <df name="test">
-            <in>test.cpp</in>
-            <in>test.hpp</in>
-          </df>
           <in>base.hpp</in>
           <in>cast.hpp</in>
           <in>template_constructors.hpp</in>
@@ -137,12 +135,14 @@
           <df name="random_notes">
             <in>main.cpp</in>
             <in>main.hpp</in>
+            <in>score1.cpp</in>
+            <in>score1.hpp</in>
+            <in>score2.cpp</in>
+            <in>score2.hpp</in>
           </df>
         </df>
         <in>engine.hpp</in>
         <in>host.hpp</in>
-        <in>paths.cpp</in>
-        <in>paths.hpp</in>
       </df>
     </df>
     <df name="psycle-audiodrivers" root="../../psycle-audiodrivers/src">
@@ -180,17 +180,20 @@
     <df name="psycle-core" root="../../psycle-core/src">
       <df name="psycle">
         <df name="core">
+          <df name="detail">
+            <in>config.hpp</in>
+            <in>config.private.hpp</in>
+            <in>project.hpp</in>
+            <in>project.private.hpp</in>
+          </df>
           <in>commands.h</in>
-          <in>config.hpp</in>
-          <in>config.private.hpp</in>
           <in>constants.h</in>
           <in>convert_internal_machines.cpp</in>
           <in>convert_internal_machines.private.hpp</in>
+          <in>cpu_time_clock.hpp</in>
           <in>eventdriver.cpp</in>
           <in>eventdriver.h</in>
           <in>exceptions.h</in>
-          <in>file.cpp</in>
-          <in>file.h</in>
           <in>fileio.cpp</in>
           <in>fileio.h</in>
           <in>filterhelper.h</in>
@@ -203,6 +206,7 @@
           <in>internal_machines.h</in>
           <in>internalhost.cpp</in>
           <in>internalhost.hpp</in>
+          <in>internalkeys.hpp</in>
           <in>ladspa.h</in>
           <in>ladspahost.cpp</in>
           <in>ladspahost.hpp</in>
@@ -220,10 +224,10 @@
           <in>mixer.h</in>
           <in>nativehost.cpp</in>
           <in>nativehost.hpp</in>
-          <in>patternevent.cpp</in>
-          <in>patternevent.h</in>
           <in>pattern.cpp</in>
           <in>pattern.h</in>
+          <in>patternevent.cpp</in>
+          <in>patternevent.h</in>
           <in>player.cpp</in>
           <in>player.h</in>
           <in>playertimeinfo.cpp</in>
@@ -247,11 +251,11 @@
           <in>psyfilterbase.h</in>
           <in>sampler.cpp</in>
           <in>sampler.h</in>
+          <in>sequence.cpp</in>
+          <in>sequence.h</in>
           <in>sequencer.cpp</in>
           <in>sequencer.h</in>
           <in>signalslib.h</in>
-          <in>pattern.cpp</in>
-          <in>pattern.h</in>
           <in>song.cpp</in>
           <in>song.h</in>
           <in>songserializer.cpp</in>
@@ -352,102 +356,45 @@
     <df name="universalis" root="../../universalis/src">
       <df name="universalis">
         <df name="compiler">
-          <df name="detail">
-            <df name="gnu">
-              <in>diagnostics.hpp</in>
-              <in>typeof.hpp</in>
-            </df>
-            <df name="microsoft">
-              <in>assume.hpp</in>
-              <in>namespace.hpp</in>
-              <in>optimizations.hpp</in>
-              <in>warnings.hpp</in>
-            </df>
-            <df name="pragmatic">
-              <in>align.hpp</in>
-              <in>asm.hpp</in>
-              <in>attribute.hpp</in>
-              <in>auto_link.hpp</in>
-              <in>calling_convention.hpp</in>
-              <in>const_function.hpp</in>
-              <in>demangle.cpp</in>
-              <in>demangle.hpp</in>
-              <in>deprecated.hpp</in>
-              <in>dynamic_link.hpp</in>
-              <in>finally.hpp</in>
-              <in>hardware_exception.hpp</in>
-              <in>pack.hpp</in>
-              <in>pragmas.hpp</in>
-              <in>thread_local_storage.hpp</in>
-              <in>virtual.hpp</in>
-              <in>weak.hpp</in>
-            </df>
-            <df name="standard">
-              <in>restrict.hpp</in>
-              <in>wchar_t.hpp</in>
-            </df>
-          </df>
-          <df name="dynamic_link">
-            <in>begin.hpp</in>
-            <in>end.hpp</in>
-          </df>
-          <df name="exceptions">
-            <in>ellipsis.cpp</in>
-            <in>ellipsis.hpp</in>
-          </df>
-          <in>compiler.hpp</in>
-          <in>concatenated.hpp</in>
+          <in>align.hpp</in>
+          <in>asm.hpp</in>
+          <in>attribute.hpp</in>
+          <in>auto_link.hpp</in>
+          <in>calling_convention.hpp</in>
+          <in>concat.hpp</in>
+          <in>const_function.hpp</in>
+          <in>deprecated.hpp</in>
+          <in>dyn_link.hpp</in>
+          <in>exception.compiler.cpp</in>
+          <in>exception.hpp</in>
           <in>location.hpp</in>
           <in>numeric.hpp</in>
-          <in>stringized.hpp</in>
+          <in>pack.hpp</in>
+          <in>pragma.hpp</in>
+          <in>restrict.hpp</in>
+          <in>setup_optimizations.hpp</in>
+          <in>setup_warnings.hpp</in>
+          <in>stringize.hpp</in>
+          <in>thread_local_storage.hpp</in>
           <in>token.hpp</in>
+          <in>typenameof.cpp</in>
           <in>typenameof.hpp</in>
+          <in>virtual.hpp</in>
+          <in>weak.hpp</in>
         </df>
         <df name="cpu">
-          <df name="atomic">
-            <in>compare_and_swap.hpp</in>
-          </df>
-          <df name="exceptions">
-            <in>code_description.cpp</in>
-            <in>code_description.hpp</in>
-          </df>
-          <in>cpu.hpp</in>
-          <in>exception.cpp</in>
+          <in>atomic_compare_and_swap.hpp</in>
+          <in>exception.cpu.cpp</in>
           <in>exception.hpp</in>
           <in>memory_barriers.hpp</in>
         </df>
         <df name="detail">
-          <in>configuration.hpp</in>
-          <in>configuration.private.hpp</in>
+          <in>config.hpp</in>
+          <in>config.private.hpp</in>
           <in>project.hpp</in>
           <in>project.private.hpp</in>
         </df>
         <df name="os">
-          <df name="detail">
-            <df name="microsoft">
-              <in>max_path.hpp</in>
-            </df>
-            <in>check_version.cpp</in>
-            <in>check_version.hpp</in>
-          </df>
-          <df name="dynamic_link">
-            <in>main.hpp</in>
-            <in>main.private.hpp</in>
-            <in>resolver.cpp</in>
-            <in>resolver.hpp</in>
-          </df>
-          <df name="exceptions">
-            <in>code_description.cpp</in>
-            <in>code_description.hpp</in>
-          </df>
-          <df name="paths">
-            <df name="injection">
-              <in>implementation.hpp</in>
-              <in>interface.hpp</in>
-            </df>
-            <in>implementation.hpp</in>
-            <in>interface.hpp</in>
-          </df>
           <df name="todo">
             <df name="bohan">
               <in>signal.hpp</in>
@@ -455,16 +402,22 @@
             </df>
           </df>
           <in>aligned_memory_alloc.hpp</in>
+          <in>check_version.cpp</in>
+          <in>check_version.hpp</in>
           <in>clocks.cpp</in>
           <in>clocks.hpp</in>
-          <in>cpu_affinity.hpp</in>
-          <in>exception.cpp</in>
+          <in>dyn_link.cpp</in>
+          <in>dyn_link.hpp</in>
+          <in>eol.hpp</in>
           <in>exception.hpp</in>
+          <in>exception.os.cpp</in>
+          <in>fs.cpp</in>
+          <in>fs.hpp</in>
+          <in>include_windows_without_crap.hpp</in>
           <in>loggers.cpp</in>
           <in>loggers.hpp</in>
-          <in>os.hpp</in>
-          <in>paths.cpp</in>
-          <in>paths.hpp</in>
+          <in>sched.cpp</in>
+          <in>sched.hpp</in>
           <in>terminal.cpp</in>
           <in>terminal.hpp</in>
           <in>thread_name.cpp</in>
@@ -472,37 +425,25 @@
         </df>
         <df name="stdlib">
           <df name="detail">
-            <in>allocators.cpp</in>
-            <in>allocators.hpp</in>
             <in>boost_xtime.hpp</in>
             <in>duration.hpp</in>
             <in>hiresolution_clock.hpp</in>
-            <in>iso646.hpp</in>
             <in>utc_time.hpp</in>
           </df>
-          <df name="exceptions">
-            <in>code_description.cpp</in>
-            <in>code_description.hpp</in>
-          </df>
-          <in>allocators.hpp</in>
           <in>condition.hpp</in>
           <in>cstdint.hpp</in>
           <in>date_time.hpp</in>
+          <in>exception.hpp</in>
+          <in>exception.stdlib.cpp</in>
           <in>mutex.hpp</in>
-          <in>ndebug.hpp</in>
           <in>stdc_secure_lib.hpp</in>
-          <in>stdlib.hpp</in>
           <in>thread.hpp</in>
         </df>
-        <in>compiler.hpp</in>
-        <in>cpu.hpp</in>
         <in>exception.cpp</in>
         <in>exception.hpp</in>
-        <in>os.hpp</in>
-        <in>stdlib.hpp</in>
-        <in>universalis.hpp</in>
       </df>
       <in>unit_tests.cpp</in>
+      <in>universalis.hpp</in>
     </df>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

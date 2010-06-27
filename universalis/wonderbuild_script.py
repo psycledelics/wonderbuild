@@ -39,8 +39,7 @@ class Wonderbuild(ScriptTask):
 		cfg = common.cfg.clone()
 
 		from wonderbuild import UserReadableException
-		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, PreCompileTasks, ModTask
-		from wonderbuild.std_checks.std_math import StdMathCheckTask
+		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, ModTask
 		from wonderbuild.std_checks.dlfcn import DlfcnCheckTask
 		from wonderbuild.std_checks.pthread import PThreadCheckTask
 		from wonderbuild.std_checks.boost import BoostCheckTask
@@ -49,58 +48,43 @@ class Wonderbuild(ScriptTask):
 		
 		check_cfg = cfg.clone()
 		glibmm = PkgConfigCheckTask.shared(check_cfg, ['glibmm-2.4', 'gmodule-2.0', 'gthread-2.0'])
-		std_math = StdMathCheckTask.shared(check_cfg)
 		dlfcn = DlfcnCheckTask.shared(check_cfg)
 		pthread = PThreadCheckTask.shared(check_cfg)
 		boost = BoostCheckTask.shared(check_cfg, (1, 34, 1), ('signals', 'thread', 'filesystem', 'date_time'))
 		boost_test = BoostCheckTask.shared(check_cfg, (1, 34, 1), ('unit_test_framework',))
 		winmm = WinMMCheckTask.shared(check_cfg)
 
-		class Pch(PreCompileTasks):
-			def __init__(self): PreCompileTasks.__init__(self, 'pch', cfg)
-
+		CommonPch = common.Pch
+		class Pch(CommonPch):
 			def __call__(self, sched_ctx):
-				self.public_deps = [diversalis]
-				req = self.public_deps
-				opt = [dlfcn, pthread, glibmm, std_math, boost]
+				for x in CommonPch.__call__(self, sched_ctx): yield x
+				req = [diversalis]
+				opt = []
 				for x in sched_ctx.parallel_wait(universalis.cxx_phase, *(req + opt)): yield x
-				self.result = min(bool(r) for r in req)
-				self.public_deps += [x for x in opt if x]
-				for x in PreCompileTasks.__call__(self, sched_ctx): yield x
+				self.result = self.result and min(bool(r) for r in req)
+				self.public_deps += req + [x for x in opt if x]
 			
 			def do_cxx_phase(self):
 				if universalis.cxx_phase.dest_dir not in self.cfg.include_paths: self.cfg.include_paths.append(universalis.cxx_phase.dest_dir)
-				self.cfg.include_paths.append(top_src_dir / 'build-systems' / 'src')
-
-			@property
-			def source_text(self):
-				try: return self._source_text
-				except AttributeError:
-					s = '#include <forced-include.private.hpp>'
-					if boost: s += '\n#include <pre-compiled/boost.private.hpp>'
-					if std_math: s += '\n#include <cmath>'
-					self._source_text = s
-					return s
+				CommonPch.do_cxx_phase(self)
+		common.__class__.Pch = Pch # overrides the common pch
+		pch = common.pch
 
 		class UniversalisMod(ModTask):
 			def __init__(self):
 				name = 'universalis'
-				ModTask.__init__(self, name, ModTask.Kinds.LIB, cfg, (name, 'default'))
+				ModTask.__init__(self, name, ModTask.Kinds.LIB, cfg)
 				self.cxx_phase = UniversalisMod.InstallHeaders(self.project, self.name + '-headers')
 				
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
 				self.public_deps = [diversalis, boost]
+				if self.cfg.dest_platform.os == 'win': self.public_deps.append(winmm)
 				req = self.public_deps + self.private_deps
 				opt = [dlfcn, pthread, glibmm]
-				sched_ctx.parallel_no_wait(winmm)
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
-				if self.result and self.cfg.dest_platform.os == 'win':
-					for x in sched_ctx.parallel_wait(winmm): yield x
-					if winmm: self.public_deps.append(winmm)
-					else: self.result = False
 				for x in ModTask.__call__(self, sched_ctx): yield x
 
 			def do_ensure_deps(self):
@@ -136,11 +120,13 @@ class Wonderbuild(ScriptTask):
 							list((self.trim_prefix / 'universalis').find_iter(
 								in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)))
 						return self._sources
+		self._mod_dep_phases = mod_dep_phases = universalis = UniversalisMod()
+		self.default_tasks.append(mod_dep_phases.mod_phase)
 
 		class UnitTestMod(ModTask):
 			def __init__(self):
 				name = 'universalis-unit-tests'
-				ModTask.__init__(self, name, ModTask.Kinds.PROG, cfg, (name, 'default'))
+				ModTask.__init__(self, name, ModTask.Kinds.PROG, cfg)
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.prog_task, universalis, boost_test]
@@ -154,8 +140,7 @@ class Wonderbuild(ScriptTask):
 				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
 				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
 				self.sources.append(src_dir / 'unit_tests.cpp')
-		
-		common._pch = pch = Pch() # overrides the common pch
-		self._mod_dep_phases = mod_dep_phases = universalis = UniversalisMod()
 		for x in sched_ctx.parallel_wait(boost_test): yield x
-		if boost_test: unit_tests = UnitTestMod()
+		if boost_test:
+			unit_tests = UnitTestMod()
+			self.default_tasks.append(unit_tests.mod_phase)

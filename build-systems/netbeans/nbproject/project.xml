@@ -10,6 +10,18 @@
             <header-extensions>h,hpp</header-extensions>
             <sourceEncoding>UTF-8</sourceEncoding>
             <make-dep-projects/>
+            <sourceRootList>
+                <sourceRootElem>../../diversalis/src</sourceRootElem>
+                <sourceRootElem>../../universalis/src</sourceRootElem>
+                <sourceRootElem>../../freepsycle/src</sourceRootElem>
+                <sourceRootElem>../../psycle-helpers/src</sourceRootElem>
+                <sourceRootElem>../../psycle-audiodrivers/src</sourceRootElem>
+                <sourceRootElem>../../psycle-core/src</sourceRootElem>
+                <sourceRootElem>../../psycle-player/src</sourceRootElem>
+            </sourceRootList>
+            <confList>
+                <confElem>Default</confElem>
+            </confList>
         </data>
     </configuration>
 </project>

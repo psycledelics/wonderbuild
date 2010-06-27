@@ -100,7 +100,7 @@ run(options, option_collector)
 				from wonderbuild.script import ScriptLoaderTask, default_script_file
 				script = self.project.top_src_dir / default_script_file
 				if script.exists:
-					script_loader_tasks = (ScriptLoaderTask.shared(self.project, script),)
+					script_loader_task = ScriptLoaderTask.shared(self.project, script)
 					usage_error = False
 				else:
 					option_collector.consolidate_known_options()
@@ -109,7 +109,7 @@ run(options, option_collector)
 					script_loader_tasks = ()
 					usage_error = True
 
-				for x in sched_ctx.parallel_wait(*script_loader_tasks): yield x
+				for x in sched_ctx.parallel_wait(script_loader_task): yield x
 				
 				if not usage_error and 'help' not in options:
 					option_collector.consolidate_known_options()
@@ -123,7 +123,10 @@ run(options, option_collector)
 					self.result = usage_error and 1 or 0
 					return
 
+				if len(script_loader_task.script_task.default_tasks) != 0: # XXX old api compat for default tasks
+					self.project.task_aliases['default'] = script_loader_task.script_task.default_tasks
 				for x in sched_ctx.parallel_wait(self.project): yield x
+				
 				self.result = 0
 
 		from wonderbuild.scheduler import Scheduler

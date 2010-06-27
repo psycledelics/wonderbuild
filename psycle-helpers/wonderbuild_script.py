@@ -54,7 +54,7 @@ class Wonderbuild(ScriptTask):
 		class HelpersMathMod(ModTask):
 			def __init__(self):
 				name = 'psycle-helpers-math'
-				ModTask.__init__(self, name, ModTask.Kinds.HEADERS, cfg, (name, 'default'), cxx_phase=HelpersMathMod.InstallHeaders())
+				ModTask.__init__(self, name, ModTask.Kinds.HEADERS, cfg, cxx_phase=HelpersMathMod.InstallHeaders())
 				
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
@@ -84,11 +84,13 @@ class Wonderbuild(ScriptTask):
 							list((self.trim_prefix / 'psycle' / 'helpers' / 'math').find_iter(
 								in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)))
 						return self._sources
+		self._math_mod_dep_phases = helpers_math = HelpersMathMod()
+		self.default_tasks.append(helpers_math.cxx_phase)
 
 		class HelpersMod(ModTask):
 			def __init__(self):
 				name = 'psycle-helpers'
-				ModTask.__init__(self, name, ModTask.Kinds.LIB, cfg, (name, 'default'))
+				ModTask.__init__(self, name, ModTask.Kinds.LIB, cfg)
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
@@ -127,11 +129,13 @@ class Wonderbuild(ScriptTask):
 						for s in (self.trim_prefix / 'psycle' / 'helpers').find_iter(
 							in_pats = ('*.hpp',), ex_pats = ('*.private.hpp', 'math.hpp'), prune_pats = ('todo', 'math')): self._sources.append(s)
 						return self._sources
+		self._mod_dep_phases = helpers = HelpersMod()
+		self.default_tasks.append(helpers.mod_phase)
 						
 		class UnitTestMod(ModTask):
 			def __init__(self):
 				name = 'psycle-helpers-unit-tests'
-				ModTask.__init__(self, name, ModTask.Kinds.PROG, cfg, (name, 'default'))
+				ModTask.__init__(self, name, ModTask.Kinds.PROG, cfg)
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.prog_task, helpers, boost_test]
@@ -145,8 +149,7 @@ class Wonderbuild(ScriptTask):
 				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
 				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
 				self.sources.append(src_dir / 'unit_tests.cpp')
-
-		self._math_mod_dep_phases = helpers_math = HelpersMathMod()
-		self._mod_dep_phases = helpers = HelpersMod()
 		for x in sched_ctx.parallel_wait(boost_test): yield x
-		if boost_test: unit_tests = UnitTestMod()
+		if boost_test:
+			unit_tests = UnitTestMod()
+			self.default_tasks.append(unit_tests.mod_phase)

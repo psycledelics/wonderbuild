@@ -40,7 +40,7 @@ class Project(Task, SharedTaskHolder):
 		self.task_aliases = {} # {name: [tasks]}
 		aliases = options.get('tasks', None)
 		if aliases is not None:
-			if len(aliases): self.requested_task_aliases = aliases.split(',')
+			if len(aliases) != 0: self.requested_task_aliases = aliases.split(',')
 			else: self.requested_task_aliases = (None,)
 		else: self.requested_task_aliases = None
 		
@@ -87,7 +87,7 @@ class Project(Task, SharedTaskHolder):
 			try: self.task_aliases[a].append(task)
 			except KeyError: self.task_aliases[a] = [task]
 
-	def tasks_with_aliases(self, task_aliases = None):
+	def tasks_with_aliases(self, task_aliases=None):
 		tasks = set()
 		if task_aliases is None: task_aliases = (None,)
 		try:

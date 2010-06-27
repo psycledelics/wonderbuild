@@ -30,6 +30,7 @@ class Wonderbuild(ScriptTask):
 		project = self.project
 		top_src_dir = self.src_dir.parent
 		src_dir = self.src_dir / 'src'
+		default_tasks = self.default_tasks
 
 		helpers = ScriptLoaderTask.shared(project, top_src_dir / 'psycle-helpers')
 		for x in sched_ctx.parallel_wait(helpers): yield x
@@ -52,15 +53,15 @@ class Wonderbuild(ScriptTask):
 		dsound = DSoundCheckTask.shared(check_cfg)
 		winmm = WinMMCheckTask.shared(check_cfg)
 
-		for x in sched_ctx.parallel_wait(
-			gstreamer, jack, alsa, esound, dsound, winmm
-		): yield x
+		for x in sched_ctx.parallel_wait(gstreamer, jack, alsa, esound, dsound, winmm): yield x
 
 		class UniformMod(ModTask):
 			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):
-				ModTask.__init__(self, name, kind, cfg, (name, 'default'))
+				ModTask.__init__(self, name, kind, cfg)
 				self.path = path
 				if deps is not None: self.public_deps += deps
+				if kind in (ModTask.Kinds.PROG, ModTask.Kinds.LOADABLE): default_tasks.append(self.mod_phase)
+				self.cxx_phase = self.__class__.InstallHeaders(self)
 
 			def __call__(self, sched_ctx):
 				if self.kind == ModTask.Kinds.PROG: self.private_deps = [pch.prog_task]
@@ -69,7 +70,6 @@ class Wonderbuild(ScriptTask):
 				req = self.all_deps
 				for x in sched_ctx.parallel_wait(*req): yield x
 				self.result = min(bool(r) for r in req)
-				self.cxx_phase = self.__class__.InstallHeaders(self)
 				for x in ModTask.__call__(self, sched_ctx): yield x
 		
 			def do_mod_phase(self):
@@ -86,7 +86,7 @@ class Wonderbuild(ScriptTask):
 
 			class InstallHeaders(InstallTask):
 				def __init__(self, outer):
-					InstallTask.__init__(self, outer.project, outer.name + '-headers')
+					InstallTask.__init__(self, project, outer.name + '-headers')
 					self.outer = outer
 				
 				@property
@@ -139,10 +139,11 @@ class Wonderbuild(ScriptTask):
 			# netaudio
 			# asio
 
+		# TODO this all-in-one lib should be removed in favor of separate loadable modules, one per driver
 		class AudioDriversMod(ModTask):
 			def __init__(self):
 				name = 'psycle-audiodrivers'
-				ModTask.__init__(self, name, ModTask.Kinds.LIB, cfg, (name, 'default'))
+				ModTask.__init__(self, name, ModTask.Kinds.LIB, cfg)
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
@@ -154,6 +155,20 @@ class Wonderbuild(ScriptTask):
 				self.public_deps += [o for o in opt if o]
 				self.cxx_phase = AudioDriversMod.InstallHeaders(self.project, self.name + '-headers')
 				for x in ModTask.__call__(self, sched_ctx): yield x
+
+				# brings the headers
+				h = []
+				if gstreamer: h.append(gst_driver)
+				if alsa: h.append(alsa_driver)
+				if esound: h.append(esound_driver)
+				if dsound: h.append(dsound_driver)
+				h.append(file_driver)
+				if False: # these drivers need testing
+					if jack: h.append(jack_driver)
+					if winmm: h.append(winmm_driver)
+					# netaudio
+					# asio
+				for x in sched_ctx.parallel_wait(*(h.cxx_phase for h in h)): yield x
 
 			def _apply_defines(self, cfg):
 				d = cfg.defines
@@ -205,7 +220,7 @@ class Wonderbuild(ScriptTask):
 						self._sources = s = []
 						dir = src_dir / 'psycle' / 'audiodrivers'
 						s.append(dir / 'audiodriver.h')
-						if False: # done now in individual driver tasks
+						if False: # now done in individual driver tasks
 							s.append(dir / 'wavefileout.h')
 							if gstreamer: s.append(dir / 'gstreamerout.h')
 							if alsa:      s.append(dir / 'alsaout.h')

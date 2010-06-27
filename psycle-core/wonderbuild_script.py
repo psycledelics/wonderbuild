@@ -50,7 +50,7 @@ class Wonderbuild(ScriptTask):
 		class CoreMod(ModTask):
 			def __init__(self):
 				name = 'psycle-core'
-				ModTask.__init__(self, name, ModTask.Kinds.LIB, cfg, (name, 'default'))
+				ModTask.__init__(self, name, ModTask.Kinds.LIB, cfg)
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
@@ -101,3 +101,4 @@ class Wonderbuild(ScriptTask):
 						return self._sources
 
 		self._mod_dep_phases = mod_dep_phases = CoreMod()
+		self.default_tasks.append(mod_dep_phases.mod_phase)

@@ -27,14 +27,17 @@ class Wonderbuild(ScriptTask):
 		project = self.project
 		top_src_dir = self.src_dir.parent
 		src_dir = self.src_dir / 'src'
+		default_tasks = self.default_tasks
 
 		universalis = ScriptLoaderTask.shared(project, top_src_dir / 'universalis')
 		helpers = ScriptLoaderTask.shared(project, top_src_dir / 'psycle-helpers')
 		for x in sched_ctx.parallel_wait(universalis, helpers): yield x
 		universalis = universalis.script_task
+		helpers = helpers.script_task
 		self._common = common = universalis.common
 		universalis = universalis.mod_dep_phases
-		helpers_math = helpers.script_task.math_mod_dep_phases
+		helpers_math = helpers.math_mod_dep_phases
+		helpers = helpers.mod_dep_phases
 		pch = common.pch
 		cfg = common.cfg.clone()
 
@@ -56,14 +59,15 @@ class Wonderbuild(ScriptTask):
 
 		class UniformMod(ModTask):
 			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):
-				ModTask.__init__(self, name, kind, cfg, (name, 'default'))
+				ModTask.__init__(self, name, kind, cfg)
 				self.path = path
 				if deps is not None: self.public_deps += deps
+				if kind in (ModTask.Kinds.PROG, ModTask.Kinds.LOADABLE): default_tasks.append(self.mod_phase)
 
 			def __call__(self, sched_ctx):
 				if self.kind == ModTask.Kinds.PROG: self.private_deps = [pch.prog_task]
 				else: self.private_deps = [pch.lib_task]
-				self.public_deps += [universalis, helpers_math]
+				self.public_deps += [universalis, helpers_math, helpers]
 				req = self.all_deps
 				for x in sched_ctx.parallel_wait(*req): yield x
 				self.result = min(bool(r) for r in req)
