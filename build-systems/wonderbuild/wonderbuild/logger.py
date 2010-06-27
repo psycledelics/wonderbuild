@@ -4,11 +4,12 @@
 
 import sys, os
 
-known_options = set(['silent', 'verbose'])
+known_options = set(['silent', 'verbose', 'sync-log'])
 
 def generate_option_help(help):
 	help['silent'] = (None, 'suppress printing of informative messages (errors and verbose messages are still printed)')
 	help['verbose'] = ('[zone,...]', 'wonderbuild debugging trace zones, comma-separated list, or no list for all zones. (example values: exec,cfg,task,sched,fs,project,cpp,...)')
+	help['sync-log'] = (None, 'synchronizes concurrent log outputs (std out and err)')
 
 silent = True
 is_debug = False
@@ -17,6 +18,13 @@ def debug(s): pass
 def use_options(options):
 	global silent
 	silent = 'silent' in options
+
+	if 'sync-log' in options:
+		class Out(object):
+			def __init__(self, out): self._out = out
+			def write(self, s): self._out.write(s) ; self._out.flush()
+		global out
+		out = Out(out)
 
 	if __debug__:
 		global is_debug

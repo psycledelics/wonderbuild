@@ -32,7 +32,6 @@ class Task(object):
 
 	def print_desc(self, desc, color='7;1'):
 		out.write(colored(color, 'wonderbuild: task: ' + desc) + '\n')
-		#out.flush()
 		
 	def print_desc_multi_column_format(self, desc, list, color = '7;1'):
 		desc = 'wonderbuild: task: ' + desc + ':'
@@ -44,7 +43,6 @@ class Task(object):
 				lines.append('\t' + colored(color, line))
 			lines.append('')
 			out.write('\n'.join(lines))
-		#out.flush()
 
 class Persistent(object):
 
