@@ -123,8 +123,7 @@ run(options, option_collector)
 					self.result = usage_error and 1 or 0
 					return
 
-				if len(script_loader_task.script_task.default_tasks) != 0: # XXX old api compat for default tasks
-					self.project.task_aliases['default'] = script_loader_task.script_task.default_tasks
+				self.project.task_aliases['default'] = script_loader_task.script_task.default_tasks
 				for x in sched_ctx.parallel_wait(self.project): yield x
 				
 				self.result = 0

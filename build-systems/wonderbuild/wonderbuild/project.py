@@ -83,7 +83,6 @@ class Project(Task, SharedTaskHolder):
 			else: return
 		if __debug__ and is_debug: debug('project: aliases: ' + str(aliases) + ' ' + str(task.__class__))
 		for a in aliases:
-			#if a == 'default': continue
 			try: self.task_aliases[a].append(task)
 			except KeyError: self.task_aliases[a] = [task]
 

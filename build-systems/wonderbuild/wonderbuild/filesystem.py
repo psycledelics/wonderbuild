@@ -380,9 +380,11 @@ class Node(object):
 
 class RootNode(Node):
 	def __getstate__(self):
-		if self._children is not None:
-			if self._fs.global_purge: self._global_purge_unused_children()
-			else: self._partial_purge_unused_children()
+		if self._fs.global_purge:
+			for c in self._children.itervalues(): c._global_purge_unused_children()
+		else:
+			for c in self._children.itervalues(): c._partial_purge_unused_children()
+		if __debug__ and is_debug: debug('fs: purged     : ' + (self._fs.global_purge and 'global' or 'partial'))
 		return Node.__getstate__(self)
 	
 	def __init__(self):
