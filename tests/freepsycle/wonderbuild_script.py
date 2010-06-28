@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2009-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2009-2010 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 if __name__ == '__main__':
 	import sys, os
@@ -27,6 +27,7 @@ class Wonderbuild(ScriptTask):
 		project = self.project
 		top_src_dir = self.src_dir.parent
 		src_dir = self.src_dir / 'src'
+		default_tasks = self.default_tasks
 
 		universalis = ScriptLoaderTask.shared(project, top_src_dir / 'universalis')
 		helpers = ScriptLoaderTask.shared(project, top_src_dir / 'psycle-helpers')
@@ -64,9 +65,10 @@ class Wonderbuild(ScriptTask):
 
 		class UniformMod(ModTask):
 			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):
-				ModTask.__init__(self, name, kind, cfg, (name, 'default'))
+				ModTask.__init__(self, name, kind, cfg)
 				self.path = path
 				if deps is not None: self.public_deps += deps
+				if kind in (ModTask.Kinds.PROG, ModTask.Kinds.LOADABLE): default_tasks.append(self.mod_phase)
 
 			def __call__(self, sched_ctx):
 				if self.kind == ModTask.Kinds.PROG: self.private_deps = [pch.prog_task]
@@ -120,7 +122,7 @@ class Wonderbuild(ScriptTask):
 		decay = UniformMod('freepsycle-plugin-decay', src_dir / 'psycle' / 'plugins' / 'decay', deps=(engine,))
 		sequence = UniformMod('freepsycle-plugin-sequence', src_dir / 'psycle' / 'plugins' / 'sequence', deps=(engine,))
 		sine = UniformMod('freepsycle-plugin-sine', src_dir / 'psycle' / 'plugins' / 'sine', deps=(engine,))
-		bipolar_filter = UniformMod('freepsycle-plugin-bipolar-filter', src_dir / 'psycle' / 'plugins' / 'bipolar_filter', deps=(engine,))
+		bipolar_filter = UniformMod('freepsycle-plugin-bipolar-filter', src_dir / 'psycle' / 'plugins' / 'bipolar_filter', deps=(engine,), kind=ModTask.Kinds.LIB)
 		additioner = UniformMod('freepsycle-plugin-additioner', src_dir / 'psycle' / 'plugins' / 'additioner', deps=(bipolar_filter,))
 		multiplier = UniformMod('freepsycle-plugin-multiplier', src_dir / 'psycle' / 'plugins' / 'multiplier', deps=(bipolar_filter,))
 
@@ -187,3 +189,4 @@ class Wonderbuild(ScriptTask):
 					host, gtkmm, gnomecanvasmm,
 					cluttermm or cluttermm_1_0 or cluttermm_0_9 or cluttermm_0_8 or cluttermm_0_7 or cluttermm_0_6
 				), kind=ModTask.Kinds.PROG)
+
