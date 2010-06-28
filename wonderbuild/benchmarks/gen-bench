@@ -180,7 +180,7 @@ class Wonderbuild(ScriptTask):
 				for s in sub_src_dir.find_iter(in_pats=('*.cpp',)): self.sources.append(s)
 
 		for n in src_dir.find_iter(in_pats = ('lib_*',), prune_pats = ('*',)):
-			self.project.add_task_aliases(BenchLib(n.name, n.name[len('lib_'):]).mod_phase, 'default')
+			self.default_tasks.append(BenchLib(n.name, n.name[len('lib_'):]).mod_phase)
 ''')
 	finally: f.close()
 

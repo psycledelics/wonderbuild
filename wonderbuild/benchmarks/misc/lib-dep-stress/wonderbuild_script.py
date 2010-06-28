@@ -33,7 +33,6 @@ else:
 					self.shared = self.pic = True
 					self.defines['WRAPPER'] = None
 					self.include_paths.append(src_dir)
-		
 			build_cfg = CustomBuildCfgTask(self.project)
 			for x in sched_ctx.parallel_wait(build_cfg): yield x
 			
@@ -49,7 +48,6 @@ else:
 
 				def do_mod_phase(self):
 					for s in (src_dir / ('wrapper' + str(self.i))).find_iter(in_pats=('*.cpp',)): self.sources.append(s)
-
 			count = 0
 			for n in src_dir.find_iter(in_pats = ('wrapper*',), prune_pats = ('*',)): count += 1
 			wrappers = [Wrapper(i) for i in xrange(count)]
@@ -65,5 +63,4 @@ else:
 
 				def do_mod_phase(self):
 					self.sources = [src_dir / 'main.cpp']
-
-			self.project.add_task_aliases(Main().mod_phase, 'default')
+			self.default_tasks.append(Main().mod_phase)

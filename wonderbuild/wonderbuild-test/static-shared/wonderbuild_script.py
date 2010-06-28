@@ -122,7 +122,7 @@ else:
 				class MainProg(ModTask):
 					def __init__(self): ModTask.__init__(self,
 						test_name + '--' + variant_name + '--main',
-						ModTask.Kinds.PROG, static_prog and static_cfg or cfg, ('default',))
+						ModTask.Kinds.PROG, static_prog and static_cfg or cfg)
 
 					def __call__(self, sched_ctx):
 						self.public_deps = [lib_wrapper]
@@ -131,6 +131,7 @@ else:
 					def do_mod_phase(self):
 						for s in (src_dir / 'main').find_iter(in_pats = ('*.cpp',)): self.sources.append(s)
 				main_prog = MainProg()
+				self.default_tasks.append(main_prog.mod_phase)
 				
 			variant(sched_ctx, True, True, True)
 			variant(sched_ctx, False, True, True)

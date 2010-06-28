@@ -30,13 +30,13 @@ else:
 
 	class Wonderbuild(ScriptTask):
 		def __call__(self, sched_ctx):
-			for x in sched_ctx.parallel_wait(
-				*(
+			tasks = [
 					ScriptLoaderTask.shared(self.project, self.src_dir / dir) \
 					for dir in (
 						'static-shared',
 						'pre-compiled',
 						'parallel'
 					)
-				)
-			): yield x
+			]
+			for x in sched_ctx.parallel_wait(*tasks): yield x
+			for t in tasks: self.default_tasks += t.script_task.default_tasks
