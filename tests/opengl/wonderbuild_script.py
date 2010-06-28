@@ -22,14 +22,14 @@ else:
 
 	class Wonderbuild(ScriptTask):
 		def __call__(self, sched_ctx):
-			for x in sched_ctx.parallel_wait(
-				*(
-					ScriptLoaderTask.shared(self.project, dir) \
-					for dir in (
-						self.src_dir / 'gl' / 'examples',
-						self.src_dir / 'glut' / 'examples',
-						self.src_dir / 'glsl' / 'examples',
-						self.src_dir / 'gtkglextmm' / 'examples'
-					)
+			tasks = [
+				ScriptLoaderTask.shared(self.project, dir) \
+				for dir in (
+					self.src_dir / 'gl' / 'examples',
+					self.src_dir / 'glut' / 'examples',
+					self.src_dir / 'glsl' / 'examples',
+					self.src_dir / 'gtkglextmm' / 'examples'
 				)
-			): yield x
+			]
+			for x in sched_ctx.parallel_wait(*tasks): yield x
+			for t in tasks: self.default_tasks += t.script_task.default_tasks

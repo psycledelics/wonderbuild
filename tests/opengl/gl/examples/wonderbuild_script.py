@@ -24,6 +24,7 @@ class Wonderbuild(ScriptTask):
 		project = self.project
 		top_src_dir = self.src_dir.parent.parent
 		src_dir = self.src_dir
+		default_tasks = self.default_tasks
 
 		from wonderbuild.cxx_tool_chain import UserBuildCfgTask
 		from wonderbuild.cxx_tool_chain import ModTask
@@ -39,9 +40,10 @@ class Wonderbuild(ScriptTask):
 
 		class UniformMod(ModTask):
 			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):
-				ModTask.__init__(self, name, kind, cfg, (name, 'default'))
+				ModTask.__init__(self, name, kind, cfg)
 				self.path = path
 				if deps is not None: self.public_deps += deps
+				if kind in (ModTask.Kinds.PROG, ModTask.Kinds.LOADABLE): default_tasks.append(self.mod_phase)
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [gl]
