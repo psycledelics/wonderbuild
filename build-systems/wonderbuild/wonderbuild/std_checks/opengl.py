@@ -42,8 +42,7 @@ class OpenGLUCheckTask(BuildCheckTask):
 		for x in BuildCheckTask.__call__(self, sched_ctx): yield x
 
 	def apply_to(self, cfg):
-		if cfg.dest_platform.os == 'darwin': cfg.frameworks.append('OpenGL')
-		else: cfg.libs.append('GLU')
+		if cfg.dest_platform.os != 'darwin': cfg.libs.append('GLU')
 
 	@property
 	def source_text(self): return '''\
