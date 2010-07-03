@@ -41,7 +41,6 @@ class Impl(object):
 
 	def cfg_cxx_args(self, cfg):
 		args = [cfg.cxx_prog, '-nologo']
-		if cfg.pic: pass #args.append('-fPIC')
 		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + repr(v)[1:-1]) # note: assumes that cpp and python escaping works the same way
@@ -52,7 +51,7 @@ class Impl(object):
 				'-Yu' + cfg.pch.name,
 				'-Fp' + cfg.bld_rel_path(pch)
 			]
-		for p in cfg.include_paths: args.append('-I' + cfg.bld_rel_path(p))
+		for p in cfg.include_paths: args.append('-I' + cfg.bld_rel_path_or_abs_path(p))
 		for i in cfg.includes: args.append('-FI' + cfg.bld_rel_path(i))
 		args += cfg.cxx_flags
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: msvc: cxx: ' + str(args))
@@ -83,12 +82,7 @@ class Impl(object):
 
 	def process_cxx_task(self, cxx_task, lock):
 		cwd = cxx_task.target_dir
-		args = cxx_task.cfg.cxx_args + ['-c'] + \
-			(cxx_task.cfg.use_source_abs_paths and \
-				[s.abs_path for s in cxx_task._actual_sources] or \
-				#[s.rel_path(cwd) for s in cxx_task._actual_sources] \
-				[s.name for s in cxx_task._actual_sources] \
-			)
+		args = cxx_task.cfg.cxx_args + ['-c'] + [cxx_task.cfg.bld_rel_path_or_name(p) for p in cxx_task._actual_sources]
 		implicit_deps = cxx_task.persistent_implicit_deps
 		if exec_subprocess(args, cwd=cwd.path) == 0:
 			succeeded_sources = cxx_task.sources
@@ -170,14 +164,11 @@ class Impl(object):
 		obj_paths = obj_names
 		mod_task_target_path = mod_task.target.rel_path(cwd)
 		if mod_task.ld:
-			args = mod_task.cfg.ld_args
-			args = [args[0], '-out:' + mod_task_target_path] + obj_paths + args[1:]
+			args = mod_task.cfg.ld_args + ['-out:' + mod_task_target_path] + obj_paths
 			if mod_task.cfg.shared: args.append('-implib:' + (mod_task.target_dev_dir / mod_task.target_dev_name).rel_path(cwd))
 		else:
 			ar_args, ranlib_args = mod_task.cfg.ar_ranlib_args
-			args = ar_args[:]
-			args.append('-out:' + mod_task_target_path)
-			args += obj_paths
+			args = ar_args + ['-out:' + mod_task_target_path)] + obj_paths
 			if removed_obj_names is not None:
 				for o in removed_obj_names: args.append('-remove:' + o)
 		if exec_subprocess(args, cwd=cwd.path) != 0: raise UserReadableException, mod_task

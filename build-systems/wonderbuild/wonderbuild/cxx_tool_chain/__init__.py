@@ -26,6 +26,7 @@ class ClientCfg(object):
 		self.shared_libs = []
 		self.ld_flags = []
 		self.pkg_config = []
+		self.frameworks = [] # for darwin
 		self._applied = set()
 		
 	def clone(self, class_ = None):
@@ -41,6 +42,7 @@ class ClientCfg(object):
 		c.shared_libs += self.shared_libs
 		c.ld_flags += self.ld_flags
 		c.pkg_config += self.pkg_config
+		c.frameworks += self.frameworks
 		return c
 	
 	def apply_to(self, cfg):
@@ -54,6 +56,7 @@ class ClientCfg(object):
 		cfg.shared_libs += self.shared_libs
 		cfg.ld_flags += self.ld_flags
 		cfg.pkg_config += self.pkg_config
+		cfg.frameworks += self.frameworks
 
 class DestPlatform(object):
 	def __init__(self):
@@ -113,7 +116,8 @@ class BuildCfg(ClientCfg, Task):
 			sig.update(self.kind)
 			sig.update(str(self.version))
 			#sig.update(self.dest_platform.sig)
-			if len(self.pkg_config): sig.update(_PkgConfigTask.env_sig())
+			if len(self.pkg_config) != 0: sig.update(_PkgConfigTask.env_sig())
+			#if len(self.frameworks) != 0: sig.update(...)
 			sig = self.__common_sig = sig.digest()
 			return sig
 		
@@ -177,6 +181,9 @@ class BuildCfg(ClientCfg, Task):
 		path = node.rel_path(self.project.bld_dir)
 		if not os.path.isabs(path): path = os.path.join(os.pardir, os.pardir, path)
 		return path
+
+	def bld_rel_path_or_abs_path(self, node): return self.use_source_abs_paths and node.abs_path or self.bld_rel_path(node)
+	def bld_rel_path_or_name(self, node): return self.use_source_abs_paths and node.name or self.bld_rel_path(node)
 
 	@property
 	def cxx_args(self):

@@ -35,19 +35,14 @@ class Impl(object):
 		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + repr(v)[1:-1]) # note: assumes that cpp and python string escaping works the same way
-		for p in cfg.include_paths: args.append('-I' + cfg.bld_rel_path(p))
+		for p in cfg.include_paths: args.append('-I' + cfg.bld_rel_path_or_abs_path(p))
 		args += cfg.cxx_flags
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: posix: cxx: ' + str(args))
 		return args
 
 	def process_cxx_task(self, cxx_task, lock):
 		cwd = cxx_task.target_dir
-		args = cxx_task.cfg.cxx_args + ['-c'] + \
-			(cxx_task.cfg.use_source_abs_paths and \
-				[s.abs_path for s in cxx_task._actual_sources] or \
-				#[s.rel_path(cwd) for s in cxx_task._actual_sources] \
-				[s.name for s in cxx_task._actual_sources] \
-			)
+		args = cxx_task.cfg.cxx_args + ['-c'] + [cxx_task.cfg.bld_rel_path_or_name(p) for p in cxx_task._actual_sources]
 		implicit_deps = cxx_task.persistent_implicit_deps
 		if exec_subprocess(args, cwd=cwd.path) == 0:
 			succeeded_sources = cxx_task.sources
@@ -124,8 +119,7 @@ class Impl(object):
 		obj_paths = obj_names
 		mod_task_target_path = mod_task.target.rel_path(cwd)
 		if mod_task.ld:
-			args = mod_task.cfg.ld_args
-			args = [args[0], '-o' + mod_task_target_path] + obj_paths + args[1:]
+			args = mod_task.cfg.ld_args + ['-o', mod_task_target_path] + obj_paths
 			if exec_subprocess(args, cwd=cwd.path) != 0: raise UserReadableException, mod_task
 		else:
 			ar_args, ranlib_args = mod_task.cfg.ar_ranlib_args

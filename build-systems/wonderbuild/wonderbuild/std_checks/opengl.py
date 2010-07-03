@@ -11,12 +11,19 @@ class OpenGLCheckTask(BuildCheckTask):
 
 	def apply_to(self, cfg):
 		cfg.defines['GL_GLEXT_PROTOTYPES'] = None
-		cfg.libs.append('GL')
+		if cfg.dest_platform.os == 'darwin':
+			if cfg.dest_platform.arch == 'arm': cfg.frameworks.append('OpenGLES')
+			else: cfg.frameworks.append('OpenGL')
+		else: cfg.libs.append('GL')
 
 	@property
 	def source_text(self): return '''\
 #if defined __APPLE__
-	#include <OpenGL/OpenGL.h>
+	#if defined __arm__
+		#include <OpenGLES/ES2/gl.h>
+	#else
+		#include <OpenGL/OpenGL.h>
+	#endif
 #else
 	#include <GL/gl.h>
 #endif
@@ -34,7 +41,9 @@ class OpenGLUCheckTask(BuildCheckTask):
 		self.public_deps = [OpenGLCheckTask.shared(self.base_cfg)]
 		for x in BuildCheckTask.__call__(self, sched_ctx): yield x
 
-	def apply_to(self, cfg): cfg.libs.append('GLU')
+	def apply_to(self, cfg):
+		if cfg.dest_platform.os == 'darwin': cfg.frameworks.append('OpenGL')
+		else: cfg.libs.append('GLU')
 
 	@property
 	def source_text(self): return '''\
@@ -57,7 +66,9 @@ class OpenGLUTCheckTask(BuildCheckTask):
 		self.public_deps = [OpenGLUCheckTask.shared(self.base_cfg)]
 		for x in BuildCheckTask.__call__(self, sched_ctx): yield x
 
-	def apply_to(self, cfg): cfg.libs.append('glut')
+	def apply_to(self, cfg):
+		if cfg.dest_platform.os == 'darwin': cfg.frameworks.append('GLUT')
+		else: cfg.libs.append('glut')
 
 	@property
 	def source_text(self): return '''\

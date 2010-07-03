@@ -69,9 +69,9 @@ class Impl(object):
 		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + repr(str(v))[1:-1]) # note: assumes that cpp and python escaping work the same way
-		args += cfg.use_source_abs_paths and \
-			['-I' + cfg.bld_rel_path(p) for p in cfg.include_paths] or \
-			['-I' + p.abs_path for p in cfg.include_paths]
+		for p in cfg.include_paths: args.append('-I' + cfg.bld_rel_path_or_abs_path(p))
+		if cfg.dest_platform.os == 'darwin':
+			for f in cfg.frameworks: args.append('-F' + f)
 		if cfg.pch is not None: args += ['-Winvalid-pch', '-include', cfg.bld_rel_path(cfg.pch)]
 		for i in cfg.includes: args += ['-include', cfg.bld_rel_path(i)]
 		args += cfg.cxx_flags
@@ -83,7 +83,7 @@ class Impl(object):
 		# some useful options: -Wmissing-include-dirs -Winvalid-pch -H -fpch-deps -Wp,-v
 		# to print the include search path: g++ -xc++ /dev/null -E -Wp,-v 2>&1 1>/dev/null | sed -e '/^[^ ]/d' -e 's,^ ,-I,'
 		cwd = precompile_task.target_dir
-		args = precompile_task.cfg.cxx_args + ['-x' + precompile_task.cfg.lang + '-header', precompile_task.header.rel_path(cwd), '-MD']
+		args = ['-MD', '-x' + precompile_task.cfg.lang + '-header', precompile_task.header.rel_path(cwd)] + precompile_task.cfg.cxx_args
 		colorgcc = Impl._colorgcc(precompile_task.cfg)
 		if colorgcc is not None: args = [colorgcc.rel_path(cwd)] + args
 		use_dir = False
@@ -116,12 +116,7 @@ class Impl(object):
 
 	def process_cxx_task(self, cxx_task, lock):
 		cwd = cxx_task.target_dir
-		args = cxx_task.cfg.cxx_args + ['-c', '-MMD'] + \
-			(cxx_task.cfg.use_source_abs_paths and \
-				[s.abs_path for s in cxx_task._actual_sources] or \
-				#[s.rel_path(cwd) for s in cxx_task._actual_sources] \
-				[s.name for s in cxx_task._actual_sources] \
-			)
+		args = cxx_task.cfg.cxx_args + ['-MMD', '-c'] + [cxx_task.cfg.bld_rel_path_or_name(p) for p in cxx_task._actual_sources]
 		colorgcc = Impl._colorgcc(cxx_task.cfg)
 		if colorgcc is not None: args = [colorgcc.rel_path(cwd)] + args
 		implicit_deps = cxx_task.persistent_implicit_deps
@@ -206,6 +201,8 @@ class Impl(object):
 		if len(cfg.shared_libs):
 			args.append('-Wl,-Bdynamic')
 			for l in cfg.shared_libs: args.append('-l' + l)
+		if cfg.dest_platform.os == 'darwin':
+			for f in cfg.frameworks: args += ['-framework', f]
 		args += cfg.ld_flags
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: gcc: ld: ' + str(args))
 		return args
@@ -226,8 +223,7 @@ class Impl(object):
 		obj_paths = obj_names
 		mod_task_target_path = mod_task.target.rel_path(cwd)
 		if mod_task.ld:
-			args = mod_task.cfg.ld_args
-			args = [args[0], '-o' + mod_task_target_path] + obj_paths + args[1:]
+			args = mod_task.cfg.ld_args + ['-o', mod_task_target_path] + obj_paths
 			colorgcc = Impl._colorgcc(mod_task.cfg)
 			if colorgcc is not None: args = [colorgcc.rel_path(cwd)] + args
 			if mod_task.cfg.dest_platform.bin_fmt == 'pe':
@@ -288,8 +284,10 @@ class Impl(object):
 		args = cfg.cxx_args + ['-x' + cfg.lang, '-']
 		if build_check_task.pipe_preproc: args.append('-E')
 		else:
-			# when cross-compiling from linux to windows: /dev/null: final close failed: Inappropriate ioctl for device
-			if os.name == 'posix' and not cfg.dest_platform.bin_fmt == 'pe': o = os.devnull
+			# When cross-compiling from linux to windows: /dev/null: final close failed: Inappropriate ioctl for device.
+			# If -MD or -MMD is passed by the user with --cxx-flags, this will try and fail to create a /dev/null.d file.
+			if os.name == 'posix' and not cfg.dest_platform.bin_fmt == 'pe' and \
+				not '-MD' in args and not '-MMD' in args: o = os.devnull
 			else:
 				if not build_check_task.compile: o = 'a.i'
 				elif not build_check_task.link: o = 'a.o'
