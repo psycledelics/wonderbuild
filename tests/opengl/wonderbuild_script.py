@@ -25,11 +25,17 @@ else:
 			tasks = [
 				ScriptLoaderTask.shared(self.project, dir) \
 				for dir in (
+					self.src_dir / 'eagl',
 					self.src_dir / 'gl',
 					self.src_dir / 'glut',
 					self.src_dir / 'glsl',
 					self.src_dir / 'gtkglextmm'
 				)
 			]
-			for x in sched_ctx.parallel_wait(*tasks): yield x
-			for t in tasks: self.default_tasks += t.script_task.default_tasks
+			from wonderbuild.cxx_tool_chain import UserBuildCfgTask
+			cfg = UserBuildCfgTask.shared(self.project)
+			for x in sched_ctx.parallel_wait(cfg, *tasks): yield x
+			if cfg.dest_platform.os == 'darwin' and cfg.dest_platform.arch == 'arm':
+				for t in tasks[0:1]: self.default_tasks += t.script_task.default_tasks
+			else:
+				for t in tasks[1:]: self.default_tasks += t.script_task.default_tasks
