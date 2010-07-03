@@ -30,7 +30,7 @@ class Impl(object):
 			cfg.cxx_prog or 'g++', \
 			cfg.ld_prog or cfg.cxx_prog or 'g++'
 		return cxx_prog, ld_prog, 'ar', 'ranlib' # for gnu ar, 'ar s' is used instead of ranlib
-		# see also g++ -print-prog-name=ld
+		# see also g++ -print-prog-name=ld, g++ -Wl,--version
 		
 	@property
 	def common_env_sig(self):
