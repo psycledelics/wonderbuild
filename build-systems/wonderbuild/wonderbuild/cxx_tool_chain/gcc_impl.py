@@ -197,7 +197,7 @@ class Impl(object):
 			rpath = '-Wl,-rpath=$ORIGIN' + os.sep + cfg.fhs.lib.rel_path(cfg.fhs.bin)
 			if need_sep_fix: rpath = rpath.replace('\\', '/') # when cross-compiling from windows
 			args.append(rpath)
-		args.append('-Wl,-rpath-link=' + cfg.bld_rel_path(cfg.fhs.lib))
+			args.append('-Wl,-rpath-link=' + cfg.bld_rel_path(cfg.fhs.lib))
 		for p in cfg.lib_paths: args.append('-L' + cfg.bld_rel_path(p))
 		for l in cfg.libs: args.append('-l' + l)
 		if len(cfg.static_libs):
