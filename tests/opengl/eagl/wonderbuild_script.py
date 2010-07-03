@@ -40,6 +40,8 @@ class Wonderbuild(ScriptTask):
 
 		# Note: the language must not be changed in the check_cfg because checks are shared with other scripts via cfg.shared_checks,
 		# and they may not want them done in objective-c++.
+		# We can change the language after cloning the check_cfg,
+		# but that's unneeded since g++ autodetects that files with a .mm extension must be compiled as objective-c++.
 		cfg.lang = 'objective-c++'
 
 		class UniformMod(ModTask):
