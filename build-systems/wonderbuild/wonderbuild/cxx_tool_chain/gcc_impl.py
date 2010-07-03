@@ -43,7 +43,8 @@ class Impl(object):
 				'DYLD_LIBRARY_PATH', 'DYLD_FALLBACK_LIBRARY_PATH', # macosx
 				'SHLIB_PATH', # hpux
 				'LIBPATH', # aix
-				'GCC_EXEC_PREFIX', 'COMPILER_PATH', 'LIBRARY_PATH'
+				'GCC_EXEC_PREFIX', 'COMPILER_PATH',
+				'LIBRARY_PATH' # used by both the compiler and the linker according to man page
 			):
 				e = os.environ.get(name, None)
 				if e is not None: sig.update(name + '=' + e)
@@ -177,7 +178,11 @@ class Impl(object):
 		try: return self._ld_env_sig
 		except AttributeError:
 			sig = Sig()
-			for name in ('LIBRARY_PATH', 'GNUTARGET', 'LDEMULATION', 'COLLECT_NO_DEMANGLE'):
+			for name in (
+				'GNUTARGET', 'LDEMULATION', 'COLLECT_NO_DEMANGLE',
+				'LD_RUN_PATH', # for elf native linker
+				'LD_LIBRARY_PATH' # for native linker
+			):
 				e = os.environ.get(name, None)
 				if e is not None: sig.update(name + '=' + e)
 			sig = self._ld_env_sig = sig.digest()
