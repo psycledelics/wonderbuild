@@ -30,7 +30,7 @@ class Scheduler(object):
 	@staticmethod
 	def generate_option_help(help):
 		help['jobs'] = ('<count>', 'use <count> threads in the scheduler to process the tasks', 'autodetected: ' + str(cpu_count) + ' * 2 (io-bounded)')
-		help['timeout'] = ('<seconds>', 'wait at most <seconds> for a task to complete before considering it\'s busted', str(_default_timeout))
+		help['timeout'] = ('<seconds>', 'wait at most <seconds> for a task to complete before considering it\'s busted and bailing out', str(_default_timeout))
 
 	def __init__(self, options):
 		self.thread_count = int(options.get('jobs', _jobs))
