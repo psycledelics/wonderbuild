@@ -83,7 +83,7 @@ class Impl(object):
 		# some useful options: -Wmissing-include-dirs -Winvalid-pch -H -fpch-deps -Wp,-v
 		# to print the include search path: g++ -xc++ /dev/null -E -Wp,-v 2>&1 1>/dev/null | sed -e '/^[^ ]/d' -e 's,^ ,-I,'
 		cwd = precompile_task.target_dir
-		args = ['-MD', '-x' + precompile_task.cfg.lang + '-header', precompile_task.header.rel_path(cwd)] + precompile_task.cfg.cxx_args
+		args = precompile_task.cfg.cxx_args + ['-MD', '-x' + precompile_task.cfg.lang + '-header', precompile_task.header.rel_path(cwd)]
 		colorgcc = Impl._colorgcc(precompile_task.cfg)
 		if colorgcc is not None: args = [colorgcc.rel_path(cwd)] + args
 		use_dir = False
