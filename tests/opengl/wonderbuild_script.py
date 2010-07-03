@@ -25,10 +25,10 @@ else:
 			tasks = [
 				ScriptLoaderTask.shared(self.project, dir) \
 				for dir in (
-					self.src_dir / 'gl' / 'examples',
-					self.src_dir / 'glut' / 'examples',
-					self.src_dir / 'glsl' / 'examples',
-					self.src_dir / 'gtkglextmm' / 'examples'
+					self.src_dir / 'gl',
+					self.src_dir / 'glut',
+					self.src_dir / 'glsl',
+					self.src_dir / 'gtkglextmm'
 				)
 			]
 			for x in sched_ctx.parallel_wait(*tasks): yield x
