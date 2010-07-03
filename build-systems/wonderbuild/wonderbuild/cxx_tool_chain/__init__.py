@@ -642,7 +642,7 @@ class _BatchCompileTask(Task):
 				else: pic = 'non-pic';
 				s = [str(s) for s in self.sources]
 				s.sort()
-				self.print_desc_multi_column_format(str(self.mod_task.target) + ': batch-compiling ' + pic + ' objects from c++', s, color)
+				self.print_desc_multi_column_format(str(self.mod_task.target) + ': batch-compiling ' + pic + ' objects from ' + self.cfg.lang, s, color)
 			self._actual_sources = []
 			for s in self.sources:
 				node = self.target_dir / self.mod_task._unique_base_name(s)
