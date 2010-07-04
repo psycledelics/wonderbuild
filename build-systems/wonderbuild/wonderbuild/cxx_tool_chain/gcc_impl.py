@@ -77,6 +77,28 @@ class Impl(object):
 		args += cfg.cxx_flags
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: gcc: cxx: ' + str(args))
 		return args
+		
+	@staticmethod
+	def _read_dep_file(dep_file_path, lock, cwd, first_is_dummy=False):
+		"reads deps from the .d files generated as side-effect of compilation by gcc's -MD or -MMD option"
+		f = open(dep_file_path, 'r')
+		try: deps = f.read().replace('\\\n', '')
+		finally: f.close()
+		deps = deps[deps.find(':') + 1:]
+		if need_sep_fix: deps = deps.replace('\\\\', '/')
+		deps = deps.replace('\\ ', '\\') # temporarily replace spaces so that split() works
+		if first_is_dummy:
+			# We skip the first implicit dep, which is the dummy actual source.
+			deps = deps.split()[1:]
+		else:
+			deps = deps.split()
+		deps = [d.replace('\\', ' ') for d in deps] # put back spaces that where temporarily removed for split() to work
+		if need_sep_fix: deps = [d.replace('/', os.sep) for d in deps]
+		lock.acquire()
+		try: deps = [cwd / d for d in deps]
+		finally: lock.release()
+		if __debug__ and is_debug: debug('cpp: gcc dep file: ' + dep_file_path + ': ' + str([str(d) for d in deps]))
+		return deps
 
 	@staticmethod
 	def process_precompile_task(precompile_task, lock):
@@ -98,16 +120,7 @@ class Impl(object):
 			args.append('-o' + o.rel_path(cwd))
 			dep_file = o.parent / (o.name + '.d')
 		if exec_subprocess(args, cwd=cwd.path) != 0: raise UserReadableException, precompile_task
-		# reads deps from the .d files generated as side-effect of compilation by gcc's -MD or -MMD option
-		f = open(dep_file.path, 'r')
-		try: deps = f.read().replace('\\\n', '')
-		finally: f.close()
-		if need_sep_fix: deps = deps.replace('/', os.sep)
-		lock.acquire()
-		try: deps = [cwd / d for d in deps[deps.find(':') + 1:].split()]
-		finally: lock.release()
-		if __debug__ and is_debug: debug('cpp: gcc dep file: ' + str(dep_file) + ': ' + str([str(d) for d in deps]))
-		return deps
+		return Impl._read_dep_file(dep_file.path, lock, cwd)
 
 	def precompile_task_target_name(self, header_name): return header_name + self.precompile_task_target_ext
 
@@ -144,17 +157,8 @@ class Impl(object):
 						else: implicit_deps[src] = True, old_cxx_sig, deps, old_dep_sig
 			finally: lock.release()
 		for s in succeeded_sources:
-			# reads deps from the .d files generated as side-effect of compilation by gcc's -MD or -MMD option
 			path = s[1].path
-			f = open(path[:path.rfind('.')] + '.d', 'r')
-			try: deps = f.read().replace('\\\n', '')
-			finally: f.close()
-			if need_sep_fix: deps = deps.replace('/', os.sep)
-			# note: we skip the first implicit dep, which is the dummy actual source
-			lock.acquire()
-			try: deps = [cwd / d for d in deps[deps.find(':') + 1:].split()[1:]]
-			finally: lock.release()
-			if __debug__ and is_debug: debug('cpp: gcc dep file: ' + path + ': ' + str([str(d) for d in deps]))
+			deps = Impl._read_dep_file(path[:path.rfind('.')] + '.d', lock, cwd, first_is_dummy=True)
 			dep_sigs = [d.sig for d in deps]
 			implicit_deps[s[0]] = False, cxx_task.cfg.cxx_sig, deps, Sig(''.join(dep_sigs)).digest()
 		if failed_sources is not None: raise UserReadableException, '  '.join(str(s) for s in failed_sources)
