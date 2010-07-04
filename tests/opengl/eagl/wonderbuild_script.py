@@ -47,7 +47,7 @@ class Wonderbuild(ScriptTask):
 		cfg.frameworks += ['UIKit', 'CoreFoundation', 'Foundation', 'CoreGraphics', 'QuartzCore']
 
 		class UniformMod(ModTask):
-			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):
+			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.PROG):
 				ModTask.__init__(self, name, kind, cfg)
 				self.path = path
 				if deps is not None: self.public_deps += deps
@@ -65,10 +65,13 @@ class Wonderbuild(ScriptTask):
 				for x in ModTask.__call__(self, sched_ctx): yield x
 			
 			def do_mod_phase(self):
-				self.cfg.include_paths.appendleft(src_dir)
 				if self.path.exists:
+					self.cfg.include_paths.appendleft(self.path)
+					c = self.path / 'Classes'
+					if c.exists: self.cfg.include_paths.appendleft(c)
 					for s in self.path.find_iter(in_pats = ('*.mm', '*.m'), prune_pats = ('todo',)): self.sources.append(s)
 				else:
+					self.cfg.include_paths.appendleft(self.path.parent)
 					f = self.path.parent / (self.path.name + '.mm')
 					if not f.exists: f = self.path.parent / (self.path.name + '.m')
 					self.sources.append(f)
@@ -101,5 +104,8 @@ class Wonderbuild(ScriptTask):
 						if f.exists: self._sources.append(f)
 						return self._sources
 
-		UniformMod('eagl-test', src_dir / 'test', kind=ModTask.Kinds.PROG)
-		UniformMod('eagl-neheihpone-02', src_dir / 'neheiphone' / 'NeHe Lesson 02', kind=ModTask.Kinds.PROG)
+		UniformMod('eagl-test', src_dir / 'test')
+		for lesson in xrange(2, 7):
+			lesson = str(lesson).rjust(2, '0')
+			UniformMod('neheihpone-' + lesson, src_dir / 'neheiphone' / ('NeHe Lesson ' + lesson))
+
