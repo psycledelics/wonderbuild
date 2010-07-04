@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2009-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2010-2010 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 if __name__ == '__main__':
 	import sys, os
@@ -43,6 +43,8 @@ class Wonderbuild(ScriptTask):
 		# We can change the language after cloning the check_cfg,
 		# but that's unneeded since g++ autodetects that files with a .mm extension must be compiled as objective-c++.
 		cfg.lang = 'objective-c++'
+		cfg.libs.append('objc')
+		cfg.frameworks += ['UIKit', 'CoreFoundation', 'Foundation', 'CoreGraphics', 'QuartzCore']
 
 		class UniformMod(ModTask):
 			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):
@@ -65,8 +67,11 @@ class Wonderbuild(ScriptTask):
 			def do_mod_phase(self):
 				self.cfg.include_paths.appendleft(src_dir)
 				if self.path.exists:
-					for s in self.path.find_iter(in_pats = ('*.mm',), prune_pats = ('todo',)): self.sources.append(s)
-				else: self.sources.append(self.path.parent / (self.path.name + '.mm'))
+					for s in self.path.find_iter(in_pats = ('*.mm', '*.m'), prune_pats = ('todo',)): self.sources.append(s)
+				else:
+					f = self.path.parent / (self.path.name + '.mm')
+					if not f.exists: f = self.path.parent / (self.path.name + '.m')
+					self.sources.append(f)
 
 			def apply_cxx_to(self, cfg):
 				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
@@ -90,9 +95,11 @@ class Wonderbuild(ScriptTask):
 						self._sources = []
 						if self.outer.path.exists:
 							for s in self.outer.path.find_iter(
-								in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)): self._sources.append(s)
+								in_pats = ('*.hpp', '*.h'), ex_pats = ('*.private.hpp', '*.private.h'), prune_pats = ('todo',)): self._sources.append(s)
 						f = self.outer.path.parent / (self.outer.path.name + '.hpp')
+						if not f.exists: f = self.outer.path.parent / (self.outer.path.name + '.h')
 						if f.exists: self._sources.append(f)
 						return self._sources
 
 		UniformMod('eagl-test', src_dir / 'test', kind=ModTask.Kinds.PROG)
+		UniformMod('eagl-neheihpone-02', src_dir / 'neheiphone' / 'NeHe Lesson 02', kind=ModTask.Kinds.PROG)
