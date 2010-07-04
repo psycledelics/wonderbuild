@@ -5,19 +5,22 @@ Index: iphonedevonlinux/apps/HelloWorldFirst/Makefile
 @@ -1,5 +1,4 @@
 -#CC = /path/to/my/toolchain/bin/arm-apple-darwin9-gcc
 -CC=arm-apple-darwin9-gcc
-+CC = $$PREFIX/bin/arm-apple-darwin9-gcc
++CC = $(PREFIX)/bin/arm-apple-darwin9-gcc
  LD = $(CC)
  
  # We build our first hello world.
-@@ -17,6 +16,8 @@
- 		-bind_at_load \
- 		-w
+@@ -13,9 +12,8 @@
+ # Hello World
  
-+LDFLAGS = -bind_at_load -w
-+
+ 
+-LDFLAGS=	-lobjc \
+-		-bind_at_load \
+-		-w
++LDFLAGS =
++LDFLAGS += -bind_at_load
+ 
  all:	HelloWorldFirst
  
- HelloWorld1: HelloWorldFirst.o
 Index: iphonedevonlinux/apps/HelloToolchain/Makefile
 ===================================================================
 --- iphonedevonlinux/apps/HelloToolchain/Makefile	(revision 83)
@@ -25,10 +28,29 @@ Index: iphonedevonlinux/apps/HelloToolchain/Makefile
 @@ -1,5 +1,4 @@
 -#CC = /path/to/my/toolchain/bin/arm-apple-darwin9-gcc
 -CC=arm-apple-darwin9-gcc
-+CC = $$PREFIX/bin/arm-apple-darwin9-gcc
++CC = $(PREFIX)/bin/arm-apple-darwin9-gcc
  LD = $(CC)
  
  # Here comes your IP of the ipod/iphone.
+@@ -15,12 +14,12 @@
+ SRC=src/
+ IMG=img/
+ 
+-LDFLAGS=	-lobjc \
+-		-bind_at_load \
+-		-framework Foundation \
+-		-framework CoreFoundation \
+-		-framework UIKit \
+-		-w
++LDFLAGS =
++LDFLAGS += -bind_at_load
++LDFLAGS += -lobjc \
++	-framework Foundation \
++	-framework CoreFoundation \
++	-framework UIKit
+ 
+ all:	HelloToolchain bundle
+ 
 Index: iphonedevonlinux/keys.list
 ===================================================================
 --- iphonedevonlinux/keys.list	(revision 83)
