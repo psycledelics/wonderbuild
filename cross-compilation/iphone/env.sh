@@ -4,7 +4,7 @@
 
 toolchain=$(cd $(dirname $0) && pwd)/iphonedevonlinux/toolchain && test -d $toolchain &&
 pre=$toolchain/pre && test -d $pre &&
-sys=$toolchain/sys && test -d $sys &&
+export SYSROOT=$toolchain/sys && test -d $SYSROOT &&
 bin_prefix=$pre/bin/arm-apple-darwin9- &&
 export AS=${bin_prefix}as && test -x $AS &&
 export CPP=${bin_prefix}cpp && test -x $CPP &&
