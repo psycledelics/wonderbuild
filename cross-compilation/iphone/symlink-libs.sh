@@ -17,7 +17,7 @@ do
 		$sys/$path/ || :
 done &&
 
-for lib in Foundation CoreFoundation CoreGraphics UIKit OpenGLES
+for lib in Foundation CoreFoundation CoreGraphics UIKit OpenGLES QuartzCore
 do
 	path=System/Library/Frameworks/$lib.framework &&
 	ln -s \
