@@ -8,7 +8,7 @@ if __name__ == '__main__':
 	sys.argv.append('--src-dir=' + dir)
 	try: from wonderbuild.main import main
 	except ImportError:
-		dir = os.path.abspath(os.path.join(dir, os.pardir, os.pardir, os.pardir, 'build-systems', 'wonderbuild'))
+		dir = os.path.abspath(os.path.join(dir, os.pardir, os.pardir, 'build-systems', 'wonderbuild'))
 		if dir not in sys.path: sys.path.append(dir)
 		try: from wonderbuild.main import main
 		except ImportError:
@@ -104,7 +104,7 @@ class Wonderbuild(ScriptTask):
 						if f.exists: self._sources.append(f)
 						return self._sources
 
-		UniformMod('eagl-test', src_dir / 'test')
+		UniformMod('hologram', src_dir / 'hologram')
 		for lesson in xrange(2, 7):
 			lesson = str(lesson).rjust(2, '0')
 			UniformMod('neheihpone-' + lesson, src_dir / 'neheiphone' / ('NeHe Lesson ' + lesson))
