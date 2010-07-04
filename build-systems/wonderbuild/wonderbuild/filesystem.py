@@ -13,13 +13,12 @@ USE_HASH_SUM = False
 if USE_HASH_SUM: from signature import Sig
 
 class FileSystem(object):
-	def __init__(self, persistent, global_purge=True):
-		self.global_purge = global_purge
+	def __init__(self, persistent):
 		cwd = os.getcwd()
 		try: self.root, old_cwd = persistent[str(self.__class__)]
 		except KeyError:
 			if  __debug__ and is_debug: debug('fs: all anew')
-			self.root = RootNode()
+			self.root = Node(None, os.sep)
 			persistent[str(self.__class__)] = self.root, cwd
 		else:
 			if old_cwd != cwd:
@@ -32,13 +31,19 @@ class FileSystem(object):
 						for child in node._old_children.itervalues(): recurse(child)
 				recurse(self.root)
 				persistent[str(self.__class__)] = self.root, cwd
-		self.root._exists = True
-		self.root._height = 0
 		self.root._fs = self
+		self.root._exists = True
+		self.root._is_dir = True
+		self.root._height = 0
 		self.cur = self.root / cwd
 		self.cur._fs = self
-		self.cur._is_dir = True
 		self.cur._exists = True
+		self.cur._is_dir = True
+		
+	def purge(self, global_purge):
+		if global_purge: self.root._global_purge_unused_children()
+		else: self.root._partial_purge_unused_children()
+		if __debug__ and is_debug: debug('fs: purged     : ' + (global_purge and 'global' or 'partial'))
 
 ignore_names = set(['.git', '.bzr', '.hg', '_MTN', '_darcs', '.svn'])
 if False: # old stuff not widely used anymore, so it's not enabled by default
@@ -357,7 +362,9 @@ class Node(object):
 		for node in self._children.itervalues():
 			try: node._sig
 			except AttributeError:
-				if node._children is None or node._global_purge_unused_children(): continue
+				if node._children is None or node._global_purge_unused_children():
+					#node.parent = None
+					continue
 			c[node.name] = node; used = True
 		self._children = used and c or None
 		if not used:
@@ -378,15 +385,3 @@ class Node(object):
 			if __debug__ and is_debug: debug('fs: unused     : ' + str(self))
 		return not used
 
-class RootNode(Node):
-	def __getstate__(self):
-		if self._fs.global_purge:
-			for c in self._children.itervalues(): c._global_purge_unused_children()
-		else:
-			for c in self._children.itervalues(): c._partial_purge_unused_children()
-		if __debug__ and is_debug: debug('fs: purged     : ' + (self._fs.global_purge and 'global' or 'partial'))
-		return Node.__getstate__(self)
-	
-	def __init__(self):
-		Node.__init__(self, None, os.sep)
-		self._is_dir = True

@@ -5,7 +5,7 @@
 import sys, os, gc, cPickle
 
 from wonderbuild import abi_sig, UserReadableException
-from task import Task, SharedTaskHolder
+from task import Task, PersistentDict, SharedTaskHolder
 from script import ScriptLoaderTask
 from filesystem import FileSystem
 from logger import is_debug, debug, colored
@@ -14,7 +14,7 @@ if __debug__ and is_debug: import time
 
 class Project(Task, SharedTaskHolder):
 
-	known_options = set(['src-dir', 'bld-dir', 'tasks', 'list-tasks'])
+	known_options = set(['src-dir', 'bld-dir', 'tasks', 'list-tasks', 'purge-persistent'])
 
 	@staticmethod
 	def generate_option_help(help):
@@ -22,6 +22,7 @@ class Project(Task, SharedTaskHolder):
 		help['bld-dir'] = ('<dir>', 'use <dir> as the build dir', '<src-dir>' + os.sep + '++wonderbuild')
 		help['tasks'] = ('<name,...>', 'build tasks with names <name,...>, comma-separated list', 'default')
 		help['list-tasks'] = (None, 'list the available task names')
+		help['purge-persistent'] = (None, 'purge the persistent pickle file from data that are not used by the requested tasks')
 
 	def __init__(self, options, option_collector):
 		Task.__init__(self)
@@ -44,6 +45,8 @@ class Project(Task, SharedTaskHolder):
 			else: self.requested_task_aliases = (None,)
 		else: self.requested_task_aliases = None
 		
+		self.global_purge = 'purge-persistent' in options
+		
 		self.processsing = False
 
 		gc_enabled = gc.isenabled()
@@ -59,18 +62,18 @@ class Project(Task, SharedTaskHolder):
 					pickle_abi_sig = cPickle.load(f)
 					if pickle_abi_sig != abi_sig:
 						print >> sys.stderr, colored('33', 'wonderbuild: abi sig changed: discarding persistent pickle file, full rebuild will be performed')
-						persistent = {}
+						persistent = PersistentDict()
 					else: persistent = cPickle.load(f)
 					if __debug__ and is_debug: debug('project: pickle: load time: ' + str(time.time() - t0) + ' s')
 				except Exception, e:
 					print >> sys.stderr, 'could not load pickle:', e
 					raise
 				finally: f.close()
-		except: persistent = {}
+		except: persistent = PersistentDict()
 		finally:
 			if gc_enabled: gc.enable()
 
-		self.fs = FileSystem(persistent, global_purge=aliases is None and not self.list_aliases)
+		self.fs = FileSystem(persistent)
 		self.top_src_dir = self.fs.cur / src_path
 		bld_dir = self.fs.cur / bld_path
 		
@@ -95,24 +98,22 @@ class Project(Task, SharedTaskHolder):
 		return tasks
 		
 	def __call__(self, sched_ctx):
-		try:
-			if self.list_aliases:
-				keys = self.task_aliases.keys()
-				keys.sort()
-				for k in keys:
-					if not (__debug__ and is_debug) and k is None: continue
-					v = [str(v) for v in self.task_aliases[k]]
-					v.sort()
-					print (k and str(k) or '<none>') + '\n\t' + '\n\t'.join(v)
-			else:
-				if self.requested_task_aliases is not None: tasks = self.tasks_with_aliases(self.requested_task_aliases)
-				else: tasks = self.task_aliases.get('default', ())
-				self.processsing = True
-				for x in sched_ctx.parallel_wait(*tasks): yield x
-				self.processsing = False
-		except: self.fs.global_purge = False # some task failed, so not all the tasks have been evaluated => we can't do the global purge of unused nodes
-		finally:
-			if False and __debug__ and is_debug: print self.persistent
+		if self.list_aliases:
+			keys = self.task_aliases.keys()
+			keys.sort()
+			for k in keys:
+				if not (__debug__ and is_debug) and k is None: continue
+				v = [str(v) for v in self.task_aliases[k]]
+				v.sort()
+				print (k and str(k) or '<none>') + '\n\t' + '\n\t'.join(v)
+		else:
+			if self.requested_task_aliases is not None: tasks = self.tasks_with_aliases(self.requested_task_aliases)
+			else: tasks = self.task_aliases.get('default', ())
+			self.processsing = True
+			for x in sched_ctx.parallel_wait(*tasks): yield x
+			self.processsing = False
+
+	def dump_persistent(self):
 			gc_enabled = gc.isenabled()
 			if gc_enabled:
 				try: gc.disable()
@@ -126,6 +127,9 @@ class Project(Task, SharedTaskHolder):
 					f = open(path, 'wb')
 				try:
 					cPickle.dump(abi_sig, f, cPickle.HIGHEST_PROTOCOL)
+					if self.global_purge: self.persistent.purge()
+					self.fs.purge(self.global_purge)
+					if False and __debug__ and is_debug: print >> sys.stderr, self.persistent
 					cPickle.dump(self.persistent, f, cPickle.HIGHEST_PROTOCOL)
 				finally: f.close()
 				if __debug__ and is_debug:

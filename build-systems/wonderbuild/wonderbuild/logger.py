@@ -19,28 +19,31 @@ def use_options(options):
 	global silent
 	silent = 'silent' in options
 
-	if 'sync-log' in options:
-		class Out(object):
-			def __init__(self, out): self._out = out
-			def write(self, s): self._out.write(s) ; self._out.flush()
-		global out
-		out = Out(out)
+	sync_log = 'sync-log' in options
+	if sync_log:
+		if False: # flush
+			class Out(object):
+				def __init__(self, out): self._out = out
+				def write(self, s): self._out.write(s); self._out.flush()
+			global out
+			out = Out(out)
 
 	if __debug__:
 		global is_debug
 		is_debug = 'verbose' in options
 
 		if is_debug:
+			debug_out = sync_log and out or sys.stderr
 			zones = options['verbose'].split(',')
 			global debug
 			if len(zones) != 0:
 				def debug(s):
 					for z in zones:
 						if s.startswith(z):
-							print >> sys.stderr, colored('35', 'wonderbuild: dbg:') + ' ' + s
+							debug_out.write(colored('35', 'wonderbuild: dbg:') + ' ' + s + '\n')
 							break
 			else:
-				def debug(s): print >> sys.stderr, colored('35', 'wonderbuild: dbg:') + ' ' + s
+				def debug(s): debug_out.write(colored('35', 'wonderbuild: dbg:') + ' ' + s + '\n')
 
 out = sys.stdout
 

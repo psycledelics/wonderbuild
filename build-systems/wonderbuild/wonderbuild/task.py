@@ -44,14 +44,18 @@ class Task(object):
 			lines.append('')
 			out.write('\n'.join(lines))
 
+class PersistentDict(dict):
+
+	def purge(self): pass # TODO
+
 class Persistent(object):
 
-	def __init__(self, persistent, uid):
-		self._persistent = persistent
+	def __init__(self, persistent_dict, uid):
+		self._persistent_dict = persistent_dict
 		self.uid = uid
 
-	def _get_persistent(self): return self._persistent[self.uid]
-	def _set_persistent(self, value): self._persistent[self.uid] = value
+	def _get_persistent(self): return self._persistent_dict[self.uid]
+	def _set_persistent(self, value): self._persistent_dict[self.uid] = value
 	persistent = property(_get_persistent, _set_persistent)
 
 class SharedTaskHolder(object):

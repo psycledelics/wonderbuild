@@ -133,12 +133,17 @@ run(options, option_collector)
 
 		try:
 			from wonderbuild.project import Project
-			main_task = MainTask(Project(options, option_collector))
+			project = Project(options, option_collector)
+			main_task = MainTask(project)
 		except:
 			option_collector.consolidate_known_options()
 			validate_options(options, option_collector.known_options)
 			raise
 
-		Scheduler(options).process(main_task)
+		# Some tasks may have been scheduled without waiting for completion inside the project task (e.g. header installation),
+		# so we wait for the scheduler to have completed all the tasks before dumping the persistent pickle.
+		try: Scheduler(options).process(main_task)
+		except: project.global_purge = False # some task failed, so not all the tasks have been evaluated => we shouldn't do the global purge
+		finally: project.dump_persistent()
 
 		return main_task.result
