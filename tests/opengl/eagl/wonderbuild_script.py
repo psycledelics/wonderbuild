@@ -44,7 +44,7 @@ class Wonderbuild(ScriptTask):
 		# but that's unneeded since g++ autodetects that files with a .mm extension must be compiled as objective-c++.
 		cfg.lang = 'objective-c++'
 		cfg.libs.append('objc')
-		cfg.frameworks += ['UIKit', 'CoreFoundation', 'Foundation', 'CoreGraphics', 'QuartzCore']
+		cfg.frameworks += ['UIKit', 'CoreFoundation', 'Foundation', 'CoreGraphics', 'QuartzCore', 'IOKit']
 
 		class UniformMod(ModTask):
 			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.PROG):
