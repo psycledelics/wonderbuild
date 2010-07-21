@@ -51,7 +51,7 @@ class Wonderbuild(ScriptTask):
 			@staticmethod
 			def shared_uid(*args, **kw): return 'stk'
 
-			def apply_to(self, cfg): cfg.libs.extend(['stk', 'asound', 'jack']) # stk uses alsa and jack!
+			def apply_to(self, cfg): cfg.libs.extend(['stk'])#, 'asound', 'jack']) # stk uses alsa and jack!
 
 			@property
 			def source_text(self): return '#include <stk/Stk.h>'
