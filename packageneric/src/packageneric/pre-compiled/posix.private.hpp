@@ -3,21 +3,27 @@
 
 ///\file \brief inclusions of POSIX standard headers to be pre-compiled.
 
+#ifndef PSYCLE__BUILD_SYSTEMS__PRE_COMPILED__POSIX__INCLUDED
+#define PSYCLE__BUILD_SYSTEMS__PRE_COMPILED__POSIX__INCLUDED
 #pragma once
-#include <diversalis/compiler.hpp>
+
+#include <diversalis.hpp>
 #if defined DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION // if the compiler supports pre-compilation
 
-	#include <diversalis/operating_system.hpp>
-	#if defined DIVERSALIS__OPERATING_SYSTEM__POSIX
+	#if defined DIVERSALIS__OS__POSIX
 
 		#if defined DIVERSALIS__COMPILER__MICROSOFT
-			#pragma message("packageneric::pre_compiled:: parsing " __FILE__)
+			#pragma message("pre-compiling " __FILE__ " ...")
 		#endif
 
 		#include <sys/unistd.h>
+		#include <dlfcn.h>
+		#include <pthread.h>
 
 		#if defined DIVERSALIS__COMPILER__MICROSOFT
-			#pragma message("packageneric::pre_compiled:: done parsing " __FILE__)
+			#pragma message("pre-compiling " __FILE__ " ... done")
 		#endif
 	#endif
+#endif
+
 #endif

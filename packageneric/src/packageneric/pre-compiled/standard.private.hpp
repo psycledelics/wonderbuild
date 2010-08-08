@@ -3,16 +3,15 @@
 
 ///\file \brief inclusions of C/C++'s standard lib headers to be pre-compiled.
 
+#ifndef PSYCLE__BUILD_SYSTEMS__PRE_COMPILED__STANDARD__INCLUDED
+#define PSYCLE__BUILD_SYSTEMS__PRE_COMPILED__STANDARD__INCLUDED
 #pragma once
-#include <diversalis/compiler.hpp>
+
+#include <diversalis.hpp>
 #if defined DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION // if the compiler supports pre-compilation
 
 	#if defined DIVERSALIS__COMPILER__MICROSOFT
-		#pragma message("packageneric::pre_compiled:: parsing " __FILE__)
-	#endif
-
-	#if defined DIVERSALIS__COMPILER__MICROSOFT
-		#define _CRT_SECURE_NO_DEPRECATE
+		#pragma message("pre-compiling " __FILE__ " ...")
 	#endif
 
 	// c++ headers
@@ -62,7 +61,7 @@
 	//#include <csignal>
 	//#include <cstdarg>
 	#include <cstddef>
-	#include <cstdint> // C1999, so not in C++1998
+	//#include <cstdint> // C1999, so not in C++1998
 	#include <cstdio>
 	#include <cstdlib>
 	#include <cstring>
@@ -71,6 +70,8 @@
 	//#include <cwctype>
 
 	#if defined DIVERSALIS__COMPILER__MICROSOFT
-		#pragma message("packageneric::pre_compiled:: done parsing " __FILE__)
+		#pragma message("pre-compiling " __FILE__ " ... done")
 	#endif
+#endif
+
 #endif
