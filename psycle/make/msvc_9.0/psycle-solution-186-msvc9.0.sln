@@ -102,6 +102,7 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "in_psycle", "projects\in_psycle\in_psycle.vcproj", "{41A8B146-5360-4F84-B22C-912FBEE45326}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B78DFE59-051A-43FD-B489-775A4982581C} = {B78DFE59-051A-43FD-B489-775A4982581C}
+		{16F2DEB9-8F35-45C9-B460-732615F0C8D5} = {16F2DEB9-8F35-45C9-B460-732615F0C8D5}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-helpers", "projects\psycle-helpers\psycle-helpers.vcproj", "{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
