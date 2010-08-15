@@ -1,3 +1,71 @@
+===========================================================
+
+Some doc for the ModTask class:
+
+	Method __call__(self, sched_ctx):
+		This is where to check for the availability of the dependencies.
+		Dependencies are instances of the ModDepPhases.
+		These are tasks that once processed, are convertible to a boolean.
+		Required and optionally found dependencies should be put in self.public_deps and self.private_deps.
+		Dependencies that are used in public headers should be put in self.public_deps, and the others in self.private_deps.
+	
+	Method do_mod_phase(self):
+		This is where to set self.sources and self.cfg for building the object files.
+
+	Attribute cxx_phase:
+		This should be a task that installs the public headers so that clients can start building their object files.
+
+	Method apply_cxx_to(self, cfg):
+		This is where to export flags to the cfg so that clients can start building their object files.
+		For example: adding to cfg.include_paths the path where the cxx_phase installed the headers.
+	
+Some doc for the PreCompileTasks class:
+
+	Method __call__(self, sched_ctx):
+		This is where to check for the availability of the dependencies, just like in the ModTask class,
+		but a pch should have only optional dependencies, put in self.public_deps.
+
+	Property source_text(self):
+		This property should return the actual code to precompile.
+		For example, a series of #include.
+	
+	Method do_cxx_phase(self):
+		This is where to set self.cfg for building the pch file.
+		For example: self.cfg.include_paths
+
+===========================================================
+
+X.setup_deps (__call__)
+X.build_objs (do_mod_phase)
+X.install_headers (cxx_phase)
+X.client_cxx_flags (apply_cxx_to) -> X.install_headers
+X.build_mod -> X.setup_deps
+            -> X.build_objs
+X.client_mod_flags -> X.build_mod
+X.deep_deps = self.cfg.shared or not self.cfg.static_prog
+X.ld = shared or prog
+
+A -> B -> C
+
+A {static, dyn} prog
+{B, C} {static, shared/loadable} lib
+
+A static, B static, C static: A -> B -> C
+A dyn, B static, C static: A -> B -> C
+A dyn, B static, C shared: A -> B -> C
+A dyn, B shared, C static: A -> B (rarely used)
+A dyn, B shared, C shared: A -> B
+
+A.build_mod -> A.setup_deps -> B.setup_deps -> C.setup_deps
+            -> A.build_objs -> B.client_cxx_flags -> B.install_headers
+                                                  -> C.client_cxx_flags -> C.install_headers
+            -> A.ld? -> B.client_mod_flags -> B.build_mod -> B.setup_deps -> C.setup_deps
+                                                          -> B.build_objs -> C.client_cxx_flags -> C.install_headers
+                                                          -> B.ld? -> C.client_mod_flags -> C.build_mod -> C.setup_deps
+                                                                                                        -> C.build_objs
+                                           -> !B.ld? -> C.client_mod_flags
+
+===========================================================
 
 The core of wonderbuild is the task.
 
