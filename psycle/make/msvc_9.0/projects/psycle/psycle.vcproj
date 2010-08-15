@@ -337,6 +337,14 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\..\src\psycle\host\WasapiDriver.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\WasapiDriver.hpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\..\src\psycle\host\WaveOut.cpp"
 						>
 					</File>
@@ -392,6 +400,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\resources\idr_vstf.ico"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\Slider\imgOff.bmp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\Slider\imgOn.bmp"
 					>
 				</File>
 				<File
@@ -600,6 +616,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\ChildView.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\ExclusiveLock.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\ExclusiveLock.hpp"
 					>
 				</File>
 				<File
@@ -1267,12 +1291,20 @@
 				RelativePath="..\..\..\..\src\Seib-vsthost\EffectWnd.hpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\..\..\src\Seib-vsthost\JBridgeEnabler.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\Seib-vsthost\JBridgeEnabler.hpp"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
 		<Global
 			Name="RESOURCE_FILE"
-			Value="\psycle_source\psycle\src\psycle\host\resources\resources.rc"
+			Value="\programacio\psycle-186\psycle\src\psycle\host\resources\resources.rc"
 		/>
 	</Globals>
 </VisualStudioProject>
