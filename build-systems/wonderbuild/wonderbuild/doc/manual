@@ -1,0 +1,74 @@
+
+The core of wonderbuild is the task.
+
+Step 0:
+A task is supposed to run only once in a build run.
+The scheduler stores a boolean attribute in each task to flag the tasks that have been evaluated
+and simply skips the tasks scheduled for execution that have already been evaluated.
+
+Step 1:
+A task first compare its inputs with the inputs of the last time it was executed.
+Since the old inputs don't exist anymore, this means a task need compute and store a signature of its inputs to a persistent storage,
+and compare this signature with the signature of the current inputs.
+
+Step 2:
+If the old input signature is different from the new signature (or if there was no previous signature),
+the task need to do its actual job.
+
+Step 3:
+Upon successful completion, the task then stores the signature of the inputs to the persistent storage.
+If a error occurred, the task doesn't update the persistent input signature, so that the next build run will try again.
+_________________________________________
+
+all: foo
+
+foo1.o: foo1.c
+	cc -c -o foo1.o foo1.c
+
+foo2.o: foo2.c
+	cc -c -o foo2.o foo2.c
+
+foo: foo1.o foo2.o
+	cc -o foo foo1.o foo2.o
+
+_________________________________________
+
+from wonderbuild.task import Task
+from wonderbuild.script import ScriptTask
+
+class WonderBuild(ScriptTask):
+
+	def __call__(self, sched_ctx):
+		project = self.project
+		
+		tasks = {}
+
+		class MakeLikeTask(Task):
+			def __init__(self, outputs, inputs, commands):
+				Task.__init__(self)
+				for o in outputs:
+					tasks[o] = self
+					project.add_task_alias(o, self)
+				self.outputs = outputs
+				self.inputs = inputs
+				self.commands = commands
+
+			def __call__(self, shed_ctx):
+				input_tasks = []
+				for i in self.inputs:
+					try: input_tasks.append(tasks[i])
+					except KeyError: pass
+				for x in sched_ctx.parallel_wait(*input_tasks): yield x
+				min_output = min([(project.bld_dir / o).time for o in self.outputs])
+				max_input = max([(project.src_dir / i).time for i in self.inputs])
+				try: sched_ctx.release()
+					if min_output < max_input:
+						for c in self.commands: exec_subprocess(c)
+				finally: sched_ctx.acquire()
+				for o in self.outputs: o.clear()
+
+		foo1 = MakeLikeTask(['foo1.o'], ['foo1.c'], ['cc -o foo1.o foo1.c'.split()])
+		foo2 = MakeLikeTask(['foo2.o'], ['foo2.c'], ['cc -o foo2.o foo2.c'.split()])
+		foo = MakeLikeTask(['foo'], ['foo1.o', 'foo2.o'], ['cc -o foo foo1.o foo2.o'.split()])
+		project.default_tasks.append(foo)
+
