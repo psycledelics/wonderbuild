@@ -1,12 +1,11 @@
 TARGET = psycle-player
+TEMPLATE = app # This project builds an executable program.
 
 # include the base stuff shared amongst all qmake projects.
-include(../../packageneric/qmake/common.pri)
+include(../../build-systems/qmake/common.pri)
 
 # this include defines a dependency on the psycle-core lib.
 include($$TOP_SRC_DIR/psycle-core/qmake/psycle-core.pri)
-
-TEMPLATE = app # This project builds an executable program.
 
 # remove default qmake/qt stuff we don't use
 CONFIG -= qt uic lex yacc
@@ -25,12 +24,10 @@ DEPENDPATH  *= $$PSYCLE_PLAYER_DIR/src
 #CONFIG *= precompile_header
 #PRECOMPILED_HEADER = $$PSYCLE_PLAYER_DIR/src/psycle/player/psyclePlayerPch.hpp
 
-sources_or_headers = \
-	$$PSYCLE_PLAYER_DIR/src/psycle/player/configuration \
-	$$PSYCLE_PLAYER_DIR/src/psycle/player/main
-	
-SOURCES_PRESERVE_PATH += $$sources(sources_or_headers)
-HEADERS += $$headers(sources_or_headers)
+SOURCES_PRESERVE_PATH += \
+	$$findFiles($$PSYCLE_PLAYER_DIR/src/psycle/player, *.cpp)
+HEADERS += \
+	$$findFiles($$PSYCLE_PLAYER_DIR/src/psycle/player, *.hpp)
 
 false: win32 {
 	RC_FILE = $$QPSYCLE_DIR/src/psycle-player.rc 

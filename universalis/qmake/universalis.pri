@@ -7,13 +7,10 @@ isEmpty(universalis_included) {
 	DEPENDPATH  *= $$TOP_SRC_DIR/diversalis/src
 
 	UNIVERSALIS_DIR = $$TOP_SRC_DIR/universalis
-	UNIVERSALIS_BUILD_DIR = $$UNIVERSALIS_DIR/++build
+	UNIVERSALIS_BUILD_DIR = $$UNIVERSALIS_DIR/++qmake-build
 	
 	INCLUDEPATH *= $$UNIVERSALIS_DIR/src
 	DEPENDPATH  *= $$UNIVERSALIS_DIR/src
-
-	INCLUDEPATH *= $$UNIVERSALIS_DIR/qmake/src
-	DEPENDPATH  *= $$UNIVERSALIS_DIR/qmake/src
 
 	!contains(TARGET, universalis) {
 		CONFIG *= link_prl

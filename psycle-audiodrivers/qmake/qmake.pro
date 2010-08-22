@@ -1,12 +1,11 @@
 TARGET = psycle-audiodrivers
+TEMPLATE = lib # This project builds a library.
 
 # include the base stuff shared amongst all qmake projects.
-include(../../packageneric/qmake/common.pri)
+include(../../build-systems/qmake/common.pri)
 
-# this include defines a dependency on the psycle-audiodrivers lib.
 include(psycle-audiodrivers.pri)
 
-TEMPLATE = lib # This project builds a library.
 !CONFIG(shared): CONFIG *= staticlib # Note: Since shared is in CONFIG by default, you will need to pass CONFIG-=shared on qmake's command line to build a static archive.
 CONFIG *= create_prl
 
@@ -19,28 +18,24 @@ MOC_DIR = $$BUILD_DIR # Where intermediate moc files go.
 DESTDIR = $$BUILD_DIR # Where the final executable goes.
 
 CONFIG *= precompile_header
-PRECOMPILED_HEADER = $$TOP_SRC_DIR/packageneric/src/packageneric/pre-compiled.private.hpp
+PRECOMPILED_HEADER = $$TOP_SRC_DIR/build-systems/src/forced-include.private.hpp
 
 sources_or_headers = \
 	$$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/audiodriver \
 	$$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/wavefileout
 
 unix {
+	contains(DEFINES, PSYCLE__GSTREAMER_AVAILABLE) {
+		sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/gstreamerout
+	}
 	contains(DEFINES, PSYCLE__ALSA_AVAILABLE) {
-		PKGCONFIG *= alsa 
 		sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/alsaout
 	}
 	contains(DEFINES, PSYCLE__JACK_AVAILABLE) {
-		PKGCONFIG *= jack 
 		sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/jackout
 	}
 	contains(DEFINES, PSYCLE__ESOUND_AVAILABLE) {
-		PKGCONFIG *= esound
 		sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/esoundout
-	}
-	contains(DEFINES, PSYCLE__GSTREAMER_AVAILABLE) {
-		PKGCONFIG *= gstreamer
-		sources_or_headers += $$PSYCLE_AUDIODRIVERS_DIR/src/psycle/audiodrivers/gstreamerout
 	}
 	contains(DEFINES, PSYCLE__NET_AUDIO_AVAILABLE) {
 		LIBS *= $$linkLibs(audio)
