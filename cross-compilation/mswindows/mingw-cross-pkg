@@ -74,7 +74,7 @@ def usage(out = sys.stderr, command = None):
 			'\n')
 	if command is None or command == 'clean-build':
 		out.write(
-			'Usage: clean-build [--download | --destdir | --all] <package...>\n'
+			'Usage: clean-build [--download | --dest-dir | --all] <package...>\n'
 			'  cleans the build dirs of packages.\n'
 			'\n'
 			'  --dest-dir  also clean the dest dir.\n'
