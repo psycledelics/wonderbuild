@@ -1,7 +1,7 @@
 #! /usr/bin/env python
-# MinGW cross compiling package handling tool
+# A package handling tool for MinGW cross compilation
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2008-2008 Johan Boule <bohan@jabber.org>
+# copyright 2008-2010 Johan Boule <bohan@jabber.org>
 
 import sys, os, subprocess, shutil, imp, fnmatch
 
@@ -39,7 +39,7 @@ def usage(out = sys.stderr, command = None):
 			'\n')
 	if command is None or command == 'install':
 		out.write(
-			'Usage: install [--continue | --rebuild | --no-download | --no-act] <package...>\n'
+			'Usage: install [--continue | --rebuild | --skip-download | --no-act | --verbose] <package...>\n'
 			'  installs the packages, and their dependencies.\n'
 			'  Packages given as arguments will be marked as user,\n'
 			'  unless the --rebuild option is present and the package was already installed.\n'
@@ -635,13 +635,6 @@ class Packages:
 					built_package.remove_state('dest', verbose = True)
 				built_package.remove_state_dir_if_empty(verbose = True)
 
-class BuiltDep:
-	def __init__(self, name, version):
-		self._name = name
-		self._version = version
-	def name(self): return self._name
-	def version(self): return self._version
-
 class Package:
 	def __init__(self, packages, name):
 		self._packages = packages
@@ -778,7 +771,7 @@ class BuiltPackage(Package):
 			self._deps = []
 			for dep in self.read_state('direct-dependencies'):
 				dep = dep.split(' ')
-				self._deps.append(BuiltDep(dep[0], dep[1]))
+				self._deps.append(self.packages().find_package(dep[0]))
 			return self._deps
 	def recursed_deps(self):
 		try: return self._recursed_deps
@@ -786,7 +779,7 @@ class BuiltPackage(Package):
 			self._recursed_deps = []
 			for dep in self.read_state('recursed-dependencies'):
 				dep = dep.split(' ')
-				self._recursed_deps.append(BuiltDep(dep[0], dep[1]))
+				self._recursed_deps.append(self.packages().find_package(dep[0]))
 			return self._recursed_deps
 
 class InstalledPackage(BuiltPackage):
