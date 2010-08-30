@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="psycle-plugins/druttis-koruz"
-	RootNameSpace="koruz"
 	ProjectGUID="{C233B433-2D3A-41BD-ABAB-F92B569E95EA}"
+	RootNamespace="koruz"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -258,10 +258,6 @@
 		/>
 	</References>
 	<Files>
-		<File
-			RelativePath="..\src\psycle\plugins\druttis\DspLib\AllPass.h"
-			>
-		</File>
 		<File
 			RelativePath="..\src\psycle\plugins\druttis\CDsp.cpp"
 			>

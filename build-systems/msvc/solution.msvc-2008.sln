@@ -296,6 +296,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/yannis-midi"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/zephod-super-fm", "..\..\psycle-plugins\msvc\zephod-SuperFM.msvc-2008.vcproj", "{652E2772-861D-48C6-A710-FDC1078CBA09}"
 	ProjectSection(ProjectDependencies) = postProject
+		{B78DFE59-051A-43FD-B489-775A4982581C} = {B78DFE59-051A-43FD-B489-775A4982581C}
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 	ProjectSection(WebsiteProperties) = preProject
@@ -794,6 +795,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/ninereeds_79
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/arguru-compressor", "..\..\psycle-plugins\msvc\arguru-compressor.msvc-2008.vcproj", "{4EA29C4A-9853-378B-48D8-8ADD53F05186}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B78DFE59-051A-43FD-B489-775A4982581C} = {B78DFE59-051A-43FD-B489-775A4982581C}
+	EndProjectSection
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
