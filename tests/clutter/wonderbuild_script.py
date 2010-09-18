@@ -89,3 +89,4 @@ class Wonderbuild(ScriptTask):
 						return self._sources
 
 		t = UniformMod('t', src_dir / 't', kind=ModTask.Kinds.PROG)
+		t2 = UniformMod('t2', src_dir / 't2', kind=ModTask.Kinds.PROG)
