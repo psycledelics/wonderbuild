@@ -259,10 +259,6 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\src\psycle\plugins\druttis\CDsp.cpp"
-			>
-		</File>
-		<File
 			RelativePath="..\src\psycle\plugins\druttis\CDsp.h"
 			>
 		</File>

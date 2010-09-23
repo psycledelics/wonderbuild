@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="psycle-plugins/druttis-phantom"
 	ProjectGUID="{A517216B-EE2E-4473-B342-2842C5F5BCBC}"
 	RootNamespace="phantom"
@@ -264,10 +264,6 @@
 		</File>
 		<File
 			RelativePath="..\src\psycle\plugins\druttis\DspLib\AllPass.h"
-			>
-		</File>
-		<File
-			RelativePath="..\src\psycle\plugins\druttis\CDsp.cpp"
 			>
 		</File>
 		<File
