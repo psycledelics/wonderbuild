@@ -172,30 +172,19 @@ class Wonderbuild(ScriptTask):
 		dw_eq = UniformMod(n + 'dw-eq', p / 'dw' / 'eq', deps=(dw_filter,))
 		
 		druttis_plucked_string = UniformMod(n + 'pluckedstring', p / 'druttis' / 'PluckedString')
+		druttis_koruz = UniformMod(n + 'koruz', p / 'druttis' / 'Koruz')
 
 		druttis_band_limited_wave_tables = UniformMod('psycle-druttis-band-limited-wave-tables', p / 'druttis' / 'blwtbl')
-
-		druttis_dsp = UniformMod('psycle-druttis-dsp', p / 'druttis' / 'dsp',
-			kind=ModTask.Kinds.LIB, deps=(druttis_band_limited_wave_tables,))
+		druttis_dsp = UniformMod('psycle-druttis-dsp', p / 'druttis' / 'dsp', kind=ModTask.Kinds.LIB, deps=(druttis_band_limited_wave_tables,))
 			
 		druttis_sublime = UniformMod(n + 'sublime', p / 'druttis' / 'sublime', deps=(druttis_dsp,))
 		druttis_slicit = UniformMod(n + 'slicit', p / 'druttis' / 'slicit', deps=(druttis_dsp,))
 		druttis_eq3 = UniformMod(n + 'eq3', p / 'druttis' / 'eq3', deps=(druttis_dsp,))
 
-		druttis_dsp_class = UniformMod('psycle-druttis-dsp-class', p / 'druttis' / 'CDsp',
-			kind=ModTask.Kinds.LIB, deps=(druttis_band_limited_wave_tables,))
+		druttis_envelope_class = UniformMod('psycle-druttis-envelope-class', p / 'druttis' / 'CEnvelope', kind=ModTask.Kinds.LIB)
 
-		druttis_koruz = UniformMod(n + 'koruz', p / 'druttis' / 'Koruz',
-			deps=(druttis_dsp_class,))
-
-		druttis_envelope_class = UniformMod('psycle-druttis-envelope-class', p / 'druttis' / 'CEnvelope',
-			kind=ModTask.Kinds.LIB)
-
-		druttis_phantom = UniformMod(n + 'phantom', p / 'druttis' / 'Phantom',
-			deps=(druttis_dsp_class, druttis_envelope_class))
-
-		druttis_feed_me = UniformMod(n + 'feedme', p / 'druttis' / 'FeedMe',
-			deps=(druttis_dsp_class, druttis_envelope_class))
+		druttis_phantom = UniformMod(n + 'phantom', p / 'druttis' / 'Phantom', deps=(druttis_envelope_class,))
+		druttis_feed_me = UniformMod(n + 'feedme', p / 'druttis' / 'FeedMe', deps=(druttis_envelope_class,))
 
 		if False: # it uses ms's winapi!
 			yannis_brown_midi = UniformMod(n + 'ymidi', p / 'y_midi')
