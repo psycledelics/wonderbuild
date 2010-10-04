@@ -35,12 +35,13 @@ class Task(object):
 		
 	def print_desc_multi_column_format(self, desc, list, color = '7;1'):
 		desc = 'wonderbuild: task: ' + desc + ':'
-		line = desc + ' ' + '  '.join(list)
-		if len(line) <= cols: out.write(colored(color, line) + '\n')
+		joined_list = '  '.join(list)
+		if len(desc) + 1 + len(joined_list) <= cols: out.write(colored(color, desc) + ' ' + joined_list + '\n')
 		else:
 			lines = [colored(color, desc)]
-			for line in multi_column_formatting.format(list, cols - 8): # less 8 because of the tab
-				lines.append('\t' + colored(color, line))
+			indent = ' ' * 2
+			for line in multi_column_formatting.format(list, cols - len(indent)):
+				lines.append(indent + line)
 			lines.append('')
 			out.write('\n'.join(lines))
 
