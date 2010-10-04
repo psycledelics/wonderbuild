@@ -253,10 +253,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\src\psycle\helpers\value_mapper.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\src\psycle\helpers\value_mapper.hpp"
 					>
 				</File>
