@@ -48,6 +48,8 @@
             <in>forward_declarations.hpp</in>
             <in>graph.cpp</in>
             <in>graph.hpp</in>
+            <in>graph_xy.cpp</in>
+            <in>graph_xy.hpp</in>
             <in>lock.cpp</in>
             <in>lock.hpp</in>
             <in>main.cpp</in>
@@ -65,17 +67,7 @@
           <in>wrappers.hpp</in>
         </df>
         <df name="host">
-          <df name="schedulers">
-            <in>multi_threaded.cpp</in>
-            <in>multi_threaded.hpp</in>
-            <in>single_threaded.cpp</in>
-            <in>single_threaded.hpp</in>
-          </df>
           <in>forward_declarations.hpp</in>
-          <in>graph.cpp</in>
-          <in>graph.hpp</in>
-          <in>host.cpp</in>
-          <in>host.hpp</in>
           <in>plugin_resolver.cpp</in>
           <in>plugin_resolver.hpp</in>
           <in>scheduler.cpp</in>
@@ -142,7 +134,6 @@
           </df>
         </df>
         <in>engine.hpp</in>
-        <in>host.hpp</in>
       </df>
     </df>
     <df name="psycle-audiodrivers" root="../../psycle-audiodrivers/src">

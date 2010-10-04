@@ -1,3 +1,6 @@
+
+* don't colorise file lists, it's ugly.
+
 * --help shouldn't create the build dir.
 
 * need a way to select a script from the command line instead of just a source dir (via --src-dir).
