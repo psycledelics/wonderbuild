@@ -19,7 +19,7 @@ DefaultGroupName=Psycle
 AllowNoIcons=true
 InfoBeforeFile=..\..\doc\for-end-users\readme.txt
 InfoAfterFile=..\..\doc\for-end-users\whatsnew.txt
-OutputBaseFilename=PsycleInstallerx64
+OutputBaseFilename=PsycleInstallerx86
 SetupIconFile=..\..\pixmaps\psycle.ico
 Compression=lzma
 SolidCompression=true
@@ -29,8 +29,8 @@ AppVerName=Psycle 1.8.8
 PrivilegesRequired=poweruser
 TimeStampsInUTC=true
 DisableReadyPage=true
-ArchitecturesInstallIn64BitMode=x64
-ArchitecturesAllowed=x64
+ArchitecturesInstallIn64BitMode=
+ArchitecturesAllowed=x86 x64
 ChangesAssociations=true
 
 [Languages]
@@ -43,14 +43,16 @@ Name: deleteCacheFile; Description: deletes the cache of plugin names to force i
 Name: deleteRegistrySettings; Description: deletes the existing settings in the registry, allowing psycle to regenerate the defaults.; Flags: unchecked
 
 [Files]
+Source: ..\msvc_9.0\output\Win32\release\bin\psycle.exe; DestDir: {app}; Flags: ignoreversion 32bit; Components: Application
+Source: ..\msvc_9.0\output\Win32\release\bin\boost_date_time-vc90-mt-1_41.dll; DestDir: {app}; Flags: ignoreversion 32bit; Components: Application
+Source: ..\msvc_9.0\output\Win32\release\bin\boost_filesystem-vc90-mt-1_41.dll; DestDir: {app}; Flags: ignoreversion 32bit; Components: Application
+Source: ..\msvc_9.0\output\Win32\release\bin\boost_system-vc90-mt-1_41.dll; DestDir: {app}; Flags: ignoreversion 32bit; Components: Application
+Source: ..\msvc_9.0\output\Win32\release\bin\boost_thread-vc90-mt-1_41.dll; DestDir: {app}; Flags: ignoreversion 32bit; Components: Application
+Source: ..\msvc_9.0\output\Win32\release\bin\universalis.dll; DestDir: {app}; Flags: ignoreversion 32bit; Components: Application
+Source: ..\..\..\..\psycleSVN\build-systems\msvc\output\Win32\release\bin\psycle-plugins\*.dll; DestDir: {app}\PsyclePlugins; Flags: ignoreversion 32bit; Tasks: ; Languages: ; Excludes: crasher.dll; Components: " Open_Source_Plugins"
 Source: ..\..\doc\for-end-users\*; DestDir: {app}\docs; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: .svn, Log1.log; Components: " Documentation"
-Source: ..\msvc_9.0\output\x64\release\bin\boost_date_time-vc90-mt-1_41.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application
-Source: ..\msvc_9.0\output\x64\release\bin\boost_filesystem-vc90-mt-1_41.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application
-Source: ..\msvc_9.0\output\x64\release\bin\boost_system-vc90-mt-1_41.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application
-Source: ..\msvc_9.0\output\x64\release\bin\boost_thread-vc90-mt-1_41.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application
-Source: ..\msvc_9.0\output\x64\release\bin\psycle.exe; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application
-Source: ..\msvc_9.0\output\x64\release\bin\universalis.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application
-Source: ..\..\..\..\psycleSVN\build-systems\msvc\output\x64\release\bin\psycle-plugins\*.dll; DestDir: {app}\PsyclePlugins; Flags: ignoreversion 64bit; Components: Open_Source_Plugins
+; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+Source: ..\..\closed-source\*.dll; DestDir: {app}\PsyclePlugins\closed-source; Flags: recursesubdirs createallsubdirs 32bit; Components: Closed_Source_Plugins
 Source: ..\..\..\..\psycleSVN\psycle-plugins\src\psycle\plugins\*.txt; DestDir: {app}\Docs; Excludes: license.txt; Flags: recursesubdirs ignoreversion; Components: " Documentation"
 Source: ..\..\Skins\*; DestDir: {app}\Skins; Excludes: *.txt; Flags: recursesubdirs ignoreversion createallsubdirs; Components: " Skins"
 Source: ..\..\doc\*.psy; DestDir: {commondocs}\Psycle Songs; Flags: ignoreversion
@@ -72,11 +74,11 @@ Name: {group}\Documents\Tweakings And Commands; Filename: {app}\Docs\tweakings a
 [Run]
 Filename: {app}\psycle.exe; Description: {cm:LaunchProgram,Psycle Modular Music Creation Studio}; Flags: nowait postinstall skipifsilent; Tasks: ; Components: Application
 Filename: {tmp}\Vst-Bundle.exe; WorkingDir: {tmp}; StatusMsg: Select the location of your 32bit VST Plugins Dir (use Psycle\VstPlugins if in doubt); Flags: runascurrentuser; Components: " VstPack"; Tasks: ; Languages: 
-Filename: {tmp}\vcredist_x64.exe; WorkingDir: {tmp}; Flags: 64bit runascurrentuser; Components: InstallMSRuntimes_x64
+Filename: {tmp}\vcredist_x86.exe; Flags: 32bit runascurrentuser; WorkingDir: {tmp}; Components: InstallMSRuntimes_x86
 
 [Components]
 Name: Application; Description: Main Application and needed dlls; Flags: fixed; Types: custom compact full; Languages: 
-Name: InstallMSRuntimes_x64; Description: Download and Install Microsoft Visual c++ 2008 runtimes (x64); Types: custom full; ExtraDiskSpaceRequired: 5000000; Languages: ; Check: Is64bitInstallMode
+Name: InstallMSRuntimes_x86; Description: Download and Install Microsoft Visual c++ 2008 runtimes (x86); Types: custom full; ExtraDiskSpaceRequired: 5000000; Languages: ; Check: Is32bitInstallMode
 Name: Open_Source_Plugins; Description: Install those plugins which the developer made their sources available; Types: custom compact full
 Name: Closed_Source_Plugins; Description: Install those plugins of which we don't have the sources; Types: custom full
 Name: VstPack; Description: Download and install the freely available VST Pack.; Types: custom full; ExtraDiskSpaceRequired: 19038208
@@ -123,9 +125,9 @@ begin
     begin
        ITD_AddFile('http://heanet.dl.sourceforge.net/project/psycle/psycle/1.8.5/psycle-1.8.5-vst-bundle.exe',ExpandConstant('{tmp}\Vst-Bundle.exe'));
     end;
-    if IsComponentSelected('InstallMSRuntimes_x64') then
+    if IsComponentSelected('InstallMSRuntimes_x86') then
     begin
-      ITD_AddFile('http://download.microsoft.com/download/2/d/6/2d61c766-107b-409d-8fba-c39e61ca08e8/vcredist_x64.exe',ExpandConstant('{tmp}\vcredist_x64.exe'));
+      ITD_AddFile('http://download.microsoft.com/download/d/d/9/dd9a82d0-52ef-40db-8dab-795376989c03/vcredist_x86.exe',ExpandConstant('{tmp}\vcredist_x86.exe'));
     end;
   end;
   Result := True;
