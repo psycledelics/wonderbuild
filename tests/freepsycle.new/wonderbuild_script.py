@@ -178,10 +178,6 @@ class Wonderbuild(ScriptTask):
 			src_dir / 'psycle' / 'tests' / 'random_notes',
 			deps=(host, default_output, sequence, decay, additioner, sine), kind=ModTask.Kinds.PROG)
 
-		classic_player = UniformMod('freepsycle-test-classic-player',
-			src_dir / 'psycle' / 'tests' / 'classic_player',
-			deps=(host, default_output, sequence, decay, additioner, sine), kind=ModTask.Kinds.PROG)
-
 		if gtkmm and gnomecanvasmm and (cluttermm or cluttermm_1_0 or cluttermm_0_9 or cluttermm_0_8 or cluttermm_0_7 or cluttermm_0_6):
 			gui = UniformMod('freepsycle-gui',
 				src_dir / 'psycle' / 'front_ends' / 'gui',
