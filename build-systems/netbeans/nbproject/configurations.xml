@@ -120,10 +120,6 @@
           <in>format.hpp</in>
         </df>
         <df name="tests">
-          <df name="classic_player">
-            <in>main.cpp</in>
-            <in>main.hpp</in>
-          </df>
           <df name="random_notes">
             <in>main.cpp</in>
             <in>main.hpp</in>
