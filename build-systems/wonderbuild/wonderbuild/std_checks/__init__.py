@@ -173,6 +173,20 @@ class MingwCheckTask(BuildCheckTask):
 #endif
 '''
 
+class ClangCheckTask(BuildCheckTask):
+
+	@staticmethod
+	def shared_uid(*args, **kw): return 'clang'
+
+	def __init__(self, persistent, uid, base_cfg): BuildCheckTask.__init__(self, persistent, uid, base_cfg, compile=False)
+
+	@property
+	def source_text(self): return '''\
+#if !defined __clang__
+	#error this is not clang
+#endif
+'''
+
 class PicFlagDefinesPicCheckTask(BuildCheckTask):
 
 	@staticmethod
