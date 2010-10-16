@@ -1,6 +1,4 @@
 
-* if objects build successfully but linking was interrupted, next run, will the linking be done?
-
 * --help shouldn't create the build dir.
 
 * need a way to select a script from the command line instead of just a source dir (via --src-dir).
