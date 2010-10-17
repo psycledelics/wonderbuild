@@ -183,7 +183,7 @@ class ClangCheckTask(BuildCheckTask):
 	@property
 	def source_text(self): return '''\
 #if !defined __clang__
-	#error this is not clang
+	#error this is not llvm clang
 #endif
 '''
 

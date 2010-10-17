@@ -15,8 +15,8 @@ class Impl(object):
 
 	@staticmethod
 	def _colorgcc(cfg):
-		# TODO the clang front-end already does colorisation, so we should check for the __clang__ predefined macro before using colorgcc
-		if not out_is_dumb: return ((cfg.project.fs.cur / __file__).parent / 'colorgcc-arg')
+		# note: clang already does colorisation
+		if not out_is_dumb and not cfg.impl._kind_is_clang: return ((cfg.project.fs.cur / __file__).parent / 'colorgcc-arg')
 		else: return None
 
 	@staticmethod

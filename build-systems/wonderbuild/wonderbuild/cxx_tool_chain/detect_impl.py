@@ -6,7 +6,7 @@ from wonderbuild import UserReadableException
 from wonderbuild.logger import out, colored, is_debug, debug, silent
 from wonderbuild.subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 from wonderbuild.check_task import CheckTask, ok_color, failed_color
-from wonderbuild.std_checks import ValidCfgCheckTask, DestPlatformCheckTask, PicFlagDefinesPicCheckTask
+from wonderbuild.std_checks import ValidCfgCheckTask, ClangCheckTask, DestPlatformCheckTask, PicFlagDefinesPicCheckTask
 
 class DetectImplCheckTask(CheckTask):
 
@@ -57,14 +57,16 @@ class DetectImplCheckTask(CheckTask):
 		if cfg.ranlib_prog is None: cfg.ranlib_prog = ranlib_prog
 		
 		valid_cfg = ValidCfgCheckTask.shared(cfg)
+		clang = ClangCheckTask.shared(cfg)
 		dest_platform = DestPlatformCheckTask.shared(cfg)
 		pic = PicFlagDefinesPicCheckTask.shared(cfg)
 		cfg.dest_platform.pic_flag_defines_pic = True # allows it to be reentrant during the check itself
-		for x in sched_ctx.parallel_wait(pic, dest_platform, valid_cfg): yield x
+		for x in sched_ctx.parallel_wait(pic, dest_platform, clang, valid_cfg): yield x
 		cfg.dest_platform.bin_fmt = dest_platform.bin_fmt
 		cfg.dest_platform.os = dest_platform.os
 		cfg.dest_platform.arch = dest_platform.arch
 		cfg.dest_platform.pic_flag_defines_pic = pic.result
+		cfg.impl._kind_is_clang = clang.result
 	
 	def do_check_and_set_result(self, sched_ctx):
 		if False: yield
