@@ -78,7 +78,7 @@ class DetectImplCheckTask(CheckTask):
 				if not silent:
 					desc = self.desc + ' ... ' + cfg.cxx_prog
 					self.print_check(desc)
-				try: r, out, err = exec_subprocess_pipe([cfg.cxx_prog, '-dumpversion'], silent=True)
+				try: r, out, err = exec_subprocess_pipe([cfg.cxx_prog, '-dumpversion'], silent=True) # TODO clang has its own version
 				except Exception, e:
 					if __debug__ and is_debug: debug('cfg: ' + desc + ': ' + str(e))
 					r = 1
@@ -100,20 +100,27 @@ class DetectImplCheckTask(CheckTask):
 					r = 1
 				if r == 0: cfg.kind = 'gcc'
 				else:
-					if not silent: self.print_check(desc + ' msvc')
-					try: r, out, err = exec_subprocess_pipe(['cl'], silent=True)
+					if not silent: self.print_check(desc + ' clang++')
+					try: r, out, err = exec_subprocess_pipe(['clang++', '-dumpversion'], silent=True)
 					except Exception, e:
 						if __debug__ and is_debug: debug('cfg: ' + desc + ': ' + str(e))
 						r = 1
-					if r == 0: cfg.kind = 'msvc'
-					elif False: # pure posix support not tested
-						if not silent: self.print_check(desc + ' c++')
-						try: r, out, err = exec_subprocess_pipe(['c++'], silent=True)
+					if r == 0: cfg.kind = 'gcc' # TODO actually clang
+					else:
+						if not silent: self.print_check(desc + ' msvc')
+						try: r, out, err = exec_subprocess_pipe(['cl'], silent=True)
 						except Exception, e:
 							if __debug__ and is_debug: debug('cfg: ' + desc + ': ' + str(e))
 							r = 1
-						if r == 0: cfg.kind = 'posix'
-					else: cfg.kind = None
+						if r == 0: cfg.kind = 'msvc'
+						elif False: # pure posix support not tested
+							if not silent: self.print_check(desc + ' c++')
+							try: r, out, err = exec_subprocess_pipe(['c++'], silent=True)
+							except Exception, e:
+								if __debug__ and is_debug: debug('cfg: ' + desc + ': ' + str(e))
+								r = 1
+							if r == 0: cfg.kind = 'posix'
+						else: cfg.kind = None
 			# set the impl corresponding to the kind
 			self._select_impl()
 			# read the version
