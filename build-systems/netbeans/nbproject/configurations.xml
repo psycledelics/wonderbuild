@@ -388,7 +388,7 @@
               <in>which.hpp</in>
             </df>
           </df>
-          <in>aligned_memory_alloc.hpp</in>
+          <in>aligned_alloc.hpp</in>
           <in>check_version.cpp</in>
           <in>check_version.hpp</in>
           <in>clocks.cpp</in>
