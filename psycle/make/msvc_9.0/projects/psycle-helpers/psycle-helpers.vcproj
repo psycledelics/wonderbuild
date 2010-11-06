@@ -249,6 +249,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\ring_buffer.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\scale.hpp"
 					>
 				</File>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="psycle-helpers"
 	ProjectGUID="{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
 	RootNamespace="psycle-helpers"
@@ -249,11 +249,11 @@
 					>
 				</File>
 				<File
-					RelativePath="src\psycle\helpers\scale.hpp"
+					RelativePath=".\src\psycle\helpers\ring_buffer.hpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\psycle\helpers\value_mapper.cpp"
+					RelativePath="src\psycle\helpers\scale.hpp"
 					>
 				</File>
 				<File

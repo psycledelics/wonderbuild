@@ -509,7 +509,7 @@
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\os\aligned_memory_alloc.hpp"
+					RelativePath="src\universalis\os\aligned_alloc.hpp"
 					>
 				</File>
 				<File
