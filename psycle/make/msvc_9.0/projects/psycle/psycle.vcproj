@@ -792,18 +792,6 @@
 								>
 							</File>
 						</Filter>
-						<Filter
-							Name="midi"
-							>
-							<File
-								RelativePath="..\..\..\..\src\psycle\host\MidiLearn.cpp"
-								>
-							</File>
-							<File
-								RelativePath="..\..\..\..\src\psycle\host\MidiLearn.hpp"
-								>
-							</File>
-						</Filter>
 					</Filter>
 				</Filter>
 				<Filter
