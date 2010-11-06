@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="psycle-plugins/zephod-super-fm"
-	RootNamespace="zephod-superfm"
 	ProjectGUID="{652E2772-861D-48C6-A710-FDC1078CBA09}"
+	RootNamespace="zephod-superfm"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -259,6 +260,10 @@
 	<Files>
 		<File
 			RelativePath="..\src\psycle\plugins\zephod_super_fm\envelope.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\src\psycle\plugins\zephod_super_fm\envelope.hpp"
 			>
 		</File>
 		<File
