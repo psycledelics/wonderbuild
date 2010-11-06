@@ -433,7 +433,7 @@
 				Name="os"
 				>
 				<File
-					RelativePath="..\..\..\..\..\universalis\src\universalis\os\aligned_memory_alloc.hpp"
+					RelativePath="..\..\..\..\..\universalis\src\universalis\os\aligned_alloc.hpp"
 					>
 				</File>
 				<File
