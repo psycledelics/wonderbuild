@@ -259,18 +259,6 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\src\psycle\plugins\druttis\CDsp.h"
-			>
-		</File>
-		<File
-			RelativePath="..\src\psycle\plugins\druttis\CEnvelope.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\src\psycle\plugins\druttis\CEnvelope.h"
-			>
-		</File>
-		<File
 			RelativePath="..\src\psycle\plugins\druttis\FeedMe\CTrack.cpp"
 			>
 		</File>
@@ -280,10 +268,6 @@
 		</File>
 		<File
 			RelativePath="..\src\psycle\plugins\druttis\FeedMe\FeedMe.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\src\psycle\plugins\druttis\wtfmlib.h"
 			>
 		</File>
 	</Files>

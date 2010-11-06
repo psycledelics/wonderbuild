@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="psycle-plugins/helpers/druttis-blwtbl (bandwidth-limited wavetable)"
-	RootNameSpace="blwtbl"
 	ProjectGUID="{984A85EE-BA08-473F-9ADB-1C1692DFD77F}"
+	RootNamespace="blwtbl"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -264,6 +264,10 @@
 		</File>
 		<File
 			RelativePath="..\src\psycle\plugins\druttis\blwtbl\blwtbl.h"
+			>
+		</File>
+		<File
+			RelativePath="..\src\psycle\plugins\druttis\blwtbl\Waveform.h"
 			>
 		</File>
 	</Files>

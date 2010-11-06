@@ -1,6 +1,10 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "psycle-plugins", "psycle-plugins", "{51505DD3-DD2B-40E4-AA3A-7BE6B650A240}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\psycle-plugins\src\psycle\plugins\plugin.hpp = ..\..\psycle-plugins\src\psycle\plugins\plugin.hpp
+		..\..\psycle-plugins\src\psycle\plugin_interface.hpp = ..\..\psycle-plugins\src\psycle\plugin_interface.hpp
+	EndProjectSection
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.Debug = "False"
@@ -613,6 +617,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/helpers/drut
 	ProjectSection(ProjectDependencies) = postProject
 		{B78DFE59-051A-43FD-B489-775A4982581C} = {B78DFE59-051A-43FD-B489-775A4982581C}
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
 	EndProjectSection
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -644,6 +649,7 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/druttis-plucked-string", "..\..\psycle-plugins\msvc\PluckedString.msvc-2008.vcproj", "{CCBCA650-988B-4454-954E-3F25121AE411}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
 	EndProjectSection
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -653,6 +659,7 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/druttis-phantom", "..\..\psycle-plugins\msvc\Phantom.msvc-2008.vcproj", "{A517216B-EE2E-4473-B342-2842C5F5BCBC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
 	EndProjectSection
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
@@ -662,6 +669,7 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/druttis-feedme", "..\..\psycle-plugins\msvc\FeedMe.msvc-2008.vcproj", "{49BA720B-BEB2-42F6-9168-C6EEA8C8BE30}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
+		{F46EC0F9-8440-418D-91E7-41176165E294} = {F46EC0F9-8440-418D-91E7-41176165E294}
 	EndProjectSection
 	ProjectSection(WebsiteProperties) = preProject
 		Debug.AspNetCompiler.Debug = "True"
