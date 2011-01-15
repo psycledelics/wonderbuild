@@ -18,8 +18,8 @@ psycle-player/wonderbuild_script.py  --install-dest-dir=/ --install-prefix-dir=$
 cmd='gdb --ex run --ex quit --args' &&
 
 # choose the audio driver (gstreamer, alsa, esd ...)
-#driver=alsa &&
-driver=gstreamer &&
+driver=alsa &&
+#driver=gstreamer &&
 #driver=esd &&
 
 # song to play (passed as argument or defaults to a demo)
