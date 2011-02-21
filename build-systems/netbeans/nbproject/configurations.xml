@@ -292,9 +292,6 @@
             <in>sincos.hpp</in>
             <in>sinseq.hpp</in>
           </df>
-          <df name="todo">
-            <in>ring_buffer.hpp</in>
-          </df>
           <in>abstractiff.cpp</in>
           <in>abstractiff.hpp</in>
           <in>appleaiff.cpp</in>
@@ -324,8 +321,8 @@
           <in>riff.hpp</in>
           <in>riffwave.cpp</in>
           <in>riffwave.hpp</in>
+          <in>ring_buffer.hpp</in>
           <in>scale.hpp</in>
-          <in>value_mapper.cpp</in>
           <in>value_mapper.hpp</in>
         </df>
       </df>
