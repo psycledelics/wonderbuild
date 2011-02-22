@@ -43,7 +43,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="PSYCLE__CORE__SHARED="
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -107,7 +106,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="PSYCLE__CORE__SHARED="
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -170,7 +168,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="PSYCLE__CORE__SHARED="
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -233,7 +230,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="PSYCLE__CORE__SHARED="
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -781,6 +777,14 @@
 							</File>
 							<File
 								RelativePath="..\..\..\..\src\psycle\host\OutputDlg.hpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\src\psycle\host\WasapiConfig.cpp"
+								>
+							</File>
+							<File
+								RelativePath="..\..\..\..\src\psycle\host\WasapiConfig.hpp"
 								>
 							</File>
 							<File

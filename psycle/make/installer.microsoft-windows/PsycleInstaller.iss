@@ -138,3 +138,7 @@ begin
 	else
 		Result := True;
 end;
+
+[InnoIDE_Settings]
+UseRelativePaths=true
+
