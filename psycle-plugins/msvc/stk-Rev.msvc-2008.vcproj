@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="psycle-plugins/stk-reverbs (stk wrapper by sartorius)"
-	RootNamespace="stk-rev"
 	ProjectGUID="{9BD0D570-BD65-4CA6-8D82-F55311A160BD}"
+	RootNamespace="stk-rev"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -262,59 +262,51 @@
 			Name="stk"
 			>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\Delay.cpp"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\Delay.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\Delay.h"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\Delay.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\Effect.cpp"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\Effect.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\Effect.h"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\Filter.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\Filter.cpp"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\JCRev.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\Filter.h"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\JCRev.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\JCRev.cpp"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\NRev.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\JCRev.h"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\NRev.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\NRev.cpp"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\PRCRev.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\NRev.h"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\PRCRev.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\PRCRev.cpp"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\Stk.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\PRCRev.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\external-packages\stk-0\stk\Stk.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\external-packages\stk-0\stk\Stk.h"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\Stk.h"
 				>
 			</File>
 		</Filter>

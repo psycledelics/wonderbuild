@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="psycle-plugins/stk-plucked (stk wrapper by sartorius)"
-	RootNamespace="stk-plucked"
 	ProjectGUID="{88A154E0-A206-4880-B65D-C8B43CE45A47}"
+	RootNamespace="stk-plucked"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -262,59 +262,47 @@
 			Name="stk"
 			>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\ADSR.cpp"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\ADSR.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\BiQuad.cpp"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\BiQuad.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\Delay.cpp"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\Delay.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\DelayA.cpp"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\DelayA.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\DelayL.cpp"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\DelayL.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\Envelope.cpp"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\Envelope.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\Filter.cpp"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\Noise.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\Generator.cpp"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\OnePole.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\Instrmnt.cpp"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\OneZero.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\Noise.cpp"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\Plucked.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\OnePole.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\external-packages\stk-0\stk\OneZero.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\external-packages\stk-0\stk\Plucked.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\external-packages\stk-0\stk\stk.cpp"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\Stk.cpp"
 				>
 			</File>
 		</Filter>
