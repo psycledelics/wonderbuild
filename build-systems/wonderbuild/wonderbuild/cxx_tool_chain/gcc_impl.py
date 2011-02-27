@@ -16,7 +16,10 @@ class Impl(object):
 	@staticmethod
 	def _colorgcc(cfg):
 		# note: clang already does colorisation
-		if not out_is_dumb and not cfg.impl._kind_is_clang: return ((cfg.project.fs.cur / __file__).parent / 'colorgcc-arg')
+		if not out_is_dumb and not cfg.impl._kind_is_clang:
+			cfg.project.fs.cur.lock.acquire()
+			try: return ((cfg.project.fs.cur / __file__).parent / 'colorgcc-arg')
+			finally: cfg.project.fs.cur.lock.release()
 		else: return None
 
 	@staticmethod
@@ -160,6 +163,13 @@ class Impl(object):
 		for s in succeeded_sources:
 			path = s[1].path
 			deps = Impl._read_dep_file(path[:path.rfind('.')] + '.d', lock, cwd, first_is_dummy=True)
+			# XXX <kluge>
+			# The dep file contains the original source s[0] as the second dep,
+			# but it may be a different node instance because of the cwd.canonical_node call in read_dep_file.
+			# This would result in s[0] from not being signed/used, hence purged, while stored in the persistent pickle, which should never happen.
+			# We can either do s[0].sig or replace deps[0] with s[0].
+			deps[0] = s[0]
+			# XXX </kluge>
 			dep_sigs = [d.sig for d in deps]
 			implicit_deps[s[0]] = False, cxx_task.cfg.cxx_sig, deps, Sig(''.join(dep_sigs)).digest()
 		if failed_sources is not None: raise UserReadableException, '  '.join(str(s) for s in failed_sources)

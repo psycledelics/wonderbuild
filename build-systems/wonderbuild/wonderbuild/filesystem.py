@@ -323,8 +323,14 @@ class Node(object):
 		except AttributeError:
 			if __debug__ and is_debug: debug('fs: os.path.realpath: ' + self.abs_path)
 			path = os.path.realpath(self.abs_path)
-			self._canonical_node = self.fs.root / path
-			self._canonical_node._abs_path = path
+			self.fs.root.lock.acquire()
+			try:
+				self._canonical_node = self.fs.root / path
+				self._canonical_node._abs_path = path
+				#try: links = self._canonical_node._links
+				#except AttributeError: links = self._canonical_node._links = set()
+				#links.add(self)
+			finally: self.fs.root.lock.release()
 			return self._canonical_node
 	
 	def rel_path(self, from_node):
