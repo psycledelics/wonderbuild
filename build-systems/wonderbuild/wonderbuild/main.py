@@ -140,10 +140,10 @@ run(options, option_collector)
 			validate_options(options, option_collector.known_options)
 			raise
 
-		# Some tasks may have been scheduled without waiting for completion inside the project task (e.g. header installation),
-		# so we wait for the scheduler to have completed all the tasks before dumping the persistent pickle.
 		try: Scheduler(options).process(main_task)
-		except: project.global_purge = False # some task failed, so not all the tasks have been evaluated => we shouldn't do the global purge
+		except:
+			project.global_purge = False # some task failed, so not all the tasks have been evaluated => we shouldn't do the global purge
+			raise
 		finally: project.dump_persistent()
 
 		return main_task.result

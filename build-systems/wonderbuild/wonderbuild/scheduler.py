@@ -2,7 +2,7 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2007-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import os, threading
+import sys, os, threading
 
 from wonderbuild import UserReadableException
 from logger import is_debug, debug, colored, silent
@@ -153,6 +153,7 @@ class Scheduler(object):
 					t.start()
 					self._threads.append(t)
 			finally: remaining_start_cond.release()
+		exception_task_str = None
 		self._cond.acquire()
 		try:
 			while True:
@@ -177,6 +178,8 @@ class Scheduler(object):
 							task._sched_processed = True
 						except:
 							if task_gen is not None: self._close_gen(task)
+							try: exception_task_str = str(task)
+							except: pass
 							raise
 						else:
 							if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': task: ' + str(task) + ', in tasks: ' + str([str(t) for t in in_tasks]))
@@ -213,8 +216,8 @@ class Scheduler(object):
 			self._stop_requested = True
 			self._cond.notifyAll()
 			if not isinstance(e, UserReadableException):
-				import traceback
-				traceback.print_exc()
+				if exception_task_str is not None: print >> sys.stderr, colored('31;1', 'wonderbuild: task failed: ') + colored('31', exception_task_str)
+				import traceback; traceback.print_exc()
 		finally:
 			if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': terminated')
 			self._cond.release()

@@ -9,7 +9,7 @@ known_options = set(['silent', 'verbose', 'sync-log'])
 def generate_option_help(help):
 	help['silent'] = (None, 'suppress printing of informative messages (errors and verbose messages are still printed)')
 	help['verbose'] = ('[zone,...]', 'wonderbuild debugging trace zones, comma-separated list, or no list for all zones. (example values: exec,cfg,task,sched,fs,project,cpp,...)')
-	help['sync-log'] = (None, 'synchronizes concurrent log outputs (std out and err)')
+	help['sync-log'] = (None, 'synchronize concurrent log outputs (std out and err)')
 
 silent = True
 is_debug = False

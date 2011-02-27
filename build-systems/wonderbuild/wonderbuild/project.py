@@ -61,15 +61,18 @@ class Project(Task, SharedTaskHolder):
 					if __debug__ and is_debug: t0 = time.time()
 					pickle_abi_sig = cPickle.load(f)
 					if pickle_abi_sig != abi_sig:
-						print >> sys.stderr, colored('33', 'wonderbuild: abi sig changed: discarding persistent pickle file, full rebuild will be performed')
+						print >> sys.stderr, colored('33', 'wonderbuild: abi sig changed: discarding persistent pickle file => full rebuild will be performed')
 						persistent = PersistentDict()
-					else: persistent = cPickle.load(f)
-					if __debug__ and is_debug: debug('project: pickle: load time: ' + str(time.time() - t0) + ' s')
-				except Exception, e:
-					print >> sys.stderr, 'could not load pickle:', e
+					else:
+						persistent = cPickle.load(f)
+						if __debug__ and is_debug: debug('project: pickle: load time: ' + str(time.time() - t0) + ' s')
+				except:
+					print >> sys.stderr, colored('33', 'wonderbuild: could not load persistent pickle file => full rebuild will be performed')
+					import traceback; traceback.print_exc()
 					raise
 				finally: f.close()
-		except: persistent = PersistentDict()
+		except:
+			persistent = PersistentDict()
 		finally:
 			if gc_enabled: gc.enable()
 

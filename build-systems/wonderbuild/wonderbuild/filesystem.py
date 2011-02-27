@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2008-2011 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import sys, os, errno, stat, threading
 from collections import deque
@@ -32,13 +32,13 @@ class FileSystem(object):
 				recurse(self.root)
 				persistent[str(self.__class__)] = self.root, cwd
 		self.root._fs = self
-		self.root._exists = True
-		self.root._is_dir = True
+		self.root._exists = self.root._is_dir = True
+		self.root._is_symlink_ = False
+		self.root._canonical_node = self.root
 		self.root._height = 0
 		self.cur = self.root / cwd
 		self.cur._fs = self
-		self.cur._exists = True
-		self.cur._is_dir = True
+		self.cur._exists = self.cur._is_dir = True
 		
 	def purge(self, global_purge):
 		if global_purge: self.root._global_purge_unused_children()
@@ -62,24 +62,24 @@ if __debug__ and is_debug: all_abs_paths = set()
 
 class Node(object):
 	__slots__ = (
-		'parent', 'name', '_is_dir', '_children', '_actual_children', '_old_children', '_old_time', '_time', '_sig',
+		'parent', 'name', '_is_dir', '_is_symlink_', '_canonical_node', '_children', '_actual_children', '_old_children', '_old_time', '_time', '_sig',
 		'_used', '_old_used', '_path', '_abs_path', '_height', '_fs', '_exists', '_lock'
 	)
 
 	def __getstate__(self):
 		if self._is_dir:
-			return self.parent, self.name, self._path, self._used or self._old_used, \
+			return self.parent, self.name, self._used or self._old_used, \
 				self._children, self._actual_children or self._old_children, self._time or self._old_time
 		else:
-			return self.parent, self.name, self._path, self._used or self._old_used
+			return self.parent, self.name, self._used or self._old_used
 
 	def __setstate__(self, data):
-		self._is_dir = len(data) != 4
+		self._is_dir = len(data) != 3
 		if self._is_dir:
-			self.parent, self.name, self._path, self._old_used, \
+			self.parent, self.name, self._old_used, \
 			self._children, self._old_children, self._old_time = data
 		else:
-			self.parent, self.name, self._path, self._old_used = data
+			self.parent, self.name, self._old_used = data
 			self._children = self._old_children = self._old_time = None
 		self._actual_children = self._time = None
 		self._used = False
@@ -87,7 +87,7 @@ class Node(object):
 	def __init__(self, parent, name):
 		self.parent = parent
 		self.name = name
-		self._path = self._is_dir = self._children = self._actual_children = self._old_children = self._time = self._old_time = None
+		self._is_dir = self._children = self._actual_children = self._old_children = self._time = self._old_time = None
 		self._used = self._old_used = False
 		if __debug__ and is_debug:
 			global all_abs_paths
@@ -99,16 +99,17 @@ class Node(object):
 			all_abs_paths.add(self.abs_path)
 		# no need: if parent is not None: parent.children[name] = self
 	
-	def __str__(self): return self.path
-	
 	def _do_stat(self):
-		if __debug__ and is_debug: debug('fs: os.stat    : ' + str(self))
-		try: st = os.stat(self.path)
-		except OSError, e:
-			if e.errno != errno.ENOENT: raise
-			# may be a broken symlink
-			if __debug__ and is_debug: debug('fs: os.lstat   : ' + str(self))
-			st = os.lstat(self.path)
+		if __debug__ and is_debug:
+			debug('fs: os.lstat   : ' + self.abs_path)
+		st = os.lstat(self.abs_path)
+		self._is_symlink_ = stat.S_ISLNK(st.st_mode)
+		if self._is_symlink_:
+			if __debug__ and is_debug: debug('fs: os.stat    : ' + self.abs_path)
+			try: st = os.stat(self.abs_path)
+			except OSError, e:
+				if e.errno != errno.ENOENT: raise
+				# broken symlink
 		self._is_dir = stat.S_ISDIR(st.st_mode)
 		self._time = st.st_mtime
 
@@ -138,7 +139,7 @@ class Node(object):
 		if parent_node_to_lock is None:
 			if not self.exists:
 				if __debug__ and is_debug: debug('fs: os.makedirs: ' + str(self) + os.sep)
-				os.makedirs(self.path)
+				os.makedirs(self.abs_path)
 				# why not: self._actual_children = {}
 		else:
 			lock = parent_node_to_lock.lock
@@ -146,16 +147,24 @@ class Node(object):
 			try:
 				if not self.exists:
 					if __debug__ and is_debug: debug('fs: os.makedirs: ' + str(self) + os.sep + ' (locking: ' + str(parent_node_to_lock) + os.sep + ')')
-					os.makedirs(self.path)
+					os.makedirs(self.abs_path)
 					# why not: self._actual_children = {}
 			finally: lock.release()
 		self._exists = self._is_dir = True
+		self._is_symlink_ = False
 
 	@property
 	def is_dir(self):
 		if self._is_dir is None: self._do_stat()
 		return self._is_dir
 	
+	@property
+	def _is_symlink(self):
+		try: return self._is_symlink_
+		except AttributeError:
+			self._do_stat()
+			return self._is_symlink_
+
 	@property
 	def time(self):
 		if self._time is None: self._do_stat()
@@ -232,13 +241,11 @@ class Node(object):
 				cur._old_time = old._old_time
 				cur._is_dir = old._is_dir
 			elif old._is_dir is not None: cur._is_dir = old._is_dir
-			if old._path is not None: cur._path = old._path
 		elif old._old_children is None:
 			if old._old_time is not None:
 				cur._old_time = old._old_time
 				cur._is_dir = old._is_dir
 			elif old._is_dir is not None: cur._is_dir = old._is_dir
-			if old._path is not None: cur._path = old._path
 		else:
 			for name, node in old._old_children.iteritems():
 				try: child = cur._children[name]
@@ -277,7 +284,7 @@ class Node(object):
 		node = self
 		for name in path.split(os.sep):
 			if len(name) == 0: continue
-			if name == os.pardir: node = node.parent or node
+			if name == os.pardir: node = node.parent or node # note: 'dir/symlink/..' becomes 'dir/', which changes the meaning of the path (just like os.path.normpath does)
 			elif name != os.curdir:
 				try: node = node.children[name]
 				except KeyError:
@@ -301,26 +308,44 @@ class Node(object):
 			self._height = self.parent.height + 1
 			return self._height
 
+	def __str__(self): return self.path
+	
 	@property
 	def path(self):
-		if self._path is None: self._path = self.rel_path(self.fs.cur, allow_abs=True)
-		return self._path
+		try: return self._path
+		except AttributeError:
+			self._path = self.rel_path(self.fs.cur.canonical_node)
+			return self._path
 
-	def rel_path(self, from_node, allow_abs=False):
-		path = []
-		node1 = self
-		node2 = from_node
+	@property
+	def canonical_node(self):
+		try: return self._canonical_node
+		except AttributeError:
+			if __debug__ and is_debug: debug('fs: os.path.realpath: ' + self.abs_path)
+			path = os.path.realpath(self.abs_path)
+			self._canonical_node = self.fs.root / path
+			self._canonical_node._abs_path = path
+			return self._canonical_node
+	
+	def rel_path(self, from_node):
+		node1 = from_node
+		node2 = self
 		node1.height
 		node2.height
-		while node1._height > node2._height: node1 = node1.parent
-		while node1._height < node2._height: node2 = node2.parent
+		while node1._height > node2._height:
+			if node1.exists and node1._is_symlink: return self.rel_path(from_node.canonical_node) # because 'dir/symlink/..' is not the same as 'dir/'
+			node1 = node1.parent
+		while node1._height < node2._height:
+			node2 = node2.parent
 		while node1 is not node2:
+			if node1.exists and node1._is_symlink: return self.rel_path(from_node.canonical_node) # because 'dir/symlink/..' is not the same as 'dir/'
 			node1 = node1.parent
 			node2 = node2.parent
 		ancestor = node1
-		if allow_abs and ancestor._height == 0:
+		if ancestor._height == 0:
 			# If we need to go up to the root, it's a bit useless to use a relative dir because the absolute path is then simpler.
 			return self.abs_path
+		path = []
 		for i in xrange(from_node._height - ancestor._height): path.append(os.pardir)
 		down = self._height - ancestor._height
 		if down > 0:
@@ -347,6 +372,10 @@ class Node(object):
 		try: del self._sig
 		except AttributeError: pass
 		try: del self._exists
+		except AttributeError: pass
+		try: del self._is_symlink_
+		except AttributeError: pass
+		try: del self._canonical_node
 		except AttributeError: pass
 		if self._actual_children is not None: self._actual_children = self._old_children = None
 

@@ -96,7 +96,7 @@ class Impl(object):
 		deps = [d.replace('\\', ' ') for d in deps] # put back spaces that where temporarily removed for split() to work
 		if need_sep_fix: deps = [d.replace('/', os.sep) for d in deps]
 		lock.acquire()
-		try: deps = [cwd / d for d in deps]
+		try: cwd = cwd.canonical_node; deps = [cwd / d for d in deps]
 		finally: lock.release()
 		if __debug__ and is_debug: debug('cpp: gcc dep file: ' + dep_file_path + ': ' + str([str(d) for d in deps]))
 		return deps
@@ -130,7 +130,7 @@ class Impl(object):
 
 	def process_cxx_task(self, cxx_task, lock):
 		cwd = cxx_task.target_dir
-		args = cxx_task.cfg.cxx_args + ['-MMD', '-c'] + [cxx_task.cfg.bld_rel_path_or_name(p) for p in cxx_task._actual_sources]
+		args = cxx_task.cfg.cxx_args + ['-MMD', '-c'] + [cxx_task.cfg.bld_rel_name_or_abs_path(p) for p in cxx_task._actual_sources]
 		colorgcc = Impl._colorgcc(cxx_task.cfg)
 		if colorgcc is not None: args = [colorgcc.rel_path(cwd)] + args
 		implicit_deps = cxx_task.persistent_implicit_deps

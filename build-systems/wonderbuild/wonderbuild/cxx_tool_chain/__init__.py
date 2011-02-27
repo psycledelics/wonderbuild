@@ -79,7 +79,7 @@ class BuildCfg(ClientCfg, Task):
 		self.fhs = FHS.shared(project)
 		self.impl = self.kind = self.version = None
 		self.dest_platform = DestPlatform()
-		self.use_source_abs_paths = False
+		self.use_input_abs_paths = False
 		self.shared_checks = project
 
 	def clone(self, class_ = None):
@@ -103,7 +103,7 @@ class BuildCfg(ClientCfg, Task):
 		c.version = self.version
 		c.dest_platform = self.dest_platform
 		c.shared_checks = self.shared_checks
-		c.use_source_abs_paths = self.use_source_abs_paths
+		c.use_input_abs_paths = self.use_input_abs_paths
 		return c
 
 	@property
@@ -182,8 +182,8 @@ class BuildCfg(ClientCfg, Task):
 		if not os.path.isabs(path): path = os.path.join(os.pardir, os.pardir, path)
 		return path
 
-	def bld_rel_path_or_abs_path(self, node): return self.use_source_abs_paths and node.abs_path or self.bld_rel_path(node)
-	def bld_rel_path_or_name(self, node): return self.use_source_abs_paths and node.name or self.bld_rel_path(node)
+	def bld_rel_path_or_abs_path(self, node): return self.use_input_abs_paths and node.abs_path or self.bld_rel_path(node)
+	def bld_rel_name_or_abs_path(self, node): return self.use_input_abs_paths and node.abs_path or node.name
 
 	@property
 	def cxx_args(self):
@@ -227,7 +227,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg, Persistent):
 		'pic-static'
 	])
 
-	known_options = signed_options | set(['check-missing', 'relink-on-shared-dep-impl-change', 'source-abs-paths'])
+	known_options = signed_options | set(['check-missing', 'relink-on-shared-dep-impl-change', 'input-abs-paths'])
 
 	@staticmethod
 	def generate_option_help(help):
@@ -235,7 +235,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg, Persistent):
 
 		help['relink-on-shared-dep-impl-change'] = ('<yes|no>', 'relink clients of a shared lib if its implementation changed', 'no')
 
-		help['source-abs-paths'] = ('<yes|no>', 'use absolute paths for source input files to the compiler', 'no')
+		help['input-abs-paths'] = ('<yes|no>', 'use absolute paths for source input files to the compiler', 'no')
 
 		help['cxx']           = ('<prog>', 'use <prog> as c++ compiler', 'CXX env var: ' + os.environ.get('CXX', '(not set)'))
 		help['cxx-flags']     = ('[flags]', 'use specific c++ compiler flags', 'CXXFLAGS env var: ' + os.environ.get('CXXFLAGS', '(not set)'))
@@ -273,7 +273,7 @@ class UserBuildCfgTask(BuildCfg, OptionCfg, Persistent):
 
 		self.check_missing = o.get('check-missing', 'yes') != 'no'
 		self.ld_on_shared_dep_impl_change = o.get('relink-on-shared-dep-impl-change', 'no') == 'yes'
-		self.use_source_abs_paths = o.get('source-abs-paths', 'no') == 'yes'
+		self.use_input_abs_paths = o.get('input-abs-paths', 'no') == 'yes'
 
 		try:
 			old_sig, \
