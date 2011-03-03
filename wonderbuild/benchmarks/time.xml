@@ -723,7 +723,7 @@
 							<bar name='wonderbuild'   value=' 20.93'>-MD gcc deps</bar>
 							<bar-section>Using neither</bar-section>
 							<bar name='cmake'         value=' 20.43'>with scan of deps in /usr/include (closer to gcc -MD)</bar>
-							<bar name='waf'           value=' 21.63'>-MMD gcc deps, timestamp signatures</bar>
+							<bar name='waf'           value=' 21.63'>-MD gcc deps, timestamp signatures</bar>
 							<bar name='waf'           value=' 21.63'>waf deps, timestamp signatures</bar>
 							<bar name='autotools'     value=' 26.61'>-MD gcc deps (non recursive)</bar>
 						</bars>
@@ -736,7 +736,7 @@
 							<bar name='wonderbuild'   value=' 20.50'>-MMD gcc deps</bar>
 							<bar-section>Using neither</bar-section>
 							<bar name='cmake'         value=' 19.42'>without scan of system wide headers (like gcc -MMD)</bar>
-							<bar name='waf'           value=' 21.92'>-MD gcc deps, timestamp signatures</bar>
+							<bar name='waf'           value=' 21.92'>-MMD gcc deps, timestamp signatures</bar>
 							<bar name='scons'         value=' 23.25'>with fast tuning options</bar>
 							<bar name='autotools'     value=' 26.75'>-MMD gcc deps (non recursive)</bar>
 						</bars>
