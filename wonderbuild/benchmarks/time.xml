@@ -618,8 +618,8 @@
 			<part caption='Stressing the dependencies between libraries' anchor='scalability-lib-deps'>
 				Here we used <a href='misc/lib-dep-stress'/> to stress the dependencies between libraries.
 				<br/>
-				The generate-src script was asked to generate N libraries, each library n depending on all libraries from 0 through n -1.<br/>
-				This lead to a total of N * (N -1) / 2 dependencies.
+				The generate-src script was asked to generate N libraries, each library n depending on all libraries from 0 through n - 1.<br/>
+				This leads to a total of N * (N -1) / 2 dependencies.
 				<br/>
 				Thus:<br/>
 				- with 200 libs => 19900 dependencies,<br/>
