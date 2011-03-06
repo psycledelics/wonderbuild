@@ -3,7 +3,7 @@
 %~d0
 cd %~p0
 
-set pkgdir=..\..\..\..\..\external-packages\boost-%1
+set pkgdir=..\..\..\..\external-packages\boost-%1
 set libdir=lib-mswindows-msvc-%2
 set output=..\..\output\%3
 
@@ -13,7 +13,6 @@ if not exist %pkgdir%\include\boost (
 	..\7za\7za x -y include.tar || exit /b 1
 	del /q include.tar || exit /b 1
 	popd || exit /b 1
-
 )
 
 if not exist %output%\boost-%1-%2-stamp (

@@ -29,7 +29,8 @@
 		&quot;$(TopSrcDir)/external-packages/asio-2.2/common&quot;;
 		&quot;$(TopSrcDir)/external-packages/asio-2.2/host&quot;;
 		&quot;$(TopSrcDir)/external-packages/asio-2.2/host/pc&quot;;
-		&quot;$(TopSrcDir)/external-packages/stk-0&quot;;
+		&quot;$(TopSrcDir)/external-packages/fluidsynth/include&quot;;
+		&quot;$(TopSrcDir)/external-packages/stk-4.4.2&quot;;
 		&quot;$(TopSrcDir)/external-packages/&quot;;
 		&quot;$(TopSrcDir)/diversalis/src&quot;;
 		&quot;$(TopSrcDir)/universalis/src&quot;;

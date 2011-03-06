@@ -306,7 +306,7 @@
 				Name="devices"
 				>
 				<Filter
-					Name="output"
+					Name="audio"
 					>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\ASIOInterface.cpp"
@@ -346,6 +346,18 @@
 					</File>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\WaveOut.hpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="midi"
+					>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\MidiInput.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\MidiInput.hpp"
 						>
 					</File>
 				</Filter>
@@ -623,14 +635,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\ExListBox.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\ExListBox.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\src\psycle\host\GreetDialog.cpp"
 					>
 				</File>
@@ -753,7 +757,7 @@
 						Name="devices"
 						>
 						<Filter
-							Name="output"
+							Name="audio"
 							>
 							<File
 								RelativePath="..\..\..\..\src\psycle\host\ASIOConfig.cpp"
@@ -908,6 +912,14 @@
 							RelativePath="..\..\..\..\src\psycle\host\InstrumentEditor.hpp"
 							>
 						</File>
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\wavfiledlg.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\WavFileDlg.hpp"
+							>
+						</File>
 						<Filter
 							Name="waveform"
 							>
@@ -965,14 +977,6 @@
 							</File>
 							<File
 								RelativePath="..\..\..\..\src\psycle\host\WaveEdMixDialog.hpp"
-								>
-							</File>
-							<File
-								RelativePath="..\..\..\..\src\psycle\host\wavfiledlg.cpp"
-								>
-							</File>
-							<File
-								RelativePath="..\..\..\..\src\psycle\host\WavFileDlg.hpp"
 								>
 							</File>
 						</Filter>
@@ -1122,9 +1126,45 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="toolbars"
+					>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\ExListBox.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\ExListBox.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\MachineBar.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\MachineBar.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\SequenceBar.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\SequenceBar.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\SongBar.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\SongBar.hpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
-				Name="host"
+				Name="engine"
 				>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\cpu_time_clock.hpp"
@@ -1249,18 +1289,6 @@
 							>
 						</File>
 					</Filter>
-				</Filter>
-				<Filter
-					Name="midi"
-					>
-					<File
-						RelativePath="..\..\..\..\src\psycle\host\MidiInput.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\..\src\psycle\host\MidiInput.hpp"
-						>
-					</File>
 				</Filter>
 			</Filter>
 		</Filter>

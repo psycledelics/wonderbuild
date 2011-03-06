@@ -3,8 +3,8 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="steinberg-asio-sdk"
-	ProjectGUID="{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
 	RootNamespace="asio"
+	ProjectGUID="{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
 	>
 	<Platforms>
 		<Platform

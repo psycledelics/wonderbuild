@@ -255,11 +255,11 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\..\..\..\packageneric\src\packageneric\forced-include.private.hpp"
+			RelativePath="$(TopSrcDir)\packageneric\src\packageneric\forced-include.private.hpp"
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\packageneric\src\packageneric\pre-compiled.private.hpp"
+			RelativePath="$(TopSrcDir)\packageneric\src\packageneric\pre-compiled.private.hpp"
 			>
 		</File>
 		<File
