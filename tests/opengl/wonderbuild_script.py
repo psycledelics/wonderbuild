@@ -27,6 +27,7 @@ else:
 				for dir in (
 					self.src_dir / 'eagl',
 					self.src_dir / 'gl',
+					self.src_dir / 'gles',
 					self.src_dir / 'glut',
 					self.src_dir / 'glsl',
 					self.src_dir / 'gtkglextmm'

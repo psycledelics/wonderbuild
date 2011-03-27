@@ -104,4 +104,5 @@ class Wonderbuild(ScriptTask):
 						if f.exists: self._sources.append(f)
 						return self._sources
 
-		UniformMod('boilerplate', src_dir / 'boilerplate')
+		if cfg.dest_platform.os == 'darwin' and cfg.dest_platform.arch == 'arm':
+			UniformMod('boilerplate', src_dir / 'boilerplate')
