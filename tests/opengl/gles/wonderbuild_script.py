@@ -104,7 +104,4 @@ class Wonderbuild(ScriptTask):
 						if f.exists: self._sources.append(f)
 						return self._sources
 
-		for lesson in xrange(2, 7):
-			lesson = str(lesson).rjust(2, '0')
-			UniformMod('neheihpone-' + lesson, src_dir / 'neheiphone' / ('NeHe Lesson ' + lesson))
-
+		UniformMod('boilerplate', src_dir / 'boilerplate')
