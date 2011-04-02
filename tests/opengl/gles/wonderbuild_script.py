@@ -105,4 +105,4 @@ class Wonderbuild(ScriptTask):
 						return self._sources
 
 		if cfg.dest_platform.os == 'darwin' and cfg.dest_platform.arch == 'arm':
-			UniformMod('boilerplate', src_dir / 'boilerplate')
+			UniformMod('boilerplate-eagl', src_dir / 'boilerplates' / 'eagl')
