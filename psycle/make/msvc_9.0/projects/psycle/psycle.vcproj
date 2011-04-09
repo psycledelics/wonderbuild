@@ -571,6 +571,22 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\KeyPresetIO.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\KeyPresetIO.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\SkinIO.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\SkinIO.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\XMFile.hpp"
 					>
 				</File>
@@ -595,11 +611,27 @@
 				Name="configuration"
 				>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\CmdDef.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\ConfigStorage.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\Configuration.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\Configuration.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\PsycleConfig.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\PsycleConfig.hpp"
 					>
 				</File>
 				<File
@@ -730,14 +762,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\MidiInputDlg.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\..\src\psycle\host\MidiInputDlg.hpp"
-						>
-					</File>
-					<File
 						RelativePath="..\..\..\..\src\psycle\host\SkinDlg.cpp"
 						>
 					</File>
@@ -756,6 +780,22 @@
 					<Filter
 						Name="devices"
 						>
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\MidiInputDlg.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\MidiInputDlg.hpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\OutputDlg.cpp"
+							>
+						</File>
+						<File
+							RelativePath="..\..\..\..\src\psycle\host\OutputDlg.hpp"
+							>
+						</File>
 						<Filter
 							Name="audio"
 							>
@@ -773,14 +813,6 @@
 							</File>
 							<File
 								RelativePath="..\..\..\..\src\psycle\host\DSoundConfig.hpp"
-								>
-							</File>
-							<File
-								RelativePath="..\..\..\..\src\psycle\host\OutputDlg.cpp"
-								>
-							</File>
-							<File
-								RelativePath="..\..\..\..\src\psycle\host\OutputDlg.hpp"
 								>
 							</File>
 							<File
@@ -806,19 +838,15 @@
 					Name="machine"
 					>
 					<File
+						RelativePath="..\..\..\..\src\psycle\host\BaseParamView.hpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\..\src\psycle\host\FrameMachine.cpp"
 						>
 					</File>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\FrameMachine.hpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\..\src\psycle\host\FrameMixerMachine.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\..\src\psycle\host\FrameMixerMachine.hpp"
 						>
 					</File>
 					<File
@@ -843,6 +871,14 @@
 					</File>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\MasterDlg.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\MixerFrameView.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\MixerFrameView.hpp"
 						>
 					</File>
 					<File
