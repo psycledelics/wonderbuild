@@ -882,6 +882,14 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\..\..\src\psycle\host\NativeGraphics.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\NativeGraphics.hpp"
+						>
+					</File>
+					<File
 						RelativePath="..\..\..\..\src\psycle\host\NativeGui.cpp"
 						>
 					</File>
