@@ -371,10 +371,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\bitmap1.bmp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\..\src\psycle\host\resources\bmp00001.bmp"
 					>
 				</File>
@@ -399,11 +395,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\ico00001.ico"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\icon1.ico"
+					RelativePath="..\..\..\..\src\psycle\host\resources\greater.ico"
 					>
 				</File>
 				<File
@@ -423,19 +415,15 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\less.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\resources\less.ico"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\lessless.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\resources\lessless.ico"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\littleleft.bmp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\littleright.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\resources\lower.ico"
 					>
 				</File>
 				<File
@@ -443,23 +431,27 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\macparam.ico"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\mainfram.bmp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\resources\MasterMachine\masterbk.bmp"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\minus.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\resources\minus.ico"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\minus1.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\resources\more.ico"
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\more.bmp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\moremore.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\resources\moremore.ico"
 					>
 				</File>
 				<File
@@ -475,11 +467,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\plus.bmp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\plus1.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\resources\plus.ico"
 					>
 				</File>
 				<File
@@ -543,11 +531,19 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\Toolbar32.bmp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\resources\Slider\VuOff.bmp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\resources\Slider\VuOn.bmp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\wavedit.ico"
 					>
 				</File>
 			</Filter>
