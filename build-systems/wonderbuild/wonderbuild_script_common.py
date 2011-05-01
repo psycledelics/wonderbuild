@@ -54,6 +54,7 @@ class Wonderbuild(ScriptTask):
 			from wonderbuild.std_checks.std_math import StdMathCheckTask
 			from wonderbuild.std_checks.dlfcn import DlfcnCheckTask
 			from wonderbuild.std_checks.pthread import PThreadCheckTask
+			from wonderbuild.std_checks.openmp import OpenMPCheckTask
 			from wonderbuild.std_checks.boost import BoostCheckTask
 
 			check_cfg = self.cfg.clone()
@@ -61,9 +62,10 @@ class Wonderbuild(ScriptTask):
 			self._std_math = std_math = StdMathCheckTask.shared(check_cfg)
 			dlfcn = DlfcnCheckTask.shared(check_cfg)
 			pthread = PThreadCheckTask.shared(check_cfg)
+			openmp = OpenMPCheckTask.shared(check_cfg)
 			self._boost = boost = BoostCheckTask.shared(check_cfg, (1, 34, 1), ('signals', 'thread', 'filesystem', 'date_time'))
 
-			opt = [dlfcn, pthread, glibmm, std_math, boost]
+			opt = [dlfcn, pthread, openmp, glibmm, std_math, boost]
 			for x in sched_ctx.parallel_wait(*opt): yield x
 			self.public_deps = [x for x in opt if x]
 			self.result = True
