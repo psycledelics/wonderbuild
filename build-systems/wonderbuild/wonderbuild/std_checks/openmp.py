@@ -13,10 +13,16 @@ class OpenMPCheckTask(BuildCheckTask):
 		if cfg.kind == 'gcc':
 			cfg.cxx_flags.append('-fopenmp')
 			cfg.ld_flags.append('-fopenmp')
+		elif cfg.kind == 'msvc':
+			cfg.cxx_flags.append('-openmp')
+			cfg.ld_flags.append('-openmp')
 		else: pass # TODO
 
 	@property
 	def source_text(self): return '''\
+#if !defined _OPENMP
+	#error openmp not enabled or unsupported
+#endif
 #include <omp.h>
 void openmp() {
 	// todo do something with it for a complete check
