@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="69">
-  <logicalFolder name="root" displayName="root" projectFiles="true">
+<configurationDescriptor version="79">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df name="diversalis" root="../../diversalis/src">
       <df name="diversalis">
         <df name="detail">
@@ -57,14 +57,6 @@
             <in>root.cpp</in>
             <in>root.hpp</in>
           </df>
-        </df>
-        <df name="generic">
-          <in>base.hpp</in>
-          <in>cast.hpp</in>
-          <in>template_constructors.hpp</in>
-          <in>typenames.hpp</in>
-          <in>virtual_factory.hpp</in>
-          <in>wrappers.hpp</in>
         </df>
         <df name="host">
           <in>forward_declarations.hpp</in>
@@ -452,9 +444,8 @@
   <confs>
     <conf name="Default" type="0">
       <toolsSet>
-        <developmentServer>localhost</developmentServer>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>GNU|GNU</compilerSet>
-        <platform>2</platform>
       </toolsSet>
       <makefileType>
         <makeTool>
