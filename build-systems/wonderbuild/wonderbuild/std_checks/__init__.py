@@ -68,7 +68,7 @@ class DestPlatformCheckTask(BuildCheckTask):
 #elif defined _WIN64 || defined _WIN32
 	#define WONDERBUILD__OS "win"
 #elif defined __unix__ || defined unix
-	#define WONDERBUILD__OS "generic"
+	#define WONDERBUILD__OS "unix"
 #else
 	#error unkown operating system
 #endif
