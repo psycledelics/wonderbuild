@@ -31,13 +31,10 @@ else:
 					'psycle-core',
 					'psycle-audiodrivers',
 					'psycle-player',
-					'psycle-plugins'
+					'psycle-plugins',
+					'freepsycle'
 				)
 			]
 
-			if (self.src_dir.parent.parent / 'freepsycle').exists:
-				tasks.append(ScriptLoaderTask.shared(self.project, self.src_dir.parent.parent / 'freepsycle'))
-				
 			for x in sched_ctx.parallel_wait(*tasks): yield x
 			for t in tasks: self.default_tasks += t.script_task.default_tasks
-
