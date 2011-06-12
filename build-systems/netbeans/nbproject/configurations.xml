@@ -28,14 +28,12 @@
           <in>buffer.cpp</in>
           <in>buffer.hpp</in>
           <in>engine.hpp</in>
-          <in>event.hpp</in>
           <in>exception.hpp</in>
           <in>forward_declarations.hpp</in>
           <in>graph.cpp</in>
           <in>graph.hpp</in>
           <in>named.hpp</in>
           <in>reference_counter.hpp</in>
-          <in>sample.hpp</in>
           <in>sequence.cpp</in>
           <in>sequence.hpp</in>
         </df>
