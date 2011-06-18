@@ -3,6 +3,7 @@
   it would allow for build errors to print the path of the original sources instead of the staged-installed ones.
   This would avoid the user to have to translate the path to correct the original source file.
   e.g.: build error in ../../staged-install/usr/local/include/xxx instead of xxx/src/xxx.
+  Note: it would also allow #pragma once to work reliably with pre-compiled headers.
 
 * --help shouldn't create the build dir.
 
