@@ -7,7 +7,7 @@ from wonderbuild.cxx_tool_chain import MultiBuildCheckTask, BuildCheckTask, ok_c
 class StdMathCheckTask(MultiBuildCheckTask):
 
 	@staticmethod
-	def shared_uid(*args, **kw): return 'c++-std-math'
+	def shared_uid(*args, **kw): return 'std-math'
 
 	def do_check_and_set_result(self, sched_ctx):
 		t = StdMathCheckTask.SubCheckTask.shared(self, True)
@@ -34,7 +34,9 @@ class StdMathCheckTask(MultiBuildCheckTask):
 		if self.m: cfg.libs.append('m')
 
 	@property
-	def source_text(self): return '''\
+	def source_text(self):
+		if self.base_cfg.lang in ('c++', 'objective-c++'):
+			return '''\
 #include <cmath>
 double math() {
 	float  const f(std::sin(1.f));
@@ -42,7 +44,15 @@ double math() {
 	return d + f;
 }
 '''
-	
+		else: return '''\
+#include <math.h>
+double math() {
+	float  const f = sinf(1.f);
+	double const d = sin (1. );
+	return d + f;
+}
+'''
+
 	class SubCheckTask(BuildCheckTask):
 		@staticmethod
 		def shared_uid(outer, m): return outer.uid + '-with' + (not m and 'out' or '') + '-lm'

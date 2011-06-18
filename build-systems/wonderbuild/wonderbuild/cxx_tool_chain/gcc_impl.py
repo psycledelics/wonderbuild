@@ -16,7 +16,7 @@ class Impl(object):
 	@staticmethod
 	def _colorgcc(cfg):
 		# note: clang already does colorisation
-		if not out_is_dumb and not cfg.impl._kind_is_clang:
+		if not out_is_dumb and not cfg.impl.kind_is_clang:
 			cfg.project.fs.cur.lock.acquire()
 			try: return ((cfg.project.fs.cur / __file__).parent / 'colorgcc-arg')
 			finally: cfg.project.fs.cur.lock.release()

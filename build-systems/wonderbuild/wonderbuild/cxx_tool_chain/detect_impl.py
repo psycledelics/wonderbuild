@@ -66,7 +66,7 @@ class DetectImplCheckTask(CheckTask):
 		cfg.dest_platform.os = dest_platform.os
 		cfg.dest_platform.arch = dest_platform.arch
 		cfg.dest_platform.pic_flag_defines_pic = pic.result
-		cfg.impl._kind_is_clang = clang.result
+		cfg.impl.kind_is_clang = clang.result
 	
 	def do_check_and_set_result(self, sched_ctx):
 		if False: yield

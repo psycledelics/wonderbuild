@@ -1,4 +1,9 @@
 
+* When a dependent module is built locally, if the include path prepends the source dir of that module,
+  it would allow for build errors to print the path of the original sources instead of the staged-installed ones.
+  This would avoid the user to have to translate the path to correct the original source file.
+  e.g.: build error in ../../staged-install/usr/local/include/xxx instead of xxx/src/xxx.
+
 * --help shouldn't create the build dir.
 
 * need a way to select a script from the command line instead of just a source dir (via --src-dir).
@@ -7,8 +12,9 @@
 
 * generate .pc files.
 
-* versionned libs. (also take care of relinking clients of shared libs when their version changed)
+* versionned libs; also take care of relinking clients of shared libs when their version changed.
 
-* rewrite colorgcc in python.
+* rewrite colorgcc in python; low priority, since clang already has colors natively.
 
 * experiment with beta-mode like tup.
+

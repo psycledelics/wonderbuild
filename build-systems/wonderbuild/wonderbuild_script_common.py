@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2009-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2009-2011 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 
 ##############################################################################
@@ -14,7 +14,7 @@
 
 
 from wonderbuild.script import ScriptTask, ScriptLoaderTask
-from wonderbuild.cxx_tool_chain import PreCompileTasks
+from wonderbuild.cxx_tool_chain import UserBuildCfgTask, PreCompileTasks
 
 class Wonderbuild(ScriptTask):
 	@property
@@ -31,7 +31,6 @@ class Wonderbuild(ScriptTask):
 			return self._pch
 
 	def __call__(self, sched_ctx):
-		from wonderbuild.cxx_tool_chain import UserBuildCfgTask
 		cfg = UserBuildCfgTask.shared(self.project)
 		for x in sched_ctx.parallel_wait(cfg): yield x
 		self._cfg = cfg = cfg.clone()
@@ -52,20 +51,22 @@ class Wonderbuild(ScriptTask):
 		def __call__(self, sched_ctx):
 			from wonderbuild.cxx_tool_chain import PkgConfigCheckTask
 			from wonderbuild.std_checks.std_math import StdMathCheckTask
-			from wonderbuild.std_checks.dlfcn import DlfcnCheckTask
-			from wonderbuild.std_checks.pthread import PThreadCheckTask
-			from wonderbuild.std_checks.openmp import OpenMPCheckTask
+			from wonderbuild.std_checks.std_cxx0x import StdCxx0xCheckTask
 			from wonderbuild.std_checks.boost import BoostCheckTask
+			from wonderbuild.std_checks.openmp import OpenMPCheckTask
+			from wonderbuild.std_checks.pthread import PThreadCheckTask
+			from wonderbuild.std_checks.dlfcn import DlfcnCheckTask
 
 			check_cfg = self.cfg.clone()
-			glibmm = PkgConfigCheckTask.shared(check_cfg, ['glibmm-2.4', 'gmodule-2.0', 'gthread-2.0'])
 			self._std_math = std_math = StdMathCheckTask.shared(check_cfg)
-			dlfcn = DlfcnCheckTask.shared(check_cfg)
-			pthread = PThreadCheckTask.shared(check_cfg)
-			openmp = OpenMPCheckTask.shared(check_cfg)
+			std_cxx0x = StdCxx0xCheckTask.shared(check_cfg)
 			self._boost = boost = BoostCheckTask.shared(check_cfg, (1, 34, 1), ('signals', 'thread', 'filesystem', 'date_time'))
+			openmp = OpenMPCheckTask.shared(check_cfg)
+			pthread = PThreadCheckTask.shared(check_cfg)
+			dlfcn = DlfcnCheckTask.shared(check_cfg)
+			glibmm = PkgConfigCheckTask.shared(check_cfg, ['glibmm-2.4', 'gmodule-2.0', 'gthread-2.0'])
 
-			opt = [dlfcn, pthread, openmp, glibmm, std_math, boost]
+			opt = [std_math, std_cxx0x, boost, openmp, pthread, dlfcn, glibmm]
 			for x in sched_ctx.parallel_wait(*opt): yield x
 			self.public_deps = [x for x in opt if x]
 			self.result = True
