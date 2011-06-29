@@ -35,10 +35,7 @@ class Wonderbuild(ScriptTask):
 		for x in sched_ctx.parallel_wait(cfg): yield x
 		self._cfg = cfg = cfg.clone()
 
-		if cfg.kind == 'msvc':
-			#cfg.defines['WINVER'] = '0x501' # select win xp explicitly because msvc 2008 defaults to vista
-			cfg.defines['BOOST_ALL_DYN_LINK'] = None # choose to link against boost dlls
-			cfg.cxx_flags += ['-EHa', '-MD'] # basic compilation flags required
+		if cfg.kind == 'msvc': cfg.cxx_flags.append('-EHa') # Asynchronous exception handling is useful for the host to be able to catch plugin crashes.
 
 		cfg.defines['UNIVERSALIS__META__PACKAGE__NAME'] = '"psycle"'
 		cfg.defines['UNIVERSALIS__META__PACKAGE__VERSION'] = 1
@@ -53,33 +50,28 @@ class Wonderbuild(ScriptTask):
 			from wonderbuild.std_checks.std_math import StdMathCheckTask
 			from wonderbuild.std_checks.std_cxx0x import StdCxx0xCheckTask
 			from wonderbuild.std_checks.boost import BoostCheckTask
+			from wonderbuild.std_checks.multithreading_support import MultithreadingSupportCheckTask
 			from wonderbuild.std_checks.openmp import OpenMPCheckTask
-			from wonderbuild.std_checks.pthread import PThreadCheckTask
-			from wonderbuild.std_checks.dlfcn import DlfcnCheckTask
+			from wonderbuild.std_checks.dynamic_loading_support import DynamicLoadingSupportCheckTask
 
 			check_cfg = self.cfg.clone()
-			self._std_math = std_math = StdMathCheckTask.shared(check_cfg)
+			std_math = StdMathCheckTask.shared(check_cfg)
 			std_cxx0x = StdCxx0xCheckTask.shared(check_cfg)
-			self._boost = boost = BoostCheckTask.shared(check_cfg, (1, 34, 1), ('signals', 'thread', 'filesystem', 'date_time'))
+			boost = BoostCheckTask.shared(check_cfg, (1, 40, 0), ('signals', 'thread', 'filesystem', 'date_time'))
+			mt = MultithreadingSupportCheckTask.shared(check_cfg)
 			openmp = OpenMPCheckTask.shared(check_cfg)
-			pthread = PThreadCheckTask.shared(check_cfg)
-			dlfcn = DlfcnCheckTask.shared(check_cfg)
+			dl = DynamicLoadingSupportCheckTask.shared(check_cfg)
 			glibmm = PkgConfigCheckTask.shared(check_cfg, ['glibmm-2.4', 'gmodule-2.0', 'gthread-2.0'])
 
-			opt = [std_math, std_cxx0x, boost, openmp, pthread, dlfcn, glibmm]
-			for x in sched_ctx.parallel_wait(*opt): yield x
-			self.public_deps = [x for x in opt if x]
-			self.result = True
+			req = [std_math, boost] # required because pre-compiled.private.hpp include them unconditionaly
+			opt = [std_cxx0x, mt, openmp, dl, glibmm]
+			for x in sched_ctx.parallel_wait(*(req + opt)): yield x
+			self.result = min(bool(r) for r in req)
+			self.public_deps = req + [x for x in opt if x]
 			for x in PreCompileTasks.__call__(self, sched_ctx): yield x
 
 		def do_cxx_phase(self): self.cfg.include_paths.append(self.top_src_dir / 'build-systems' / 'src')
 
 		@property
-		def source_text(self):
-			try: return self._source_text
-			except AttributeError:
-				s = '#include <forced-include.private.hpp>'
-				if self._boost: s += '\n#include <pre-compiled/boost.private.hpp>'
-				if self._std_math: s += '\n#include <cmath>'
-				self._source_text = s
-				return s
+		def source_text(self): return '#include <forced-include.private.hpp>\n'
+

@@ -307,12 +307,12 @@ class UserBuildCfgTask(BuildCfg, OptionCfg, Persistent):
 			self.ar_prog = o.get('ar', None) or os.environ.get('AR', None)
 			self.ranlib_prog = o.get('ranlib', None) or os.environ.get('RANLIB', None)
 			
-			if self.cxx_prog is not None: self.print_desc('user-build-cfg: cxx: ' + self.cxx_prog)
-			if len(self.cxx_flags) != 0: self.print_desc('user-build-cfg: cxx flags: ' + str(self.cxx_flags))
-			if self.ld_prog is not None: self.print_desc('user-build-cfg: ld: ' + self.ld_prog)
-			if len(self.ld_flags) != 0: self.print_desc('user-build-cfg: ld flags: ' + str(self.ld_flags))
-			if self.ar_prog is not None: self.print_desc('user-build-cfg: ar: ' + self.ar_prog)
-			if self.ranlib_prog is not None: self.print_desc('user-build-cfg: ranlib: ' + self.ranlib_prog)
+			if self.cxx_prog is not None: self.print_desc('user-provided-build-cfg-flags: cxx: ' + self.cxx_prog)
+			if len(self.cxx_flags) != 0: self.print_desc('user-provided-build-cfg-flags: cxx flags: ' + str(self.cxx_flags))
+			if self.ld_prog is not None: self.print_desc('user-provided-build-cfg-flags: ld: ' + self.ld_prog)
+			if len(self.ld_flags) != 0: self.print_desc('user-provided-build-cfg-flags: ld flags: ' + str(self.ld_flags))
+			if self.ar_prog is not None: self.print_desc('user-provided-build-cfg-flags: ar: ' + self.ar_prog)
+			if self.ranlib_prog is not None: self.print_desc('user-provided-build-cfg-flags: ranlib: ' + self.ranlib_prog)
 
 			self.persistent = \
 				self.options_sig, \
@@ -622,7 +622,7 @@ class _BatchCompileTask(Task):
 	@property
 	def cfg(self): return self.mod_task.cfg
 
-	def __str__(self): return 'batch-compile ' + self.mod_task.name + ': ' + ' '.join([str(s) for s in self.sources])
+	def __str__(self): return 'compile ' + self.mod_task.name + ': ' + ' '.join([str(s) for s in self.sources])
 
 	@property
 	def target_dir(self): return self.mod_task.obj_dir
@@ -642,7 +642,7 @@ class _BatchCompileTask(Task):
 				else: pic = 'non-pic';
 				s = [str(s) for s in self.sources]
 				s.sort()
-				self.print_desc_multi_column_format(str(self.mod_task.target) + ': batch-compiling ' + pic + ' objects from ' + self.cfg.lang, s, color)
+				self.print_desc_multi_column_format(str(self.mod_task.target) + ': compiling ' + pic + ' objects from ' + self.cfg.lang, s, color)
 			self._actual_sources = []
 			for s in self.sources:
 				node = self.target_dir / self.mod_task._unique_base_name(s)
@@ -876,8 +876,10 @@ class ModTask(ModDepPhases, ProjectTask, Persistent):
 			for s in changed_sources:
 				batches[i].append(s)
 				i = (i + 1) % sched_ctx.thread_count
+			i = 0
 			for b in batches:
 				if len(b) == 0: break
+				i += 1
 				tasks.append(_BatchCompileTask(self, b))
 			if not(__debug__ and is_debug) and not silent:
 				color = color_bg_fg_rgb((0, 150, 180), (255, 255, 255))
@@ -885,7 +887,7 @@ class ModTask(ModDepPhases, ProjectTask, Persistent):
 				else: pic = 'non-pic';
 				s = [str(s) for s in changed_sources]
 				s.sort()
-				self.print_desc_multi_column_format(str(self.target) + ': batch-compiling ' + pic + ' objects from ' + self.cfg.lang, s, color)
+				self.print_desc_multi_column_format(str(self.target) + ': compiling ' + pic + ' objects from ' + self.cfg.lang + ' using ' + str(i) + ' processes and batch-size ' + str(len(batches[0])), s, color)
 		elif self.cfg.check_missing:
 			for t in self.targets:
 				if not t.exists:

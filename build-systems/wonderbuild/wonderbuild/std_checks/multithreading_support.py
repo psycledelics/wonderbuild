@@ -1,10 +1,10 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2009-2010 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2009-2011 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 from wonderbuild.cxx_tool_chain import BuildCheckTask
 
-class MultitheadingSupportCheckTask(BuildCheckTask):
+class MultithreadingSupportCheckTask(BuildCheckTask):
 
 	@staticmethod
 	def shared_uid(*args, **kw): return 'multithreading-support'
@@ -26,10 +26,17 @@ class MultitheadingSupportCheckTask(BuildCheckTask):
 
 	@property
 	def source_text(self):
-		if cfg.dest_platform.os not in ('win', 'cygwin'):
+		if self.base_cfg.dest_platform.os not in ('win', 'cygwin'):
 			return '''\
 #if !defined _REENTRANT && !defined _PTHREADS && !defined _MT && !defined __MT__
 	#error no multithreading support
+#endif
+
+#if 0 // better check
+	#include <unistd.h>
+	#if !defined _POSIX_THREADS
+		#error no posix threads support
+	#endif
 #endif
 
 #if defined _REENTRANT
@@ -39,3 +46,30 @@ class MultitheadingSupportCheckTask(BuildCheckTask):
 	}
 #endif
 '''
+
+class PThreadCheckTask(BuildCheckTask):
+
+	@staticmethod
+	def shared_uid(*args, **kw): return 'posix-thread'
+
+	def apply_to(self, cfg):
+		if cfg.kind == 'gcc': # TODO windows/cygwin platforms
+			cfg.cxx_flags.append('-pthread')
+			cfg.ld_flags.append('-pthread')
+		else: cfg.libs.append('pthread')
+
+	@property
+	def source_text(self): return '''\
+#if 0 // better check
+	#include <unistd.h>
+	#if !defined _POSIX_THREADS
+		#error no posix threads support
+	#endif
+#endif
+
+#include <pthread.h>
+void pthread() {
+	pthread_t self(pthread_self());
+}
+'''
+

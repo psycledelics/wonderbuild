@@ -346,6 +346,7 @@
           <in>pack.hpp</in>
           <in>pragma.hpp</in>
           <in>restrict.hpp</in>
+          <in>setup_feature_test_macros.hpp</in>
           <in>setup_optimizations.hpp</in>
           <in>setup_warnings.hpp</in>
           <in>stringize.hpp</in>
@@ -369,6 +370,9 @@
           <in>project.private.hpp</in>
         </df>
         <df name="os">
+          <df name="detail">
+            <in>clocks.hpp</in>
+          </df>
           <df name="todo">
             <df name="bohan">
               <in>signal.hpp</in>
@@ -399,17 +403,14 @@
         </df>
         <df name="stdlib">
           <df name="detail">
-            <in>boost_xtime.hpp</in>
-            <in>duration.hpp</in>
-            <in>hiresolution_clock.hpp</in>
-            <in>utc_time.hpp</in>
           </df>
+          <in>chrono.hpp</in>
           <in>condition.hpp</in>
           <in>cstdint.hpp</in>
-          <in>date_time.hpp</in>
           <in>exception.hpp</in>
           <in>exception.stdlib.cpp</in>
           <in>mutex.hpp</in>
+          <in>ratio.hpp</in>
           <in>stdc_secure_lib.hpp</in>
           <in>thread.hpp</in>
         </df>

@@ -120,7 +120,8 @@ class BoostCheckTask(MultiBuildCheckTask):
 			else:
 				toolset = ''
 				versioned_toolset = None
-			if versioned_toolset is not None:
+			for x in link_check(): yield x
+			if not self.result and versioned_toolset is not None:
 				for x in link_check(toolset=versioned_toolset, lib_version=lib_version): yield x
 			if not self.result:
 				for x in link_check(toolset=toolset, lib_version=lib_version): yield x
@@ -130,8 +131,6 @@ class BoostCheckTask(MultiBuildCheckTask):
 				for x in link_check(toolset=toolset): yield x
 			if not self.result:
 				for x in link_check(lib_version=lib_version): yield x
-			if not self.result:
-				for x in link_check(): yield x
 
 	class ReadVersion(BuildCheckTask):
 	

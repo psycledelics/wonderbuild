@@ -1,16 +1,13 @@
 // This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-// copyright 2002-2008 members of the psycle project http://psycle.pastnotecut.org ; johan boule <bohan@jabber.org>
+// copyright 2002-2011 members of the psycle project http://psycle.pastnotecut.org ; johan boule <bohan@jabber.org>
 
 ///\file \brief inclusions of C/C++'s standard lib headers to be pre-compiled.
 
-#ifndef PSYCLE__BUILD_SYSTEMS__PRE_COMPILED__STANDARD__INCLUDED
-#define PSYCLE__BUILD_SYSTEMS__PRE_COMPILED__STANDARD__INCLUDED
 #pragma once
-
 #include <diversalis.hpp>
-#if defined DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION // if the compiler supports pre-compilation
+#ifdef DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION // if the compiler supports pre-compilation
 
-	#if defined DIVERSALIS__COMPILER__MICROSOFT
+	#ifdef DIVERSALIS__COMPILER__MICROSOFT
 		#pragma message("pre-compiling " __FILE__ " ...")
 	#endif
 
@@ -47,6 +44,13 @@
 	//#include <utility>
 	//#include <valarray>
 	#include <vector>
+	#ifdef DIVERSALIS__COMPILER__FEATURE__CXX0X
+		#include <thread>
+		#include <mutex>
+		#include <condition_variable>
+		#include <ratio>
+		#include <chrono>
+	#endif
 
 	// c headers
 	#include <cassert>
@@ -56,22 +60,23 @@
 	#include <climits>
 	#include <cerrno>
 	//#include <clocale>
-	#include <cmath>
 	//#include <csetjmp>
 	//#include <csignal>
 	//#include <cstdarg>
 	#include <cstddef>
-	//#include <cstdint> // C1999, so not in C++1998
 	#include <cstdio>
 	#include <cstdlib>
 	#include <cstring>
 	//#include <ctime>
 	//#include <cwchar>
 	//#include <cwctype>
+	#include <cmath>
+	#ifdef DIVERSALIS__COMPILER__FEATURE__CXX0X
+		#include <cstdint> // C1999, so not in C++1998
+	#endif
 
-	#if defined DIVERSALIS__COMPILER__MICROSOFT
+	#ifdef DIVERSALIS__COMPILER__MICROSOFT
 		#pragma message("pre-compiling " __FILE__ " ... done")
 	#endif
 #endif
 
-#endif

@@ -38,22 +38,26 @@ class Wonderbuild(ScriptTask):
 		diversalis = diversalis.mod_dep_phases
 		cfg = common.cfg.clone()
 
-		from wonderbuild import UserReadableException
 		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, ModTask
-		from wonderbuild.std_checks.dlfcn import DlfcnCheckTask
-		from wonderbuild.std_checks.pthread import PThreadCheckTask
+		from wonderbuild.std_checks.std_math import StdMathCheckTask
+		from wonderbuild.std_checks.std_cxx0x import StdCxx0xCheckTask
 		from wonderbuild.std_checks.boost import BoostCheckTask
+		from wonderbuild.std_checks.multithreading_support import MultithreadingSupportCheckTask
+		from wonderbuild.std_checks.openmp import OpenMPCheckTask
+		from wonderbuild.std_checks.dynamic_loading_support import DynamicLoadingSupportCheckTask
 		from wonderbuild.std_checks.winmm import WinMMCheckTask
-		from wonderbuild.install import InstallTask
-		
-		check_cfg = cfg.clone()
-		glibmm = PkgConfigCheckTask.shared(check_cfg, ['glibmm-2.4', 'gmodule-2.0', 'gthread-2.0'])
-		dlfcn = DlfcnCheckTask.shared(check_cfg)
-		pthread = PThreadCheckTask.shared(check_cfg)
-		boost = BoostCheckTask.shared(check_cfg, (1, 34, 1), ('signals', 'thread', 'filesystem', 'date_time'))
-		boost_test = BoostCheckTask.shared(check_cfg, (1, 34, 1), ('unit_test_framework',))
-		winmm = WinMMCheckTask.shared(check_cfg)
 
+		check_cfg = cfg.clone()
+		std_math = StdMathCheckTask.shared(check_cfg)
+		std_cxx0x = StdCxx0xCheckTask.shared(check_cfg)
+		boost = BoostCheckTask.shared(check_cfg, (1, 40, 0), ('signals', 'thread', 'filesystem', 'date_time'))
+		boost_test = BoostCheckTask.shared(check_cfg, (1, 40, 0), ('unit_test_framework',))
+		mt = MultithreadingSupportCheckTask.shared(check_cfg)
+		openmp = OpenMPCheckTask.shared(check_cfg)
+		dl = DynamicLoadingSupportCheckTask.shared(check_cfg)
+		glibmm = PkgConfigCheckTask.shared(check_cfg, ['glibmm-2.4', 'gmodule-2.0', 'gthread-2.0'])
+		winmm = WinMMCheckTask.shared(check_cfg)
+		
 		CommonPch = common.Pch
 		class Pch(CommonPch):
 			def __call__(self, sched_ctx):
@@ -70,6 +74,9 @@ class Wonderbuild(ScriptTask):
 		common.__class__.Pch = Pch # overrides the common pch
 		pch = common.pch
 
+		from wonderbuild import UserReadableException
+		from wonderbuild.install import InstallTask
+
 		class UniversalisMod(ModTask):
 			def __init__(self):
 				name = 'universalis'
@@ -78,10 +85,10 @@ class Wonderbuild(ScriptTask):
 				
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
-				self.public_deps = [diversalis, boost]
+				self.public_deps = [diversalis, std_math, boost, mt, dl]
 				if self.cfg.dest_platform.os == 'win': self.public_deps.append(winmm)
 				req = self.public_deps + self.private_deps
-				opt = [dlfcn, pthread, glibmm]
+				opt = [std_cxx0x, openmp, glibmm]
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]

@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2006-2010 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2006-2011 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 from wonderbuild import UserReadableException
 from wonderbuild.cxx_tool_chain import BuildCheckTask, ok_color, failed_color
@@ -11,14 +11,14 @@ class ValidCfgCheckTask(BuildCheckTask):
 	'a check to simply test whether the user-provided compiler flags are correct'
 
 	@staticmethod
-	def shared_uid(*args, **kw): return 'valid-cfg'
+	def shared_uid(*args, **kw): return 'valid-user-provided-build-cfg-flags'
 
 	@property
 	def source_text(self): return '' # the base class already adds a main() function
 
 	def __call__(self, sched_ctx):
 		for x in BuildCheckTask.__call__(self, sched_ctx): yield x
-		if not self: raise UserReadableException, str(self) + ': invalid user-provided flags'
+		if not self: raise UserReadableException, str(self) + ': invalid user-provided build cfg flags'
 
 class DestPlatformCheckTask(BuildCheckTask):
 
@@ -33,7 +33,7 @@ class DestPlatformCheckTask(BuildCheckTask):
 	#define WONDERBUILD__BIN_FMT "elf"
 #elif defined __APPLE__ && defined __MACH__
 	#define WONDERBUILD__BIN_FMT "mac-o"
-#elif defined _WIN32 || defined __CYGWIN__ || defined __MSYS__ || defined _UWIN
+#elif defined _WIN32 /* note: is also defined when _WIN64 is defined */ || defined __CYGWIN__ || defined __MSYS__ || defined _UWIN
 	#define WONDERBUILD__BIN_FMT "pe"
 #else
 	#error unkown binary format
@@ -65,7 +65,7 @@ class DestPlatformCheckTask(BuildCheckTask):
 	#define WONDERBUILD__OS "msys"
 #elif defined _UWIN__
 	#define WONDERBUILD__OS "uwin"
-#elif defined _WIN64 || defined _WIN32
+#elif defined _WIN32
 	#define WONDERBUILD__OS "win"
 #elif defined __unix__ || defined unix
 	#define WONDERBUILD__OS "unix"
@@ -168,7 +168,7 @@ class MingwCheckTask(BuildCheckTask):
 
 	@property
 	def source_text(self): return '''\
-#if !defined __MINGW32__
+#if !defined __MINGW32__ // note: is also defined when __MINGW64__ is defined
 	#error this is not mingw gcc
 #endif
 '''
