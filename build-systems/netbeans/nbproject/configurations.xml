@@ -403,6 +403,10 @@
         </df>
         <df name="stdlib">
           <df name="detail">
+            <df name="chrono">
+              <in>duration_and_time_point.hpp</in>
+              <in>measure_clock.hpp</in>
+            </df>
           </df>
           <in>chrono.hpp</in>
           <in>condition.hpp</in>
