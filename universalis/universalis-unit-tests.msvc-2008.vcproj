@@ -4,6 +4,8 @@
 	Version="9.00"
 	Name="universalis-unit-tests"
 	ProjectGUID="{15447E72-E8B4-4545-AC7B-091E68221C41}"
+	RootNamespace="universalis-unit-tests"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -75,7 +77,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="$(TargetPath) --log_level=test_suite --report_level=detailed"
+				CommandLine="$(TargetPath) $(BoostUnitTestProgramCommandArguments)"
 			/>
 		</Configuration>
 		<Configuration
@@ -137,7 +139,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="$(TargetPath) --log_level=test_suite --report_level=detailed"
+				CommandLine="$(TargetPath) $(BoostUnitTestProgramCommandArguments)"
 			/>
 		</Configuration>
 		<Configuration
@@ -199,7 +201,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="$(TargetPath) --log_level=test_suite --report_level=detailed"
+				CommandLine="$(TargetPath) $(BoostUnitTestProgramCommandArguments)"
 			/>
 		</Configuration>
 		<Configuration
@@ -261,14 +263,14 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="$(TargetPath) --log_level=test_suite --report_level=detailed"
+				CommandLine="$(TargetPath) $(BoostUnitTestProgramCommandArguments)"
 			/>
 		</Configuration>
 	</Configurations>
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{B78DFE59-051A-43FD-B489-775A4982581C}"
-			RelativePathToProject=".\universalis.msvc-2008.vcproj"
+			RelativePathToProject="..\..\universalis\universalis.msvc-2008.vcproj"
 		/>
 	</References>
 	<Files>

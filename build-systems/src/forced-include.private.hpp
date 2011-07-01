@@ -6,10 +6,17 @@
 
 #pragma once
 
+#ifndef DIVERSALIS__OS__MICROSOFT__REQUIRED_VERSION
 #define DIVERSALIS__OS__MICROSOFT__REQUIRED_VERSION 0x500 // win2k. defines WINVER, _WIN32_WINDOWS, and _WIN32_NT
+#endif
 
+#ifndef BOOST_ALL_DYN_LINK
 #define BOOST_ALL_DYN_LINK
+#endif
+
+#ifndef BOOST_THREAD_USE_DLL
 #define BOOST_THREAD_USE_DLL
+#endif
 
 #include <universalis/compiler/setup_feature_test_macros.hpp>
 #include <universalis/compiler/setup_warnings.hpp>
