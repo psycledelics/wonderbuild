@@ -4,4 +4,4 @@ set -x &&
 
 cd $(dirname $0) &&
 
-./wonderbuild_script.py --cxx-flags='-O0 -g'
+./wonderbuild_script.py --cxx-flags='-O0 -ggdb3 -Wall'
