@@ -20,7 +20,7 @@ cp -axl $dest/debug/* $dest/merge &&
 
 # choose either gdb, valgrind, alleyoop ...
 #cmd=valgrind &&
-#cmd="alleyoop --recursive $(pwd) --" &&
+#cmd="alleyoop --recursive $(cd ../.. && pwd) --" &&
 cmd='gdb --ex run --ex quit --args' &&
 
 # choose the audio driver (gstreamer, alsa, esd ...)

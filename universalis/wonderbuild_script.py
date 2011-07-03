@@ -113,6 +113,7 @@ class Wonderbuild(ScriptTask):
 								in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)))
 						return self._sources
 		self._mod_dep_phases = mod_dep_phases = universalis = UniversalisMod()
+		common.pch.public_deps.append(mod_dep_phases)
 		self.default_tasks.append(mod_dep_phases.mod_phase)
 
 		class UnitTestMod(ModTask):
