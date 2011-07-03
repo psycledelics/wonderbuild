@@ -15,22 +15,11 @@ if USE_HASH_SUM: from signature import Sig
 class FileSystem(object):
 	def __init__(self, persistent):
 		cwd = os.getcwd()
-		try: self.root, old_cwd = persistent[str(self.__class__)]
+		try: self.root = persistent[str(self.__class__)]
 		except KeyError:
 			if  __debug__ and is_debug: debug('fs: all anew')
 			self.root = Node(None, os.sep)
-			persistent[str(self.__class__)] = self.root, cwd
-		else:
-			if old_cwd != cwd:
-				if  __debug__ and is_debug: debug('fs: cwd changed')
-				def recurse(node):
-					node._path = None # delete previously computed path since cwd changed
-					if node._children is not None:
-						for child in node._children.itervalues(): recurse(child)
-					if node._old_children is not None:
-						for child in node._old_children.itervalues(): recurse(child)
-				recurse(self.root)
-				persistent[str(self.__class__)] = self.root, cwd
+			persistent[str(self.__class__)] = self.root
 		self.root._fs = self
 		self.root._exists = self.root._is_dir = True
 		self.root._is_symlink_ = False
@@ -327,9 +316,6 @@ class Node(object):
 			try:
 				self._canonical_node = self.fs.root / path
 				self._canonical_node._abs_path = path
-				#try: links = self._canonical_node._links
-				#except AttributeError: links = self._canonical_node._links = set()
-				#links.add(self)
 			finally: self.fs.root.lock.release()
 			return self._canonical_node
 	

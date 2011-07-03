@@ -17,7 +17,7 @@ class CheckTask(SharedTask, OptionCfg):
 
 	@staticmethod
 	def generate_option_help(help):
-		help['recheck'] = (None, 'perform configuration checks again', 'do not recheck')
+		help['recheck'] = (None, 'perform configuration checks again', 'do not recheck unless signature changed')
 
 	def __init__(self, persistent, uid, shared_options_holder):
 		SharedTask.__init__(self, persistent, uid)

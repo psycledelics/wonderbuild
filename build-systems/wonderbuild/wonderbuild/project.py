@@ -20,9 +20,14 @@ class Project(Task, SharedTaskHolder):
 	def generate_option_help(help):
 		help['src-dir'] = ('<dir>', 'use <dir> as the source dir', 'current working dir: ' + os.getcwd())
 		help['bld-dir'] = ('<dir>', 'use <dir> as the build dir', '<src-dir>' + os.sep + '++wonderbuild')
-		help['tasks'] = ('<name,...>', 'build tasks with names <name,...>, comma-separated list', 'default')
-		help['list-tasks'] = (None, 'list the available task names')
-		help['purge-persistent'] = (None, 'purge the persistent pickle file from data that are not used by the requested tasks')
+		help['tasks'] = ('<name,...>', 'build tasks with names <name,...>, comma-separated list', 'default (use --list-tasks for detail)')
+		help['list-tasks'] = (None, 'list the available task names and exit')
+
+		help['purge-persistent'] = (
+			'[yes|no]',
+			'purge the persistent pickle file from data that are not used by the requested tasks\n'
+			'(only useful after some tasks have been removed and you want to trim their ghost signature from the pickle)',
+			'no')
 
 	def __init__(self, options, option_collector):
 		Task.__init__(self)
@@ -45,7 +50,7 @@ class Project(Task, SharedTaskHolder):
 			else: self.requested_task_aliases = (None,)
 		else: self.requested_task_aliases = None
 		
-		self.global_purge = 'purge-persistent' in options
+		self.global_purge = options.get('purge-persistent', 'no') != 'no'
 		
 		self.processsing = False
 

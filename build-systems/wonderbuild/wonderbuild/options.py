@@ -69,4 +69,5 @@ def print_help(help, out, cols):
 		v = help[k]
 		print >> out, name(k, v[0]).ljust(just), format(v[1])
 		if len(v) >= 3: print >> out, ' '.ljust(just), format('(default: ' + v[2] + ')')
+		print >> out
 

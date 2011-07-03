@@ -104,7 +104,7 @@ class Wonderbuild(ScriptTask):
 				if self.cfg.shared: self.cfg.defines['UNIVERSALIS__SHARED'] = None
 				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
 				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
-				self.cfg.include_paths.append(src_dir)
+				self.cfg.include_paths.appendleft(src_dir)
 				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 			
 			def apply_cxx_to(self, cfg):

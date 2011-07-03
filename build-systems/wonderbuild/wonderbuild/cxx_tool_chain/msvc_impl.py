@@ -47,12 +47,12 @@ class Impl(object):
 		if cfg.pch is not None:
 			pch = cfg.pch.parent / self.precompile_task_target_name(cfg.pch.name)
 			args += [
-				'-FI' + cfg.pch.name,
+				'-Fp' + cfg.bld_rel_path(pch),
 				'-Yu' + cfg.pch.name,
-				'-Fp' + cfg.bld_rel_path(pch)
+				'-FI' + cfg.pch.name
 			]
-		for p in cfg.include_paths: args.append('-I' + cfg.bld_rel_path_or_abs_path(p))
 		for i in cfg.includes: args.append('-FI' + cfg.bld_rel_path(i))
+		for p in cfg.include_paths: args.append('-I' + cfg.bld_rel_path_or_abs_path(p))
 		args += cfg.cxx_flags
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: msvc: cxx: ' + str(args))
 		return args

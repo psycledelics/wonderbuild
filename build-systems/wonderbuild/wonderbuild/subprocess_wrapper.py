@@ -9,12 +9,12 @@ from logger import out, is_debug, debug, colored
 known_options = set(['make-like-messages'])
 
 def generate_option_help(help):
-	help['make-like-messages'] = (None, 'output messages like the make build tool when executing subprocess command lines')
+	help['make-like-messages'] = ('[yes|no]', 'output messages like the make build tool when executing subprocess command lines', 'no')
 
 make_like_messages = False
 def use_options(options):
 	global make_like_messages
-	make_like_messages = 'make-like-messages' in options
+	make_like_messages = options.get('make-like-messages', 'no') != 'no'
 
 if __debug__ and is_debug:
 	import os

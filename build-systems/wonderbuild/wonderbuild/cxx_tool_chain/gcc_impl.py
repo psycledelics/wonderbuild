@@ -73,11 +73,11 @@ class Impl(object):
 		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + repr(str(v))[1:-1]) # note: assumes that cpp and python escaping work the same way
+		if cfg.pch is not None: args += ['-Winvalid-pch', '-include', cfg.bld_rel_path(cfg.pch)]
+		for i in cfg.includes: args += ['-include', cfg.bld_rel_path(i)]
 		for p in cfg.include_paths: args.append('-I' + cfg.bld_rel_path_or_abs_path(p))
 		if cfg.dest_platform.os == 'darwin':
 			for f in cfg.frameworks: args.append('-F' + f)
-		if cfg.pch is not None: args += ['-Winvalid-pch', '-include', cfg.bld_rel_path(cfg.pch)]
-		for i in cfg.includes: args += ['-include', cfg.bld_rel_path(i)]
 		args += cfg.cxx_flags
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: gcc: cxx: ' + str(args))
 		return args
@@ -163,13 +163,13 @@ class Impl(object):
 		for s in succeeded_sources:
 			path = s[1].path
 			deps = Impl._read_dep_file(path[:path.rfind('.')] + '.d', lock, cwd, first_is_dummy=True)
-			# XXX <kluge>
+			# <kluge>
 			# The dep file contains the original source s[0] as the second dep,
 			# but it may be a different node instance because of the cwd.canonical_node call in read_dep_file.
 			# This would result in s[0] from not being signed/used, hence purged, while stored in the persistent pickle, which should never happen.
 			# We can either do s[0].sig or replace deps[0] with s[0].
 			deps[0] = s[0]
-			# XXX </kluge>
+			# </kluge>
 			dep_sigs = [d.sig for d in deps]
 			implicit_deps[s[0]] = False, cxx_task.cfg.cxx_sig, deps, Sig(''.join(dep_sigs)).digest()
 		if failed_sources is not None: raise UserReadableException, '  '.join(str(s) for s in failed_sources)

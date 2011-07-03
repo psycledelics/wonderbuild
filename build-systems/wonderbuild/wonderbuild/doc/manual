@@ -38,6 +38,33 @@ Some doc for the PreCompileTasks class:
 		This is where to set self.cfg for building the pch file.
 		For example: self.cfg.include_paths
 
+Some doc for the ModDepPhases class:
+
+	Method __call__(self, sched_ctx):
+		task that check for availability of dependencies.
+		If there are missing required dependencies, self.result should be assigned False.
+		self.private_deps and self.public_deps should be filled with all required dependencies, found or not, and available optional dependencies.
+
+		If self.do_ensure_deps is later called, missing dependencies found in self.all_deps will raise an error.
+
+	Attributes public_deps, private_deps, property expose_private_deep_deps:
+		self.public_deps export compiler/linker flags to clients' build cfg with self.apply_cxx_to(cfg) and self.apply_mod_to(cfg)
+		self.private_deps don't export cxx cfg to clients of clients.
+		self.private_deps export mod cfg to clients of clients only when it's a static lib (expose_private_deep_deps True).
+
+		This is done in self.do_deps_cxx_phases, which retrieve a topologically-sorted dependency list and call their apply_cxx_to method with self.cfg.
+		self.do_deps_cxx_phases also ensures the dependencies have processed their cxx_phase.
+
+	Attribute cxx_phase:
+		task executed before clients start compiling object files (e.g. install headers)
+		This is called by clients with self.do_deps_cxx_phases, to bring dependencies up and then apply cfg with apply_cxx_to.
+
+	Methods apply_cxx_to(self, cfg), apply_mod_to(self, cfg):
+		modify the clients' cfg
+
+	Attribute mod_phase(self):
+		task executed before clients start linking the binary.
+
 ===========================================================
 
 X.setup_deps (__call__)

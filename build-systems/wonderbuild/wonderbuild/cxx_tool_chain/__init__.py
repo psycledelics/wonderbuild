@@ -231,11 +231,11 @@ class UserBuildCfgTask(BuildCfg, OptionCfg, Persistent):
 
 	@staticmethod
 	def generate_option_help(help):
-		help['check-missing'] = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'yes')
+		help['check-missing'] = ('[yes|no]', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'yes')
 
-		help['relink-on-shared-dep-impl-change'] = ('<yes|no>', 'relink clients of a shared lib if its implementation changed', 'no')
+		help['relink-on-shared-dep-impl-change'] = ('[yes|no]', 'relink clients of a shared lib if its implementation changed', 'no')
 
-		help['input-abs-paths'] = ('<yes|no>', 'use absolute paths for source input files to the compiler', 'no')
+		help['input-abs-paths'] = ('[yes|no]', 'use absolute paths for source input files to the compiler', 'no => use paths relative to the build dir')
 
 		help['cxx']           = ('<prog>', 'use <prog> as c++ compiler', 'CXX env var: ' + os.environ.get('CXX', '(not set)'))
 		help['cxx-flags']     = ('[flags]', 'use specific c++ compiler flags', 'CXXFLAGS env var: ' + os.environ.get('CXXFLAGS', '(not set)'))
@@ -244,13 +244,15 @@ class UserBuildCfgTask(BuildCfg, OptionCfg, Persistent):
 		help['ar']            = ('<prog>', 'use <prog> as static lib archiver', 'AR env var: ' + os.environ.get('AR', '(not set, defaults to ar on posix)'))
 		help['ranlib']        = ('<prog>', 'use <prog> as static lib archive indexer', 'RANLIB env var: ' + os.environ.get('RANLIB', '(not set, defaults to using the ar s flag on posix)'))
 		
-		help['static'] = ('<libs|full>',
+		help['static'] = ('<no|libs|full>',
+			'no: build dynamic, shared libs and programs\n'
 			'libs: build libs as static archives (rather than dynamic, shared libs),\n'
 			'full: like libs but also statically link programs (rather than dynamically using shared libs)',
-			'libs')
-		help['pic-static'] = (None,
-			'instruct the c++ compiler to emit pic code even for static libs and programs\n' \
-			'(shared libs are always pic regardless of this option)', 'non-pic for static libs and programs')
+			'no')
+		help['pic-static'] = ('[yes|no]',
+			'instruct the compiler to emit pic code even for static libs and programs\n'
+			'(shared libs are always pic regardless of this option)',
+			'no => non-pic for static libs and programs')
 
 		# posix compiler options -O -g -s
 		#help['optim']        = ('<0|1|n>', '...', '0')
@@ -272,9 +274,9 @@ class UserBuildCfgTask(BuildCfg, OptionCfg, Persistent):
 		o = self.options
 
 		self.check_missing = o.get('check-missing', 'yes') != 'no'
-		self.ld_on_shared_dep_impl_change = o.get('relink-on-shared-dep-impl-change', 'no') == 'yes'
-		self.use_input_abs_paths = o.get('input-abs-paths', 'no') == 'yes'
-
+		self.ld_on_shared_dep_impl_change = o.get('relink-on-shared-dep-impl-change', 'no') != 'no'
+		self.use_input_abs_paths = o.get('input-abs-paths', 'no') != 'no'
+		
 		try:
 			old_sig, \
 			self.cxx_prog, self.cxx_flags, self.pic, \
@@ -292,11 +294,11 @@ class UserBuildCfgTask(BuildCfg, OptionCfg, Persistent):
 				if e is not None: self.cxx_flags = e.split()
 				else: self.cxx_flags = []
 
-			static = o.get('static', None)
-			self.shared = static is None
+			static = o.get('static', 'no')
+			self.shared = static == 'no'
 			self.static_prog = static == 'full'
 			
-			self.pic = 'pic-static' in o # this is for programs and static libs only
+			self.pic = o.get('pic-static', 'no') != 'no' # this is for programs and static libs only
 			
 			self.ld_prog = o.get('ld', None) or os.environ.get('LD', None)
 			if 'ld-flags' in o: self.ld_flags = o['ld-flags'].split()
@@ -801,6 +803,7 @@ class ModTask(ModDepPhases, ProjectTask, Persistent):
 			deps_mod_phases = [dep.mod_phase for dep in deps if dep.mod_phase is not None]
 			sched_ctx.parallel_no_wait(*deps_mod_phases)
 		for x in self.do_deps_cxx_phases(sched_ctx): yield x
+		self.do_mod_phase()
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, because we don't need pkg-config cxx flags in the cfg sig
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.cfg)
@@ -811,7 +814,6 @@ class ModTask(ModDepPhases, ProjectTask, Persistent):
 					# XXX pkg-config and static/shared (alternative is self.cfg.static_prog or not self.cfg.shared)
 					expose_private_deep_deps=self.cfg.static_prog)
 				sched_ctx.parallel_no_wait(pkg_config_ld_flags_task)
-		self.do_mod_phase()
 		try: state = self.persistent
 		except KeyError:
 			if __debug__ and is_debug: debug('task: no state: ' + str(self))
