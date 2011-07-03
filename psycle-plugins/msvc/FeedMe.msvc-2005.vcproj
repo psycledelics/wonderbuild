@@ -3,8 +3,8 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="psycle-plugins/druttis-feedme"
-	RootNameSpace="feedme"
 	ProjectGUID="{49BA720B-BEB2-42F6-9168-C6EEA8C8BE30}"
+	RootNamespace="feedme"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -259,22 +259,6 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\src\psycle\plugins\druttis\CDsp.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\src\psycle\plugins\druttis\CDsp.h"
-			>
-		</File>
-		<File
-			RelativePath="..\src\psycle\plugins\druttis\CEnvelope.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\src\psycle\plugins\druttis\CEnvelope.h"
-			>
-		</File>
-		<File
 			RelativePath="..\src\psycle\plugins\druttis\FeedMe\CTrack.cpp"
 			>
 		</File>
@@ -284,10 +268,6 @@
 		</File>
 		<File
 			RelativePath="..\src\psycle\plugins\druttis\FeedMe\FeedMe.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\src\psycle\plugins\druttis\wtfmlib.h"
 			>
 		</File>
 	</Files>

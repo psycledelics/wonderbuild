@@ -3,8 +3,8 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="psycle-plugins/yezar-freeverb (aka arguru freeverb)"
-	RootNameSpace="arguru-freeverb"
 	ProjectGUID="{2911A2EB-A0F2-4C99-802C-ED694E557DE6}"
+	RootNamespace="arguru-freeverb"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>

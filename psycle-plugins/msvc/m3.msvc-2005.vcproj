@@ -3,8 +3,8 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="psycle-plugins/makk-m3"
-	RootNameSpace="m3"
 	ProjectGUID="{B7B85261-D124-4CF6-B12A-91D4105B3CDC}"
+	RootNamespace="m3"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -264,6 +264,10 @@
 		</File>
 		<File
 			RelativePath="..\src\psycle\plugins\m3\track.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\src\psycle\plugins\m3\track.hpp"
 			>
 		</File>
 	</Files>

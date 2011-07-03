@@ -3,8 +3,8 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="psycle-plugins/stk-shakers (stk wrapper by sartorius)"
-	RootNamespace="stk-shakers"
 	ProjectGUID="{6A82474F-4EF8-4A94-A696-7D0757F11332}"
+	RootNamespace="stk-shakers"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -262,15 +262,11 @@
 			Name="stk"
 			>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\Instrmnt.cpp"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\Shakers.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-0\stk\Shakers.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\external-packages\stk-0\stk\stk.cpp"
+				RelativePath="..\..\external-packages\stk-4.4.2\stk\Stk.cpp"
 				>
 			</File>
 		</Filter>

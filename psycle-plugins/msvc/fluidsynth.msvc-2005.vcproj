@@ -330,106 +330,106 @@
 				RelativePath="..\..\external-packages\fluidsynth\include\fluidsynth\synth.h"
 				>
 			</File>
-		<File
+			<File
 				RelativePath="..\..\external-packages\fluidsynth\include\fluidsynth\types.h"
-			>
-		</File>
-		<File
+				>
+			</File>
+			<File
 				RelativePath="..\..\external-packages\fluidsynth\include\fluidsynth\version.h"
-			>
-		</File>
-		<File
+				>
+			</File>
+			<File
 				RelativePath="..\..\external-packages\fluidsynth\include\fluidsynth\voice.h"
-			>
-		</File>
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="src"
 			>
-		<File
+			<File
 				RelativePath="..\..\external-packages\fluidsynth\src\config_win32.h"
-			>
-		</File>
-		<File
+				>
+			</File>
+			<File
 				RelativePath="..\..\external-packages\fluidsynth\src\fake_glib.cpp"
-			>
-		</File>
-		<File
+				>
+			</File>
+			<File
 				RelativePath="..\..\external-packages\fluidsynth\src\fake_glib.h"
-			>
-		</File>
+				>
+			</File>
 			<Filter
 				Name="rvoice"
 				>
-		<File
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\rvoice\fluid_adsr_env.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\rvoice\fluid_adsr_env.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\rvoice\fluid_chorus.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\rvoice\fluid_chorus.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\rvoice\fluid_iir_filter.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\rvoice\fluid_iir_filter.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\rvoice\fluid_lfo.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\rvoice\fluid_lfo.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\rvoice\fluid_phase.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\rvoice\fluid_rev.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\rvoice\fluid_rev.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\rvoice\fluid_rvoice.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\rvoice\fluid_rvoice.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\rvoice\fluid_rvoice_dsp.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\rvoice\fluid_rvoice_event.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\rvoice\fluid_rvoice_event.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\rvoice\fluid_rvoice_mixer.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\rvoice\fluid_rvoice_mixer.h"
 					>
 				</File>
@@ -455,69 +455,69 @@
 				</File>
 				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\synth\fluid_event_queue.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\synth\fluid_gen.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\synth\fluid_gen.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\synth\fluid_mod.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\synth\fluid_mod.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\synth\fluid_synth.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\synth\fluid_synth.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\synth\fluid_tuning.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\synth\fluid_tuning.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\synth\fluid_voice.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\synth\fluid_voice.h"
-			>
-		</File>
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="sfloader"
 				>
-		<File
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\sfloader\fluid_defsfont.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\sfloader\fluid_defsfont.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\sfloader\fluid_ramsfont.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\sfloader\fluid_ramsfont.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\sfloader\fluid_sfont.h"
 					>
 				</File>
@@ -527,53 +527,53 @@
 				>
 				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\utils\fluid_conv.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\utils\fluid_conv.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\utils\fluid_hash.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\utils\fluid_hash.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\utils\fluid_list.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\utils\fluid_list.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\utils\fluid_ringbuffer.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\utils\fluid_ringbuffer.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\utils\fluid_settings.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\utils\fluid_settings.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\utils\fluid_sys.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\utils\fluid_sys.h"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\utils\fluidsynth_priv.h"
 					>
 				</File>
@@ -583,12 +583,12 @@
 				>
 				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\midi\fluid_midi.c"
-			>
-		</File>
-		<File
+					>
+				</File>
+				<File
 					RelativePath="..\..\external-packages\fluidsynth\src\midi\fluid_midi.h"
-			>
-		</File>
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<File

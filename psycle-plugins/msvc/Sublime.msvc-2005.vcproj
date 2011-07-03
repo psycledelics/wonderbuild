@@ -3,8 +3,8 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="psycle-plugins/druttis-sublime"
-	RootNamespace="sublime"
 	ProjectGUID="{A5BF47C9-76B0-454D-8564-804E42CA3315}"
+	RootNamespace="sublime"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -254,11 +254,11 @@
 	<References>
 		<ProjectReference
 			ReferencedProjectIdentifier="{984A85EE-BA08-473F-9ADB-1C1692DFD77F}"
-			RelativePathToProject=".\projects\psycle-plugins\blwtbl.vcproj"
+			RelativePathToProject=".\blwtbl.msvc-2005.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{F46EC0F9-8440-418D-91E7-41176165E294}"
-			RelativePathToProject=".\projects\psycle-plugins\dsp.vcproj"
+			RelativePathToProject=".\dsp.msvc-2005.vcproj"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
@@ -272,10 +272,6 @@
 		</File>
 		<File
 			RelativePath="..\src\psycle\plugins\druttis\sublime\Globals.h"
-			>
-		</File>
-		<File
-			RelativePath="..\src\psycle\plugins\druttis\sublime\Shared.cpp"
 			>
 		</File>
 		<File

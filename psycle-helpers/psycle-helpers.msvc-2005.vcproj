@@ -249,11 +249,11 @@
 					>
 				</File>
 				<File
-					RelativePath="src\psycle\helpers\scale.hpp"
+					RelativePath=".\src\psycle\helpers\ring_buffer.hpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\psycle\helpers\value_mapper.cpp"
+					RelativePath="src\psycle\helpers\scale.hpp"
 					>
 				</File>
 				<File
@@ -376,7 +376,7 @@
 						>
 					</File>
 					<File
-						RelativePath="src\psycle\helpers\binread.h"
+						RelativePath="src\psycle\helpers\binread.hpp"
 						>
 					</File>
 					<File
