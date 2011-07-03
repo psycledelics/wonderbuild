@@ -1,6 +1,4 @@
 
-* It's not a bug with wonderbuild, but the mix of #pragma once and pch and install-dir is problematic.
-
 * --help shouldn't create the build dir.
 
 * need a way to select a script from the command line instead of just a source dir (via --src-dir).

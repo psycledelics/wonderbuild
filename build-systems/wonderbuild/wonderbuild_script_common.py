@@ -63,7 +63,13 @@ class Wonderbuild(ScriptTask):
 			dl = DynamicLoadingSupportCheckTask.shared(check_cfg)
 			glibmm = PkgConfigCheckTask.shared(check_cfg, ['glibmm-2.4', 'gmodule-2.0', 'gthread-2.0'])
 
-			req = [std_math, boost] # required because pre-compiled.private.hpp include them unconditionaly
+			diversalis = ScriptLoaderTask.shared(self.cfg.project, self.top_src_dir / 'diversalis')
+			universalis = ScriptLoaderTask.shared(self.cfg.project, self.top_src_dir / 'universalis')
+			for x in sched_ctx.parallel_wait(diversalis, universalis): yield x
+			diversalis = diversalis.script_task.mod_dep_phases
+			universalis = universalis.script_task.mod_dep_phases
+
+			req = [std_math, boost, diversalis, universalis] # required because pre-compiled.private.hpp include them unconditionaly
 			opt = [std_cxx0x, mt, openmp, dl, glibmm]
 			for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 			self.result = min(bool(r) for r in req)

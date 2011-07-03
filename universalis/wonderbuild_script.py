@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2009-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2009-2011 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 if __name__ == '__main__':
 	import sys, os
@@ -36,6 +36,7 @@ class Wonderbuild(ScriptTask):
 		diversalis = diversalis.script_task
 		self._common = common = diversalis.common
 		diversalis = diversalis.mod_dep_phases
+		pch = common.pch
 		cfg = common.cfg.clone()
 
 		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, ModTask
@@ -58,22 +59,6 @@ class Wonderbuild(ScriptTask):
 		glibmm = PkgConfigCheckTask.shared(check_cfg, ['glibmm-2.4', 'gmodule-2.0', 'gthread-2.0'])
 		winmm = WinMMCheckTask.shared(check_cfg)
 		
-		CommonPch = common.Pch
-		class Pch(CommonPch):
-			def __call__(self, sched_ctx):
-				for x in CommonPch.__call__(self, sched_ctx): yield x
-				req = [diversalis]
-				opt = []
-				for x in sched_ctx.parallel_wait(universalis.cxx_phase, *(req + opt)): yield x
-				self.result = self.result and min(bool(r) for r in req)
-				self.public_deps += req + [x for x in opt if x]
-			
-			def do_cxx_phase(self):
-				if universalis.cxx_phase.dest_dir not in self.cfg.include_paths: self.cfg.include_paths.append(universalis.cxx_phase.dest_dir)
-				CommonPch.do_cxx_phase(self)
-		common.__class__.Pch = Pch # overrides the common pch
-		pch = common.pch
-
 		from wonderbuild import UserReadableException
 		from wonderbuild.install import InstallTask
 
@@ -84,7 +69,7 @@ class Wonderbuild(ScriptTask):
 				self.cxx_phase = UniversalisMod.InstallHeaders(self.project, self.name + '-headers')
 				
 			def __call__(self, sched_ctx):
-				self.private_deps = [pch.lib_task]
+				self.private_deps = []
 				self.public_deps = [diversalis, std_math, boost, mt, dl]
 				if self.cfg.dest_platform.os == 'win': self.public_deps.append(winmm)
 				req = self.public_deps + self.private_deps
