@@ -20,8 +20,11 @@ else: # hard links unavailable, do a copy instead
 	install = shutil.copy2
 
 class InstallTask(Task, Persistent, OptionDecl):
+
+	# OptionDecl
 	known_options = set(['check-missing'])
 
+	# OptionDecl
 	@staticmethod
 	def generate_option_help(help): help['check-missing'] = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'yes')
 	
@@ -44,7 +47,8 @@ class InstallTask(Task, Persistent, OptionDecl):
 	
 	@property
 	def dest_dir(self): raise Exception, str(self.__class__) + ' did not redefine the property.'
-	
+
+	# Task	
 	def __call__(self, sched_ctx):
 		if False: yield
 		try: old_sig, sigs = self.persistent

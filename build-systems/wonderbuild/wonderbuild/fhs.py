@@ -55,9 +55,9 @@ class FHS(OptionCfg, Persistent):
 			
 			self.persistent = self.options_sig, self.dest, self.prefix_path
 
-		def dir(s): return self.dest / self.prefix_path / s
-		self.bin = dir('bin')
-		self.lib = dir('lib')
-		self.libexec = dir('libexec')
-		self.include = dir('include')
-		self.share = dir('share')
+		self.exec_prefix = self.dest / self.prefix_path
+		self.bin = self.exec_prefix / 'bin'
+		self.lib = self.exec_prefix /  'lib'
+		self.libexec = self.exec_prefix / 'libexec'
+		self.include = self.dest / self.prefix_path / 'include'
+		self.share = self.dest / self.prefix_path / 'share'

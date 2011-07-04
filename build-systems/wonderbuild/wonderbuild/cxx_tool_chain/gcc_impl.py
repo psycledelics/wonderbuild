@@ -67,6 +67,16 @@ class Impl(object):
 			return sig
 
 	@staticmethod
+	def client_cfg_cxx_args(client_cfg):
+		args = []
+		for k, v in client_cfg.defines.iteritems():
+			if v is None: args.append('-D' + k)
+			else: args.append('-D' + k + '=' + repr(str(v))[1:-1]) # note: assumes that cpp and python escaping work the same way
+		for p in client_cfg.include_paths: args.append('-I' + p.abs_path)
+		for f in client_cfg.frameworks: args.append('-F' + f)
+		return args
+
+	@staticmethod
 	def cfg_cxx_args(cfg):
 		args = [cfg.cxx_prog, '-pipe']
 		if cfg.pic and cfg.dest_platform.pic_flag_defines_pic: args.append('-fPIC')
@@ -197,6 +207,21 @@ class Impl(object):
 				if e is not None: sig.update(name + '=' + e)
 			sig = self._ld_env_sig = sig.digest()
 			return sig
+
+	@staticmethod
+	def client_cfg_ld_args(client_cfg):
+		args = []
+		for p in client_cfg.lib_paths: args.append('-L' + p.abs_path)
+		for l in client_cfg.libs: args.append('-l' + l)
+		if len(client_cfg.static_libs):
+			args.append('-Wl,-Bstatic')
+			for l in client_cfg.static_libs: args.append('-l' + l)
+		if len(client_cfg.shared_libs):
+			args.append('-Wl,-Bdynamic')
+			for l in client_cfg.shared_libs: args.append('-l' + l)
+		for f in client_cfg.frameworks: args += ['-framework', f]
+		args += client_cfg.ld_flags
+		return args
 
 	@staticmethod
 	def cfg_ld_args(cfg):

@@ -6,16 +6,19 @@ import sys, os, gc, cPickle
 
 from wonderbuild import abi_sig, UserReadableException
 from task import Task, PersistentDict, SharedTaskHolder
+from options import OptionDecl
 from script import ScriptLoaderTask
 from filesystem import FileSystem
 from logger import is_debug, debug, colored
 
 if __debug__ and is_debug: import time
 
-class Project(Task, SharedTaskHolder):
+class Project(Task, SharedTaskHolder, OptionDecl):
 
+	# OptionDecl
 	known_options = set(['src-dir', 'bld-dir', 'tasks', 'list-tasks', 'purge-persistent'])
 
+	# OptionDecl
 	@staticmethod
 	def generate_option_help(help):
 		help['src-dir'] = ('<dir>', 'use <dir> as the source dir', 'current working dir: ' + os.getcwd())
@@ -104,7 +107,8 @@ class Project(Task, SharedTaskHolder):
 			for a in task_aliases: tasks |= set(self.task_aliases[a])
 		except KeyError: raise UserReadableException, 'no such task alias: ' + a
 		return tasks
-		
+
+	# Task		
 	def __call__(self, sched_ctx):
 		if self.list_aliases:
 			keys = self.task_aliases.keys()

@@ -72,6 +72,5 @@ class Wonderbuild(ScriptTask):
 
 		def do_cxx_phase(self): self.cfg.include_paths.append(self.top_src_dir / 'build-systems' / 'src')
 
-		@property
-		def source_text(self): return '#include <forced-include.private.hpp>\n'
+		source_text = '#include <forced-include.private.hpp>\n'
 
