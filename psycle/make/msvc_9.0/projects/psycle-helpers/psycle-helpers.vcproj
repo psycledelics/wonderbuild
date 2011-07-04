@@ -237,6 +237,14 @@
 				Name="helpers"
 				>
 				<File
+					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\hexstring_to_binary.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\hexstring_to_binary.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\..\psycle-helpers\src\psycle\helpers\hexstring_to_integer.cpp"
 					>
 				</File>

@@ -415,6 +415,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\resources\MasterMachine\LedOn.bmp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\resources\less.ico"
 					>
 				</File>
@@ -435,11 +439,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\mainfram.bmp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\MasterMachine\masterbk.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\resources\MasterMachine\Master-Mixer.bmp"
 					>
 				</File>
 				<File
@@ -495,7 +495,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\..\src\psycle\host\resources\MasterMachine\slider.bmp"
+					RelativePath="..\..\..\..\src\psycle\host\resources\MasterMachine\Slide.bmp"
 					>
 				</File>
 				<File
@@ -575,6 +575,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\src\psycle\host\PresetIO.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\PresetIO.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\src\psycle\host\SkinIO.cpp"
 					>
 				</File>
@@ -636,6 +644,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\src\psycle\host\Registry.hpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\WinIniFile.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\src\psycle\host\WinIniFile.hpp"
 					>
 				</File>
 			</Filter>
@@ -886,11 +902,11 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\NativeGui.cpp"
+						RelativePath="..\..\..\..\src\psycle\host\NativeView.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\NativeGui.hpp"
+						RelativePath="..\..\..\..\src\psycle\host\NativeView.hpp"
 						>
 					</File>
 					<File
@@ -907,6 +923,14 @@
 					</File>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\NewVal.hpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\ParamList.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\ParamList.hpp"
 						>
 					</File>
 					<File
@@ -1030,14 +1054,6 @@
 						</File>
 						<File
 							RelativePath="..\..\..\..\src\psycle\host\VstEffectWnd.hpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\..\src\psycle\host\VstParamList.cpp"
-							>
-						</File>
-						<File
-							RelativePath="..\..\..\..\src\psycle\host\VstParamList.hpp"
 							>
 						</File>
 					</Filter>
@@ -1170,14 +1186,6 @@
 					Name="toolbars"
 					>
 					<File
-						RelativePath="..\..\..\..\src\psycle\host\ExListBox.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\..\src\psycle\host\ExListBox.h"
-						>
-					</File>
-					<File
 						RelativePath="..\..\..\..\src\psycle\host\MachineBar.cpp"
 						>
 					</File>
@@ -1199,6 +1207,18 @@
 					</File>
 					<File
 						RelativePath="..\..\..\..\src\psycle\host\SongBar.hpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="UIControls"
+					>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\ExListBox.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\..\src\psycle\host\ExListBox.h"
 						>
 					</File>
 				</Filter>
@@ -1341,6 +1361,14 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\src\Seib-vsthost\CVSTHost.Seib.hpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\Seib-vsthost\CVSTPreset.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\src\Seib-vsthost\CVSTPreset.hpp"
 				>
 			</File>
 			<File
