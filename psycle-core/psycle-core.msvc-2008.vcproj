@@ -277,6 +277,10 @@
 					>
 				</File>
 				<File
+					RelativePath="src\psycle\core\cpu_time_clock.hpp"
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\core\eventdriver.cpp"
 					>
 				</File>
@@ -534,10 +538,6 @@
 				</File>
 				<File
 					RelativePath="src\psycle\core\signalslib.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\core\cpu_time_clock.hpp"
 					>
 				</File>
 				<File

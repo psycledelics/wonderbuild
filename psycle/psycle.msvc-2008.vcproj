@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="psycle"
 	ProjectGUID="{C6292BF4-9E87-4176-9101-A3D29D074B35}"
 	RootNamespace="psycle"
@@ -556,10 +556,6 @@
 				</File>
 				<File
 					RelativePath="src\psycle\host\Configuration.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\configuration_options.hpp"
 					>
 				</File>
 				<File
@@ -1466,6 +1462,26 @@
 						</File>
 					</Filter>
 				</Filter>
+			</Filter>
+			<Filter
+				Name="detail"
+				>
+				<File
+					RelativePath=".\src\psycle\host\detail\config.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\detail\config.private.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\detail\project.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\detail\project.private.hpp"
+					>
+				</File>
 			</Filter>
 		</Filter>
 	</Files>
