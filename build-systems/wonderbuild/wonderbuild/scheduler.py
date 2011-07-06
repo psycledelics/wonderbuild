@@ -189,7 +189,8 @@ class Scheduler(OptionDecl):
 							if __debug__ and is_debug:
 								debug('sched: thread: ' + str(thread_id) + ': task: ' + str(task) + ', in tasks: ' + str([str(t) for t in in_tasks]))
 								# the same mesage but with 'task' prefix
-								debug('task: dep: ' + str(task) + ', in tasks: ' + str([str(t) for t in in_tasks]))
+								# commented out because that's not really accurate since tasks are filtered in parallel_wait and parallel_no_wait
+								#debug('task: dep: ' + str(task) + ', in tasks: ' + str([str(t) for t in in_tasks]))
 							task._sched_stacked = False
 							notify = 0
 							task._sched_in_task_todo_count += len(in_tasks)
