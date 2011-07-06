@@ -4,7 +4,7 @@
 	Version="9.00"
 	Name="psycle-plugins/gzero-synth"
 	RootNameSpace="gzero-synth"
-	ProjectGUID="{4F58513B-F7E3-46CD-8196-9B3E4A07AF20}"
+	ProjectGUID="{9B7FB5DC-0EAE-4338-8D77-A879A9E11D51}"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
