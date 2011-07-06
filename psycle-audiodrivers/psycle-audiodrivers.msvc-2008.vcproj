@@ -5,6 +5,7 @@
 	Name="psycle-audiodrivers"
 	ProjectGUID="{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}"
 	RootNamespace="psycle-audiodrivers"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -226,6 +227,10 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
 			RelativePathToProject="..\..\psycle-helpers\psycle-helpers.msvc-2008.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
+			RelativePathToProject="..\..\psycle-audiodrivers\asio.msvc-2008.vcproj"
 		/>
 	</References>
 	<Files>

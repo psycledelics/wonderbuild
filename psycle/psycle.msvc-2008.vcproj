@@ -274,10 +274,6 @@
 	</Configurations>
 	<References>
 		<ProjectReference
-			ReferencedProjectIdentifier="{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
-			RelativePathToProject="..\..\psycle-audiodrivers\asio.msvc-2008.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{28C015FB-3BDA-4B32-8D85-C652E9892216}"
 			RelativePathToProject=".\projects\pre-compiled-headers\pre-compiled-headers-with-mfc.msvc-2008.vcproj"
 		/>
