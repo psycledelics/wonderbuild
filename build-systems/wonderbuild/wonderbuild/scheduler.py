@@ -5,6 +5,7 @@
 import sys, os, threading
 
 from wonderbuild import UserReadableException
+from options import OptionDecl
 from logger import is_debug, debug, colored, silent
 
 is_jython = os.name == 'java' # platform.system() == 'Java'
@@ -24,9 +25,12 @@ else:
 _jobs = cpu_count * 2 # at least two threads per core is always better for i/o bound tasks
 _default_timeout = 3600.0
 
-class Scheduler(object):
+class Scheduler(OptionDecl):
+
+	# OptionDecl
 	known_options = set(['jobs', 'timeout'])
 
+	# OptionDecl
 	@staticmethod
 	def generate_option_help(help):
 		help['jobs'] = ('<count>', 'use <count> threads in the scheduler to process the tasks', 'autodetected: ' + str(cpu_count) + ' * 2 (io-bounded)')
@@ -182,7 +186,10 @@ class Scheduler(object):
 							except: pass
 							raise
 						else:
-							if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': task: ' + str(task) + ', in tasks: ' + str([str(t) for t in in_tasks]))
+							if __debug__ and is_debug:
+								debug('sched: thread: ' + str(thread_id) + ': task: ' + str(task) + ', in tasks: ' + str([str(t) for t in in_tasks]))
+								# the same mesage but with 'task' prefix
+								debug('task: dep: ' + str(task) + ', in tasks: ' + str([str(t) for t in in_tasks]))
 							task._sched_stacked = False
 							notify = 0
 							task._sched_in_task_todo_count += len(in_tasks)
@@ -227,21 +234,23 @@ class Scheduler(object):
 	def _done_or_break_cond(self): return self._done_cond() or self._stop_requested
 
 	def _parallel_wait(self, *tasks):
+		#assert self._cond is acquired
 		if __debug__ and is_debug: debug('sched: parallel_wait: ' + str([str(t) for t in tasks]))
 		tasks_to_yield = tuple(t for t in tasks if not t._sched_processed)
 		if len(tasks_to_yield) != 0:
 			if __debug__ and is_debug: debug('sched: yield tasks: ' + str([str(t) for t in tasks_to_yield]))
 			yield tasks_to_yield
 		if __debug__ and is_debug:
-			debug('sched: thread: parallel_wait done: ' + str([str(t) for t in tasks]))
+			debug('sched: parallel_wait done: ' + str([str(t) for t in tasks]))
 			for t in tasks: assert t._sched_processed, t
 	
 	def _parallel_no_wait(self, *tasks):
-		if __debug__ and is_debug: debug('sched: thread: parallel_no_wait: ' + str([str(t) for t in tasks]))
+		#assert self._cond is acquired
+		if __debug__ and is_debug: debug('sched: parallel_no_wait: ' + str([str(t) for t in tasks]))
 		notify = 0
 		for t in reversed(tasks):
 			if not t._sched_processed and not t._sched_stacked and t._sched_in_task_todo_count == 0:
-				if __debug__ and is_debug: debug('sched: thread: task pushed on stack: ' + str(t))
+				if __debug__ and is_debug: debug('sched: task pushed on stack: ' + str(t))
 				self._task_stack.append(t)
 				t._sched_stacked = True
 				notify += 1
