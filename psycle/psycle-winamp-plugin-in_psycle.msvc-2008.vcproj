@@ -2,11 +2,10 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="in_psycle"
+	Name="psycle-winamp-plugin-in_psycle"
 	ProjectGUID="{41A8B146-5360-4F84-B22C-912FBEE45326}"
 	RootNamespace="in_psycle"
-	Keyword="Win32Proj"
-	TargetFrameworkVersion="131072"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -19,7 +18,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\use_pre_compiled_header_with_mfc.vsprops;.\inpsycle.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\use_pre_compiled_header_with_mfc.vsprops;.\psycle-winamp-plugin-in_psycle.vsprops"
 			UseOfMFC="2"
 			ManagedExtensions="0"
 			>
@@ -81,7 +80,7 @@
 		<Configuration
 			Name="Release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\use_pre_compiled_header_with_mfc.vsprops;.\inpsycle.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\use_pre_compiled_header_with_mfc.vsprops;.\psycle-winamp-plugin-in_psycle.vsprops"
 			UseOfMFC="2"
 			WholeProgramOptimization="1"
 			>
@@ -148,11 +147,11 @@
 			Name="winamp"
 			>
 			<File
-				RelativePath="..\..\..\..\..\external-packages\winamp-2\in2.h"
+				RelativePath="..\external-packages\winamp-2\in2.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\external-packages\winamp-2\out.h"
+				RelativePath="..\external-packages\winamp-2\out.h"
 				>
 			</File>
 		</Filter>
@@ -160,187 +159,187 @@
 			Name="plugin"
 			>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\player_plugins\winamp\fake_progressDialog.hpp"
+				RelativePath="src\psycle\host\player_plugins\winamp\fake_progressDialog.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\player_plugins\winamp\in_psycle.cpp"
+				RelativePath="src\psycle\host\player_plugins\winamp\in_psycle.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\player_plugins\winamp\resources.hpp"
+				RelativePath="src\psycle\host\player_plugins\winamp\resources.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\player_plugins\winamp\resources.rc"
+				RelativePath="src\psycle\host\player_plugins\winamp\resources.rc"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\player_plugins\winamp\shrunk_newachine.cpp"
+				RelativePath="src\psycle\host\player_plugins\winamp\shrunk_newachine.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\player_plugins\winamp\shrunk_newmachine.hpp"
+				RelativePath="src\psycle\host\player_plugins\winamp\shrunk_newmachine.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\player_plugins\winamp\WinampDriver.cpp"
+				RelativePath="src\psycle\host\player_plugins\winamp\WinampDriver.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\player_plugins\winamp\WinampDriver.hpp"
+				RelativePath="src\psycle\host\player_plugins\winamp\WinampDriver.hpp"
 				>
 			</File>
 		</Filter>
 		<Filter
-			Name="psyclemfc-core"
+			Name="psycle-mfc-core"
 			>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\AudioDriver.cpp"
+				RelativePath="src\psycle\host\AudioDriver.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\AudioDriver.hpp"
+				RelativePath="src\psycle\host\AudioDriver.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Configuration.cpp"
+				RelativePath="src\psycle\host\Configuration.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Configuration.hpp"
+				RelativePath="src\psycle\host\Configuration.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Constants.hpp"
+				RelativePath="src\psycle\host\Constants.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\convert_internal_machines.hpp"
+				RelativePath="src\psycle\host\convert_internal_machines.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\Seib-vsthost\CVSTHost.Seib.cpp"
+				RelativePath="src\Seib-vsthost\CVSTHost.Seib.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\Seib-vsthost\CVSTHost.Seib.hpp"
+				RelativePath="src\Seib-vsthost\CVSTHost.Seib.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\FileIO.cpp"
+				RelativePath="src\psycle\host\FileIO.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\FileIO.hpp"
+				RelativePath="src\psycle\host\FileIO.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Global.cpp"
+				RelativePath="src\psycle\host\Global.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Global.hpp"
+				RelativePath="src\psycle\host\Global.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Instrument.cpp"
+				RelativePath="src\psycle\host\Instrument.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Instrument.hpp"
+				RelativePath="src\psycle\host\Instrument.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\internal_machines.cpp"
+				RelativePath="src\psycle\host\internal_machines.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\internal_machines.hpp"
+				RelativePath="src\psycle\host\internal_machines.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Machine.cpp"
+				RelativePath="src\psycle\host\Machine.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Machine.hpp"
+				RelativePath="src\psycle\host\Machine.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Player.cpp"
+				RelativePath="src\psycle\host\Player.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Player.hpp"
+				RelativePath="src\psycle\host\Player.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Plugin.cpp"
+				RelativePath="src\psycle\host\Plugin.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Plugin.hpp"
+				RelativePath="src\psycle\host\Plugin.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Registry.cpp"
+				RelativePath="src\psycle\host\Registry.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Registry.hpp"
+				RelativePath="src\psycle\host\Registry.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Sampler.cpp"
+				RelativePath="src\psycle\host\Sampler.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Sampler.hpp"
+				RelativePath="src\psycle\host\Sampler.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Song.cpp"
+				RelativePath="src\psycle\host\Song.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\Song.hpp"
+				RelativePath="src\psycle\host\Song.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\SongStructs.hpp"
+				RelativePath="src\psycle\host\SongStructs.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\version.hpp"
+				RelativePath="src\psycle\host\version.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\vsthost24.cpp"
+				RelativePath="src\psycle\host\vsthost24.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\vsthost24.hpp"
+				RelativePath="src\psycle\host\vsthost24.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\XMFile.hpp"
+				RelativePath="src\psycle\host\XMFile.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\XMInstrument.cpp"
+				RelativePath="src\psycle\host\XMInstrument.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\XMInstrument.hpp"
+				RelativePath="src\psycle\host\XMInstrument.hpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\XMSampler.cpp"
+				RelativePath="src\psycle\host\XMSampler.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\src\psycle\host\XMSampler.hpp"
+				RelativePath="src\psycle\host\XMSampler.hpp"
 				>
 			</File>
 		</Filter>
