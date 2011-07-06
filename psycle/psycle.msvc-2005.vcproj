@@ -274,10 +274,6 @@
 	</Configurations>
 	<References>
 		<ProjectReference
-			ReferencedProjectIdentifier="{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
-			RelativePathToProject="..\..\psycle-audiodrivers\asio.msvc-2005.vcproj"
-		/>
-		<ProjectReference
 			ReferencedProjectIdentifier="{28C015FB-3BDA-4B32-8D85-C652E9892216}"
 			RelativePathToProject=".\projects\pre-compiled-headers\pre-compiled-headers-with-mfc.msvc-2005.vcproj"
 		/>
@@ -556,10 +552,6 @@
 				</File>
 				<File
 					RelativePath="src\psycle\host\Configuration.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\configuration_options.hpp"
 					>
 				</File>
 				<File
@@ -1466,6 +1458,26 @@
 						</File>
 					</Filter>
 				</Filter>
+			</Filter>
+			<Filter
+				Name="detail"
+				>
+				<File
+					RelativePath=".\src\psycle\host\detail\config.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\detail\config.private.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\detail\project.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\detail\project.private.hpp"
+					>
+				</File>
 			</Filter>
 		</Filter>
 	</Files>

@@ -257,6 +257,10 @@
 		<Filter
 			Name="psycle"
 			>
+			<File
+				RelativePath="..\psycle-plugins\src\psycle\plugin_interface.hpp"
+				>
+			</File>
 			<Filter
 				Name="core"
 				>
@@ -274,6 +278,10 @@
 				</File>
 				<File
 					RelativePath="src\psycle\core\convert_internal_machines.private.hpp"
+					>
+				</File>
+				<File
+					RelativePath="src\psycle\core\cpu_time_clock.hpp"
 					>
 				</File>
 				<File
@@ -534,10 +542,6 @@
 				</File>
 				<File
 					RelativePath="src\psycle\core\signalslib.h"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\core\cpu_time_clock.hpp"
 					>
 				</File>
 				<File
