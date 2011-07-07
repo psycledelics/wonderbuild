@@ -133,6 +133,7 @@ class InstallTask(Task, Persistent, OptionDecl):
 								if dest.exists: os.remove(dest.path)
 								else: dest.parent.make_dir()
 								install(s.path, dest.path)
+							dest.clear()
 						self.persistent = sig, sigs
 					finally: self.dest_dir.lock.release()
 				finally: sched_ctx.lock.acquire()
