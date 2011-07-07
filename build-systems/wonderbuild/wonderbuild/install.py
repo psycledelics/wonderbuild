@@ -26,7 +26,7 @@ class InstallTask(Task, Persistent, OptionDecl):
 
 	# OptionDecl
 	@staticmethod
-	def generate_option_help(help): help['check-missing'] = ('<yes|no>', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'yes')
+	def generate_option_help(help): help['check-missing'] = ('[yes|no]', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'yes')
 	
 	def __init__(self, project, name):
 		Task.__init__(self)
@@ -97,7 +97,9 @@ class InstallTask(Task, Persistent, OptionDecl):
 					# Some sources have been removed from the list of sources.
 					need_process = True
 				elif not need_process and old_sig != sig:
-					# it's self.dest_dir that changed (non exclusive, actually)
+					# it's self.dest_dir that changed (non exclusive, actually).
+					# to be complete, we should remove the files in the old destination,
+					# but only if that old destination overlaps with the new one.
 					changed_sources = self.sources
 					need_process = True
 			if not need_process:

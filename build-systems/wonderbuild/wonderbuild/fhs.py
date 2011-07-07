@@ -28,9 +28,9 @@ class FHS(OptionCfg, Persistent):
 
 	@staticmethod
 	def shared(project):
-		try: return project.fhs
+		try: return project.__fhs
 		except AttributeError:
-			instance = project.fhs = FHS(project)
+			instance = project.__fhs = FHS(project)
 			return instance
 
 	def __init__(self, project):
@@ -38,7 +38,7 @@ class FHS(OptionCfg, Persistent):
 		Persistent.__init__(self, project.persistent, str(self.__class__))
 		
 		try:
-			old_sig, self.dest, self.prefix_path = self.persistent
+			old_sig, self.dest, prefix_path = self.persistent
 		except KeyError: parse = True
 		else: parse = old_sig != self.options_sig
 		if parse:
@@ -49,15 +49,16 @@ class FHS(OptionCfg, Persistent):
 			if dest is not None: self.dest = project.fs.cur / dest
 			else: self.dest = project.bld_dir / 'staged-install'
 			
-			self.prefix_path = o.get('install-prefix-dir', None) or os.environ.get('PREFIX', None) or os.path.join(os.sep, 'usr', 'local')
-			if self.prefix_path.startswith(os.sep): self.prefix_path = self.prefix_path[len(os.sep):]
-			else: raise Exception, 'invalid install-prefix-dir option: prefix must be an absolute path. got: ' + self.prefix_path
+			prefix_path = o.get('install-prefix-dir', None) or os.environ.get('PREFIX', None) or os.path.join(os.sep, 'usr', 'local')
+			if prefix_path.startswith(os.sep): prefix_path = prefix_path[len(os.sep):]
+			else: raise Exception, 'invalid install-prefix-dir option: prefix must be an absolute path. got: ' + prefix_path
 			
-			self.persistent = self.options_sig, self.dest, self.prefix_path
+			self.persistent = self.options_sig, self.dest, prefix_path
 
-		self.exec_prefix = self.dest / self.prefix_path
+		self.prefix = self.dest / prefix_path
+		self.exec_prefix = self.prefix
 		self.bin = self.exec_prefix / 'bin'
-		self.lib = self.exec_prefix /  'lib'
+		self.lib = self.exec_prefix / 'lib'
 		self.libexec = self.exec_prefix / 'libexec'
-		self.include = self.dest / self.prefix_path / 'include'
-		self.share = self.dest / self.prefix_path / 'share'
+		self.include = self.prefix / 'include'
+		self.share = self.prefix / 'share'

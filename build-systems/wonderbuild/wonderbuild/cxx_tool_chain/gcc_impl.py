@@ -67,12 +67,12 @@ class Impl(object):
 			return sig
 
 	@staticmethod
-	def client_cfg_cxx_args(client_cfg):
+	def client_cfg_cxx_args(client_cfg, fhs):
 		args = []
 		for k, v in client_cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + repr(str(v))[1:-1]) # note: assumes that cpp and python escaping work the same way
-		for p in client_cfg.include_paths: args.append('-I' + p.abs_path)
+		for p in client_cfg.include_paths: args.append('-I${includedir}/' + p.rel_path(fhs.include))
 		for f in client_cfg.frameworks: args.append('-F' + f)
 		return args
 
@@ -209,9 +209,9 @@ class Impl(object):
 			return sig
 
 	@staticmethod
-	def client_cfg_ld_args(client_cfg):
+	def client_cfg_ld_args(client_cfg, fhs):
 		args = []
-		for p in client_cfg.lib_paths: args.append('-L' + p.abs_path)
+		for p in client_cfg.lib_paths: args.append('-L${libdir}/' + p.rel_path(fhs.lib))
 		for l in client_cfg.libs: args.append('-l' + l)
 		if len(client_cfg.static_libs):
 			args.append('-Wl,-Bstatic')
