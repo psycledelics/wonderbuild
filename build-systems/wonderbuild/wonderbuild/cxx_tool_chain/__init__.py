@@ -829,6 +829,12 @@ class ModTask(ModDepPhases, ProjectTask, Persistent):
 			if __debug__ and is_debug and self._type_changed: debug('task: mod type changed: ' + str(self))
 			changed_sources = deque()
 			implicit_deps = state[2]
+			if self.cfg.check_missing:
+				self.obj_dir.lock.acquire()
+				try:
+					try: self.obj_dir.actual_children # not needed, just an optimisation
+					except OSError: pass
+				finally: self.obj_dir.lock.release()
 			for s in self.sources:
 				try: had_failed, old_cxx_sig, deps, old_dep_sig = implicit_deps[s]
 				except KeyError:
@@ -859,11 +865,6 @@ class ModTask(ModDepPhases, ProjectTask, Persistent):
 					changed_sources.append(s)
 					continue
 				if self.cfg.check_missing:
-					self.obj_dir.lock.acquire()
-					try:
-						try: self.obj_dir.actual_children # not needed, just an optimisation
-						except OSError: pass
-					finally: self.obj_dir.lock.release()
 					o = self.obj_dir / self._obj_name(s)
 					if not o.exists:
 						if __debug__ and is_debug: debug('task: target missing: ' + str(o))
