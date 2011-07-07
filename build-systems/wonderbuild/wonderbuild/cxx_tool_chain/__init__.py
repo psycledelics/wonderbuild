@@ -521,10 +521,7 @@ class _PreCompileTask(ModDepPhases, Task, Persistent):
 				try:
 					f.write(
 						'#error This is an intentional error to ensure the pre-compiled header is really used.\n'
-						'// Below is the original file content that was pre-compiled to ' + self.target.rel_path(self.header) + '\n'
-						+ self.target.abs_path + '\n'
-						+ self.header.abs_path + '\n'
-						+ self.header.rel_path(self.target) + '\n'
+						'// Below is the original file content that was pre-compiled to ' + self.target.rel_path(self.header.parent) + '\n'
 					)
 					f.write(self.source_text); f.write('\n')					
 				finally: f.close()

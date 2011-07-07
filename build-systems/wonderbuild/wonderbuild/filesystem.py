@@ -22,7 +22,7 @@ class FileSystem(object):
 			persistent[str(self.__class__)] = self.root
 		self.root._fs = self
 		self.root._exists = self.root._is_dir = True
-		self.root._is_symlink_ = False
+		self.root._is_symlink = False
 		self.root._canonical_node = self.root
 		self.root._height = 0
 		self.cur = self.root / cwd
@@ -51,7 +51,7 @@ if __debug__ and is_debug: all_abs_paths = set()
 
 class Node(object):
 	__slots__ = (
-		'parent', 'name', '_is_dir', '_is_symlink_', '_canonical_node', '_children', '_actual_children', '_old_children', '_old_time', '_time', '_sig',
+		'parent', 'name', '_is_dir', '_is_symlink', '_canonical_node', '_children', '_actual_children', '_old_children', '_old_time', '_time', '_sig',
 		'_used', '_old_used', '_path', '_abs_path', '_height', '_fs', '_exists', '_lock'
 	)
 
@@ -92,8 +92,8 @@ class Node(object):
 		if __debug__ and is_debug:
 			debug('fs: os.lstat   : ' + self.abs_path)
 		st = os.lstat(self.abs_path)
-		self._is_symlink_ = stat.S_ISLNK(st.st_mode)
-		if self._is_symlink_:
+		self._is_symlink = stat.S_ISLNK(st.st_mode)
+		if self._is_symlink:
 			if __debug__ and is_debug: debug('fs: os.stat    : ' + self.abs_path)
 			try: st = os.stat(self.abs_path)
 			except OSError, e:
@@ -129,7 +129,7 @@ class Node(object):
 			if not self.exists:
 				if __debug__ and is_debug: debug('fs: os.makedirs: ' + str(self) + os.sep)
 				os.makedirs(self.abs_path)
-				# why not: self._actual_children = {}
+				# why not: self._actual_children = {}; self._used = True
 		else:
 			lock = parent_node_to_lock.lock
 			lock.acquire()
@@ -137,10 +137,10 @@ class Node(object):
 				if not self.exists:
 					if __debug__ and is_debug: debug('fs: os.makedirs: ' + str(self) + os.sep + ' (locking: ' + str(parent_node_to_lock) + os.sep + ')')
 					os.makedirs(self.abs_path)
-					# why not: self._actual_children = {}
+					# why not: self._actual_children = {}; self._used = True
 			finally: lock.release()
 		self._exists = self._is_dir = True
-		self._is_symlink_ = False
+		self._is_symlink = False
 
 	@property
 	def is_dir(self):
@@ -148,11 +148,11 @@ class Node(object):
 		return self._is_dir
 	
 	@property
-	def _is_symlink(self):
-		try: return self._is_symlink_
+	def is_symlink(self):
+		try: return self._is_symlink
 		except AttributeError:
 			self._do_stat()
-			return self._is_symlink_
+			return self._is_symlink
 
 	@property
 	def time(self):
@@ -194,6 +194,7 @@ class Node(object):
 	@property
 	def actual_children(self):
 		if self._actual_children is None:
+			self._used = True
 			if self.time == self._old_time and self._old_children is not None:
 				self._actual_children = self._old_children
 				self._old_children = None
@@ -218,7 +219,6 @@ class Node(object):
 							try: child = self._children[name]
 							except KeyError: self._children[name] = self._actual_children[name] = Node(self, name)
 							else: self._actual_children[name] = child
-			self._used = True # so that find_iter results are persistent in dirs where no relevant files have been found.
 		return self._actual_children
 	
 	def _merge(self, cur, old):
@@ -259,7 +259,7 @@ class Node(object):
 					if match(name, pat): matched = True; break
 			if not matched:
 				for pat in in_pats:
-					if match(name, pat): yield node; matched = True; break
+					if match(name, pat): matched = True; yield node; break
 				if not matched and node.is_dir:
 					if prune_pats is not None:
 						for pat in prune_pats:
@@ -321,6 +321,9 @@ class Node(object):
 			return self._canonical_node
 	
 	def rel_path(self, from_node):
+		if from_node.exists:
+			if from_node.is_symlink: from_node = from_node.canonical_node # because 'dir/symlink/..' is not the same as 'dir/'
+			if not from_node.is_dir: from_node = from_node.parent
 		node1 = from_node
 		node2 = self
 		node1.height
@@ -328,12 +331,12 @@ class Node(object):
 		# TODO minor optim: A small optimisation could be done for the 'dir/symlink/..' case in the loop, indeed
 		# TODO minor optim: once we've canonicalised the node there is no need to check for symlinks anymore.
 		while node1._height > node2._height:
-			if node1.exists and node1._is_symlink: return self.rel_path(from_node.canonical_node) # because 'dir/symlink/..' is not the same as 'dir/'
+			if node1.exists and node1.is_symlink: return self.rel_path(from_node.canonical_node) # because 'dir/symlink/..' is not the same as 'dir/'
 			node1 = node1.parent
 		while node1._height < node2._height:
 			node2 = node2.parent
 		while node1 is not node2:
-			if node1.exists and node1._is_symlink: return self.rel_path(from_node.canonical_node) # because 'dir/symlink/..' is not the same as 'dir/'
+			if node1.exists and node1.is_symlink: return self.rel_path(from_node.canonical_node) # because 'dir/symlink/..' is not the same as 'dir/'
 			node1 = node1.parent
 			node2 = node2.parent
 		ancestor = node1
@@ -370,11 +373,12 @@ class Node(object):
 		except AttributeError: pass
 		try: del self._exists
 		except AttributeError: pass
-		try: del self._is_symlink_
+		try: del self._is_symlink
 		except AttributeError: pass
 		try: del self._canonical_node
 		except AttributeError: pass
 		if self._actual_children is not None: self._actual_children = self._old_children = None
+		self._used = False
 
 	def forget(self):
 		"detach the node from its parent. This is used to cut from the tree the branches we don't want to dump in the pickle"
