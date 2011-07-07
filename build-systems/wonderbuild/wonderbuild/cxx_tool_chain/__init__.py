@@ -82,6 +82,7 @@ class BuildCfg(ClientCfg, Task):
 		self.use_input_abs_paths = False
 		self.shared_checks = project
 
+	# ClientCfg
 	def clone(self, class_ = None):
 		if class_ is None: class_ = self.__class__
 		c = ClientCfg.clone(self, class_)
@@ -214,8 +215,10 @@ class UserBuildCfgTask(BuildCfg, OptionCfg, Persistent):
 		if class_ is None: class_ = BuildCfg
 		return class_.clone(self, class_)
 
+	# OptionCfg
 	signed_os_environ = set(['PATH', 'CXX', 'CXXFLAGS', 'LD', 'LDFLAGS', 'AR', 'RANLIB'])
 
+	# OptionCfg
 	signed_options = set([
 		'cxx',
 		'cxx-flags',
@@ -227,15 +230,23 @@ class UserBuildCfgTask(BuildCfg, OptionCfg, Persistent):
 		'pic-static'
 	])
 
+	# OptionCfg(OptionDecl)
 	known_options = signed_options | set(['check-missing', 'relink-on-shared-dep-impl-change', 'input-abs-paths'])
 
+	# OptionCfg(OptionDecl)
 	@staticmethod
 	def generate_option_help(help):
-		help['check-missing'] = ('[yes|no]', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'yes')
+		help['check-missing'] = ('[yes|no]', 'check for missing built files; rebuild files you manually deleted in the build dir', 'yes')
 
-		help['relink-on-shared-dep-impl-change'] = ('[yes|no]', 'relink clients of a shared lib if its implementation changed', 'no')
+		help['relink-on-shared-dep-impl-change'] = ('[yes|no]',
+			'relink clients of a shared lib if its implementation changed; '
+			'Normaly when only the implementation changed, and not the interface, clients are not impacted',
+			'no')
 
-		help['input-abs-paths'] = ('[yes|no]', 'use absolute paths for source input files to the compiler', 'no => use paths relative to the build dir')
+		help['input-abs-paths'] = ('[yes|no]',
+			'use absolute paths for source input files to the compiler. '
+			'Using absolute paths may let you click on error lines to open the files.',
+			'no => use paths relative to the build dir')
 
 		help['cxx']           = ('<prog>', 'use <prog> as c++ compiler', 'CXX env var: ' + os.environ.get('CXX', '(not set)'))
 		help['cxx-flags']     = ('[flags]', 'use specific c++ compiler flags', 'CXXFLAGS env var: ' + os.environ.get('CXXFLAGS', '(not set)'))
@@ -250,8 +261,8 @@ class UserBuildCfgTask(BuildCfg, OptionCfg, Persistent):
 			'full: like libs but also statically link programs (rather than dynamically using shared libs)',
 			'no')
 		help['pic-static'] = ('[yes|no]',
-			'instruct the compiler to emit pic code even for static libs and programs\n'
-			'(shared libs are always pic regardless of this option)',
+			'instruct the compiler to emit pic code even for static libs and programs; '
+			'shared libs are of course always pic regardless of this option.',
 			'no => non-pic for static libs and programs')
 
 		# posix compiler options -O -g -s
@@ -261,15 +272,16 @@ class UserBuildCfgTask(BuildCfg, OptionCfg, Persistent):
 
 	@staticmethod
 	def shared(project):
-		try: build_cfg_task = project._cxx_user_build_cfg_task
-		except AttributeError: build_cfg_task = project._cxx_user_build_cfg_task = UserBuildCfgTask(project)
+		try: build_cfg_task = project.__cxx_user_build_cfg_task
+		except AttributeError: build_cfg_task = project.__cxx_user_build_cfg_task = UserBuildCfgTask(project)
 		return build_cfg_task
 	
 	def __init__(self, project):
 		BuildCfg.__init__(self, project)
 		OptionCfg.__init__(self, project)
 		Persistent.__init__(self, project.persistent, str(self.__class__))
-		
+	
+	# BuildCfg(Task)
 	def __call__(self, sched_ctx):
 		o = self.options
 
@@ -327,18 +339,16 @@ class UserBuildCfgTask(BuildCfg, OptionCfg, Persistent):
 			detect_impl = DetectImplCheckTask.shared(self)
 			for x in sched_ctx.parallel_wait(detect_impl): yield x
 
-class ModDepPhases(object):
+class ModDepPhases(object): # note: doesn't derive form Task, but derived classes also derive from Task
 	def __init__(self):
 		self.private_deps = [] # of ModDepPhases
 		self.public_deps = [] # of ModDepPhases
 		self.cxx_phase = self.mod_phase = None
 
 	@property
-	def expose_private_deep_deps(self): return False
-
-	@property
 	def all_deps(self): return self.public_deps + self.private_deps
 
+	# called by derived classes that also derive from Task
 	def __call__(self, sched_ctx):
 		### needs changes in CheckTask
 		#self.result = True
@@ -355,6 +365,7 @@ class ModDepPhases(object):
 	def __bool__(self): return self.result
 	def __nonzero__(self): return self.__bool__() # __bool__ has become the default in python 3
 
+	# can be overriden in derived classes to generate friendlier message when deps are unavailable
 	def do_ensure_deps(self): 
 		for dep in self.all_deps:
 			if not dep:
@@ -372,33 +383,36 @@ class ModDepPhases(object):
 	def apply_cxx_to(self, cfg): return not self._applied(cfg, 'cxx')
 	def apply_mod_to(self, cfg): return not self._applied(cfg, 'mod')
 	
-	def do_deps_cxx_phases(self, sched_ctx):
-		deps = self.topologically_sorted_unique_deep_deps(expose_private_deep_deps=False)
+	def _do_deps_cxx_phases(self, sched_ctx):
+		deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=False)
 		cxx_phases = [dep.cxx_phase for dep in deps if dep.cxx_phase is not None]
 		for x in sched_ctx.parallel_wait(*cxx_phases): yield x
 		for dep in deps: dep.apply_cxx_to(self.cfg) # ordering matters for sig
 
-	def topologically_sorted_unique_deep_deps(self, expose_private_deep_deps):
+ 	@property
+	def _expose_private_deep_deps(self): return False
+
+	def _topologically_sorted_unique_deep_deps(self, expose_private_deep_deps):
 		try: return \
 			expose_private_deep_deps is None and self._private_cut_topologically_sorted_unique_deep_deps or \
 			expose_private_deep_deps and self._private_topologically_sorted_unique_deep_deps or \
 			self._public_topologically_sorted_unique_deep_deps
 		except AttributeError:
 			result = deque(); seen = set() # ordering matters for sig, and static libs must appear after their clients
-			self._topologically_sorted_unique_deep_deps(result, seen, True, True, expose_private_deep_deps)
+			self.__topologically_sorted_unique_deep_deps_recurse(result, seen, True, True, expose_private_deep_deps)
 			if expose_private_deep_deps is None: self._private_cut_topologically_sorted_unique_deep_deps = result
 			elif expose_private_deep_deps: self._private_topologically_sorted_unique_deep_deps = result
 			else: self._public_topologically_sorted_unique_deep_deps = result
 			return result
 
-	def _topologically_sorted_unique_deep_deps(self, result, seen, root, expose_private_deps, expose_private_deep_deps):
+	def __topologically_sorted_unique_deep_deps_recurse(self, result, seen, root, expose_private_deps, expose_private_deep_deps):
 		if not root:
 			if self in seen: return
 			seen.add(self)
 		for dep in expose_private_deps and self.all_deps or self.public_deps:
-			if expose_private_deep_deps is None: dep._topologically_sorted_unique_deep_deps(result, seen, False,
-				dep.expose_private_deep_deps, dep.expose_private_deep_deps and None)
-			else: dep._topologically_sorted_unique_deep_deps(result, seen, False, expose_private_deep_deps, expose_private_deep_deps)
+			if expose_private_deep_deps is None: dep.__topologically_sorted_unique_deep_deps_recurse(result, seen, False,
+				dep._expose_private_deep_deps, dep._expose_private_deep_deps and None)
+			else: dep.__topologically_sorted_unique_deep_deps_recurse(result, seen, False, expose_private_deep_deps, expose_private_deep_deps)
 		if not root: result.appendleft(self)
 
 class _PreCompileTask(ModDepPhases, Task, Persistent):
@@ -416,10 +430,12 @@ class _PreCompileTask(ModDepPhases, Task, Persistent):
 			self._cfg = self.base_cfg.clone()
 			return self._cfg
 	
+	# Task
 	def __call__(self, sched_ctx):
 		for x in ModDepPhases.__call__(self, sched_ctx): yield x
 		self.cxx_phase = _PreCompileTask._CxxPhaseCallbackTask(self)
 	
+	# ModDepPhases
 	def apply_cxx_to(self, cfg):
 		if not ModDepPhases.apply_cxx_to(self, cfg): return
 		cfg.pch = self.header
@@ -455,17 +471,15 @@ class _PreCompileTask(ModDepPhases, Task, Persistent):
 			self.pre_compile_task = pre_compile_task
 		
 		def __str__(self): return 'pre-compile ' + str(self.pre_compile_task.header)
-		
+
+		# Task		
 		def __call__(self, sched_ctx):
 			for x in self.pre_compile_task._cxx_phase_callback(sched_ctx): yield x
-
-	def do_cxx_phase(self): pass
 
 	def _cxx_phase_callback(self, sched_ctx):
 		for x in sched_ctx.parallel_wait(self): yield x
 		self.do_ensure_deps()
-		for x in self.do_deps_cxx_phases(sched_ctx): yield x
-		self.do_cxx_phase()
+		for x in self._do_deps_cxx_phases(sched_ctx): yield x
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, because we don't need pkg-config cxx flags in the cfg sig
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.cfg)
@@ -601,18 +615,20 @@ class PreCompileTasks(ModDepPhases, Task):
 		@property
 		def source_text(self): return self.parent_task.source_text
 
+		# _PreCompileTask(Task)
 		def __call__(self, sched_ctx):
 			for x in sched_ctx.parallel_wait(self.parent_task): yield x
 			self.private_deps = self.parent_task.private_deps
 			self.public_deps = self.parent_task.public_deps
 			self.result = self.parent_task.result
-			try: self.parent_task._cxx_phase_done
+			try: self.parent_task.__cxx_phase_done
 			except AttributeError:
 				self.parent_task.do_cxx_phase()
-				self.parent_task._cxx_phase_done = True
+				self.parent_task.__cxx_phase_done = True
 			self.cfg.pic = self.pic # this clones the parent cfg and changes the pic setting
 			for x in _PreCompileTask.__call__(self, sched_ctx): yield x
 
+		# _PreCompileTask(ModDepPhases)
 		def apply_cxx_to(self, cfg):
 			_PreCompileTask.apply_cxx_to(self, cfg)
 			self.parent_task.apply_cxx_to(cfg)
@@ -634,8 +650,9 @@ class _BatchCompileTask(Task):
 	def target_dir(self): return self.mod_task.obj_dir
 	
 	@property
-	def persistent_implicit_deps(self): return self.mod_task.persistent_implicit_deps
+	def persistent_implicit_deps(self): return self.mod_task.persistent[2]
 
+	# Task
 	def __call__(self, sched_ctx):
 		if False: yield
 		self.target_dir.make_dir()
@@ -700,15 +717,17 @@ class ModTask(ModDepPhases, ProjectTask, Persistent):
 					cfg.pic = True
 			return cfg
 
+	# ModDepPhases
 	@property
-	def expose_private_deep_deps(self):
-		try: return self._expose_private_deep_deps
+	def _expose_private_deep_deps(self):
+		try: return self.__expose_private_deep_deps
 		except AttributeError:
-			self._expose_private_deep_deps = \
+			self.__expose_private_deep_deps = \
 				(not self.ld or self.kind == ModTask.Kinds.PROG and self.cfg.static_prog) and \
 				self.kind != ModTask.Kinds.HEADERS
-			return self._expose_private_deep_deps
+			return self.__expose_private_deep_deps
 
+	# ModDepPhases
 	def apply_mod_to(self, cfg):
 		if not ModDepPhases.apply_mod_to(self, cfg): return
 		if self.kind != ModTask.Kinds.HEADERS:
@@ -780,15 +799,14 @@ class ModTask(ModDepPhases, ProjectTask, Persistent):
 			else: self._ld = self.cfg.shared
 			return self._ld
 
-	@property
-	def persistent_implicit_deps(self): return self.persistent[2]
-
 	class _ModPhaseCallbackTask(Task):
 		def __init__(self, mod_task):
 			Task.__init__(self)
 			self.mod_task = mod_task
 
 		def __str__(self): return 'build module ' + str(self.mod_task.target)
+		
+		# Task
 		def __call__(self, sched_ctx):
 			for x in self.mod_task._mod_phase_callback(sched_ctx): yield x
 
@@ -806,10 +824,10 @@ class ModTask(ModDepPhases, ProjectTask, Persistent):
 		else:
 			# For shared libs and programs, we need all deps before linking.
 			# We schedule them in advance, and don't wait for them right now, but just before linking.
-			deps = self.topologically_sorted_unique_deep_deps(expose_private_deep_deps=None)
+			deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=None)
 			deps_mod_phases = [dep.mod_phase for dep in deps if dep.mod_phase is not None]
 			sched_ctx.parallel_no_wait(*deps_mod_phases)
-		for x in self.do_deps_cxx_phases(sched_ctx): yield x
+		for x in self._do_deps_cxx_phases(sched_ctx): yield x
 		self.do_mod_phase()
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, because we don't need pkg-config cxx flags in the cfg sig
@@ -913,7 +931,7 @@ class ModTask(ModDepPhases, ProjectTask, Persistent):
 		#       Linking programs needs all deps, however.
 		for x in sched_ctx.parallel_wait(*tasks): yield x
 		if self.ld:
-			deps = self.topologically_sorted_unique_deep_deps(expose_private_deep_deps=None)
+			deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=None)
 			for dep in deps: dep.apply_mod_to(self.cfg) # ordering matters for sig
 			if not need_process:
 				for dep in deps:
@@ -983,39 +1001,39 @@ class ModTask(ModDepPhases, ProjectTask, Persistent):
 		if not self.cfg.check_missing: self.obj_dir.forget()
 		self._needed_process = need_process
 		if False: # TODO generating pkg-config .pc file; work in progress
-			print
-			print '------------ begin pkg-config .pc file -------------------'
-			print '# generated by wonderbuild'
-			print
-			client_cfg = ClientCfg(self.project)
-			from wonderbuild.fhs import FHS
-			fhs = FHS.shared(self.project)
-			self.apply_cxx_to(client_cfg)
-			self.apply_mod_to(client_cfg)
-			cxx_flags = self.cfg.impl.client_cfg_cxx_args(client_cfg, fhs)
-			ld_flags = self.cfg.impl.client_cfg_ld_args(client_cfg, fhs)
-			pkg_config_deps = self.cfg.pkg_config
-			xxx_deps = self.topologically_sorted_unique_deep_deps(expose_private_deep_deps=None)
+			if self.kind == ModTask.Kinds.LIB:
+				print
+				print '------------ begin pkg-config .pc file -------------------'
+				print '# generated by wonderbuild'
+				print
+				client_cfg = ClientCfg(self.project)
+				from wonderbuild.fhs import FHS
+				fhs = FHS.shared(self.project)
+				self.apply_cxx_to(client_cfg)
+				self.apply_mod_to(client_cfg)
+				cxx_flags = self.cfg.impl.client_cfg_cxx_args(client_cfg, fhs)
+				ld_flags = self.cfg.impl.client_cfg_ld_args(client_cfg, fhs)
+				pkg_config_deps = self.cfg.pkg_config
 
-			uninstalled = True
-			print 'prefix=' + (uninstalled and fhs.prefix or fhs.dest.fs.root / fhs.prefix.rel_path(fhs.dest)).abs_path
-			print 'exec_prefix=${prefix}/' + fhs.exec_prefix.rel_path(fhs.prefix)
-			print 'libdir=${exec_prefix}/' + fhs.lib.rel_path(fhs.exec_prefix)
-			print 'includedir=${prefix}/' + fhs.include.rel_path(fhs.prefix)
-			print
-			print 'Name:', self.name
-			if self.description: print 'Description:', self.description
-			if self.version: print 'Version:', self.version
-			if self.url: print 'URL:', self.url
-			print
-			print 'Cflags:', ' '.join(cxx_flags)
-			print 'Libs:', ' '.join(ld_flags)
-			if False: print 'Libs.private:', '...'
-			print 'Requires:', ' '.join(pkg_config_deps)
-			if False: print 'Requires.private:', '...' # messy specification
-			if False: print 'Conflicts:', '...'
-			print '------------ end pkg-config .pc file -------------------'
-			print
+				uninstalled = True
+				print 'prefix=' + (uninstalled and fhs.prefix or fhs.dest.fs.root / fhs.prefix.rel_path(fhs.dest)).abs_path
+				print 'exec_prefix=${prefix}/' + fhs.exec_prefix.rel_path(fhs.prefix)
+				print 'libdir=${exec_prefix}/' + fhs.lib.rel_path(fhs.exec_prefix)
+				print 'includedir=${prefix}/' + fhs.include.rel_path(fhs.prefix)
+				print
+				print 'Name:', self.name
+				if self.description: print 'Description:', self.description
+				if self.version: print 'Version:', self.version
+				if self.url: print 'URL:', self.url
+				print
+				print 'Cflags:', ' '.join(cxx_flags)
+				print 'Libs:', ' '.join(ld_flags)
+				if False: print 'Libs.private:', '...'
+				print 'Requires:', ' '.join(pkg_config_deps)
+				if False: print 'Requires.private:', '...' # messy specification
+				if False: print 'Conflicts:', '...'
+				print '------------ end pkg-config .pc file -------------------'
+				print
 
 	def _unique_base_name(self, source):
 		return source.rel_path(self.project.top_src_dir).replace(os.pardir, '_').replace(os.sep, ',')
@@ -1052,6 +1070,7 @@ class _PkgConfigTask(CheckTask):
 
 	def __str__(self): return 'check pkg-config ' + ' '.join(self.what_args) + ' ' + ' '.join(self.pkgs)
 
+	# CheckTask
 	@property
 	def desc(self):
 		try: return self._desc
@@ -1068,6 +1087,7 @@ class _PkgConfigTask(CheckTask):
 	@property
 	def args(self): return [self.prog] + self.pkgs + self.what_args
 
+	# CheckTask
 	@property
 	def sig(self):
 		try: return self._sig
@@ -1087,12 +1107,14 @@ class _PkgConfigFlagsTask(_PkgConfigTask):
 
 	def __init__(self, persistent, uid, cfg): _PkgConfigTask.__init__(self, persistent, uid, cfg, cfg.pkg_config)
 
+	# _PkgConfigTask(CheckTask)
 	def do_check_and_set_result(self, sched_ctx):
 		if False: yield
 		r, out, err = exec_subprocess_pipe(self.args, silent=True)
 		if r != 0: raise Exception, r
 		self.results = out.split()
 
+	# _PkgConfigTask(CheckTask)
 	if __debug__ and is_debug:
 		@property
 		def result_display(self): return ' '.join(self.result), ok_color
@@ -1104,28 +1126,35 @@ class _PkgConfigFlagsTask(_PkgConfigTask):
 
 class _PkgConfigCxxFlagsTask(_PkgConfigFlagsTask):
 
+	# _PkgConfigFlagsTask(_PkgConfigTask(CheckTask(SharedTask)))
 	@classmethod
 	def shared_uid(class_, cfg): return _PkgConfigFlagsTask._shared_uid(class_, cfg.pkg_config)
 
+	# _PkgConfigFlagsTask(_PkgConfigTask(CheckTask(SharedTask)))
 	@classmethod
 	def shared(class_, cfg): return _PkgConfigFlagsTask._shared(class_, cfg.shared_checks, cfg)
 
+	# _PkgConfigFlagsTask(_PkgConfigTask)
 	@property
 	def what_desc(self): return 'cxx flags'
 	
+	# _PkgConfigFlagsTask(_PkgConfigTask)
 	@property
 	def what_args(self): return ['--cflags']
 
+	# _PkgConfigFlagsTask
 	def apply_to(self, cfg): cfg.cxx_flags += self.result
 
 class _PkgConfigLdFlagsTask(_PkgConfigFlagsTask):
 
+	# _PkgConfigFlagsTask(_PkgConfigTask(CheckTask(SharedTask)))
 	@classmethod
 	def shared_uid(class_, cfg, expose_private_deep_deps):
 		uid = _PkgConfigFlagsTask._shared_uid(class_, cfg.pkg_config)
 		if expose_private_deep_deps: uid += ' --static'
 		return uid
 
+	# _PkgConfigFlagsTask(_PkgConfigTask(CheckTask(SharedTask)))
 	@classmethod
 	def shared(class_, cfg, expose_private_deep_deps):
 		return _PkgConfigFlagsTask._shared(class_, cfg.shared_checks, cfg, expose_private_deep_deps)
@@ -1134,23 +1163,28 @@ class _PkgConfigLdFlagsTask(_PkgConfigFlagsTask):
 		_PkgConfigFlagsTask.__init__(self, persistent, uid, cfg)
 		self.expose_private_deep_deps = expose_private_deep_deps
 
+	# _PkgConfigFlagsTask(_PkgConfigTask)
 	@property
 	def what_desc(self):
 		if self.expose_private_deep_deps: return 'static ld flags'
 		else: return 'shared ld flags'
 	
+	# _PkgConfigFlagsTask(_PkgConfigTask)
 	@property
 	def what_args(self):
 		if self.expose_private_deep_deps: return ['--libs', '--static']
 		else: return ['--libs']
 
+	# _PkgConfigFlagsTask
 	def apply_to(self, cfg): cfg.ld_flags += self.result
 
 class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 
+	# _PkgConfigTask(CheckTask(SharedTask))
 	@classmethod
 	def shared_uid(class_, cfg, pkgs): return _PkgConfigTask._shared_uid(class_, pkgs)
 
+	# _PkgConfigTask(CheckTask(SharedTask))
 	@classmethod
 	def shared(class_, cfg, pkgs): return _PkgConfigTask._shared(class_, cfg.shared_checks, cfg, pkgs)
 
@@ -1158,20 +1192,25 @@ class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 		ModDepPhases.__init__(self)
 		_PkgConfigTask.__init__(self, persistent, uid, cfg, pkgs)
 
+	# _PkgConfigTask(CheckTask(SharedTask(Task)))
 	def __call__(self, sched_ctx):
 		for x in ModDepPhases.__call__(self, sched_ctx): yield x
 		for x in _PkgConfigTask.__call__(self, sched_ctx): yield x
 
+	# ModDepPhases
 	def apply_cxx_to(self, cfg):
 		if not ModDepPhases.apply_cxx_to(self, cfg): return
 		cfg.pkg_config += self.pkgs
 		
+	# _PkgConfigTask
 	@property
 	def what_desc(self): return 'existence'
 	
+	# _PkgConfigTask
 	@property
 	def what_args(self): return ['--exists']
 
+	# _PkgConfigTask(CheckTask)
 	def do_check_and_set_result(self, sched_ctx):
 		if False: yield
 		try: r = exec_subprocess(self.args)
@@ -1183,12 +1222,15 @@ class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 
 class MultiBuildCheckTask(CheckTask, ModDepPhases):
 
+	# CheckTask(SharedTask)
 	@staticmethod
 	def shared_uid(base_cfg, *args, **kw): raise Exception, str(MultiBuildCheckTask) + ' did not redefine the static method.'
 	
+	# CheckTask(SharedTask)
 	@classmethod
 	def shared(class_, base_cfg, *args, **kw): return CheckTask._shared(class_, base_cfg.shared_checks, base_cfg, *args, **kw)
 
+	# CheckTask(SharedTask)
 	@staticmethod
 	def _shared(class_, base_cfg, *args, **kw): return CheckTask._shared(class_, base_cfg.shared_checks, *args, **kw)
 
@@ -1200,6 +1242,7 @@ class MultiBuildCheckTask(CheckTask, ModDepPhases):
 		self.compile = compile
 		self.link = link
 
+	# CheckTask(SharedTask(Task))
 	def __call__(self, sched_ctx):
 		for x in ModDepPhases.__call__(self, sched_ctx): yield x
 		for x in CheckTask.__call__(self, sched_ctx): yield x
@@ -1213,6 +1256,7 @@ class MultiBuildCheckTask(CheckTask, ModDepPhases):
 			self.apply_to(self._cfg)
 			return self._cfg
 
+	# ModDepPhases
 	def apply_cxx_to(self, cfg):
 		if not ModDepPhases.apply_cxx_to(self, cfg): return
 		self.apply_to(cfg)
@@ -1222,6 +1266,7 @@ class MultiBuildCheckTask(CheckTask, ModDepPhases):
 	@property
 	def source_text(self): return '#error ' + str(self.__class__) + ' did not redefine default source text.\n'
 
+	# CheckTask
 	@property
 	def sig(self):
 		try: return self._sig
@@ -1248,6 +1293,7 @@ class BuildCheckTask(MultiBuildCheckTask):
 			finally: bld_dir.lock.release()
 			return self._bld_dir
 
+	# MultiBuildCheckTask(CheckTask)
 	def do_check_and_set_result(self, sched_ctx):
 		if False: yield
 		sched_ctx.lock.release()

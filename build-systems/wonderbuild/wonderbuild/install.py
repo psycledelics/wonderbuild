@@ -26,13 +26,14 @@ class InstallTask(Task, Persistent, OptionDecl):
 
 	# OptionDecl
 	@staticmethod
-	def generate_option_help(help): help['check-missing'] = ('[yes|no]', 'check for missing built files (rebuilds files you manually deleted in the build dir)', 'yes')
+	def generate_option_help(help): help['check-missing'] = ('[yes|no]', 'check for missing built files; rebuild files you manually deleted in the build dir', 'yes')
 	
 	def __init__(self, project, name):
 		Task.__init__(self)
 		Persistent.__init__(self, project.persistent, name)
 		self.name = name
 		self.fhs = FHS.shared(project)
+		project.option_collector.option_decls.add(self.__class__)
 		self.check_missing = project.options.get('check-missing', 'yes') != 'no'
 
 	def __str__(self): return \

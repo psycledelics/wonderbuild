@@ -12,20 +12,25 @@ from task import Persistent
 class FHS(OptionCfg, Persistent):
 	'options for the Filesystem Hierarchy Standard'
 	
+	# OptionCfg
 	signed_os_environ = set(['DESTDIR', 'PREFIX'])
 
+	# OptionCfg
 	signed_options = set([
 		'install-dest-dir',
 		'install-prefix-dir'
 	])
 	
+	# OptionCfg(OptionDecl)
 	known_options = signed_options
 
+	# OptionCfg(OptionDecl)
 	@staticmethod
 	def generate_option_help(help):
 		help['install-dest-dir']   = ('<dir>', 'use <dir> as staged install prefix', 'DESTDIR env var: ' + os.environ.get('DESTDIR', '(not set, defaults to <bld-dir>/staged-install)'))
 		help['install-prefix-dir'] = ('<abs-dir>', 'use <abs-dir> as final install prefix', 'PREFIX env var: ' + os.environ.get('PREFIX', '(not set, defaults to /usr/local)'))
 
+	
 	@staticmethod
 	def shared(project):
 		try: return project.__fhs

@@ -14,15 +14,22 @@ Some doc for the ModTask class:
 		Required and optionally found dependencies should be put in self.public_deps and self.private_deps.
 		Dependencies that are used in public headers should be put in self.public_deps, and the others in self.private_deps.
 	
-	Method do_mod_phase(self):
-		This is where to set self.sources and self.cfg for building the object files.
-
 	Attribute cxx_phase:
 		This should be a task that installs the public headers so that clients can start building their object files.
 
 	Method apply_cxx_to(self, cfg):
-		This is where to export flags to the cfg so that clients can start building their object files.
-		For example: adding to cfg.include_paths the path where the cxx_phase installed the headers.
+		This is where to export compile flags to the cfg so that clients can start building their object files.
+		For example: adding to cfg.include_paths the path where the cxx_phase installed the headers:
+			if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+
+	Attribute mod_phase(self):
+		The user doesn't need to override this method.
+		This is where actual compilation and linking takes place.
+		The task is executed by clients before linking their binary,
+		but may of course also be requested directly, so it also ensure self.__call__ as been called, and cxx_phase too.
+
+	Method do_mod_phase(self):
+		This is where to set self.sources and self.cfg for building the object files.
 	
 Some doc for the PreCompileTasks class:
 
@@ -32,11 +39,11 @@ Some doc for the PreCompileTasks class:
 
 	Property source_text(self):
 		This property should return the actual code to precompile.
-		For example, a series of #include.
+		For example, a series of #include: return '#include <cmath>\n#include <thread>\n'
 	
 	Method do_cxx_phase(self):
 		This is where to set self.cfg for building the pch file.
-		For example: self.cfg.include_paths
+		For example: self.cfg.include_paths.append(src_dir / 'pre-compiled')
 
 Some doc for the ModDepPhases class:
 
@@ -46,24 +53,29 @@ Some doc for the ModDepPhases class:
 		self.private_deps and self.public_deps should be filled with all required dependencies, found or not, and available optional dependencies.
 
 		If self.do_ensure_deps is later called, missing dependencies found in self.all_deps will raise an error.
+		Users can override self.do_ensure_deps to generate a friendlier message.
 
-	Attributes public_deps, private_deps, property expose_private_deep_deps:
+	Attributes public_deps, private_deps:
 		self.public_deps export compiler/linker flags to clients' build cfg with self.apply_cxx_to(cfg) and self.apply_mod_to(cfg)
 		self.private_deps don't export cxx cfg to clients of clients.
-		self.private_deps export mod cfg to clients of clients only when it's a static lib (expose_private_deep_deps True).
+		self.private_deps export mod cfg to clients of clients only when it's a static lib (self._expose_private_deep_deps True is ModTask).
 
-		This is done in self.do_deps_cxx_phases, which retrieve a topologically-sorted dependency list and call their apply_cxx_to method with self.cfg.
-		self.do_deps_cxx_phases also ensures the dependencies have processed their cxx_phase.
+		This is done in self._do_deps_cxx_phases, which retrieve a topologically-sorted dependency list,
+		and call their apply_cxx_to method with self.cfg.
+		self._do_deps_cxx_phases also ensures the dependencies have processed their cxx_phase.
+		
+		The property self._expose_private_deep_deps returns False in ModDepPhases,
+		but is overriden is ModTask to return True when it's a static lib.
 
 	Attribute cxx_phase:
 		task executed before clients start compiling object files (e.g. install headers)
-		This is called by clients with self.do_deps_cxx_phases, to bring dependencies up and then apply cfg with apply_cxx_to.
+		This is called by clients with self._do_deps_cxx_phases, to bring dependencies up and then apply cfg with apply_cxx_to.
 
 	Methods apply_cxx_to(self, cfg), apply_mod_to(self, cfg):
-		modify the clients' cfg
+		This is where the you can export compile flags to clients so they can start building their object files.
 
 	Attribute mod_phase(self):
-		task executed before clients start linking the binary.
+		task executed before clients start linking their binary.
 
 ===========================================================
 

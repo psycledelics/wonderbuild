@@ -13,11 +13,13 @@ _announce_color = color_bg_fg_rgb((240, 240, 255), (0, 0, 170))
 
 class CheckTask(SharedTask, OptionCfg):
 
+	# OptionCfg(OptionDecl)
 	known_options = set(['recheck'])
 
+	# OptionCfg(OptionDecl)
 	@staticmethod
 	def generate_option_help(help):
-		help['recheck'] = (None, 'perform configuration checks again', 'do not recheck unless signature changed')
+		help['recheck'] = ('[yes|no]', 'perform configuration checks again', 'no => do not recheck unless signature changed')
 
 	def __init__(self, persistent, uid, shared_options_holder):
 		SharedTask.__init__(self, persistent, uid)
@@ -66,6 +68,7 @@ class CheckTask(SharedTask, OptionCfg):
 	def _set_results(self, value): self._results = value
 	results = property(_get_results, _set_results)
 
+	# SharedTask(Task)
 	def __call__(self, sched_ctx):
 		if 'recheck' not in self.options:
 			try: old_sig, self._results = self.persistent

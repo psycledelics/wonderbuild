@@ -75,7 +75,7 @@ class SharedTaskHolder(object):
 		self.bld_dir = bld_dir
 		self._shared_tasks = {}
 
-class SharedTask(Task, Persistent):
+class SharedTask(Task, Persistent): # note: the only derived class is CheckTask
 		
 	@classmethod
 	def shared_uid(class_, *args, **kw): raise Exception, str(class_) + ' did not redefine the class method.'
@@ -90,9 +90,9 @@ class SharedTask(Task, Persistent):
 		except KeyError: instance = holder._shared_tasks[uid] = class_(holder.persistent, uid, *args, **kw)
 		return instance
 	
-	def __init__(self, persistent, uid):
+	def __init__(self, persistent_dict, uid):
 		Task.__init__(self)
-		Persistent.__init__(self, persistent, uid)
+		Persistent.__init__(self, persistent_dict, uid)
 
 class ProjectTask(Task):
 
