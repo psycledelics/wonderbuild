@@ -515,15 +515,22 @@ class _PreCompileTask(ModDepPhases, Task, Persistent):
 				f = open(self.header.path, 'w')
 				try: f.write(self.source_text); f.write('\n')
 				finally: f.close()
-				self.header.clear() # if the user touched the header in the build dir!
 				deps = self.cfg.impl.process_precompile_task(self, sched_ctx.lock)
+				# We create a file with a #error to ensure the pch is used.
+				f = open(self.header.path, 'w')
+				try:
+					f.write(
+						'#error This is an intentional error to ensure the pre-compiled header is really used.\n'
+						'// Below is the original file content that was pre-compiled to ' + self.target.rel_path(self.header) + '\n'
+						+ self.target.abs_path + '\n'
+						+ self.header.abs_path + '\n'
+						+ self.header.rel_path(self.target) + '\n'
+					)
+					f.write(self.source_text); f.write('\n')					
+				finally: f.close()
+				self.header.clear()
 				dep_sigs = [d.sig for d in deps]
 				self.persistent = self.sig, deps, Sig(''.join(dep_sigs)).digest()
-				if False:
-					# We create a file with a #error to ensure the pch is used.
-					f = open(self.header.path, 'w')
-					try: f.write('#error pre-compiled header missed\n');
-					finally: f.close()
 		finally: sched_ctx.lock.acquire()
 
 	@property

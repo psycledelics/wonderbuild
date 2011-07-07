@@ -218,6 +218,7 @@ class Node(object):
 							try: child = self._children[name]
 							except KeyError: self._children[name] = self._actual_children[name] = Node(self, name)
 							else: self._actual_children[name] = child
+			self._used = True # so that find_iter results are persistent in dirs where no relevant files have been found.
 		return self._actual_children
 	
 	def _merge(self, cur, old):
@@ -324,6 +325,8 @@ class Node(object):
 		node2 = self
 		node1.height
 		node2.height
+		# TODO minor optim: A small optimisation could be done for the 'dir/symlink/..' case in the loop, indeed
+		# TODO minor optim: once we've canonicalised the node there is no need to check for symlinks anymore.
 		while node1._height > node2._height:
 			if node1.exists and node1._is_symlink: return self.rel_path(from_node.canonical_node) # because 'dir/symlink/..' is not the same as 'dir/'
 			node1 = node1.parent
@@ -335,7 +338,9 @@ class Node(object):
 			node2 = node2.parent
 		ancestor = node1
 		if ancestor._height == 0:
-			# If we need to go up to the root, it's a bit useless to use a relative dir because the absolute path is then simpler.
+			# Relative paths are useful to be able to move a common ancestor while keeping these relative paths between children valid.
+			# If we need to go up to the root, it's useless to use a relative path because the root itself never moves.
+			# We use the absolute path which is simpler for the user to read.
 			return self.abs_path
 		path = []
 		for i in xrange(from_node._height - ancestor._height): path.append(os.pardir)
@@ -380,28 +385,25 @@ class Node(object):
 		if parent._actual_children is not None and name in parent._actual_children: del parent._actual_children[name]
 		if parent._old_children is not None and name in parent._old_children: del parent._old_children[name]
 
-	def _global_purge_unused_children(self):
-		c = {}; used = False
-		for node in self._children.itervalues():
-			try: node._sig
-			except AttributeError:
-				if node._children is None or node._global_purge_unused_children():
-					#node.parent = None
-					continue
-			c[node.name] = node; used = True
-		self._children = used and c or None
-		if not used:
-			self._actual_children = self._old_children = None
-			if __debug__ and is_debug: debug('fs: unused     : ' + str(self))
-		return not used
+	if False: # TODO See note in PurgeablePersistentDict
+		def _global_purge_unused_children(self):
+			c = {}; used = False
+			for node in self._children.itervalues():
+				if node._used or node._children is not None and not node._global_purge_unused_children():
+					c[node.name] = node
+					used = True
+			self._children = used and c or None
+			if not used:
+				self._actual_children = self._old_children = None
+				if __debug__ and is_debug: debug('fs: unused     : ' + str(self))
+			return not used
 
 	def _partial_purge_unused_children(self):
 		c = {}; used = False
 		for node in self._children.itervalues():
-			try: node._sig
-			except AttributeError:
-				if node._used or (not node._old_used and (node._children is None or node._partial_purge_unused_children())): continue
-			c[node.name] = node; used = True
+			if node._used or node._old_used or node._children is not None and not node._partial_purge_unused_children():
+				c[node.name] = node
+				used = True
 		self._children = used and c or None
 		if not used:
 			self._actual_children = self._old_children = None

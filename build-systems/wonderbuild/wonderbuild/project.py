@@ -5,7 +5,7 @@
 import sys, os, gc, cPickle
 
 from wonderbuild import abi_sig, UserReadableException
-from task import Task, PersistentDict, SharedTaskHolder
+from task import Task, PurgeablePersistentDict, SharedTaskHolder
 from options import OptionDecl
 from script import ScriptLoaderTask
 from filesystem import FileSystem
@@ -26,11 +26,12 @@ class Project(Task, SharedTaskHolder, OptionDecl):
 		help['tasks'] = ('<name,...>', 'build tasks with names <name,...>, comma-separated list', 'default (use --list-tasks for detail)')
 		help['list-tasks'] = (None, 'list the available task names and exit')
 
-		help['purge-persistent'] = (
-			'[yes|no]',
-			'purge the persistent pickle file from data that are not used by the requested tasks\n'
-			'(only useful after some tasks have been removed and you want to trim their ghost signature from the pickle)',
-			'no')
+		if False: # TODO See note in PurgeablePersistentDict
+			help['purge-persistent'] = (
+				'[yes|no]',
+				'purge the persistent pickle file from data that are not used by the requested tasks\n'
+				'(only useful after some tasks have been removed and you want to trim their ghost signature from the pickle)',
+				'no')
 
 	def __init__(self, options, option_collector):
 		Task.__init__(self)
@@ -53,7 +54,9 @@ class Project(Task, SharedTaskHolder, OptionDecl):
 			else: self.requested_task_aliases = (None,)
 		else: self.requested_task_aliases = None
 		
-		self.global_purge = options.get('purge-persistent', 'no') != 'no'
+		# TODO See note in PurgeablePersistentDict
+		if False: self.global_purge = options.get('purge-persistent', 'no') != 'no'
+		else: self.global_purge = False
 		
 		self.processsing = False
 
@@ -70,7 +73,7 @@ class Project(Task, SharedTaskHolder, OptionDecl):
 					pickle_abi_sig = cPickle.load(f)
 					if pickle_abi_sig != abi_sig:
 						print >> sys.stderr, colored('33', 'wonderbuild: abi sig changed: discarding persistent pickle file => full rebuild will be performed')
-						persistent = PersistentDict()
+						persistent = PurgeablePersistentDict()
 					else:
 						persistent = cPickle.load(f)
 						if __debug__ and is_debug: debug('project: pickle: load time: ' + str(time.time() - t0) + ' s')
@@ -80,7 +83,7 @@ class Project(Task, SharedTaskHolder, OptionDecl):
 					raise
 				finally: f.close()
 		except:
-			persistent = PersistentDict()
+			persistent = PurgeablePersistentDict()
 		finally:
 			if gc_enabled: gc.enable()
 
