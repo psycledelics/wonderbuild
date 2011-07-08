@@ -71,6 +71,6 @@ class Wonderbuild(ScriptTask):
 						return self._sources
 		
 		self._mod_dep_phases = mod_dep_phases = DiversalisMod()
-		common.pch.public_deps.append(mod_dep_phases)
+		common.pch.private_deps.append(mod_dep_phases)
 		self.default_tasks = [mod_dep_phases.cxx_phase]
 

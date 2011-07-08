@@ -67,13 +67,20 @@ class Impl(object):
 			return sig
 
 	@staticmethod
-	def client_cfg_cxx_args(client_cfg, fhs):
+	def client_cfg_cxx_args(cfg, uninstalled):
 		args = []
-		for k, v in client_cfg.defines.iteritems():
+		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + repr(str(v))[1:-1]) # note: assumes that cpp and python escaping work the same way
-		for p in client_cfg.include_paths: args.append('-I${includedir}/' + p.rel_path(fhs.include))
-		for f in client_cfg.frameworks: args.append('-F' + f)
+		if uninstalled:
+			for p in cfg.include_paths: args.append('-I' + p.abs_path)
+		else:
+			dest = cfg.fhs.dest
+			root = dest.fs.root
+			for p in cfg.include_paths: args.append('-I' + (root / p.rel_path(dest)).abs_path)
+		if cfg.dest_platform.os == 'darwin':
+			for f in cfg.frameworks: args.append('-F' + f)
+		args += cfg.cxx_flags
 		return args
 
 	@staticmethod
@@ -209,18 +216,24 @@ class Impl(object):
 			return sig
 
 	@staticmethod
-	def client_cfg_ld_args(client_cfg, fhs):
+	def client_cfg_ld_args(cfg, uninstalled):
 		args = []
-		for p in client_cfg.lib_paths: args.append('-L${libdir}/' + p.rel_path(fhs.lib))
-		for l in client_cfg.libs: args.append('-l' + l)
-		if len(client_cfg.static_libs):
+		if uninstalled:
+			for p in cfg.lib_paths: args.append('-L' + p.abs_path)
+		else:
+			dest = cfg.fhs.dest
+			root = dest.fs.root
+			for p in cfg.lib_paths: args.append('-L' + (root / p.rel_path(dest)).abs_path)
+		for l in cfg.libs: args.append('-l' + l)
+		if len(cfg.static_libs):
 			args.append('-Wl,-Bstatic')
-			for l in client_cfg.static_libs: args.append('-l' + l)
-		if len(client_cfg.shared_libs):
+			for l in cfg.static_libs: args.append('-l' + l)
+		if len(cfg.shared_libs):
 			args.append('-Wl,-Bdynamic')
-			for l in client_cfg.shared_libs: args.append('-l' + l)
-		for f in client_cfg.frameworks: args += ['-framework', f]
-		args += client_cfg.ld_flags
+			for l in cfg.shared_libs: args.append('-l' + l)
+		if cfg.dest_platform.os == 'darwin':
+			for f in cfg.frameworks: args += ['-framework', f]
+		args += cfg.ld_flags
 		return args
 
 	@staticmethod
@@ -229,6 +242,7 @@ class Impl(object):
 		if cfg.shared: args.append(cfg.dest_platform.bin_fmt == 'mac-o' and '-dynamiclib' or '-shared')
 		elif cfg.static_prog: args.append('-static') # we can have both -shared and -static but that's not very useful
 		if cfg.dest_platform.bin_fmt == 'elf':
+			# we use fhs.lib and fhs.bin here but we could use mod_task.target.parent and fhs.bin
 			rpath = '-Wl,-rpath=$ORIGIN' + os.sep + cfg.fhs.lib.rel_path(cfg.fhs.bin)
 			if need_sep_fix: rpath = rpath.replace('\\', '/') # when cross-compiling from windows
 			args.append(rpath)

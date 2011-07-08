@@ -98,7 +98,7 @@ class Wonderbuild(ScriptTask):
 					self.outer = outer
 					
 				@property
-				def trim_prefix(self): return src_dir / 'psycle' # so that psycle headers and freepsycle ones are mixed
+				def trim_prefix(self): return src_dir
 
 				@property
 				def dest_dir(self): return self.fhs.include / 'freepsycle' # so that psycle headers and freepsycle ones are mixed

@@ -67,7 +67,7 @@ class Wonderbuild(ScriptTask):
 			opt = [std_cxx0x, mt, openmp, dl, glibmm]
 			for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 			self.result = min(bool(r) for r in req)
-			self.public_deps += req + [x for x in opt if x]
+			self.private_deps += req + [x for x in opt if x]
 			for x in PreCompileTasks.__call__(self, sched_ctx): yield x
 
 		def do_cxx_phase(self): self.cfg.include_paths.append(self.top_src_dir / 'build-systems' / 'src')
