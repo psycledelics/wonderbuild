@@ -7,33 +7,38 @@
 
 Some doc for the ModTask class:
 
-	Method __call__(self, sched_ctx):
+	Method __call__(self, sched_ctx), from Task, also required by ModDepPhases:
 		This is where to check for the availability of the dependencies.
 		Dependencies are instances of the ModDepPhases.
 		These are tasks that once processed, are convertible to a boolean.
 		Required and optionally found dependencies should be put in self.public_deps and self.private_deps.
 		Dependencies that are used in public headers should be put in self.public_deps, and the others in self.private_deps.
 	
-	Attribute cxx_phase:
+	Attribute cxx_phase, from ModDepPhases:
 		This should be a task that installs the public headers so that clients can start building their object files.
 
-	Method apply_cxx_to(self, cfg):
+	Method apply_cxx_to(self, cfg), from ModDepPhases:
 		This is where to export compile flags to the cfg so that clients can start building their object files.
 		For example: adding to cfg.include_paths the path where the cxx_phase installed the headers:
 			if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
 
-	Attribute mod_phase(self):
-		The user doesn't need to override this method.
+	Attribute mod_phase, from ModDepPhases:
+		The user doesn't need to override this attribute. They only override the self.do_mod_phase() method, which is called by the mod_phase task.
 		This is where actual compilation and linking takes place.
-		The task is executed by clients before linking their binary,
-		but may of course also be requested directly, so it also ensure self.__call__ as been called, and cxx_phase too.
+		The task is executed by clients before linking their binary against this mod,
+		It may of course also be requested directly.
+		It ensures self.__call__ as been called, and cxx_phase of dependencies too, with _do_deps_cxx_phases (defined in ModDepPhases).
 
 	Method do_mod_phase(self):
 		This is where to set self.sources and self.cfg for building the object files.
-	
+
+	Method apply_mod_to(self, cfg), from ModDepPhases:
+		The user doesn't need to override this method.
+		This default implementation exports link flags to the cfg so that clients can start linking against this mod.
+		
 Some doc for the PreCompileTasks class:
 
-	Method __call__(self, sched_ctx):
+	Method __call__(self, sched_ctx), from Task, also required by ModDepPhases:
 		This is where to check for the availability of the dependencies, just like in the ModTask class,
 		but a pch should have only optional dependencies, put in self.public_deps.
 
@@ -41,14 +46,29 @@ Some doc for the PreCompileTasks class:
 		This property should return the actual code to precompile.
 		For example, a series of #include: return '#include <cmath>\n#include <thread>\n'
 	
+	Attribute cxx_phase, from ModDepPhases:
+		The user doesn't need to override this attribute. They only override the self.do_cxx_phase() method, which is called by the cxx_phase task.
+		This is were actual pre-compilation takes place.
+		It ensures self.__call__ as been called, and cxx_phase of dependencies too, with _do_deps_cxx_phases (defined in ModDepPhases).
+		One the pre-compiled header is built, clients can start building their object files.
+		
 	Method do_cxx_phase(self):
 		This is where to set self.cfg for building the pch file.
 		For example: self.cfg.include_paths.append(src_dir / 'pre-compiled')
 
+	Method apply_cxx_to(self, cfg), from ModDepPhases:
+		This is where to export compile flags to the cfg so that clients can start building their object files.
+		For example: adding to cfg.include_paths the path where the cxx_phase installed the headers:
+			if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+
 Some doc for the ModDepPhases class:
 
-	Method __call__(self, sched_ctx):
+	ModDepPhases can be a ModTask, a PreCompileTasks, or a CheckTask like PkgConfigCheckTask or (Multi)BuildCheckTask.
+
+	Method __call__(self, sched_ctx) (derived classes are required to also derive from Task):
 		task that check for availability of dependencies.
+		Viewed from the other side, task executed by clients to check for the availability of this instance.
+
 		If there are missing required dependencies, self.result should be assigned False.
 		self.private_deps and self.public_deps should be filled with all required dependencies, found or not, and available optional dependencies.
 
@@ -57,57 +77,33 @@ Some doc for the ModDepPhases class:
 
 	Attributes public_deps, private_deps:
 		self.public_deps export compiler/linker flags to clients' build cfg with self.apply_cxx_to(cfg) and self.apply_mod_to(cfg)
-		self.private_deps don't export cxx cfg to clients of clients.
-		self.private_deps export mod cfg to clients of clients only when it's a static lib (self._expose_private_deep_deps True is ModTask).
-
-		This is done in self._do_deps_cxx_phases, which retrieve a topologically-sorted dependency list,
-		and call their apply_cxx_to method with self.cfg.
-		self._do_deps_cxx_phases also ensures the dependencies have processed their cxx_phase.
+		self.private_deps export linker flags to clients only when self._expose_private_deep_deps is True.
 		
 		The property self._expose_private_deep_deps returns False in ModDepPhases,
 		but is overriden is ModTask to return True when it's a static lib.
 
 	Attribute cxx_phase:
-		task executed before clients start compiling object files (e.g. install headers)
-		This is called by clients with self._do_deps_cxx_phases, to bring dependencies up and then apply cfg with apply_cxx_to.
+		task executed before clients start compiling object files.
+		This is called by clients with _do_deps_cxx_phases, to bring dependencies up and then apply cfg with apply_cxx_to.
+		It should for example install or pre-compiler headers.
+		The cxx_phase task is not used by CheckTask, and left as None.
+		The cxx_phase task may be not used by ModTask when its kind is Kinds.PROG or Kinds.LOADABLE, and left as None.
 
-	Methods apply_cxx_to(self, cfg), apply_mod_to(self, cfg):
-		This is where the you can export compile flags to clients so they can start building their object files.
+	Method apply_cxx_to(self, cfg):
+		This is where you can export compile flags to clients so they can start building their object files.
+		This is called by clients with _do_deps_cxx_phases.
 
-	Attribute mod_phase(self):
+	Attribute mod_phase:
 		task executed before clients start linking their binary.
+		This is called by clients from their own mod_phase task, to bring dependencies up and then apply cfg with apply_mod_to.
+		It should for example compile and link the binary.
+		The mod_phase task is not used by CheckTask, and left as None.
+		The mod_phase task is not used by PreCompileTasks, and left as None.
+		The mod_phase task is not used by ModTask when its kind is Kinds.HEADERS, and left as None.
 
-===========================================================
-
-X.setup_deps (__call__)
-X.build_objs (do_mod_phase)
-X.install_headers (cxx_phase)
-X.client_cxx_flags (apply_cxx_to) -> X.install_headers
-X.build_mod -> X.setup_deps
-            -> X.build_objs
-X.client_mod_flags -> X.build_mod
-X.deep_deps = self.cfg.shared or not self.cfg.static_prog
-X.ld = shared or prog
-
-A -> B -> C
-
-A {static, dyn} prog
-{B, C} {static, shared/loadable} lib
-
-A static, B static, C static: A -> B -> C
-A dyn, B static, C static: A -> B -> C
-A dyn, B static, C shared: A -> B -> C
-A dyn, B shared, C static: A -> B (rarely used)
-A dyn, B shared, C shared: A -> B
-
-A.build_mod -> A.setup_deps -> B.setup_deps -> C.setup_deps
-            -> A.build_objs -> B.client_cxx_flags -> B.install_headers
-                                                  -> C.client_cxx_flags -> C.install_headers
-            -> A.ld? -> B.client_mod_flags -> B.build_mod -> B.setup_deps -> C.setup_deps
-                                                          -> B.build_objs -> C.client_cxx_flags -> C.install_headers
-                                                          -> B.ld? -> C.client_mod_flags -> C.build_mod -> C.setup_deps
-                                                                                                        -> C.build_objs
-                                           -> !B.ld? -> C.client_mod_flags
+	Method apply_mod_to(self, cfg):
+		This is where you can export link flags to clients so they can start linking their binary.
+		This is called by clients from their mod_phase task.
 
 ===========================================================
 
@@ -130,6 +126,11 @@ the task need to do its actual job.
 Step 3:
 Upon successful completion, the task then stores the signature of the inputs to the persistent storage.
 If a error occurred, the task doesn't update the persistent input signature, so that the next build run will try again.
+
+===========================================================
+
+Example implementing a makefile with wonderbuild
+
 _________________________________________
 
 all: foo
@@ -173,10 +174,10 @@ class WonderBuild(ScriptTask):
 				for x in sched_ctx.parallel_wait(*input_tasks): yield x
 				min_output = min([(project.bld_dir / o).time for o in self.outputs])
 				max_input = max([(project.src_dir / i).time for i in self.inputs])
-				try: sched_ctx.release()
-					if min_output < max_input:
+				if min_output < max_input:
+					try: sched_ctx.release()
 						for c in self.commands: exec_subprocess(c)
-				finally: sched_ctx.acquire()
+					finally: sched_ctx.acquire()
 				for o in self.outputs: o.clear()
 
 		foo1 = MakeLikeTask(['foo1.o'], ['foo1.c'], ['cc -o foo1.o foo1.c'.split()])

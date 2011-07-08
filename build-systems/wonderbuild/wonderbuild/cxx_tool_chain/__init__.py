@@ -14,7 +14,7 @@ from wonderbuild.task import Persistent, Task, ProjectTask
 from wonderbuild.check_task import CheckTask, ok_color, failed_color
 from wonderbuild.subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 
-class ClientCfg(object):
+class ClientCfg(object): # TODO The ClientCfg class is never used. Merge it with the BuildCfg class (renamed to just Cfg?)
 	def __init__(self, project):
 		self.project = project
 		self.defines = {}
@@ -44,19 +44,20 @@ class ClientCfg(object):
 		c.pkg_config += self.pkg_config
 		c.frameworks += self.frameworks
 		return c
-	
-	def apply_to(self, cfg):
-		if self in cfg._applied: return
-		cfg.defines.update(self.defines)
-		cfg.include_paths.extend(self.include_paths)
-		cfg.cxx_flags += self.cxx_flags
-		cfg.lib_paths.extend(self.lib_paths)
-		cfg.libs += self.libs
-		cfg.static_libs += self.static_libs
-		cfg.shared_libs += self.shared_libs
-		cfg.ld_flags += self.ld_flags
-		cfg.pkg_config += self.pkg_config
-		cfg.frameworks += self.frameworks
+
+	if False: # TODO unused. remove.
+		def apply_to(self, cfg):
+			if self in cfg._applied: return
+			cfg.defines.update(self.defines)
+			cfg.include_paths.extend(self.include_paths)
+			cfg.cxx_flags += self.cxx_flags
+			cfg.lib_paths.extend(self.lib_paths)
+			cfg.libs += self.libs
+			cfg.static_libs += self.static_libs
+			cfg.shared_libs += self.shared_libs
+			cfg.ld_flags += self.ld_flags
+			cfg.pkg_config += self.pkg_config
+			cfg.frameworks += self.frameworks
 
 class DestPlatform(object):
 	def __init__(self):
@@ -385,8 +386,13 @@ class ModDepPhases(object): # note: doesn't derive form Task, but derived classe
 		result = uid in cfg._applied
 		cfg._applied.add(uid)
 
-	def apply_cxx_to(self, cfg): return not self._applied(cfg, 'cxx')
-	def apply_mod_to(self, cfg): return not self._applied(cfg, 'mod')
+	def apply_cxx_to(self, cfg):
+		if not self._applied(cfg, 'cxx'): return True
+		else: print 'XXXXXXXXXXXXXXXXXXXXXXXXXX apply_cxx_to'; return False
+	
+	def apply_mod_to(self, cfg):
+		if not self._applied(cfg, 'mod'): return True
+		else: print 'XXXXXXXXXXXXXXXXXXXXXXXXXX aply_mod_to'; return False
 	
 	def _do_deps_cxx_phases(self, sched_ctx):
 		deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=False)
@@ -1254,6 +1260,8 @@ class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 	def what_args(self): return ['--exists']
 
 	# _PkgConfigTask(CheckTask)
+	# Note: This sets 'results', which indirectly sets the bool result property as defined in CheckTask.
+	# The bool result is taken from CheckTask and not ModDepPhases because ModDepPhases comes last in the inheritance.
 	def do_check_and_set_result(self, sched_ctx):
 		if False: yield
 		try: r = exec_subprocess(self.args)
@@ -1304,6 +1312,13 @@ class MultiBuildCheckTask(CheckTask, ModDepPhases):
 		if not ModDepPhases.apply_cxx_to(self, cfg): return
 		self.apply_to(cfg)
 
+	# TODO distinguish between apply_cxx_to and apply_mod_to
+	# TODO For example, with the openmp check,
+	# TODO If it's a private dep and we build a static lib,
+	# TODO clients will need apply_mod_to but not apply_cxx_to
+	# TODO That is, -fopenmp passed only to the linker (translated to a -lopenmp flag)
+	def apply_mod_to(self, cfg): pass
+	
 	def apply_to(self, cfg): pass
 		
 	@property
