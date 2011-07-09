@@ -63,9 +63,8 @@ Some doc for the PreCompileTasks class:
 			self.cfg.include_paths.append(src_dir / 'pre-compiled')
 
 	Method apply_cxx_to(self, cfg), from ModDepPhases:
-		This is where to export compile flags to the cfg so that clients can start building their object files.
-		For example: adding to cfg.include_paths the path where the cxx_phase installed the headers:
-			if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+		The user doesn't need to override this method.
+		This default implementation exports compile flags to the cfg so that clients will use the pre-compiled header.
 
 Some doc for the ModDepPhases class:
 

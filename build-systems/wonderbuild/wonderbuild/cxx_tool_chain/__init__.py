@@ -623,11 +623,6 @@ class PreCompileTasks(ModDepPhases, Task):
 			self.cfg.pic = self.pic # this clones the parent cfg and changes the pic setting
 			for x in _PreCompileTask.__call__(self, sched_ctx): yield x
 
-		# _PreCompileTask(ModDepPhases)
-		def apply_cxx_to(self, cfg):
-			_PreCompileTask.apply_cxx_to(self, cfg)
-			self.parent_task.apply_cxx_to(cfg)
-
 	def do_cxx_phase(self): pass
 
 class _BatchCompileTask(Task):
