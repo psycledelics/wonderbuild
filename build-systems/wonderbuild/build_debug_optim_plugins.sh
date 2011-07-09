@@ -8,12 +8,7 @@ cd $(dirname $0)/../.. &&
 dest=/tmp/psycle-player-test &&
 
 # test whether compiler supports link-time optimisation (lto)
-{ cpp -P 2>/dev/null << EOF
-        #if (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__) < 40500
-                #error version too low
-        #endif
-EOF
-} && lto=-flto
+if cpp -P -xc++ /dev/null -flto; then lto=-flto; fi &&
 
 common_flags='-march=native -ggdb3 -Wall -Wstrict-aliasing=2 -Winit-self' && # -Wfloat-equal -Wpadded
 
