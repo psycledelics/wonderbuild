@@ -54,7 +54,8 @@ class Wonderbuild(ScriptTask):
 		class HelpersMathMod(ModTask):
 			def __init__(self):
 				name = 'psycle-helpers-math'
-				ModTask.__init__(self, name, ModTask.Kinds.HEADERS, cfg, cxx_phase=HelpersMathMod.InstallHeaders())
+				ModTask.__init__(self, name, ModTask.Kinds.HEADERS, cfg,
+					cxx_phase = self.__class__.InstallHeaders(project, name + '-headers'))
 				
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
@@ -63,13 +64,11 @@ class Wonderbuild(ScriptTask):
 				req = self.all_deps
 				self.result = min(bool(r) for r in req)
 
-			def apply_cxx_to(self, cfg):
-				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
-				ModTask.apply_cxx_to(self, cfg)
+			def do_ensure_deps(self):
+				if not std_math: raise UserReadableException, self.name + ' requires the standard math lib: ' + std_math.help
+				ModTask.do_ensure_deps(self)
 
 			class InstallHeaders(InstallTask):
-				def __init__(self): InstallTask.__init__(self, project, 'psycle-helpers-math-headers')
-
 				@property
 				def trim_prefix(self): return src_dir
 
@@ -84,13 +83,15 @@ class Wonderbuild(ScriptTask):
 							list((self.trim_prefix / 'psycle' / 'helpers' / 'math').find_iter(
 								in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)))
 						return self._sources
+						
+			def apply_cxx_to(self, cfg):
+				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+
 		self._math_mod_dep_phases = helpers_math = HelpersMathMod()
 		self.default_tasks.append(helpers_math.cxx_phase)
 
 		class HelpersMod(ModTask):
-			def __init__(self):
-				name = 'psycle-helpers'
-				ModTask.__init__(self, name, ModTask.Kinds.LIB, cfg)
+			def __init__(self): ModTask.__init__(self, 'psycle-helpers', ModTask.Kinds.LIB, cfg)
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
@@ -99,20 +100,6 @@ class Wonderbuild(ScriptTask):
 				for x in sched_ctx.parallel_wait(*req): yield x
 				self.result = min(bool(r) for r in req)
 				self.cxx_phase = HelpersMod.InstallHeaders(self.project, self.name + '-headers')
-				for x in ModTask.__call__(self, sched_ctx): yield x
-
-			def do_ensure_deps(self):
-				if not std_math: raise UserReadableException, self.name + ' requires the standard math lib: ' + std_math.help
-
-			def do_mod_phase(self):
-				self.cfg.include_paths.appendleft(src_dir)
-				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
-				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
-				for s in (src_dir / 'psycle' / 'helpers').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo', 'math')): self.sources.append(s)
-
-			def apply_cxx_to(self, cfg):
-				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
-				ModTask.apply_cxx_to(self, cfg)
 
 			class InstallHeaders(InstallTask):
 				@property
@@ -129,27 +116,34 @@ class Wonderbuild(ScriptTask):
 						for s in (self.trim_prefix / 'psycle' / 'helpers').find_iter(
 							in_pats = ('*.hpp',), ex_pats = ('*.private.hpp', 'math.hpp'), prune_pats = ('todo', 'math')): self._sources.append(s)
 						return self._sources
+
+			def apply_cxx_to(self, cfg):
+				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+
+			def do_mod_phase(self):
+				self.cfg.include_paths.appendleft(src_dir)
+				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
+				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
+				for s in (src_dir / 'psycle' / 'helpers').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo', 'math')): self.sources.append(s)
+
 		self._mod_dep_phases = helpers = HelpersMod()
 		self.default_tasks.append(helpers.mod_phase)
 						
 		class UnitTestMod(ModTask):
-			def __init__(self):
-				name = 'psycle-helpers-unit-tests'
-				ModTask.__init__(self, name, ModTask.Kinds.PROG, cfg)
+			def __init__(self): ModTask.__init__(self, 'psycle-helpers-unit-tests', ModTask.Kinds.PROG, cfg)
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.prog_task, helpers, boost_test]
 				req = self.all_deps
 				for x in sched_ctx.parallel_wait(*req): yield x
 				self.result = min(bool(r) for r in req)
-				for x in ModTask.__call__(self, sched_ctx): yield x
 
 			def do_mod_phase(self):
 				self.cfg.include_paths.appendleft(src_dir)
 				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
 				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
 				self.sources.append(src_dir / 'unit_tests.cpp')
+				
+		unit_tests = UnitTestMod()
 		for x in sched_ctx.parallel_wait(boost_test): yield x
-		if boost_test:
-			unit_tests = UnitTestMod()
-			self.default_tasks.append(unit_tests.mod_phase)
+		if boost_test: self.default_tasks.append(unit_tests.mod_phase)

@@ -14,9 +14,17 @@ from wonderbuild.task import Persistent, Task, ProjectTask
 from wonderbuild.check_task import CheckTask, ok_color, failed_color
 from wonderbuild.subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 
-class ClientCfg(object): # TODO The ClientCfg class is never used. Merge it with the BuildCfg class (renamed to just Cfg?)
+class DestPlatform(object):
+	def __init__(self):
+		self.bin_fmt = None
+		self.os = None
+		self.arch = None
+		self.pic_flag_defines_pic = None
+			
+class BuildCfg(object):
 	def __init__(self, project):
 		self.project = project
+		# client cfg
 		self.defines = {}
 		self.include_paths = deque()
 		self.cxx_flags = []
@@ -27,48 +35,7 @@ class ClientCfg(object): # TODO The ClientCfg class is never used. Merge it with
 		self.ld_flags = []
 		self.pkg_config = []
 		self.frameworks = [] # for darwin
-		self._applied = set()
-		
-	def clone(self, class_ = None):
-		if class_ is None: class_ = self.__class__
-		if __debug__ and is_debug: debug('cfg: clone: ' + str(class_))
-		c = class_(self.project)
-		c.defines.update(self.defines)
-		c.include_paths.extend(self.include_paths)
-		c.cxx_flags += self.cxx_flags
-		c.lib_paths.extend(self.lib_paths)
-		c.libs += self.libs
-		c.static_libs += self.static_libs
-		c.shared_libs += self.shared_libs
-		c.ld_flags += self.ld_flags
-		c.pkg_config += self.pkg_config
-		c.frameworks += self.frameworks
-		return c
-
-	if False: # TODO unused. remove.
-		def apply_to(self, cfg):
-			if self in cfg._applied: return
-			cfg.defines.update(self.defines)
-			cfg.include_paths.extend(self.include_paths)
-			cfg.cxx_flags += self.cxx_flags
-			cfg.lib_paths.extend(self.lib_paths)
-			cfg.libs += self.libs
-			cfg.static_libs += self.static_libs
-			cfg.shared_libs += self.shared_libs
-			cfg.ld_flags += self.ld_flags
-			cfg.pkg_config += self.pkg_config
-			cfg.frameworks += self.frameworks
-
-class DestPlatform(object):
-	def __init__(self):
-		self.bin_fmt = None
-		self.os = None
-		self.arch = None
-		self.pic_flag_defines_pic = None
-			
-class BuildCfg(ClientCfg):
-	def __init__(self, project):
-		ClientCfg.__init__(self, project)
+		# build cfg
 		self.lang = 'c++'
 		self.cxx_prog = self.ld_prog = self.ar_prog = self.ranlib_prog = None
 		self.pic = self.shared = self.static_prog = None
@@ -82,10 +49,22 @@ class BuildCfg(ClientCfg):
 		self.use_input_abs_paths = False
 		self.shared_checks = project
 
-	# ClientCfg
 	def clone(self, class_ = None):
 		if class_ is None: class_ = self.__class__
-		c = ClientCfg.clone(self, class_)
+		if __debug__ and is_debug: debug('cfg: clone: ' + str(class_))
+		c = class_(self.project)
+		# client cfg
+		c.defines.update(self.defines)
+		c.include_paths.extend(self.include_paths)
+		c.cxx_flags += self.cxx_flags
+		c.lib_paths.extend(self.lib_paths)
+		c.libs += self.libs
+		c.static_libs += self.static_libs
+		c.shared_libs += self.shared_libs
+		c.ld_flags += self.ld_flags
+		c.pkg_config += self.pkg_config
+		c.frameworks += self.frameworks
+		# build cfg
 		c.lang = self.lang
 		c.cxx_prog = self.cxx_prog
 		c.pic = self.pic
@@ -327,11 +306,11 @@ class UserBuildCfgTask(BuildCfg, OptionCfg, Persistent, Task):
 			self.ar_prog = o.get('ar', None) or os.environ.get('AR', None)
 			self.ranlib_prog = o.get('ranlib', None) or os.environ.get('RANLIB', None)
 			
-			if self.cxx_prog is not None: self.print_desc('user-provided-build-cfg-flags: cxx: ' + self.cxx_prog)
-			if len(self.cxx_flags) != 0: self.print_desc('user-provided-build-cfg-flags: cxx flags: ' + str(self.cxx_flags))
-			if self.ld_prog is not None: self.print_desc('user-provided-build-cfg-flags: ld: ' + self.ld_prog)
-			if len(self.ld_flags) != 0: self.print_desc('user-provided-build-cfg-flags: ld flags: ' + str(self.ld_flags))
-			if self.ar_prog is not None: self.print_desc('user-provided-build-cfg-flags: ar: ' + self.ar_prog)
+			if self.cxx_prog    is not None: self.print_desc('user-provided-build-cfg-flags: cxx: ' + self.cxx_prog)
+			if len(self.cxx_flags) != 0    : self.print_desc('user-provided-build-cfg-flags: cxx flags: ' + str(self.cxx_flags))
+			if self.ld_prog     is not None: self.print_desc('user-provided-build-cfg-flags: ld: ' + self.ld_prog)
+			if len(self.ld_flags) != 0     : self.print_desc('user-provided-build-cfg-flags: ld flags: ' + str(self.ld_flags))
+			if self.ar_prog     is not None: self.print_desc('user-provided-build-cfg-flags: ar: ' + self.ar_prog)
 			if self.ranlib_prog is not None: self.print_desc('user-provided-build-cfg-flags: ranlib: ' + self.ranlib_prog)
 
 			self.persistent = \
@@ -345,8 +324,9 @@ class UserBuildCfgTask(BuildCfg, OptionCfg, Persistent, Task):
 			detect_impl = DetectImplCheckTask.shared(self)
 			for x in sched_ctx.parallel_wait(detect_impl): yield x
 
-class ModDepPhases(object): # note: doesn't derive form Task, but derived classes also derive from Task
+class ModDepPhases(object): # note: doesn't derive form Task, but derived classes must also derive from Task
 	def __init__(self):
+		if __debug__ and is_debug: assert isinstance(self, Task) # note: doesn't derive form Task, but derived classes must also derive from Task
 		self.private_deps = [] # of ModDepPhases
 		self.public_deps = [] # of ModDepPhases
 		self.cxx_phase = self.mod_phase = None
@@ -363,6 +343,8 @@ class ModDepPhases(object): # note: doesn't derive form Task, but derived classe
 			for x in sched_ctx.parallel_wait(*self.all_deps): yield x
 			#self.result = min(bool(dep) for dep in self.all_deps)
 
+	# bool result is compatible with CheckTask.result
+	# This is merged in MultiBuildCheckTask which derives both from CheckTask and ModDepPhases.
 	def _get_result(self):
 		try: return self._result
 		except AttributeError: raise Exception, 'did you forget to process the ' + str(self) + ' task?'
@@ -381,18 +363,8 @@ class ModDepPhases(object): # note: doesn't derive form Task, but derived classe
 				else: desc += str(dep)
 				raise UserReadableException, desc
 	
-	def _applied(self, cfg, what):
-		uid = str(id(self)) + '#' + what
-		result = uid in cfg._applied
-		cfg._applied.add(uid)
-
-	def apply_cxx_to(self, cfg):
-		if not self._applied(cfg, 'cxx'): return True
-		else: print 'XXXXXXXXXXXXXXXXXXXXXXXXXX apply_cxx_to'; return False
-	
-	def apply_mod_to(self, cfg):
-		if not self._applied(cfg, 'mod'): return True
-		else: print 'XXXXXXXXXXXXXXXXXXXXXXXXXX aply_mod_to'; return False
+	def apply_cxx_to(self, cfg): pass
+	def apply_mod_to(self, cfg): pass
 	
 	def _do_deps_cxx_phases(self, sched_ctx):
 		deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=False)
@@ -462,9 +434,7 @@ class _PreCompileTask(ModDepPhases, Task, Persistent):
 		self.cxx_phase = _PreCompileTask._CxxPhaseCallbackTask(self)
 	
 	# ModDepPhases
-	def apply_cxx_to(self, cfg):
-		if not ModDepPhases.apply_cxx_to(self, cfg): return
-		cfg.pch = self.header
+	def apply_cxx_to(self, cfg): cfg.pch = self.header
 
 	@property
 	def source_text(self): return '#error ' + str(self.__class__) + ' did not redefine default source text.\n'
@@ -595,8 +565,7 @@ class PreCompileTasks(ModDepPhases, Task):
 
 	def __str__(self): return 'pre-compile ' + self.name + ' (pic-or-not)'
 
-	@property
-	def source_text(self): return '#error ' + str(self.__class__) + ' did not redefine default source text.\n'
+	source_text = '#error no source text defined.\n'
 
 	@property
 	def pic_task(self):
@@ -724,10 +693,10 @@ class ModTask(ModDepPhases, ProjectTask, Persistent):
 		self.sources = []
 		if aliases is None: aliases = (name,)
 		if kind == ModTask.Kinds.HEADERS:
-			#self.cxx_phase = ModTask._CxxPhaseCallbackTask(self)
 			self.cxx_phase = kw['cxx_phase']
 			self.project.add_task_aliases(self.cxx_phase, *aliases)
 		else:
+			if __debug__ and is_debug and 'cxx_phase' in kw: raise Exception, 'set cxx_phase in __call__(self, sched_ctx)'
 			self.mod_phase = ModTask._ModPhaseCallbackTask(self)
 			self.project.add_task_aliases(self.mod_phase, *aliases)
 	
@@ -756,7 +725,6 @@ class ModTask(ModDepPhases, ProjectTask, Persistent):
 
 	# ModDepPhases
 	def apply_mod_to(self, cfg):
-		if not ModDepPhases.apply_mod_to(self, cfg): return
 		if self.kind != ModTask.Kinds.HEADERS:
 			if not self.target_dev_dir in cfg.lib_paths: cfg.lib_paths.append(self.target_dev_dir)
 			cfg.libs.append(self.name)
@@ -1247,9 +1215,7 @@ class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 		for x in _PkgConfigTask.__call__(self, sched_ctx): yield x
 
 	# ModDepPhases
-	def apply_cxx_to(self, cfg):
-		if not ModDepPhases.apply_cxx_to(self, cfg): return
-		cfg.pkg_config += self.pkgs
+	def apply_cxx_to(self, cfg): cfg.pkg_config += self.pkgs
 		
 	# _PkgConfigTask
 	@property
@@ -1308,9 +1274,7 @@ class MultiBuildCheckTask(CheckTask, ModDepPhases):
 			return self._cfg
 
 	# ModDepPhases
-	def apply_cxx_to(self, cfg):
-		if not ModDepPhases.apply_cxx_to(self, cfg): return
-		self.apply_to(cfg)
+	def apply_cxx_to(self, cfg): self.apply_to(cfg)
 
 	# TODO distinguish between apply_cxx_to and apply_mod_to
 	# TODO For example, with the openmp check,

@@ -48,42 +48,18 @@ class Wonderbuild(ScriptTask):
 		zlib = ZLibCheckTask.shared(check_cfg)
 
 		class CoreMod(ModTask):
-			def __init__(self):
-				name = 'psycle-core'
-				ModTask.__init__(self, name, ModTask.Kinds.LIB, cfg)
+			def __init__(self): ModTask.__init__(self, 'psycle-core', ModTask.Kinds.LIB, cfg)
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
-				self.public_deps = [audiodrivers, xml, zlib]
+				self.public_deps = [audiodrivers, zlib]
 				req = self.public_deps + self.private_deps
-				for x in sched_ctx.parallel_wait(*req): yield x
+				opt = [xml]
+				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
+				self.public_deps += [o for o in opt if o]
 				self.result = min(bool(r) for r in req)
 				self.cxx_phase = CoreMod.InstallHeaders(self.project, self.name + '-headers')
-				for x in ModTask.__call__(self, sched_ctx): yield x
 			
-			def _apply_defines(self, cfg):
-				d = cfg.defines
-				if xml: d['PSYCLE__CORE__CONFIG__LIBXMLPP_AVAILABLE'] = None
-
-			def do_mod_phase(self):
-				self.cfg.include_paths.appendleft(src_dir)
-				self._apply_defines(self.cfg)
-				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
-				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
-				self.cfg.include_paths.appendleft(top_src_dir / 'psycle-plugins' / 'src')
-				self.cfg.include_paths.appendleft(top_src_dir / 'external-packages' / 'vst-2.4')
-				for s in (src_dir / 'psycle' / 'core').find_iter(
-					in_pats = ('*.cpp',), prune_pats = ('todo',), ex_pats = ('psy4filter.cpp',)
-				): self.sources.append(s)
-				for s in (src_dir / 'seib' / 'vst').find_iter(
-					in_pats = ('*,coo',), prune_pats = ('todo',)
-				): self.sources.append(s);
-
-			def apply_cxx_to(self, cfg):
-				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
-				self._apply_defines(cfg)
-				ModTask.apply_cxx_to(self, cfg)
-
 			class InstallHeaders(InstallTask):
 				@property
 				def trim_prefix(self): return src_dir
@@ -99,6 +75,27 @@ class Wonderbuild(ScriptTask):
 						for s in (self.trim_prefix / 'psycle' / 'core').find_iter(
 							in_pats = ('*.hpp', '*.h'), ex_pats = ('*.private.hpp', '*.private.h'), prune_pats = ('todo',)): self._sources.append(s)
 						return self._sources
+
+			def _apply_defines_to(self, cfg):
+				if xml: cfg.defines['PSYCLE__CORE__CONFIG__LIBXMLPP_AVAILABLE'] = None
+
+			def apply_cxx_to(self, cfg):
+				self._apply_defines_to(cfg)
+				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+
+			def do_mod_phase(self):
+				self._apply_defines_to(self.cfg)
+				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
+				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
+				self.cfg.include_paths.appendleft(src_dir)
+				self.cfg.include_paths.appendleft(top_src_dir / 'psycle-plugins' / 'src')
+				self.cfg.include_paths.appendleft(top_src_dir / 'external-packages' / 'vst-2.4')
+				for s in (src_dir / 'psycle' / 'core').find_iter(
+					in_pats = ('*.cpp',), prune_pats = ('todo',), ex_pats = ('psy4filter.cpp',)
+				): self.sources.append(s)
+				for s in (src_dir / 'seib' / 'vst').find_iter(
+					in_pats = ('*,coo',), prune_pats = ('todo',)
+				): self.sources.append(s);
 
 		self._mod_dep_phases = mod_dep_phases = CoreMod()
 		self.default_tasks.append(mod_dep_phases.mod_phase)

@@ -43,18 +43,15 @@ class Wonderbuild(ScriptTask):
 		xml = PkgConfigCheckTask.shared(check_cfg, ['libxml++-2.6'])
 
 		class PlayerMod(ModTask):
-			def __init__(self):
-				name = 'psycle-player'
-				ModTask.__init__(self, name, ModTask.Kinds.PROG, cfg)
+			def __init__(self): ModTask.__init__(self, 'psycle-player', ModTask.Kinds.PROG, cfg)
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.prog_task, core]
 				req = self.all_deps
 				opt = [xml]
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
-				self.result = min(bool(r) for r in req)
 				self.private_deps += [o for o in opt if o]
-				for x in ModTask.__call__(self, sched_ctx): yield x
+				self.result = min(bool(r) for r in req)
 
 			def do_mod_phase(self):
 				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'

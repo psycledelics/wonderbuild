@@ -18,17 +18,17 @@ from wonderbuild.cxx_tool_chain import UserBuildCfgTask, PreCompileTasks
 
 class Wonderbuild(ScriptTask):
 	@property
-	def top_src_dir(self): return self.src_dir.parent.parent
-
-	@property
 	def cfg(self): return self._cfg
 
 	@property
 	def pch(self):
 		try: return self._pch
 		except AttributeError:
-			self._pch = Wonderbuild.Pch(self.top_src_dir, self.cfg)
+			self._pch = Wonderbuild.Pch(self._top_src_dir, self.cfg)
 			return self._pch
+
+	@property
+	def _top_src_dir(self): return self.src_dir.parent.parent
 
 	def __call__(self, sched_ctx):
 		cfg = UserBuildCfgTask.shared(self.project)
@@ -43,7 +43,7 @@ class Wonderbuild(ScriptTask):
 	class Pch(PreCompileTasks):
 		def __init__(self, top_src_dir, base_cfg):
 			PreCompileTasks.__init__(self, 'common-pch', base_cfg)
-			self.top_src_dir = top_src_dir
+			self._top_src_dir = top_src_dir
 
 		def __call__(self, sched_ctx):
 			from wonderbuild.cxx_tool_chain import PkgConfigCheckTask
@@ -66,11 +66,9 @@ class Wonderbuild(ScriptTask):
 			req = [std_math, boost] # required because pre-compiled.private.hpp include them unconditionaly
 			opt = [std_cxx0x, mt, openmp, dl, glibmm]
 			for x in sched_ctx.parallel_wait(*(req + opt)): yield x
+			self.private_deps += req + [o for o in opt if o]
 			self.result = min(bool(r) for r in req)
-			self.private_deps += req + [x for x in opt if x]
-			for x in PreCompileTasks.__call__(self, sched_ctx): yield x
 
-		def do_cxx_phase(self): self.cfg.include_paths.append(self.top_src_dir / 'build-systems' / 'src')
-
-		source_text = '#include <forced-include.private.hpp>\n'
-
+		def do_cxx_phase(self):
+			self.cfg.include_paths.append(self._top_src_dir / 'build-systems' / 'src')
+			self.source_text = '#include <forced-include.private.hpp>\n'

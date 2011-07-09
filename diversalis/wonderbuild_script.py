@@ -42,19 +42,14 @@ class Wonderbuild(ScriptTask):
 		class DiversalisMod(ModTask):
 			def __init__(self):
 				name = 'diversalis'
-				ModTask.__init__(self, name, ModTask.Kinds.HEADERS, cfg, cxx_phase=DiversalisMod.InstallHeaders())
+				ModTask.__init__(self, name, ModTask.Kinds.HEADERS, cfg,
+					cxx_phase=self.__class__.InstallHeaders(project, name + '-headers'))
 				
 			def __call__(self, sched_ctx):
+				if False: yield
 				self.result = True
-				for x in ModTask.__call__(self, sched_ctx): yield x
 			
-			def apply_cxx_to(self, cfg):
-				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
-				ModTask.apply_cxx_to(self, cfg)
-
 			class InstallHeaders(InstallTask):
-				def __init__(self): InstallTask.__init__(self, project, 'diversalis-headers')
-
 				@property
 				def trim_prefix(self): return src_dir
 
@@ -70,7 +65,9 @@ class Wonderbuild(ScriptTask):
 								in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)))
 						return self._sources
 		
+			def apply_cxx_to(self, cfg):
+				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+
 		self._mod_dep_phases = mod_dep_phases = DiversalisMod()
 		common.pch.private_deps.append(mod_dep_phases)
 		self.default_tasks = [mod_dep_phases.cxx_phase]
-

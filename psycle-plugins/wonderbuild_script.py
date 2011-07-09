@@ -72,21 +72,7 @@ class Wonderbuild(ScriptTask):
 				for x in sched_ctx.parallel_wait(*req): yield x
 				self.result = min(bool(r) for r in req)
 				if self.kind == ModTask.Kinds.LIB: self.cxx_phase = self.__class__.InstallHeaders(self)
-				for x in ModTask.__call__(self, sched_ctx): yield x
 			
-			def do_mod_phase(self):
-				self.cfg.include_paths.appendleft(src_dir)
-				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
-				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
-				if self.path.exists:
-					for s in self.path.find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
-				else: self.sources.append(self.path.parent / (self.path.name + '.cpp'))
-
-			def apply_cxx_to(self, cfg):
-				if self.cxx_phase is not None and not self.cxx_phase.dest_dir in cfg.include_paths:
-					cfg.include_paths.append(self.cxx_phase.dest_dir)
-				ModTask.apply_cxx_to(self, cfg)
-
 			class InstallHeaders(InstallTask):
 				def __init__(self, outer):
 					InstallTask.__init__(self, outer.project, outer.name + '-headers')
@@ -112,6 +98,18 @@ class Wonderbuild(ScriptTask):
 								self._sources.append(f)
 								break
 						return self._sources
+						
+			def apply_cxx_to(self, cfg):
+				if self.cxx_phase is not None and not self.cxx_phase.dest_dir in cfg.include_paths:
+					cfg.include_paths.append(self.cxx_phase.dest_dir)
+
+			def do_mod_phase(self):
+				self.cfg.include_paths.appendleft(src_dir)
+				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
+				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
+				if self.path.exists:
+					for s in self.path.find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
+				else: self.sources.append(self.path.parent / (self.path.name + '.cpp'))
 
 		n = 'psycle-plugin-'
 		p = src_dir / 'psycle' / 'plugins'

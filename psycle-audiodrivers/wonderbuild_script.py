@@ -61,7 +61,7 @@ class Wonderbuild(ScriptTask):
 				self.path = path
 				if deps is not None: self.public_deps += deps
 				if kind in (ModTask.Kinds.PROG, ModTask.Kinds.LOADABLE): default_tasks.append(self.mod_phase)
-				self.cxx_phase = self.__class__.InstallHeaders(self)
+				self.cxx_phase = self.__class__.InstallHeaders(self) # note: set in __ini__ because called directly in AudioDriversMod.__call__
 
 			def __call__(self, sched_ctx):
 				if self.kind == ModTask.Kinds.PROG: self.private_deps = [pch.prog_task]
@@ -70,23 +70,10 @@ class Wonderbuild(ScriptTask):
 				req = self.all_deps
 				for x in sched_ctx.parallel_wait(*req): yield x
 				self.result = min(bool(r) for r in req)
-				for x in ModTask.__call__(self, sched_ctx): yield x
 		
-			def do_mod_phase(self):
-				self.cfg.include_paths.appendleft(src_dir)
-				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
-				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
-				if self.path.exists:
-					for s in self.path.find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
-				else: self.sources.append(self.path.parent / (self.path.name + '.cpp'))
-
-			def apply_cxx_to(self, cfg):
-				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
-				ModTask.apply_cxx_to(self, cfg)
-
 			class InstallHeaders(InstallTask):
 				def __init__(self, outer):
-					InstallTask.__init__(self, project, outer.name + '-headers')
+					InstallTask.__init__(self, outer.project, outer.name + '-headers')
 					self.outer = outer
 				
 				@property
@@ -109,7 +96,18 @@ class Wonderbuild(ScriptTask):
 								self._sources.append(f)
 								break
 						return self._sources
-		
+
+			def apply_cxx_to(self, cfg):
+				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+
+			def do_mod_phase(self):
+				self.cfg.include_paths.appendleft(src_dir)
+				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
+				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
+				if self.path.exists:
+					for s in self.path.find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
+				else: self.sources.append(self.path.parent / (self.path.name + '.cpp'))
+
 		class AudioDriverMod(UniformMod):
 			def __init__(self, name, path, deps=None, define_name=None):
 				UniformMod.__init__(self,
@@ -117,16 +115,15 @@ class Wonderbuild(ScriptTask):
 					src_dir / 'psycle' / 'audiodrivers' / path,
 					deps
 				)
-				self.define_name = define_name is not None and define_name or name.replace('-', '_').upper()
+				self._define_name = define_name is not None and define_name or name.replace('-', '_').upper()
 			
-			def apply_defines_to(self, cfg):
-				cfg.defines['PSYCLE__' + self.define_name + '_AVAILABLE'] = None
-		
+			def _apply_defines_to(self, cfg): cfg.defines['PSYCLE__' + self._define_name + '_AVAILABLE'] = None
+
+			def apply_cxx_to(self, cfg): self._apply_defines_to(cfg)
+
 			def do_mod_phase(self):
-				self.apply_defines_to(self.cfg)
+				self._apply_defines_to(self.cfg)
 				UniformMod.do_mod_phase(self)
-				
-			def apply_cxx_to(self, cfg): self.apply_defines_to(cfg)
 
 		if gstreamer: gst_driver = AudioDriverMod('gstreamer', 'gstreamerout', deps=(gstreamer,))
 		if alsa: alsa_driver = AudioDriverMod('alsa', 'alsaout', deps=(alsa,))
@@ -141,9 +138,7 @@ class Wonderbuild(ScriptTask):
 
 		# TODO this all-in-one lib should be removed in favor of separate loadable modules, one per driver
 		class AudioDriversMod(ModTask):
-			def __init__(self):
-				name = 'psycle-audiodrivers'
-				ModTask.__init__(self, name, ModTask.Kinds.LIB, cfg)
+			def __init__(self): ModTask.__init__(self, 'psycle-audiodrivers', ModTask.Kinds.LIB, cfg)
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
@@ -151,10 +146,9 @@ class Wonderbuild(ScriptTask):
 				req = self.public_deps + self.private_deps
 				opt = [alsa, jack, esound, dsound, winmm, gstreamer] # netaudio, asio
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
-				self.result = min(bool(r) for r in req)
 				self.public_deps += [o for o in opt if o]
-				self.cxx_phase = AudioDriversMod.InstallHeaders(self.project, self.name + '-headers')
-				for x in ModTask.__call__(self, sched_ctx): yield x
+				self.result = min(bool(r) for r in req)
+				self.cxx_phase = self.__class__.InstallHeaders(self.project, self.name + '-headers')
 
 				# brings the headers
 				h = []
@@ -169,42 +163,6 @@ class Wonderbuild(ScriptTask):
 					# netaudio
 					# asio
 				for x in sched_ctx.parallel_wait(*(h.cxx_phase for h in h)): yield x
-
-			def _apply_defines(self, cfg):
-				d = cfg.defines
-				if gstreamer: d['PSYCLE__GSTREAMER_AVAILABLE'] = None
-				if alsa:      d['PSYCLE__ALSA_AVAILABLE'] = None
-				if esound:    d['PSYCLE__ESOUND_AVAILABLE'] = None
-				if dsound:    d['PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE'] = None
-				if False: # these drivers need testing
-					if jack:      d['PSYCLE__JACK_AVAILABLE'] = None
-					if netaudio:  d['PSYCLE__NET_AUDIO_AVAILABLE'] = None
-					if asio:      d['PSYCLE__STEINBERG_ASIO_AVAILABLE'] = None
-					if winmm:     d['PSYCLE__MICROSOFT_MME_AVAILABLE'] = None
-			
-			def do_mod_phase(self):
-				self.cfg.include_paths.appendleft(src_dir)
-				self._apply_defines(self.cfg)
-				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
-				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
-				s = self.sources
-				dir = src_dir / 'psycle' / 'audiodrivers'
-				s.append(dir / 'audiodriver.cpp')
-				s.append(dir / 'wavefileout.cpp')
-				if gstreamer: s.append(dir / 'gstreamerout.cpp')
-				if alsa:      s.append(dir / 'alsaout.cpp')
-				if esound:    s.append(dir / 'esoundout.cpp')
-				if dsound:    s.append(dir / 'microsoftdirectsoundout.cpp')
-				if False: # these drivers need testing
-					if jack:      s.append(dir / 'jackout.cpp')
-					if netaudio:  s.append(dir / 'netaudioout.cpp')
-					if asio:      s.append(dir / 'asiointerface.cpp')
-					if winmm:     s.append(dir / 'microsoftmmewaveout.cpp')
-
-			def apply_cxx_to(self, cfg):
-				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
-				self._apply_defines(cfg)
-				ModTask.apply_cxx_to(self, cfg)
 
 			class InstallHeaders(InstallTask):
 				@property
@@ -232,5 +190,39 @@ class Wonderbuild(ScriptTask):
 								if asio:      s.append(dir / 'asioout.h')
 								if winmm:     s.append(dir / 'microsoftmmewaveout.h')
 						return s
+
+			def _apply_defines_to(self, cfg):
+				if gstreamer: cfg.defines['PSYCLE__GSTREAMER_AVAILABLE'] = None
+				if alsa:      cfg.defines['PSYCLE__ALSA_AVAILABLE'] = None
+				if esound:    cfg.defines['PSYCLE__ESOUND_AVAILABLE'] = None
+				if dsound:    cfg.defines['PSYCLE__MICROSOFT_DIRECT_SOUND_AVAILABLE'] = None
+				if False: # these drivers need testing
+					if jack:      cfg.defines['PSYCLE__JACK_AVAILABLE'] = None
+					if netaudio:  cfg.defines['PSYCLE__NET_AUDIO_AVAILABLE'] = None
+					if asio:      cfg.defines['PSYCLE__STEINBERG_ASIO_AVAILABLE'] = None
+					if winmm:     cfg.defines['PSYCLE__MICROSOFT_MME_AVAILABLE'] = None
+			
+			def apply_cxx_to(self, cfg):
+				self._apply_defines_to(cfg)
+				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+
+			def do_mod_phase(self):
+				self._apply_defines_to(self.cfg)
+				self.cfg.include_paths.appendleft(src_dir)
+				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
+				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
+				s = self.sources
+				dir = src_dir / 'psycle' / 'audiodrivers'
+				s.append(dir / 'audiodriver.cpp')
+				s.append(dir / 'wavefileout.cpp')
+				if gstreamer: s.append(dir / 'gstreamerout.cpp')
+				if alsa:      s.append(dir / 'alsaout.cpp')
+				if esound:    s.append(dir / 'esoundout.cpp')
+				if dsound:    s.append(dir / 'microsoftdirectsoundout.cpp')
+				if False: # these drivers need testing
+					if jack:      s.append(dir / 'jackout.cpp')
+					if netaudio:  s.append(dir / 'netaudioout.cpp')
+					if asio:      s.append(dir / 'asiointerface.cpp')
+					if winmm:     s.append(dir / 'microsoftmmewaveout.cpp')
 
 		self._mod_dep_phases = mod_dep_phases = AudioDriversMod()

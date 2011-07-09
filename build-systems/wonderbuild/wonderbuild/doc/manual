@@ -22,6 +22,10 @@ Some doc for the ModTask class:
 		For example: adding to cfg.include_paths the path where the cxx_phase installed the headers:
 			if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
 
+	Attribute sources:
+		list of FileSystem.Node
+		This should be the source files compile.
+
 	Attribute mod_phase, from ModDepPhases:
 		The user doesn't need to override this attribute. They only override the self.do_mod_phase() method, which is called by the mod_phase task.
 		This is where actual compilation and linking takes place.
@@ -42,9 +46,9 @@ Some doc for the PreCompileTasks class:
 		This is where to check for the availability of the dependencies, just like in the ModTask class,
 		but a pch should have only optional dependencies, put in self.public_deps.
 
-	Property source_text(self):
-		This property should return the actual code to precompile.
-		For example, a series of #include: return '#include <cmath>\n#include <thread>\n'
+	Attribute source_text:
+		This should be the actual code to precompile.
+		For example, a series of #include: '#include <forced-include.private.hpp>\n#include <cmath>\n#include <thread>\n'
 	
 	Attribute cxx_phase, from ModDepPhases:
 		The user doesn't need to override this attribute. They only override the self.do_cxx_phase() method, which is called by the cxx_phase task.
@@ -53,8 +57,10 @@ Some doc for the PreCompileTasks class:
 		One the pre-compiled header is built, clients can start building their object files.
 		
 	Method do_cxx_phase(self):
-		This is where to set self.cfg for building the pch file.
-		For example: self.cfg.include_paths.append(src_dir / 'pre-compiled')
+		This is where to set self.source_text and self.cfg for building the pch file.
+		For example:
+			self.source_text = '#include <forced-include.private.hpp>\n#include <cmath>\n#include <thread>\n'
+			self.cfg.include_paths.append(src_dir / 'pre-compiled')
 
 	Method apply_cxx_to(self, cfg), from ModDepPhases:
 		This is where to export compile flags to the cfg so that clients can start building their object files.

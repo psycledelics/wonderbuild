@@ -35,6 +35,5 @@ else:
 					'freepsycle'
 				)
 			]
-
 			for x in sched_ctx.parallel_wait(*tasks): yield x
 			for t in tasks: self.default_tasks += t.script_task.default_tasks

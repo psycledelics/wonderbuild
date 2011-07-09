@@ -63,10 +63,7 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild.install import InstallTask
 
 		class UniversalisMod(ModTask):
-			def __init__(self):
-				name = 'universalis'
-				ModTask.__init__(self, name, ModTask.Kinds.LIB, cfg)
-				self.cxx_phase = UniversalisMod.InstallHeaders(self.project, self.name + '-headers')
+			def __init__(self): ModTask.__init__(self, 'universalis', ModTask.Kinds.LIB, cfg)
 				
 			def __call__(self, sched_ctx):
 				self.private_deps = []
@@ -75,9 +72,9 @@ class Wonderbuild(ScriptTask):
 				req = self.public_deps + self.private_deps
 				opt = [std_cxx0x, openmp, glibmm]
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
+				self.public_deps += [o for o in opt if o]
 				self.result = min(bool(r) for r in req)
-				self.public_deps += [x for x in opt if x]
-				for x in ModTask.__call__(self, sched_ctx): yield x
+				self.cxx_phase = self.__class__.InstallHeaders(self.project, self.name + '-headers')
 
 			def do_ensure_deps(self):
 				if not boost: raise UserReadableException, self.name + ' requires the following boost libs: ' + boost.help
@@ -85,18 +82,6 @@ class Wonderbuild(ScriptTask):
 					'on mswindows, ' + self.name + ' requires microsoft\'s windows multimedia extensions: ' + winmm.help
 				ModTask.do_ensure_deps(self)
 			
-			def do_mod_phase(self):
-				if self.cfg.shared: self.cfg.defines['UNIVERSALIS__SHARED'] = None
-				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
-				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
-				self.cfg.include_paths.appendleft(src_dir)
-				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
-			
-			def apply_cxx_to(self, cfg):
-				if self.cxx_phase.dest_dir not in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
-				if not self.cfg.shared: cfg.defines['UNIVERSALIS__SOURCE'] = '-1'
-				ModTask.apply_cxx_to(self, cfg)
-
 			class InstallHeaders(InstallTask):
 				@property
 				def trim_prefix(self): return src_dir
@@ -112,28 +97,37 @@ class Wonderbuild(ScriptTask):
 							list((self.trim_prefix / 'universalis').find_iter(
 								in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',), prune_pats = ('todo',)))
 						return self._sources
+
+			def apply_cxx_to(self, cfg):
+				if self.cxx_phase.dest_dir not in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+				if not self.cfg.shared: cfg.defines['UNIVERSALIS__SOURCE'] = '-1'
+
+			def do_mod_phase(self):
+				if self.cfg.shared: self.cfg.defines['UNIVERSALIS__SHARED'] = None
+				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
+				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
+				self.cfg.include_paths.appendleft(src_dir)
+				for s in (src_dir / 'universalis').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
+			
 		self._mod_dep_phases = mod_dep_phases = universalis = UniversalisMod()
 		common.pch.private_deps.append(mod_dep_phases)
 		self.default_tasks.append(mod_dep_phases.mod_phase)
 
 		class UnitTestMod(ModTask):
-			def __init__(self):
-				name = 'universalis-unit-tests'
-				ModTask.__init__(self, name, ModTask.Kinds.PROG, cfg)
+			def __init__(self): ModTask.__init__(self, 'universalis-unit-tests', ModTask.Kinds.PROG, cfg)
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.prog_task, universalis, boost_test]
 				req = self.all_deps
 				for x in sched_ctx.parallel_wait(*req): yield x
 				self.result = min(bool(r) for r in req)
-				for x in ModTask.__call__(self, sched_ctx): yield x
 
 			def do_mod_phase(self):
 				self.cfg.include_paths.appendleft(src_dir)
 				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
 				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
 				self.sources.append(src_dir / 'unit_tests.cpp')
+				
+		unit_tests = UnitTestMod()
 		for x in sched_ctx.parallel_wait(boost_test): yield x
-		if boost_test:
-			unit_tests = UnitTestMod()
-			self.default_tasks.append(unit_tests.mod_phase)
+		if boost_test: self.default_tasks.append(unit_tests.mod_phase)
