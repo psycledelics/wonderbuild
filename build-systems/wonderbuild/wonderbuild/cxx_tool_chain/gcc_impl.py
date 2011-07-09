@@ -225,10 +225,10 @@ class Impl(object):
 			root = dest.fs.root
 			for p in cfg.lib_paths: args.append('-L' + (root / p.rel_path(dest)).abs_path)
 		for l in cfg.libs: args.append('-l' + l)
-		if len(cfg.static_libs):
+		if len(cfg.static_libs) != 0:
 			args.append('-Wl,-Bstatic')
 			for l in cfg.static_libs: args.append('-l' + l)
-		if len(cfg.shared_libs):
+		if len(cfg.shared_libs) != 0:
 			args.append('-Wl,-Bdynamic')
 			for l in cfg.shared_libs: args.append('-l' + l)
 		if cfg.dest_platform.os == 'darwin':
@@ -249,10 +249,10 @@ class Impl(object):
 			args.append('-Wl,-rpath-link=' + cfg.bld_rel_path(cfg.fhs.lib))
 		for p in cfg.lib_paths: args.append('-L' + cfg.bld_rel_path(p))
 		for l in cfg.libs: args.append('-l' + l)
-		if len(cfg.static_libs):
+		if len(cfg.static_libs) != 0:
 			args.append('-Wl,-Bstatic')
 			for l in cfg.static_libs: args.append('-l' + l)
-		if len(cfg.shared_libs):
+		if len(cfg.shared_libs) != 0:
 			args.append('-Wl,-Bdynamic')
 			for l in cfg.shared_libs: args.append('-l' + l)
 		if cfg.dest_platform.os == 'darwin':

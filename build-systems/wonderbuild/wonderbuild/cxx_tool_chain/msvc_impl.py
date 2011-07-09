@@ -39,11 +39,27 @@ class Impl(object):
 			sig = self._cxx_env_sig = sig.digest()
 			return sig
 
+	@staticmethod
+	def client_cfg_cxx_args(cfg, uninstalled):
+		args = []
+		for k, v in cfg.defines.iteritems():
+			if v is None: args.append('-D' + k)
+			else: args.append('-D' + k + '=' + repr(str(v))[1:-1]) # note: assumes that cpp and python escaping work the same way
+		if uninstalled:
+			for p in cfg.include_paths: args.append('-I' + p.abs_path)
+		else:
+			dest = cfg.fhs.dest
+			root = dest.fs.root
+			for p in cfg.include_paths: args.append('-I' + (root / p.rel_path(dest)).abs_path)
+		args += cfg.cxx_flags
+		return args
+
+	#@staticmethod
 	def cfg_cxx_args(self, cfg):
 		args = [cfg.cxx_prog, '-nologo']
 		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
-			else: args.append('-D' + k + '=' + repr(v)[1:-1]) # note: assumes that cpp and python escaping works the same way
+			else: args.append('-D' + k + '=' + repr(str(v))[1:-1]) # note: assumes that cpp and python escaping works the same way
 		if cfg.pch is not None:
 			pch = cfg.pch.parent / self.precompile_task_target_name(cfg.pch.name)
 			args += [
@@ -137,6 +153,22 @@ class Impl(object):
 			sig = self._ld_env_sig = sig.digest()
 			return sig
 
+	@staticmethod
+	def client_cfg_ld_args(cfg, uninstalled):
+		args = []
+		if uninstalled:
+			for p in cfg.lib_paths: args.append('-libpath:' + p.abs_path)
+		else:
+			dest = cfg.fhs.dest
+			root = dest.fs.root
+			for p in cfg.lib_paths: args.append('-libpath:' + (root / p.rel_path(dest)).abs_path)
+		for l in cfg.libs: args.append('-l' + l)
+		for l in cfg.static_libs: args.append('lib' + l + '.lib')
+		for l in cfg.libs: args.append(l + '.lib')
+		for l in cfg.shared_libs: args.append(l + '.lib')
+		args += cfg.ld_flags
+		return args
+
 	#@staticmethod
 	def cfg_ld_args(self, cfg):
 		args = [cfg.ld_prog, '-nologo']
@@ -144,11 +176,9 @@ class Impl(object):
 		elif cfg.static_prog: pass #args.append('-static')
 		if cfg.pch is not None: args.append(cfg.bld_rel_path(cfg.pch.parent / (cfg.pch.name[:cfg.pch.name.rfind('.')] + self.cxx_task_target_ext)))
 		for p in cfg.lib_paths: args.append('-libpath:' + cfg.bld_rel_path(p))
+		for l in cfg.static_libs: args.append('lib' + l + '.lib')
 		for l in cfg.libs: args.append(l + '.lib')
-		if len(cfg.static_libs):
-			for l in cfg.static_libs: args.append('lib' + l + '.lib')
-		if len(cfg.shared_libs):
-			for l in cfg.shared_libs: args.append(l + '.lib')
+		for l in cfg.shared_libs: args.append(l + '.lib')
 		args += cfg.ld_flags
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: msvc: ld: ' + str(args))
 		return args

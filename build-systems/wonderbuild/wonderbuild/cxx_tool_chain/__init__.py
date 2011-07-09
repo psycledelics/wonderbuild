@@ -375,52 +375,39 @@ class ModDepPhases(object): # note: doesn't derive form Task, but derived classe
 	def apply_cxx_to(self, cfg): pass
 	def apply_mod_to(self, cfg): pass
 	
-	def _do_deps_cxx_phases(self, sched_ctx):
-		deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=False)
-		cxx_phases = [dep.cxx_phase for dep in deps if dep.cxx_phase is not None]
+	def _do_deps_cxx_phases_and_apply_cxx_deep(self, sched_ctx):
+		cxx_phases = (dep.cxx_phase for dep in self.all_deps if dep.cxx_phase is not None)
 		for x in sched_ctx.parallel_wait(*cxx_phases): yield x
-		for dep in deps: dep.apply_cxx_to(self.cfg) # ordering matters for sig
+		deep_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=False)
+		for dep in deep_deps: dep.apply_cxx_to(self.cfg) # ordering matters for sig
 
  	@property
 	def _expose_private_deep_deps(self): return False
 
 	def _topologically_sorted_unique_deep_deps(self, expose_private_deep_deps, expose_deep_mod_tasks=True):
-		if expose_deep_mod_tasks:
-			try: return \
-				expose_private_deep_deps is None and self._private_cut_topologically_sorted_unique_deep_deps or \
-				expose_private_deep_deps and self._private_topologically_sorted_unique_deep_deps or \
-				self._public_topologically_sorted_unique_deep_deps
-			except AttributeError:
-				result = deque(); seen = set() # ordering matters for sig, and static libs must appear after their clients
-				self.__topologically_sorted_unique_deep_deps_recurse(result, seen, True, True, expose_private_deep_deps, expose_deep_mod_tasks)
-				if expose_private_deep_deps is None: self._private_cut_topologically_sorted_unique_deep_deps = result
-				elif expose_private_deep_deps: self._private_topologically_sorted_unique_deep_deps = result
-				else: self._public_topologically_sorted_unique_deep_deps = result
-				return result
-		else:
-			result = deque(); seen = set() # ordering matters for sig, and static libs must appear after their clients
-			self.__topologically_sorted_unique_deep_deps_recurse(result, seen, True, True, expose_private_deep_deps, expose_deep_mod_tasks)
-			return result
-
-	def __topologically_sorted_unique_deep_deps_recurse(self, result, seen, root, expose_private_deps, expose_private_deep_deps, expose_deep_mod_tasks):
-		if not root:
-			if self in seen: return
-			seen.add(self)
-		for dep in expose_private_deps and self.all_deps or self.public_deps:
-			if expose_deep_mod_tasks or not isinstance(dep, ModTask):
-				if expose_private_deep_deps is None:
-					dep.__topologically_sorted_unique_deep_deps_recurse(result, seen, False,
-						dep._expose_private_deep_deps, dep._expose_private_deep_deps and None,
-						expose_deep_mod_tasks is not None and (expose_deep_mod_tasks or not isinstance(dep, ModTask) or None))
+		if expose_private_deep_deps: expose_private_deep_deps = None # called with True or False, but we use a tribool in the recursion
+		result = deque(); seen = set() # ordering matters for sig, and static libs must appear after their clients
+		def recurse(instance, root, expose_private_deps, expose_private_deep_deps, expose_deep_mod_tasks):
+			if not root:
+				if instance in seen: return
+				seen.add(instance)
+			for dep in expose_private_deps and instance.all_deps or instance.public_deps:
+				if expose_deep_mod_tasks or not isinstance(dep, ModTask):
+					if expose_private_deep_deps is None:
+						recurse(dep, False,
+							dep._expose_private_deep_deps, dep._expose_private_deep_deps and None,
+							expose_deep_mod_tasks is not None and (expose_deep_mod_tasks or not isinstance(dep, ModTask) or None))
+					else:
+						recurse(dep, False,
+							expose_private_deep_deps, expose_private_deep_deps,
+							expose_deep_mod_tasks is not None and (expose_deep_mod_tasks or not isinstance(dep, ModTask) or None))
 				else:
-					dep.__topologically_sorted_unique_deep_deps_recurse(result, seen, False,
-						expose_private_deep_deps, expose_private_deep_deps,
-						expose_deep_mod_tasks is not None and (expose_deep_mod_tasks or not isinstance(dep, ModTask) or None))
-			else:
-				if not dep in seen:
-					result.appendleft(dep)
-					seen.add(dep)
-		if not root: result.appendleft(self)
+					if not dep in seen:
+						result.appendleft(dep)
+						seen.add(dep)
+			if not root: result.appendleft(instance)
+		recurse(self, True, True, expose_private_deep_deps, expose_deep_mod_tasks)
+		return result
 
 class _PreCompileTask(ModDepPhases, Task, Persistent):
 	def __init__(self, name, base_cfg):
@@ -484,7 +471,7 @@ class _PreCompileTask(ModDepPhases, Task, Persistent):
 	def _cxx_phase_callback(self, sched_ctx):
 		for x in sched_ctx.parallel_wait(self): yield x
 		self.do_ensure_deps()
-		for x in self._do_deps_cxx_phases(sched_ctx): yield x
+		for x in self._do_deps_cxx_phases_and_apply_cxx_deep(sched_ctx): yield x
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, because we don't need pkg-config cxx flags in the cfg sig
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.cfg)
@@ -683,33 +670,28 @@ class ModTask(ModDepPhases, Task, Persistent):
 		LIB = 2 # TODO allow the developer to specify that a lib is not dll-aware
 		LOADABLE = 3
 
-	def __init__(self, name, kind, base_cfg, cxx_phase=None, **kw):
+	def __init__(self, name, kind, base_cfg, **kw):
 		ModDepPhases.__init__(self)
 		Task.__init__(self)
 		Persistent.__init__(self, base_cfg.project.persistent, name)
 		self.base_cfg = base_cfg
 		self.name = name
 		self.title = kw.get('title', name)
-		self.description = kw.get('description', '')
-		self.version = kw.get('version', '')
-		self.url = kw.get('url', '')
+		self.description = kw.get('description', self.title)
+		self.version = kw.get('version', '0')
+		self.url = kw.get('url', None)
 		self.kind = kind
 		self.sources = []
-		if kind == ModTask.Kinds.HEADERS:
-			if __debug__ and is_debug: assert cxx_phase is not None
-			self.cxx_phase = cxx_phase
-			base_cfg.project.add_task_aliases(self.cxx_phase, name)
-		else:
-			if __debug__ and is_debug and cxx_phase is not None: raise Exception, 'set cxx_phase in __call__(self, sched_ctx)'
-			self.mod_phase = ModTask._ModPhaseCallbackTask(self)
-			base_cfg.project.add_task_aliases(self.mod_phase, name)
+		self.cxx_phase = kw.get('cxx_phase', None)
+		self.mod_phase = ModTask._ModPhaseCallbackTask(self)
+		base_cfg.project.add_task_aliases(self.mod_phase, name)
 	
 	@property
 	def cfg(self):
 		try: return self._cfg
 		except AttributeError:
 			cfg = self._cfg = self.base_cfg.clone()
-			if self.kind == ModTask.Kinds.PROG: cfg.shared = False
+			if self.kind in (ModTask.Kinds.HEADERS, ModTask.Kinds.PROG): cfg.shared = False
 			else:
 				if self.kind == ModTask.Kinds.LOADABLE: cfg.shared = True
 				if cfg.shared and not cfg.pic:
@@ -732,10 +714,6 @@ class ModTask(ModDepPhases, Task, Persistent):
 		if self.kind != ModTask.Kinds.HEADERS:
 			if not self.target_dev_dir in cfg.lib_paths: cfg.lib_paths.append(self.target_dev_dir)
 			cfg.libs.append(self.name)
-
-	def __str__(self):
-		if self.kind != ModTask.Kinds.HEADERS: return 'deps of module ' + str(self.target)
-		else: return 'deps of headers ' + self.name
 
 	@property
 	def obj_dir(self):
@@ -798,12 +776,22 @@ class ModTask(ModDepPhases, Task, Persistent):
 			else: self._ld = self.cfg.shared
 			return self._ld
 
+	def __str__(self):
+		if self.kind == ModTask.Kinds.HEADERS:
+			if self.cxx_phase is not None: return 'deps of ' + str(self.cxx_phase)
+			else: return 'deps of headers ' + self.name
+		else: return 'deps of module ' + str(self.target)
+
 	class _ModPhaseCallbackTask(Task):
 		def __init__(self, mod_task):
 			Task.__init__(self)
 			self.mod_task = mod_task
 
-		def __str__(self): return 'build module ' + str(self.mod_task.target)
+		def __str__(self):
+			if self.mod_task.kind == ModTask.Kinds.HEADERS:
+				if self.mod_task.cxx_phase is not None: return str(self.mod_task.cxx_phase)
+				else: return 'install headers ' + self.mod_task.name
+			else: return 'build module ' + str(self.mod_task.target)
 		
 		# Task
 		def __call__(self, sched_ctx):
@@ -814,19 +802,13 @@ class ModTask(ModDepPhases, Task, Persistent):
 	def _mod_phase_callback(self, sched_ctx):
 		for x in sched_ctx.parallel_wait(self): yield x
 		self.do_ensure_deps()
+		# For static archives, we don't need to wait for the deps, but we want them to be done when the build finishes so that the resulting archive can be used.
+		# For shared libs and programs, we need all deps before linking. We schedule them in advance, and don't wait for them right now, but just before linking.
+		deep_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=True)
+		deep_deps_mod_phases = [dep.mod_phase for dep in deep_deps if dep.mod_phase is not None]
+		sched_ctx.parallel_no_wait(*deep_deps_mod_phases)
 		if self.cxx_phase is not None: sched_ctx.parallel_no_wait(self.cxx_phase)
-		if not self.ld:
-			# For static archives, we don't need to wait for the deps,
-			# but we want them to be done when the build finishes so that the resulting archive can be used.
-			deps = (dep.mod_phase for dep in self.all_deps if dep.mod_phase is not None)
-			sched_ctx.parallel_no_wait(*deps)
-		else:
-			# For shared libs and programs, we need all deps before linking.
-			# We schedule them in advance, and don't wait for them right now, but just before linking.
-			deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=None)
-			deps_mod_phases = [dep.mod_phase for dep in deps if dep.mod_phase is not None]
-			sched_ctx.parallel_no_wait(*deps_mod_phases)
-		for x in self._do_deps_cxx_phases(sched_ctx): yield x
+		for x in self._do_deps_cxx_phases_and_apply_cxx_deep(sched_ctx): yield x
 		self.do_mod_phase()
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, because we don't need pkg-config cxx flags in the cfg sig
@@ -838,18 +820,18 @@ class ModTask(ModDepPhases, Task, Persistent):
 					# XXX pkg-config and static/shared (alternative is self.cfg.static_prog or not self.cfg.shared)
 					expose_private_deep_deps=self.cfg.static_prog)
 				sched_ctx.parallel_no_wait(pkg_config_ld_flags_task)
-		try: state = self.persistent
+		try: persistent = self.persistent
 		except KeyError:
 			if __debug__ and is_debug: debug('task: no state: ' + str(self))
-			state = self.persistent = None, None, {}
+			persistent = self.persistent = None, None, {}, None
 			self._type_changed = False
 			changed_sources = self.sources
 		else:
-			self._type_changed = state[1] != self.ld
+			self._type_changed = persistent[1] != self.ld
 			if __debug__ and is_debug and self._type_changed: debug('task: mod type changed: ' + str(self))
 			changed_sources = deque()
-			implicit_deps = state[2]
-			if self.cfg.check_missing:
+			implicit_deps = persistent[2]
+			if self.cfg.check_missing and self.kind != ModTask.Kinds.HEADERS:
 				self.obj_dir.lock.acquire()
 				try:
 					try: self.obj_dir.actual_children # not needed, just an optimisation
@@ -894,7 +876,7 @@ class ModTask(ModDepPhases, Task, Persistent):
 		need_process = False
 		# For shared libs and programs, we need all deps before linking.
 		# So these are parts of the tasks we need to process before linking.
-		tasks = self.ld and deps_mod_phases or []
+		tasks = self.ld and deep_deps_mod_phases or []
 		if len(changed_sources) != 0:
 			need_process = True
 			batches = []
@@ -915,7 +897,7 @@ class ModTask(ModDepPhases, Task, Persistent):
 				s = [str(s) for s in changed_sources]
 				s.sort()
 				self.print_desc_multicolumn_format(str(self.target) + ': compiling ' + pic + ' objects from ' + self.cfg.lang + ' using ' + str(i) + ' processes and batch-size ' + str(len(batches[0])), s, color)
-		elif self.cfg.check_missing:
+		elif self.cfg.check_missing and self.kind != ModTask.Kinds.HEADERS:
 			for t in self.targets:
 				if not t.exists:
 					if __debug__ and is_debug: debug('task: target missing: ' + str(t))
@@ -930,10 +912,9 @@ class ModTask(ModDepPhases, Task, Persistent):
 		#       Linking programs needs all deps, however.
 		for x in sched_ctx.parallel_wait(*tasks): yield x
 		if self.ld:
-			deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=None)
-			for dep in deps: dep.apply_mod_to(self.cfg) # ordering matters for sig
+			for dep in deep_deps: dep.apply_mod_to(self.cfg) # ordering matters for sig
 			if not need_process:
-				for dep in deps:
+				for dep in deep_deps:
 					# When a dependant lib is a static archive, or changes its type from static to shared, we need to relink.
 					# When the relink-on-shared-dep-impl-change option is on, we also relink to check that external symbols still exist.
 					need_process = \
@@ -944,15 +925,24 @@ class ModTask(ModDepPhases, Task, Persistent):
 						break
 			if len(self.cfg.pkg_config) != 0:
 				self.cfg.ld_sig # compute the signature before, because we don't need pkg-config ld flags in the cfg sig
-		if state[0] != self._mod_sig:
+		if persistent[0] != self._mod_sig:
 			if __debug__ and is_debug: debug('task: mod sig changed: ' + str(self))
 			changed_sources = self.sources
 			need_process = True
 		elif not need_process:
-			implicit_deps = state[2]
+			implicit_deps = persistent[2]
 			if len(implicit_deps) > len(self.sources):
 				# Some source has been removed from the list of sources to build.
+				if __debug__ and is_debug: debug('task: source removed: ' + str(self))
 				need_process = True
+		elif not need_process:
+			if __debug__ and is_debug: debug('task: pkg-config sig changed: ' + str(self))
+			if persistent[3] != self._pkg_config_sig:
+				sched_ctx.lock.release()
+				try:
+					self._generate_pkg_config_file()
+					self.persistent = persistent[0], persistent[1], persistent[2], self._pkg_config_sig
+				finally: sched_ctx.lock.acquire()
 		if not need_process:
 			if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
 		else:
@@ -963,7 +953,7 @@ class ModTask(ModDepPhases, Task, Persistent):
 			if self.kind != ModTask.Kinds.PROG and self.target_dir is not self.target_dev_dir: self.target_dev_dir.make_dir()
 			sched_ctx.lock.release()
 			try:
-				implicit_deps = state[2]
+				implicit_deps = persistent[2]
 				if len(implicit_deps) == len(self.sources): # (yes this is correct, even if it looks strange)
 					source_states = implicit_deps
 					removed_obj_names = None
@@ -979,82 +969,120 @@ class ModTask(ModDepPhases, Task, Persistent):
 							if not s in self.sources: removed_obj_names.append(self._obj_name(s))
 				if self.ld: sources = self.sources
 				else: sources = changed_sources
-				if not silent:
-					if not self.ld: desc = 'archiving and indexing static lib'; color = color_bg_fg_rgb((120, 100, 120), (255, 255, 255))
-					elif self.kind == ModTask.Kinds.PROG:
-						if self.cfg.static_prog: shared = 'static'; color = color_bg_fg_rgb((0, 180, 0), (255, 255, 255))
-						else: shared = 'dynamic'; color = color_bg_fg_rgb((130, 180, 0), (255, 255, 255))
-						if self.cfg.pic: pic = 'pic'; color += ';1'
-						else: pic = 'non-pic'
-						desc = 'linking ' + shared + ' ' + pic + ' program'
-					elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = color_bg_fg_rgb((180, 150, 80), (255, 255, 255))
-					else: desc = 'linking shared lib'; color = color_bg_fg_rgb((150, 150, 0), (255, 255, 255))
-					plus = not self.ld and '+' or ''
-					if __debug__ and is_debug: s = [plus + self._obj_name(s) + '(' + str(s) + ')' for s in sources]
-					else: s = [plus + self._obj_name(s) for s in sources]
-					if removed_obj_names is not None: s += ['-' + o for o in removed_obj_names]
-					s.sort()
-					self.print_desc_multicolumn_format(str(self.target) + ': ' + desc + ' from objects', s, color)
-				self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources], removed_obj_names)
-				self.persistent = self._mod_sig, self.ld, source_states
+				if self.kind != ModTask.Kinds.HEADERS:
+					if not silent:
+						if not self.ld: desc = 'archiving and indexing static lib'; color = color_bg_fg_rgb((120, 100, 120), (255, 255, 255))
+						elif self.kind == ModTask.Kinds.PROG:
+							if self.cfg.static_prog: shared = 'static'; color = color_bg_fg_rgb((0, 180, 0), (255, 255, 255))
+							else: shared = 'dynamic'; color = color_bg_fg_rgb((130, 180, 0), (255, 255, 255))
+							if self.cfg.pic: pic = 'pic'; color += ';1'
+							else: pic = 'non-pic'
+							desc = 'linking ' + shared + ' ' + pic + ' program'
+						elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = color_bg_fg_rgb((180, 150, 80), (255, 255, 255))
+						else: desc = 'linking shared lib'; color = color_bg_fg_rgb((150, 150, 0), (255, 255, 255))
+						plus = not self.ld and '+' or ''
+						if __debug__ and is_debug: s = [plus + self._obj_name(s) + '(' + str(s) + ')' for s in sources]
+						else: s = [plus + self._obj_name(s) for s in sources]
+						if removed_obj_names is not None: s += ['-' + o for o in removed_obj_names]
+						s.sort()
+						self.print_desc_multicolumn_format(str(self.target) + ': ' + desc + ' from objects', s, color)
+					self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources], removed_obj_names)
+				if persistent[3] != self._pkg_config_sig: self._generate_pkg_config_file()
+				self.persistent = self._mod_sig, self.ld, source_states, self._pkg_config_sig
 			finally: sched_ctx.lock.acquire()
 		if not self.cfg.check_missing: self.obj_dir.forget()
 		self._needed_process = need_process
-		if False: # TODO generating pkg-config .pc file; work in progress
-			if self.kind in (ModTask.Kinds.LIB, ModTask.Kinds.HEADERS):
-				cfg = BuildCfg(self.cfg.project)
-
-				# copy impl settings
-				cfg.lang = self.cfg.lang
-				cfg.pic = self.cfg.pic
-				cfg.shared = self.cfg.shared
-				cfg.static_prog = self.cfg.static_prog
-				cfg.impl = self.cfg.impl
-				cfg.kind = self.cfg.kind
-				cfg.version = self.cfg.version
-				cfg.dest_platform = self.cfg.dest_platform
-				
-				self.apply_cxx_to(cfg)
-				self.apply_mod_to(cfg)
-				cfg.pkg_config_deps = self.cfg.pkg_config[:]
-				
-				cfg.pkg_config_deps.append('### PRIVATE:')
-
-				private_cfg = cfg.clone()
-				private_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=True, expose_deep_mod_tasks=False)
-				for dep in private_deps:
-					if isinstance(dep, ModTask): cfg.pkg_config_deps.append(dep.name)
-					else: dep.apply_mod_to(private_cfg)
-				
-				cfg.pkg_config_deps.append('### PUBLIC:')
-				
-				public_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=None, expose_deep_mod_tasks=False)
-				for dep in public_deps:
-					if isinstance(dep, ModTask): cfg.pkg_config_deps.append(dep.name)
-					else: dep.apply_cxx_to(cfg); dep.apply_mod_to(cfg)
-				
-				uninstalled = False
-				pc_file = self.cfg.fhs.lib / 'pkgconfig' / (self.name + (uninstalled and '-uninstalled.pc' or '.pc'))
+		
+	def _generate_pkg_config_file(self):
+		if self.kind != ModTask.Kinds.PROG:
+			installed_pc_file = self.cfg.fhs.lib / 'pkgconfig' / (self.name + '.pc')
+			uninstalled_pc_file = self.cfg.project.bld_dir / 'pkgconfig' / (self.name + '-uninstalled.pc')
+			if not silent:
+				if self.kind == ModTask.Kinds.HEADERS: desc = str(self.cxx_phase)
+				else: desc = str(self.target)
+				self.print_desc_multicolumn_format(desc + ': writing pkg-config files',
+					[str(installed_pc_file), str(uninstalled_pc_file)], color_bg_fg_rgb((230, 100, 170), (255, 255, 255)) + ';1')
+			
+			cfg = BuildCfg(self.cfg.project)
+			# copy impl settings
+			cfg.lang = self.cfg.lang
+			cfg.pic = self.cfg.pic
+			cfg.shared = self.cfg.shared
+			cfg.static_prog = self.cfg.static_prog
+			cfg.impl = self.cfg.impl
+			cfg.kind = self.cfg.kind
+			cfg.version = self.cfg.version
+			cfg.dest_platform = self.cfg.dest_platform
+			
+			self.apply_cxx_to(cfg)
+			self.apply_mod_to(cfg)
+			
+			private_cfg = cfg.clone()
+			private_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=True, expose_deep_mod_tasks=False)
+			for dep in private_deps:
+				if isinstance(dep, ModTask): pass
+				elif isinstance(dep, PkgConfigCheckTask): pass
+				else: dep.apply_mod_to(private_cfg)
+			
+			public_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=False, expose_deep_mod_tasks=False)
+			for dep in public_deps:
+				if isinstance(dep, ModTask): cfg.pkg_config.append(dep.name)
+				elif isinstance(dep, PkgConfigCheckTask): cfg.pkg_config += dep.pkgs
+				else: dep.apply_cxx_to(cfg); dep.apply_mod_to(cfg)
+			
+			def generate(uninstalled, file):
 				cxx_flags = self.cfg.impl.client_cfg_cxx_args(cfg, uninstalled)
 				ld_flags = self.cfg.impl.client_cfg_ld_args(cfg, uninstalled)
 				private_ld_flags = self.cfg.impl.client_cfg_ld_args(private_cfg, uninstalled)
-				print
-				print '---------- begin pkg-config file ' + str(pc_file)
-				print '# generated by wonderbuild'
-				print
-				print 'Name:', self.title
-				if self.description: print 'Description:', self.description
-				if self.version: print 'Version:', self.version
-				if self.url: print 'URL:', self.url
-				print
-				print 'Cflags:', ' '.join(cxx_flags)
-				print 'Libs:', ' '.join(ld_flags)
-				print 'Libs.private:', ' '.join(private_ld_flags)
-				print 'Requires:', ' '.join(cfg.pkg_config_deps)
-				if False: print 'Requires.private:', '...' # messy specification
-				if False: print 'Conflicts:', '...'
-				print '---------- end pkg-config file ' + str(pc_file)
-				print
+				s = \
+					'# generated by wonderbuild\n' \
+					'\nName: ' + self.title + \
+					'\nDescription: ' + self.description + \
+					'\nVersion: ' + self.version
+				if self.url: s += '\nURL: ' + self.url + '\n'
+				s += \
+					'\nCflags: ' + ' '.join(cxx_flags) + \
+					'\nLibs: ' + ' '.join(ld_flags) + \
+					'\nLibs.private: ' + ' '.join(private_ld_flags) + \
+					'\nRequires: ' + ' '.join(cfg.pkg_config)
+				if False: s += '\nRequires.private: ...' # messy specification
+				if False: s += '\nConflicts: ...'
+				s += '\n'
+				file.parent.make_dir(file.parent.parent)
+				f = open(file.path, 'w')
+				try: f.write(s)
+				finally: f.close()
+				if __debug__ and is_debug: debug('pkg-config: file ' + str(file) + '\n' + s + '---------- end file ' + str(file))
+
+			generate(False, installed_pc_file)
+			generate(True, uninstalled_pc_file)
+
+	@property
+	def _pkg_config_sig(self):
+		try: return self.__pkg_config_sig
+		except AttributeError:
+			cfg = self.cfg.clone()
+			self.apply_cxx_to(cfg)
+			self.apply_mod_to(cfg)
+			sig = Sig(cfg.cxx_sig)
+			sig.update(cfg.ld_sig)
+			self.__pkg_config_sig = sig = sig.digest()
+			return sig
+	
+	@property
+	def _mod_sig(self):
+		try: return self.__mod_sig
+		except AttributeError:
+			if self.kind == ModTask.Kinds.HEADERS:
+				self.__mod_sig = sig = ''
+			else:
+				sig = Sig(self.target_dir.abs_path)
+				if self.kind != ModTask.Kinds.PROG and \
+					self.target_dir is not self.target_dev_dir: sig.update(self.target_dev_dir.abs_path)
+				if self.ld: sig.update(self.cfg.ld_sig)
+				else: sig.update(self.cfg.ar_ranlib_sig)
+				self.__mod_sig = sig = sig.digest()
+			return sig
 
 	def _unique_base_name(self, source):
 		return source.rel_path(self.base_cfg.project.top_src_dir).replace(os.pardir, '_').replace(os.sep, ',')
@@ -1062,18 +1090,6 @@ class ModTask(ModDepPhases, Task, Persistent):
 	def _obj_name(self, source):
 		name = self._unique_base_name(source)
 		return name[:name.rfind('.')] + self.cfg.impl.cxx_task_target_ext
-
-	@property
-	def _mod_sig(self):
-		try: return self.__mod_sig
-		except AttributeError:
-			sig = Sig(self.target_dir.abs_path)
-			if self.kind not in (ModTask.Kinds.PROG, ModTask.Kinds.HEADERS) and \
-				self.target_dir is not self.target_dev_dir: sig.update(self.target_dev_dir.abs_path)
-			if self.ld: sig.update(self.cfg.ld_sig)
-			else: sig.update(self.cfg.ar_ranlib_sig)
-			self.__mod_sig = sig = sig.digest()
-			return sig
 
 class _PkgConfigTask(CheckTask):
 

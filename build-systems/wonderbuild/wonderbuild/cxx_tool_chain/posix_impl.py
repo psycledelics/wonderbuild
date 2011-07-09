@@ -30,11 +30,26 @@ class Impl(object):
 	def cxx_env_sig(self): return ''
 
 	@staticmethod
+	def client_cfg_cxx_args(cfg, uninstalled):
+		args = []
+		for k, v in cfg.defines.iteritems():
+			if v is None: args.append('-D' + k)
+			else: args.append('-D' + k + '=' + repr(str(v))[1:-1]) # note: assumes that cpp and python escaping work the same way
+		if uninstalled:
+			for p in cfg.include_paths: args.append('-I' + p.abs_path)
+		else:
+			dest = cfg.fhs.dest
+			root = dest.fs.root
+			for p in cfg.include_paths: args.append('-I' + (root / p.rel_path(dest)).abs_path)
+		args += cfg.cxx_flags
+		return args
+
+	@staticmethod
 	def cfg_cxx_args(cfg):
 		args = [cfg.cxx_prog]
 		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
-			else: args.append('-D' + k + '=' + repr(v)[1:-1]) # note: assumes that cpp and python string escaping works the same way
+			else: args.append('-D' + k + '=' + repr(str(v))[1:-1]) # note: assumes that cpp and python string escaping works the same way
 		for p in cfg.include_paths: args.append('-I' + cfg.bld_rel_path_or_abs_path(p))
 		args += cfg.cxx_flags
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: posix: cxx: ' + str(args))
@@ -91,11 +106,26 @@ class Impl(object):
 	def ld_env_sig(self): return ''
 
 	@staticmethod
+	def client_cfg_ld_args(cfg, uninstalled):
+		args = []
+		if uninstalled:
+			for p in cfg.lib_paths: args.append('-L' + p.abs_path)
+		else:
+			dest = cfg.fhs.dest
+			root = dest.fs.root
+			for p in cfg.lib_paths: args.append('-L' + (root / p.rel_path(dest)).abs_path)
+		for l in cfg.static_libs: args.append('-l' + l)
+		for l in cfg.libs: args.append('-l' + l)
+		for l in cfg.shared_libs: args.append('-l' + l)
+		args += cfg.ld_flags
+		return args
+
+	@staticmethod
 	def cfg_ld_args(cfg):
 		args = [cfg.ld_prog]
 		for p in cfg.lib_paths: args.append('-L' + cfg.bld_rel_path(p))
-		for l in cfg.libs: args.append('-l' + l)
 		for l in cfg.static_libs: args.append('-l' + l)
+		for l in cfg.libs: args.append('-l' + l)
 		for l in cfg.shared_libs: args.append('-l' + l)
 		args += cfg.ld_flags
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: posix: ld: ' + str(args))

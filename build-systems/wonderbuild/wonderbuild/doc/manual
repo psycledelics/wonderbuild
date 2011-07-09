@@ -31,7 +31,7 @@ Some doc for the ModTask class:
 		This is where actual compilation and linking takes place.
 		The task is executed by clients before linking their binary against this mod,
 		It may of course also be requested directly.
-		It ensures self.__call__ as been called, and cxx_phase of dependencies too, with _do_deps_cxx_phases (defined in ModDepPhases).
+		It ensures self.__call__ as been called, and cxx_phase of dependencies too, with _do_deps_cxx_phases_and_apply_cxx_deep (defined in ModDepPhases).
 
 	Method do_mod_phase(self):
 		This is where to set self.sources and self.cfg for building the object files.
@@ -53,7 +53,7 @@ Some doc for the PreCompileTasks class:
 	Attribute cxx_phase, from ModDepPhases:
 		The user doesn't need to override this attribute. They only override the self.do_cxx_phase() method, which is called by the cxx_phase task.
 		This is were actual pre-compilation takes place.
-		It ensures self.__call__ as been called, and cxx_phase of dependencies too, with _do_deps_cxx_phases (defined in ModDepPhases).
+		It ensures self.__call__ as been called, and cxx_phase of dependencies too, with _do_deps_cxx_phases_and_apply_cxx_deep (defined in ModDepPhases).
 		One the pre-compiled header is built, clients can start building their object files.
 		
 	Method do_cxx_phase(self):
@@ -89,14 +89,14 @@ Some doc for the ModDepPhases class:
 
 	Attribute cxx_phase:
 		task executed before clients start compiling object files.
-		This is called by clients with _do_deps_cxx_phases, to bring dependencies up and then apply cfg with apply_cxx_to.
+		This is called by clients with _do_deps_cxx_phases_and_apply_cxx_deep, to bring dependencies up and then apply cfg with apply_cxx_to.
 		It should for example install or pre-compiler headers.
 		The cxx_phase task is not used by CheckTask, and left as None.
 		The cxx_phase task may be not used by ModTask when its kind is Kinds.PROG or Kinds.LOADABLE, and left as None.
 
 	Method apply_cxx_to(self, cfg):
 		This is where you can export compile flags to clients so they can start building their object files.
-		This is called by clients with _do_deps_cxx_phases.
+		This is called by clients with _do_deps_cxx_phases_and_apply_cxx_deep.
 
 	Attribute mod_phase:
 		task executed before clients start linking their binary.
