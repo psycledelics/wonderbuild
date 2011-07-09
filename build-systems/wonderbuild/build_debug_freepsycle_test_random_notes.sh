@@ -4,7 +4,7 @@ set -x &&
 
 cd $(dirname $0)/../.. &&
 
-# where everything is going to be installed
+# where everything is going to be built/installed
 dest=/tmp/freepsycle-random-notes-test &&
 
 freepsycle/wonderbuild_script.py --install-dest-dir=/ --install-prefix-dir=$dest --cxx-flags='-O0 -ggdb3 -Wall' "$@" &&

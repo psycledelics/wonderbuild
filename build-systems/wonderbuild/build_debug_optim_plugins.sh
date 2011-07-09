@@ -4,12 +4,21 @@ set -x &&
 
 cd $(dirname $0)/../.. &&
 
-# where everything is going to be installed
+# where everything is going to be build/installed
 dest=/tmp/psycle-player-test &&
 
-# build the plugins separately so that we can use different compiler flags
+# test whether compiler supports link-time optimisation (lto)
+{ cpp -P 2>/dev/null << EOF
+        #if (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__) < 40500
+                #error version too low
+        #endif
+EOF
+} && lto=-flto
+
 common_flags='-march=native -ggdb3 -Wall -Wstrict-aliasing=2 -Winit-self' && # -Wfloat-equal -Wpadded
-psycle-plugins/wonderbuild_script.py --install-dest-dir=/ --install-prefix-dir=$dest/optim --cxx-flags="$common_flags -O3 -DNDEBUG -fno-strict-aliasing" &&
+
+# build the plugins separately so that we can use different compiler flags
+psycle-plugins/wonderbuild_script.py --install-dest-dir=/ --install-prefix-dir=$dest/optim --cxx-flags="$common_flags -O3 -DNDEBUG -fno-strict-aliasing $lto" &&
 psycle-player/wonderbuild_script.py  --install-dest-dir=/ --install-prefix-dir=$dest/debug --cxx-flags="$common_flags -O0 -UNDEBUG" &&
 
 rm -Rf $dest/merge &&
