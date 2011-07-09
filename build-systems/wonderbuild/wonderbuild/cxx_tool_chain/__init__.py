@@ -935,17 +935,9 @@ class ModTask(ModDepPhases, Task, Persistent):
 				# Some source has been removed from the list of sources to build.
 				if __debug__ and is_debug: debug('task: source removed: ' + str(self))
 				need_process = True
-		elif not need_process:
-			if __debug__ and is_debug: debug('task: pkg-config sig changed: ' + str(self))
-			if persistent[3] != self._pkg_config_sig:
-				sched_ctx.lock.release()
-				try:
-					self._generate_pkg_config_file()
-					self.persistent = persistent[0], persistent[1], persistent[2], self._pkg_config_sig
-				finally: sched_ctx.lock.acquire()
 		if not need_process:
 			if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
-		else:
+		elif self.kind != ModTask.Kinds.HEADERS:
 			if self.ld and len(self.cfg.pkg_config) != 0:
 					for x in sched_ctx.parallel_wait(pkg_config_ld_flags_task): yield x
 					pkg_config_ld_flags_task.apply_to(self.cfg)
@@ -987,75 +979,97 @@ class ModTask(ModDepPhases, Task, Persistent):
 						s.sort()
 						self.print_desc_multicolumn_format(str(self.target) + ': ' + desc + ' from objects', s, color)
 					self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources], removed_obj_names)
-				if persistent[3] != self._pkg_config_sig: self._generate_pkg_config_file()
-				self.persistent = self._mod_sig, self.ld, source_states, self._pkg_config_sig
+				self.persistent = self._mod_sig, self.ld, source_states, persistent[3]
 			finally: sched_ctx.lock.acquire()
 		if not self.cfg.check_missing: self.obj_dir.forget()
 		self._needed_process = need_process
+		self._generate_pkg_config_file() # Note: don't bother releasing the sched_ctx.lock; it works, but it's actually slower.
 		
 	def _generate_pkg_config_file(self):
-		if self.kind != ModTask.Kinds.PROG:
+		if self.kind == ModTask.Kinds.PROG: return # could have some use too iirc on elf where programs can be used as libs?
+		need_process = False
+		persistent = self.persistent
+		if persistent[3] != self._pkg_config_sig:
+			if __debug__ and is_debug: debug('task: pkg-config sig changed: ' + str(self))
+			need_process = True
+		if need_process or self.base_cfg.check_missing:
 			installed_pc_file = self.cfg.fhs.lib / 'pkgconfig' / (self.name + '.pc')
 			uninstalled_pc_file = self.cfg.project.bld_dir / 'pkgconfig' / (self.name + '-uninstalled.pc')
-			if not silent:
-				if self.kind == ModTask.Kinds.HEADERS: desc = str(self.cxx_phase)
-				else: desc = str(self.target)
-				self.print_desc_multicolumn_format(desc + ': writing pkg-config files',
-					[str(installed_pc_file), str(uninstalled_pc_file)], color_bg_fg_rgb((230, 100, 170), (255, 255, 255)) + ';1')
+			if self.base_cfg.check_missing:
+				for f in (installed_pc_file, uninstalled_pc_file):
+					f.parent.lock.acquire()
+					try:
+						try: f.parent.actual_children # not needed, just an optimisation
+						except OSError: pass
+					finally: f.parent.lock.release()
+				if not f.exists:
+					if __debug__ and is_debug: debug('task: pkg-config: file missing:' + str(f))
+					need_process = True
+		if need_process:
+			if self.kind != ModTask.Kinds.PROG:
+				installed_pc_file = self.cfg.fhs.lib / 'pkgconfig' / (self.name + '.pc')
+				uninstalled_pc_file = self.cfg.project.bld_dir / 'pkgconfig' / (self.name + '-uninstalled.pc')
+				if not silent:
+					if self.kind == ModTask.Kinds.HEADERS: desc = str(self.cxx_phase)
+					else: desc = str(self.target)
+					self.print_desc_multicolumn_format(desc + ': writing pkg-config files',
+						[str(installed_pc_file), str(uninstalled_pc_file)], color_bg_fg_rgb((230, 100, 170), (255, 255, 255)) + ';1')
 			
-			cfg = BuildCfg(self.cfg.project)
-			# copy impl settings
-			cfg.lang = self.cfg.lang
-			cfg.pic = self.cfg.pic
-			cfg.shared = self.cfg.shared
-			cfg.static_prog = self.cfg.static_prog
-			cfg.impl = self.cfg.impl
-			cfg.kind = self.cfg.kind
-			cfg.version = self.cfg.version
-			cfg.dest_platform = self.cfg.dest_platform
+				cfg = BuildCfg(self.cfg.project)
+				# copy impl settings
+				cfg.lang = self.cfg.lang
+				cfg.pic = self.cfg.pic
+				cfg.shared = self.cfg.shared
+				cfg.static_prog = self.cfg.static_prog
+				cfg.impl = self.cfg.impl
+				cfg.kind = self.cfg.kind
+				cfg.version = self.cfg.version
+				cfg.dest_platform = self.cfg.dest_platform
 			
-			self.apply_cxx_to(cfg)
-			self.apply_mod_to(cfg)
+				self.apply_cxx_to(cfg)
+				self.apply_mod_to(cfg)
 			
-			private_cfg = cfg.clone()
-			private_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=True, expose_deep_mod_tasks=False)
-			for dep in private_deps:
-				if isinstance(dep, ModTask): pass
-				elif isinstance(dep, PkgConfigCheckTask): pass
-				else: dep.apply_mod_to(private_cfg)
+				private_cfg = cfg.clone()
+				private_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=True, expose_deep_mod_tasks=False)
+				for dep in private_deps:
+					if isinstance(dep, ModTask): pass
+					elif isinstance(dep, PkgConfigCheckTask): pass
+					else: dep.apply_mod_to(private_cfg)
 			
-			public_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=False, expose_deep_mod_tasks=False)
-			for dep in public_deps:
-				if isinstance(dep, ModTask): cfg.pkg_config.append(dep.name)
-				elif isinstance(dep, PkgConfigCheckTask): cfg.pkg_config += dep.pkgs
-				else: dep.apply_cxx_to(cfg); dep.apply_mod_to(cfg)
+				public_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=False, expose_deep_mod_tasks=False)
+				for dep in public_deps:
+					if isinstance(dep, ModTask): cfg.pkg_config.append(dep.name)
+					elif isinstance(dep, PkgConfigCheckTask): cfg.pkg_config += dep.pkgs
+					else: dep.apply_cxx_to(cfg); dep.apply_mod_to(cfg)
 			
-			def generate(uninstalled, file):
-				cxx_flags = self.cfg.impl.client_cfg_cxx_args(cfg, uninstalled)
-				ld_flags = self.cfg.impl.client_cfg_ld_args(cfg, uninstalled)
-				private_ld_flags = self.cfg.impl.client_cfg_ld_args(private_cfg, uninstalled)
-				s = \
-					'# generated by wonderbuild\n' \
-					'\nName: ' + self.title + \
-					'\nDescription: ' + self.description + \
-					'\nVersion: ' + self.version
-				if self.url: s += '\nURL: ' + self.url + '\n'
-				s += \
-					'\nCflags: ' + ' '.join(cxx_flags) + \
-					'\nLibs: ' + ' '.join(ld_flags) + \
-					'\nLibs.private: ' + ' '.join(private_ld_flags) + \
-					'\nRequires: ' + ' '.join(cfg.pkg_config)
-				if False: s += '\nRequires.private: ...' # messy specification
-				if False: s += '\nConflicts: ...'
-				s += '\n'
-				file.parent.make_dir(file.parent.parent)
-				f = open(file.path, 'w')
-				try: f.write(s)
-				finally: f.close()
-				if __debug__ and is_debug: debug('pkg-config: file ' + str(file) + '\n' + s + '---------- end file ' + str(file))
+				def generate(uninstalled, file):
+					cxx_flags = self.cfg.impl.client_cfg_cxx_args(cfg, uninstalled)
+					ld_flags = self.cfg.impl.client_cfg_ld_args(cfg, uninstalled)
+					private_ld_flags = self.cfg.impl.client_cfg_ld_args(private_cfg, uninstalled)
+					s = \
+						'# generated by wonderbuild\n' \
+						'\nName: ' + self.title + \
+						'\nDescription: ' + self.description + \
+						'\nVersion: ' + self.version
+					if self.url: s += '\nURL: ' + self.url + '\n'
+					s += \
+						'\nCflags: ' + ' '.join(cxx_flags) + \
+						'\nLibs: ' + ' '.join(ld_flags) + \
+						'\nLibs.private: ' + ' '.join(private_ld_flags) + \
+						'\nRequires: ' + ' '.join(cfg.pkg_config)
+					if False: s += '\nRequires.private: ...' # messy specification
+					if False: s += '\nConflicts: ...'
+					s += '\n'
+					file.parent.make_dir(file.parent.parent)
+					f = open(file.path, 'w')
+					try: f.write(s)
+					finally: f.close()
+					if __debug__ and is_debug: debug('task: pkg-config: file ' + str(file) + '\n' + s + '---------- end file ' + str(file))
 
-			generate(False, installed_pc_file)
-			generate(True, uninstalled_pc_file)
+				generate(False, installed_pc_file)
+				generate(True, uninstalled_pc_file)
+			self.persistent = persistent[0], persistent[1], persistent[2], self._pkg_config_sig
+			
 
 	@property
 	def _pkg_config_sig(self):
