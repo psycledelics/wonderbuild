@@ -73,6 +73,7 @@ class Scheduler(OptionDecl):
 		self._task_stack = list(tasks)
 		self._todo_count = len(tasks)
 		for task in tasks:
+			Scheduler._init_task(task)
 			task._sched_stacked = True
 			if __debug__ and is_debug: debug('sched: stack: push: todo: ' + str(self._todo_count) + ', stack length: ' + str(len(self._task_stack)) + ', task: ' + str(task))
 
@@ -124,8 +125,9 @@ class Scheduler(OptionDecl):
 				for task in self._task_stack: self._close_gen(task)
 				if isinstance(self.exception, UserReadableException): raise self.exception
 				else: raise UserReadableException, 'An exception occurred, see stack trace above.'
-	
-	def _close_gen(self, task):
+
+	@staticmethod	
+	def _close_gen(task):
 		try:
 			try: task_gen = task._sched_gen
 			except AttributeError: pass
@@ -138,7 +140,7 @@ class Scheduler(OptionDecl):
 			if out_tasks is not None:
 				task._out_tasks = None
 				for out_task in out_tasks:
-					try: self._close_gen(out_task)
+					try: Scheduler._close_gen(out_task)
 					except: continue
 
 	def _thread_loop(self, thread_id, remaining_start_count, remaining_start_cond):
@@ -171,20 +173,21 @@ class Scheduler(OptionDecl):
 					if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': stack pop: task: ' + str(task) + ', out tasks: ' + str(task._sched_out_tasks))
 					if not task._sched_processed:
 						if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': task not yet processed: ' + str(task))
-						self._context._thread_id = thread_id
-						task_gen = None
-						try:
-							try: task_gen = task._sched_gen
-							except AttributeError: task_gen = task._sched_gen = task(self._context)
-							in_tasks = task_gen.next()
+						try: task_gen = task._sched_gen
+						except AttributeError:
+							try: task_gen = task._sched_gen = task(self._context)
+							except:
+								try: exception_task_str = str(task)
+								finally: raise
+						try: in_tasks = task_gen.next()
 						except StopIteration:
 							if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': task processed: ' + str(task) + ', out tasks: ' + str([str(t) for t in task._sched_out_tasks]))
 							task._sched_processed = True
 						except:
-							if task_gen is not None: self._close_gen(task)
-							try: exception_task_str = str(task)
-							except: pass
-							raise
+							try:
+								Scheduler._close_gen(task)
+								exception_task_str = str(task)
+							finally: raise
 						else:
 							if __debug__ and is_debug:
 								debug('sched: thread: ' + str(thread_id) + ': task: ' + str(task) + ', in tasks: ' + str([str(t) for t in in_tasks]))
@@ -234,9 +237,19 @@ class Scheduler(OptionDecl):
 	
 	def _done_or_break_cond(self): return self._done_cond() or self._stop_requested
 
-	def _parallel_wait(self, *tasks):
+	@staticmethod
+	def _init_task(task):
+		try: task._sched_processed
+		except AttributeError:
+			task._sched_stacked = task._sched_processed = False
+			task._sched_in_task_todo_count = 0
+			task._sched_out_tasks = []
+
+	@staticmethod
+	def _parallel_wait(*tasks):
 		#assert self._cond is acquired
 		if __debug__ and is_debug: debug('sched: parallel_wait: ' + str([str(t) for t in tasks]))
+		for t in tasks: Scheduler._init_task(t)
 		tasks_to_yield = tuple(t for t in tasks if not t._sched_processed)
 		if len(tasks_to_yield) != 0:
 			if __debug__ and is_debug: debug('sched: yield tasks: ' + str([str(t) for t in tasks_to_yield]))
@@ -246,10 +259,12 @@ class Scheduler(OptionDecl):
 			for t in tasks: assert t._sched_processed, t
 	
 	def _parallel_no_wait(self, *tasks):
+		for t in tasks: Scheduler._init_task(t)
 		#assert self._cond is acquired
 		if __debug__ and is_debug: debug('sched: parallel_no_wait: ' + str([str(t) for t in tasks]))
 		notify = 0
 		for t in reversed(tasks):
+			Scheduler._init_task(t)
 			if not t._sched_processed and not t._sched_stacked and t._sched_in_task_todo_count == 0:
 				if __debug__ and is_debug: debug('sched: task pushed on stack: ' + str(t))
 				self._task_stack.append(t)

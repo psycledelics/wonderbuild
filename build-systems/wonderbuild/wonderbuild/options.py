@@ -3,8 +3,7 @@
 # copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import sys
-
-from multi_column_formatting import fold
+from logger import fold
 
 class OptionDecl(object):
 	known_options = set()

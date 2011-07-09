@@ -9,20 +9,27 @@ class MultithreadingSupportCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared_uid(*args, **kw): return 'multithreading-support'
 
-	def apply_to(self, cfg):
+	def apply_cxx_to(self, cfg):
 		# some documentation is available in <boost/config/requires_threads.hpp>
 		if cfg.kind == 'gcc':
 			if cfg.dest_platform.os in ('win', 'cygwin'):
 				cfg.cxx_flags.append('-mthreads')
-				cfg.ld_flags.append('-mthreads')
 			elif cfg.dest_platform.os == 'sunos':
 				cfg.cxx_flags.append('-pthread')
-				cfg.ld_flags.append('-pthread')
 			else:
 				cfg.cxx_flags.append('-pthread')
-				cfg.ld_flags.append('-pthread')
 		elif cfg.kind == 'msvc':
 			cfg.cxx_flags.append('-MD') # TODO -MT, -MTd, -MD, -MDd
+
+	def apply_mod_to(self, cfg):
+		# some documentation is available in <boost/config/requires_threads.hpp>
+		if cfg.kind == 'gcc':
+			if cfg.dest_platform.os in ('win', 'cygwin'):
+				cfg.ld_flags.append('-mthreads')
+			elif cfg.dest_platform.os == 'sunos':
+				cfg.ld_flags.append('-pthread')
+			else:
+				cfg.ld_flags.append('-pthread')
 
 	@property
 	def source_text(self):
@@ -52,9 +59,15 @@ class PThreadCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared_uid(*args, **kw): return 'posix-thread'
 
-	def apply_to(self, cfg):
+	def apply_cxx_to(self, cfg):
 		if cfg.kind == 'gcc': # TODO windows/cygwin platforms
 			cfg.cxx_flags.append('-pthread')
+		else:
+			cfg.defines['_REENTRANT'] = '1'
+			cfg.libs.append('pthread')
+
+	def apply_mod_to(self, cfg):
+		if cfg.kind == 'gcc': # TODO windows/cygwin platforms
 			cfg.ld_flags.append('-pthread')
 		else: cfg.libs.append('pthread')
 

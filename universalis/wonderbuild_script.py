@@ -27,11 +27,10 @@ class Wonderbuild(ScriptTask):
 	def mod_dep_phases(self): return self._mod_dep_phases
 
 	def __call__(self, sched_ctx):
-		project = self.project
 		top_src_dir = self.src_dir.parent
 		src_dir = self.src_dir / 'src'
 		
-		diversalis = ScriptLoaderTask.shared(project, top_src_dir / 'diversalis')
+		diversalis = ScriptLoaderTask.shared(self.project, top_src_dir / 'diversalis')
 		for x in sched_ctx.parallel_wait(diversalis): yield x
 		diversalis = diversalis.script_task
 		self._common = common = diversalis.common
@@ -74,7 +73,7 @@ class Wonderbuild(ScriptTask):
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.public_deps += [o for o in opt if o]
 				self.result = min(bool(r) for r in req)
-				self.cxx_phase = self.__class__.InstallHeaders(self.project, self.name + '-headers')
+				self.cxx_phase = self.__class__.InstallHeaders(self.base_cfg.project, self.name + '-headers')
 
 			def do_ensure_deps(self):
 				if not boost: raise UserReadableException, self.name + ' requires the following boost libs: ' + boost.help

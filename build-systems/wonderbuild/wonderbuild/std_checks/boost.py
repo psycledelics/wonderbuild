@@ -40,8 +40,10 @@ class BoostCheckTask(MultiBuildCheckTask):
 	@property
 	def libs(self): return self.results[2]
 
-	def apply_to(self, cfg):
+	def apply_cxx_to(self, cfg):
 		if self.include_path is not None: cfg.include_paths.append(self.include_path)
+
+	def apply_mod_to(self, cfg):
 		cfg.libs.extend(self.libs)
 
 	@property
@@ -58,7 +60,7 @@ class BoostCheckTask(MultiBuildCheckTask):
 				return
 				
 			# damn cygwin installs boost headers in e.g. /usr/include/boost-1_33_1/
-			dir = self.base_cfg.shared_checks.fs.root / 'usr' / 'include'
+			dir = self.base_cfg.project.fs.root / 'usr' / 'include'
 			include_path = self.find_max_include_above_min(dir)
 			if include_path is None:
 				self.results = failed

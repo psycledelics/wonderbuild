@@ -10,7 +10,7 @@ from wonderbuild.logger import out, is_debug, debug, colored, color_bg_fg_rgb, s
 from wonderbuild.signature import Sig
 from wonderbuild.option_cfg import OptionCfg
 from wonderbuild.fhs import FHS
-from wonderbuild.task import Persistent, Task, ProjectTask
+from wonderbuild.task import Persistent, Task
 from wonderbuild.check_task import CheckTask, ok_color, failed_color
 from wonderbuild.subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 
@@ -34,7 +34,7 @@ class BuildCfg(object):
 		self.shared_libs = []
 		self.ld_flags = []
 		self.pkg_config = []
-		self.frameworks = [] # for darwin
+		self.frameworks = set() # for darwin
 		# build cfg
 		self.lang = 'c++'
 		self.cxx_prog = self.ld_prog = self.ar_prog = self.ranlib_prog = None
@@ -63,7 +63,7 @@ class BuildCfg(object):
 		c.shared_libs += self.shared_libs
 		c.ld_flags += self.ld_flags
 		c.pkg_config += self.pkg_config
-		c.frameworks += self.frameworks
+		c.frameworks |= self.frameworks
 		# build cfg
 		c.lang = self.lang
 		c.cxx_prog = self.cxx_prog
@@ -334,14 +334,32 @@ class ModDepPhases(object): # note: doesn't derive form Task, but derived classe
 	@property
 	def all_deps(self): return self.public_deps + self.private_deps
 
-	# called by derived classes that also derive from Task
-	def __call__(self, sched_ctx):
-		### needs changes in CheckTask
-		#self.result = True
-		#for x in self.do_check_phase(sched_ctx): yield x
-		#if self.result and len(self.all_deps) != 0:
-			for x in sched_ctx.parallel_wait(*self.all_deps): yield x
-			#self.result = min(bool(dep) for dep in self.all_deps)
+	if False:
+		# Currently, it's the responsibility of derived classes to actually call the dep tasks, which they need to do since they want to check their results.
+		# If we want to change this. We need changes in CheckTask. See code below.
+		# called by derived classes that also derive from Task
+		def __call__(self, sched_ctx):
+			self.result = True
+			for x in self.do_check_phase(sched_ctx): yield x
+			if self.result and len(self.all_deps) != 0:
+				for x in sched_ctx.parallel_wait(*self.all_deps): yield x
+				self.result = min(bool(dep) for dep in self.all_deps)
+
+	# can be overriden in derived classes to generate friendlier message when deps are unavailable
+	def do_ensure_deps(self): 
+		all_deps = self.all_deps
+		if False:
+			# Currently, it's the responsibility of derived classes to actually call the dep tasks, which they need to do since they want to check their results.
+			if len(all_deps) != 0:
+				for x in sched_ctx.parallel_wait(*all_deps): yield x
+		for dep in all_deps:
+			if not dep:
+				desc = str(self.mod_phase or self.cxx_phase or self) + ' requires the following dep: '
+				try: dep.do_ensure_deps()
+				except UserReadableException, e: desc += str(dep.mod_phase or dep.cxx_phase or dep) + ',\nand ' + str(e)
+				else: desc += str(dep)
+				raise UserReadableException, desc
+		if __debug__ and is_debug: assert self.result
 
 	# bool result is compatible with CheckTask.result
 	# This is merged in MultiBuildCheckTask which derives both from CheckTask and ModDepPhases.
@@ -353,15 +371,6 @@ class ModDepPhases(object): # note: doesn't derive form Task, but derived classe
 	def __bool__(self): return self.result
 	def __nonzero__(self): return self.__bool__() # __bool__ has become the default in python 3
 
-	# can be overriden in derived classes to generate friendlier message when deps are unavailable
-	def do_ensure_deps(self): 
-		for dep in self.all_deps:
-			if not dep:
-				desc = str(self.mod_phase or self.cxx_phase or self) + ' requires the following dep: '
-				try: dep.do_ensure_deps()
-				except UserReadableException, e: desc += str(dep.mod_phase or dep.cxx_phase or dep) + ',\nand ' + str(e)
-				else: desc += str(dep)
-				raise UserReadableException, desc
 	
 	def apply_cxx_to(self, cfg): pass
 	def apply_mod_to(self, cfg): pass
@@ -430,7 +439,7 @@ class _PreCompileTask(ModDepPhases, Task, Persistent):
 	
 	# Task
 	def __call__(self, sched_ctx):
-		for x in ModDepPhases.__call__(self, sched_ctx): yield x
+		if False: yield
 		self.cxx_phase = _PreCompileTask._CxxPhaseCallbackTask(self)
 	
 	# ModDepPhases
@@ -655,7 +664,7 @@ class _BatchCompileTask(Task):
 				else: pic = 'non-pic';
 				s = [str(s) for s in self.sources]
 				s.sort()
-				self.print_desc_multi_column_format(str(self.mod_task.target) + ': compiling ' + pic + ' objects from ' + self.cfg.lang, s, color)
+				self.print_desc_multicolumn_format(str(self.mod_task.target) + ': compiling ' + pic + ' objects from ' + self.cfg.lang, s, color)
 			self._actual_sources = []
 			for s in self.sources:
 				node = self.target_dir / self.mod_task._unique_base_name(s)
@@ -667,33 +676,33 @@ class _BatchCompileTask(Task):
 			self.cfg.impl.process_cxx_task(self, sched_ctx.lock)
 		finally: sched_ctx.lock.acquire()
 
-class ModTask(ModDepPhases, ProjectTask, Persistent):
+class ModTask(ModDepPhases, Task, Persistent):
 	class Kinds(object):
 		HEADERS = 0
 		PROG = 1
 		LIB = 2 # TODO allow the developer to specify that a lib is not dll-aware
 		LOADABLE = 3
 
-	def __init__(self, name, kind, base_cfg, aliases=None, **kw):
+	def __init__(self, name, kind, base_cfg, cxx_phase=None, **kw):
 		ModDepPhases.__init__(self)
-		ProjectTask.__init__(self, base_cfg.project)
+		Task.__init__(self)
 		Persistent.__init__(self, base_cfg.project.persistent, name)
+		self.base_cfg = base_cfg
 		self.name = name
 		self.title = kw.get('title', name)
 		self.description = kw.get('description', '')
 		self.version = kw.get('version', '')
 		self.url = kw.get('url', '')
 		self.kind = kind
-		self.base_cfg = base_cfg
 		self.sources = []
-		if aliases is None: aliases = (name,)
 		if kind == ModTask.Kinds.HEADERS:
-			self.cxx_phase = kw['cxx_phase']
-			self.project.add_task_aliases(self.cxx_phase, *aliases)
+			if __debug__ and is_debug: assert cxx_phase is not None
+			self.cxx_phase = cxx_phase
+			base_cfg.project.add_task_aliases(self.cxx_phase, name)
 		else:
-			if __debug__ and is_debug and 'cxx_phase' in kw: raise Exception, 'set cxx_phase in __call__(self, sched_ctx)'
+			if __debug__ and is_debug and cxx_phase is not None: raise Exception, 'set cxx_phase in __call__(self, sched_ctx)'
 			self.mod_phase = ModTask._ModPhaseCallbackTask(self)
-			self.project.add_task_aliases(self.mod_phase, *aliases)
+			base_cfg.project.add_task_aliases(self.mod_phase, name)
 	
 	@property
 	def cfg(self):
@@ -733,9 +742,9 @@ class ModTask(ModDepPhases, ProjectTask, Persistent):
 		''' the dir node where intermediate object files are placed'''
 		try: return self._obj_dir
 		except AttributeError:
-			self.project.bld_dir.lock.acquire()
-			try: self._obj_dir = self.project.bld_dir / 'modules' / self.name
-			finally: self.project.bld_dir.lock.release()
+			self.base_cfg.project.bld_dir.lock.acquire()
+			try: self._obj_dir = self.base_cfg.project.bld_dir / 'modules' / self.name
+			finally: self.base_cfg.project.bld_dir.lock.release()
 			return self._obj_dir
 
 	@property
@@ -905,7 +914,7 @@ class ModTask(ModDepPhases, ProjectTask, Persistent):
 				else: pic = 'non-pic';
 				s = [str(s) for s in changed_sources]
 				s.sort()
-				self.print_desc_multi_column_format(str(self.target) + ': compiling ' + pic + ' objects from ' + self.cfg.lang + ' using ' + str(i) + ' processes and batch-size ' + str(len(batches[0])), s, color)
+				self.print_desc_multicolumn_format(str(self.target) + ': compiling ' + pic + ' objects from ' + self.cfg.lang + ' using ' + str(i) + ' processes and batch-size ' + str(len(batches[0])), s, color)
 		elif self.cfg.check_missing:
 			for t in self.targets:
 				if not t.exists:
@@ -985,7 +994,7 @@ class ModTask(ModDepPhases, ProjectTask, Persistent):
 					else: s = [plus + self._obj_name(s) for s in sources]
 					if removed_obj_names is not None: s += ['-' + o for o in removed_obj_names]
 					s.sort()
-					self.print_desc_multi_column_format(str(self.target) + ': ' + desc + ' from objects', s, color)
+					self.print_desc_multicolumn_format(str(self.target) + ': ' + desc + ' from objects', s, color)
 				self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources], removed_obj_names)
 				self.persistent = self._mod_sig, self.ld, source_states
 			finally: sched_ctx.lock.acquire()
@@ -993,7 +1002,7 @@ class ModTask(ModDepPhases, ProjectTask, Persistent):
 		self._needed_process = need_process
 		if False: # TODO generating pkg-config .pc file; work in progress
 			if self.kind in (ModTask.Kinds.LIB, ModTask.Kinds.HEADERS):
-				cfg = BuildCfg(self.project)
+				cfg = BuildCfg(self.cfg.project)
 
 				# copy impl settings
 				cfg.lang = self.cfg.lang
@@ -1048,7 +1057,7 @@ class ModTask(ModDepPhases, ProjectTask, Persistent):
 				print
 
 	def _unique_base_name(self, source):
-		return source.rel_path(self.project.top_src_dir).replace(os.pardir, '_').replace(os.sep, ',')
+		return source.rel_path(self.base_cfg.project.top_src_dir).replace(os.pardir, '_').replace(os.sep, ',')
 
 	def _obj_name(self, source):
 		name = self._unique_base_name(source)
@@ -1204,11 +1213,6 @@ class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 		ModDepPhases.__init__(self)
 		_PkgConfigTask.__init__(self, persistent, uid, cfg, pkgs)
 
-	# _PkgConfigTask(CheckTask(SharedTask(Task)))
-	def __call__(self, sched_ctx):
-		for x in ModDepPhases.__call__(self, sched_ctx): yield x
-		for x in _PkgConfigTask.__call__(self, sched_ctx): yield x
-
 	# ModDepPhases
 	def apply_cxx_to(self, cfg): cfg.pkg_config += self.pkgs
 		
@@ -1254,32 +1258,16 @@ class MultiBuildCheckTask(CheckTask, ModDepPhases):
 		self.compile = compile
 		self.link = link
 
-	# CheckTask(SharedTask(Task))
-	def __call__(self, sched_ctx):
-		for x in ModDepPhases.__call__(self, sched_ctx): yield x
-		for x in CheckTask.__call__(self, sched_ctx): yield x
-
 	@property
 	def cfg(self):
 		try: return self._cfg
 		except AttributeError:
 			self._cfg = self.base_cfg.clone()
 			if self.link: self.cfg.shared = False # build a program
-			self.apply_to(self._cfg)
+			self.apply_cxx_to(self._cfg)
+			self.apply_mod_to(self._cfg)
 			return self._cfg
 
-	# ModDepPhases
-	def apply_cxx_to(self, cfg): self.apply_to(cfg)
-
-	# TODO distinguish between apply_cxx_to and apply_mod_to
-	# TODO For example, with the openmp check,
-	# TODO If it's a private dep and we build a static lib,
-	# TODO clients will need apply_mod_to but not apply_cxx_to
-	# TODO That is, -fopenmp passed only to the linker (translated to a -lopenmp flag)
-	def apply_mod_to(self, cfg): pass
-	
-	def apply_to(self, cfg): pass
-		
 	@property
 	def source_text(self): return '#error ' + str(self.__class__) + ' did not redefine default source text.\n'
 
@@ -1304,7 +1292,7 @@ class BuildCheckTask(MultiBuildCheckTask):
 	def bld_dir(self):
 		try: return self._bld_dir
 		except AttributeError:
-			bld_dir = self.base_cfg.shared_checks.bld_dir
+			bld_dir = self.base_cfg.project.bld_dir
 			bld_dir.lock.acquire()
 			try: self._bld_dir = bld_dir / 'checks' / self.uid
 			finally: bld_dir.lock.release()

@@ -2,15 +2,15 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2008-2010 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-from logger import is_debug, debug, out, cols, colored
-import multi_column_formatting
+from logger import is_debug, debug, out, cols, colored, multicolumn_format
 
 class Task(object):
 
-	def __init__(self):
-		self._sched_stacked = self._sched_processed = False
-		self._sched_in_task_todo_count = 0
-		self._sched_out_tasks = []
+	if False: # This is now done lazily directly in the Scheduler.
+		def __init__(self):
+			self._sched_stacked = task._sched_processed = False
+			self._sched_in_task_todo_count = 0
+			self._sched_out_tasks = []
 
 	def __call__(self, sched_ctx):
 		if False: yield
@@ -30,17 +30,19 @@ class Task(object):
 		#
 		# for x in (again_more_sub_task_1, again_more_sub_task_2, ...): yield x
 
-	def print_desc(self, desc, color='7;1'):
+	@staticmethod
+	def print_desc(desc, color='7;1'):
 		out.write(colored(color, 'wonderbuild: task: ' + desc) + '\n')
 		
-	def print_desc_multi_column_format(self, desc, list, color = '7;1'):
+	@staticmethod
+	def print_desc_multicolumn_format(desc, list, color = '7;1'):
 		desc = 'wonderbuild: task: ' + desc + ':'
 		joined_list = '  '.join(list)
 		if len(desc) + 1 + len(joined_list) <= cols: out.write(colored(color, desc) + ' ' + joined_list + '\n')
 		else:
 			lines = [colored(color, desc)]
 			indent = ' ' * 2
-			for line in multi_column_formatting.format(list, cols - len(indent)):
+			for line in multicolumn_format(list, cols - len(indent)):
 				lines.append(indent + line)
 			lines.append('')
 			out.write('\n'.join(lines))
@@ -66,7 +68,7 @@ class Persistent(object):
 	def _set_persistent(self, value): self._persistent_dict[self.uid] = value
 	persistent = property(_get_persistent, _set_persistent)
 
-class SharedTaskHolder(object):
+class SharedTaskHolder(object): # Note: Currently the only use is the derived class Project.
 
 	def __init__(self, persistent, options, option_collector, bld_dir):
 		self.persistent = persistent
@@ -75,7 +77,7 @@ class SharedTaskHolder(object):
 		self.bld_dir = bld_dir
 		self._shared_tasks = {}
 
-class SharedTask(Task, Persistent): # note: the only derived class is CheckTask
+class SharedTask(Task, Persistent): # Note: Currently the only use is the derived class CheckTask.
 		
 	@classmethod
 	def shared_uid(class_, *args, **kw): raise Exception, str(class_) + ' did not redefine the class method.'
@@ -93,11 +95,3 @@ class SharedTask(Task, Persistent): # note: the only derived class is CheckTask
 	def __init__(self, persistent_dict, uid):
 		Task.__init__(self)
 		Persistent.__init__(self, persistent_dict, uid)
-
-class ProjectTask(Task):
-
-	def __init__(self, project, aliases=None):
-		Task.__init__(self)
-		self.project = project
-		if aliases is not None: project.add_task_aliases(self, *aliases)
-

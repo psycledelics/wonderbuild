@@ -24,13 +24,12 @@ class Wonderbuild(ScriptTask):
 	def common(self): return self._common
 
 	def __call__(self, sched_ctx):
-		project = self.project
 		top_src_dir = self.src_dir.parent
 		src_dir = self.src_dir / 'src'
 		default_tasks = self.default_tasks
 
-		universalis = ScriptLoaderTask.shared(project, top_src_dir / 'universalis')
-		helpers = ScriptLoaderTask.shared(project, top_src_dir / 'psycle-helpers')
+		universalis = ScriptLoaderTask.shared(self.project, top_src_dir / 'universalis')
+		helpers = ScriptLoaderTask.shared(self.project, top_src_dir / 'psycle-helpers')
 		for x in sched_ctx.parallel_wait(universalis, helpers): yield x
 		universalis = universalis.script_task
 		self._common = common = universalis.common
@@ -81,7 +80,7 @@ class Wonderbuild(ScriptTask):
 			
 			class InstallHeaders(InstallTask):
 				def __init__(self, outer):
-					InstallTask.__init__(self, outer.project, outer.name + '-headers')
+					InstallTask.__init__(self, outer.base_cfg.project, outer.name + '-headers')
 					self.outer = outer
 					
 				@property

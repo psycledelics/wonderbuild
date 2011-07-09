@@ -11,7 +11,7 @@ class WinMMCheckTask(BuildCheckTask):
 
 	def __init__(self, persistent, uid, base_cfg): BuildCheckTask.__init__(self, persistent, uid, base_cfg)
 
-	def apply_to(self, cfg): cfg.libs.append('winmm')
+	def apply_mod_to(self, cfg): cfg.libs.append('winmm')
 
 	@property
 	def source_text(self): return '''\

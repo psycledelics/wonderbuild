@@ -9,12 +9,17 @@ class OpenMPCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared_uid(*args, **kw): return 'openmp'
 
-	def apply_to(self, cfg):
+	def apply_cxx_to(self, cfg):
 		if cfg.kind == 'gcc':
 			cfg.cxx_flags.append('-fopenmp')
-			cfg.ld_flags.append('-fopenmp')
 		elif cfg.kind == 'msvc':
 			cfg.cxx_flags.append('-openmp')
+		else: pass # TODO
+
+	def apply_mod_to(self, cfg):
+		if cfg.kind == 'gcc':
+			cfg.ld_flags.append('-fopenmp')
+		elif cfg.kind == 'msvc':
 			cfg.ld_flags.append('-openmp')
 		else: pass # TODO
 

@@ -23,7 +23,7 @@ class DynamicLoadingSupportCheckTask(MultiBuildCheckTask):
 	@property
 	def dl(self): return self.results[1]
 
-	def apply_to(self, cfg):
+	def apply_mod_to(self, cfg):
 		if self.dl: cfg.libs.append('dl')
 
 class DlfcnCheckTask(MultiBuildCheckTask):
@@ -52,7 +52,7 @@ class DlfcnCheckTask(MultiBuildCheckTask):
 		if self.result: return 'yes with' + (not self.dl and 'out' or '') + ' ldl', ok_color
 		else: return 'no', failed_color
 		
-	def apply_to(self, cfg):
+	def apply_mod_to(self, cfg):
 		if self.dl: cfg.libs.append('dl')
 
 	@property
@@ -84,7 +84,7 @@ void dlfcn() {
 			self.outer = outer
 			self.dl = dl
 
-		def apply_to(self, cfg):
+		def apply_mod_to(self, cfg):
 			if self.dl: cfg.libs.append('dl')
 
 		@property

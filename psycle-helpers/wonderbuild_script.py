@@ -30,11 +30,10 @@ class Wonderbuild(ScriptTask):
 	def math_mod_dep_phases(self): return self._math_mod_dep_phases
 
 	def __call__(self, sched_ctx):
-		project = self.project
 		top_src_dir = self.src_dir.parent
 		src_dir = self.src_dir / 'src'
 
-		universalis = ScriptLoaderTask.shared(project, top_src_dir / 'universalis')
+		universalis = ScriptLoaderTask.shared(self.project, top_src_dir / 'universalis')
 		for x in sched_ctx.parallel_wait(universalis): yield x
 		universalis = universalis.script_task
 		self._common = common = universalis.common
@@ -55,13 +54,13 @@ class Wonderbuild(ScriptTask):
 			def __init__(self):
 				name = 'psycle-helpers-math'
 				ModTask.__init__(self, name, ModTask.Kinds.HEADERS, cfg,
-					cxx_phase = self.__class__.InstallHeaders(project, name + '-headers'))
+					cxx_phase = self.__class__.InstallHeaders(cfg.project, name + '-headers'))
 				
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
 				self.public_deps = [universalis, std_math]
-				for x in ModTask.__call__(self, sched_ctx): yield x
 				req = self.all_deps
+				for x in sched_ctx.parallel_wait(*req): yield x
 				self.result = min(bool(r) for r in req)
 
 			def do_ensure_deps(self):
@@ -99,7 +98,7 @@ class Wonderbuild(ScriptTask):
 				req = self.all_deps
 				for x in sched_ctx.parallel_wait(*req): yield x
 				self.result = min(bool(r) for r in req)
-				self.cxx_phase = HelpersMod.InstallHeaders(self.project, self.name + '-headers')
+				self.cxx_phase = HelpersMod.InstallHeaders(self.base_cfg.project, self.name + '-headers')
 
 			class InstallHeaders(InstallTask):
 				@property

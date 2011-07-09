@@ -4,6 +4,9 @@
 
 import sys, os
 
+#########################################
+# OptionDecl
+
 known_options = set(['silent', 'verbose', 'sync-log'])
 
 def generate_option_help(help):
@@ -13,6 +16,13 @@ def generate_option_help(help):
 		'wonderbuild debugging trace zones, comma-separated list, or no list for all zones. '
 		'(example values: exec,cfg,task,sched,fs,project,cpp...)\n'
 		'If you want to see subprocess command lines, use --verbose=exec')
+
+#########################################
+# use_options(options)
+# which defines:
+# - silent
+# - is_debug
+# - def debug(s)
 
 silent = True
 is_debug = False
@@ -48,7 +58,87 @@ def use_options(options):
 			else:
 				def debug(s): debug_out.write(colored('35', 'wonderbuild: dbg:') + ' ' + s + '\n')
 
+#########################################
+
 out = sys.stdout
+
+#########################################
+# multicolumn_format(list, max_width)
+#
+# based on the 'ls' directory listing program for GNU:
+#   http://www.gnu.org/software/coreutils
+#   http://git.savannah.gnu.org/cgit/coreutils.git/tree/src/ls.c
+#   copyright 1985, 1988, 1990, 1991, 1995-2009 Free Software Foundation, Inc.
+
+def multicolumn_format(list, max_width):
+	min_col_width = 3
+	list_len = len(list)
+	max_cols = min(max(1, max_width / min_col_width), list_len)
+
+	class ColInfo(object):
+		def __init__(self, i):
+			self.valid_len = True
+			self.line_len = i * min_col_width
+			self.col_arr = [min_col_width] * i
+	col_infos = []
+	for i in xrange(max_cols): col_infos.append(ColInfo(i + 1))
+
+	# compute the maximum number of possible columns
+	for f in xrange(list_len):
+		e = list[f]
+		name_len = len(e)
+		for i in xrange(max_cols):
+			col_info = col_infos[i]
+			if col_info.valid_len:
+				idx = f / ((list_len + i) / (i + 1))
+				real_len = name_len + (idx != i and 2 or 0)
+				if col_info.col_arr[idx] < real_len:
+					col_info.line_len += real_len - col_info.col_arr[idx]
+					col_info.col_arr[idx] = real_len
+					col_info.valid_len = col_info.line_len < max_width
+
+	# find maximum allowed columns
+	cols = max_cols
+	while 1 < cols:
+		if col_infos[cols - 1].valid_len: break
+		cols -= 1
+	#print cols
+
+	# calculate the number of rows that will be in each column except possibly for a short column on the right
+	rows = list_len / cols + (list_len % cols != 0)
+	#print rows
+
+	col_info = col_infos[cols - 1]
+	result = []
+	for row in xrange(rows):
+		col = 0
+		f = row
+		line = ''
+		while True: # print the next row
+			e = list[f]
+			line += e.ljust(col_info.col_arr[col])
+			col += 1
+			f += rows
+			if f >= list_len: break
+		result.append(line)
+	return result
+
+#########################################
+# fold(s, width)
+
+def fold(s, width): # TODO don't split the text in the middle of a word
+	l = []
+	for s in s.split('\n'):
+		if len(s) <= width: l.append(s)
+		else:
+			i = 0
+			while i < len(s):
+				l.append(s[i : i + width].strip())
+				i += width
+	return l
+
+#########################################
+# cols = <int>
 
 try: import curses
 except ImportError: _curses = False
@@ -80,6 +170,11 @@ def _get_cols():
 
 	return 80
 cols = _get_cols()
+
+#########################################
+# def colored(color, s)
+# colors = <int>
+# def color_bg_fg_rgb(bg, fg)
 
 # Note: cannot test tty on jython (should look at the underlying platform hidden behind the jvm).
 out_is_dumb = os.environ.get('TERM', 'dumb') in ('dumb', 'emacs') or not out.isatty()
@@ -190,6 +285,9 @@ else:
 			return '48;5;' + _merge_rgb(bg) + ';38;5;' + _merge_rgb(fg)
 	else:
 		def color_bg_fg_rgb(bg, fg): return ''
+
+###################################################################
+# test program for the true color function color_bg_fg_rgb(bg, fg)
 
 if __name__ == '__main__':
 	# 8 colors (3-bit: bgr with 1 bit per channel)

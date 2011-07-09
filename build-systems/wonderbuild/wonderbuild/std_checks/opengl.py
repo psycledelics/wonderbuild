@@ -9,11 +9,16 @@ class OpenGLCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared_uid(*args, **kw): return 'opengl'
 
-	def apply_to(self, cfg):
+	def apply_cxx_to(self, cfg):
 		cfg.defines['GL_GLEXT_PROTOTYPES'] = None
 		if cfg.dest_platform.os == 'darwin':
-			if cfg.dest_platform.arch == 'arm': cfg.frameworks.append('OpenGLES')
-			else: cfg.frameworks.append('OpenGL')
+			if cfg.dest_platform.arch == 'arm': cfg.frameworks.add('OpenGLES')
+			else: cfg.frameworks.add('OpenGL')
+
+	def apply_mod_to(self, cfg):
+		if cfg.dest_platform.os == 'darwin':
+			if cfg.dest_platform.arch == 'arm': cfg.frameworks.add('OpenGLES')
+			else: cfg.frameworks.add('OpenGL')
 		else: cfg.libs.append('GL')
 
 	@property
@@ -41,7 +46,7 @@ class OpenGLUCheckTask(BuildCheckTask):
 		self.public_deps = [OpenGLCheckTask.shared(self.base_cfg)]
 		for x in BuildCheckTask.__call__(self, sched_ctx): yield x
 
-	def apply_to(self, cfg):
+	def apply_mod_to(self, cfg):
 		if cfg.dest_platform.os != 'darwin': cfg.libs.append('GLU')
 
 	@property
@@ -65,7 +70,10 @@ class OpenGLUTCheckTask(BuildCheckTask):
 		self.public_deps = [OpenGLUCheckTask.shared(self.base_cfg)]
 		for x in BuildCheckTask.__call__(self, sched_ctx): yield x
 
-	def apply_to(self, cfg):
+	def apply_cxx_to(self, cfg):
+		if cfg.dest_platform.os == 'darwin': cfg.frameworks.append('GLUT')
+
+	def apply_mod_to(self, cfg):
 		if cfg.dest_platform.os == 'darwin': cfg.frameworks.append('GLUT')
 		else: cfg.libs.append('glut')
 

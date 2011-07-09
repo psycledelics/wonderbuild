@@ -9,7 +9,7 @@ class StdCxx0xCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared_uid(*args, **kw): return 'std-c++0x'
 
-	def apply_to(self, cfg):
+	def apply_cxx_to(self, cfg):
 		if cfg.kind == 'gcc':
 			if '-std=c++0x' not in cfg.cxx_flags and '-std=gnu++0x' not in cfg.cxx_flags: cfg.cxx_flags.append('-std=gnu++0x')
 		else: pass # TODO

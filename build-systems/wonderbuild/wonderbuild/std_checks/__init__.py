@@ -13,8 +13,7 @@ class ValidCfgCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared_uid(*args, **kw): return 'valid-user-provided-build-cfg-flags'
 
-	@property
-	def source_text(self): return '' # the base class already adds a main() function
+	source_text = '' # the base class already adds a main() function
 
 	def __call__(self, sched_ctx):
 		for x in BuildCheckTask.__call__(self, sched_ctx): yield x
@@ -194,7 +193,7 @@ class PicFlagDefinesPicCheckTask(BuildCheckTask):
 
 	def __init__(self, persistent, uid, base_cfg): BuildCheckTask.__init__(self, persistent, uid, base_cfg, compile=False)
 
-	def apply_to(self, cfg): cfg.pic = True
+	def apply_cxx_to(self, cfg): cfg.pic = True
 
 	@property
 	def source_text(self): return '''\

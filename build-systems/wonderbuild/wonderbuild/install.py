@@ -123,7 +123,7 @@ class InstallTask(Task, Persistent, OptionDecl):
 						if not silent and len(install_tuples) != 0:
 							list = [(t[2] and '-' or '+') + t[3] for t in install_tuples]
 							list.sort()
-							self.print_desc_multi_column_format(
+							self.print_desc_multicolumn_format(
 								str(self.dest_dir)+ ': installing ' + self.name + ' from ' + str(self.trim_prefix),
 								list, color_bg_fg_rgb((220, 220, 220), (70, 100, 150))
 							)

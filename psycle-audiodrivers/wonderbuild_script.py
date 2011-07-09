@@ -27,12 +27,11 @@ class Wonderbuild(ScriptTask):
 	def mod_dep_phases(self): return self._mod_dep_phases
 
 	def __call__(self, sched_ctx):
-		project = self.project
 		top_src_dir = self.src_dir.parent
 		src_dir = self.src_dir / 'src'
 		default_tasks = self.default_tasks
 
-		helpers = ScriptLoaderTask.shared(project, top_src_dir / 'psycle-helpers')
+		helpers = ScriptLoaderTask.shared(self.project, top_src_dir / 'psycle-helpers')
 		for x in sched_ctx.parallel_wait(helpers): yield x
 		helpers = helpers.script_task
 		self._common = common = helpers.common
@@ -73,7 +72,7 @@ class Wonderbuild(ScriptTask):
 		
 			class InstallHeaders(InstallTask):
 				def __init__(self, outer):
-					InstallTask.__init__(self, outer.project, outer.name + '-headers')
+					InstallTask.__init__(self, outer.base_cfg.project, outer.name + '-headers')
 					self.outer = outer
 				
 				@property
@@ -148,7 +147,7 @@ class Wonderbuild(ScriptTask):
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.public_deps += [o for o in opt if o]
 				self.result = min(bool(r) for r in req)
-				self.cxx_phase = self.__class__.InstallHeaders(self.project, self.name + '-headers')
+				self.cxx_phase = self.__class__.InstallHeaders(self.base_cfg.project, self.name + '-headers')
 
 				# brings the headers
 				h = []

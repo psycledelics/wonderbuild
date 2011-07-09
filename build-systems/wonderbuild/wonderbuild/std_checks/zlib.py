@@ -15,7 +15,7 @@ class ZLibCheckTask(BuildCheckTask):
 		BuildCheckTask.__init__(self, persistent, uid, base_cfg)
 		self.min_version = min_version
 
-	def apply_to(self, cfg): cfg.libs.append('z')
+	def apply_mod_to(self, cfg): cfg.libs.append('z')
 
 	@property
 	def source_text(self): return '''\

@@ -5,7 +5,6 @@
 from option_cfg import OptionCfg
 from task import SharedTask
 from logger import out, colored, color_bg_fg_rgb, is_debug, debug, silent
-import multi_column_formatting
 
 ok_color = color_bg_fg_rgb((240, 255, 240), (0, 170, 0))
 failed_color = color_bg_fg_rgb((255, 240, 240), (170, 0, 0))

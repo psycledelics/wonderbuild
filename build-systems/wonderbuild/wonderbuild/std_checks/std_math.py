@@ -30,7 +30,7 @@ class StdMathCheckTask(MultiBuildCheckTask):
 		if self.result: return 'yes with' + (not self.m and 'out' or '') + ' lm', ok_color
 		else: return 'no', failed_color
 		
-	def apply_to(self, cfg):
+	def apply_mod_to(self, cfg):
 		if self.m: cfg.libs.append('m')
 
 	@property
@@ -65,7 +65,7 @@ double math() {
 			self.outer = outer
 			self.m = m
 
-		def apply_to(self, cfg):
+		def apply_mod_to(self, cfg):
 			if self.m: cfg.libs.append('m')
 
 		@property

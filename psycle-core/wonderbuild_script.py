@@ -27,11 +27,10 @@ class Wonderbuild(ScriptTask):
 	def mod_dep_phases(self): return self._mod_dep_phases
 
 	def __call__(self, sched_ctx):
-		project = self.project
 		top_src_dir = self.src_dir.parent
 		src_dir = self.src_dir / 'src'
 
-		audiodrivers = ScriptLoaderTask.shared(project, top_src_dir / 'psycle-audiodrivers')
+		audiodrivers = ScriptLoaderTask.shared(self.project, top_src_dir / 'psycle-audiodrivers')
 		for x in sched_ctx.parallel_wait(audiodrivers): yield x
 		audiodrivers = audiodrivers.script_task
 		self._common = common = audiodrivers.common
@@ -58,7 +57,7 @@ class Wonderbuild(ScriptTask):
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.public_deps += [o for o in opt if o]
 				self.result = min(bool(r) for r in req)
-				self.cxx_phase = CoreMod.InstallHeaders(self.project, self.name + '-headers')
+				self.cxx_phase = CoreMod.InstallHeaders(self.base_cfg.project, self.name + '-headers')
 			
 			class InstallHeaders(InstallTask):
 				@property
