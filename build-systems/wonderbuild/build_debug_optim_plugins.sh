@@ -4,23 +4,36 @@ set -x &&
 
 cd $(dirname $0)/../.. &&
 
-# where everything is going to be build/installed
-dest=/tmp/psycle-player-test &&
+# the only place where we write; nothing is touched outside of this dir
+output=/tmp/psycle-player-test &&
 
-# test whether compiler supports link-time optimisation (lto)
-if cpp -P -xc++ /dev/null -flto; then lto=-flto; fi &&
+# where everything is going to be built
+build=$output/build &&
+
+# where everything is going to be installed
+prefix=$output/install &&
 
 common_flags='-march=native -ggdb3 -Wall -Wstrict-aliasing=2 -Winit-self' && # -Wfloat-equal -Wpadded
 
-# build the plugins separately so that we can use different compiler flags
-psycle-plugins/wonderbuild_script.py --install-dest-dir=/ --install-prefix-dir=$dest/optim --cxx-flags="$common_flags -O3 -DNDEBUG -fno-strict-aliasing $lto" &&
-psycle-player/wonderbuild_script.py  --install-dest-dir=/ --install-prefix-dir=$dest/debug --cxx-flags="$common_flags -O0 -UNDEBUG" &&
+# test whether compiler supports link-time optimisation (lto)
+if cpp -P -xc++ /dev/null -flto; then optims="$optims -flto";  fi &&
+# test whether compiler supports openmp
+if cpp -P -xc++ /dev/null -fopenmp; then optims="$optims -fopenmp"; fi &&
 
-rm -Rf $dest/merge &&
-mkdir $dest/merge &&
+
+# build the plugins separately so that we can use different compiler flags
+psycle-plugins/wonderbuild_script.py --bld-dir=$build/optim --install-prefix-dir=$prefix \
+	--cxx-flags="$common_flags -O3 -DNDEBUG -fno-strict-aliasing $optims" --ld-flags="$optims" &&
+	
+psycle-player/wonderbuild_script.py  --bld-dir=$build/debug --install-prefix-dir=$prefix \
+	--cxx-flags="$common_flags -O0 -UNDEBUG" &&
+
+# merge the two staged-install dirs into one
+rm -Rf $prefix &&
+mkdir $prefix &&
 # using hard links (-l) makes it pretty fast
-cp -axl $dest/optim/* $dest/merge &&
-cp -axl $dest/debug/* $dest/merge &&
+cp -axl $build/optim/staged-install/$prefix/* $prefix &&
+cp -axl $build/debug/staged-install/$prefix/* $prefix &&
 
 # choose either gdb, valgrind, alleyoop ...
 #cmd=valgrind &&
@@ -37,7 +50,7 @@ song=${1:-psycle/doc/Example - classic sounds demo.psy} &&
 
 # LD_LIBRARY_PATH is needed for valgrind.
 # PSYCLE_PATH makes sure we don't get the path from the user config file in the home dir.
-LD_LIBRARY_PATH=$dest/merge/lib:$LD_LIBRARY_PATH \
-PSYCLE_PATH=$dest/merge/lib \
-	$cmd $dest/merge/bin/psycle-player --output-driver $driver --input-file "$song"
+LD_LIBRARY_PATH=$prefix/lib:$LD_LIBRARY_PATH \
+PSYCLE_PATH=$prefix/lib \
+	$cmd $prefix/bin/psycle-player --output-driver $driver --input-file "$song"
 
