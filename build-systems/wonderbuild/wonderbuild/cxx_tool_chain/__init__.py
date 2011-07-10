@@ -1058,9 +1058,11 @@ class ModTask(ModDepPhases, Task, Persistent):
 		private_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=True, expose_deep_mod_tasks=False)
 		public_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=False, expose_deep_mod_tasks=False)
 		
-		if False:
-			# We have already waited for the deps to complete in _mod_phase_callback.
-			pass #for x in sched_ctx.parallel_wait(*(private_deps + public_deps): yield x
+		if False: # We just need to do apply_cxx_to and apply_mod_to. So no need for the tasks to complete.
+			if not self.ld:
+				# For shared libs and programs, we waited for all deps in _mod_phase_callback.
+				# Otherwise, we need to wait for them here.
+				for x in sched_ctx.parallel_wait(*(private_deps + public_deps)): yield x
 		
 		private_cfg = cfg.clone() # split between 'Libs' and 'Libs.private'
 		for dep in private_deps:
