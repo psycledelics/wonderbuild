@@ -8,8 +8,14 @@ except ImportError:
 	except ImportError: from md5 import md5 as _Sig
 
 class Sig(object):
-	def __init__(self, s=None):
-		if s is None: self._sig = _Sig()
-		else: self._sig = _Sig(s); self._sig.update('\0')
-	def update(self, s): self._sig.update(s); self._sig.update('\0')
+	
+	def __init__(self, *args):
+		self._sig = _Sig()
+		self.update(*args)
+
+	def update(self, *args):
+		for s in args:
+			if s is not None: self._sig.update(s)
+			self._sig.update('\0')
+	
 	def digest(self): return self._sig.digest()

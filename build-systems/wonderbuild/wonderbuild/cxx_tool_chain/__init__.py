@@ -20,6 +20,25 @@ class DestPlatform(object):
 		self.os = None
 		self.arch = None
 		self.pic_flag_defines_pic = None
+
+	def clone(self, class_ = None):
+		if class_ is None: class_ = self.__class__
+		if __debug__ and is_debug: debug('cfg: dest platform: clone: ' + str(class_))
+		c = class_()
+		c.bin_fmt = self.bin_fmt
+		c.os = self.os
+		c.arch = self.arch
+		c.pic_flag_defines_pic = self.pic_flag_defines_pic
+		return c
+
+	@property
+	def sig(self):
+		try: return self._sig
+		except AttributeError:
+			sig = Sig(self.bin_fmt, self.os, self.arch)
+			if self.pic_flag_defines_pic is not None: sig.update(str(self.pic_flag_defines_pic))
+			sig = self._sig = sig.digest()
+			return sig
 			
 class BuildCfg(object):
 	def __init__(self, project):
@@ -81,7 +100,7 @@ class BuildCfg(object):
 		c.impl = self.impl
 		c.kind = self.kind
 		c.version = self.version
-		c.dest_platform = self.dest_platform
+		c.dest_platform = self.dest_platform.clone() # not sure it's useful to clone
 		c.shared_checks = self.shared_checks
 		c.use_input_abs_paths = self.use_input_abs_paths
 		return c
@@ -93,11 +112,11 @@ class BuildCfg(object):
 			sig = Sig(self.impl.common_env_sig)
 			e = os.environ.get('PATH', None)
 			if e is not None: sig.update(e)
-			sig.update(self.kind)
-			sig.update(str(self.version))
-			#sig.update(self.dest_platform.sig)
-			if len(self.pkg_config) != 0: sig.update(_PkgConfigTask.env_sig())
-			#if len(self.frameworks) != 0: sig.update(...)
+			sig.update(self.lang, self.kind, str(self.version), self.dest_platform.sig)
+			if len(self.pkg_config) != 0:
+				sig.update(_PkgConfigTask.env_sig())
+				# Note: there is no need to sign self.pkg_config itself since this ends up as cxx_flags and ld_flags
+			sig.update(*sorted(self.frameworks))
 			sig = self.__common_sig = sig.digest()
 			return sig
 		
@@ -105,17 +124,15 @@ class BuildCfg(object):
 	def cxx_sig(self):
 		try: return self._cxx_sig
 		except AttributeError:
-			sig = Sig(self._common_sig)
-			sig.update(self.cxx_prog)
-			sig.update(str(self.pic))
+			sig = Sig(self._common_sig, self.cxx_prog, str(self.pic))
 			for k in sorted(self.defines.iterkeys()):
 				sig.update(k)
 				v = self.defines[k]
-				if v is not None: sig.update(repr(str(v))[1:-1])
-			for p in self.include_paths: sig.update(p.abs_path)
+				if v is not None: sig.update(str(v))
+			sig.update(*(p.abs_path for p in self.include_paths))
 			if self.pch is not None: sig.update(self.pch.sig)
-			for i in self.includes: sig.update(i.sig)
-			for f in self.cxx_flags: sig.update(f)
+			sig.update(*(i.sig for i in self.includes))
+			sig.update(*self.cxx_flags)
 			sig.update(self.impl.cxx_env_sig)
 			sig = self._cxx_sig = sig.digest()
 			return sig
@@ -124,13 +141,11 @@ class BuildCfg(object):
 	def _common_mod_sig(self):
 		try: return self.__common_mod_sig
 		except AttributeError:
-			sig = Sig(self._common_sig)
-			sig.update(str(self.shared))
-			sig.update(str(self.static_prog))
-			for p in self.lib_paths: sig.update(p.abs_path)
-			for l in self.libs: sig.update(l)
-			for l in self.static_libs: sig.update(l)
-			for l in self.shared_libs: sig.update(l)
+			sig = Sig(self._common_sig, str(self.shared), str(self.static_prog))
+			sig.update(*(p.abs_path for p in self.lib_paths))
+			sig.update(*self.libs)
+			sig.update(*self.static_libs)
+			sig.update(*self.shared_libs)
 			sig.update(self.impl.common_mod_env_sig)
 			sig = self.__common_mod_sig = sig.digest()
 			return sig
@@ -471,34 +486,43 @@ class _PreCompileTask(ModDepPhases, Task, Persistent):
 	def _cxx_phase_callback(self, sched_ctx):
 		for x in sched_ctx.parallel_wait(self): yield x
 		self.do_ensure_deps()
+		
+		# We need the headers of your deps.
 		for x in self._do_deps_cxx_phases_and_apply_cxx_deep(sched_ctx): yield x
+		
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, because we don't need pkg-config cxx flags in the cfg sig
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.cfg)
 			for x in sched_ctx.parallel_wait(pkg_config_cxx_flags_task): yield x
 			pkg_config_cxx_flags_task.apply_to(self.cfg)
+		
 		sched_ctx.lock.release()
 		try:
-			changed = False
-			try: old_sig, deps, old_dep_sig = self.persistent
+			need_process = False
+
+			cxx_sig = Sig(self.source_text)
+			cxx_sig.update(self.cfg.cxx_sig)
+			cxx_sig = cxx_sig.digest()
+
+			try: old_cxx_sig, deps, old_dep_sig = self.persistent
 			except KeyError:
 				if __debug__ and is_debug: debug('task: no state: ' + str(self))
-				changed = True
+				need_process = True
 			else:
-				if old_sig != self.sig:
+				if old_cxx_sig != cxx_sig:
 					if __debug__ and is_debug: debug('task: sig changed: ' + str(self))
-					changed = True
+					need_process = True
 				else:
 					try: dep_sigs = [dep.sig for dep in deps]
 					except OSError:
 						# A cached implicit dep does not exist anymore.
 						if __debug__ and is_debug: debug('cpp: deps not found: ' + str(self.header))
-						changed = True
+						need_process = True
 					else:
 						if old_dep_sig != Sig(''.join(dep_sigs)).digest():
 							# The cached implicit deps changed.
 							if __debug__ and is_debug: debug('cpp: deps changed: ' + str(self.header))
-							changed = True
+							need_process = True
 						elif self.cfg.check_missing:
 							self.target_dir.lock.acquire()
 							try:
@@ -507,8 +531,8 @@ class _PreCompileTask(ModDepPhases, Task, Persistent):
 							finally: self.target_dir.lock.release()
 							if not self.target.exists:
 								if __debug__ and is_debug: debug('task: target missing: ' + str(self.target))
-								changed = True
-			if not changed:
+								need_process = True
+			if not need_process:
 				if __debug__ and is_debug: debug('task: skip: no change: ' + str(self.header))
 			else:
 				if not silent: 
@@ -516,8 +540,7 @@ class _PreCompileTask(ModDepPhases, Task, Persistent):
 					if self.cfg.pic: pic = 'pic'; color += ';1'
 					else: pic = 'non-pic'
 					self.print_desc(str(self.header) + ': pre-compiling ' + pic + ' c++', color)
-				dir = self.header.parent
-				dir.make_dir(dir.parent)
+				self.header.parent.make_dir(self.header.parent.parent)
 				f = open(self.header.path, 'w')
 				try: f.write(self.source_text); f.write('\n')
 				finally: f.close()
@@ -533,17 +556,8 @@ class _PreCompileTask(ModDepPhases, Task, Persistent):
 				finally: f.close()
 				self.header.clear()
 				dep_sigs = [d.sig for d in deps]
-				self.persistent = self.sig, deps, Sig(''.join(dep_sigs)).digest()
+				self.persistent = cxx_sig, deps, Sig(''.join(dep_sigs)).digest()
 		finally: sched_ctx.lock.acquire()
-
-	@property
-	def sig(self):
-		try: return self._sig
-		except AttributeError:
-			sig = Sig(self.source_text)
-			sig.update(self.cfg.cxx_sig)
-			sig = self._sig = sig.digest()
-			return sig
 
 class PreCompileTasks(ModDepPhases, Task):
 	def __init__(self, name, base_cfg):
@@ -636,7 +650,7 @@ class _BatchCompileTask(Task):
 	def target_dir(self): return self.mod_task.obj_dir
 	
 	@property
-	def persistent_implicit_deps(self): return self.mod_task.persistent[2]
+	def persistent_implicit_deps(self): return self.mod_task.persistent[-1]
 
 	# Task
 	def __call__(self, sched_ctx):
@@ -715,6 +729,13 @@ class ModTask(ModDepPhases, Task, Persistent):
 			if not self.target_dev_dir in cfg.lib_paths: cfg.lib_paths.append(self.target_dev_dir)
 			cfg.libs.append(self.name)
 
+	def _unique_base_name(self, source):
+		return source.rel_path(self.base_cfg.project.top_src_dir).replace(os.pardir, '_').replace(os.sep, ',')
+
+	def _obj_name(self, source):
+		name = self._unique_base_name(source)
+		return name[:name.rfind('.')] + self.cfg.impl.cxx_task_target_ext
+
 	@property
 	def obj_dir(self):
 		''' the dir node where intermediate object files are placed'''
@@ -782,6 +803,9 @@ class ModTask(ModDepPhases, Task, Persistent):
 			else: return 'deps of headers ' + self.name
 		else: return 'deps of module ' + str(self.target)
 
+
+	def do_mod_phase(self): pass
+
 	class _ModPhaseCallbackTask(Task):
 		def __init__(self, mod_task):
 			Task.__init__(self)
@@ -797,19 +821,23 @@ class ModTask(ModDepPhases, Task, Persistent):
 		def __call__(self, sched_ctx):
 			for x in self.mod_task._mod_phase_callback(sched_ctx): yield x
 
-	def do_mod_phase(self): pass
-
 	def _mod_phase_callback(self, sched_ctx):
 		for x in sched_ctx.parallel_wait(self): yield x
 		self.do_ensure_deps()
+
 		# For static archives, we don't need to wait for the deps, but we want them to be done when the build finishes so that the resulting archive can be used.
 		# For shared libs and programs, we need all deps before linking. We schedule them in advance, and don't wait for them right now, but just before linking.
 		deep_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=True)
 		deep_deps_mod_phases = [dep.mod_phase for dep in deep_deps if dep.mod_phase is not None]
 		sched_ctx.parallel_no_wait(*deep_deps_mod_phases)
+
+		# We don't need the headers we export to clients, but we want clients to be able to use them.
+		# We schedule the task but don't wait for it.
 		if self.cxx_phase is not None: sched_ctx.parallel_no_wait(self.cxx_phase)
+
+		# We need the headers of our deps.
 		for x in self._do_deps_cxx_phases_and_apply_cxx_deep(sched_ctx): yield x
-		self.do_mod_phase()
+
 		if len(self.cfg.pkg_config) != 0:
 			self.cfg.cxx_sig # compute the signature before, because we don't need pkg-config cxx flags in the cfg sig
 			pkg_config_cxx_flags_task = _PkgConfigCxxFlagsTask.shared(self.cfg)
@@ -820,148 +848,166 @@ class ModTask(ModDepPhases, Task, Persistent):
 					# XXX pkg-config and static/shared (alternative is self.cfg.static_prog or not self.cfg.shared)
 					expose_private_deep_deps=self.cfg.static_prog)
 				sched_ctx.parallel_no_wait(pkg_config_ld_flags_task)
-		try: persistent = self.persistent
+
+		self.do_mod_phase() # brings self.sources
+
+		if __debug__ and is_debug and self.kind == ModTask.Kinds.HEADERS: assert len(self.sources) == 0
+
+		try: old_pkg_config_sig, old_kind, old_ld, old_mod_sig, old_implicit_deps = self.persistent
 		except KeyError:
 			if __debug__ and is_debug: debug('task: no state: ' + str(self))
-			persistent = self.persistent = None, None, {}, None
+			old_pkg_config_sig, old_kind, old_ld, old_mod_sig, old_implicit_deps = self.persistent = None, None, None, None, {}
 			self._type_changed = False
 			changed_sources = self.sources
 		else:
-			self._type_changed = persistent[1] != self.ld
+			self._type_changed = old_kind != self.kind or old_ld != self.ld
 			if __debug__ and is_debug and self._type_changed: debug('task: mod type changed: ' + str(self))
-			changed_sources = deque()
-			implicit_deps = persistent[2]
-			if self.cfg.check_missing and self.kind != ModTask.Kinds.HEADERS:
-				self.obj_dir.lock.acquire()
-				try:
-					try: self.obj_dir.actual_children # not needed, just an optimisation
-					except OSError: pass
-				finally: self.obj_dir.lock.release()
-			for s in self.sources:
-				try: had_failed, old_cxx_sig, deps, old_dep_sig = implicit_deps[s]
-				except KeyError:
-					# This is a new source.
-					if __debug__ and is_debug: debug('task: no state: ' + str(s))
-					changed_sources.append(s)
-					continue
-				if had_failed:
-					# The compilation failed the last time.
-					# We place this source first in the deque so that it is compiled first,
-					# and hence we can give the fastest feedback in the usage cycle "fix some compilation errors then retry to build".
-					if __debug__ and is_debug: debug('task: retry previously failed: ' + str(s))
-					changed_sources.appendleft(s)
-					continue
-				try: dep_sigs = [dep.sig for dep in deps]
-				except OSError:
-					# A cached implicit dep does not exist anymore.
-					if __debug__ and is_debug: debug('cpp: deps not found: ' + str(s))
-					changed_sources.append(s)
-					continue
-				if old_dep_sig != Sig(''.join(dep_sigs)).digest():
-					# The cached implicit deps changed.
-					if __debug__ and is_debug: debug('cpp: deps changed: ' + str(s))
-					changed_sources.append(s)
-					continue
-				if old_cxx_sig != self.cfg.cxx_sig:
-					if __debug__ and is_debug: debug('task: cxx sig changed: ' + str(s))
-					changed_sources.append(s)
-					continue
+
+			if self.kind != ModTask.Kinds.HEADERS:
+				changed_sources = deque()
 				if self.cfg.check_missing:
-					o = self.obj_dir / self._obj_name(s)
-					if not o.exists:
-						if __debug__ and is_debug: debug('task: target missing: ' + str(o))
+					self.obj_dir.lock.acquire()
+					try:
+						try: self.obj_dir.actual_children # not needed, just an optimisation
+						except OSError: pass
+					finally: self.obj_dir.lock.release()
+				for s in self.sources:
+					try: had_failed, old_cxx_sig, deps, old_dep_sig = old_implicit_deps[s]
+					except KeyError:
+						# This is a new source.
+						if __debug__ and is_debug: debug('task: no state: ' + str(s))
 						changed_sources.append(s)
 						continue
-				if __debug__ and is_debug: debug('task: skip: no change: ' + str(s))
+					if had_failed:
+						# The compilation failed the last time.
+						# We place this source first in the deque so that it is compiled first,
+						# and hence we can give the fastest feedback in the usage cycle "fix some compilation errors then retry to build".
+						if __debug__ and is_debug: debug('task: retry previously failed: ' + str(s))
+						changed_sources.appendleft(s)
+						continue
+					try: dep_sigs = [dep.sig for dep in deps]
+					except OSError:
+						# A cached implicit dep does not exist anymore.
+						if __debug__ and is_debug: debug('cpp: deps not found: ' + str(s))
+						changed_sources.append(s)
+						continue
+					if old_dep_sig != Sig(''.join(dep_sigs)).digest():
+						# The cached implicit deps changed.
+						if __debug__ and is_debug: debug('cpp: deps changed: ' + str(s))
+						changed_sources.append(s)
+						continue
+					if old_cxx_sig != self.cfg.cxx_sig:
+						if __debug__ and is_debug: debug('task: cxx sig changed: ' + str(s))
+						changed_sources.append(s)
+						continue
+					if self.cfg.check_missing:
+						o = self.obj_dir / self._obj_name(s)
+						if not o.exists:
+							if __debug__ and is_debug: debug('task: target missing: ' + str(o))
+							changed_sources.append(s)
+							continue
+					if __debug__ and is_debug: debug('task: skip: no change: ' + str(s))
+
 		need_process = False
-		# For shared libs and programs, we need all deps before linking.
-		# So these are parts of the tasks we need to process before linking.
-		tasks = self.ld and deep_deps_mod_phases or []
-		if len(changed_sources) != 0:
-			need_process = True
-			batches = []
-			for i in xrange(sched_ctx.thread_count): batches.append([])
-			i = 0
-			for s in changed_sources:
-				batches[i].append(s)
-				i = (i + 1) % sched_ctx.thread_count
-			i = 0
-			for b in batches:
-				if len(b) == 0: break
-				i += 1
-				tasks.append(_BatchCompileTask(self, b))
-			if not(__debug__ and is_debug) and not silent:
-				color = color_bg_fg_rgb((0, 150, 180), (255, 255, 255))
-				if self.cfg.pic: pic = 'pic'; color += ';1'
-				else: pic = 'non-pic';
-				s = [str(s) for s in changed_sources]
-				s.sort()
-				self.print_desc_multicolumn_format(str(self.target) + ': compiling ' + pic + ' objects from ' + self.cfg.lang + ' using ' + str(i) + ' processes and batch-size ' + str(len(batches[0])), s, color)
-		elif self.cfg.check_missing and self.kind != ModTask.Kinds.HEADERS:
-			for t in self.targets:
-				if not t.exists:
-					if __debug__ and is_debug: debug('task: target missing: ' + str(t))
-					changed_sources = self.sources
-					need_process = True
-					break
-		# Before linking, we wait for the compile tasks to complete.
-		# For shared libs and programs, we also need all deps before linking.
-		# We've scheduled them in advance, and now we wait for them too.
-		# Note: When linking a shared lib on platforms that support -Wl,--undefined,
-		#       which is the default on linux, we could go on even without all deps.
-		#       Linking programs needs all deps, however.
-		for x in sched_ctx.parallel_wait(*tasks): yield x
-		if self.ld:
-			for dep in deep_deps: dep.apply_mod_to(self.cfg) # ordering matters for sig
-			if not need_process:
-				for dep in deep_deps:
-					# When a dependant lib is a static archive, or changes its type from static to shared, we need to relink.
-					# When the relink-on-shared-dep-impl-change option is on, we also relink to check that external symbols still exist.
-					need_process = \
-						isinstance(dep, ModTask) and dep.kind != ModTask.Kinds.HEADERS and \
-						dep._needed_process and (not dep.ld or dep._type_changed or self.cfg.ld_on_shared_dep_impl_change)
-					if need_process:
-						if __debug__ and is_debug: debug('task: dep lib task changed: ' + str(self) + ' ' + str(dep))
-						break
-			if len(self.cfg.pkg_config) != 0:
-				self.cfg.ld_sig # compute the signature before, because we don't need pkg-config ld flags in the cfg sig
-		if persistent[0] != self._mod_sig:
-			if __debug__ and is_debug: debug('task: mod sig changed: ' + str(self))
-			changed_sources = self.sources
-			need_process = True
-		elif not need_process:
-			implicit_deps = persistent[2]
-			if len(implicit_deps) > len(self.sources):
-				# Some source has been removed from the list of sources to build.
-				if __debug__ and is_debug: debug('task: source removed: ' + str(self))
+
+		if self.kind != ModTask.Kinds.HEADERS:
+			# For shared libs and programs, we need all deps before linking.
+			# So these are parts of the tasks we need to process before linking.
+			tasks = self.ld and deep_deps_mod_phases or []
+
+			if len(changed_sources) != 0:
 				need_process = True
-		if not need_process:
-			if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
-		elif self.kind != ModTask.Kinds.HEADERS:
-			if self.ld and len(self.cfg.pkg_config) != 0:
-					for x in sched_ctx.parallel_wait(pkg_config_ld_flags_task): yield x
-					pkg_config_ld_flags_task.apply_to(self.cfg)
-			self.target_dir.make_dir()
-			if self.kind != ModTask.Kinds.PROG and self.target_dir is not self.target_dev_dir: self.target_dev_dir.make_dir()
-			sched_ctx.lock.release()
-			try:
-				implicit_deps = persistent[2]
-				if len(implicit_deps) == len(self.sources): # (yes this is correct, even if it looks strange)
-					source_states = implicit_deps
-					removed_obj_names = None
-				else:
-					# remove old sources from implicit deps dictionary
-					source_states = {}
-					for s in self.sources: source_states[s] = implicit_deps[s]
-					if self.ld: removed_obj_names = None
+				batches = []
+				for i in xrange(sched_ctx.thread_count): batches.append([])
+				i = 0
+				for s in changed_sources:
+					batches[i].append(s)
+					i = (i + 1) % sched_ctx.thread_count
+				i = 0
+				for b in batches:
+					if len(b) == 0: break
+					i += 1
+					tasks.append(_BatchCompileTask(self, b))
+				if not(__debug__ and is_debug) and not silent:
+					color = color_bg_fg_rgb((0, 150, 180), (255, 255, 255))
+					if self.cfg.pic: pic = 'pic'; color += ';1'
+					else: pic = 'non-pic';
+					s = [str(s) for s in changed_sources]
+					s.sort()
+					self.print_desc_multicolumn_format(str(self.target) + ': compiling ' + pic + ' objects from ' + self.cfg.lang + ' using ' + str(i) + ' processes and batch-size ' + str(len(batches[0])), s, color)
+			elif self.cfg.check_missing:
+				for t in self.targets:
+					if not t.exists:
+						if __debug__ and is_debug: debug('task: target missing: ' + str(t))
+						changed_sources = self.sources
+						need_process = True
+						break
+
+			# Before linking, we wait for the compile tasks to complete.
+			# For shared libs and programs, we also need all deps before linking.
+			# We've scheduled them in advance, and now we wait for them too.
+			# Note: When linking a shared lib on platforms that support -Wl,--undefined,
+			#       which is the default on linux, we could go on even without all deps.
+			#       Linking programs needs all deps, however.
+			for x in sched_ctx.parallel_wait(*tasks): yield x
+
+			if self.ld:
+				for dep in deep_deps: dep.apply_mod_to(self.cfg) # ordering matters for sig
+				if not need_process:
+					for dep in deep_deps:
+						# When a dependant lib is a static archive, or changes its type from static to shared, we need to relink.
+						# When the relink-on-shared-dep-impl-change option is on, we also relink to check that external symbols still exist.
+						need_process = \
+							isinstance(dep, ModTask) and dep.kind != ModTask.Kinds.HEADERS and \
+							dep._needed_process and (not dep.ld or dep._type_changed or self.cfg.ld_on_shared_dep_impl_change)
+						if need_process:
+							if __debug__ and is_debug: debug('task: dep lib task changed: ' + str(self) + ' ' + str(dep))
+							break
+				if len(self.cfg.pkg_config) != 0:
+					self.cfg.ld_sig # compute the signature before, because we don't need pkg-config ld flags in the cfg sig
+
+			mod_sig = Sig(self.target_dir.abs_path)
+			if self.kind != ModTask.Kinds.PROG and \
+				self.target_dir is not self.target_dev_dir: mod_sig.update(self.target_dev_dir.abs_path)
+			if self.ld: mod_sig.update(self.cfg.ld_sig)
+			else: mod_sig.update(self.cfg.ar_ranlib_sig)
+			mod_sig = mod_sig.digest()
+
+			if old_mod_sig != mod_sig:
+				if __debug__ and is_debug: debug('task: mod sig changed: ' + str(self))
+				changed_sources = self.sources
+				need_process = True
+			elif not need_process:
+				if len(old_implicit_deps) > len(self.sources):
+					# Some source has been removed from the list of sources to build.
+					if __debug__ and is_debug: debug('task: source removed: ' + str(self))
+					need_process = True
+
+			if not need_process:
+				if __debug__ and is_debug: debug('task: skip: no change: ' + str(self))
+			else:
+				if self.ld and len(self.cfg.pkg_config) != 0:
+						for x in sched_ctx.parallel_wait(pkg_config_ld_flags_task): yield x
+						pkg_config_ld_flags_task.apply_to(self.cfg)
+				self.target_dir.make_dir()
+				if self.kind != ModTask.Kinds.PROG and self.target_dir is not self.target_dev_dir: self.target_dev_dir.make_dir()
+				sched_ctx.lock.release()
+				try:
+					if len(old_implicit_deps) == len(self.sources): # (yes this is correct, even if it looks strange)
+						implicit_deps = old_implicit_deps
+						removed_obj_names = None
 					else:
-						# remove old objects from static archive
-						removed_obj_names = []
-						for s in implicit_deps:
-							if not s in self.sources: removed_obj_names.append(self._obj_name(s))
-				if self.ld: sources = self.sources
-				else: sources = changed_sources
-				if self.kind != ModTask.Kinds.HEADERS:
+						# remove old sources from implicit deps dictionary
+						implicit_deps = {}
+						for s in self.sources: implicit_deps[s] = old_implicit_deps[s]
+						if self.ld: removed_obj_names = None
+						else:
+							# remove old objects from static archive
+							removed_obj_names = []
+							for s in old_implicit_deps:
+								if not s in self.sources: removed_obj_names.append(self._obj_name(s))
+					if self.ld: sources = self.sources
+					else: sources = changed_sources
 					if not silent:
 						if not self.ld: desc = 'archiving and indexing static lib'; color = color_bg_fg_rgb((120, 100, 120), (255, 255, 255))
 						elif self.kind == ModTask.Kinds.PROG:
@@ -979,19 +1025,66 @@ class ModTask(ModDepPhases, Task, Persistent):
 						s.sort()
 						self.print_desc_multicolumn_format(str(self.target) + ': ' + desc + ' from objects', s, color)
 					self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources], removed_obj_names)
-				self.persistent = self._mod_sig, self.ld, source_states, persistent[3]
-			finally: sched_ctx.lock.acquire()
-		if not self.cfg.check_missing: self.obj_dir.forget()
+					self.persistent = old_pkg_config_sig, self.kind, self.ld, mod_sig, implicit_deps
+				finally: sched_ctx.lock.acquire()
+
+		if not self.cfg.check_missing and (self.kind != ModTask.Kinds.HEADERS or self._type_changed): self.obj_dir.forget()
+
 		self._needed_process = need_process
+
 		self._generate_pkg_config_file() # Note: don't bother releasing the sched_ctx.lock; it works, but it's actually slower.
 		
 	def _generate_pkg_config_file(self):
 		if self.kind == ModTask.Kinds.PROG: return # could have some use too iirc on elf where programs can be used as libs?
+
+		# Our BuildCfg is not the same as self.cfg.
+		# It doesn't contain user-provided flags, nor expanded self.cfg.pkg_config flags.
+		# It doesn't contain either what's been brought by deep mod tasks.
+		cfg = BuildCfg(self.cfg.project)
+		
+		# copy impl settings
+		cfg.lang = self.cfg.lang
+		cfg.pic = self.cfg.pic
+		cfg.shared = self.cfg.shared
+		cfg.static_prog = self.cfg.static_prog
+		cfg.impl = self.cfg.impl
+		cfg.kind = self.cfg.kind
+		cfg.version = self.cfg.version
+		cfg.dest_platform = self.cfg.dest_platform
+	
+		self.apply_cxx_to(cfg)
+		self.apply_mod_to(cfg)
+
+		private_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=True, expose_deep_mod_tasks=False)
+		public_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=False, expose_deep_mod_tasks=False)
+		
+		if False:
+			# We have already waited for the deps to complete in _mod_phase_callback.
+			pass #for x in sched_ctx.parallel_wait(*(private_deps + public_deps): yield x
+		
+		private_cfg = cfg.clone() # split between 'Libs' and 'Libs.private'
+		for dep in private_deps:
+			if isinstance(dep, ModTask): pass
+			elif isinstance(dep, PkgConfigCheckTask): pass
+			else: dep.apply_mod_to(private_cfg)
+		for dep in public_deps:
+			if isinstance(dep, ModTask): cfg.pkg_config.append(dep.name)
+			elif isinstance(dep, PkgConfigCheckTask): cfg.pkg_config += dep.pkgs
+			else: dep.apply_cxx_to(cfg); dep.apply_mod_to(cfg)
+
 		need_process = False
+		
+		pkg_config_sig = Sig(self.title, self.description, self.version, self.url or '', cfg.cxx_sig, cfg.ld_sig)
+		pkg_config_sig.update(*cfg.pkg_config)
+		pkg_config_sig = pkg_config_sig.digest()
+
+		# No need to check whether our persistent data exist since it has already been done in _mod_phase_callback.
 		persistent = self.persistent
-		if persistent[3] != self._pkg_config_sig:
-			if __debug__ and is_debug: debug('task: pkg-config sig changed: ' + str(self))
+
+		if persistent[0] != pkg_config_sig:
+			if __debug__ and is_debug: debug('task: pkg-config: sig changed: ' + str(self))
 			need_process = True
+			
 		if need_process or self.base_cfg.check_missing:
 			installed_pc_file = self.cfg.fhs.lib / 'pkgconfig' / (self.name + '.pc')
 			uninstalled_pc_file = self.cfg.project.bld_dir / 'pkgconfig' / (self.name + '-uninstalled.pc')
@@ -1003,107 +1096,44 @@ class ModTask(ModDepPhases, Task, Persistent):
 						except OSError: pass
 					finally: f.parent.lock.release()
 				if not f.exists:
-					if __debug__ and is_debug: debug('task: pkg-config: file missing:' + str(f))
+					if __debug__ and is_debug: debug('task: pkg-config: file missing: ' + str(f))
 					need_process = True
+					
 		if need_process:
-			if self.kind != ModTask.Kinds.PROG:
-				installed_pc_file = self.cfg.fhs.lib / 'pkgconfig' / (self.name + '.pc')
-				uninstalled_pc_file = self.cfg.project.bld_dir / 'pkgconfig' / (self.name + '-uninstalled.pc')
-				if not silent:
-					if self.kind == ModTask.Kinds.HEADERS: desc = str(self.cxx_phase)
-					else: desc = str(self.target)
-					self.print_desc_multicolumn_format(desc + ': writing pkg-config files',
-						[str(installed_pc_file), str(uninstalled_pc_file)], color_bg_fg_rgb((230, 100, 170), (255, 255, 255)) + ';1')
-			
-				cfg = BuildCfg(self.cfg.project)
-				# copy impl settings
-				cfg.lang = self.cfg.lang
-				cfg.pic = self.cfg.pic
-				cfg.shared = self.cfg.shared
-				cfg.static_prog = self.cfg.static_prog
-				cfg.impl = self.cfg.impl
-				cfg.kind = self.cfg.kind
-				cfg.version = self.cfg.version
-				cfg.dest_platform = self.cfg.dest_platform
-			
-				self.apply_cxx_to(cfg)
-				self.apply_mod_to(cfg)
-			
-				private_cfg = cfg.clone()
-				private_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=True, expose_deep_mod_tasks=False)
-				for dep in private_deps:
-					if isinstance(dep, ModTask): pass
-					elif isinstance(dep, PkgConfigCheckTask): pass
-					else: dep.apply_mod_to(private_cfg)
-			
-				public_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=False, expose_deep_mod_tasks=False)
-				for dep in public_deps:
-					if isinstance(dep, ModTask): cfg.pkg_config.append(dep.name)
-					elif isinstance(dep, PkgConfigCheckTask): cfg.pkg_config += dep.pkgs
-					else: dep.apply_cxx_to(cfg); dep.apply_mod_to(cfg)
-			
-				def generate(uninstalled, file):
-					cxx_flags = self.cfg.impl.client_cfg_cxx_args(cfg, uninstalled)
-					ld_flags = self.cfg.impl.client_cfg_ld_args(cfg, uninstalled)
-					private_ld_flags = self.cfg.impl.client_cfg_ld_args(private_cfg, uninstalled)
-					s = \
-						'# generated by wonderbuild\n' \
-						'\nName: ' + self.title + \
-						'\nDescription: ' + self.description + \
-						'\nVersion: ' + self.version
-					if self.url: s += '\nURL: ' + self.url + '\n'
-					s += \
-						'\nCflags: ' + ' '.join(cxx_flags) + \
-						'\nLibs: ' + ' '.join(ld_flags) + \
-						'\nLibs.private: ' + ' '.join(private_ld_flags) + \
-						'\nRequires: ' + ' '.join(cfg.pkg_config)
-					if False: s += '\nRequires.private: ...' # messy specification
-					if False: s += '\nConflicts: ...'
-					s += '\n'
-					file.parent.make_dir(file.parent.parent)
-					f = open(file.path, 'w')
-					try: f.write(s)
-					finally: f.close()
-					if __debug__ and is_debug: debug('task: pkg-config: file ' + str(file) + '\n' + s + '---------- end file ' + str(file))
+			if not silent:
+				if self.kind == ModTask.Kinds.HEADERS: desc = str(self.cxx_phase)
+				else: desc = str(self.target)
+				self.print_desc_multicolumn_format(desc + ': writing pkg-config files',
+					[str(installed_pc_file), str(uninstalled_pc_file)], color_bg_fg_rgb((230, 100, 170), (255, 255, 255)) + ';1')
+		
+			def generate(uninstalled, file):
+				cxx_flags = self.cfg.impl.client_cfg_cxx_args(cfg, uninstalled)
+				ld_flags = self.cfg.impl.client_cfg_ld_args(cfg, uninstalled)
+				private_ld_flags = self.cfg.impl.client_cfg_ld_args(private_cfg, uninstalled)
+				s = \
+					'# generated by wonderbuild\n' \
+					'\nName: ' + self.title + \
+					'\nDescription: ' + self.description + \
+					'\nVersion: ' + self.version
+				if self.url: s += '\nURL: ' + self.url + '\n'
+				s += \
+					'\nCflags: ' + ' '.join(cxx_flags) + \
+					'\nLibs: ' + ' '.join(ld_flags) + \
+					'\nLibs.private: ' + ' '.join(private_ld_flags) + \
+					'\nRequires: ' + ' '.join(cfg.pkg_config)
+				if False: s += '\nRequires.private: ...' # messy specification
+				if False: s += '\nConflicts: ...'
+				s += '\n'
+				file.parent.make_dir(file.parent.parent)
+				f = open(file.path, 'w')
+				try: f.write(s)
+				finally: f.close()
+				if __debug__ and is_debug:
+					debug('task: pkg-config: wrote content of file ' + str(file) + '\n' + s + '---------- end of file ' + str(file))
 
-				generate(False, installed_pc_file)
-				generate(True, uninstalled_pc_file)
-			self.persistent = persistent[0], persistent[1], persistent[2], self._pkg_config_sig
-			
-
-	@property
-	def _pkg_config_sig(self):
-		try: return self.__pkg_config_sig
-		except AttributeError:
-			cfg = self.cfg.clone()
-			self.apply_cxx_to(cfg)
-			self.apply_mod_to(cfg)
-			sig = Sig(cfg.cxx_sig)
-			sig.update(cfg.ld_sig)
-			self.__pkg_config_sig = sig = sig.digest()
-			return sig
-	
-	@property
-	def _mod_sig(self):
-		try: return self.__mod_sig
-		except AttributeError:
-			if self.kind == ModTask.Kinds.HEADERS:
-				self.__mod_sig = sig = ''
-			else:
-				sig = Sig(self.target_dir.abs_path)
-				if self.kind != ModTask.Kinds.PROG and \
-					self.target_dir is not self.target_dev_dir: sig.update(self.target_dev_dir.abs_path)
-				if self.ld: sig.update(self.cfg.ld_sig)
-				else: sig.update(self.cfg.ar_ranlib_sig)
-				self.__mod_sig = sig = sig.digest()
-			return sig
-
-	def _unique_base_name(self, source):
-		return source.rel_path(self.base_cfg.project.top_src_dir).replace(os.pardir, '_').replace(os.sep, ',')
-
-	def _obj_name(self, source):
-		name = self._unique_base_name(source)
-		return name[:name.rfind('.')] + self.cfg.impl.cxx_task_target_ext
+			generate(False, installed_pc_file)
+			generate(True, uninstalled_pc_file)
+			self.persistent = pkg_config_sig, self.kind, self.ld, persistent[-2], persistent[-1]
 
 class _PkgConfigTask(CheckTask):
 
