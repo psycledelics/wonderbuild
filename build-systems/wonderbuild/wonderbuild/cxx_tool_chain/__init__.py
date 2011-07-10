@@ -1026,13 +1026,19 @@ class ModTask(ModDepPhases, Task, Persistent):
 						self.print_desc_multicolumn_format(str(self.target) + ': ' + desc + ' from objects', s, color)
 					self.cfg.impl.process_mod_task(self, [self._obj_name(s) for s in sources], removed_obj_names)
 					self.persistent = old_pkg_config_sig, self.kind, self.ld, mod_sig, implicit_deps
+					self._generate_pkg_config_file()
 				finally: sched_ctx.lock.acquire()
-
-		if not self.cfg.check_missing and (self.kind != ModTask.Kinds.HEADERS or self._type_changed): self.obj_dir.forget()
 
 		self._needed_process = need_process
 
-		self._generate_pkg_config_file() # Note: don't bother releasing the sched_ctx.lock; it works, but it's actually slower.
+		if not self.cfg.check_missing and (self.kind != ModTask.Kinds.HEADERS or self._type_changed): self.obj_dir.forget()
+
+		self._generate_pkg_config_file()
+
+		if not need_process: # When processed, self._generate_pkg_config_file() is called directly with the lock released.
+			sched_ctx.lock.release()
+			try: self._generate_pkg_config_file()
+			finally: sched_ctx.lock.acquire()
 		
 	def _generate_pkg_config_file(self):
 		if self.kind == ModTask.Kinds.PROG: return # could have some use too iirc on elf where programs can be used as libs?
@@ -1057,8 +1063,12 @@ class ModTask(ModDepPhases, Task, Persistent):
 
 		private_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=True, expose_deep_mod_tasks=False)
 		public_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=False, expose_deep_mod_tasks=False)
-		
-		if False: # We just need to do apply_cxx_to and apply_mod_to. So no need for the tasks to complete.
+
+		if False: # No need for the tasks to complete, because:
+			# We just need to do apply_cxx_to and apply_mod_to.
+			# While apply_cxx_to may use cxx_phase properties like dest_dir for an InstallTask cxx_phase,
+			# e.g. def apply_cxx_to(self, cfg): cfg.include_paths.append(self.cxx_phase.dest_dir),
+			# this can be done without the InstallTask cxx_phase having run.
 			if not self.ld:
 				# For shared libs and programs, we waited for all deps in _mod_phase_callback.
 				# Otherwise, we need to wait for them here.
@@ -1097,10 +1107,11 @@ class ModTask(ModDepPhases, Task, Persistent):
 						try: f.parent.actual_children # not needed, just an optimisation
 						except OSError: pass
 					finally: f.parent.lock.release()
-				if not f.exists:
-					if __debug__ and is_debug: debug('task: pkg-config: file missing: ' + str(f))
-					need_process = True
-					
+					if not f.exists:
+						if __debug__ and is_debug: debug('task: pkg-config: file missing: ' + str(f))
+						need_process = True
+						break
+		
 		if need_process:
 			if not silent:
 				if self.kind == ModTask.Kinds.HEADERS: desc = str(self.cxx_phase)
