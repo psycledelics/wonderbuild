@@ -5,4 +5,4 @@
 class UserReadableException(Exception): pass
 
 version = (1, 0)
-abi_sig = '5'
+abi_sig = '6'

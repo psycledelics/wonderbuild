@@ -30,17 +30,16 @@ class Impl(object):
 	def cxx_env_sig(self): return ''
 
 	@staticmethod
-	def client_cfg_cxx_args(cfg, uninstalled):
+	def client_cfg_cxx_args(cfg, include_dir_var):
 		args = []
 		for k, v in cfg.defines.iteritems():
 			if v is None: args.append('-D' + k)
 			else: args.append('-D' + k + '=' + repr(str(v))[1:-1]) # note: assumes that cpp and python escaping work the same way
-		if uninstalled:
-			for p in cfg.include_paths: args.append('-I' + p.abs_path)
-		else:
-			dest = cfg.fhs.dest
-			root = dest.fs.root
-			for p in cfg.include_paths: args.append('-I' + (root / p.rel_path(dest)).abs_path)
+		for p in cfg.include_paths:
+			path = p.rel_path(cfg.fhs.include, allow_abs_path=False)
+			if path == os.curdir: path = include_dir_var
+			else: path = include_dir_var + os.sep + path
+			args.append('-I' + path)
 		args += cfg.cxx_flags
 		return args
 
@@ -106,14 +105,13 @@ class Impl(object):
 	def ld_env_sig(self): return ''
 
 	@staticmethod
-	def client_cfg_ld_args(cfg, uninstalled):
+	def client_cfg_ld_args(cfg, lib_dir_var):
 		args = []
-		if uninstalled:
-			for p in cfg.lib_paths: args.append('-L' + p.abs_path)
-		else:
-			dest = cfg.fhs.dest
-			root = dest.fs.root
-			for p in cfg.lib_paths: args.append('-L' + (root / p.rel_path(dest)).abs_path)
+		for p in cfg.lib_paths:
+			path = p.rel_path(cfg.fhs.lib, allow_abs_path=False)
+			if path == os.curdir: path = lib_dir_var
+			else: path = lib_dir_var + os.sep + path
+			args.append('-L' + path)
 		for l in cfg.static_libs: args.append('-l' + l)
 		for l in cfg.libs: args.append('-l' + l)
 		for l in cfg.shared_libs: args.append('-l' + l)

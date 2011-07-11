@@ -320,7 +320,7 @@ class Node(object):
 			finally: self.fs.root.lock.release()
 			return self._canonical_node
 	
-	def rel_path(self, from_node):
+	def rel_path(self, from_node, allow_abs_path=True):
 		if from_node.exists:
 			if from_node.is_symlink: from_node = from_node.canonical_node # because 'dir/symlink/..' is not the same as 'dir/'
 			if not from_node.is_dir: from_node = from_node.parent
@@ -340,10 +340,11 @@ class Node(object):
 			node1 = node1.parent
 			node2 = node2.parent
 		ancestor = node1
-		if ancestor._height == 0:
+		if ancestor._height == 0 and allow_abs_path:
 			# Relative paths are useful to be able to move a common ancestor while keeping these relative paths between children valid.
 			# If we need to go up to the root, it's useless to use a relative path because the root itself never moves.
 			# We use the absolute path which is simpler for the user to read.
+			# There is one, far fetched, case where disabling this proved useful: in generate_pkg_config_file; see there for the gory details.
 			return self.abs_path
 		path = []
 		for i in xrange(from_node._height - ancestor._height): path.append(os.pardir)
