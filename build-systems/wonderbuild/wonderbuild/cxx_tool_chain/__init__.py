@@ -391,9 +391,9 @@ class ModDepPhases(object): # note: doesn't derive form Task, but derived classe
 	def apply_mod_to(self, cfg): pass
 	
 	def _do_deps_cxx_phases_and_apply_cxx_deep(self, sched_ctx):
-		cxx_phases = (dep.cxx_phase for dep in self.all_deps if dep.cxx_phase is not None)
-		for x in sched_ctx.parallel_wait(*cxx_phases): yield x
 		deep_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=False)
+		cxx_phases = (dep.cxx_phase for dep in deep_deps if dep.cxx_phase is not None)
+		for x in sched_ctx.parallel_wait(*cxx_phases): yield x
 		for dep in deep_deps: dep.apply_cxx_to(self.cfg) # ordering matters for sig
 
  	@property
@@ -487,7 +487,7 @@ class _PreCompileTask(ModDepPhases, Task, Persistent):
 		for x in sched_ctx.parallel_wait(self): yield x
 		self.do_ensure_deps()
 		
-		# We need the headers of your deps.
+		# We need the headers of our deps.
 		for x in self._do_deps_cxx_phases_and_apply_cxx_deep(sched_ctx): yield x
 		
 		if len(self.cfg.pkg_config) != 0:
