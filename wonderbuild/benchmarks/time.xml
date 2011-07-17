@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <?xml-stylesheet type='text/xsl' href='time.xsl'?>
 <part caption='Benchmarks of various C++ build tools' image='http://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Koch_curve.svg/180px-Koch_curve.svg.png' alt='koch curve'>
-	<i>(send comments to <a href='mailto:bohan.wonderbuild@retropaganda.info?subject=[wonderbuild%20benchmarks]'>Johan Boul&#233; &lt;bohan.wonderbuild@retropaganda.info&gt;</a>)</i>
+	<i>(send comments to Johan Boul&#233; &lt;<a href='mailto:bohan.wonderbuild@retropaganda.info?subject=[wonderbuild%20benchmarks]'>bohan.wonderbuild@retropaganda.info</a>&gt;)</i>
 	<part caption='Configuration details'>
 		The benchmarks were generated with this <a href='gen-bench'/> script.
 		The script produces reproductible seeded-random setups.
