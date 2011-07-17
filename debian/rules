@@ -1,0 +1,46 @@
+#! /usr/bin/make -f
+
+CXXFLAGS = -g -Wall
+ifeq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+ CXXFLAGS += -O2
+endif
+
+export DEB_HOST_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
+export DEB_BUILD_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+
+ifeq ($(DEB_BUILD_GNU_TYPE), $(DEB_HOST_GNU_TYPE))
+ cross_compile_flags =
+ strip_prog = strip
+else
+ cross_compile_flags = \
+  --cxx=$(DEB_HOST_GNU_TYPE)-g++ \
+  --ar=$(DEB_HOST_GNU_TYPE)-ar
+ strip_prog = $(DEB_HOST_GNU_TYPE)-strip
+endif
+
+ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
+ STRIP = $(strip_prog) --remove-section=.comment --remove-section=.note
+else
+ STRIP = true
+endif
+
+build:
+	build-system/wonderbuild/wonderbuild_script.py \
+		$(cross_compile_flags) \
+		--cxxflags='$(CXXFLAGS)' \
+		--bld-dir=$$(pwd)/debian/tmp \
+		--install-prefix=/usr
+
+clean:
+	dh_clean && \
+	rm -Rf debian/tmp
+
+binary: binary-arch binary-indep
+
+binary-arch: build
+	:
+
+binary-indep: build
+	:
+
+.PHONY: build binary binary-arch binary-indep clean

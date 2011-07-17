@@ -1,0 +1,5 @@
+psycle (1.9.0-1) unstable; urgency=low
+
+  * initial debian packaging
+
+ -- Johan Boule <bohan.debian@retropaganda.info>  Wed, 4 Aug 2004 00:29:15 +0000
