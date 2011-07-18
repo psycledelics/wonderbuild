@@ -36,18 +36,21 @@ override_dh_auto_configure:
 	:
 
 override_dh_auto_build:
-	build-system/wonderbuild/wonderbuild_script.py \
+	build-systems/wonderbuild/wonderbuild_script.py \
 		$(cross_compile_flags) \
-		--cxxflags='$(CXXFLAGS)' \
+		--cxx-flags='$(CXXFLAGS)' \
 		--bld-dir=$$(pwd)/debian/build \
-		--install-prefix=/usr
+		--install-prefix-dir=/usr
 
 override_dh_auto_test:
 	set -e && \
-	for test in $$(pwd)/debian/build/usr/bin/*-unit-tests; \
+	for test in $$(pwd)/debian/build/staged-install/usr/bin/*-unit-tests; \
 	do \
-		$test --log_level=test_suite --report_level=detailed; \
+		$$test --log_level=test_suite --report_level=detailed; \
 	done
+
+override_dh_auto_install:
+	:
 
 override_dh_auto_clean:
 	rm -Rf debian/build
