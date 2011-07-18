@@ -52,10 +52,14 @@ override_dh_auto_install:
 	install -d debian/libdiversalis1-dev/usr/include/
 	cp -L  debian/++wonderbuild/staged-install/usr/include/diversalis.hpp debian/libdiversalis1-dev/usr/include/
 	cp -LR debian/++wonderbuild/staged-install/usr/include/diversalis/    debian/libdiversalis1-dev/usr/include/
-
+	install -d debian/libdiversalis1-dev/usr/lib/pkgconfig/
+	cp -L  debian/++wonderbuild/staged-install/usr/lib/pkgconfig/diversalis.pc debian/libdiversalis1-dev/usr/lib/pkgconfig/
+	
 	install -d debian/libuniversalis1-dev/usr/include/
 	cp -L  debian/++wonderbuild/staged-install/usr/include/universalis.hpp debian/libuniversalis1-dev/usr/include/
 	cp -LR debian/++wonderbuild/staged-install/usr/include/universalis/    debian/libuniversalis1-dev/usr/include/
+	install -d debian/libuniversalis1-dev/usr/lib/pkgconfig/
+	cp -L  debian/++wonderbuild/staged-install/usr/lib/pkgconfig/universalis.pc debian/libuniversalis1-dev/usr/lib/pkgconfig/
 	
 	install -d debian/libuniversalis1/usr/lib/
 	cp -L debian/++wonderbuild/staged-install/usr/lib/libuniversalis.so debian/libuniversalis1/usr/lib/
