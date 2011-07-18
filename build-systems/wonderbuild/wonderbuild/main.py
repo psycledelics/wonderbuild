@@ -105,6 +105,7 @@ run(options, option_collector)
 					if 'help' not in options:
 						option_collector.consolidate_known_options()
 						usage_error = not validate_options(options, option_collector.known_options)
+					else: usage_error = False
 				else:
 					usage_error = 'help' not in options
 					if usage_error:

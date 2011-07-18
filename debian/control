@@ -3,6 +3,8 @@ Standards-Version: 3.9.2.0
 Section: sound
 Priority: optional
 Maintainer: Johan Boule <bohan.debian@retropaganda.info>
+Vcs-Svn: https://psycle.svn.sourceforge.net/svnroot/psycle
+Vcs-Browser: http://psycle.svn.sourceforge.net/viewvc/psycle
 Homepage: http://psycle.sourceforge.net
 Build-Depends:
  debhelper (>= 7.4.15),
@@ -12,7 +14,7 @@ Build-Depends:
  libboost-signals-dev (>= 1.40.0),
  libboost-thread-dev (>= 1.40.0),
  libboost-filesystem-dev (>= 1.40.0),
- libboost-date_time-dev (>= 1.40.0),
+ libboost-date-time-dev (>= 1.40.0),
  libboost-test-dev (>= 1.40.0),
  libglibmm-2.4-dev (>= 2.24.2),
  libxml++2.6-dev (>= 2.30.0),
@@ -26,7 +28,7 @@ Package: psycle-player1
 Provides: psycle-player
 Section: sound
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libpsycle-core1
+Depends: ${shlibs:Depends}, ${misc:Depends}, libpsycle-core1 (= ${source:Version})
 Recommends: libpsycle-plugins1
 Description: blah
  more blah blah.
@@ -35,7 +37,7 @@ Package: libpsycle-plugins1
 Provides: libpsycle-plugins
 Section: libs
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libpsycle-helpers1
+Depends: ${shlibs:Depends}, ${misc:Depends}, libpsycle-helpers1 (= ${source:Version})
 Description: blah
  more blah blah.
 
@@ -51,7 +53,7 @@ Package: libpsycle-core1
 Provides: libpsycle-core
 Section: libs
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libpsycle-audiodrivers1
+Depends: ${shlibs:Depends}, ${misc:Depends}, libpsycle-audiodrivers1 (= ${source:Version})
 Description: blah
  more blah blah.
 
@@ -59,7 +61,7 @@ Package: libpsycle-core1-dev
 Provides: libpsycle-core-dev
 Section: libdevel
 Architecture: any
-Depends: libpsycle-audiodrivers1-dev, libpsycle-plugin-interface1-dev
+Depends: libpsycle-audiodrivers1-dev (= ${source:Version}), libpsycle-plugin-interface1-dev (= ${source:Version})
 Description: blah
  more blah blah.
 
@@ -67,7 +69,7 @@ Package: libpsycle-audiodrivers1
 Provides: libpsycle-audiodrivers
 Section: libs
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libpsycle-helpers1
+Depends: ${shlibs:Depends}, ${misc:Depends}, libpsycle-helpers1 (= ${source:Version})
 Description: blah
  more blah blah.
 
@@ -75,7 +77,7 @@ Package: libpsycle-audiodrivers1-dev
 Provides: libpsycle-audiodrivers-dev
 Section: libdevel
 Architecture: any
-Depends: libpsycle-helpers1-dev
+Depends: libpsycle-helpers1-dev (= ${source:Version})
 Description: blah
  more blah blah.
 
@@ -83,7 +85,7 @@ Package: libpsycle-helpers1
 Provides: libpsycle-helpers
 Section: libs
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libuniversalis1
+Depends: ${shlibs:Depends}, ${misc:Depends}, libuniversalis1 (= ${source:Version})
 Description: blah
  more blah blah.
 
@@ -91,7 +93,7 @@ Package: libpsycle-helpers1-dev
 Provides: libpsycle-helpers-dev
 Section: libdevel
 Architecture: any
-Depends: libpsycle-helpers-math1-dev
+Depends: libpsycle-helpers-math1-dev (= ${source:Version})
 Description: blah
  more blah blah.
 
@@ -99,7 +101,7 @@ Package: libpsycle-helpers-math1-dev
 Provides: libpsycle-helpers-math-dev
 Section: libdevel
 Architecture: any
-Depends: libuniversalis1-dev
+Depends: libuniversalis1-dev (= ${source:Version})
 Description: blah
  more blah blah.
 
@@ -122,7 +124,7 @@ Package: libuniversalis1-dev
 Provides: libuniversalis-dev
 Section: libdevel
 Architecture: any
-Depends: libdiversalis1-dev
+Depends: libdiversalis1-dev (= ${source:Version})
 Description: Development files for the Universalis library
  Universalis is a library which abstracts the few platform specificities
  which are not handled by the boost and glibmm libraries themselves.

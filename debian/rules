@@ -17,19 +17,17 @@ export DEB_HOST_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 export DEB_BUILD_GNU_TYPE ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
 ifeq ($(DEB_BUILD_GNU_TYPE), $(DEB_HOST_GNU_TYPE))
- cross_compile_flags =
- strip_prog = strip
+ CROSS_COMPILE =
 else
- cross_compile_flags = \
+ CROSS_COMPILE = \
   --cxx=$(DEB_HOST_GNU_TYPE)-g++ \
   --ar=$(DEB_HOST_GNU_TYPE)-ar
- strip_prog = $(DEB_HOST_GNU_TYPE)-strip
 endif
 
-ifeq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
- STRIP = $(strip_prog) --remove-section=.comment --remove-section=.note
+ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+ JOBS = --jobs=$(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
 else
- STRIP = true
+ JOBS=
 endif
 
 override_dh_auto_configure:
@@ -37,21 +35,34 @@ override_dh_auto_configure:
 
 override_dh_auto_build:
 	build-systems/wonderbuild/wonderbuild_script.py \
-		$(cross_compile_flags) \
+		$(CROSS_COMPILE) \
 		--cxx-flags='$(CXXFLAGS)' \
-		--bld-dir=$$(pwd)/debian/build \
-		--install-prefix-dir=/usr
+		--bld-dir=$$(pwd)/debian/++wonderbuild \
+		--install-prefix-dir=/usr \
+		$(JOBS)
 
 override_dh_auto_test:
 	set -e && \
-	for test in $$(pwd)/debian/build/staged-install/usr/bin/*-unit-tests; \
+	for test in debian/++wonderbuild/staged-install/usr/bin/*-unit-tests; \
 	do \
 		$$test --log_level=test_suite --report_level=detailed; \
 	done
 
 override_dh_auto_install:
-	:
+	install -d debian/libdiversalis1-dev/usr/include/
+	cp -L  debian/++wonderbuild/staged-install/usr/include/diversalis.hpp debian/libdiversalis1-dev/usr/include/
+	cp -LR debian/++wonderbuild/staged-install/usr/include/diversalis/    debian/libdiversalis1-dev/usr/include/
+
+	install -d debian/libuniversalis1-dev/usr/include/
+	cp -L  debian/++wonderbuild/staged-install/usr/include/universalis.hpp debian/libuniversalis1-dev/usr/include/
+	cp -LR debian/++wonderbuild/staged-install/usr/include/universalis/    debian/libuniversalis1-dev/usr/include/
+	
+	install -d debian/libuniversalis1/usr/lib/
+	cp -L debian/++wonderbuild/staged-install/usr/lib/libuniversalis.so debian/libuniversalis1/usr/lib/
+
+	install -d debian/psycle-player1/usr/bin/
+	cp -LR debian/++wonderbuild/staged-install/usr/bin/psycle-player debian/psycle-player1/usr/bin/
 
 override_dh_auto_clean:
-	rm -Rf debian/build
+	rm -Rf debian/++wonderbuild
 
