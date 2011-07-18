@@ -5,6 +5,9 @@
 export DH_VERBOSE=1
 export DH_OPTIONS=-v
 
+%:
+	dh $@
+
 CXXFLAGS = -g -Wall
 ifeq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
  CXXFLAGS += -O2
@@ -29,23 +32,23 @@ else
  STRIP = true
 endif
 
-build:
+override_dh_auto_configure:
+	:
+
+override_dh_auto_build:
 	build-system/wonderbuild/wonderbuild_script.py \
 		$(cross_compile_flags) \
 		--cxxflags='$(CXXFLAGS)' \
-		--bld-dir=$$(pwd)/debian/tmp \
+		--bld-dir=$$(pwd)/debian/build \
 		--install-prefix=/usr
 
-clean:
-	dh_clean && \
-	rm -Rf debian/tmp
+override_dh_auto_test:
+	set -e && \
+	for test in $$(pwd)/debian/build/usr/bin/*-unit-tests; \
+	do \
+		$test --log_level=test_suite --report_level=detailed; \
+	done
 
-binary: binary-arch binary-indep
+override_dh_auto_clean:
+	rm -Rf debian/build
 
-binary-arch: build
-	:
-
-binary-indep: build
-	:
-
-.PHONY: build binary binary-arch binary-indep clean
