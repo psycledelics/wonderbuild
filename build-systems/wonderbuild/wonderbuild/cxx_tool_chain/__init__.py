@@ -1097,7 +1097,7 @@ class ModTask(ModDepPhases, Task, Persistent):
 
 		if need_process or self.cfg.check_missing:
 			installed_pc_file = cfg.fhs.lib / 'pkgconfig' / (self.name + '.pc')
-			uninstalled_pc_file = cfg.project.bld_dir / 'pkgconfig' / (self.name + '-uninstalled.pc')
+			uninstalled_pc_file = cfg.project.bld_dir / 'pkgconfig-uninstalled' / (self.name + '-uninstalled.pc')
 			if self.cfg.check_missing:
 				for f in (installed_pc_file, uninstalled_pc_file):
 					f.parent.lock.acquire()
