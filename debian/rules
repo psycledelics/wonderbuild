@@ -88,7 +88,10 @@ override_dh_auto_install:
 		debian/libpsycle-audiodrivers1-dev/usr/lib/pkgconfig/
 
 	install -d debian/libpsycle-audiodrivers1/usr/lib/
-	cp -L debian/++wonderbuild/staged-install/usr/lib/libpsycle-audiodrivers.so debian/libpsycle-audiodrivers1/usr/lib/
+	cp -L \
+		debian/++wonderbuild/staged-install/usr/lib/libpsycle-audiodrivers.so \
+		debian/++wonderbuild/staged-install/usr/lib/libpsycle-audiodriver-*.so \
+		debian/libpsycle-audiodrivers1/usr/lib/
 
 	install -d debian/libpsycle-core1-dev/usr/include/psycle/core/
 	cp -RL debian/++wonderbuild/staged-install/usr/include/psycle/core/ debian/libpsycle-core1-dev/usr/include/psycle/
