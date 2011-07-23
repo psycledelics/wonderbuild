@@ -1040,6 +1040,27 @@ class ModTask(ModDepPhases, Task, Persistent):
 
 		for x in self._generate_pkg_config_file(sched_ctx): yield x
 
+		if False: # 'debian' in self.base_cfg.project.options: # TODO make it easier to split the staged-install dir into several debian binary packages
+			from wonderbuild.install import InstallTask
+			if isinstance(self.cxx_phase, InstallTask):
+				self.base_cfg.project.bld_dir.lock.acquire()
+				try:
+					pkg_dir = self.base_cfg.project.bld_dir / 'packages' / self.name
+					pkg_dir.make_dir()
+				finally: self.base_cfg.project.bld_dir.lock.release()
+				mod_task = self
+				class InstallDev(InstallTask):
+					@property
+					def trim_prefix(self): return mod_task.cxx_phase.trim_prefix
+
+					@property
+					def dest_dir(self): return pkg_dir / mod_task.cxx_phase.dest_dir.rel_path(self.fhs.dest)
+
+					@property
+					def sources(self): return mod_task.cxx_phase.sources
+				install = InstallDev(self.base_cfg.project, self.name + '-binary-package-dev')
+				for x in sched_ctx.parallel_wait(install): yield x
+
 	def _generate_pkg_config_file(self, sched_ctx):
 		if self.kind == ModTask.Kinds.PROG: return # could have some use too iirc on elf where programs can be used as libs?
 

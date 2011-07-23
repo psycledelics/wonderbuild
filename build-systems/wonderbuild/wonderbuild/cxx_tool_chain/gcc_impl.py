@@ -281,7 +281,7 @@ class Impl(object):
 			if mod_task.cfg.dest_platform.bin_fmt == 'elf' and mod_task.kind != mod_task.Kinds.PROG:
 				link_node = mod_task.target_dev_dir / ('lib' + mod_task.name + '.so')
 				elf_so_name_node = mod_task.target_dir / (link_node.name + '.' + str(mod_task.version_interface))
-				args.append('-Wl,-soname,' + elf_so_name_node.name)
+				args.append('-Wl,-h,' + elf_so_name_node.name)
 			elif mod_task.cfg.dest_platform.bin_fmt == 'pe':
 				args.append('-Wl,--enable-auto-import') # supress informational messages
 				if False and mod_task.cfg.shared: # mingw doesn't need import libs
