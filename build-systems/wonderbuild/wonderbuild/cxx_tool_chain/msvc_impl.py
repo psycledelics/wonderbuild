@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2007-2010 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2007-2011 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import os
 
@@ -210,7 +210,7 @@ class Impl(object):
 			#exp = mod_task.target_dev_dir / mod_task.name + '.exp'
 			#pdb = mod_task.target_dev_dir / mod_task.name + '.pdb'
 			#ilk = mod_task.target_dev_dir / mod_task.name + '.ilk'
-			return (mod_task.target, implib)
+			return mod_task.target, implib
 
 	@staticmethod
 	def mod_task_target_dev_dir(mod_task): return mod_task.cfg.fhs.lib

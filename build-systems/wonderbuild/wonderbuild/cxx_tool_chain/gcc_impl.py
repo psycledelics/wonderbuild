@@ -278,20 +278,27 @@ class Impl(object):
 			args = mod_task.cfg.ld_args + ['-o', mod_task_target_path] + obj_paths
 			colorgcc = Impl._colorgcc(mod_task.cfg)
 			if colorgcc is not None: args = [colorgcc.rel_path(cwd)] + args
-			if mod_task.cfg.dest_platform.bin_fmt == 'elf':
-				args.append('-Wl,-soname,' + mod_task.target.name)
+			if mod_task.cfg.dest_platform.bin_fmt == 'elf' and mod_task.kind != mod_task.Kinds.PROG:
+				link_node = mod_task.target_dev_dir / ('lib' + mod_task.name + '.so')
+				elf_so_name_node = mod_task.target_dir / (link_node.name + '.' + str(mod_task.version_interface))
+				args.append('-Wl,-soname,' + elf_so_name_node.name)
 			elif mod_task.cfg.dest_platform.bin_fmt == 'pe':
 				args.append('-Wl,--enable-auto-import') # supress informational messages
 				if False and mod_task.cfg.shared: # mingw doesn't need import libs
-					args.append('-Wl,--out-implib,' + (mod_task.cfg.fhs.lib / ('lib' + mod_task.target.name + '.dll.a')).rel_path(cwd))
-					args.append('-Wl,--out-implib,' + (mod_task.target_dev_dir / ('lib' + mod_task.target.name + '.dll.a')).rel_path(cwd))
+					args.append('-Wl,--out-implib,' + (mod_task.target_dev_dir / ('lib' + mod_task.name + '.dll.a')).rel_path(cwd))
 			if exec_subprocess(args, cwd=cwd.path) != 0: raise UserReadableException, mod_task
-			if mod_task.cfg.dest_platform.bin_fmt == 'elf':
-				link_name = 'lib' + mod_task.name + '.so'
-				path = (mod_task.target.parent / link_name).path
-				if os.name == 'posix': os.symlink(mod_task.target.name, path)
+			if mod_task.cfg.dest_platform.bin_fmt == 'elf' and mod_task.kind != mod_task.Kinds.PROG:
+				if os.name == 'posix':
+					def alias(orig, new):
+						if new.exists: os.remove(new.path)
+						os.symlink(orig.rel_path(new), new.path)
 				else: # when cross-compiling from windows
-					import shutils; shutil.copy2(mod_task.target, path)
+					import shutils
+					def alias(orig, new):
+						if new.exists: os.remove(new.path)
+						shutil.copy2(orig.path, new.path)
+				alias(mod_task.target, elf_so_name_node)
+				alias(elf_so_name_node, link_node)
 		else:
 			ar_args, ranlib_args = mod_task.cfg.ar_ranlib_args
 			if len(obj_names) != 0:
@@ -309,7 +316,21 @@ class Impl(object):
 				if exec_subprocess(args, cwd=cwd.path) != 0: raise UserReadableException, mod_task
 
 	@staticmethod
-	def mod_task_targets(mod_task): return (mod_task.target,) # + symlinks
+	def mod_task_targets(mod_task):
+		if mod_task.kind == mod_task.Kinds.PROG or not mod_task.ld: return (mod_task.target,)
+		elif mod_task.cfg.dest_platform.bin_fmt == 'elf':
+			link_name = 'lib' + mod_task.name + '.so'
+			return (
+				mod_task.target,
+				mod_task.target_dir / (link_name + '.' + str(mod_task.version_interface)),
+				mod_task.target_dev_dir / link_name
+			)
+		elif mod_task.cfg.dest_platform.bin_fmt == 'pe':
+			if False: # mingw doesn't need import libs
+				implib = mod_task.target_dev_dir / 'lib' + mod_task.name + '.dll.a' 
+				return mod_task.target, implib
+			else: return (mod_task.target,)
+		else: return (mod_task.target,)
 
 	@staticmethod
 	def mod_task_target_dev_dir(mod_task):
@@ -318,7 +339,13 @@ class Impl(object):
 		else: return mod_task.cfg.fhs.lib
 
 	@staticmethod
-	def mod_task_target_dev_name(mod_task): return mod_task.name
+	def mod_task_target_dev_name(mod_task):
+		if mod_task.ld:
+			if mod_task.cfg.dest_platform.bin_fmt == 'pe':
+				if False: return 'lib' + mod_task.name + '.dll.a' # mingw doesn't need import libs
+				else: return 'lib' + mod_task.name + '.dll'
+			else: return mod_task.name
+		else: return mod_task.name
 
 	@staticmethod
 	def mod_task_target_dir(mod_task):
@@ -334,7 +361,10 @@ class Impl(object):
 		elif mod_task.cfg.shared:
 			if mod_task.cfg.dest_platform.bin_fmt == 'pe': return mod_task.name + '.dll'
 			elif mod_task.cfg.dest_platform.bin_fmt == 'mac-o': return 'lib' + mod_task.name + '.dylib'
-			else: return 'lib' + mod_task.name + '.so.' + mod_task.version
+			else: return 'lib' + mod_task.name + '.so.' + \
+				str(mod_task.version_interface) + '.' + \
+				str(mod_task.version_interface - mod_task.version_interface_min) + '.' + \
+				str(mod_task.version_impl)
 		else: return 'lib' + mod_task.name + '.a'
 
 	@staticmethod

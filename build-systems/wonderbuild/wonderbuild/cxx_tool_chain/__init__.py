@@ -692,7 +692,10 @@ class ModTask(ModDepPhases, Task, Persistent):
 		self.name = name
 		self.title = kw.get('title', name)
 		self.description = kw.get('description', self.title)
-		self.version = kw.get('version', '0')
+		self.version_interface = kw.get('version_interface', 0)
+		self.version_interface_min = kw.get('version_interface_min', 0)
+		self.version_impl = kw.get('version_impl', 0)
+		self.version_string = kw.get('version_string', '0')
 		self.url = kw.get('url', None)
 		self.kind = kind
 		self.sources = []
@@ -969,7 +972,10 @@ class ModTask(ModDepPhases, Task, Persistent):
 			mod_sig = Sig(self.target_dir.abs_path)
 			if self.kind != ModTask.Kinds.PROG and self.target_dir is not self.target_dev_dir:
 				mod_sig.update(self.target_dev_dir.abs_path)
-			if self.ld: mod_sig.update(self.cfg.ld_sig, self.version)
+			if self.ld:
+				mod_sig.update(self.cfg.ld_sig)
+				if self.kind != ModTask.Kinds.PROG:
+					mod_sig.update(str(self.version_interface), str(self.version_interface_min), str(self.version_impl))
 			else: mod_sig.update(self.cfg.ar_ranlib_sig)
 			mod_sig = mod_sig.digest()
 
@@ -1081,7 +1087,7 @@ class ModTask(ModDepPhases, Task, Persistent):
 		need_process = False
 		
 		pkg_config_sig = Sig(
-			self.title, self.description, self.version, self.url or '',
+			self.title, self.description, self.version_string, self.url or '',
 			cfg.fhs.prefix.abs_path, cfg.fhs.exec_prefix.abs_path, cfg.fhs.lib.abs_path, cfg.fhs.include.abs_path,
 			cfg.cxx_sig, cfg.ld_sig
 		)
@@ -1220,7 +1226,7 @@ class ModTask(ModDepPhases, Task, Persistent):
 						'\n' \
 						'\nName: ' + self.title + \
 						'\nDescription: ' + self.description + \
-						'\nVersion: ' + self.version
+						'\nVersion: ' + self.version_string
 					if self.url: s += '\nURL: ' + self.url
 					s += \
 						'\nCflags: ' + ' '.join(cxx_flags) + \
