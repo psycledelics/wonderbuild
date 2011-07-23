@@ -60,9 +60,11 @@ override_dh_auto_install:
 	cp -LR debian/++wonderbuild/staged-install/usr/include/universalis/    debian/libuniversalis1-dev/usr/include/
 	install -d debian/libuniversalis1-dev/usr/lib/pkgconfig/
 	cp -L  debian/++wonderbuild/staged-install/usr/lib/pkgconfig/universalis.pc debian/libuniversalis1-dev/usr/lib/pkgconfig/
+	install -d debian/libuniversalis1-dev/usr/lib/
+	cp -L debian/++wonderbuild/staged-install/usr/lib/libuniversalis.so debian/libuniversalis1-dev/usr/lib/
 	
 	install -d debian/libuniversalis1/usr/lib/
-	cp -L debian/++wonderbuild/staged-install/usr/lib/libuniversalis.so debian/libuniversalis1/usr/lib/
+	cp -L debian/++wonderbuild/staged-install/usr/lib/libuniversalis.so.* debian/libuniversalis1/usr/lib/
 
 	install -d debian/libpsycle-helpers-math1-dev/usr/include/psycle/helpers/
 	cp -L  debian/++wonderbuild/staged-install/usr/include/psycle/helpers/math.hpp debian/libpsycle-helpers-math1-dev/usr/include/psycle/helpers/
@@ -75,9 +77,11 @@ override_dh_auto_install:
 		debian/libpsycle-helpers1-dev/usr/include/psycle/helpers/
 	install -d debian/libpsycle-helpers1-dev/usr/lib/pkgconfig/
 	cp -L debian/++wonderbuild/staged-install/usr/lib/pkgconfig/psycle-helpers.pc debian/libpsycle-helpers1-dev/usr/lib/pkgconfig/
-
+	install -d debian/libpsycle-helpers1-dev/usr/lib/
+	cp -L debian/++wonderbuild/staged-install/usr/lib/libpsycle-helpers.so debian/libpsycle-helpers1-dev/usr/lib/
+	
 	install -d debian/libpsycle-helpers1/usr/lib/
-	cp -L debian/++wonderbuild/staged-install/usr/lib/libpsycle-helpers.so debian/libpsycle-helpers1/usr/lib/
+	cp -L debian/++wonderbuild/staged-install/usr/lib/libpsycle-helpers.so.* debian/libpsycle-helpers1/usr/lib/
 
 	install -d debian/libpsycle-audiodrivers1-dev/usr/include/psycle/audiodrivers
 	cp -RL debian/++wonderbuild/staged-install/usr/include/psycle/audiodrivers/ debian/libpsycle-audiodrivers1-dev/usr/include/psycle/
@@ -86,20 +90,27 @@ override_dh_auto_install:
 		debian/++wonderbuild/staged-install/usr/lib/pkgconfig/psycle-audiodriver-*.pc \
 		debian/++wonderbuild/staged-install/usr/lib/pkgconfig/psycle-audiodrivers.pc \
 		debian/libpsycle-audiodrivers1-dev/usr/lib/pkgconfig/
-
-	install -d debian/libpsycle-audiodrivers1/usr/lib/
+	install -d debian/libpsycle-audiodrivers1-dev/usr/lib/
 	cp -L \
 		debian/++wonderbuild/staged-install/usr/lib/libpsycle-audiodrivers.so \
 		debian/++wonderbuild/staged-install/usr/lib/libpsycle-audiodriver-*.so \
+		debian/libpsycle-audiodrivers1-dev/usr/lib/
+
+	install -d debian/libpsycle-audiodrivers1/usr/lib/
+	cp -L \
+		debian/++wonderbuild/staged-install/usr/lib/libpsycle-audiodrivers.so.* \
+		debian/++wonderbuild/staged-install/usr/lib/libpsycle-audiodriver-*.so.* \
 		debian/libpsycle-audiodrivers1/usr/lib/
 
 	install -d debian/libpsycle-core1-dev/usr/include/psycle/core/
 	cp -RL debian/++wonderbuild/staged-install/usr/include/psycle/core/ debian/libpsycle-core1-dev/usr/include/psycle/
 	install -d debian/libpsycle-core1-dev/usr/lib/pkgconfig/
 	cp -L  debian/++wonderbuild/staged-install/usr/lib/pkgconfig/psycle-core.pc debian/libpsycle-core1-dev/usr/lib/pkgconfig/
+	install -d debian/libpsycle-core1-dev/usr/lib/
+	cp -L debian/++wonderbuild/staged-install/usr/lib/libpsycle-core.so debian/libpsycle-core1-dev/usr/lib/
 
 	install -d debian/libpsycle-core1/usr/lib/
-	cp -L debian/++wonderbuild/staged-install/usr/lib/libpsycle-core.so debian/libpsycle-core1/usr/lib/
+	cp -L debian/++wonderbuild/staged-install/usr/lib/libpsycle-core.so.* debian/libpsycle-core1/usr/lib/
 
 	#install -d debian/libpsycle-plugin-interface1-dev/usr/include/psycle/
 	#cp -L debian/++wonderbuild/staged-install/usr/include/psycle/plugin_interface.hpp debian/libpsycle-plugins1-dev/usr/include/psycle/
@@ -118,13 +129,21 @@ override_dh_auto_install:
 	#				-name psycle-druttis-band-limited-wave-tables.pc \
 	#			\) \
 	#	) debian/libpsycle-plugins1-dev/usr/lib/pkgconfig/
+	#install -d debian/libpsycle-plugins1-dev/usr/lib/
+	#cp -L \
+	#	debian/++wonderbuild/staged-install/usr/lib/libpsycle-plugin-*.so \
+	#	debian/++wonderbuild/staged-install/usr/lib/libpsycle-dw-filter.so \
+	#	debian/++wonderbuild/staged-install/usr/lib/libpsycle-druttis-dsp.so \
+	#	debian/++wonderbuild/staged-install/usr/lib/libpsycle-druttis-band-limited-wave-tables.so \
+	#	debian/libpsycle-plugins1-dev/usr/lib/
 
 	install -d debian/libpsycle-plugins1/usr/lib/
 	cp -L \
 		debian/++wonderbuild/staged-install/usr/lib/libpsycle-plugin-*.so \
-		debian/++wonderbuild/staged-install/usr/lib/libpsycle-dw-filter.so \
-		debian/++wonderbuild/staged-install/usr/lib/libpsycle-druttis-dsp.so \
-		debian/++wonderbuild/staged-install/usr/lib/libpsycle-druttis-band-limited-wave-tables.so \
+		debian/++wonderbuild/staged-install/usr/lib/libpsycle-plugin-*.so.* \
+		debian/++wonderbuild/staged-install/usr/lib/libpsycle-dw-filter.so.* \
+		debian/++wonderbuild/staged-install/usr/lib/libpsycle-druttis-dsp.so.* \
+		debian/++wonderbuild/staged-install/usr/lib/libpsycle-druttis-band-limited-wave-tables.so.* \
 		debian/libpsycle-plugins1/usr/lib/
 
 	install -d debian/psycle-player1/usr/bin/

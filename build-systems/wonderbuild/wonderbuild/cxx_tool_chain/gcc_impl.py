@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2007-2010 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2007-2011 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import os
 
@@ -278,12 +278,20 @@ class Impl(object):
 			args = mod_task.cfg.ld_args + ['-o', mod_task_target_path] + obj_paths
 			colorgcc = Impl._colorgcc(mod_task.cfg)
 			if colorgcc is not None: args = [colorgcc.rel_path(cwd)] + args
-			if mod_task.cfg.dest_platform.bin_fmt == 'pe':
+			if mod_task.cfg.dest_platform.bin_fmt == 'elf':
+				args.append('-Wl,-soname,' + mod_task.target.name)
+			elif mod_task.cfg.dest_platform.bin_fmt == 'pe':
 				args.append('-Wl,--enable-auto-import') # supress informational messages
 				if False and mod_task.cfg.shared: # mingw doesn't need import libs
 					args.append('-Wl,--out-implib,' + (mod_task.cfg.fhs.lib / ('lib' + mod_task.target.name + '.dll.a')).rel_path(cwd))
 					args.append('-Wl,--out-implib,' + (mod_task.target_dev_dir / ('lib' + mod_task.target.name + '.dll.a')).rel_path(cwd))
 			if exec_subprocess(args, cwd=cwd.path) != 0: raise UserReadableException, mod_task
+			if mod_task.cfg.dest_platform.bin_fmt == 'elf':
+				link_name = 'lib' + mod_task.name + '.so'
+				path = (mod_task.target.parent / link_name).path
+				if os.name == 'posix': os.symlink(mod_task.target.name, path)
+				else: # when cross-compiling from windows
+					import shutils; shutil.copy2(mod_task.target, path)
 		else:
 			ar_args, ranlib_args = mod_task.cfg.ar_ranlib_args
 			if len(obj_names) != 0:
@@ -301,7 +309,7 @@ class Impl(object):
 				if exec_subprocess(args, cwd=cwd.path) != 0: raise UserReadableException, mod_task
 
 	@staticmethod
-	def mod_task_targets(mod_task): return (mod_task.target,)
+	def mod_task_targets(mod_task): return (mod_task.target,) # + symlinks
 
 	@staticmethod
 	def mod_task_target_dev_dir(mod_task):
@@ -326,7 +334,7 @@ class Impl(object):
 		elif mod_task.cfg.shared:
 			if mod_task.cfg.dest_platform.bin_fmt == 'pe': return mod_task.name + '.dll'
 			elif mod_task.cfg.dest_platform.bin_fmt == 'mac-o': return 'lib' + mod_task.name + '.dylib'
-			else: return 'lib' + mod_task.name + '.so'
+			else: return 'lib' + mod_task.name + '.so.' + mod_task.version
 		else: return 'lib' + mod_task.name + '.a'
 
 	@staticmethod

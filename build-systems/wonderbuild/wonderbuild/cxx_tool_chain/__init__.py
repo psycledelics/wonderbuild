@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2007-2010 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2007-2011 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import os, threading
 from collections import deque
@@ -967,9 +967,9 @@ class ModTask(ModDepPhases, Task, Persistent):
 					self.cfg.ld_sig # compute the signature before, because we don't need pkg-config ld flags in the cfg sig
 
 			mod_sig = Sig(self.target_dir.abs_path)
-			if self.kind != ModTask.Kinds.PROG and \
-				self.target_dir is not self.target_dev_dir: mod_sig.update(self.target_dev_dir.abs_path)
-			if self.ld: mod_sig.update(self.cfg.ld_sig)
+			if self.kind != ModTask.Kinds.PROG and self.target_dir is not self.target_dev_dir:
+				mod_sig.update(self.target_dev_dir.abs_path)
+			if self.ld: mod_sig.update(self.cfg.ld_sig, self.version)
 			else: mod_sig.update(self.cfg.ar_ranlib_sig)
 			mod_sig = mod_sig.digest()
 
