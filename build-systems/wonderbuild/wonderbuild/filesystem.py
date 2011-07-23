@@ -116,10 +116,11 @@ class Node(object):
 			if self._time is not None: self._exists = True
 			elif self.parent._actual_children is not None:
 				self._exists = self.name in self.parent._actual_children
-			elif self.parent._old_children is not None and self.parent.time == self.parent._old_time:
-				self._exists = self.name in self.parent._old_children
 			else:
-				try: self._do_stat()
+				try: # self.parent.time may fail is parent doesn't exist
+					if self.parent._old_children is not None and self.parent.time == self.parent._old_time:
+						self._exists = self.name in self.parent._old_children
+					else: self._do_stat()
 				except OSError: self._exists = False
 				else: self._exists = True
 			return self._exists
