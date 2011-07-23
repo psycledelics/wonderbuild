@@ -113,16 +113,22 @@ class Node(object):
 	def exists(self):
 		try: return self._exists
 		except AttributeError:
-			if self._time is not None: self._exists = True
+			if self._time is not None:
+				self._exists = True
+				return self._exists
 			elif self.parent._actual_children is not None:
 				self._exists = self.name in self.parent._actual_children
-			else:
-				try: # self.parent.time may fail is parent doesn't exist
-					if self.parent._old_children is not None and self.parent.time == self.parent._old_time:
-						self._exists = self.name in self.parent._old_children
-					else: self._do_stat()
-				except OSError: self._exists = False
-				else: self._exists = True
+				return self._exists
+			elif self.parent._old_children is not None:
+				if not self.parent.exists:
+					self._exists = False
+					return self._exists
+				elif self.parent.time == self.parent._old_time:
+					self._exists = self.name in self.parent._old_children
+					return self._exists
+			try: self._do_stat()
+			except OSError: self._exists = False
+			else: self._exists = True
 			return self._exists
 	
 	def make_dir(self, parent_node_to_lock=None):
