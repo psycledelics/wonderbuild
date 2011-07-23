@@ -291,7 +291,7 @@ class Impl(object):
 				if os.name == 'posix':
 					def alias(orig, new):
 						if new.exists: os.remove(new.path)
-						os.symlink(orig.rel_path(new), new.path)
+						os.symlink(orig.rel_path(new.parent), new.path)
 				else: # when cross-compiling from windows
 					import shutils
 					def alias(orig, new):
