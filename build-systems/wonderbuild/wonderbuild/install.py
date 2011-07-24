@@ -10,14 +10,14 @@ from signature import Sig
 
 import os, errno, shutil
 if os.name == 'posix':
-	def install(src, dst):
+	def _install(src, dst):
 		try: os.link(src, dst) # try to do a hard link
 		except OSError, e:
 			if e.errno != errno.EXDEV: raise 
 			# error: cross-device link: dst is on another filesystem than src
 			shutil.copy2(src, dst) # fallback to copying
 else: # hard links unavailable, do a copy instead
-	install = shutil.copy2
+	_install = shutil.copy2
 
 class InstallTask(Task, Persistent, OptionDecl):
 
@@ -130,12 +130,16 @@ class InstallTask(Task, Persistent, OptionDecl):
 						for t in install_tuples:
 							s, dest, deinstall = t[0], t[1], t[2],# t[3]
 							if deinstall:
-								if dest.exists: os.remove(dest.path)
+								try: os.remove(dest.path)
+								except OSError, e:
+									if e.errno != errno.ENOENT: raise
 								del sigs[s]
 							else:
-								if dest.exists: os.remove(dest.path)
-								else: dest.parent.make_dir()
-								install(s.path, dest.path)
+								try: os.remove(dest.path)
+								except OSError, e:
+									if e.errno != errno.ENOENT: raise
+									dest.parent.make_dir()
+								_install(s.path, dest.path)
 							dest.clear()
 						self.persistent = sig, sigs
 					finally: self.dest_dir.lock.release()

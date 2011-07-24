@@ -2,25 +2,38 @@
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2007-2011 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
-import os
+import os, errno
 
 from wonderbuild import UserReadableException
 from wonderbuild.logger import is_debug, debug, colored, out_is_dumb
 from wonderbuild.signature import Sig
 from wonderbuild.subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 
-need_sep_fix = os.sep != '/'
+_need_sep_fix = os.sep != '/'
 
+if os.name == 'posix':
+	def _alias(orig, new):
+		try: os.remove(new.path)
+		except OSError, e:
+			if e.errno != errno.ENOENT: raise
+		os.symlink(orig.rel_path(new.parent), new.path)
+else: # when cross-compiling from windows
+	import shutils
+	def _alias(orig, new):
+		try: os.remove(new.path)
+		except OSError, e:
+			if e.errno != errno.ENOENT: raise
+		shutil.copy2(orig.path, new.path)
+
+def _colorgcc(cfg):
+	# note: clang already does colorisation
+	if not out_is_dumb and not cfg.impl.kind_is_clang:
+		cfg.project.fs.cur.lock.acquire()
+		try: return ((cfg.project.fs.cur / __file__).parent / 'colorgcc-arg')
+		finally: cfg.project.fs.cur.lock.release()
+	else: return None
+	
 class Impl(object):
-
-	@staticmethod
-	def _colorgcc(cfg):
-		# note: clang already does colorisation
-		if not out_is_dumb and not cfg.impl.kind_is_clang:
-			cfg.project.fs.cur.lock.acquire()
-			try: return ((cfg.project.fs.cur / __file__).parent / 'colorgcc-arg')
-			finally: cfg.project.fs.cur.lock.release()
-		else: return None
 
 	@staticmethod
 	def parse_version(out, err):
@@ -105,7 +118,7 @@ class Impl(object):
 		try: deps = f.read().replace('\\\n', '')
 		finally: f.close()
 		deps = deps[deps.find(':') + 1:]
-		if need_sep_fix: deps = deps.replace('\\\\', '/')
+		if _need_sep_fix: deps = deps.replace('\\\\', '/')
 		deps = deps.replace('\\ ', '\\') # temporarily replace spaces so that split() works
 		if first_is_dummy:
 			# We skip the first implicit dep, which is the dummy actual source.
@@ -113,7 +126,7 @@ class Impl(object):
 		else:
 			deps = deps.split()
 		deps = [d.replace('\\', ' ') for d in deps] # put back spaces that where temporarily removed for split() to work
-		if need_sep_fix: deps = [d.replace('/', os.sep) for d in deps]
+		if _need_sep_fix: deps = [d.replace('/', os.sep) for d in deps]
 		lock.acquire()
 		try: cwd = cwd.canonical_node; deps = [cwd / d for d in deps]
 		finally: lock.release()
@@ -126,7 +139,7 @@ class Impl(object):
 		# to print the include search path: g++ -xc++ /dev/null -E -Wp,-v 2>&1 1>/dev/null | sed -e '/^[^ ]/d' -e 's,^ ,-I,'
 		cwd = precompile_task.target_dir
 		args = precompile_task.cfg.cxx_args + ['-MD', '-x' + precompile_task.cfg.lang + '-header', precompile_task.header.rel_path(cwd)]
-		colorgcc = Impl._colorgcc(precompile_task.cfg)
+		colorgcc = _colorgcc(precompile_task.cfg)
 		if colorgcc is not None: args = [colorgcc.rel_path(cwd)] + args
 		use_dir = False
 		if not use_dir:
@@ -150,7 +163,7 @@ class Impl(object):
 	def process_cxx_task(self, cxx_task, lock):
 		cwd = cxx_task.target_dir
 		args = cxx_task.cfg.cxx_args + ['-MMD', '-c'] + [cxx_task.cfg.bld_rel_name_or_abs_path(p) for p in cxx_task._actual_sources]
-		colorgcc = Impl._colorgcc(cxx_task.cfg)
+		colorgcc = _colorgcc(cxx_task.cfg)
 		if colorgcc is not None: args = [colorgcc.rel_path(cwd)] + args
 		implicit_deps = cxx_task.persistent_implicit_deps
 		if exec_subprocess(args, cwd=cwd.path) == 0:
@@ -242,7 +255,7 @@ class Impl(object):
 		if cfg.dest_platform.bin_fmt == 'elf':
 			# we use fhs.lib and fhs.bin here but we could use mod_task.target.parent and fhs.bin
 			rpath = '-Wl,-rpath=$ORIGIN' + os.sep + cfg.fhs.lib.rel_path(cfg.fhs.bin)
-			if need_sep_fix: rpath = rpath.replace('\\', '/') # when cross-compiling from windows
+			if _need_sep_fix: rpath = rpath.replace('\\', '/') # when cross-compiling from windows
 			args.append(rpath)
 			args.append('-Wl,-rpath-link=' + cfg.bld_rel_path(cfg.fhs.lib))
 		for p in cfg.lib_paths: args.append('-L' + cfg.bld_rel_path(p))
@@ -276,7 +289,7 @@ class Impl(object):
 		mod_task_target_path = mod_task.target.rel_path(cwd)
 		if mod_task.ld:
 			args = mod_task.cfg.ld_args + ['-o', mod_task_target_path] + obj_paths
-			colorgcc = Impl._colorgcc(mod_task.cfg)
+			colorgcc = _colorgcc(mod_task.cfg)
 			if colorgcc is not None: args = [colorgcc.rel_path(cwd)] + args
 			if mod_task.cfg.dest_platform.bin_fmt == 'elf' and mod_task.kind != mod_task.Kinds.PROG:
 				link_node = mod_task.target_dev_dir / ('lib' + mod_task.name + '.so')
@@ -288,17 +301,8 @@ class Impl(object):
 					args.append('-Wl,--out-implib,' + (mod_task.target_dev_dir / ('lib' + mod_task.name + '.dll.a')).rel_path(cwd))
 			if exec_subprocess(args, cwd=cwd.path) != 0: raise UserReadableException, mod_task
 			if mod_task.cfg.dest_platform.bin_fmt == 'elf' and mod_task.kind != mod_task.Kinds.PROG:
-				if os.name == 'posix':
-					def alias(orig, new):
-						if new.exists: os.remove(new.path)
-						os.symlink(orig.rel_path(new.parent), new.path)
-				else: # when cross-compiling from windows
-					import shutils
-					def alias(orig, new):
-						if new.exists: os.remove(new.path)
-						shutil.copy2(orig.path, new.path)
-				alias(mod_task.target, elf_so_name_node)
-				alias(elf_so_name_node, link_node)
+				_alias(mod_task.target, elf_so_name_node)
+				_alias(elf_so_name_node, link_node)
 		else:
 			ar_args, ranlib_args = mod_task.cfg.ar_ranlib_args
 			if len(obj_names) != 0:

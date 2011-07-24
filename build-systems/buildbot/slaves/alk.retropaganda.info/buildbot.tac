@@ -6,7 +6,7 @@ import os
 basedir = os.getcwd()
 host = 'factoid.retropaganda.info'
 port = 9989
-slavename = 'winux'
+slavename = 'alk'
 passwd = 'password'
 keepalive = 600
 usepty = 1

@@ -127,7 +127,9 @@ class Node(object):
 					self._exists = self.name in self.parent._old_children
 					return self._exists
 			try: self._do_stat()
-			except OSError: self._exists = False
+			except OSError, e:
+				if e.errno != errno.ENOENT: raise
+				self._exists = False
 			else: self._exists = True
 			return self._exists
 	
