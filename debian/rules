@@ -73,7 +73,7 @@ override_dh_auto_install:
 	cp -L  debian/++wonderbuild/staged-install/usr/lib/pkgconfig/psycle-helpers-math.pc debian/libpsycle-helpers-math1-dev/usr/lib/pkgconfig/
 
 	install -d debian/libpsycle-helpers1-dev/usr/include/psycle/helpers/
-	cp -LR $$(find debian/++wonderbuild/staged-install/usr/include/psycle/helpers/ \! -name math -a \! -name math.hpp) \
+	cp -LR $$(find debian/++wonderbuild/staged-install/usr/include/psycle/helpers/ \! -name math -a \! -name math.hpp ) \
 		debian/libpsycle-helpers1-dev/usr/include/psycle/helpers/
 	install -d debian/libpsycle-helpers1-dev/usr/lib/pkgconfig/
 	cp -L debian/++wonderbuild/staged-install/usr/lib/pkgconfig/psycle-helpers.pc debian/libpsycle-helpers1-dev/usr/lib/pkgconfig/
