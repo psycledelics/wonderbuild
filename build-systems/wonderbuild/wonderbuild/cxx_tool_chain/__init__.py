@@ -940,7 +940,7 @@ class ModTask(ModDepPhases, Task, Persistent):
 					self.print_desc_multicolumn_format(str(self.target) + ': compiling ' + pic + ' objects from ' + self.cfg.lang + ' using ' + str(i) + ' processes and batch-size ' + str(len(batches[0])), s, color)
 			elif self.cfg.check_missing:
 				for t in self.targets:
-					if not t.exists:
+					if not t.exists: # XXX If t.is_symlink we should check whether it points to something that exists.
 						if __debug__ and is_debug: debug('task: target missing: ' + str(t))
 						changed_sources = self.sources
 						need_process = True
