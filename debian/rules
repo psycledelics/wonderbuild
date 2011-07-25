@@ -10,7 +10,7 @@ export DH_OPTIONS=-v
 
 CXXFLAGS = -g -Wall
 ifeq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
- CXXFLAGS += -O2
+ CXXFLAGS += -O2 -DNDEBUG
 endif
 
 export DEB_HOST_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
