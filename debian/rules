@@ -37,7 +37,7 @@ override_dh_auto_build:
 	build-systems/wonderbuild/wonderbuild_script.py \
 		$(CROSS_COMPILE) \
 		--cxx-flags='$(CXXFLAGS)' \
-		--bld-dir=$$(pwd)/debian/++wonderbuild \
+		--bld-dir=debian/++wonderbuild \
 		--install-prefix-dir=/usr \
 		$(JOBS)
 
@@ -49,105 +49,15 @@ override_dh_auto_test:
 	done
 
 override_dh_auto_install:
-	install -d debian/libdiversalis1-dev/usr/include/
-	cp -L  debian/++wonderbuild/staged-install/usr/include/diversalis.hpp debian/libdiversalis1-dev/usr/include/
-	cp -LR debian/++wonderbuild/staged-install/usr/include/diversalis/    debian/libdiversalis1-dev/usr/include/
-	install -d debian/libdiversalis1-dev/usr/lib/pkgconfig/
-	cp -L  debian/++wonderbuild/staged-install/usr/lib/pkgconfig/diversalis.pc debian/libdiversalis1-dev/usr/lib/pkgconfig/
-	
-	install -d debian/libuniversalis1-dev/usr/include/
-	cp -L  debian/++wonderbuild/staged-install/usr/include/universalis.hpp debian/libuniversalis1-dev/usr/include/
-	cp -LR debian/++wonderbuild/staged-install/usr/include/universalis/    debian/libuniversalis1-dev/usr/include/
-	install -d debian/libuniversalis1-dev/usr/lib/pkgconfig/
-	cp -L  debian/++wonderbuild/staged-install/usr/lib/pkgconfig/universalis.pc debian/libuniversalis1-dev/usr/lib/pkgconfig/
-	install -d debian/libuniversalis1-dev/usr/lib/
-	cp -L debian/++wonderbuild/staged-install/usr/lib/libuniversalis.so debian/libuniversalis1-dev/usr/lib/
-	
-	install -d debian/libuniversalis1/usr/lib/
-	cp -L debian/++wonderbuild/staged-install/usr/lib/libuniversalis.so.* debian/libuniversalis1/usr/lib/
+	:
 
-	install -d debian/libpsycle-helpers-math1-dev/usr/include/psycle/helpers/
-	cp -L  debian/++wonderbuild/staged-install/usr/include/psycle/helpers/math.hpp debian/libpsycle-helpers-math1-dev/usr/include/psycle/helpers/
-	cp -LR debian/++wonderbuild/staged-install/usr/include/psycle/helpers/math/    debian/libpsycle-helpers-math1-dev/usr/include/psycle/helpers/
-	install -d debian/libpsycle-helpers-math1-dev/usr/lib/pkgconfig/
-	cp -L  debian/++wonderbuild/staged-install/usr/lib/pkgconfig/psycle-helpers-math.pc debian/libpsycle-helpers-math1-dev/usr/lib/pkgconfig/
-
-	install -d debian/libpsycle-helpers1-dev/usr/include/psycle/helpers/
-	cp -LR $$(find debian/++wonderbuild/staged-install/usr/include/psycle/helpers/ \! -name math -a \! -name math.hpp ) \
-		debian/libpsycle-helpers1-dev/usr/include/psycle/helpers/
-	install -d debian/libpsycle-helpers1-dev/usr/lib/pkgconfig/
-	cp -L debian/++wonderbuild/staged-install/usr/lib/pkgconfig/psycle-helpers.pc debian/libpsycle-helpers1-dev/usr/lib/pkgconfig/
-	install -d debian/libpsycle-helpers1-dev/usr/lib/
-	cp -L debian/++wonderbuild/staged-install/usr/lib/libpsycle-helpers.so debian/libpsycle-helpers1-dev/usr/lib/
-	
-	install -d debian/libpsycle-helpers1/usr/lib/
-	cp -L debian/++wonderbuild/staged-install/usr/lib/libpsycle-helpers.so.* debian/libpsycle-helpers1/usr/lib/
-
-	install -d debian/libpsycle-audiodrivers1-dev/usr/include/psycle/audiodrivers
-	cp -RL debian/++wonderbuild/staged-install/usr/include/psycle/audiodrivers/ debian/libpsycle-audiodrivers1-dev/usr/include/psycle/
-	install -d debian/libpsycle-audiodrivers1-dev/usr/lib/pkgconfig/
-	cp -L \
-		debian/++wonderbuild/staged-install/usr/lib/pkgconfig/psycle-audiodriver-*.pc \
-		debian/++wonderbuild/staged-install/usr/lib/pkgconfig/psycle-audiodrivers.pc \
-		debian/libpsycle-audiodrivers1-dev/usr/lib/pkgconfig/
-	install -d debian/libpsycle-audiodrivers1-dev/usr/lib/
-	cp -L \
-		debian/++wonderbuild/staged-install/usr/lib/libpsycle-audiodrivers.so \
-		debian/++wonderbuild/staged-install/usr/lib/libpsycle-audiodriver-*.so \
-		debian/libpsycle-audiodrivers1-dev/usr/lib/
-
-	install -d debian/libpsycle-audiodrivers1/usr/lib/
-	cp -L \
-		debian/++wonderbuild/staged-install/usr/lib/libpsycle-audiodrivers.so.* \
-		debian/++wonderbuild/staged-install/usr/lib/libpsycle-audiodriver-*.so.* \
-		debian/libpsycle-audiodrivers1/usr/lib/
-
-	install -d debian/libpsycle-core1-dev/usr/include/psycle/core/
-	cp -RL debian/++wonderbuild/staged-install/usr/include/psycle/core/ debian/libpsycle-core1-dev/usr/include/psycle/
-	install -d debian/libpsycle-core1-dev/usr/lib/pkgconfig/
-	cp -L  debian/++wonderbuild/staged-install/usr/lib/pkgconfig/psycle-core.pc debian/libpsycle-core1-dev/usr/lib/pkgconfig/
-	install -d debian/libpsycle-core1-dev/usr/lib/
-	cp -L debian/++wonderbuild/staged-install/usr/lib/libpsycle-core.so debian/libpsycle-core1-dev/usr/lib/
-
-	install -d debian/libpsycle-core1/usr/lib/
-	cp -L debian/++wonderbuild/staged-install/usr/lib/libpsycle-core.so.* debian/libpsycle-core1/usr/lib/
-
-	#install -d debian/libpsycle-plugin-interface1-dev/usr/include/psycle/
-	#cp -L debian/++wonderbuild/staged-install/usr/include/psycle/plugin_interface.hpp debian/libpsycle-plugins1-dev/usr/include/psycle/
-	#install -d debian/libpsycle-plugin-interface1-dev/usr/lib/pkgconfig/
-	#cp -L debian/++wonderbuild/staged-install/usr/lib/pkgconfig/psycle-plugin-interface.pc debian/libpsycle-plugin-interface1-dev/usr/lib/pkgconfig/
-
-	#install -d debian/libpsycle-plugins1-dev/usr/include/psycle/plugins/
-	#cp -RL debian/++wonderbuild/staged-install/usr/include/psycle/plugins/ debian/libpsycle-plugins1-dev/usr/include/psycle/
-	#install -d debian/libpsycle-plugins1-dev/usr/lib/pkgconfig/
-	#cp -L $$( \
-	#		find debian/++wonderbuild/staged-install/usr/lib/pkgconfig/ \
-	#			\! -name psycle-plugin-interface.pc -a \( \
-	#				-name psycle-plugin-\*.pc -o \
-	#				-name psycle-dw-filter.pc -o \
-	#				-name psycle-druttis-dsp.pc -o \
-	#				-name psycle-druttis-band-limited-wave-tables.pc \
-	#			\) \
-	#	) debian/libpsycle-plugins1-dev/usr/lib/pkgconfig/
-	#install -d debian/libpsycle-plugins1-dev/usr/lib/
-	#cp -L \
-	#	debian/++wonderbuild/staged-install/usr/lib/libpsycle-plugin-*.so \
-	#	debian/++wonderbuild/staged-install/usr/lib/libpsycle-dw-filter.so \
-	#	debian/++wonderbuild/staged-install/usr/lib/libpsycle-druttis-dsp.so \
-	#	debian/++wonderbuild/staged-install/usr/lib/libpsycle-druttis-band-limited-wave-tables.so \
-	#	debian/libpsycle-plugins1-dev/usr/lib/
-
-	install -d debian/libpsycle-plugins1/usr/lib/
-	cp -L \
-		debian/++wonderbuild/staged-install/usr/lib/libpsycle-plugin-*.so \
-		debian/++wonderbuild/staged-install/usr/lib/libpsycle-plugin-*.so.* \
-		debian/++wonderbuild/staged-install/usr/lib/libpsycle-dw-filter.so.* \
-		debian/++wonderbuild/staged-install/usr/lib/libpsycle-druttis-dsp.so.* \
-		debian/++wonderbuild/staged-install/usr/lib/libpsycle-druttis-band-limited-wave-tables.so.* \
-		debian/libpsycle-plugins1/usr/lib/
-
-	install -d debian/psycle-player1/usr/bin/
-	cp -LR debian/++wonderbuild/staged-install/usr/bin/psycle-player debian/psycle-player1/usr/bin/
+override_dh_install:
+	dh_install --sourcedir=debian/++wonderbuild/staged-install --package=libpsycle-helpers1-dev $(patsubst %,--exclude=%,$(shell cat debian/libpsycle-helpers-math1-dev.install))
+	dh_install --sourcedir=debian/++wonderbuild/staged-install --remaining-packages
+	# The following test is equivalent to dh_install --list-missing --fail--missing
+	test \
+		$(for i in $(cat debian/*.install); do find debian/++wonderbuild/staged-install/$i -type f; done | wc --lines) = \
+		$(find $(for i in debian/*.install; do echo debian/$(basename $i .install); done) -type f \! -regex '.*/DEBIAN/.*' \! -regex '.*/usr/share/doc/.*' | wc --lines)
 
 override_dh_auto_clean:
 	rm -Rf debian/++wonderbuild

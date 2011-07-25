@@ -56,6 +56,37 @@ class Wonderbuild(ScriptTask):
 			def source_text(self): return '#include <stk/Stk.h>'
 		stk = StkCheckTask.shared(check_cfg)
 
+		class InterfaceMod(ModTask):
+			def __init__(self):
+				name = 'psycle-plugin-interface'
+				ModTask.__init__(self, name, ModTask.Kinds.HEADERS, cfg,
+					cxx_phase=self.__class__.InstallHeaders(cfg.project, name + '-headers'))
+				
+			def __call__(self, sched_ctx):
+				if False: yield
+				self.result = True
+			
+			class InstallHeaders(InstallTask):
+				@property
+				def trim_prefix(self): return src_dir
+
+				@property
+				def dest_dir(self): return self.fhs.include
+
+				@property
+				def sources(self):
+					try: return self._sources
+					except AttributeError:
+						self._sources = [self.trim_prefix / 'psycle' / 'plugin_interface.hpp']
+						return self._sources
+		
+			def apply_cxx_to(self, cfg):
+				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
+		interface = InterfaceMod()
+		
+		n = 'psycle-plugin-'
+		p = src_dir / 'psycle' / 'plugins'
+
 		class UniformMod(ModTask):
 			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):
 				ModTask.__init__(self, name, kind, cfg)
@@ -67,6 +98,7 @@ class Wonderbuild(ScriptTask):
 				if self.kind == ModTask.Kinds.PROG: self.private_deps = [pch.prog_task]
 				else: self.private_deps = [pch.lib_task]
 				self.public_deps += [universalis, helpers_math, helpers]
+				if self.name.startswith(n): self.public_deps.append(interface)
 				req = self.all_deps
 				for x in sched_ctx.parallel_wait(*req): yield x
 				self.result = min(bool(r) for r in req)
@@ -109,9 +141,6 @@ class Wonderbuild(ScriptTask):
 				if self.path.exists:
 					for s in self.path.find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 				else: self.sources.append(self.path.parent / (self.path.name + '.cpp'))
-
-		n = 'psycle-plugin-'
-		p = src_dir / 'psycle' / 'plugins'
 
 		alk_muter = UniformMod(n + 'alk-muter', p / 'alk_muter')
 		arguru_cross_delay = UniformMod(n + 'arguru-xfilter', p / 'arguru_xfilter')
