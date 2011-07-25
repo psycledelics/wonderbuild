@@ -52,7 +52,9 @@ override_dh_auto_install:
 	:
 
 override_dh_install:
-	dh_install --sourcedir=debian/++wonderbuild/staged-install --package=libpsycle-helpers1-dev $(patsubst %,--exclude=%,$(shell cat debian/libpsycle-helpers-math1-dev.install))
+	for i in $$(cat debian/libpsycle-helpers-math1-dev.install); do install -d debian/libpsycle-helpers-math1-dev/$$(dirname $$i) && mv debian/++wonderbuild/staged-install/$$i debian/libpsycle-helpers-math1-dev/$$i; done
+	dh_install --sourcedir=debian/++wonderbuild/staged-install --package=libpsycle-helpers1-dev
+	for i in $$(cat debian/libpsycle-helpers-math1-dev.install); do mv debian/libpsycle-helpers-math1-dev/$$i debian/++wonderbuild/staged-install/$$i; done
 	dh_install --sourcedir=debian/++wonderbuild/staged-install --remaining-packages
 
 override_dh_auto_clean:
