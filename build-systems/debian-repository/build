@@ -402,3 +402,168 @@ function remote_execution
 	eof
 }
 
+#! /bin/bash
+
+###########################################################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# copyright 1999-2007 psycledelics http://psycle.pastnotecut.org : johan boule
+#
+# \meta generic
+# \meta standard gnu
+#
+###########################################################################################################
+
+set -o nounset &&
+
+function main
+{
+	local tmp_dir= &&
+
+	local result=true &&
+
+	local distribution=$1 && shift &&
+	echoing "$(basename $0):         distribution: $distribution" &&
+
+	local extra_packages_mount_dir=$1 && shift &&
+	test -d $extra_packages_mount_dir ||
+	{
+		echoing "$(basename $0): directory does not exist: $extra_packages_mount_dir" &&
+		echoing "$(basename $0): pwd: $(pwd)" &&
+		false
+	} &&
+	extra_packages_mount_dir=$(cd $extra_packages_mount_dir && pwd) &&
+	echoing "$(basename $0): extra packages mount: $extra_packages_mount_dir" &&
+
+	local extra_packages_dir=$1 && shift &&
+	echoing "$(basename $0):       extra packages: $extra_packages_dir" &&
+	test -d $extra_packages_mount_dir/$extra_packages_dir ||
+	{
+		echoing "$(basename $0): directory does not exist: $extra_packages_dir" &&
+		echoing "$(basename $0): under: $extra_packages_mount_dir" &&
+		false
+	} &&
+
+	local source_dsc_file=$1 && shift &&
+	echoing "$(basename $0):               source: $source_dsc_file" &&
+
+	local result_dir=$1 && shift &&
+	test -d $result_dir ||
+	{
+		echoing "$(basename $0): directory does not exist: $result_dir" &&
+		echoing "$(basename $0): pwd: $(pwd)" &&
+		false
+	} &&
+	result_dir=$(cd $result_dir && pwd) &&
+	echoing "$(basename $0):               result: $result_dir" &&
+
+	local tmp_dir=$result_dir/++packageneric/$(basename $0) &&
+	mkdir $tmp_dir --parents &&
+
+	local build_dir=$tmp_dir/build &&
+	mkdir $build_dir &&
+
+	local archive_dir=$tmp_dir/archive &&
+	mkdir $archive_dir &&
+
+	ln --verbose --symbolic $extra_packages_mount_dir/$extra_packages_dir $archive_dir/packages &&
+
+	local hook_dir=$tmp_dir/hook &&
+	mkdir $hook_dir &&
+	local hook=$hook_dir/B00-chmod &&
+	{
+		cat > $hook <<-eof
+			#! /bin/sh
+			chown $(id --user):$(id --group) --changes /tmp/buildd/*.{changes,deb}
+		eof
+	} &&
+	chmod +x $hook &&
+	ln $hook $hook_dir/C00-chmod &&
+	local hook=$hook_dir/D00-apt &&
+	{
+		cat > $hook <<-eof
+			#! /bin/sh
+			echo deb file://$archive_dir / >> /etc/apt/sources.list &&
+			cat /etc/apt/sources.list &&
+			if test -e /etc/apt/apt.conf
+			then
+				cat /etc/apt/apt.conf
+			fi &&
+			{
+				apt-get update       --option acquire::retries=3 ||
+				apt-get update       --option acquire::retries=3
+			} &&
+			{
+				apt-get dist-upgrade --option acquire::retries=3 --assume-yes --force-yes ||
+				apt-get dist-upgrade --option acquire::retries=3 --assume-yes --force-yes
+			}
+		eof
+	} &&
+	chmod +x $hook &&
+	{
+		cat > $archive_dir/Release <<-eof
+			Archive: $distribution
+			Component: main
+			Origin: $extra_packages_dir
+			Label: $(id --user --name)@$(hostname --long)
+			Architecture: $(dpkg-architecture -qDEB_HOST_ARCH)
+		eof
+	} &&
+	(
+		cd $archive_dir/packages &&
+		dpkg-scanpackages -a $(dpkg-architecture -qDEB_HOST_ARCH) . /dev/null packages/ > $archive_dir/Packages
+	) &&
+	echoing sudo ${PACKAGENERIC__SUDO:-sudo} \
+		pbuilder \
+			build \
+			--basetgz $distribution \
+			--buildplace $build_dir \
+			--bindmounts $extra_packages_mount_dir \
+			$(if test $(readlink --canonicalize --no-newline $extra_packages_mount_dir) != $(readlink --canonicalize --no-newline $result_dir) ; then echo --bindmounts $archive_dir ; fi) \
+			--hookdir $hook_dir \
+			--debbuildopts -b \
+			--buildresult $result_dir \
+			"$@" \
+			$source_dsc_file ||
+	result=false
+	if test -n "$tmp_dir" -a -d $tmp_dir
+	then
+		rm $tmp_dir --recursive --force --verbose
+	fi &&
+	$result
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+function echo-custom
+{
+	echo -en '\e[1;33m' &&
+	echo "$@" &&
+	echo -en '\e[0m'
+} &&
+
+function echoing
+{
+	local script_path=packageneric.debian.archive.$(basename $0)
+	local comment=$1 && shift &&
+	echo-custom "$script_path: $comment" &&
+	if test $# != 0
+	then
+		echo-custom "$script_path: -> calling: $@" &&
+		"$@"
+	fi
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+main "$@" &&
+echoing "completed successfully for $(pwd) $*" ||
+{
+	echoing "failed for $(pwd) $*" &&
+	false
+}
+
