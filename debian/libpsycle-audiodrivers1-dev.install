@@ -1,0 +1,5 @@
+usr/include/psycle/audiodrivers/
+usr/lib/pkgconfig/psycle-audiodriver-*.pc
+usr/lib/pkgconfig/psycle-audiodrivers.pc
+usr/lib/libpsycle-audiodrivers.so
+usr/lib/libpsycle-audiodriver-*.so

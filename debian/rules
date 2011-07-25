@@ -54,10 +54,6 @@ override_dh_auto_install:
 override_dh_install:
 	dh_install --sourcedir=debian/++wonderbuild/staged-install --package=libpsycle-helpers1-dev $(patsubst %,--exclude=%,$(shell cat debian/libpsycle-helpers-math1-dev.install))
 	dh_install --sourcedir=debian/++wonderbuild/staged-install --remaining-packages
-	# The following test is equivalent to dh_install --list-missing --fail--missing
-	test \
-		$(for i in $(cat debian/*.install); do find debian/++wonderbuild/staged-install/$i -type f; done | wc --lines) = \
-		$(find $(for i in debian/*.install; do echo debian/$(basename $i .install); done) -type f \! -regex '.*/DEBIAN/.*' \! -regex '.*/usr/share/doc/.*' | wc --lines)
 
 override_dh_auto_clean:
 	rm -Rf debian/++wonderbuild
