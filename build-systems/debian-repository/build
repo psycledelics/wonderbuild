@@ -1,0 +1,404 @@
+#! /bin/bash
+
+###########################################################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# copyright 1999-2007 psycledelics http://psycle.pastnotecut.org : johan boule
+#
+# Builds and rsync debian archive
+# \meta generic
+# \meta standard gnu
+#
+###########################################################################################################
+
+function archive
+{
+	#local packages__incoming=$1 && shift &&
+	#local binary_distribution=$1 && shift &&
+	#local source__distribution=$1 && shift &&
+	#local distribution__section_component=$1 && shift &&
+	
+	echoing "building archive $packages__remote for packages $packages__stage" && 
+	(
+		cd $packages__stage &&
+
+		#########################
+		# standard source tarbal
+		
+		mkdir --verbose standard-source-tarball --parents &&
+		(
+			cd standard-source-tarball &&
+			mv --verbose ../*.tar.gz . &&
+			for file in *.tar.gz
+			do
+				md5sum $file | gpg --clearsign > $file.sum.asc &&
+				if test -L $file
+				then
+					ln --verbose --symbolic $(readlink --no-newline $file).sig $file.sig
+				else
+					gpg --detach-sign $file
+				fi ||
+				return
+			done
+		) &&
+		
+		#########
+		# debian
+		
+		mkdir --verbose debian --parents &&
+		(
+			cd debian &&
+			
+			ln --verbose --symbolic ../standard-source-tarball/*_*.tar.gz . &&
+			mv --verbose ../*.dsc . &&
+			
+			mkdir --verbose dists &&
+			cd dists &&
+			
+			mkdir source --parents &&
+			(
+				cd source &&
+				ln --verbose --symbolic ../../*.{dsc,tar.gz} . &&
+				mkdir --verbose $source__distribution --parents &&
+				cd $source__distribution &&
+				ln --verbose --symbolic ../*.{dsc,tar.gz} . &&
+				mkdir --verbose $distribution__section_component --parents &&
+				cd $distribution__section_component &&
+				ln --verbose --symbolic ../*.{dsc,tar.gz} .
+			) &&
+			
+			if test -n "$binary__distribution"
+			then
+				mkdir --verbose $binary__distribution --parents &&
+				cd $binary__distribution &&
+				mv --verbose ../../../*.{changes,deb} . &&
+				mkdir --verbose $source__distribution --parents &&
+				(
+					cd $source__distribution &&
+					ln --verbose --symbolic ../*.{changes,deb} . &&
+					mkdir --verbose $distribution__section_component --parents &&
+					cd $distribution__section_component &&
+					ln --verbose --symbolic ../*.{changes,deb} .
+				) &&
+				echoing "signing binary packages $source" debsigs --sign=builder *.deb # --sign=<type> can be builder, or origin.
+			fi
+		) &&
+		
+		##################
+		# cross packaging
+		
+		if $option__cross_packaging
+		then
+			echoing "cross packaging" $libexec/debian/archive/alien . debian/dists/$binary__distribution
+		fi
+	) &&
+	
+	#####################################################################################################
+	#####################################################################################################
+	#####################################################################################################
+	# merges the local and the remote archive repository
+
+	echoing "merging the local and the remote archive repository" &&
+	{
+		archive__download &&
+		merge &&
+		archive__upload
+	} &&	
+		
+	#####################################################################################################
+	#####################################################################################################
+	#####################################################################################################
+	
+	remote_execution
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+function archive__name
+{
+	if test -z ${packages:-}
+	then
+		packages=packages &&
+		. $libexec/package/remote $source_root
+	fi
+} &&
+
+function archive__download
+{
+	if test -z ${packages:-}
+	then
+		archive__name &&
+		mkdir --verbose $packages__remote/$packageneric__remote__host/$packageneric__remote__path/$packages --parents &&
+		echoing "rsyncing from remote archive to local archive" \
+			rsync \
+				--verbose --itemize-changes --progress --stats --compress --recursive --links --ignore-existing --filter='dir-merge /.rsync-filter' --relative --no-implied-dirs \
+				$packageneric__remote__user@$packageneric__remote__host:$packageneric__remote__path/$packages/ \
+				$packages__remote/$packageneric__remote__host/
+	fi
+} &&
+
+function archive__upload
+{
+	if ! $option__upload
+	then
+		return
+	fi &&
+	if test -z ${packages:-}
+	then
+		archive__name
+	fi &&
+	echoing "rsyncing from local archive to remote archive" \
+		rsync \
+			--verbose --itemize-changes --progress --stats --compress --recursive --links --checksum --delete --filter='dir-merge /.rsync-filter' \
+			$packages__remote/$packageneric__remote__host/$packageneric__remote__path/$packages/ \
+			$packageneric__remote__user@$packageneric__remote__host:$packageneric__remote__path/$packages/
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+function merge
+{
+	(
+		cd $packages__remote/$packageneric__remote__host/$packageneric__remote__path/$packages &&
+		echoing "merging archive locally: moving $packages__stage to $(pwd)" &&
+		
+		#####################################################################################################
+		#####################################################################################################
+		#####################################################################################################
+		
+		for file in $(cd $packages__stage && find . -mindepth 1 -type f -or -type l)
+		do
+			mkdir $(dirname $file) --parent &&
+			mv --verbose --force $packages__stage/$file $(dirname $file)/ ||
+			return
+		done &&
+		
+		#####################################################################################################
+		#####################################################################################################
+		#####################################################################################################
+		
+		remove-old &&
+		scan
+	)
+} &&
+		
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+function remove-old
+{
+	echoing "removing previous versions of package $package__name in archive component section debian/dists/$binary__distribution/$source__distribution/$distribution__section_component" &&
+	
+	if test -n "$binary__distribution"
+	then
+		for changes in debian/dists/$binary__distribution/$source__distribution/${package__name}_*_$(dpkg-architecture -qDEB_HOST_ARCH).changes
+		do
+			local old__version=$(sed --silent 's/^Version: //p' < $changes | head --lines 1) &&
+			if test $old__version != $package__version
+			then
+				echoing "$package__name old version $old__version ..." &&
+				local found_in_other_source_distribution=false &&
+				for distribution in $(find debian/dists/$binary__distribution -mindepth 1 -maxdepth 1 -type d)
+				do
+					if test $(basename $distribution) != $source__distribution -a -e $distribution/$(basename $changes)
+					then
+						echoing "$package__name old version $old_version is still used in source distribution $(basename $distribution) ... not removing globally" &&
+						found_in_other_source_distribution=true &&
+						break
+					fi ||
+					return
+				done &&
+				for binary in $(sed --silent 's/^Binary: //p' < $changes | sed 's/,//g')
+				do
+					echoing "$package__name old version $old__version ... binary $(dpkg-architecture -qDEB_HOST_ARCH) $binary ..." &&
+					rm --verbose --force debian/dists/$binary__distribution/$source__distribution/{,$distribution__section_component/}${binary}_${old__version}_{$(dpkg-architecture -qDEB_HOST_ARCH),all}.deb &&
+					if ! $found_in_other_source_distribution
+					then
+						rm --verbose --force debian/dists/$binary__distribution/${binary}_${old__version}_{$(dpkg-architecture -qDEB_HOST_ARCH),all}.deb
+					fi &&
+					if $option__cross_packaging
+					then
+						rm --verbose --force {linux-standard-base/lsb-,rpm/}$binary-$old__version-1.{$(dpkg-architecture -qDEB_HOST_ARCH),noarch}.rpm &&
+						rm --verbose --force slackware/$binary-$old__version.tgz
+					fi ||
+					return
+				done &&
+				rm --verbose --force debian/dists/$binary__distribution/$source__distribution/{,$distribution__section_component/}${package__name}_${old__version}_$(dpkg-architecture -qDEB_HOST_ARCH).changes &&
+				if ! $found_in_other_source_distribution
+				then
+					rm --verbose --force debian/dists/$binary__distribution/${package__name}_${old__version}_$(dpkg-architecture -qDEB_HOST_ARCH).changes
+				fi
+			fi ||
+			return
+		done
+	fi &&
+	for dsc in debian/dists/source/$source__distribution/${package__name}_*.dsc
+	do
+		local old__version=$(sed --silent 's/^Version: //p' < $dsc | head --lines 1) &&
+		if test $old__version != $package__version
+		then
+			echoing "$package__name old version $old__version ..." &&
+			local found_in_other_source_distribution=false &&
+			for distribution in $(find debian/dists/source -mindepth 1 -maxdepth 1 -type d)
+			do
+				if test $(basename $distribution) != $source__distribution -a -e $distribution/$(basename $dsc)
+				then
+					echoing "$package__name old version $old_version is still used in source distribution $(basename $distribution) ... not removing globally" &&
+					found_in_other_source_distribution=true &&
+					break
+				fi ||
+				return
+			done &&
+			echoing "$package__name old version $old__version ... source" &&
+			rm --verbose --force debian/dists/source/$source__distribution/{,$distribution__section_component/}${package__name}_$old__version.{dsc,tar.gz} &&
+			if ! $found_in_other_source_distribution
+			then
+				rm --verbose --force debian/{,dists/source/}${package__name}_$old__version.{dsc,tar.gz} &&
+				rm --verbose --force standard-source-tarball/${package__name}_$old__version{,.unofficial}.tar.gz{,.{sig,sum.asc}}
+			fi
+		fi ||
+		return
+	done &&
+	
+	##################
+	# nested packages
+	
+	if $option__nested_source_packages
+	then
+		if test -d $source/packageneric/package/nested
+		then
+			for dir in $(cd $source && eval find packageneric/package/nested -maxdepth 1 $(packageneric__find__dir__no_arch))
+			do
+				if test -e $source/$dir/packageneric/generic/detail/libexec/debian/archive/build
+				then
+					echoing "nested source package $dir/" &&
+					(
+						local source=$source/$dir &&
+						local package__name=$($source/packageneric/generic/detail/libexec/package/meta-information name) &&
+						local package__version=$($source/packageneric/generic/detail/libexec/package/meta-information version) &&
+						remove-old
+					) &&
+					echoing "poping back from $dir to parent source package $source/"
+				fi
+			done
+		fi
+	fi
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+function scan
+{
+	echoing "scanning packages in archive component section $(pwd)/debian $binary__distribution/$source__distribution $distribution__section_component" &&
+	(
+		cd debian/dists &&
+		scan-architecture     .                source $source__distribution $source__distribution                       $distribution__section_component source &&
+		if test -n "$binary__distribution"
+		then
+			scan-architecture . $binary__distribution $source__distribution $binary__distribution/$source__distribution $distribution__section_component $(dpkg-architecture -qDEB_HOST_ARCH)
+		fi
+	)
+} &&
+
+function scan-architecture
+{
+	local debian__dists=$1 && shift &&
+	local distribution__path__prefix=$1 && shift &&
+	local distribution__path__relative=$1 && shift &&
+	local distribution__name=$1 && shift &&
+	local distribution__section_component=$1 && shift &&
+	local architecture=$1 && shift &&
+	echoing "scanning $architecture packages in archive component section $distribution__path__prefix/$distribution__path__relative $distribution__section_component" &&
+	(
+		cd $debian__dists/$distribution__path__prefix/$distribution__path__relative/$distribution__section_component &&
+		if test $architecture = source
+		then
+			local dir=$architecture
+		else
+			local dir=binary-$architecture
+		fi &&
+		if test ! -d $dir
+		then
+			mkdir --verbose $dir --parents
+		fi &&
+		if test ! -e $dir/Release
+		then
+			{
+				cat > $dir/Release <<-eof
+					Archive: $distribution__name
+					Component: $distribution__section_component
+					Origin: $($libexec/package/meta-information origin)
+					Label: $(id --user --name)@$(hostname --long)
+					Architecture: $architecture
+				eof
+			} &&
+			gpg --detach-sign --armor --output $dir/Release.gpg $dir/Release
+		fi &&
+		if test $architecture = source
+		then
+			local file=$dir/Sources &&
+			echoing "scanning sources" eval "dpkg-scansources . > $file"
+		else
+			local file=$dir/Packages &&
+			#local override=$libexec/debian/archive/override &&
+			local override=/dev/null &&
+			echoing "scanning binaries $architecture" eval "dpkg-scanpackages -a $architecture . $override dists/$distribution__path__prefix/ > $file"
+		fi &&
+		gzip --force --best --rsyncable $file
+	)
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+function remote_execution
+{
+	if ! $option__upload
+	then
+		return
+	fi &&
+	echoing "executing update commands on the remote host itself" &&
+	local deb=$package__name-doc_${package__version}_all.deb &&
+	ssh $packageneric__remote__user@$packageneric__remote__host <<-eof
+		#set -o xtrace &&
+		if test -n "$binary__distribution" -a $source__distribution = unstable -a -e $packageneric__remote__path/$packages/debian/dists/$binary__distribution/$deb
+		then
+			# Since we uploaded to the debian archive the doc binary package, which contains the doxygen documentation,
+			# we can also update the site by extracting the doxygen directory from the debian binary package.
+			{
+				cd /tmp &&
+				rm --recursive --force $packageneric__remote__user.$deb.extracted &&
+				mkdir $packageneric__remote__user.$deb.extracted &&
+				cd $packageneric__remote__user.$deb.extracted &&
+				ar x $packageneric__remote__path/$packages/debian/dists/$binary__distribution/$deb &&
+				umask 0001 &&
+				tar --extract --gzip --touch --file data.tar.gz &&
+				if test -d usr/share/doc/${package__name}-doc/doxygen
+				then
+					rm --recursive --force $packageneric__remote__path/doxygen &&
+					mv usr/share/doc/${package__name}-doc/doxygen $packageneric__remote__path &&
+					cd $packageneric__remote__path &&
+					chmod u=rwx,g=rwsx,o=rx doxygen &&
+					find doxygen -follow -type d -exec chmod ug=rwsx,o=rx {} \; &&
+					find doxygen -follow -type f -exec chmod ug+rwX,o+r-w {} \;
+				fi
+			}
+		fi &&
+		{
+			cd $packageneric__remote__path &&
+			if test -x update-timestamps
+			then
+				./update-timestamps
+			fi
+		}
+	eof
+}
+
