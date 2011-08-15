@@ -1,0 +1,2 @@
+exclude, /native_client_sdk
+exclude, /native_client_sdk_*
