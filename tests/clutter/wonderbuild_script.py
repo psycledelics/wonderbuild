@@ -35,7 +35,7 @@ class Wonderbuild(ScriptTask):
 		self._cfg = cfg = cfg.clone()
 
 		check_cfg = cfg.clone()
-		clutter = PkgConfigCheckTask.shared(check_cfg, ['clutter-gtk-0.6'])
+		clutter = PkgConfigCheckTask.shared(check_cfg, ['clutter-gtk-0.10'])
 
 		class UniformMod(ModTask):
 			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):
@@ -67,7 +67,7 @@ class Wonderbuild(ScriptTask):
 
 			class InstallHeaders(InstallTask):
 				def __init__(self, outer):
-					InstallTask.__init__(self, outer.project, outer.name + '-headers')
+					InstallTask.__init__(self, outer.base_cfg.project, outer.name + '-headers')
 					self.outer = outer
 					
 				@property

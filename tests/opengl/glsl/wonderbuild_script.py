@@ -68,7 +68,7 @@ class Wonderbuild(ScriptTask):
 
 			class InstallHeaders(InstallTask):
 				def __init__(self, outer):
-					InstallTask.__init__(self, outer.project, outer.name + '-headers')
+					InstallTask.__init__(self, outer.base_cfg.project, outer.name + '-headers')
 					self.outer = outer
 					
 				@property
