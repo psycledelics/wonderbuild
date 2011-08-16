@@ -66,6 +66,8 @@ class DestPlatformCheckTask(BuildCheckTask):
 	#define WONDERBUILD__OS "uwin"
 #elif defined _WIN32
 	#define WONDERBUILD__OS "win"
+#elif defined __native_client__
+	#define WONDERBUILD__OS "nacl"
 #elif defined __unix__ || defined unix
 	#define WONDERBUILD__OS "unix"
 #else

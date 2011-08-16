@@ -300,6 +300,8 @@
           <in>fft.hpp</in>
           <in>filter.cpp</in>
           <in>filter.hpp</in>
+          <in>hexstring_to_binary.cpp</in>
+          <in>hexstring_to_binary.hpp</in>
           <in>hexstring_to_integer.cpp</in>
           <in>hexstring_to_integer.hpp</in>
           <in>math.hpp</in>
