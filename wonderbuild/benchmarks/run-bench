@@ -50,11 +50,11 @@ main() {
 
 	case $tool in
 		wonderbuild)
-			measure $wonderbuild         --bld-dir=build-$tool --jobs=$jobs --check-missing=no "$@"
+			measure $wonderbuild         --bld-dir=build-$tool --jobs=$jobs --check-missing=no --silent=yes "$@"
 		;;
 	
 		wonderbuild-on-jython)
-			measure $jython $wonderbuild --bld-dir=build-$tool --jobs=$jobs --check-missing=no "$@"
+			measure $jython $wonderbuild --bld-dir=build-$tool --jobs=$jobs --check-missing=no --silent=yes "$@"
 		;;
 
 		tup)

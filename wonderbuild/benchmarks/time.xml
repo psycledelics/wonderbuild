@@ -111,6 +111,28 @@
 	touch lib_17/*.hpp &amp;&amp; time ../../wonderbuild.py --silent --check-missing=no # big partial rebuild
 				</pre>
 			</code>
+			Alternatively, you may use the <a href='run-bench'/> helper script, which does the same thing, with:
+			<code>
+				<pre>
+	svn co https://psycle.svn.sourceforge.net/svnroot/psycle/branches/bohan/wonderbuild
+	cd wonderbuild/benchmarks
+	./gen-bench.default
+	./run-bench reset wonderbuild # initial full build
+	./run-bench big wonderbuild # big partial rebuild
+	./run-bench small wonderbuild # small partial rebuild
+	./run-bench no-op wonderbuild # big partial rebuild
+				</pre>
+			</code>
+			Using the latter <a href='run-bench'/> helper script, you can easily compare wonderbuild with other tools,
+			as was done in these benchmarks. For example:
+			<code>
+				<pre>
+	./run-bench small make # small partial rebuild with make
+	./run-bench small autotools # small partial rebuild with autotools
+	./run-bench small cmake # small partial rebuild with cmake
+	./run-bench small waf # small partial rebuild with waf
+				</pre>
+			</code>
 		</part>
 	</part>
 	<part caption='Results'>
