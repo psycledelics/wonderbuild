@@ -59,9 +59,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{7367C3D3-56D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "midi", "midi", "{0134E93B-162A-4D3F-855F-3396F7C6830F}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\psycle\doc\for-end-users\psycle-midi-2.2b\midiconfiguration.jpg = ..\..\psycle\doc\for-end-users\psycle-midi-2.2b\midiconfiguration.jpg
-		..\..\psycle\doc\for-end-users\psycle-midi-2.2b\midimonitor.jpg = ..\..\psycle\doc\for-end-users\psycle-midi-2.2b\midimonitor.jpg
-		..\..\psycle\doc\for-end-users\psycle-midi-2.2b\midiout.jpg = ..\..\psycle\doc\for-end-users\psycle-midi-2.2b\midiout.jpg
+		..\..\psycle\doc\for-end-users\psycle-midi-2.2b\midiconfiguration.png = ..\..\psycle\doc\for-end-users\psycle-midi-2.2b\midiconfiguration.png
+		..\..\psycle\doc\for-end-users\psycle-midi-2.2b\midimonitor.png = ..\..\psycle\doc\for-end-users\psycle-midi-2.2b\midimonitor.png
+		..\..\psycle\doc\for-end-users\psycle-midi-2.2b\midiout.png = ..\..\psycle\doc\for-end-users\psycle-midi-2.2b\midiout.png
 		..\..\psycle\doc\for-end-users\psycle-midi-2.2b\psyclemidi.html = ..\..\psycle\doc\for-end-users\psycle-midi-2.2b\psyclemidi.html
 		..\..\psycle\doc\for-end-users\psycle-midi-2.2b\PsycleMIDIChart.txt = ..\..\psycle\doc\for-end-users\psycle-midi-2.2b\PsycleMIDIChart.txt
 	EndProjectSection
