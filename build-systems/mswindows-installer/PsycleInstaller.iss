@@ -8,7 +8,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{8E7D0A7F-B85F-44DC-8C1C-2A2C27BAEA0B}
 AppName=Psycle Modular Music Creation Studio
-AppVersion=1.8.8 beta 2
+AppVersion=1.8.8 RC1
 ;AppVerName=Psycle Modular Music Creation Studio 1.8.8
 AppPublisher=psycledelics
 AppPublisherURL=http://psycle.sourceforge.net/
@@ -20,12 +20,12 @@ AllowNoIcons=true
 InfoBeforeFile=..\..\psycle\doc\for-end-users\readme.txt
 InfoAfterFile=..\..\psycle\doc\for-end-users\whatsnew.txt
 OutputBaseFilename=PsycleInstallerx64
-SetupIconFile=..\..\pixmaps\psycle.ico
+SetupIconFile=..\..\psycle\pixmaps\psycle.ico
 Compression=lzma
 SolidCompression=true
 MinVersion=0,5.0.2195sp4
-AppCopyright=2000-2010 psycledelics
-AppVerName=Psycle 1.8.8
+AppCopyright=2000-2011 psycledelics
+AppVerName=Psycle 1.8.8 64 bits
 PrivilegesRequired=poweruser
 TimeStampsInUTC=true
 DisableReadyPage=true
@@ -43,18 +43,19 @@ Name: deleteCacheFile; Description: deletes the cache of plugin names to force i
 Name: deleteRegistrySettings; Description: deletes the existing settings in the registry, allowing psycle to regenerate the defaults.; Flags: unchecked
 
 [Files]
-Source: ..\..\psycle\doc\for-end-users\*; DestDir: {app}\docs; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: .svn, Log1.log; Components: " Documentation"
 Source: ..\msvc\output\x64\release\bin\boost_date_time-vc90-mt-1_41.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application
 Source: ..\msvc\output\x64\release\bin\boost_filesystem-vc90-mt-1_41.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application
 Source: ..\msvc\output\x64\release\bin\boost_system-vc90-mt-1_41.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application
 Source: ..\msvc\output\x64\release\bin\boost_thread-vc90-mt-1_41.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application
 Source: ..\msvc\output\x64\release\bin\psycle.exe; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application
 Source: ..\msvc\output\x64\release\bin\universalis.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application
-Source: ..\..\..\..\psycleSVN\build-systems\msvc\output\x64\release\bin\psycle-plugins\*.dll; DestDir: {app}\PsyclePlugins; Flags: ignoreversion 64bit; Components: Open_Source_Plugins
-Source: ..\..\..\..\psycleSVN\psycle-plugins\src\psycle\plugins\*.txt; DestDir: {app}\Docs; Excludes: license.txt; Flags: recursesubdirs ignoreversion; Components: " Documentation"
-Source: ..\..\Skins\*; DestDir: {app}\Skins; Excludes: *.txt; Flags: recursesubdirs ignoreversion createallsubdirs; Components: " Skins"
+Source: ..\msvc\output\x64\release\bin\psycle-plugins\*.dll; DestDir: {app}\PsyclePlugins; Flags: ignoreversion 64bit; Components: Open_Source_Plugins
+Source: ..\..\psycle\doc\for-end-users\*; DestDir: {app}\docs; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: .svn, Log1.log; Components: " Documentation"
+; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+Source: ..\..\psycle-plugins\src\psycle\plugins\*.txt; DestDir: {app}\Docs; Excludes: license.txt; Flags: recursesubdirs ignoreversion; Components: " Documentation"
+Source: ..\..\psycle\Skins\*; DestDir: {app}\Skins; Excludes: *.txt; Flags: recursesubdirs ignoreversion createallsubdirs; Components: " Skins"
 Source: ..\..\psycle\doc\*.psy; DestDir: {commondocs}\Psycle Songs; Flags: ignoreversion
-Source: ..\..\..\..\psycleSVN\psycle-plugins\presets\*.prs; DestDir: {app}\PsyclePlugins; Flags: ignoreversion onlyifdoesntexist; Components: Presets
+Source: ..\..\psycle-plugins\presets\*.prs; DestDir: {app}\PsyclePlugins; Flags: ignoreversion onlyifdoesntexist; Components: Presets
 
 [Icons]
 Name: {group}\Psycle Modular Music Creation Studio; Filename: {app}\psycle.exe
@@ -105,7 +106,6 @@ Name: {win}\Psyclekeys.ini; Type: files; Tasks: " deleteCacheFile"; Components: 
 Name: {userappdata}\psycle\; Type: filesandordirs; Tasks: " deleteCacheFile"; Components: Application
 [UninstallDelete]
 Name: {userappdata}\..\.psycle\; Type: filesandordirs; Components: Application
-Name: {win}\Psyclekeys.ini; Type: files; Components: Application
 Name: {userappdata}\psycle\; Type: filesandordirs; Components: Application
 [Code]
 procedure InitializeWizard();
@@ -125,7 +125,7 @@ begin
     end;
     if IsComponentSelected('InstallMSRuntimes_x64') then
     begin
-      ITD_AddFile('http://download.microsoft.com/download/2/d/6/2d61c766-107b-409d-8fba-c39e61ca08e8/vcredist_x64.exe',ExpandConstant('{tmp}\vcredist_x64.exe'));
+      ITD_AddFile('http://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x64.exe',ExpandConstant('{tmp}\vcredist_x64.exe'));
     end;
   end;
   Result := True;

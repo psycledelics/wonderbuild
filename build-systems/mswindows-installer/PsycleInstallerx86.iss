@@ -8,7 +8,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{8E7D0A7F-B85F-44DC-8C1C-2A2C27BAEA0B}
 AppName=Psycle Modular Music Creation Studio
-AppVersion=1.8.8 beta 2
+AppVersion=1.8.8 RC1
 ;AppVerName=Psycle Modular Music Creation Studio 1.8.8
 AppPublisher=psycledelics
 AppPublisherURL=http://psycle.sourceforge.net/
@@ -20,12 +20,12 @@ AllowNoIcons=true
 InfoBeforeFile=..\..\psycle\doc\for-end-users\readme.txt
 InfoAfterFile=..\..\psycle\doc\for-end-users\whatsnew.txt
 OutputBaseFilename=PsycleInstallerx86
-SetupIconFile=..\..\pixmaps\psycle.ico
+SetupIconFile=..\..\psycle\pixmaps\psycle.ico
 Compression=lzma
 SolidCompression=true
 MinVersion=0,5.0.2195sp4
-AppCopyright=2000-2010 psycledelics
-AppVerName=Psycle 1.8.8
+AppCopyright=2000-2011 psycledelics
+AppVerName=Psycle 1.8.8 32 bits
 PrivilegesRequired=poweruser
 TimeStampsInUTC=true
 DisableReadyPage=true
@@ -49,14 +49,14 @@ Source: ..\msvc\output\Win32\release\bin\boost_filesystem-vc90-mt-1_41.dll; Dest
 Source: ..\msvc\output\Win32\release\bin\boost_system-vc90-mt-1_41.dll; DestDir: {app}; Flags: ignoreversion 32bit; Components: Application
 Source: ..\msvc\output\Win32\release\bin\boost_thread-vc90-mt-1_41.dll; DestDir: {app}; Flags: ignoreversion 32bit; Components: Application
 Source: ..\msvc\output\Win32\release\bin\universalis.dll; DestDir: {app}; Flags: ignoreversion 32bit; Components: Application
-Source: ..\..\..\..\psycleSVN\build-systems\msvc\output\Win32\release\bin\psycle-plugins\*.dll; DestDir: {app}\PsyclePlugins; Flags: ignoreversion 32bit; Tasks: ; Languages: ; Excludes: crasher.dll; Components: " Open_Source_Plugins"
+Source: ..\msvc\output\Win32\release\bin\psycle-plugins\*.dll; DestDir: {app}\PsyclePlugins; Flags: ignoreversion 32bit; Tasks: ; Languages: ; Excludes: crasher.dll; Components: " Open_Source_Plugins"
 Source: ..\..\psycle\doc\for-end-users\*; DestDir: {app}\docs; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: .svn, Log1.log; Components: " Documentation"
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: ..\..\closed-source\*.dll; DestDir: {app}\PsyclePlugins\closed-source; Flags: recursesubdirs createallsubdirs 32bit; Components: Closed_Source_Plugins
-Source: ..\..\..\..\psycleSVN\psycle-plugins\src\psycle\plugins\*.txt; DestDir: {app}\Docs; Excludes: license.txt; Flags: recursesubdirs ignoreversion; Components: " Documentation"
-Source: ..\..\Skins\*; DestDir: {app}\Skins; Excludes: *.txt; Flags: recursesubdirs ignoreversion createallsubdirs; Components: " Skins"
+Source: ..\..\psycle-plugins\closed-source\*.dll; DestDir: {app}\PsyclePlugins\closed-source; Flags: recursesubdirs createallsubdirs 32bit; Components: Closed_Source_Plugins
+Source: ..\..\psycle-plugins\src\psycle\plugins\*.txt; DestDir: {app}\Docs; Excludes: license.txt; Flags: recursesubdirs ignoreversion; Components: " Documentation"
+Source: ..\..\psycle\Skins\*; DestDir: {app}\Skins; Excludes: *.txt; Flags: recursesubdirs ignoreversion createallsubdirs; Components: " Skins"
 Source: ..\..\psycle\doc\*.psy; DestDir: {commondocs}\Psycle Songs; Flags: ignoreversion
-Source: ..\..\..\..\psycleSVN\psycle-plugins\presets\*.prs; DestDir: {app}\PsyclePlugins; Flags: ignoreversion onlyifdoesntexist; Components: Presets
+Source: ..\..\psycle-plugins\presets\*.prs; DestDir: {app}\PsyclePlugins; Flags: ignoreversion onlyifdoesntexist; Components: Presets
 
 [Icons]
 Name: {group}\Psycle Modular Music Creation Studio; Filename: {app}\psycle.exe
@@ -107,7 +107,6 @@ Name: {win}\Psyclekeys.ini; Type: files; Tasks: " deleteCacheFile"; Components: 
 Name: {userappdata}\psycle\; Type: filesandordirs; Tasks: " deleteCacheFile"; Components: Application
 [UninstallDelete]
 Name: {userappdata}\..\.psycle\; Type: filesandordirs; Components: Application
-Name: {win}\Psyclekeys.ini; Type: files; Components: Application
 Name: {userappdata}\psycle\; Type: filesandordirs; Components: Application
 [Code]
 procedure InitializeWizard();
@@ -127,7 +126,7 @@ begin
     end;
     if IsComponentSelected('InstallMSRuntimes_x86') then
     begin
-      ITD_AddFile('http://download.microsoft.com/download/d/d/9/dd9a82d0-52ef-40db-8dab-795376989c03/vcredist_x86.exe',ExpandConstant('{tmp}\vcredist_x86.exe'));
+      ITD_AddFile('http://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x86.exe',ExpandConstant('{tmp}\vcredist_x86.exe'));
     end;
   end;
   Result := True;
@@ -140,3 +139,7 @@ begin
 	else
 		Result := True;
 end;
+
+[InnoIDE_Settings]
+UseRelativePaths=true
+
