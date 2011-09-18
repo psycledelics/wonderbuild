@@ -6,9 +6,11 @@ cd $(dirname $0)/llvm &&
 
 svn up &&
 
+prefix=$(pwd)/++install &&
+
 mkdir -p ++build &&
 cd ++build &&
 
-../configure --prefix=$(cd ../++install && pwd) --enable-optimized --disable-assertions --enable-threads "$@"
+../configure --prefix=$prefix --enable-optimized --disable-assertions --enable-threads "$@"
 
 make -j8 install
