@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="psycle"
 	ProjectGUID="{C6292BF4-9E87-4176-9101-A3D29D074B35}"
 	RootNamespace="psycle"
@@ -126,6 +126,7 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				AdditionalManifestFiles="src\psycle\host\resources\DeclareDPIAware.manifest"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -403,11 +404,23 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\psycle\host\resources\DeclareDPIAware.manifest"
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\host\resources\greater.ico"
 					>
 				</File>
 				<File
 					RelativePath="src\psycle\host\resources\idr_vstf.ico"
+					>
+				</File>
+				<File
+					RelativePath="src\psycle\host\resources\Slider\imgMiniOff.bmp"
+					>
+				</File>
+				<File
+					RelativePath="src\psycle\host\resources\Slider\imgMiniOn.bmp"
 					>
 				</File>
 				<File
@@ -420,6 +433,22 @@
 				</File>
 				<File
 					RelativePath="src\psycle\host\resources\keys_bac.bmp"
+					>
+				</File>
+				<File
+					RelativePath="src\psycle\host\resources\MasterMachine\ledOff-left.bmp"
+					>
+				</File>
+				<File
+					RelativePath="src\psycle\host\resources\MasterMachine\ledOff-right.bmp"
+					>
+				</File>
+				<File
+					RelativePath="src\psycle\host\resources\MasterMachine\ledOn-left.bmp"
+					>
+				</File>
+				<File
+					RelativePath="src\psycle\host\resources\MasterMachine\ledOn-right.bmp"
 					>
 				</File>
 				<File
@@ -1221,6 +1250,10 @@
 				<Filter
 					Name="UIControls"
 					>
+					<File
+						RelativePath=".\src\psycle\host\DPI.hpp"
+						>
+					</File>
 					<File
 						RelativePath="src\psycle\host\ExListBox.cpp"
 						>
