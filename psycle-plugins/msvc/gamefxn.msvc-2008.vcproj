@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="psycle-plugins/gamefx"
+	Name="psycle-plugins/gamefxn"
 	ProjectGUID="{485B9E85-CBC7-4B27-8AD2-5DD97234FBED}"
-	RootNamespace="gamefx"
+	RootNamespace="gamefxn"
 	TargetFrameworkVersion="0"
 	>
 	<Platforms>
@@ -255,23 +255,23 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\src\psycle\plugins\jme\gamefx\aaf.cpp"
+			RelativePath="..\src\psycle\plugins\jme\gamefxn\aaf.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\jme\gamefx\atlantisfilter.cpp"
+			RelativePath="..\src\psycle\plugins\jme\gamefxn\atlantisfilter.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\jme\gamefx\gamefx.cpp"
+			RelativePath="..\src\psycle\plugins\jme\gamefxn\gamefx.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\jme\gamefx\license.txt"
+			RelativePath="..\src\psycle\plugins\jme\gamefxn\license.txt"
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\jme\gamefx\voice.cpp"
+			RelativePath="..\src\psycle\plugins\jme\gamefxn\voice.cpp"
 			>
 		</File>
 	</Files>

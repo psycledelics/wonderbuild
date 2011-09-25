@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="psycle-plugins/blitz"
-	RootNameSpace="blitz"
+	Name="psycle-plugins/blitzn"
+	RootNameSpace="blitzn"
 	ProjectGUID="{C55834ED-9038-4D48-AE49-122834E68B25}"
 	>
 	<Platforms>
@@ -254,35 +254,35 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\src\psycle\plugins\jme\blitz\aaf.cpp"
+			RelativePath="..\src\psycle\plugins\jme\blitzn\aaf.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\jme\blitz\atlantisfilter.cpp"
+			RelativePath="..\src\psycle\plugins\jme\blitzn\atlantisfilter.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\jme\blitz\blitz.cpp"
+			RelativePath="..\src\psycle\plugins\jme\blitzn\blitz.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\jme\blitz\filter.cpp"
+			RelativePath="..\src\psycle\plugins\jme\blitzn\filter.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\jme\blitz\lfo.cpp"
+			RelativePath="..\src\psycle\plugins\jme\blitzn\lfo.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\jme\blitz\license.txt"
+			RelativePath="..\src\psycle\plugins\jme\blitzn\license.txt"
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\jme\blitz\pwm.cpp"
+			RelativePath="..\src\psycle\plugins\jme\blitzn\pwm.cpp"
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\jme\blitz\voice.cpp"
+			RelativePath="..\src\psycle\plugins\jme\blitzn\voice.cpp"
 			>
 		</File>
 	</Files>
