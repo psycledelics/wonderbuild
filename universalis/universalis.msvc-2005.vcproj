@@ -441,14 +441,6 @@
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\os\check_version.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\universalis\os\check_version.hpp"
-					>
-				</File>
-				<File
 					RelativePath="src\universalis\os\clocks.cpp"
 					>
 				</File>
