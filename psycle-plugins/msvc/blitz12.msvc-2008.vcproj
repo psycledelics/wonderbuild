@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="psycle-plugins/blitz"
+	Name="psycle-plugins/blitz12"
 	ProjectGUID="{90667BBA-76B8-42EF-B6AD-D3F87EAD19D9}"
-	RootNamespace="blitz"
+	RootNamespace="blitz12"
 	TargetFrameworkVersion="0"
 	>
 	<Platforms>

@@ -232,14 +232,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/gamefxn", ".
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/gamefx", "..\..\psycle-plugins\msvc\gamefx13.msvc-2005.vcproj", "{7A5C762B-7B12-49C2-88BC-EFD78734B1D4}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/gamefx13", "..\..\psycle-plugins\msvc\gamefx13.msvc-2005.vcproj", "{7A5C762B-7B12-49C2-88BC-EFD78734B1D4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/blitzn", "..\..\psycle-plugins\msvc\blitzn.msvc-2005.vcproj", "{C55834ED-9038-4D48-AE49-122834E68B25}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F} = {3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/blitz", "..\..\psycle-plugins\msvc\blitz12.msvc-2005.vcproj", "{90667BBA-76B8-42EF-B6AD-D3F87EAD19D9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/blitz12", "..\..\psycle-plugins\msvc\blitz12.msvc-2005.vcproj", "{90667BBA-76B8-42EF-B6AD-D3F87EAD19D9}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-plugins/audacity-wahwah", "..\..\psycle-plugins\msvc\wahwah.msvc-2005.vcproj", "{25CF6AC2-6555-41FC-AAB7-A92C9DAE2A61}"
 	ProjectSection(ProjectDependencies) = postProject

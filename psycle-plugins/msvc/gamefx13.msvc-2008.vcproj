@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="psycle-plugins/gamefx"
+	Name="psycle-plugins/gamefx13"
 	ProjectGUID="{7A5C762B-7B12-49C2-88BC-EFD78734B1D4}"
-	RootNamespace="gamefx"
+	RootNamespace="gamefx13"
 	TargetFrameworkVersion="0"
 	>
 	<Platforms>
