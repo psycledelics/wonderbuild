@@ -942,7 +942,6 @@
           <in>exception.compiler.cpp</in>
           <in>exception.hpp</in>
           <in>location.hpp</in>
-          <in>numeric.hpp</in>
           <in>pack.hpp</in>
           <in>pragma.hpp</in>
           <in>restrict.hpp</in>
@@ -972,12 +971,6 @@
         <df name="os">
           <df name="detail">
             <in>clocks.hpp</in>
-          </df>
-          <df name="todo">
-            <df name="bohan">
-              <in>signal.hpp</in>
-              <in>which.hpp</in>
-            </df>
           </df>
           <in>aligned_alloc.hpp</in>
           <in>clocks.cpp</in>
@@ -1013,7 +1006,6 @@
           <in>exception.stdlib.cpp</in>
           <in>mutex.hpp</in>
           <in>ratio.hpp</in>
-          <in>stdc_secure_lib.hpp</in>
           <in>thread.hpp</in>
         </df>
         <in>exception.cpp</in>
@@ -1123,26 +1115,6 @@
             flavor="0">
       </item>
       <item path="../../psycle-helpers/src/psycle/helpers/hexstring_to_integer.hpp"
-            ex="true"
-            tool="3"
-            flavor="0">
-      </item>
-      <item path="../../universalis/src/universalis/compiler/numeric.hpp"
-            ex="true"
-            tool="3"
-            flavor="0">
-      </item>
-      <item path="../../universalis/src/universalis/os/todo/bohan/signal.hpp"
-            ex="true"
-            tool="3"
-            flavor="0">
-      </item>
-      <item path="../../universalis/src/universalis/os/todo/bohan/which.hpp"
-            ex="true"
-            tool="3"
-            flavor="0">
-      </item>
-      <item path="../../universalis/src/universalis/stdlib/stdc_secure_lib.hpp"
             ex="true"
             tool="3"
             flavor="0">
