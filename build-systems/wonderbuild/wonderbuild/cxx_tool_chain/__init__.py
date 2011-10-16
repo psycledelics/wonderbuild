@@ -400,14 +400,15 @@ class ModDepPhases(object): # note: doesn't derive form Task, but derived classe
 	def _expose_private_deep_deps(self): return False
 
 	def _topologically_sorted_unique_deep_deps(self, expose_private_deep_deps, expose_deep_mod_tasks=True):
+		expose_private_deps = expose_private_deep_deps or expose_deep_mod_tasks
+		expose_private_deps_only = expose_private_deep_deps and not expose_deep_mod_tasks
 		if expose_private_deep_deps: expose_private_deep_deps = None # called with True or False, but we use a tribool in the recursion
 		result = deque(); seen = set() # ordering matters for sig, and static libs must appear after their clients
 		def recurse(instance, root, expose_private_deps, expose_private_deep_deps, expose_deep_mod_tasks):
 			if not root:
 				if instance in seen: return
 				seen.add(instance)
-			#for dep in expose_private_deps and (expose_deep_mod_tasks and instance.all_deps or instance.private_deps) or instance.public_deps:
-			for dep in expose_private_deps and instance.all_deps or instance.public_deps:
+			for dep in expose_private_deps and (expose_private_deps_only and instance.private_deps or instance.all_deps) or instance.public_deps:
 				if expose_deep_mod_tasks or not isinstance(dep, ModTask):
 					if expose_private_deep_deps is None:
 						recurse(dep, False,
@@ -422,7 +423,7 @@ class ModDepPhases(object): # note: doesn't derive form Task, but derived classe
 						result.appendleft(dep)
 						seen.add(dep)
 			if not root: result.appendleft(instance)
-		recurse(self, True, True, expose_private_deep_deps, expose_deep_mod_tasks)
+		recurse(self, True, expose_private_deps, expose_private_deep_deps, expose_deep_mod_tasks)
 		return result
 
 class _PreCompileTask(ModDepPhases, Task, Persistent):
@@ -1063,7 +1064,6 @@ class ModTask(ModDepPhases, Task, Persistent):
 		private_cfg = cfg.clone() # split between 'Libs' and 'Libs.private'
 		self.apply_mod_to(cfg)
 
-		# XXX should avoid duplicating public_deps in private_deps
 		private_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=True, expose_deep_mod_tasks=False)
 		public_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=False, expose_deep_mod_tasks=False)
 
