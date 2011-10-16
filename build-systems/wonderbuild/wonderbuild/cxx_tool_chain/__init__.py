@@ -1059,6 +1059,7 @@ class ModTask(ModDepPhases, Task, Persistent):
 		cfg.dest_platform = self.cfg.dest_platform
 	
 		self.apply_cxx_to(cfg)
+		private_cfg = cfg.clone() # split between 'Libs' and 'Libs.private'
 		self.apply_mod_to(cfg)
 
 		private_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=True, expose_deep_mod_tasks=False)
@@ -1074,7 +1075,6 @@ class ModTask(ModDepPhases, Task, Persistent):
 				# Otherwise, we need to wait for them here.
 				for x in sched_ctx.parallel_wait(*(private_deps + public_deps)): yield x
 		
-		private_cfg = cfg.clone() # split between 'Libs' and 'Libs.private'
 		for dep in private_deps:
 			if isinstance(dep, ModTask): pass
 			elif isinstance(dep, PkgConfigCheckTask): pass
@@ -1086,7 +1086,7 @@ class ModTask(ModDepPhases, Task, Persistent):
 
 		need_process = False
 		
-		pkg_config_sig = Sig(
+		pkg_config_sig = Sig( # XXX and private_cfg sig too
 			self.title, self.description, self.version_string, self.url or '',
 			cfg.fhs.prefix.abs_path, cfg.fhs.exec_prefix.abs_path, cfg.fhs.lib.abs_path, cfg.fhs.include.abs_path,
 			cfg.cxx_sig, cfg.ld_sig
