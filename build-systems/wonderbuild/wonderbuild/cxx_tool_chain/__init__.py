@@ -406,6 +406,7 @@ class ModDepPhases(object): # note: doesn't derive form Task, but derived classe
 			if not root:
 				if instance in seen: return
 				seen.add(instance)
+			#for dep in expose_private_deps and (expose_deep_mod_tasks and instance.all_deps or instance.private_deps) or instance.public_deps:
 			for dep in expose_private_deps and instance.all_deps or instance.public_deps:
 				if expose_deep_mod_tasks or not isinstance(dep, ModTask):
 					if expose_private_deep_deps is None:
@@ -1062,6 +1063,7 @@ class ModTask(ModDepPhases, Task, Persistent):
 		private_cfg = cfg.clone() # split between 'Libs' and 'Libs.private'
 		self.apply_mod_to(cfg)
 
+		# XXX should avoid duplicating public_deps in private_deps
 		private_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=True, expose_deep_mod_tasks=False)
 		public_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=False, expose_deep_mod_tasks=False)
 
