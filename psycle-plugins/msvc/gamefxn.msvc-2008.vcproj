@@ -259,7 +259,15 @@
 			>
 		</File>
 		<File
+			RelativePath="..\src\psycle\plugins\jme\gamefxn\aaf.h"
+			>
+		</File>
+		<File
 			RelativePath="..\src\psycle\plugins\jme\gamefxn\atlantisfilter.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\src\psycle\plugins\jme\gamefxn\atlantisfilter.h"
 			>
 		</File>
 		<File
@@ -272,6 +280,10 @@
 		</File>
 		<File
 			RelativePath="..\src\psycle\plugins\jme\gamefxn\voice.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\src\psycle\plugins\jme\gamefxn\voice.h"
 			>
 		</File>
 	</Files>

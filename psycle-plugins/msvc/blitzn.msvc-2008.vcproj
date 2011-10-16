@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="psycle-plugins/blitzn"
-	RootNameSpace="blitzn"
 	ProjectGUID="{C55834ED-9038-4D48-AE49-122834E68B25}"
+	RootNamespace="blitzn"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -258,7 +259,15 @@
 			>
 		</File>
 		<File
+			RelativePath="..\src\psycle\plugins\jme\blitzn\aaf.h"
+			>
+		</File>
+		<File
 			RelativePath="..\src\psycle\plugins\jme\blitzn\atlantisfilter.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\src\psycle\plugins\jme\blitzn\atlantisfilter.h"
 			>
 		</File>
 		<File
@@ -266,11 +275,23 @@
 			>
 		</File>
 		<File
+			RelativePath="..\src\psycle\plugins\jme\blitzn\blitz.h"
+			>
+		</File>
+		<File
 			RelativePath="..\src\psycle\plugins\jme\blitzn\filter.cpp"
 			>
 		</File>
 		<File
+			RelativePath="..\src\psycle\plugins\jme\blitzn\filter.h"
+			>
+		</File>
+		<File
 			RelativePath="..\src\psycle\plugins\jme\blitzn\lfo.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\src\psycle\plugins\jme\blitzn\lfo.h"
 			>
 		</File>
 		<File
@@ -282,7 +303,15 @@
 			>
 		</File>
 		<File
+			RelativePath="..\src\psycle\plugins\jme\blitzn\pwm.h"
+			>
+		</File>
+		<File
 			RelativePath="..\src\psycle\plugins\jme\blitzn\voice.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\src\psycle\plugins\jme\blitzn\voice.h"
 			>
 		</File>
 	</Files>
