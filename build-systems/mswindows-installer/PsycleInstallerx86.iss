@@ -25,7 +25,7 @@ Compression=lzma
 SolidCompression=true
 MinVersion=0,5.0.2195sp4
 AppCopyright=2000-2011 psycledelics
-AppVerName=Psycle 1.8.8 32 bits
+AppVerName=Psycle 1.10.0 32 bits
 PrivilegesRequired=poweruser
 TimeStampsInUTC=true
 DisableReadyPage=true
@@ -43,20 +43,20 @@ Name: deleteCacheFile; Description: deletes the cache of plugin names to force i
 Name: deleteRegistrySettings; Description: deletes the existing settings in the registry, allowing psycle to regenerate the defaults.; Flags: unchecked
 
 [Files]
-Source: ..\msvc\output\Win32\release\bin\psycle.exe; DestDir: {app}; Flags: ignoreversion 32bit; Components: Application
-Source: ..\msvc\output\Win32\release\bin\boost_date_time-vc90-mt-1_41.dll; DestDir: {app}; Flags: ignoreversion 32bit; Components: Application
-Source: ..\msvc\output\Win32\release\bin\boost_filesystem-vc90-mt-1_41.dll; DestDir: {app}; Flags: ignoreversion 32bit; Components: Application
-Source: ..\msvc\output\Win32\release\bin\boost_system-vc90-mt-1_41.dll; DestDir: {app}; Flags: ignoreversion 32bit; Components: Application
-Source: ..\msvc\output\Win32\release\bin\boost_thread-vc90-mt-1_41.dll; DestDir: {app}; Flags: ignoreversion 32bit; Components: Application
-Source: ..\msvc\output\Win32\release\bin\universalis.dll; DestDir: {app}; Flags: ignoreversion 32bit; Components: Application
-Source: ..\msvc\output\Win32\release\bin\psycle-plugins\*.dll; DestDir: {app}\PsyclePlugins; Flags: ignoreversion 32bit; Tasks: ; Languages: ; Excludes: crasher.dll; Components: " Open_Source_Plugins"
-Source: ..\..\psycle\doc\for-end-users\*; DestDir: {app}\docs; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: .svn, Log1.log; Components: " Documentation"
+Source: ..\msvc\output\Win32\release\bin\boost_date_time-vc90-mt-1_41.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
+Source: ..\msvc\output\Win32\release\bin\boost_filesystem-vc90-mt-1_41.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
+Source: ..\msvc\output\Win32\release\bin\boost_system-vc90-mt-1_41.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
+Source: ..\msvc\output\Win32\release\bin\boost_thread-vc90-mt-1_41.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
+Source: ..\msvc\output\Win32\release\bin\psycle.exe; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
+Source: ..\msvc\output\Win32\release\bin\universalis.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
+Source: ..\msvc\output\Win32\release\bin\psycle-plugins\*.dll; DestDir: {app}\PsyclePlugins; Flags: 32bit ignoreversion; Excludes: crasher.dll; Components: Open_Source_Plugins;
+Source: ..\..\psycle\doc\for-end-users\*; DestDir: {app}\Docs; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: .svn, Log1.log; Components: Documentation;
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: ..\..\psycle-plugins\closed-source\*.dll; DestDir: {app}\PsyclePlugins\closed-source; Flags: recursesubdirs createallsubdirs 32bit; Components: Closed_Source_Plugins
-Source: ..\..\psycle-plugins\src\psycle\plugins\*.txt; DestDir: {app}\Docs; Excludes: license.txt; Flags: recursesubdirs ignoreversion; Components: " Documentation"
-Source: ..\..\psycle\Skins\*; DestDir: {app}\Skins; Excludes: *.txt; Flags: recursesubdirs ignoreversion createallsubdirs; Components: " Skins"
-Source: ..\..\psycle\doc\*.psy; DestDir: {commondocs}\Psycle Songs; Flags: ignoreversion
-Source: ..\..\psycle-plugins\presets\*.prs; DestDir: {app}\PsyclePlugins; Flags: ignoreversion onlyifdoesntexist; Components: Presets
+Source: ..\..\psycle-plugins\closed-source\*.dll; DestDir: {app}\psycle-plugins\closed-source; Flags: recursesubdirs createallsubdirs 32bit IgnoreVersion; Components: Closed_Source_Plugins; Excludes: recovered-or-reversed-engineered; 
+Source: ..\..\psycle-plugins\src\psycle\plugins\*.txt; DestDir: {app}\Docs; Excludes: license.txt; Flags: recursesubdirs ignoreversion; Components: Documentation;
+Source: ..\..\psycle\Skins\*; DestDir: {app}\Skins; Excludes: *.txt; Flags: recursesubdirs ignoreversion createallsubdirs; Components: Skins;
+Source: ..\..\psycle\doc\*.psy; DestDir: "{commondocs}\Psycle Songs"; Flags: ignoreversion; Components: Demo_Songs; 
+Source: ..\..\psycle-plugins\presets\*.prs; DestDir: {app}\psycle-plugins; Flags: ignoreversion onlyifdoesntexist; Components: Presets;
 
 [Icons]
 Name: {group}\Psycle Modular Music Creation Studio; Filename: {app}\psycle.exe
@@ -74,7 +74,7 @@ Name: {group}\Documents\Tweakings And Commands; Filename: {app}\Docs\tweakings a
 [Run]
 Filename: {app}\psycle.exe; Description: {cm:LaunchProgram,Psycle Modular Music Creation Studio}; Flags: nowait postinstall skipifsilent; Tasks: ; Components: Application
 Filename: {tmp}\Vst-Bundle.exe; WorkingDir: {tmp}; StatusMsg: Select the location of your 32bit VST Plugins Dir (use Psycle\VstPlugins if in doubt); Flags: runascurrentuser; Components: " VstPack"; Tasks: ; Languages: 
-Filename: {tmp}\vcredist_x86.exe; Flags: 32bit runascurrentuser; WorkingDir: {tmp}; Components: InstallMSRuntimes_x86
+Filename: {tmp}\vcredist_x86.exe; WorkingDir: {tmp}; Flags: 32bit runascurrentuser; Components: InstallMSRuntimes_x86
 
 [Components]
 Name: Application; Description: Main Application and needed dlls; Flags: fixed; Types: custom compact full; Languages: 
@@ -87,12 +87,12 @@ Name: Documentation; Description: Install the documentation of the project; Type
 Name: Skins; Description: Skins that change the look and feel of Psycle; Types: custom full
 Name: Demo_Songs; Description: Demo songs to show what psycle can do; Types: custom full; Languages: 
 [Dirs]
-Name: {app}\PsyclePlugins; Flags: uninsalwaysuninstall; Components: " Open_Source_Plugins Closed_Source_Plugins"; Tasks: ; Languages: 
-Name: {app}\Skins; Flags: uninsalwaysuninstall; Components: " Skins"
-Name: {app}\VstPlugins; Flags: deleteafterinstall; Components: Application; Tasks: 
-Name: {app}\VstPlugins64; Flags: uninsalwaysuninstall; Components: Application; Tasks: ; Languages: 
-Name: {app}\Docs; Flags: uninsalwaysuninstall; Components: Documentation
-Name: {commondocs}\Psycle Songs; Components: " Demo_Songs"
+Name: {app}\psycle-plugins; Flags: uninsalwaysuninstall; Components: " Open_Source_Plugins Closed_Source_Plugins";
+Name: {app}\Skins; Flags: uninsalwaysuninstall; Components: Skins;
+Name: {app}\VstPlugins; Components: Application;
+Name: {app}\VstPlugins64; Components: Application;
+Name: {app}\Docs; Flags: uninsalwaysuninstall; Components: Documentation;
+Name: "{commondocs}\Psycle Songs"; Components: " Demo_Songs";
 [Registry]
 Root: HKCU; Subkey: software\psycle; Flags: uninsdeletekey
 Root: HKCU; Subkey: software\psycle; Tasks: " deleteRegistrySettings"; Flags: deletekey
