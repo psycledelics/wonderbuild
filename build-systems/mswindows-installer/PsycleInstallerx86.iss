@@ -52,11 +52,11 @@ Source: ..\msvc\output\Win32\release\bin\universalis.dll; DestDir: {app}; Flags:
 Source: ..\msvc\output\Win32\release\bin\psycle-plugins\*.dll; DestDir: {app}\PsyclePlugins; Flags: 32bit ignoreversion; Excludes: crasher.dll; Components: Open_Source_Plugins;
 Source: ..\..\psycle\doc\for-end-users\*; DestDir: {app}\Docs; Flags: ignoreversion recursesubdirs createallsubdirs; Excludes: .svn, Log1.log; Components: Documentation;
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: ..\..\psycle-plugins\closed-source\*.dll; DestDir: {app}\psycle-plugins\closed-source; Flags: recursesubdirs createallsubdirs 32bit IgnoreVersion; Components: Closed_Source_Plugins; Excludes: recovered-or-reversed-engineered; 
+Source: ..\..\psycle-plugins\closed-source\*.dll; DestDir: {app}\PsyclePlugins\closed-source; Flags: recursesubdirs createallsubdirs 32bit IgnoreVersion; Components: Closed_Source_Plugins; Excludes: recovered-or-reversed-engineered; 
 Source: ..\..\psycle-plugins\src\psycle\plugins\*.txt; DestDir: {app}\Docs; Excludes: license.txt; Flags: recursesubdirs ignoreversion; Components: Documentation;
 Source: ..\..\psycle\Skins\*; DestDir: {app}\Skins; Excludes: *.txt; Flags: recursesubdirs ignoreversion createallsubdirs; Components: Skins;
 Source: ..\..\psycle\doc\*.psy; DestDir: "{commondocs}\Psycle Songs"; Flags: ignoreversion; Components: Demo_Songs; 
-Source: ..\..\psycle-plugins\presets\*.prs; DestDir: {app}\psycle-plugins; Flags: ignoreversion onlyifdoesntexist; Components: Presets;
+Source: ..\..\psycle-plugins\presets\*.prs; DestDir: {app}\PsyclePlugins; Flags: ignoreversion onlyifdoesntexist; Components: Presets;
 
 [Icons]
 Name: {group}\Psycle Modular Music Creation Studio; Filename: {app}\psycle.exe
@@ -87,7 +87,7 @@ Name: Documentation; Description: Install the documentation of the project; Type
 Name: Skins; Description: Skins that change the look and feel of Psycle; Types: custom full
 Name: Demo_Songs; Description: Demo songs to show what psycle can do; Types: custom full; Languages: 
 [Dirs]
-Name: {app}\psycle-plugins; Flags: uninsalwaysuninstall; Components: " Open_Source_Plugins Closed_Source_Plugins";
+Name: {app}\PsyclePlugins; Flags: uninsalwaysuninstall; Components: " Open_Source_Plugins Closed_Source_Plugins";
 Name: {app}\Skins; Flags: uninsalwaysuninstall; Components: Skins;
 Name: {app}\VstPlugins; Components: Application;
 Name: {app}\VstPlugins64; Components: Application;
