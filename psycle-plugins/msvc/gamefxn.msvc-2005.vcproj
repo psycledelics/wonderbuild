@@ -3,8 +3,9 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="psycle-plugins/gamefxn"
-	RootNameSpace="gamefxn"
 	ProjectGUID="{485B9E85-CBC7-4B27-8AD2-5DD97234FBED}"
+	RootNamespace="gamefxn"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -258,7 +259,15 @@
 			>
 		</File>
 		<File
-			RelativePath="..\src\psycle\plugins\jme\gamefxn\filter.cpp"
+			RelativePath="..\src\psycle\plugins\jme\gamefxn\aaf.h"
+			>
+		</File>
+		<File
+			RelativePath="..\src\psycle\plugins\jme\gamefxn\atlantisfilter.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\src\psycle\plugins\jme\gamefxn\atlantisfilter.h"
 			>
 		</File>
 		<File
@@ -271,6 +280,10 @@
 		</File>
 		<File
 			RelativePath="..\src\psycle\plugins\jme\gamefxn\voice.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\src\psycle\plugins\jme\gamefxn\voice.h"
 			>
 		</File>
 	</Files>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="psycle"
 	ProjectGUID="{C6292BF4-9E87-4176-9101-A3D29D074B35}"
 	RootNamespace="psycle"
@@ -63,6 +63,7 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				AdditionalManifestFiles="src\psycle\host\resources\DeclareDPIAware.manifest"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -189,6 +190,7 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				AdditionalManifestFiles="src\psycle\host\resources\DeclareDPIAware.manifest"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -251,6 +253,7 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				AdditionalManifestFiles="src\psycle\host\resources\DeclareDPIAware.manifest"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -279,8 +282,8 @@
 			RelativePathToProject=".\projects\pre-compiled-headers\pre-compiled-headers-with-mfc.msvc-2005.vcproj"
 		/>
 		<ProjectReference
-			ReferencedProjectIdentifier="{B78DFE59-051A-43FD-B489-785A3982541C}"
-			RelativePathToProject="..\..\psycle-core\psycle-core.msvc-2005.vcproj"
+			ReferencedProjectIdentifier="{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
+			RelativePathToProject="..\..\psycle-helpers\psycle-helpers.msvc-2005.vcproj"
 		/>
 	</References>
 	<Files>
@@ -313,68 +316,68 @@
 			</File>
 			<Filter
 				Name="devices"
-					>
+				>
 				<Filter
 					Name="audio"
 					>
-				<File
+					<File
 						RelativePath="src\psycle\host\ASIOInterface.cpp"
-					>
-				</File>
-				<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\ASIOInterface.hpp"
-					>
-				</File>
-				<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\AudioDriver.cpp"
-					>
-				</File>
-				<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\AudioDriver.hpp"
-					>
-				</File>
-				<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\DirectSound.cpp"
-					>
-				</File>
-				<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\DirectSound.hpp"
-					>
-				</File>
-				<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\WasapiDriver.cpp"
-					>
-				</File>
-				<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\WasapiDriver.hpp"
-					>
-				</File>
-				<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\WaveOut.cpp"
-					>
-				</File>
-				<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\WaveOut.hpp"
-					>
-				</File>
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="midi"
 					>
-				<File
+					<File
 						RelativePath="src\psycle\host\MidiInput.cpp"
-					>
-				</File>
-				<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\MidiInput.hpp"
-					>
-				</File>
+						>
+					</File>
 				</Filter>
 			</Filter>
 			<Filter
 				Name="resources"
 				Filter="*.bmp"
-					>
+				>
 				<File
 					RelativePath="src\psycle\host\resources\AsioLogo.bmp"
 					>
@@ -586,7 +589,7 @@
 			</Filter>
 			<Filter
 				Name="file"
-					>
+				>
 				<File
 					RelativePath="src\psycle\host\FileIO.cpp"
 					>
@@ -650,7 +653,7 @@
 			</Filter>
 			<Filter
 				Name="configuration"
-					>
+				>
 				<File
 					RelativePath="src\psycle\host\CmdDef.hpp"
 					>
@@ -694,7 +697,7 @@
 			</Filter>
 			<Filter
 				Name="mfc"
-					>
+				>
 				<File
 					RelativePath="src\psycle\host\Bitmap.hpp"
 					>
@@ -829,22 +832,22 @@
 					<Filter
 						Name="devices"
 						>
-							<File
+						<File
 							RelativePath="src\psycle\host\MidiInputDlg.cpp"
-								>
-							</File>
-							<File
+							>
+						</File>
+						<File
 							RelativePath="src\psycle\host\MidiInputDlg.hpp"
-								>
-							</File>
-							<File
+							>
+						</File>
+						<File
 							RelativePath="src\psycle\host\OutputDlg.cpp"
-								>
-							</File>
-							<File
+							>
+						</File>
+						<File
 							RelativePath="src\psycle\host\OutputDlg.hpp"
-								>
-							</File>
+							>
+						</File>
 						<Filter
 							Name="audio"
 							>
@@ -1175,133 +1178,133 @@
 						>
 					</File>
 				</Filter>
-					<Filter
+				<Filter
 					Name="monitors"
-						>
-						<File
+					>
+					<File
 						RelativePath="src\psycle\host\InfoDlg.cpp"
-							>
-						</File>
-						<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\InfoDlg.hpp"
-							>
-						</File>
-						<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\MidiMonitorDlg.cpp"
-							>
-						</File>
-						<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\MidiMonitorDlg.hpp"
-							>
-						</File>
-						<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\ProgressDialog.cpp"
-							>
-						</File>
-						<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\ProgressDialog.hpp"
-							>
-						</File>
-						<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\VolumeDlg.cpp"
-							>
-						</File>
-						<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\VolumeDlg.hpp"
-							>
-						</File>
-						<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\WireDlg.cpp"
-							>
-						</File>
-						<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\WireDlg.hpp"
-							>
-						</File>
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="toolbars"
-							>
-						<File
+					>
+					<File
 						RelativePath="src\psycle\host\MachineBar.cpp"
-							>
-						</File>
-						<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\MachineBar.hpp"
-							>
-						</File>
-						<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\SequenceBar.cpp"
-							>
-						</File>
-						<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\SequenceBar.hpp"
-							>
-						</File>
-						<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\SongBar.cpp"
-							>
-						</File>
-						<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\SongBar.hpp"
-							>
-						</File>
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="UIControls"
-							>
-						<File
+					>
+					<File
 						RelativePath=".\src\psycle\host\DPI.hpp"
-							>
-						</File>
-						<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\ExListBox.cpp"
-							>
-						</File>
-						<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\ExListBox.h"
-							>
-						</File>
+						>
+					</File>
 				</Filter>
 			</Filter>
 			<Filter
 				Name="engine"
-							>
-						<File
+				>
+				<File
 					RelativePath="src\psycle\host\cpu_time_clock.hpp"
-							>
-						</File>
-						<File
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\host\InstPreview.cpp"
-							>
-						</File>
-						<File
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\host\InstPreview.hpp"
-							>
-						</File>
-						<File
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\host\Player.cpp"
-							>
-						</File>
-					<File
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\host\Player.hpp"
-						>
-					</File>
-					<File
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\host\Song.cpp"
-						>
-					</File>
-					<File
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\host\Song.hpp"
-						>
-					</File>
-					<File
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\host\SongStructs.hpp"
-						>
-					</File>
+					>
+				</File>
 				<Filter
 					Name="machine"
-						>
+					>
 					<File
 						RelativePath=".\src\psycle\host\convert_internal_machines.private.hpp"
 						>
@@ -1322,29 +1325,29 @@
 						RelativePath="src\psycle\host\Machine.hpp"
 						>
 					</File>
-						<File
+					<File
 						RelativePath="src\psycle\host\Plugin.cpp"
-							>
-						</File>
-						<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\Plugin.hpp"
-							>
-						</File>
-						<File
+						>
+					</File>
+					<File
 						RelativePath="..\psycle-plugins\src\psycle\plugin_interface.hpp"
-							>
-						</File>
-						<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\vsthost24.cpp"
-							>
-						</File>
-						<File
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\vsthost24.hpp"
-							>
-						</File>
+						>
+					</File>
 					<Filter
 						Name="sampler"
-							>
+						>
 						<File
 							RelativePath="src\psycle\host\Instrument.cpp"
 							>
@@ -1387,59 +1390,59 @@
 			<Filter
 				Name="detail"
 				>
-						<File
+				<File
 					RelativePath=".\src\psycle\host\detail\config.hpp"
-							>
-						</File>
-						<File
+					>
+				</File>
+				<File
 					RelativePath=".\src\psycle\host\detail\config.private.hpp"
-							>
-						</File>
-						<File
+					>
+				</File>
+				<File
 					RelativePath=".\src\psycle\host\detail\project.hpp"
-							>
-						</File>
-						<File
+					>
+				</File>
+				<File
 					RelativePath=".\src\psycle\host\detail\project.private.hpp"
-							>
-						</File>
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
 			Name="Seib-Vsthost"
 			>
-						<File
+			<File
 				RelativePath="src\Seib-vsthost\CVSTHost.Seib.cpp"
-							>
-						</File>
-						<File
+				>
+			</File>
+			<File
 				RelativePath="src\Seib-vsthost\CVSTHost.Seib.hpp"
-							>
-						</File>
-						<File
+				>
+			</File>
+			<File
 				RelativePath="src\Seib-vsthost\CVSTPreset.cpp"
-							>
-						</File>
-						<File
+				>
+			</File>
+			<File
 				RelativePath="src\Seib-vsthost\CVSTPreset.hpp"
-							>
-						</File>
-						<File
+				>
+			</File>
+			<File
 				RelativePath="src\Seib-vsthost\EffectWnd.cpp"
-							>
-						</File>
-						<File
+				>
+			</File>
+			<File
 				RelativePath="src\Seib-vsthost\EffectWnd.hpp"
-							>
-						</File>
-						<File
+				>
+			</File>
+			<File
 				RelativePath="src\Seib-vsthost\JBridgeEnabler.cpp"
-							>
-						</File>
-						<File
+				>
+			</File>
+			<File
 				RelativePath="src\Seib-vsthost\JBridgeEnabler.hpp"
-							>
-						</File>
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

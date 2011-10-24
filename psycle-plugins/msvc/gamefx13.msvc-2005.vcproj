@@ -3,8 +3,9 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="psycle-plugins/gamefx13"
-	RootNameSpace="gamefx13"
-	ProjectGUID="{485B9E85-CBC7-4B27-8AD2-5DD97234FBED}"
+	ProjectGUID="{7A5C762B-7B12-49C2-88BC-EFD78734B1D4}"
+	RootNamespace="gamefx13"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -254,11 +255,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\src\psycle\plugins\jme\gamefx13\aaf.cpp"
-			>
-		</File>
-		<File
-			RelativePath="..\src\psycle\plugins\jme\gamefx13\atlantisfilter.cpp"
+			RelativePath="..\src\psycle\plugins\jme\gamefx13\filter.cpp"
 			>
 		</File>
 		<File
