@@ -37,7 +37,7 @@ class Task(object):
 	@staticmethod
 	def print_desc_multicolumn_format(desc, list, color = '7;1'):
 		desc = 'wonderbuild: task: ' + desc + ':'
-		if cols == 0: out.write(colored(color, desc) + '\n' + '\n'.join(list) + '\n')
+		if cols == 0: out.write(colored(color, desc) + '\n  ' + '\n  '.join(list) + '\n')
 		else:
 			joined_list = '  '.join(list)
 			if len(desc) + 1 + len(joined_list) <= cols: out.write(colored(color, desc) + ' ' + joined_list + '\n')
