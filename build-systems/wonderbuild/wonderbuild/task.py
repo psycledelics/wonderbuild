@@ -37,31 +37,33 @@ class Task(object):
 	@staticmethod
 	def print_desc_multicolumn_format(desc, list, color = '7;1'):
 		desc = 'wonderbuild: task: ' + desc + ':'
-		joined_list = '  '.join(list)
-		if len(desc) + 1 + len(joined_list) <= cols: out.write(colored(color, desc) + ' ' + joined_list + '\n')
-		elif len(desc) % cols + 1 + len(joined_list) <= cols:
-			s = ''
-			i = 0
-			while True:
-				s += colored(color, desc[i : i + cols])
-				i += cols
-				if i < len(desc): s += '\n'
-				else: break
-			s += ' ' + joined_list + '\n'
-			out.write(s)
+		if cols == 0: out.write(colored(color, desc) + '\n' + '\n'.join(list) + '\n')
 		else:
-			s = ''
-			i = 0
-			while True:
-				s += colored(color, desc[i : i + cols])
-				i += cols
-				if i < len(desc): s += '\n'
-				else: break
-			s += '\n'
-			indent = '  '
-			for line in multicolumn_format(list, cols - len(indent)):
-				s += indent + line + '\n'
-			out.write(s)
+			joined_list = '  '.join(list)
+			if len(desc) + 1 + len(joined_list) <= cols: out.write(colored(color, desc) + ' ' + joined_list + '\n')
+			elif len(desc) % cols + 1 + len(joined_list) <= cols:
+				s = ''
+				i = 0
+				while True:
+					s += colored(color, desc[i : i + cols])
+					i += cols
+					if i < len(desc): s += '\n'
+					else: break
+				s += ' ' + joined_list + '\n'
+				out.write(s)
+			else:
+				s = ''
+				i = 0
+				while True:
+					s += colored(color, desc[i : i + cols])
+					i += cols
+					if i < len(desc): s += '\n'
+					else: break
+				s += '\n'
+				indent = '  '
+				for line in multicolumn_format(list, cols - len(indent)):
+					s += indent + line + '\n'
+				out.write(s)
 
 class PurgeablePersistentDict(dict):
 
