@@ -1,3 +1,4 @@
+* #include scanner for msvc: cl.exe -showincludes
 
 * --help shouldn't create the build dir.
 
@@ -5,11 +6,8 @@
 
 * integrate binreloc.
 
-* generate .pc files.
-
 * versionned libs; also take care of relinking clients of shared libs when their version changed.
 
 * rewrite colorgcc in python; low priority, since clang already has colors natively.
 
 * experiment with beta-mode like tup.
-
