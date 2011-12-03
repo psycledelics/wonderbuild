@@ -234,12 +234,14 @@ VERSION = '1.0.0'
 top = '.'
 out = 'build-waf'
 
-def options(opt): pass
+def options(opt):
+	opt.load('compiler_cxx')
 
 def configure(conf):
-	conf.check_tool('g++')
-	#conf.check_tool('gccdeps')
-	#conf.check_tool('batched_cc')
+	conf.load('compiler_cxx')
+	#conf.load('g++')
+	#conf.load('gccdeps')
+	#conf.load('batched_cc')
 
 def build(bld):
 	for n in bld.srcnode.ant_glob('lib_*', dir=True, src=False):
@@ -251,6 +253,17 @@ def build(bld):
 			includes = '.',
 			source = [s.relpath_gen(bld.srcnode) for s in n.ant_glob('*.cpp')]
 		); obj.source.sort() # issue #527 was not fixed
+
+if True:
+	# use timestamp for file signature instead of content hash
+	import os, stat
+	def h_file(filename):
+		st = os.stat(filename)
+		if stat.S_ISDIR(st.st_mode): raise IOError('not a file')
+		return str(st.st_mtime)
+	from waflib import Utils
+	Utils.h_file = h_file
+
 ''')
 	finally: f.close()
 
