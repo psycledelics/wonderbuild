@@ -1,0 +1,18 @@
+Index: waf/waflib/Utils.py
+===================================================================
+--- waf/waflib/Utils.py	(revision 11518)
++++ waf/waflib/Utils.py	(working copy)
+@@ -171,6 +171,13 @@
+ 		f.close()
+ 	return m.digest()
+ 
++if True:
++	import stat
++	def h_file(filename):
++		st = os.stat(filename)
++		if stat.S_ISDIR(st.st_mode): raise IOError('not a file')
++		return str(st.st_mtime)
++
+ try:
+ 	x = ''.encode('hex')
+ except:
