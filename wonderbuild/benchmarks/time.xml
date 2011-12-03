@@ -160,8 +160,6 @@
 				<bars scale='5'>
 					<bar-section>Using batch compilation</bar-section>
 					<bar name='wonderbuild'   value=' 30.8'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib), (dynamically looking for sources)</bar>
-					<bar name='waf'           value=' 38.2'>(OLD BENCHMARK OF OLD VERSION) max 50 srcs/batch, waf cpp, shutil, timestamp signatures</bar>
-					<bar name='waf'           value=' 39.7'>(OLD BENCHMARK OF OLD VERSION) max 50 srcs/batch, waf cpp, mv, timestamp signatures</bar>
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='toy makefiles' value=' 32.9'>without scan of system-wide headers, (recursive)</bar>
 					<bar name='toy makefiles' value=' 33.4'>with scan of system-wide headers, (recursive)</bar>
@@ -186,8 +184,6 @@
 				<bars scale='20'>
 					<bar-section>Using batch compilation</bar-section>
 					<bar name='wonderbuild'   value=' 4.40'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib), (dynamically looking for sources)</bar>
-					<bar name='waf'           value=' 6.42'>(OLD BENCHMARK OF OLD VERSION) max 50 srcs/batch, waf cpp, shutil, timestamp signatures</bar>
-					<bar name='waf'           value=' 6.64'>(OLD BENCHMARK OF OLD VERSION) max 50 srcs/batch, waf cpp, mv, timestamp signatures</bar>
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='jam'           value=' 4.25'><span style='color: red'>missed header deps!</span></bar>
 					<bar name='toy makefiles' value=' 4.66'>without scan of system-wide headers, (recursive)</bar>
@@ -209,7 +205,6 @@
 				<bars scale='60'>
 					<bar-section>Using batch compilation</bar-section>
 					<bar name='wonderbuild'   value=' 0.84'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib), (dynamically looking for sources)</bar>
-					<bar name='waf'           value=' 1.90'>(OLD BENCHMARK OF OLD VERSION) max 50 srcs/batch, waf cpp (same with shutil or mv), timestamp signatures</bar>
 					<bar-section>Not using batch compilation</bar-section>
 					<bar name='tup'           value=' 0.38'>with monitor</bar>
 					<bar name='tup'           value=' 0.40'>without monitor</bar>
