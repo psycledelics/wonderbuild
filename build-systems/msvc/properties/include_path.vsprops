@@ -22,6 +22,7 @@
 		&quot;$(TopSrcDir)/external-packages/vst-2.4&quot;;
 		&quot;$(TopSrcDir)/external-packages/foobar2000&quot;;
 		&quot;$(TopSrcDir)/external-packages/winamp-2&quot;;
+		&quot;$(TopSrcDir)/external-packages/winamp-2/Wasabi&quot;;
 		&quot;$(TopSrcDir)/external-packages/zlib-1.2.3/include&quot;;
 		&quot;$(TopSrcDir)/external-packages/dsound-9/include&quot;;
 		&quot;$(TopSrcDir)/external-packages/boost-1.41.0/include&quot;;
