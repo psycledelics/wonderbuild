@@ -671,14 +671,6 @@
 					>
 				</File>
 				<File
-					RelativePath="src\psycle\host\PsycleConfig.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\PsycleConfig.hpp"
-					>
-				</File>
-				<File
 					RelativePath="src\psycle\host\Registry.cpp"
 					>
 				</File>
@@ -759,6 +751,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\psycle\host\PsycleGlobal.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\PsycleGlobal.hpp"
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\host\SaveWavDlg.cpp"
 					>
 				</File>
@@ -811,6 +811,14 @@
 					</File>
 					<File
 						RelativePath="src\psycle\host\KeyConfigDlg.hpp"
+						>
+					</File>
+					<File
+						RelativePath="src\psycle\host\PsycleConfig.cpp"
+						>
+					</File>
+					<File
+						RelativePath="src\psycle\host\PsycleConfig.hpp"
 						>
 					</File>
 					<File
@@ -1283,11 +1291,39 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\psycle\host\machineloader.hpp"
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\host\Player.cpp"
 					>
 				</File>
 				<File
 					RelativePath="src\psycle\host\Player.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\plugincatcher.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\plugincatcher.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\plugininfo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\plugininfo.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\Preset.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\Preset.hpp"
 					>
 				</File>
 				<File
@@ -1446,5 +1482,9 @@
 		</Filter>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="src\psycle\host\resources\resources.rc"
+		/>
 	</Globals>
 </VisualStudioProject>

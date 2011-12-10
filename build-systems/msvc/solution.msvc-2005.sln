@@ -18,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "properties", "properties", 
 		properties\platform_x64.vsprops = properties\platform_x64.vsprops
 		properties\plugin.vsprops = properties\plugin.vsprops
 		properties\program.vsprops = properties\program.vsprops
+		..\..\psycle\psycle-winamp-plugin-in_psycle.vsprops = ..\..\psycle\psycle-winamp-plugin-in_psycle.vsprops
 		properties\release.vsprops = properties\release.vsprops
 		properties\top_output_dir.vsprops = properties\top_output_dir.vsprops
 		properties\top_src_dir.vsprops = properties\top_src_dir.vsprops
@@ -70,6 +71,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle", "..\..\psycle\psyc
 	ProjectSection(ProjectDependencies) = postProject
 		{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01} = {21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}
 		{B78DFE59-051A-43FD-B489-785A3982541C} = {B78DFE59-051A-43FD-B489-785A3982541C}
+		{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1} = {69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}
 		{28C015FB-3BDA-4B32-8D85-C652E9892216} = {28C015FB-3BDA-4B32-8D85-C652E9892216}
 	EndProjectSection
 EndProject
@@ -619,6 +621,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "psycle_help", "psycle_help"
 		..\..\psycle\doc\Psycle Help\wire.png = ..\..\psycle\doc\Psycle Help\wire.png
 		..\..\psycle\doc\Psycle Help\wire_dialog.png = ..\..\psycle\doc\Psycle Help\wire_dialog.png
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-winamp-plugin-in_psycle", "..\..\psycle\psycle-winamp-plugin-in_psycle.msvc-2005.vcproj", "{41A8B146-5360-4F84-B22C-912FBEE45326}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1638,6 +1642,20 @@ Global
 		{4EA29C4A-9853-378B-48D8-8ADD53F05186}.unpack|win32.ActiveCfg = release|x64
 		{4EA29C4A-9853-378B-48D8-8ADD53F05186}.unpack|x64.ActiveCfg = release|x64
 		{4EA29C4A-9853-378B-48D8-8ADD53F05186}.unpack|x64.Build.0 = release|x64
+		{41A8B146-5360-4F84-B22C-912FBEE45326}.debug|win32.ActiveCfg = debug|Win32
+		{41A8B146-5360-4F84-B22C-912FBEE45326}.debug|win32.Build.0 = debug|Win32
+		{41A8B146-5360-4F84-B22C-912FBEE45326}.debug|x64.ActiveCfg = debug|x64
+		{41A8B146-5360-4F84-B22C-912FBEE45326}.debug|x64.Build.0 = debug|x64
+		{41A8B146-5360-4F84-B22C-912FBEE45326}.documentation|win32.ActiveCfg = debug|Win32
+		{41A8B146-5360-4F84-B22C-912FBEE45326}.documentation|win32.Build.0 = debug|Win32
+		{41A8B146-5360-4F84-B22C-912FBEE45326}.documentation|x64.ActiveCfg = debug|Win32
+		{41A8B146-5360-4F84-B22C-912FBEE45326}.release|win32.ActiveCfg = Release|Win32
+		{41A8B146-5360-4F84-B22C-912FBEE45326}.release|win32.Build.0 = Release|Win32
+		{41A8B146-5360-4F84-B22C-912FBEE45326}.release|x64.ActiveCfg = Release|x64
+		{41A8B146-5360-4F84-B22C-912FBEE45326}.release|x64.Build.0 = Release|x64
+		{41A8B146-5360-4F84-B22C-912FBEE45326}.unpack|win32.ActiveCfg = Release|Win32
+		{41A8B146-5360-4F84-B22C-912FBEE45326}.unpack|win32.Build.0 = Release|Win32
+		{41A8B146-5360-4F84-B22C-912FBEE45326}.unpack|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
