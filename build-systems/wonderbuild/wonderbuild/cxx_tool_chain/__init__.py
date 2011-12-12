@@ -539,8 +539,8 @@ class _PreCompileTask(ModDepPhases, Task, Persistent):
 			else:
 				if not silent: 
 					color = color_bg_fg_rgb((130, 50, 130), (255, 255, 255))
-					if self.cfg.pic: pic = 'pic'; color += ';1'
-					else: pic = 'non-pic'
+					if self.cfg.pic: pic = 'pic'
+					else: pic = 'non-pic'; color += ';1'
 					self.print_desc(str(self.header) + ': pre-compiling ' + pic + ' c++', color)
 				self.header.parent.make_dir(self.header.parent)
 				f = open(self.header.path, 'w')
@@ -663,8 +663,8 @@ class _BatchCompileTask(Task):
 		try:
 			if __debug__ and is_debug and not silent:
 				color = color_bg_fg_rgb((0, 150, 180), (255, 255, 255))
-				if self.cfg.pic: pic = 'pic'; color += ';1'
-				else: pic = 'non-pic';
+				if self.cfg.pic: pic = 'pic'
+				else: pic = 'non-pic'; color += ';1'
 				s = [str(s) for s in self.sources]
 				s.sort()
 				self.print_desc_multicolumn_format(str(self.mod_task.target) + ': compiling ' + pic + ' objects from ' + self.cfg.lang, s, color)
@@ -935,8 +935,8 @@ class ModTask(ModDepPhases, Task, Persistent):
 					tasks.append(_BatchCompileTask(self, b))
 				if not(__debug__ and is_debug) and not silent:
 					color = color_bg_fg_rgb((0, 150, 180), (255, 255, 255))
-					if self.cfg.pic: pic = 'pic'; color += ';1'
-					else: pic = 'non-pic';
+					if self.cfg.pic: pic = 'pic'
+					else: pic = 'non-pic'; color += ';1'
 					s = [str(s) for s in changed_sources]
 					s.sort()
 					self.print_desc_multicolumn_format(str(self.target) + ': compiling ' + pic + ' objects from ' + self.cfg.lang + ' using ' + str(i) + ' processes and batch-size ' + str(len(batches[0])), s, color)
@@ -1021,8 +1021,8 @@ class ModTask(ModDepPhases, Task, Persistent):
 						elif self.kind == ModTask.Kinds.PROG:
 							if self.cfg.static_prog: shared = 'static'; color = color_bg_fg_rgb((0, 180, 0), (255, 255, 255))
 							else: shared = 'dynamic'; color = color_bg_fg_rgb((130, 180, 0), (255, 255, 255))
-							if self.cfg.pic: pic = 'pic'; color += ';1'
-							else: pic = 'non-pic'
+							if self.cfg.pic: pic = 'pic'
+							else: pic = 'non-pic'; color += ';1'
 							desc = 'linking ' + shared + ' ' + pic + ' program'
 						elif self.kind == ModTask.Kinds.LOADABLE: desc = 'linking loadable module'; color = color_bg_fg_rgb((180, 150, 80), (255, 255, 255))
 						else: desc = 'linking shared lib'; color = color_bg_fg_rgb((150, 150, 0), (255, 255, 255))
@@ -1125,7 +1125,7 @@ class ModTask(ModDepPhases, Task, Persistent):
 					if self.kind == ModTask.Kinds.HEADERS: desc = str(self.cxx_phase)
 					else: desc = str(self.target)
 					self.print_desc_multicolumn_format(desc + ': writing pkg-config files',
-						[str(installed_pc_file), str(uninstalled_pc_file)], color_bg_fg_rgb((230, 100, 170), (255, 255, 255)) + ';1')
+						[str(installed_pc_file), str(uninstalled_pc_file)], color_bg_fg_rgb((230, 100, 170), (255, 255, 255)))
 		
 				def generate(uninstalled, file):
 					# the 'prefix' variable is *mandatory* for proper working on MS-Windows; see pkg-config(1) manpage.
@@ -1242,6 +1242,9 @@ class ModTask(ModDepPhases, Task, Persistent):
 					f = open(file.path, 'w')
 					try: f.write(s)
 					finally: f.close()
+					file.parent.lock.acquire()
+					try: file.parent.actual_children[file.name] = file
+					finally: file.parent.lock.release()
 					if __debug__ and is_debug:
 						debug('task: pkg-config: wrote content of file ' + str(file) + '\n' + s + '---------- end of file ' + str(file))
 
