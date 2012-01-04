@@ -15,7 +15,7 @@
 		FavorSizeOrSpeed="1"
 		OmitFramePointers="true"
 		EnableFiberSafeOptimizations="true"
-		WholeProgramOptimization="true"
+		WholeProgramOptimization="1"
 		StringPooling="true"
 		SmallerTypeCheck="false"
 		RuntimeLibrary="2"

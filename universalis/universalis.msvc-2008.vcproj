@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="universalis"
 	ProjectGUID="{B78DFE59-051A-43FD-B489-775A4982581C}"
 	RootNamespace="universalis"
@@ -22,6 +22,8 @@
 			Name="debug|Win32"
 			ConfigurationType="2"
 			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
+			UseOfATL="0"
+			CharacterSet="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"

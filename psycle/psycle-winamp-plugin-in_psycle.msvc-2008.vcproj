@@ -21,9 +21,12 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\use_pre_compiled_header_with_mfc.vsprops;.\psycle-winamp-plugin-in_psycle.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\use_pre_compiled_header_with_mfc.vsprops;..\build-systems\msvc\properties\psycle-winamp-plugin-in_psycle.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
 			UseOfMFC="2"
+			UseOfATL="0"
+			CharacterSet="0"
 			ManagedExtensions="0"
+			WholeProgramOptimization="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -78,7 +81,6 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description=""
 				CommandLine=""
 			/>
 		</Configuration>
@@ -87,9 +89,10 @@
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\use_pre_compiled_header_with_mfc.vsprops;.\psycle-winamp-plugin-in_psycle.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\use_pre_compiled_header_with_mfc.vsprops;..\build-systems\msvc\properties\psycle-winamp-plugin-in_psycle.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
 			UseOfMFC="2"
 			ManagedExtensions="0"
+			WholeProgramOptimization="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -146,16 +149,16 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description=""
 				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\use_pre_compiled_header_with_mfc.vsprops;.\psycle-winamp-plugin-in_psycle.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\use_pre_compiled_header_with_mfc.vsprops;..\build-systems\msvc\properties\psycle-winamp-plugin-in_psycle.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
 			UseOfMFC="2"
 			ManagedExtensions="0"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -210,7 +213,6 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description=""
 				CommandLine=""
 			/>
 		</Configuration>
@@ -219,9 +221,10 @@
 			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\use_pre_compiled_header_with_mfc.vsprops;.\psycle-winamp-plugin-in_psycle.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\use_pre_compiled_header_with_mfc.vsprops;..\build-systems\msvc\properties\psycle-winamp-plugin-in_psycle.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
 			UseOfMFC="2"
 			ManagedExtensions="0"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -278,7 +281,6 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description=""
 				CommandLine=""
 			/>
 		</Configuration>

@@ -25,4 +25,10 @@
 		Name="VCLinkerTool"
 		LinkIncremental="2"
 	/>
+  <UserMacro
+		Name="Defines"
+		Value="_DEBUG"
+		InheritsFromParent="true"
+		Delimiter=";"
+	/>
 </VisualStudioPropertySheet>

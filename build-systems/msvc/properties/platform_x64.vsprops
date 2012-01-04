@@ -4,6 +4,10 @@
 	Version="8.00"
 	Name="platform_x64"
 	>
+  <Tool
+    Name="VCCLCompilerTool"
+    Detect64BitPortabilityProblems="true"
+			/>
 	<Tool
 		Name="VCLinkerTool"
 		TargetMachine="17"

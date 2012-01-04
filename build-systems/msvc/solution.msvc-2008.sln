@@ -18,11 +18,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "properties", "properties", 
 		properties\platform_x64.vsprops = properties\platform_x64.vsprops
 		properties\plugin.vsprops = properties\plugin.vsprops
 		properties\program.vsprops = properties\program.vsprops
-		..\..\psycle\psycle-winamp-plugin-in_psycle.vsprops = ..\..\psycle\psycle-winamp-plugin-in_psycle.vsprops
+		properties\psycle-winamp-plugin-in_psycle.vsprops = properties\psycle-winamp-plugin-in_psycle.vsprops
 		properties\release.vsprops = properties\release.vsprops
 		properties\top_output_dir.vsprops = properties\top_output_dir.vsprops
 		properties\top_src_dir.vsprops = properties\top_src_dir.vsprops
 		properties\use_pre_compiled_header.vsprops = properties\use_pre_compiled_header.vsprops
+		..\..\external-packages\foobar2000\pfc\use_pre_compiled_header_pfc.vsprops = ..\..\external-packages\foobar2000\pfc\use_pre_compiled_header_pfc.vsprops
 		properties\use_pre_compiled_header_with_mfc.vsprops = properties\use_pre_compiled_header_with_mfc.vsprops
 	EndProjectSection
 EndProject
@@ -623,6 +624,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "psycle_help", "psycle_help"
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-winamp-plugin-in_psycle", "..\..\psycle\psycle-winamp-plugin-in_psycle.msvc-2008.vcproj", "{41A8B146-5360-4F84-B22C-912FBEE45326}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-foobar-plugin-foo_psy", "..\..\psycle\psycle-foobar-plugin-foo_psy.msvc-2008.vcproj", "{4444B146-5360-4F84-FFFF-4444BEE45326}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E8091321-D79D-4575-86EF-064EA1A4A20D} = {E8091321-D79D-4575-86EF-064EA1A4A20D}
+		{71AD2674-065B-48F5-B8B0-E1F9D3892081} = {71AD2674-065B-48F5-B8B0-E1F9D3892081}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pfc", "..\..\external-packages\foobar2000\pfc\pfc.vcproj", "{EBFFFB4E-261D-44D3-B89C-957B31A0BF9C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "foobar2000_SDK", "..\..\external-packages\foobar2000\foobar2000\SDK\foobar2000_SDK.vcproj", "{E8091321-D79D-4575-86EF-064EA1A4A20D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "foobar2000_component_client", "..\..\external-packages\foobar2000\foobar2000\foobar2000_component_client\foobar2000_component_client.vcproj", "{71AD2674-065B-48F5-B8B0-E1F9D3892081}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E8091321-D79D-4575-86EF-064EA1A4A20D} = {E8091321-D79D-4575-86EF-064EA1A4A20D}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1656,6 +1672,62 @@ Global
 		{41A8B146-5360-4F84-B22C-912FBEE45326}.unpack|win32.ActiveCfg = Release|Win32
 		{41A8B146-5360-4F84-B22C-912FBEE45326}.unpack|win32.Build.0 = Release|Win32
 		{41A8B146-5360-4F84-B22C-912FBEE45326}.unpack|x64.ActiveCfg = Release|Win32
+		{4444B146-5360-4F84-FFFF-4444BEE45326}.debug|win32.ActiveCfg = debug|Win32
+		{4444B146-5360-4F84-FFFF-4444BEE45326}.debug|win32.Build.0 = debug|Win32
+		{4444B146-5360-4F84-FFFF-4444BEE45326}.debug|x64.ActiveCfg = debug|x64
+		{4444B146-5360-4F84-FFFF-4444BEE45326}.debug|x64.Build.0 = debug|x64
+		{4444B146-5360-4F84-FFFF-4444BEE45326}.documentation|win32.ActiveCfg = debug|x64
+		{4444B146-5360-4F84-FFFF-4444BEE45326}.documentation|x64.ActiveCfg = debug|x64
+		{4444B146-5360-4F84-FFFF-4444BEE45326}.documentation|x64.Build.0 = debug|x64
+		{4444B146-5360-4F84-FFFF-4444BEE45326}.release|win32.ActiveCfg = Release|Win32
+		{4444B146-5360-4F84-FFFF-4444BEE45326}.release|win32.Build.0 = Release|Win32
+		{4444B146-5360-4F84-FFFF-4444BEE45326}.release|x64.ActiveCfg = Release|x64
+		{4444B146-5360-4F84-FFFF-4444BEE45326}.release|x64.Build.0 = Release|x64
+		{4444B146-5360-4F84-FFFF-4444BEE45326}.unpack|win32.ActiveCfg = Release|x64
+		{4444B146-5360-4F84-FFFF-4444BEE45326}.unpack|x64.ActiveCfg = Release|x64
+		{4444B146-5360-4F84-FFFF-4444BEE45326}.unpack|x64.Build.0 = Release|x64
+		{EBFFFB4E-261D-44D3-B89C-957B31A0BF9C}.debug|win32.ActiveCfg = Debug|Win32
+		{EBFFFB4E-261D-44D3-B89C-957B31A0BF9C}.debug|win32.Build.0 = Debug|Win32
+		{EBFFFB4E-261D-44D3-B89C-957B31A0BF9C}.debug|x64.ActiveCfg = Debug|x64
+		{EBFFFB4E-261D-44D3-B89C-957B31A0BF9C}.debug|x64.Build.0 = Debug|x64
+		{EBFFFB4E-261D-44D3-B89C-957B31A0BF9C}.documentation|win32.ActiveCfg = Debug|x64
+		{EBFFFB4E-261D-44D3-B89C-957B31A0BF9C}.documentation|x64.ActiveCfg = Debug|x64
+		{EBFFFB4E-261D-44D3-B89C-957B31A0BF9C}.documentation|x64.Build.0 = Debug|x64
+		{EBFFFB4E-261D-44D3-B89C-957B31A0BF9C}.release|win32.ActiveCfg = Release|Win32
+		{EBFFFB4E-261D-44D3-B89C-957B31A0BF9C}.release|win32.Build.0 = Release|Win32
+		{EBFFFB4E-261D-44D3-B89C-957B31A0BF9C}.release|x64.ActiveCfg = Release|x64
+		{EBFFFB4E-261D-44D3-B89C-957B31A0BF9C}.release|x64.Build.0 = Release|x64
+		{EBFFFB4E-261D-44D3-B89C-957B31A0BF9C}.unpack|win32.ActiveCfg = Release|x64
+		{EBFFFB4E-261D-44D3-B89C-957B31A0BF9C}.unpack|x64.ActiveCfg = Release|x64
+		{EBFFFB4E-261D-44D3-B89C-957B31A0BF9C}.unpack|x64.Build.0 = Release|x64
+		{E8091321-D79D-4575-86EF-064EA1A4A20D}.debug|win32.ActiveCfg = Debug|Win32
+		{E8091321-D79D-4575-86EF-064EA1A4A20D}.debug|win32.Build.0 = Debug|Win32
+		{E8091321-D79D-4575-86EF-064EA1A4A20D}.debug|x64.ActiveCfg = Debug|x64
+		{E8091321-D79D-4575-86EF-064EA1A4A20D}.debug|x64.Build.0 = Debug|x64
+		{E8091321-D79D-4575-86EF-064EA1A4A20D}.documentation|win32.ActiveCfg = Debug|x64
+		{E8091321-D79D-4575-86EF-064EA1A4A20D}.documentation|x64.ActiveCfg = Debug|x64
+		{E8091321-D79D-4575-86EF-064EA1A4A20D}.documentation|x64.Build.0 = Debug|x64
+		{E8091321-D79D-4575-86EF-064EA1A4A20D}.release|win32.ActiveCfg = Release|Win32
+		{E8091321-D79D-4575-86EF-064EA1A4A20D}.release|win32.Build.0 = Release|Win32
+		{E8091321-D79D-4575-86EF-064EA1A4A20D}.release|x64.ActiveCfg = Release|x64
+		{E8091321-D79D-4575-86EF-064EA1A4A20D}.release|x64.Build.0 = Release|x64
+		{E8091321-D79D-4575-86EF-064EA1A4A20D}.unpack|win32.ActiveCfg = Release|x64
+		{E8091321-D79D-4575-86EF-064EA1A4A20D}.unpack|x64.ActiveCfg = Release|x64
+		{E8091321-D79D-4575-86EF-064EA1A4A20D}.unpack|x64.Build.0 = Release|x64
+		{71AD2674-065B-48F5-B8B0-E1F9D3892081}.debug|win32.ActiveCfg = Debug|Win32
+		{71AD2674-065B-48F5-B8B0-E1F9D3892081}.debug|win32.Build.0 = Debug|Win32
+		{71AD2674-065B-48F5-B8B0-E1F9D3892081}.debug|x64.ActiveCfg = Debug|x64
+		{71AD2674-065B-48F5-B8B0-E1F9D3892081}.debug|x64.Build.0 = Debug|x64
+		{71AD2674-065B-48F5-B8B0-E1F9D3892081}.documentation|win32.ActiveCfg = Debug|x64
+		{71AD2674-065B-48F5-B8B0-E1F9D3892081}.documentation|x64.ActiveCfg = Debug|x64
+		{71AD2674-065B-48F5-B8B0-E1F9D3892081}.documentation|x64.Build.0 = Debug|x64
+		{71AD2674-065B-48F5-B8B0-E1F9D3892081}.release|win32.ActiveCfg = Release|Win32
+		{71AD2674-065B-48F5-B8B0-E1F9D3892081}.release|win32.Build.0 = Release|Win32
+		{71AD2674-065B-48F5-B8B0-E1F9D3892081}.release|x64.ActiveCfg = Release|x64
+		{71AD2674-065B-48F5-B8B0-E1F9D3892081}.release|x64.Build.0 = Release|x64
+		{71AD2674-065B-48F5-B8B0-E1F9D3892081}.unpack|win32.ActiveCfg = Release|x64
+		{71AD2674-065B-48F5-B8B0-E1F9D3892081}.unpack|x64.ActiveCfg = Release|x64
+		{71AD2674-065B-48F5-B8B0-E1F9D3892081}.unpack|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
