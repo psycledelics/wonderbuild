@@ -22,6 +22,7 @@
 			Name="debug|Win32"
 			ConfigurationType="4"
 			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
+			CharacterSet="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
