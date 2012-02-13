@@ -18,6 +18,8 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
+    <OutDir>$(TopOutputDir)/bin</OutDir>
+    <IntDir>$(TopOutputDir)/intermediate/$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='unpack|x64'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
@@ -44,11 +46,6 @@
     <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'">cmd.exe /c "clean.cmd $(Platform) &amp;&amp; build.cmd $(Platform)"</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'">cmd.exe /c clean.cmd $(Platform)</NMakeCleanCommandLine>
     <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'" />
-    <NMakePreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'">$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
-    <NMakeIncludeSearchPath Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'">$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
-    <NMakeForcedIncludes Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'">$(NMakeForcedIncludes)</NMakeForcedIncludes>
-    <NMakeAssemblySearchPath Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'">$(NMakeAssemblySearchPath)</NMakeAssemblySearchPath>
-    <NMakeForcedUsingAssemblies Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'">$(NMakeForcedUsingAssemblies)</NMakeForcedUsingAssemblies>
     <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">cmd.exe /c build.cmd $(Platform)</NMakeBuildCommandLine>
     <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">cmd.exe /c "clean.cmd $(Platform) &amp;&amp; build.cmd $(Platform)"</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">cmd.exe /c clean.cmd $(Platform)</NMakeCleanCommandLine>
