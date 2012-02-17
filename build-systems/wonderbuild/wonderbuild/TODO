@@ -1,4 +1,4 @@
-* #include scanner for msvc: cl.exe -showincludes
+* #include scanner for msvc: cl.exe -showincludes ... http://www.conifersystems.com/2008/10/09/dependencies-from-showincludes/
 
 * --help shouldn't create the build dir.
 
