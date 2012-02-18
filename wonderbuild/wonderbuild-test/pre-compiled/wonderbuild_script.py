@@ -82,7 +82,7 @@ class Wonderbuild(ScriptTask):
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
-				self.cxx_phase = LibImpl.Install(self.project, self.name + '-headers')
+				self.cxx_phase = self.__class__.Install(self.cfg.project, self.name + '-headers')
 				for x in ModTask.__call__(self, sched_ctx): yield x
 				
 			def do_mod_phase(self):
@@ -121,7 +121,7 @@ class Wonderbuild(ScriptTask):
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
-				self.cxx_phase = LibWrapper.Install(self.project, self.name + '-headers')
+				self.cxx_phase = self.__class__.Install(self.cfg.project, self.name + '-headers')
 				for x in ModTask.__call__(self, sched_ctx): yield x
 				
 			def do_mod_phase(self):

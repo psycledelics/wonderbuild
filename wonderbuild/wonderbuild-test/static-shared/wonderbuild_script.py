@@ -57,7 +57,7 @@ else:
 
 					def __call__(self, sched_ctx):
 						self.result = True
-						self.cxx_phase = LibImpl.Install(self.project, self.name + '-headers')
+						self.cxx_phase = self.__class__.Install(self.cfg.project, self.name + '-headers')
 						for x in ModTask.__call__(self, sched_ctx): yield x
 
 					def do_mod_phase(self):
@@ -92,7 +92,7 @@ else:
 					def __call__(self, sched_ctx):
 						self.private_deps = [lib_impl]
 						self.result = True
-						self.cxx_phase = LibWrapper.Install(self.project, self.name + '-headers')
+						self.cxx_phase = self.__class__.Install(self.cfg.project, self.name + '-headers')
 						for x in ModTask.__call__(self, sched_ctx): yield x
 
 					def do_mod_phase(self):
