@@ -49,9 +49,9 @@
 			<br/>
 			C++ dependencies were tracked with scons' own full-featured custom preprocessor.
 			<br/>
-			Automatic fetching of source files from SCMs was disabled.
-			<br/>
 			Cache of implicit deps was enabled.
+			<br/>
+			Automatic fetching of source files from SCMs was disabled.
 			<br/>
 			Built target cache was disabled.
 			<br/>
