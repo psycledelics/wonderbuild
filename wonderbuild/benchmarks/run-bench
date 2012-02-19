@@ -3,13 +3,26 @@
 set -x &&
 
 jobs=4 &&
+
 wonderbuild=../../wonderbuild.py &&
 tup=../../tup/tup &&
 fbuild=../../fbuild/fbuild-light &&
 waf=../../waf/waf-light &&
 scons=../../scons/src/ &&
+fabricate=../../fabricate/fabricate.py &&
+
+cpython=python &&
+pypy=../../pypy/bin/pypy &&
+#jython=../../jython/bin/jython &&
 jython='java -jar ../../jython/jython.jar' &&
-fabricate='../../fabricate/fabricate.py' &&
+
+python=$cpython &&
+python3=python3 &&
+
+
+silencer() {
+	"$@"
+} &&
 
 measure() {
 	if which time; then time "$@"; else case "$SHELL" in bash) time "$@";; *) bash -c "time $*";; esac; fi
@@ -50,11 +63,7 @@ main() {
 
 	case $tool in
 		wonderbuild)
-			measure $wonderbuild         --bld-dir=build-$tool --jobs=$jobs --check-missing=no --silent=yes "$@"
-		;;
-	
-		wonderbuild-on-jython)
-			measure $jython $wonderbuild --bld-dir=build-$tool --jobs=$jobs --check-missing=no --silent=yes "$@"
+			measure $python $wonderbuild --bld-dir=build-$tool --jobs=$jobs --check-missing=no --silent=yes "$@"
 		;;
 
 		tup)
@@ -87,10 +96,8 @@ main() {
 
 		fbuild)
 			# fbuild lacks a silent option!
-			if test -x $fbuild.dev-null
-			then measure $fbuild.dev-null --buildroot=build-$tool --jobs=$jobs "$@"
-			else measure $fbuild          --buildroot=build-$tool --jobs=$jobs "$@"
-			fi
+			# fbuild requires python >= 3
+			measure $silencer $python3 $fbuild --buildroot=build-$tool --jobs=$jobs "$@"
 		;;
 	
 		waf)
@@ -99,36 +106,12 @@ main() {
 				$waf configure
 			fi &&
 			# waf lacks a silent option!
-			if test -x $waf.dev-null
-			then measure $waf.dev-null --jobs=$jobs "$@"
-			else measure $waf          --jobs=$jobs "$@"
-			fi
-		;;
-
-		waf-on-jython)
-			if test $op = reset
-			then
-				rm -Rf build-waf
-			fi &&
-			if ! test -d build-waf
-			then
-				$jython $waf configure
-			fi &&
-			# waf lacks a silent option!
-			if test -x $waf-on-jython.dev-null
-			then measure $waf-on-jython.dev-null --jobs=$jobs "$@"
-			else measure $jython $waf            --jobs=$jobs "$@"
-			fi
+			measure $silencer $python $waf --jobs=$jobs "$@"
 		;;
 
 		scons)
 			SCONS_LIB_DIR=$(cd $scons && pwd)/engine \
-				measure python $scons/script/scons.py  --no-cache --jobs=$jobs "$@"
-		;;
-
-		scons-on-jython)
-			SCONS_LIB_DIR=$(cd $scons && pwd)/engine \
-				measure $jython $scons/script/scons.py --no-cache --jobs=$jobs "$@"
+				measure $python $scons/script/scons.py --no-cache --jobs=$jobs "$@"
 		;;
 
 		make)
@@ -170,15 +153,11 @@ main() {
 		;;
 
 		fabricate)
-			if test $op = reset
-			then
-				rm -f lib_*/*.o lib_*/*.a
-			fi &&
 			if ! test -e $(basename $fabricate)
 			then
 				ln -s $fabricate .
 			fi &&
-			measure python ./fabricate_script.py "$@"
+			measure $python ./fabricate_script.py "$@"
 		;;
 	esac
 } &&
