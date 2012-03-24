@@ -1190,6 +1190,14 @@
 					Name="monitors"
 					>
 					<File
+						RelativePath=".\src\psycle\host\ChannelMappingDlg.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\psycle\host\ChannelMappingDlg.hpp"
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\InfoDlg.cpp"
 						>
 					</File>
