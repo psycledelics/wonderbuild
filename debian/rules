@@ -38,7 +38,7 @@ override_dh_auto_build:
 		$(CROSS_COMPILE) \
 		--cxx-flags='$(CXXFLAGS)' \
 		--bld-dir=debian/++wonderbuild \
-		--install-prefix-dir=/usr \
+		--install-prefix-dir=/opt/psycle \
 		$(JOBS)
 
 override_dh_auto_test:
