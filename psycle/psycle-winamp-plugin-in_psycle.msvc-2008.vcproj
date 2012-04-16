@@ -86,8 +86,6 @@
 		</Configuration>
 		<Configuration
 			Name="debug|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\use_pre_compiled_header_with_mfc.vsprops;..\build-systems\msvc\properties\psycle-winamp-plugin-in_psycle.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
 			UseOfMFC="2"
@@ -218,8 +216,6 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\use_pre_compiled_header_with_mfc.vsprops;..\build-systems\msvc\properties\psycle-winamp-plugin-in_psycle.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
 			UseOfMFC="2"
