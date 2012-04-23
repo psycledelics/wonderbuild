@@ -8,7 +8,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{8E7D0A7F-B85F-44DC-8C1C-2A2C27BAEA0B}
 AppName=Psycle Modular Music Creation Studio
-AppVersion=1.8.8 RC1
+AppVersion=1.10.1
 ;AppVerName=Psycle Modular Music Creation Studio 1.8.8
 AppPublisher=psycledelics
 AppPublisherURL=http://psycle.sourceforge.net/
@@ -24,14 +24,15 @@ SetupIconFile=..\..\psycle\pixmaps\psycle.ico
 Compression=lzma
 SolidCompression=true
 MinVersion=0,5.0.2195sp4
-AppCopyright=2000-2011 psycledelics
-AppVerName=Psycle 1.10.0 32 bits
+AppCopyright=2000-2012 psycledelics
+AppVerName=Psycle 1.10.1 32 bits
 PrivilegesRequired=poweruser
 TimeStampsInUTC=true
 DisableReadyPage=true
 ArchitecturesInstallIn64BitMode=
 ArchitecturesAllowed=x86 x64
 ChangesAssociations=true
+ShowLanguageDialog=no
 
 [Languages]
 Name: english; MessagesFile: compiler:Default.isl
@@ -57,6 +58,7 @@ Source: ..\..\psycle-plugins\src\psycle\plugins\*.txt; DestDir: {app}\Docs; Excl
 Source: ..\..\psycle\Skins\*; DestDir: {app}\Skins; Excludes: *.txt; Flags: recursesubdirs ignoreversion createallsubdirs; Components: Skins;
 Source: ..\..\psycle\doc\*.psy; DestDir: "{commondocs}\Psycle Songs"; Flags: ignoreversion; Components: Demo_Songs; 
 Source: ..\..\psycle-plugins\presets\*.prs; DestDir: {app}\PsyclePlugins; Flags: ignoreversion onlyifdoesntexist; Components: Presets;
+Source: "Output\Psycle Winamp plugin_v1_10.exe"; DestDir: {tmp}; Components: "Winamp_plugin"; 
 
 [Icons]
 Name: {group}\Psycle Modular Music Creation Studio; Filename: {app}\psycle.exe
@@ -75,6 +77,7 @@ Name: {group}\Documents\Tweakings And Commands; Filename: {app}\Docs\tweakings a
 Filename: {app}\psycle.exe; Description: {cm:LaunchProgram,Psycle Modular Music Creation Studio}; Flags: nowait postinstall skipifsilent; Tasks: ; Components: Application
 Filename: {tmp}\Vst-Bundle.exe; WorkingDir: {tmp}; StatusMsg: Select the location of your 32bit VST Plugins Dir (use Psycle\VstPlugins if in doubt); Flags: runascurrentuser; Components: " VstPack"; Tasks: ; Languages: 
 Filename: {tmp}\vcredist_x86.exe; WorkingDir: {tmp}; Flags: 32bit runascurrentuser; Components: InstallMSRuntimes_x86
+Components: Winamp_plugin; Filename: "{tmp}\Psycle Winamp plugin_v1_10.exe"; WorkingDir: {tmp}; Flags: RunAsCurrentUser; 
 
 [Components]
 Name: Application; Description: Main Application and needed dlls; Flags: fixed; Types: custom compact full; Languages: 
@@ -86,6 +89,7 @@ Name: Presets; Description: Install presets for selected plugins (does not overw
 Name: Documentation; Description: Install the documentation of the project; Types: custom full
 Name: Skins; Description: Skins that change the look and feel of Psycle; Types: custom full
 Name: Demo_Songs; Description: Demo songs to show what psycle can do; Types: custom full; Languages: 
+Name: "Winamp_plugin"; Description: "Installs the winamp plugin to play .psy files with this player.";Types: custom full; Languages: 
 [Dirs]
 Name: {app}\PsyclePlugins; Flags: uninsalwaysuninstall; Components: " Open_Source_Plugins Closed_Source_Plugins";
 Name: {app}\Skins; Flags: uninsalwaysuninstall; Components: Skins;
@@ -142,4 +146,3 @@ end;
 
 [InnoIDE_Settings]
 UseRelativePaths=true
-

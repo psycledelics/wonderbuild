@@ -6,9 +6,9 @@
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{8E7D0A7F-B85F-44DC-8C1C-2A2C27BAEA0B}
+AppID={{8E7D0A7F-B85F-44DC-8C1C-2A2C27BAEA0B}
 AppName=Psycle Modular Music Creation Studio
-AppVersion=1.8.8 RC1
+AppVersion=1.10.1
 ;AppVerName=Psycle Modular Music Creation Studio 1.8.8
 AppPublisher=psycledelics
 AppPublisherURL=http://psycle.sourceforge.net/
@@ -21,17 +21,18 @@ InfoBeforeFile=..\..\psycle\doc\for-end-users\readme.txt
 InfoAfterFile=..\..\psycle\doc\for-end-users\whatsnew.txt
 OutputBaseFilename=PsycleInstallerx64
 SetupIconFile=..\..\psycle\pixmaps\psycle.ico
-Compression=lzma
+Compression=lzma/Max
 SolidCompression=true
-MinVersion=0,5.0.2195sp4
-AppCopyright=2000-2011 psycledelics
-AppVerName=Psycle 1.10.0 64 bits
+MinVersion=0,5.2.3790
+AppCopyright=2000-2012 psycledelics
+AppVerName=Psycle 1.10.1 64 bits
 PrivilegesRequired=poweruser
 TimeStampsInUTC=true
 DisableReadyPage=true
 ArchitecturesInstallIn64BitMode=x64
 ArchitecturesAllowed=x64
 ChangesAssociations=true
+ShowLanguageDialog=no
 
 [Languages]
 Name: english; MessagesFile: compiler:Default.isl
@@ -58,11 +59,11 @@ Source: ..\..\psycle\doc\*.psy; DestDir: "{commondocs}\Psycle Songs"; Flags: ign
 Source: ..\..\psycle-plugins\presets\*.prs; DestDir: {app}\PsyclePlugins; Flags: ignoreversion onlyifdoesntexist; Components: Presets; 
 
 [Icons]
-Name: {group}\Psycle Modular Music Creation Studio; Filename: {app}\psycle.exe
+Name: {group}\Psycle Modular Music Creation Studio 64; Filename: {app}\psycle.exe
 Name: {group}\{cm:ProgramOnTheWeb,Psycle Modular Music Creation Studio}; Filename: http://psycle.sourceforge.net/
-Name: {group}\{cm:UninstallProgram,Psycle Modular Music Creation Studio}; Filename: {uninstallexe}
-Name: {commondesktop}\Psycle Modular Music Creation Studio; Filename: {app}\psycle.exe; Tasks: desktopicon
-Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\Psycle Modular Music Creation Studio; Filename: {app}\psycle.exe; Tasks: quicklaunchicon
+Name: {group}\{cm:UninstallProgram,Psycle Modular Music Creation Studio 64}; Filename: {uninstallexe}
+Name: {commondesktop}\Psycle Modular Music Creation Studio 64; Filename: {app}\psycle.exe; Tasks: desktopicon
+Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\Psycle Modular Music Creation Studio 64; Filename: {app}\psycle.exe; Tasks: quicklaunchicon
 Name: {group}\Documents\How to Skin Psycle; Filename: {app}\Docs\how to skin psycle.txt; WorkingDir: {app}\Docs; Components: Documentation
 Name: {group}\Documents\Version History; Filename: {app}\Docs\whatsnew.txt; WorkingDir: {app}\Docs; Components: Documentation
 Name: {group}\Documents\Pattern Keys; Filename: {app}\Docs\keys.txt; WorkingDir: {app}\Docs; Components: Documentation
