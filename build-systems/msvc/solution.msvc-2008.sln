@@ -512,7 +512,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "psycle_help", "psycle_help"
 		..\..\psycle\doc\Psycle Help\keymap.gif = ..\..\psycle\doc\Psycle Help\keymap.gif
 		..\..\psycle\doc\Psycle Help\keymap_ord.gif = ..\..\psycle\doc\Psycle Help\keymap_ord.gif
 		..\..\psycle\doc\Psycle Help\Keys.htm = ..\..\psycle\doc\Psycle Help\Keys.htm
-		..\..\psycle\doc\Psycle Help\knobexample.bmp = ..\..\psycle\doc\Psycle Help\knobexample.bmp
 		..\..\psycle\doc\Psycle Help\knobexample.png = ..\..\psycle\doc\Psycle Help\knobexample.png
 		..\..\psycle\doc\Psycle Help\machine.png = ..\..\psycle\doc\Psycle Help\machine.png
 		..\..\psycle\doc\Psycle Help\Machine_Add.htm = ..\..\psycle\doc\Psycle Help\Machine_Add.htm
