@@ -60,16 +60,15 @@ Source: ..\..\psycle-plugins\presets\*.prs; DestDir: {app}\PsyclePlugins; Flags:
 
 [Icons]
 Name: {group}\Psycle Modular Music Creation Studio 64; Filename: {app}\psycle.exe
-Name: {group}\{cm:ProgramOnTheWeb,Psycle Modular Music Creation Studio}; Filename: http://psycle.sourceforge.net/
-Name: {group}\{cm:UninstallProgram,Psycle Modular Music Creation Studio 64}; Filename: {uninstallexe}
+Name: "{group}\{cm:ProgramOnTheWeb,Psycledelics site}"; Filename: http://psycle.sourceforge.net/; 
+Name: "{group}\{cm:UninstallProgram,Psycle 64}"; Filename: {uninstallexe};
 Name: {commondesktop}\Psycle Modular Music Creation Studio 64; Filename: {app}\psycle.exe; Tasks: desktopicon
 Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\Psycle Modular Music Creation Studio 64; Filename: {app}\psycle.exe; Tasks: quicklaunchicon
-Name: {group}\Documents\How to Skin Psycle; Filename: {app}\Docs\how to skin psycle.txt; WorkingDir: {app}\Docs; Components: Documentation
+Name: "{group}\Documents\How to Skin Psycle"; Filename: {app}\Docs\how-to-skin-psycle.txt; WorkingDir: {app}\Docs; Components: Documentation; 
 Name: {group}\Documents\Version History; Filename: {app}\Docs\whatsnew.txt; WorkingDir: {app}\Docs; Components: Documentation
 Name: {group}\Documents\Pattern Keys; Filename: {app}\Docs\keys.txt; WorkingDir: {app}\Docs; Components: Documentation
-Name: {group}\Documents\MIDI Help; Filename: {app}\Docs\MIDI Help\psyclemidi.html; WorkingDir: {app}\Docs\MIDI Help; Components: Documentation
-Name: {group}\Documents\Upwego Tutorial; Filename: {app}\Docs\Upwego\upwego5.html; WorkingDir: {app}\Docs\Upwego; Components: Documentation
-Name: {group}\Documents\Tweakings And Commands; Filename: {app}\Docs\tweakings and commands.txt; WorkingDir: {app}\Docs\; Components: 
+Name: "{group}\Documents\MIDI Help"; Filename: {app}\Docs\psycle-midi-2.2b\psyclemidi.html; WorkingDir: {app}\Docs\psycle-midi-2.2b; Components: Documentation; 
+Name: "{group}\Documents\Tweakings And Commands"; Filename: {app}\Docs\tweaking.txt; WorkingDir: {app}\Docs\;  Components: Documentation
 
 [Run]
 Filename: {app}\psycle.exe; Description: {cm:LaunchProgram,Psycle Modular Music Creation Studio}; Flags: nowait postinstall skipifsilent; Tasks: ; Components: Application
