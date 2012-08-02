@@ -11,7 +11,7 @@ isEmpty(common_included) {
 	else:        message("===================== $$TARGET ($$TEMPLATE) =====================")
 	
 	defineReplace(pathToVarName) {
-		s = $$replace($$1, \.\., _)
+		s = $$replace($$1, \\.\\., _)
 		return($$replace(s, [/\\\\], _))
 	}
 

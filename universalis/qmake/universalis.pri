@@ -14,7 +14,7 @@ isEmpty(universalis_included) {
 
 	!contains(TARGET, universalis) {
 		CONFIG *= link_prl
-		LIBPATH *= $$UNIVERSALIS_BUILD_DIR
+                QMAKE_LIBDIR *= $$UNIVERSALIS_BUILD_DIR
 		LIBS *= $$linkLibs(universalis)
 		PRE_TARGETDEPS *= $$UNIVERSALIS_BUILD_DIR
 	}
