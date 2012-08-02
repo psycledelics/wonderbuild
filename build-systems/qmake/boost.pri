@@ -7,7 +7,7 @@ isEmpty(boost_included) {
 
 	unix {
 		macx: LIBS *= $$linkLibs(boost_signals-1_41 boost_thread-1_41 boost_filesystem-1_41)
-		else: LIBS *= $$linkLibs(boost_signals-mt boost_thread-mt boost_filesystem-mt)
+		else: LIBS *= $$linkLibs(boost_signals boost_thread boost_filesystem boost_system)
 	} else: win32 {
 		win32-g++:            BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.41.0
 		else: win32-msvc2010: BOOST_DIR = $$EXTERNAL_PKG_DIR/boost-1.41.0
