@@ -440,6 +440,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-helpers", "..\..\psycle-helpers\psycle-helpers.msvc-2008.vcproj", "{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-player", "..\..\psycle-player\psycle-player.msvc-2008.vcproj", "{071F8A79-4146-47A0-BD16-F4D8EB43E5F0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0} = {69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-audiodrivers", "..\..\psycle-audiodrivers\psycle-audiodrivers.msvc-2008.vcproj", "{1D7F6F39-323D-4D7D-8BD9-4304FD6A2791}"
 	ProjectSection(ProjectDependencies) = postProject
