@@ -7,7 +7,7 @@ isEmpty(psycle_core_included) {
 	include($$TOP_SRC_DIR/psycle-audiodrivers/qmake/psycle-audiodrivers.pri)
 
 	PSYCLE_CORE_DIR = $$TOP_SRC_DIR/psycle-core
-	PSYCLE_CORE_BUILD_DIR = $$PSYCLE_CORE_DIR/++qmake-build
+	PSYCLE_CORE_BUILD_DIR = $$PSYCLE_CORE_DIR/++qmake
 
 	INCLUDEPATH *= $$PSYCLE_CORE_DIR/src $$TOP_SRC_DIR/psycle-plugins/src
 	DEPENDPATH  *= $$PSYCLE_CORE_DIR/src $$TOP_SRC_DIR/psycle-plugins/src

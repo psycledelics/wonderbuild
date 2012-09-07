@@ -58,6 +58,9 @@ isEmpty(common_included) {
 
 	# omit the current directory from the final INCLUDEPATH (no '-I.' in compiler command line)
 	CONFIG *= no_include_pwd
+
+	# http://www.boost.org/doc/libs/1_51_0/doc/html/signals/s04.html
+	CONFIG += no_keywords # so Qt won't #define any non-all-caps `keywords'
 	
 	# Define a new compiler that compiles ../src/foo/bar.cpp to $$OBJECTS_DIR/src/foo/bar.o instead of $$OBJECTS_DIR/bar.o
 	# To use it, add the .cpp to the SOURCES_PRESERVE_PATH var instead of the SOURCES var.

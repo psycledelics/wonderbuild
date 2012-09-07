@@ -12,7 +12,7 @@ CONFIG -= qt uic lex yacc
 
 PSYCLE_PLAYER_DIR = $$TOP_SRC_DIR/psycle-player
 
-BUILD_DIR = $$PSYCLE_PLAYER_DIR/++build
+BUILD_DIR = $$PSYCLE_PLAYER_DIR/++qmake
 OBJECTS_DIR = $$BUILD_DIR # Where the .o files go.
 MOC_DIR = $$BUILD_DIR # Where intermediate moc files go.
 RCC_DIR = $$BUILD_DIR # Where intermediate resource files go.

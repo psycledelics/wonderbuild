@@ -41,10 +41,10 @@ isEmpty(platform_included) {
 	# so you will need to use "colormake TERM=colorgcc" to enable colorisation of gcc's output.
 	#
 	!CONFIG(nocolor): exists(/usr/bin/env) { # /usr/bin/env is a good indication we have a posix system and shell (as opposed to microsoft's cmd.exe shell). A better test would be to test the SHELL env var.
-		colorgcc = $$TOP_SRC_DIR/build-systems/wonderbuild/wonderbuild/cxx_tool_chain/colorgcc
+		colorgcc = $$TOP_SRC_DIR/build-systems/wonderbuild/wonderbuild/cxx_tool_chain/colorgcc-arg
 		exists($$colorgcc) {
-			contains(QMAKE_CXX,  g++): QMAKE_CXX  = $$colorgcc
-			contains(QMAKE_LINK, g++): QMAKE_LINK = $$colorgcc
+			contains(QMAKE_CXX,  g++): QMAKE_CXX  = $$colorgcc $$QMAKE_CXX
+			contains(QMAKE_LINK, g++): QMAKE_LINK = $$colorgcc $$QMAKE_LINK
 		}
 	}
 }

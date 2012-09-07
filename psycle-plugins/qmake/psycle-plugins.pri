@@ -11,7 +11,7 @@ CONFIG *= shared # Plugins are loadable modules.
 CONFIG -= qt uic lex yacc
 
 PSYCLE_PLUGINS_DIR = $$TOP_SRC_DIR/psycle-plugins
-PSYCLE_PLUGINS_BUILD_DIR = $$PSYCLE_PLUGINS_DIR/++qmake-build
+PSYCLE_PLUGINS_BUILD_DIR = $$PSYCLE_PLUGINS_DIR/++qmake
 
 INCLUDEPATH += $$PSYCLE_PLUGINS_DIR/src
 DEPENDPATH  += $$PSYCLE_PLUGINS_DIR/src
