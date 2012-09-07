@@ -1,14 +1,10 @@
-QT       -= core gui
+TARGET = psycle-plugin-m3
 
-TARGET = m3
-TEMPLATE = lib
+include(psycle-plugins.pri)
 
-DEFINES += m3_built
-
-SOURCES += ../src/psycle/plugins/m3/m3.cpp\
-../src/psycle/plugins/m3/track.cpp\
-
-HEADERS += ../src/psycle/plugins/m3/track.hpp\
-
-include (common.pri)
+SOURCES_PRESERVE_PATH += \
+	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins/m3, *.cpp)
+HEADERS += \
+	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins/m3, *.hpp) \
+	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins/m3, *.h)
 

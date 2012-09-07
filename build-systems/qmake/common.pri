@@ -33,6 +33,29 @@ isEmpty(common_included) {
 		export(SUBDIRS)
 	}
 
+	# addSubprojects(subprojects, deps): same as addSubdirs, but with paths to .pro files
+	defineTest(addSubprojects) {
+		isEmpty(2): message("Sub project: $$1")
+		else: message("Sub project: $$1 -> $$2")
+		for(subprojects, 1) {
+			entries = $$files($$subprojects)
+			for(entry, entries) {
+				false {
+					# It seems SUBDIRS variables actually don't have a '.file' property.
+					name = subdirs_$$pathToVarName(entry)
+					SUBDIRS += $$name
+					eval($${name}.file = $$entry)
+					export($${name}.file)
+				} else {
+					SUBDIRS += $$entry
+				}
+				for(dep, 2): eval($${name}.depends += subdirs_$$pathToVarName(dep))
+				export($${name}.depends)
+			}
+		}
+		export(SUBDIRS)
+	}
+
 	# omit the current directory from the final INCLUDEPATH (no '-I.' in compiler command line)
 	CONFIG *= no_include_pwd
 	

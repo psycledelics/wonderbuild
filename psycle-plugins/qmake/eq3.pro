@@ -1,10 +1,11 @@
-QT       -= core gui
+TARGET = psycle-plugin-eq3
 
-TARGET = eq3
-TEMPLATE = lib
+include(psycle-plugins.pri)
 
-DEFINES += eq3_built
+SOURCES_PRESERVE_PATH += \
+	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins/druttis/eq3/, *.cpp)
+HEADERS += \
+	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins/druttis/eq3/, *.hpp) \
+	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins/druttis/eq3/, *.h)
 
-SOURCES += ../src/psycle/plugins/druttis/eq3/eq3.cpp\
-
-include (common.pri)
+# TODO add dependency on psycle-druttis-dsp (see wonderbuild_script.py)

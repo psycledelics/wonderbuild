@@ -1,11 +1,10 @@
-QT       -= core gui
+TARGET = psycle-plugin-haas
 
-TARGET = haas
-TEMPLATE = lib
+include(psycle-plugins.pri)
 
-DEFINES += haas_built
+SOURCES_PRESERVE_PATH += \
+	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins, haas.cpp)
+HEADERS += \
+	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins, haas.hpp) \
+	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins, haas.h)
 
-SOURCES += ../src/psycle/plugins/haas.cpp\
-
-
-include (common.pri)

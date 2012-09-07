@@ -1,10 +1,11 @@
-QT       -= core gui
+TARGET = psycle-plugin-dw-eq
 
-TARGET = dw_eq
-TEMPLATE = lib
+include(psycle-plugins.pri)
 
-DEFINES += dq_eq_built
+SOURCES_PRESERVE_PATH += \
+	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins/dw/eq, *.cpp)
+HEADERS += \
+	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins/dw/eq, *.hpp) \
+	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins/dw/eq, *.h)
 
-SOURCES += ../src/psycle/plugins/dw/eq/dw_eq.cpp\
-
-include (common.pri)
+# TODO add dependency on psycle-dw-filter (see wonderbuild_script.py)
