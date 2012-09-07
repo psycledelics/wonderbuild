@@ -1,11 +1,10 @@
- 
-QT       -= core gui
+TARGET = psycle-plugin-alk-muter
 
-TARGET = alk_muter
-TEMPLATE = lib
+include(psycle-plugins.pri)
 
-DEFINES += alk_muter_built
+SOURCES_PRESERVE_PATH += \
+	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins/alk-muter, *.cpp)
+HEADERS += \
+	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins/alk-muter, *.hpp) \
+	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins/alk-muter, *.h)
 
-SOURCES += ../src/psycle/plugins/alk_muter/alk_muter.cpp\
-
-include (common.pri)
