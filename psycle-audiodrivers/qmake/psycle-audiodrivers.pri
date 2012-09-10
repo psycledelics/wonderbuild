@@ -78,7 +78,7 @@ isEmpty(psycle_audiodrivers_included) {
 
 	!contains(TARGET, psycle-audiodrivers) {
 		CONFIG *= link_prl
-                QMAKE_LIBDIR *= $$PSYCLE_AUDIODRIVERS_BUILD_DIR
+		QMAKE_LIBDIR *= $$PSYCLE_AUDIODRIVERS_BUILD_DIR
 		LIBS *= $$linkLibs(psycle-audiodrivers)
 		PRE_TARGETDEPS *= $$PSYCLE_AUDIODRIVERS_BUILD_DIR
 	}
