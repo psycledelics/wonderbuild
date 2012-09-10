@@ -12,7 +12,7 @@ isEmpty(psycle_helpers_included) {
 
 	!contains(TARGET, psycle-helpers) {
 		CONFIG *= link_prl
-                QMAKE_LIBDIR *= $$PSYCLE_HELPERS_BUILD_DIR
+		QMAKE_LIBDIR *= $$PSYCLE_HELPERS_BUILD_DIR
 		LIBS *= $$linkLibs(psycle-helpers)
 		PRE_TARGETDEPS *= $$PSYCLE_HELPERS_BUILD_DIR
 	}
