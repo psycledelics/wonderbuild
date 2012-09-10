@@ -14,7 +14,7 @@ isEmpty(psycle_core_included) {
 
 	!contains(TARGET, psycle-core) {
 		CONFIG *= link_prl
-                QMAKE_LIBDIR *= $$PSYCLE_CORE_BUILD_DIR
+		QMAKE_LIBDIR *= $$PSYCLE_CORE_BUILD_DIR
 		LIBS *= $$linkLibs(psycle-core)
 		PRE_TARGETDEPS += $$PSYCLE_CORE_BUILD_DIR
 	}
