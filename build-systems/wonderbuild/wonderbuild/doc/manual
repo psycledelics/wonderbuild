@@ -54,7 +54,7 @@ Some doc for the PreCompileTasks class:
 		The user doesn't need to override this attribute. They only override the self.do_cxx_phase() method, which is called by the cxx_phase task.
 		This is were actual pre-compilation takes place.
 		It ensures self.__call__ as been called, and cxx_phase of dependencies too, with _do_deps_cxx_phases_and_apply_cxx_deep (defined in ModDepPhases).
-		One the pre-compiled header is built, clients can start building their object files.
+		Once the pre-compiled header is built, clients can start building their object files.
 		
 	Method do_cxx_phase(self):
 		This is where to set self.source_text and self.cfg for building the pch file.
