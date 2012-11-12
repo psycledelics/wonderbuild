@@ -26,8 +26,8 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="cmd.exe /c build.cmd 1.41.0 9.0-cxxabi-1500 $(PlatformName)"
-				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd $(PlatformName) &amp;&amp; build.cmd 1.41.0 9.0-cxxabi-1500  $(PlatformName)&quot;"
+				BuildCommandLine="cmd.exe /c build.cmd 1.50.0 9.0-cxxabi-1500 $(PlatformName)"
+				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd $(PlatformName) &amp;&amp; build.cmd 1.50.0 9.0-cxxabi-1500  $(PlatformName)&quot;"
 				CleanCommandLine="cmd.exe /c clean.cmd $(PlatformName)"
 				Output=""
 				PreprocessorDefinitions=""
@@ -45,8 +45,8 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="cmd.exe /c build.cmd 1.41.0 9.0-cxxabi-1500 $(PlatformName)"
-				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd $(PlatformName) &amp;&amp; build.cmd 1.41.0 9.0-cxxabi-1500  $(PlatformName)&quot;"
+				BuildCommandLine="cmd.exe /c build.cmd 1.50.0 9.0-cxxabi-1500 $(PlatformName)"
+				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd $(PlatformName) &amp;&amp; build.cmd 1.50.0 9.0-cxxabi-1500  $(PlatformName)&quot;"
 				CleanCommandLine="cmd.exe /c clean.cmd $(PlatformName)"
 				Output=""
 				PreprocessorDefinitions=""
