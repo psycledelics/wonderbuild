@@ -2,8 +2,8 @@
 
 
 rem ================================================================================================
-rem disabled because there's no way to make it work on windows.. file and or dirs seems to be locked
-goto :eof
+rem Sometimes this does not work. remove the rem from the following line in that case. (file locked)
+rem goto :eof
 rem ================================================================================================
 
 

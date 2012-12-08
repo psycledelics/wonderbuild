@@ -6,7 +6,7 @@
 	>
   <Tool
     Name="VCCLCompilerTool"
-    Detect64BitPortabilityProblems="true"
+    Detect64BitPortabilityProblems="false"
 			/>
 	<Tool
 		Name="VCLinkerTool"
