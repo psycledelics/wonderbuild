@@ -1109,6 +1109,78 @@
 						Name="XMSampler"
 						>
 						<File
+							RelativePath=".\src\psycle\host\EnvelopeEditor.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\EnvelopeEditor.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\EnvelopeEditorDlg.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\EnvelopeEditorDlg.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\InstrumentAmpDlg.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\InstrumentAmpDlg.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\InstrumentFilDlg.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\InstrumentFilDlg.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\InstrumentGenDlg.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\InstrumentGenDlg.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\InstrumentPanDlg.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\InstrumentPanDlg.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\InstrumentPitDlg.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\InstrumentPitDlg.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SampleAssignEditor.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\SampleAssignEditor.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\WaveScopeCtrl.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\WaveScopeCtrl.hpp"
+							>
+						</File>
+						<File
 							RelativePath="src\psycle\host\XMSamplerMixerPage.cpp"
 							>
 						</File>
@@ -1189,6 +1261,14 @@
 				<Filter
 					Name="monitors"
 					>
+					<File
+						RelativePath=".\src\psycle\host\ChannelMappingDlg.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\psycle\host\ChannelMappingDlg.hpp"
+						>
+					</File>
 					<File
 						RelativePath="src\psycle\host\InfoDlg.cpp"
 						>
