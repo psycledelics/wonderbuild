@@ -288,7 +288,7 @@ class Impl(object):
 		obj_paths = obj_names
 		mod_task_target_path = mod_task.target.rel_path(cwd)
 		if mod_task.ld:
-			args = mod_task.cfg.ld_args + ['-o', mod_task_target_path] + obj_paths
+			args = [mod_task.cfg.ld_args[0]] + obj_paths + mod_task.cfg.ld_args[1:] + ['-o', mod_task_target_path]
 			colorgcc = _colorgcc(mod_task.cfg)
 			if colorgcc is not None: args = [colorgcc.rel_path(cwd)] + args
 			if mod_task.cfg.dest_platform.bin_fmt == 'elf' and mod_task.kind != mod_task.Kinds.PROG:

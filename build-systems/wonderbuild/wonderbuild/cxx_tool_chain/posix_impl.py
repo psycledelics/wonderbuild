@@ -147,7 +147,7 @@ class Impl(object):
 		obj_paths = obj_names
 		mod_task_target_path = mod_task.target.rel_path(cwd)
 		if mod_task.ld:
-			args = mod_task.cfg.ld_args + ['-o', mod_task_target_path] + obj_paths
+			args = [mod_task.cfg.ld_args[0]] + obj_paths + mod_task.cfg.ld_args[1:] + ['-o', mod_task_target_path]
 			if exec_subprocess(args, cwd=cwd.path) != 0: raise UserReadableException, mod_task
 		else:
 			ar_args, ranlib_args = mod_task.cfg.ar_ranlib_args

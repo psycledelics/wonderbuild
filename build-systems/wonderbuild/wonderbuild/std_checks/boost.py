@@ -252,6 +252,11 @@ class BoostCheckTask(MultiBuildCheckTask):
 					"""
 				return result
 
+			source_texts['system'] = \
+				"""
+					#include <boost/system/system_error.hpp>
+					void system_() { /* todo do something with it for a complete check */ }
+				""" + auto_link('system')
 			source_texts['signals'] = \
 				"""
 					#include <boost/signals/slot.hpp>

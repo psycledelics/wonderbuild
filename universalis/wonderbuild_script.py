@@ -50,7 +50,7 @@ class Wonderbuild(ScriptTask):
 		check_cfg = cfg.clone()
 		std_math = StdMathCheckTask.shared(check_cfg)
 		std_cxx0x = StdCxx0xCheckTask.shared(check_cfg)
-		boost = BoostCheckTask.shared(check_cfg, (1, 40, 0), ('signals', 'thread', 'filesystem', 'date_time'))
+		boost = BoostCheckTask.shared(check_cfg, (1, 40, 0), ('system', 'signals', 'thread', 'filesystem', 'date_time'))
 		boost_test = BoostCheckTask.shared(check_cfg, (1, 40, 0), ('unit_test_framework',))
 		mt = MultithreadingSupportCheckTask.shared(check_cfg)
 		openmp = OpenMPCheckTask.shared(check_cfg)

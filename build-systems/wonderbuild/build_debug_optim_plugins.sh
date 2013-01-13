@@ -24,7 +24,7 @@ if cpp -P -xc++ /dev/null -fopenmp; then optims="$optims -fopenmp"; fi &&
 # build the plugins separately so that we can use different compiler flags
 psycle-plugins/wonderbuild_script.py --bld-dir=$build/optim --install-prefix-dir=$prefix \
 	--cxx-flags="$common_flags -O3 -DNDEBUG $optims" --ld-flags="$optims" &&
-	
+
 psycle-player/wonderbuild_script.py  --bld-dir=$build/debug --install-prefix-dir=$prefix \
 	--cxx-flags="$common_flags -O0 -UNDEBUG" &&
 

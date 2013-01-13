@@ -57,17 +57,23 @@ class Wonderbuild(ScriptTask):
 			check_cfg = self.cfg.clone()
 			std_math = StdMathCheckTask.shared(check_cfg)
 			std_cxx0x = StdCxx0xCheckTask.shared(check_cfg)
-			boost = BoostCheckTask.shared(check_cfg, (1, 40, 0), ('signals', 'thread', 'filesystem', 'date_time'))
+			self._boost = boost = BoostCheckTask.shared(check_cfg, (1, 40, 0), ('system', 'signals', 'thread', 'filesystem', 'date_time'))
 			mt = MultithreadingSupportCheckTask.shared(check_cfg)
 			openmp = OpenMPCheckTask.shared(check_cfg)
 			dl = DynamicLoadingSupportCheckTask.shared(check_cfg)
 			glibmm = PkgConfigCheckTask.shared(check_cfg, ['glibmm-2.4', 'gmodule-2.0', 'gthread-2.0'])
 
-			req = [std_math, boost] # required because pre-compiled.private.hpp include them unconditionaly
+			req = [std_math, boost] # required because pre-compiled.private.hpp includes them unconditionaly
 			opt = [std_cxx0x, mt, openmp, dl, glibmm]
 			for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 			self.private_deps += req + [o for o in opt if o]
 			self.result = min(bool(r) for r in req)
+
+		def do_ensure_deps(self):
+			if not self._boost:
+				from wonderbuild import UserReadableException
+				raise UserReadableException, self.name + ' requires the following boost libs: ' + self._boost.help
+			PreCompileTasks.do_ensure_deps(self)
 
 		def do_cxx_phase(self):
 			self.cfg.include_paths.append(self._top_src_dir / 'build-systems' / 'src')

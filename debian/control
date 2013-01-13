@@ -11,6 +11,7 @@ Build-Depends:
  python (>= 2.6.5),
  pkg-config (>= 0.22),
  libboost-dev (>= 1.40.0),
+ libboost-system-dev (>= 1.40.0),
  libboost-signals-dev (>= 1.40.0),
  libboost-thread-dev (>= 1.40.0),
  libboost-filesystem-dev (>= 1.40.0),

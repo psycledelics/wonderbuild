@@ -634,6 +634,8 @@ class PreCompileTasks(ModDepPhases, Task):
 				self.parent_task.__cxx_phase_done = True
 			self.cfg.pic = self.pic # this clones the parent cfg and changes the pic setting
 			for x in _PreCompileTask.__call__(self, sched_ctx): yield x
+	
+		def do_ensure_deps(self): self.parent_task.do_ensure_deps()
 
 	def do_cxx_phase(self): pass
 

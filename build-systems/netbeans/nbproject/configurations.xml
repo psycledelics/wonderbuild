@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="79">
+<configurationDescriptor version="84">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
-    <df name="diversalis" root="../../diversalis/src">
+    <df name="src" root="../../diversalis/src">
       <df name="diversalis">
         <df name="detail">
           <in>config.hpp</in>
@@ -15,7 +15,7 @@
       </df>
       <in>diversalis.hpp</in>
     </df>
-    <df name="freepsycle" root="../../freepsycle/src">
+    <df name="src" root="../../freepsycle/src">
       <df name="psycle">
         <df name="detail">
           <in>config.hpp</in>
@@ -122,7 +122,7 @@
         <in>engine.hpp</in>
       </df>
     </df>
-    <df name="psycle-audiodrivers" root="../../psycle-audiodrivers/src">
+    <df name="src" root="../../psycle-audiodrivers/src">
       <df name="asio">
         <in>asio.cpp</in>
         <in>asio.private.hpp</in>
@@ -154,7 +154,7 @@
         </df>
       </df>
     </df>
-    <df name="psycle-core" root="../../psycle-core/src">
+    <df name="src" root="../../psycle-core/src">
       <df name="psycle">
         <df name="core">
           <df name="detail">
@@ -232,7 +232,6 @@
           <in>sequence.h</in>
           <in>sequencer.cpp</in>
           <in>sequencer.h</in>
-          <in>signalslib.h</in>
           <in>song.cpp</in>
           <in>song.h</in>
           <in>songserializer.cpp</in>
@@ -266,7 +265,7 @@
         </df>
       </df>
     </df>
-    <df name="psycle-helpers" root="../../psycle-helpers/src">
+    <df name="src" root="../../psycle-helpers/src">
       <df name="psycle">
         <df name="helpers">
           <df name="math">
@@ -320,7 +319,7 @@
       </df>
       <in>unit_tests.cpp</in>
     </df>
-    <df name="psycle-player" root="../../psycle-player/src">
+    <df name="src" root="../../psycle-player/src">
       <df name="psycle">
         <df name="player">
           <in>configuration.cpp</in>
@@ -329,7 +328,7 @@
         </df>
       </df>
     </df>
-    <df name="universalis" root="../../universalis/src">
+    <df name="src" root="../../universalis/src">
       <df name="universalis">
         <df name="compiler">
           <in>align.hpp</in>
@@ -443,6 +442,8 @@
         <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>GNU|GNU</compilerSet>
       </toolsSet>
+      <codeAssistance>
+      </codeAssistance>
       <makefileType>
         <makeTool>
           <buildCommandWorkingDir></buildCommandWorkingDir>
@@ -464,72 +465,72 @@
       <item path="../../freepsycle/src/psycle/detail/config.hpp"
             ex="true"
             tool="3"
-            flavor="0">
+            flavor2="0">
       </item>
       <item path="../../freepsycle/src/psycle/front_ends/gui/coordinates.hpp"
             ex="true"
             tool="3"
-            flavor="0">
+            flavor2="0">
       </item>
       <item path="../../freepsycle/src/psycle/front_ends/gui/graph_xy.hpp"
             ex="true"
             tool="3"
-            flavor="0">
+            flavor2="0">
       </item>
       <item path="../../freepsycle/src/psycle/host/forward_declarations.hpp"
             ex="true"
             tool="3"
-            flavor="0">
+            flavor2="0">
       </item>
       <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/microsoftdirectsoundout.h"
             ex="true"
             tool="3"
-            flavor="0">
+            flavor2="0">
       </item>
       <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/microsoftmmewaveout.h"
             ex="true"
             tool="3"
-            flavor="0">
+            flavor2="0">
       </item>
       <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/netaudioout.h"
             ex="true"
             tool="3"
-            flavor="0">
+            flavor2="0">
       </item>
       <item path="../../psycle-core/src/psycle/core/exceptions.h"
             ex="true"
             tool="3"
-            flavor="0">
+            flavor2="0">
       </item>
       <item path="../../psycle-core/src/psycle/core/filterhelper.h"
             ex="true"
             tool="3"
-            flavor="0">
+            flavor2="0">
       </item>
       <item path="../../psycle-core/src/psycle/core/fwd.hpp"
             ex="true"
             tool="3"
-            flavor="0">
+            flavor2="0">
       </item>
       <item path="../../psycle-helpers/src/psycle/helpers/hexstring_to_binary.hpp"
             ex="true"
             tool="3"
-            flavor="0">
+            flavor2="0">
       </item>
       <item path="../../psycle-helpers/src/psycle/helpers/hexstring_to_integer.hpp"
             ex="true"
             tool="3"
-            flavor="0">
+            flavor2="0">
       </item>
       <item path="../../psycle-helpers/src/psycle/helpers/scale.hpp"
             ex="true"
             tool="3"
-            flavor="0">
+            flavor2="0">
       </item>
       <item path="../../psycle-helpers/src/psycle/helpers/value_mapper.hpp"
             ex="true"
             tool="3"
-            flavor="0">
+            flavor2="0">
       </item>
       <folder path="freepsycle">
         <ccTool>
