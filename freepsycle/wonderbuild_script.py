@@ -75,6 +75,12 @@ class Wonderbuild(ScriptTask):
 				self.result = min(bool(r) for r in req)
 				self.cxx_phase = self.__class__.InstallHeaders(self)
 			
+			def do_ensure_deps(self):
+				# TODO Is there something to do about this in wonderbuild ?
+				# TODO If not checked explicitly, since programs are not used as dependencies, compilation starts regardless of required deps!
+				if not std_cxx11: raise UserReadableException, self.name + ' requires a compiler with C++11 standard support.'
+				ModTask.do_ensure_deps(self)
+
 			class InstallHeaders(InstallTask):
 				def __init__(self, outer):
 					InstallTask.__init__(self, outer.base_cfg.project, outer.name + '-headers')
