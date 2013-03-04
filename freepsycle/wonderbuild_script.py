@@ -40,10 +40,12 @@ class Wonderbuild(ScriptTask):
 
 		from wonderbuild import UserReadableException
 		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, ModTask
+		from wonderbuild.std_checks.std_cxx11 import StdCxx11CheckTask
 		from wonderbuild.std_checks.dsound import DSoundCheckTask
 		from wonderbuild.install import InstallTask
 
 		check_cfg = cfg.clone()
+		std_cxx11 = StdCxx11CheckTask.shared(check_cfg)
 		gstreamer = PkgConfigCheckTask.shared(check_cfg, ['gstreamer-0.10'])
 		jack = PkgConfigCheckTask.shared(check_cfg, ['jack >= 0.101.1'])
 		alsa = PkgConfigCheckTask.shared(check_cfg, ['alsa >= 1.0'])
@@ -67,7 +69,7 @@ class Wonderbuild(ScriptTask):
 			def __call__(self, sched_ctx):
 				if self.kind == ModTask.Kinds.PROG: self.private_deps = [pch.prog_task]
 				else: self.private_deps = [pch.lib_task]
-				self.public_deps += [universalis, helpers_math]
+				self.public_deps += [std_cxx11, universalis, helpers_math]
 				req = self.all_deps
 				for x in sched_ctx.parallel_wait(*req): yield x
 				self.result = min(bool(r) for r in req)

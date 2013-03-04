@@ -339,9 +339,9 @@ class UserBuildCfgTask(BuildCfg, OptionCfg, Persistent, Task):
 			detect_impl = DetectImplCheckTask.shared(self)
 			for x in sched_ctx.parallel_wait(detect_impl): yield x
 
-class ModDepPhases(object): # note: doesn't derive form Task, but derived classes must also derive from Task
+class ModDepPhases(object): # note: doesn't derive from Task, but derived classes must also derive from Task
 	def __init__(self):
-		if __debug__ and is_debug: assert isinstance(self, Task) # note: doesn't derive form Task, but derived classes must also derive from Task
+		if __debug__ and is_debug: assert isinstance(self, Task) # note: doesn't derive from Task, but derived classes must also derive from Task
 		self.private_deps = [] # of ModDepPhases
 		self.public_deps = [] # of ModDepPhases
 		self.cxx_phase = self.mod_phase = None
@@ -356,9 +356,11 @@ class ModDepPhases(object): # note: doesn't derive form Task, but derived classe
 		def __call__(self, sched_ctx):
 			self.result = True
 			for x in self.do_check_phase(sched_ctx): yield x
-			if self.result and len(self.all_deps) != 0:
-				for x in sched_ctx.parallel_wait(*self.all_deps): yield x
-				self.result = min(bool(dep) for dep in self.all_deps)
+			if self.result:
+				all_deps = self.all_deps
+				if len(all_deps) != 0:
+					for x in sched_ctx.parallel_wait(*all_deps): yield x
+					self.result = min(bool(dep) for dep in all_deps)
 
 	# can be overriden in derived classes to generate friendlier message when deps are unavailable
 	def do_ensure_deps(self): 

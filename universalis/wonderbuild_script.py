@@ -68,7 +68,7 @@ class Wonderbuild(ScriptTask):
 				self.private_deps = []
 				self.public_deps = [diversalis, std_math, boost, mt, dl]
 				if self.cfg.dest_platform.os == 'win': self.public_deps.append(winmm)
-				req = self.public_deps + self.private_deps
+				req = self.all_deps
 				opt = [std_cxx11, openmp, glibmm]
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.public_deps += [o for o in opt if o]
