@@ -55,6 +55,7 @@ class Wonderbuild(ScriptTask):
 		dsound = DSoundCheckTask.shared(check_cfg)
 
 		for x in sched_ctx.parallel_wait(
+			std_cxx11,
 			gstreamer, jack, alsa, dsound,
 			gtkmm, gnomecanvasmm, cluttermm
 		): yield x
