@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2009-2011 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2009-2013 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 if __name__ == '__main__':
 	import sys, os
@@ -40,7 +40,7 @@ class Wonderbuild(ScriptTask):
 
 		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, ModTask
 		from wonderbuild.std_checks.std_math import StdMathCheckTask
-		from wonderbuild.std_checks.std_cxx0x import StdCxx0xCheckTask
+		from wonderbuild.std_checks.std_cxx11 import StdCxx11CheckTask
 		from wonderbuild.std_checks.boost import BoostCheckTask
 		from wonderbuild.std_checks.multithreading_support import MultithreadingSupportCheckTask
 		from wonderbuild.std_checks.openmp import OpenMPCheckTask
@@ -49,7 +49,7 @@ class Wonderbuild(ScriptTask):
 
 		check_cfg = cfg.clone()
 		std_math = StdMathCheckTask.shared(check_cfg)
-		std_cxx0x = StdCxx0xCheckTask.shared(check_cfg)
+		std_cxx11 = StdCxx11CheckTask.shared(check_cfg)
 		boost = BoostCheckTask.shared(check_cfg, (1, 40, 0), ('system', 'signals', 'thread', 'filesystem', 'date_time'))
 		boost_test = BoostCheckTask.shared(check_cfg, (1, 40, 0), ('unit_test_framework',))
 		mt = MultithreadingSupportCheckTask.shared(check_cfg)
@@ -69,7 +69,7 @@ class Wonderbuild(ScriptTask):
 				self.public_deps = [diversalis, std_math, boost, mt, dl]
 				if self.cfg.dest_platform.os == 'win': self.public_deps.append(winmm)
 				req = self.public_deps + self.private_deps
-				opt = [std_cxx0x, openmp, glibmm]
+				opt = [std_cxx11, openmp, glibmm]
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.public_deps += [o for o in opt if o]
 				self.result = min(bool(r) for r in req)
