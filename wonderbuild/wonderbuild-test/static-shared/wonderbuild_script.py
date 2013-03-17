@@ -93,6 +93,7 @@ else:
 						self.private_deps = [lib_impl]
 						self.result = True
 						self.cxx_phase = self.__class__.Install(self.cfg.project, self.name + '-headers')
+						for x in sched_ctx.parallel_wait(lib_impl): yield x # XXX
 						for x in ModTask.__call__(self, sched_ctx): yield x
 
 					def do_mod_phase(self):
@@ -126,6 +127,7 @@ else:
 
 					def __call__(self, sched_ctx):
 						self.public_deps = [lib_wrapper]
+						for x in sched_ctx.parallel_wait(lib_wrapper): yield x # XXX
 						for x in ModTask.__call__(self, sched_ctx): yield x
 			
 					def do_mod_phase(self):
