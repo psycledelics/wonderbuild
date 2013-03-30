@@ -9,16 +9,16 @@ set output=..\..\output\%3
 
 if not exist %pkgdir%\include\boost (
 	pushd %pkgdir% || exit /b 1
-	..\7za\7za x -y include.tar.bz2 || exit /b 1
-	..\7za\7za x -y include.tar || exit /b 1
+	..\7za\7z.exe x -y include.tar.bz2 || exit /b 1
+	..\7za\7z.exe x -y include.tar || exit /b 1
 	del /q include.tar || exit /b 1
 	popd || exit /b 1
 )
 
 if not exist %output%\boost-%1-%2-stamp (
 	pushd %pkgdir% || exit /b 1
-	..\7za\7za x -y %libdir%.tar.bz2 || exit /b 1
-	..\7za\7za x -y %libdir%.tar || exit /b 1
+	..\7za\7z.exe x -y %libdir%.tar.bz2 || exit /b 1
+	..\7za\7z.exe x -y %libdir%.tar || exit /b 1
 	del /q %libdir%.tar || exit /b 1
 	popd || exit /b 1
 
