@@ -360,6 +360,14 @@
 						RelativePath="src\psycle\helpers\mersennetwister.hpp"
 						>
 					</File>
+					<File
+						RelativePath=".\src\psycle\helpers\resampler.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\psycle\helpers\resampler.hpp"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="file"
