@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="top_output_dir"
+	OutputDirectory="$(TopOutputDir)/lib"
+	IntermediateDirectory="$(TopOutputDir)/intermediate/$(ProjectName)"
+	>
+	<UserMacro
+		Name="TopOutputDir"
+		Value="$(SolutionDir)/output/$(PlatformName)/$(ConfigurationName)"
+	/>
+	<UserMacro
+		Name="TopSoxrDir"
+		Value="$(SolutionDir)/../../external-packages/libsoxr/soxr-0.1.0-Source/"
+	/>
+</VisualStudioPropertySheet>
