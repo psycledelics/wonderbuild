@@ -23,7 +23,8 @@ Build-Depends:
  libgstreamer0.10-dev (>= 0.10.28),
  libjack-dev (>= 0.118),
  libesd0-dev (>= 0.2.41),
- libasound2-dev (>= 1.0.22)
+ libasound2-dev (>= 1.0.22),
+ libsoxr-dev (>= 0.1.1)
 
 Package: psycle-player1
 Provides: psycle-player
