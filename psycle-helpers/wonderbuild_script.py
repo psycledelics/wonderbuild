@@ -41,13 +41,14 @@ class Wonderbuild(ScriptTask):
 		pch = common.pch
 		cfg = common.cfg.clone()
 
-		from wonderbuild.cxx_tool_chain import UserBuildCfgTask, ModTask
+		from wonderbuild.cxx_tool_chain import UserBuildCfgTask, ModTask, PkgConfigCheckTask
 		from wonderbuild.std_checks.std_math import StdMathCheckTask
 		from wonderbuild.std_checks.boost import BoostCheckTask
 		from wonderbuild.install import InstallTask
 
 		check_cfg = cfg.clone()
 		std_math = StdMathCheckTask.shared(check_cfg)
+		soxr = PkgConfigCheckTask.shared(check_cfg, ['soxr >= 0.1.1'])
 		boost_test = BoostCheckTask.shared(check_cfg, (1, 40, 0), ('unit_test_framework',))
 
 		class HelpersMathMod(ModTask):
@@ -94,7 +95,7 @@ class Wonderbuild(ScriptTask):
 
 			def __call__(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
-				self.public_deps = [universalis, helpers_math]
+				self.public_deps = [universalis, helpers_math, soxr]
 				req = self.all_deps
 				for x in sched_ctx.parallel_wait(*req): yield x
 				self.result = min(bool(r) for r in req)
