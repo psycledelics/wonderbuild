@@ -9,8 +9,6 @@ class WinMMCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared_uid(*args, **kw): return 'ms-winmm'
 
-	def __init__(self, persistent, uid, base_cfg): BuildCheckTask.__init__(self, persistent, uid, base_cfg)
-
 	def apply_mod_to(self, cfg): cfg.libs.append('winmm')
 
 	@property
