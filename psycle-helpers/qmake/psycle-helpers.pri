@@ -3,6 +3,7 @@ isEmpty(psycle_helpers_included) {
 	verbose: message("psycle-helpers included")
 	
 	include($$TOP_SRC_DIR/universalis/qmake/universalis.pri)
+        include($$COMMON_DIR/soxr.pri)
 
 	PSYCLE_HELPERS_DIR = $$TOP_SRC_DIR/psycle-helpers
 	PSYCLE_HELPERS_BUILD_DIR = $$PSYCLE_HELPERS_DIR/++qmake
