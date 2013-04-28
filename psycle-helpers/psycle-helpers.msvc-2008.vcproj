@@ -41,6 +41,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="$(Defines);_LIB"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -143,6 +144,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="$(Defines);_LIB"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -368,6 +370,14 @@
 						RelativePath=".\src\psycle\helpers\resampler.hpp"
 						>
 					</File>
+					<File
+						RelativePath=".\src\psycle\helpers\sampleconverter.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\psycle\helpers\sampleconverter.hpp"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="file"
@@ -381,11 +391,19 @@
 						>
 					</File>
 					<File
-						RelativePath="src\psycle\helpers\appleaiff.cpp"
+						RelativePath=".\src\psycle\helpers\amigasvx.cpp"
 						>
 					</File>
 					<File
-						RelativePath="src\psycle\helpers\appleaiff.hpp"
+						RelativePath=".\src\psycle\helpers\amigasvx.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\psycle\helpers\appleaiff.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\psycle\helpers\appleaiff.hpp"
 						>
 					</File>
 					<File
