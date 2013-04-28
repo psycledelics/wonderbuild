@@ -2,16 +2,18 @@
 <VisualStudioPropertySheet
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="top_output_dir"
-	OutputDirectory="$(TopOutputDir)/lib"
-	IntermediateDirectory="$(TopOutputDir)/intermediate/$(ProjectName)"
+	Name="libsoxr"
+	InheritedPropertySheets=".\no_pre_compiled_header.vsprops"
 	>
-	<UserMacro
-		Name="TopOutputDir"
-		Value="$(SolutionDir)/output/$(PlatformName)/$(ConfigurationName)"
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="$(IncludePath);$(TopSoxrDir)/msvc"
+		PreprocessorDefinitions="$(Defines);_USE_MATH_DEFINES;_CRT_SECURE_NO_WARNINGS;SOXR_LIB"
+		CompileAs="0"
 	/>
+
 	<UserMacro
 		Name="TopSoxrDir"
-		Value="$(SolutionDir)/../../external-packages/libsoxr/soxr-0.1.0-Source/"
+		Value="$(TopSrcDir)/external-packages/libsoxr/soxr-0.1.0-Source/"
 	/>
 </VisualStudioPropertySheet>

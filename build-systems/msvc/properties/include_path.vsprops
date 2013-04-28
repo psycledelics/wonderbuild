@@ -26,6 +26,7 @@
 		&quot;$(TopSrcDir)/external-packages/zlib-1.2.3/include&quot;;
 		&quot;$(TopSrcDir)/external-packages/dsound-9/include&quot;;
 		&quot;$(TopSrcDir)/external-packages/libsoxr/soxr-0.1.0-Source/src/&quot;;
+		&quot;$(TopSrcDir)/external-packages/lua-5.2.2/src/&quot;;
 		&quot;$(TopSrcDir)/external-packages/boost-1.50.0/include&quot;;
 		&quot;$(TopSrcDir)/external-packages/asio-2.2/common&quot;;
 		&quot;$(TopSrcDir)/external-packages/asio-2.2/host&quot;;

@@ -1434,6 +1434,14 @@
 						>
 					</File>
 					<File
+						RelativePath=".\src\psycle\host\LuaHost.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\psycle\host\LuaHost.hpp"
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\Machine.cpp"
 						>
 					</File>
