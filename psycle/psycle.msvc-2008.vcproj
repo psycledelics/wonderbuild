@@ -1434,14 +1434,6 @@
 						>
 					</File>
 					<File
-						RelativePath=".\src\psycle\host\LuaHost.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\src\psycle\host\LuaHost.hpp"
-						>
-					</File>
-					<File
 						RelativePath="src\psycle\host\Machine.cpp"
 						>
 					</File>
@@ -1506,6 +1498,34 @@
 						</File>
 						<File
 							RelativePath="src\psycle\host\XMSampler.hpp"
+							>
+						</File>
+					</Filter>
+					<Filter
+						Name="Lua"
+						>
+						<File
+							RelativePath=".\src\psycle\host\LuaArray.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\LuaArray.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\LuaHost.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\LuaHost.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\LuaPlugin.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\LuaPlugin.hpp"
 							>
 						</File>
 					</Filter>
