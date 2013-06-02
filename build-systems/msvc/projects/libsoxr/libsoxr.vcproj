@@ -26,7 +26,7 @@
 			<Tool
 				Name="VCPreBuildEventTool"
 				Description="unpack libsoxr source"
-				CommandLine="build.cmd 0.1.0"
+				CommandLine="build.cmd 0.1.1"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -79,7 +79,7 @@
 			<Tool
 				Name="VCPreBuildEventTool"
 				Description="unpack libsoxr source"
-				CommandLine="build.cmd 0.1.0"
+				CommandLine="build.cmd 0.1.1"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -132,7 +132,7 @@
 			<Tool
 				Name="VCPreBuildEventTool"
 				Description="unpack libsoxr source"
-				CommandLine="build.cmd 0.1.0"
+				CommandLine="build.cmd 0.1.1"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -185,7 +185,7 @@
 			<Tool
 				Name="VCPreBuildEventTool"
 				Description="unpack libsoxr source"
-				CommandLine="build.cmd 0.1.0"
+				CommandLine="build.cmd 0.1.1"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -238,55 +238,55 @@
 			Name="Source Files"
 			>
 			<File
-				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.0-Source\src\data-io.c"
+				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.1-Source\src\data-io.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.0-Source\src\dbesi0.c"
+				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.1-Source\src\dbesi0.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.0-Source\src\fft4g32.c"
+				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.1-Source\src\fft4g32.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.0-Source\src\fft4g64.c"
+				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.1-Source\src\fft4g64.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.0-Source\src\filter.c"
+				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.1-Source\src\filter.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.0-Source\src\lsr.c"
+				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.1-Source\src\lsr.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.0-Source\src\pffft32s.c"
+				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.1-Source\src\pffft32s.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.0-Source\src\rate32.c"
+				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.1-Source\src\rate32.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.0-Source\src\rate32s.c"
+				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.1-Source\src\rate32s.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.0-Source\src\rate64.c"
+				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.1-Source\src\rate64.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.0-Source\src\simd.c"
+				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.1-Source\src\simd.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.0-Source\src\soxr.c"
+				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.1-Source\src\soxr.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.0-Source\src\vr32.c"
+				RelativePath="..\..\..\..\external-packages\libsoxr\soxr-0.1.1-Source\src\vr32.c"
 				>
 			</File>
 		</Filter>

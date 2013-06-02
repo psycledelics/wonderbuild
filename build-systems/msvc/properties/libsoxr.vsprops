@@ -14,6 +14,6 @@
 
 	<UserMacro
 		Name="TopSoxrDir"
-		Value="$(TopSrcDir)/external-packages/libsoxr/soxr-0.1.0-Source/"
+		Value="$(TopSrcDir)/external-packages/libsoxr/soxr-0.1.1-Source/"
 	/>
 </VisualStudioPropertySheet>
