@@ -318,6 +318,10 @@
 						RelativePath="src\psycle\helpers\math\sinseq.hpp"
 						>
 					</File>
+					<File
+						RelativePath=".\src\psycle\helpers\math\sse_mathfun.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="dsp"
