@@ -14,7 +14,7 @@ class BoostCheckTask(MultiBuildCheckTask):
 
 	@staticmethod
 	def shared_uid(base_cfg, min_version_tuple, lib_names, *args, **kw): return \
-		'boost-' + '.'.join(str(i) for i in min_version_tuple) + \
+		'boost-at-least-version-' + '.'.join(str(i) for i in min_version_tuple) + \
 		'-libs-' + ','.join(lib_names) 
 	
 	def __init__(self, persistent, uid, base_cfg, min_version_tuple, lib_names):
@@ -79,7 +79,7 @@ class BoostCheckTask(MultiBuildCheckTask):
 				variant = '-auto-link'
 				cfg_link_libs = []
 			else:
-				variant = kw.get('toolset', '') + kw.get('threading', '-mt') + kw.get('abi', '') + kw.get('lib_version', '')
+				variant = kw.get('toolset', '') + kw.get('threading', '') + kw.get('abi', '') + kw.get('lib_version', '')
 				cfg_link_libs = ['boost_' + lib + variant for lib in self.lib_names]
 			outer = self
 			class AllInOneCheckTask(BuildCheckTask):
@@ -122,23 +122,26 @@ class BoostCheckTask(MultiBuildCheckTask):
 			else:
 				toolset = ''
 				versioned_toolset = None
-			for x in link_check(): yield x
+			threading = '-mt'
+			for x in link_check(threading=threading): yield x
 			if not self.result and versioned_toolset is not None:
-				for x in link_check(toolset=versioned_toolset, lib_version=lib_version): yield x
+				for x in link_check(toolset=versioned_toolset, threading=threading, lib_version=lib_version): yield x
 			if not self.result:
-				for x in link_check(toolset=toolset, lib_version=lib_version): yield x
+				for x in link_check(toolset=toolset, threading=threading, lib_version=lib_version): yield x
 			if not self.result:
-				for x in link_check(toolset=versioned_toolset): yield x
+				for x in link_check(toolset=versioned_toolset, threading=threading): yield x
 			if not self.result:
-				for x in link_check(toolset=toolset): yield x
+				for x in link_check(toolset=toolset, threading=threading): yield x
 			if not self.result:
-				for x in link_check(lib_version=lib_version): yield x
+				for x in link_check(threading=threading, lib_version=lib_version): yield x
+			if not self.result:
+				for x in link_check(): yield x
 
 	class ReadVersion(BuildCheckTask):
 	
 		@staticmethod
 		def shared_uid(outer, include_path=None): return \
-			'boost-' + '.'.join(str(i) for i in outer.min_version_tuple) + \
+			'boost-at-least-version-' + '.'.join(str(i) for i in outer.min_version_tuple) + \
 			(include_path and '-path-' + include_path.abs_path.replace(os.sep, ',').replace(os.pardir, '_') or '')
 
 		@classmethod
