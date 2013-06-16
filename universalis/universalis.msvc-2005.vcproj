@@ -359,6 +359,10 @@
 					>
 				</File>
 				<File
+					RelativePath="src\universalis\compiler\pure_function.hpp"
+					>
+				</File>
+				<File
 					RelativePath="src\universalis\compiler\deprecated.hpp"
 					>
 				</File>
@@ -388,6 +392,10 @@
 				</File>
 				<File
 					RelativePath="src\universalis\compiler\pragma.hpp"
+					>
+				</File>
+				<File
+					RelativePath="src\universalis\compiler\constexpr.hpp"
 					>
 				</File>
 				<File
