@@ -293,11 +293,11 @@
 						>
 					</File>
 					<File
-						RelativePath="src\psycle\helpers\math\lrint.hpp"
+						RelativePath="src\psycle\helpers\math\rint.hpp"
 						>
 					</File>
 					<File
-						RelativePath="src\psycle\helpers\math\lround.hpp"
+						RelativePath="src\psycle\helpers\math\round.hpp"
 						>
 					</File>
 					<File
