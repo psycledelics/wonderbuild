@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python2
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
 # copyright 2009-2011 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
@@ -180,7 +180,7 @@ class Wonderbuild(ScriptTask):
 			src_dir / 'psycle' / 'tests' / 'random_notes',
 			deps=(host, default_output, sequence, decay, additioner, sine), kind=ModTask.Kinds.PROG)
 
-		if False and gtkmm and gnomecanvasmm and cluttermm:
+		if True and gtkmm and gnomecanvasmm and cluttermm:
 			gui = UniformMod('freepsycle-gui',
 				src_dir / 'psycle' / 'front_ends' / 'gui',
 				deps=(host, gtkmm, gnomecanvasmm, cluttermm),
