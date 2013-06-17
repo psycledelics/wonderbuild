@@ -33,7 +33,9 @@ class MultithreadingSupportCheckTask(BuildCheckTask):
 
 	@property
 	def source_text(self):
-		if self.base_cfg.dest_platform.os not in ('win', 'cygwin'):
+		if self.base_cfg.dest_platform.os in ('win', 'cygwin'):
+			return '/* no way to detect multithreading support in this os */'
+		else:
 			return '''\
 #if !defined _REENTRANT && !defined _PTHREADS && !defined _MT && !defined __MT__
 	#error no multithreading support
