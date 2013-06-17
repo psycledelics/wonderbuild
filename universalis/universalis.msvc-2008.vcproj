@@ -363,6 +363,10 @@
 					>
 				</File>
 				<File
+					RelativePath="src\universalis\compiler\message.hpp"
+					>
+				</File>
+				<File
 					RelativePath="src\universalis\compiler\deprecated.hpp"
 					>
 				</File>
