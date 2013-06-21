@@ -7,13 +7,11 @@
 #include <diversalis.hpp>
 #ifdef DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION // if the compiler supports pre-compilation
 	#ifdef DIVERSALIS__OS__MICROSOFT
-		#ifdef DIVERSALIS__COMPILER__MICROSOFT
-			#pragma message("pre-compiling " __FILE__ " ...")
-		#endif
+		DIVERSALIS__MESSAGE("pre-compiling ...")
+
 		#include <universalis/os/include_windows_without_crap.hpp>
-		#ifdef DIVERSALIS__COMPILER__MICROSOFT
-			#pragma message("pre-compiling " __FILE__ " ... done")
-		#endif
+
+		DIVERSALIS__MESSAGE("pre-compiling ... done")
 	#endif
 #endif
 

@@ -6,21 +6,21 @@
 
 // consistency check
 #if defined NDEBUG && defined DIVERSALIS__STDLIB__RUNTIME__DEBUG
-	DIVERSALIS__DETAIL__WARNING("Assertions are off and we are using a debug runtime. Is this intended?")
+	DIVERSALIS__WARNING("Assertions are off and we are using a debug runtime. Is this intended?")
 #elif !defined NDEBUG && !defined DIVERSALIS__STDLIB__RUNTIME__DEBUG && \
 	/* debug runtime is currently only detected on msvc */ defined DIVERSALIS__COMPILER__MICROSOFT
-	DIVERSALIS__DETAIL__WARNING("Assertions are on and we are not using a debug runtime. Is this intended?")
+	DIVERSALIS__WARNING("Assertions are on and we are not using a debug runtime. Is this intended?")
 #elif defined NDEBUG && !defined DIVERSALIS__COMPILER__FEATURE__OPTIMIZE && \
 	/* optimisation is currently only detected on gcc */ defined DIVERSALIS__COMPILER__GNU
-	DIVERSALIS__DETAIL__WARNING("Both assertions and optimisations are off. Is this intended?")
+	DIVERSALIS__WARNING("Both assertions and optimisations are off. Is this intended?")
 #elif !defined NDEBUG && defined DIVERSALIS__COMPILER__FEATURE__OPTIMIZE
-	DIVERSALIS__DETAIL__WARNING("Both assertions and optimisations are on. Is this intended?")
+	DIVERSALIS__WARNING("Both assertions and optimisations are on. Is this intended?")
 #endif
 
 #if defined DIVERSALIS__COMPILER__FEATURE__OPTIMIZE || defined NDEBUG
 	#ifdef DIVERSALIS__COMPILER__MICROSOFT
 		#if defined UNIVERSALIS__COMPILER__VERBOSE
-			DIVERSALIS__DETAIL__MESSAGE("Setting optimizations on")
+			DIVERSALIS__MESSAGE("Setting optimizations on")
 		#endif
 
 		#pragma runtime_checks("c", off) // reports when a value is assigned to a smaller data type that results in a data loss
@@ -56,11 +56,11 @@
 		
 		#if !_SECURE_SCL
 			// see https://svn.boost.org/trac/boost/ticket/1917
-			DIVERSALIS__DETAIL__WARNING("Compiling with _SECURE_SCL = 0. Remember to build Boost libs this way too.")
+			DIVERSALIS__WARNING("Compiling with _SECURE_SCL = 0. Remember to build Boost libs this way too.")
 		#endif
 		#if !_HAS_ITERATOR_DEBUGGING
 			// see https://svn.boost.org/trac/boost/ticket/1917
-			DIVERSALIS__DETAIL__WARNING("Compiling with _HAS_ITERATOR_DEBUGGING = 0. Remember to build Boost libs this way too.")
+			DIVERSALIS__WARNING("Compiling with _HAS_ITERATOR_DEBUGGING = 0. Remember to build Boost libs this way too.")
 		#endif
 	#endif
 #endif

@@ -6,17 +6,13 @@
 #pragma once
 #include <diversalis.hpp>
 #ifdef DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION // if the compiler supports pre-compilation
-	#ifdef DIVERSALIS__COMPILER__MICROSOFT
-		#pragma message("pre-compiling " __FILE__ " ...")
-	#endif
+	DIVERSALIS__MESSAGE("pre-compiling ...")
 
 	#include "pre-compiled/microsoft.private.hpp"
 	#include "pre-compiled/standard.private.hpp"
 	#include "pre-compiled/posix.private.hpp"
 	#include "pre-compiled/boost.private.hpp"
 
-	#ifdef DIVERSALIS__COMPILER__MICROSOFT
-		#pragma message("pre-compiling " __FILE__ " ... done")
-	#endif
+	DIVERSALIS__MESSAGE("pre-compiling ... done")
 #endif
 

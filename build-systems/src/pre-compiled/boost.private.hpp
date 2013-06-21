@@ -6,10 +6,7 @@
 #pragma once
 #include <diversalis.hpp>
 #ifdef DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION // if the compiler supports pre-compilation
-
-	#ifdef DIVERSALIS__COMPILER__MICROSOFT
-		#pragma message("pre-compiling " __FILE__ " ...")
-	#endif
+	DIVERSALIS__MESSAGE("pre-compiling ...")
 
 	#include <boost/version.hpp>
 	#include <boost/static_assert.hpp>
@@ -21,8 +18,6 @@
 	#include <boost/thread/mutex.hpp>
 	#include <boost/thread/recursive_mutex.hpp>
 
-	#ifdef DIVERSALIS__COMPILER__MICROSOFT
-		#pragma message("pre-compiling " __FILE__ " ... done")
-	#endif
+	DIVERSALIS__MESSAGE("pre-compiling ... done")
 #endif
 

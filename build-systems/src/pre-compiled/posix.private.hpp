@@ -7,17 +7,13 @@
 #include <diversalis.hpp>
 #ifdef DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION // if the compiler supports pre-compilation
 	#ifdef DIVERSALIS__OS__POSIX
-		#ifdef DIVERSALIS__COMPILER__MICROSOFT
-			#pragma message("pre-compiling " __FILE__ " ...")
-		#endif
+		DIVERSALIS__MESSAGE("pre-compiling ...")
 
 		#include <sys/unistd.h>
 		#include <dlfcn.h>
 		#include <pthread.h>
 
-		#ifdef DIVERSALIS__COMPILER__MICROSOFT
-			#pragma message("pre-compiling " __FILE__ " ... done")
-		#endif
+		DIVERSALIS__MESSAGE("pre-compiling ... done")
 	#endif
 #endif
 

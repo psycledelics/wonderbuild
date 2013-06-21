@@ -6,10 +6,7 @@
 #pragma once
 #include <diversalis.hpp>
 #ifdef DIVERSALIS__COMPILER__FEATURE__PRE_COMPILATION // if the compiler supports pre-compilation
-
-	#ifdef DIVERSALIS__COMPILER__MICROSOFT
-		#pragma message("pre-compiling " __FILE__ " ...")
-	#endif
+	DIVERSALIS__MESSAGE("pre-compiling ...")
 
 	// c++ headers
 	#include <algorithm>
@@ -75,8 +72,6 @@
 		#include <cstdint> // C1999, so not in C++1998
 	#endif
 
-	#ifdef DIVERSALIS__COMPILER__MICROSOFT
-		#pragma message("pre-compiling " __FILE__ " ... done")
-	#endif
+	DIVERSALIS__MESSAGE("pre-compiling ... done")
 #endif
 
