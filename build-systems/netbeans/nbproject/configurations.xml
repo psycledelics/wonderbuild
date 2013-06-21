@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="84">
+<configurationDescriptor version="89">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
-    <df name="src" root="../../diversalis/src">
+    <df root="../../diversalis/src" name="src">
       <df name="diversalis">
         <df name="detail">
           <in>config.hpp</in>
@@ -15,10 +15,9 @@
       </df>
       <in>diversalis.hpp</in>
     </df>
-    <df name="src" root="../../freepsycle/src">
+    <df root="../../freepsycle/src" name="src">
       <df name="psycle">
         <df name="detail">
-          <in>config.hpp</in>
           <in>config.private.hpp</in>
           <in>decl.hpp</in>
           <in>project.hpp</in>
@@ -42,12 +41,10 @@
             <in>color.hpp</in>
             <in>contraption.cpp</in>
             <in>contraption.hpp</in>
-            <in>coordinates.hpp</in>
             <in>forward_declarations.hpp</in>
             <in>graph.cpp</in>
             <in>graph.hpp</in>
             <in>graph_xy.cpp</in>
-            <in>graph_xy.hpp</in>
             <in>lock.cpp</in>
             <in>lock.hpp</in>
             <in>main.cpp</in>
@@ -57,7 +54,6 @@
           </df>
         </df>
         <df name="host">
-          <in>forward_declarations.hpp</in>
           <in>plugin_resolver.cpp</in>
           <in>plugin_resolver.hpp</in>
           <in>scheduler.cpp</in>
@@ -122,7 +118,7 @@
         <in>engine.hpp</in>
       </df>
     </df>
-    <df name="src" root="../../psycle-audiodrivers/src">
+    <df root="../../psycle-audiodrivers/src" name="src">
       <df name="asio">
         <in>asio.cpp</in>
         <in>asio.private.hpp</in>
@@ -144,17 +140,14 @@
           <in>jackout.cpp</in>
           <in>jackout.h</in>
           <in>microsoftdirectsoundout.cpp</in>
-          <in>microsoftdirectsoundout.h</in>
           <in>microsoftmmewaveout.cpp</in>
-          <in>microsoftmmewaveout.h</in>
           <in>netaudioout.cpp</in>
-          <in>netaudioout.h</in>
           <in>wavefileout.cpp</in>
           <in>wavefileout.h</in>
         </df>
       </df>
     </df>
-    <df name="src" root="../../psycle-core/src">
+    <df root="../../psycle-core/src" name="src">
       <df name="psycle">
         <df name="core">
           <df name="detail">
@@ -170,11 +163,8 @@
           <in>cpu_time_clock.hpp</in>
           <in>eventdriver.cpp</in>
           <in>eventdriver.h</in>
-          <in>exceptions.h</in>
           <in>fileio.cpp</in>
           <in>fileio.h</in>
-          <in>filterhelper.h</in>
-          <in>fwd.hpp</in>
           <in>instpreview.cpp</in>
           <in>instpreview.h</in>
           <in>instrument.cpp</in>
@@ -265,7 +255,7 @@
         </df>
       </df>
     </df>
-    <df name="src" root="../../psycle-helpers/src">
+    <df root="../../psycle-helpers/src" name="src">
       <df name="psycle">
         <df name="helpers">
           <df name="math">
@@ -302,9 +292,7 @@
           <in>filter.cpp</in>
           <in>filter.hpp</in>
           <in>hexstring_to_binary.cpp</in>
-          <in>hexstring_to_binary.hpp</in>
           <in>hexstring_to_integer.cpp</in>
-          <in>hexstring_to_integer.hpp</in>
           <in>math.hpp</in>
           <in>mersennetwister.cpp</in>
           <in>mersennetwister.hpp</in>
@@ -319,13 +307,11 @@
           <in>ring_buffer.hpp</in>
           <in>sampleconverter.cpp</in>
           <in>sampleconverter.hpp</in>
-          <in>scale.hpp</in>
-          <in>value_mapper.hpp</in>
         </df>
       </df>
       <in>unit_tests.cpp</in>
     </df>
-    <df name="src" root="../../psycle-player/src">
+    <df root="../../psycle-player/src" name="src">
       <df name="psycle">
         <df name="player">
           <in>configuration.cpp</in>
@@ -334,7 +320,7 @@
         </df>
       </df>
     </df>
-    <df name="src" root="../../universalis/src">
+    <df root="../../universalis/src" name="src">
       <df name="universalis">
         <df name="compiler">
           <in>align.hpp</in>
@@ -447,6 +433,8 @@
       <toolsSet>
         <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>GNU|GNU</compilerSet>
+        <dependencyChecking>false</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <codeAssistance>
       </codeAssistance>
@@ -716,73 +704,1583 @@
           </ccTool>
         </makeTool>
       </makefileType>
-      <item path="../../freepsycle/src/psycle/detail/config.hpp"
-            ex="true"
+      <item path="../../diversalis/src/diversalis.hpp"
+            ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../freepsycle/src/psycle/front_ends/gui/coordinates.hpp"
-            ex="true"
+      <item path="../../diversalis/src/diversalis/compiler.hpp"
+            ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../freepsycle/src/psycle/front_ends/gui/graph_xy.hpp"
-            ex="true"
+      <item path="../../diversalis/src/diversalis/cpu.hpp"
+            ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../freepsycle/src/psycle/host/forward_declarations.hpp"
-            ex="true"
+      <item path="../../diversalis/src/diversalis/detail/config.hpp"
+            ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/microsoftdirectsoundout.h"
-            ex="true"
+      <item path="../../diversalis/src/diversalis/detail/project.hpp"
+            ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/microsoftmmewaveout.h"
-            ex="true"
+      <item path="../../diversalis/src/diversalis/detail/stringize.hpp"
+            ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/netaudioout.h"
-            ex="true"
+      <item path="../../diversalis/src/diversalis/os.hpp"
+            ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../psycle-core/src/psycle/core/exceptions.h"
-            ex="true"
+      <item path="../../diversalis/src/diversalis/stdlib.hpp"
+            ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../psycle-core/src/psycle/core/filterhelper.h"
-            ex="true"
+      <item path="../../freepsycle/src/psycle/detail/config.private.hpp"
+            ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../psycle-core/src/psycle/core/fwd.hpp"
-            ex="true"
+      <item path="../../freepsycle/src/psycle/detail/decl.hpp"
+            ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../psycle-helpers/src/psycle/helpers/hexstring_to_binary.hpp"
-            ex="true"
+      <item path="../../freepsycle/src/psycle/detail/project.hpp"
+            ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../psycle-helpers/src/psycle/helpers/hexstring_to_integer.hpp"
-            ex="true"
+      <item path="../../freepsycle/src/psycle/detail/project.private.hpp"
+            ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../psycle-helpers/src/psycle/helpers/scale.hpp"
-            ex="true"
+      <item path="../../freepsycle/src/psycle/engine.hpp"
+            ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="../../psycle-helpers/src/psycle/helpers/value_mapper.hpp"
-            ex="true"
+      <item path="../../freepsycle/src/psycle/engine/buffer.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/engine/buffer.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/engine/engine.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/engine/exception.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/engine/forward_declarations.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/engine/graph.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/engine/graph.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/engine/named.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/engine/reference_counter.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/engine/sequence.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/engine/sequence.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/front_ends/gui/color.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/front_ends/gui/contraption.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/front_ends/gui/contraption.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/front_ends/gui/forward_declarations.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/front_ends/gui/graph.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/front_ends/gui/graph.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/front_ends/gui/graph_xy.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/front_ends/gui/lock.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/front_ends/gui/lock.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/front_ends/gui/main.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/front_ends/gui/main.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/front_ends/gui/root.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/front_ends/gui/root.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/host/plugin_resolver.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/host/plugin_resolver.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/host/scheduler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/host/scheduler.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/additioner.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/additioner.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/bipolar_filter.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/bipolar_filter.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/decay.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/decay.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/multiplier.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/multiplier.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/output.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/output.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/outputs/alsa.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/outputs/alsa.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/outputs/direct_sound.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/outputs/direct_sound.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/outputs/dummy.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/outputs/dummy.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/outputs/gstreamer.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/outputs/gstreamer.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/outputs/jack.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/outputs/jack.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/outputs/todo/asio.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/outputs/todo/asio.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/plugin.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/resource.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/resource.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/sequence.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/sequence.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/sine.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/sine.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/template.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/plugins/template.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/stream/format.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/stream/formats/riff_wave/format.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/stream/formats/riff_wave/format.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/tests/random_notes/main.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/tests/random_notes/main.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/tests/random_notes/score1.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/tests/random_notes/score1.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/tests/random_notes/score2.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../freepsycle/src/psycle/tests/random_notes/score2.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/asio/asio.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/asio/asio.private.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/asio/asiodrivers.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/asio/asiolist.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/alsaout.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/alsaout.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/asiointerface.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/asiointerface.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/audiodriver.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/audiodriver.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/esoundout.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/esoundout.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/gstreamerout.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/gstreamerout.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/jackout.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/jackout.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/microsoftdirectsoundout.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/microsoftmmewaveout.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/netaudioout.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/wavefileout.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-audiodrivers/src/psycle/audiodrivers/wavefileout.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/commands.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/constants.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/convert_internal_machines.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/convert_internal_machines.private.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/cpu_time_clock.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/detail/config.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/detail/config.private.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/detail/project.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/detail/project.private.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/eventdriver.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/eventdriver.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/fileio.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/fileio.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/instpreview.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/instpreview.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/instrument.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/instrument.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/internal_machines.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/internal_machines.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/internalhost.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/internalhost.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/internalkeys.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/ladspa.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/ladspahost.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/ladspahost.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/ladspamachine.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/ladspamachine.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/machine.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/machine.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/machinefactory.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/machinefactory.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/machinehost.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/machinehost.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/machinekey.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/machinekey.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/mixer.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/mixer.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/nativehost.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/nativehost.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/pattern.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/pattern.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/patternevent.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/patternevent.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/player.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/player.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/playertimeinfo.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/playertimeinfo.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/plugin.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/plugin.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/plugincatcher.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/plugincatcher.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/pluginfinder.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/pluginfinder.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/plugininfo.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/plugininfo.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/preset.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/preset.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/psy2filter.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/psy2filter.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/psy3filter.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/psy3filter.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/psy4filter.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/psy4filter.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/psyfilterbase.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/sampler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/sampler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/sequence.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/sequence.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/sequencer.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/sequencer.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/song.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/song.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/songserializer.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/songserializer.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/timesignature.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/timesignature.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/vsthost.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/vsthost.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/vstplugin.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/vstplugin.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/xminstrument.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/xminstrument.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/xml.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/xml.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/xmsampler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/xmsampler.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/zipreader.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/zipreader.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/zipwriter.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/zipwriter.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/zipwriterstream.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/psycle/core/zipwriterstream.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/seib/vst/CVSTHost.Seib.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/seib/vst/CVSTHost.Seib.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/seib/vst/EffectWnd.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-core/src/seib/vst/EffectWnd.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/abstractiff.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/abstractiff.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/amigasvx.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/amigasvx.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/appleaiff.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/appleaiff.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/binread.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/binread.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/datacompression.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/datacompression.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/dither.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/dither.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/dsp.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/dsp.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/eaiff.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/eaiff.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/fft.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/fft.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/filter.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/filter.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/hexstring_to_binary.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/hexstring_to_integer.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/math.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/math/clip.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/math/constants.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/math/erase_all_nans_infinities_and_denormals.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/math/erase_denormals.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/math/log.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/math/lrint.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/math/lround.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/math/math.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/math/sin.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/math/sincos.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/math/sinseq.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/mersennetwister.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/mersennetwister.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/msriff.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/msriff.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/resampler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/resampler.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/riff.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/riff.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/riffwave.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/riffwave.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/ring_buffer.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/sampleconverter.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/psycle/helpers/sampleconverter.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-helpers/src/unit_tests.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-player/src/psycle/player/configuration.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-player/src/psycle/player/configuration.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../psycle-player/src/psycle/player/main.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/unit_tests.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/align.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/asm.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/attribute.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/auto_link.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/calling_convention.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/concat.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/const_function.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/deprecated.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/dyn_link.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/exception.compiler.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/exception.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/location.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/pack.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/pragma.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/restrict.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/setup_feature_test_macros.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/setup_optimizations.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/setup_warnings.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/stringize.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/thread_local_storage.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/token.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/typenameof.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/typenameof.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/virtual.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/compiler/weak.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/cpu/atomic_compare_and_swap.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/cpu/exception.cpu.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/cpu/exception.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/cpu/memory_barriers.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/detail/config.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/detail/config.private.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/detail/project.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/detail/project.private.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/exception.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/exception.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/os/aligned_alloc.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/os/clocks.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/os/clocks.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/os/detail/clocks.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/os/dyn_link.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/os/dyn_link.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/os/eol.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/os/exception.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/os/exception.os.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/os/fs.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/os/fs.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/os/include_windows_without_crap.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/os/loggers.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/os/loggers.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/os/sched.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/os/sched.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/os/terminal.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/os/terminal.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/os/thread_name.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/os/thread_name.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/stdlib/chrono.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/stdlib/condition_variable.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/stdlib/cstdint.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/stdlib/detail/chrono/duration_and_time_point.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/stdlib/detail/chrono/measure_clock.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/stdlib/exception.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/stdlib/exception.stdlib.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/stdlib/mutex.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/stdlib/ratio.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="../../universalis/src/universalis/stdlib/thread.hpp"
+            ex="false"
             tool="3"
             flavor2="0">
       </item>

@@ -18,9 +18,9 @@
 #define BOOST_THREAD_USE_DLL
 #endif
 
-#include <universalis/compiler/setup_feature_test_macros.hpp>
-#include <universalis/compiler/setup_warnings.hpp>
-#include <universalis/compiler/setup_optimizations.hpp>
+#include "setup_feature_test_macros.hpp"
+#include "setup_warnings.hpp"
+#include "setup_optimizations.hpp"
 
 // Everything in pre-compiled headers is entirely optional,
 // i.e. the include could be commented out and it should still build the same.

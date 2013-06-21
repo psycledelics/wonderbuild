@@ -114,7 +114,9 @@ class Wonderbuild(ScriptTask):
 				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
 				if self.path.exists:
 					for s in self.path.find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
-				else: self.sources.append(self.path.parent / (self.path.name + '.cpp'))
+				else:
+					p = self.path.parent / (self.path.name + '.cpp')
+					if p.exists: self.sources.append(self.path.parent / (self.path.name + '.cpp'))
 
 		engine = UniformMod('freepsycle-engine', src_dir / 'psycle' / 'engine', kind=ModTask.Kinds.LIB)
 		host = UniformMod('freepsycle-host', src_dir / 'psycle' / 'host', deps=(engine,), kind=ModTask.Kinds.LIB)

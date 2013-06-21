@@ -294,6 +294,10 @@
 					RelativePath="..\diversalis\src\diversalis\detail\stringize.hpp"
 					>
 				</File>
+				<File
+					RelativePath="..\diversalis\src\diversalis\detail\message.hpp"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -407,23 +411,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\src\universalis\compiler\setup_feature_test_macros.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\universalis\compiler\setup_optimizations.hpp"
-					>
-				</File>
-				<File
-					RelativePath="src\universalis\compiler\setup_warnings.hpp"
-					>
-				</File>
-				<File
 					RelativePath="src\universalis\compiler\stringize.hpp"
 					>
 				</File>
 				<File
-					RelativePath="src\universalis\compiler\thread_local_storage.hpp"
+					RelativePath="src\universalis\compiler\thread_local.hpp"
 					>
 				</File>
 				<File
