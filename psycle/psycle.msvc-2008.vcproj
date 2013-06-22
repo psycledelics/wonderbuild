@@ -982,6 +982,14 @@
 						>
 					</File>
 					<File
+						RelativePath=".\src\psycle\host\PlotterDlg.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\psycle\host\PlotterDlg.hpp"
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\PresetsDlg.cpp"
 						>
 					</File>
