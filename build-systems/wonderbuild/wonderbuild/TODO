@@ -11,3 +11,5 @@
 * rewrite colorgcc in python; low priority, since clang already has colors natively.
 
 * experiment with beta-mode like tup.
+
+* speedup boost lib detection : try multiple link names in parellel and don't #include
