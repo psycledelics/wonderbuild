@@ -100,7 +100,7 @@ class Node(object):
 				if e.errno != errno.ENOENT: raise
 				# broken symlink
 		self._is_dir = stat.S_ISDIR(st.st_mode)
-		self._time = st.st_mtime
+		self._time = st.st_ctime # note: unlike mtime, ctime is updated when a change in perm or ownership occurs.
 
 	@property
 	def lock(self):
