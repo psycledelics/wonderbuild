@@ -69,7 +69,7 @@ isEmpty(common_included) {
 		cxx_to_object_preserve_path.dependency_type = TYPE_C
 		defineReplace(cxxToObjectPreservePathOutputFunction) {
 			variable = $$1
-			return($$OBJECTS_DIR/$$replace(variable, \.\., ).o)
+                        return($$OBJECTS_DIR/$$replace(variable, \\.\\., ).o)
 		}
 		cxx_to_object_preserve_path.output_function = cxxToObjectPreservePathOutputFunction
 		*-msvc* {
