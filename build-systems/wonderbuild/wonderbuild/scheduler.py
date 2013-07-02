@@ -21,6 +21,7 @@ else:
 	except:
 		cpu_count = int(os.environ.get('NUMBER_OF_PROCESSORS', 1)) # env var defined on mswindows
 		#_, cpu_count, __ = int(exec_subprocess_pipe(['sysctl', '-n', 'hw.ncpu']))
+		#cpu_count = int(exec_subprocess_pipe(['nproc']))
 
 _jobs = cpu_count * 2 # at least two threads per core is always better for i/o bound tasks
 _default_timeout = 3600.0
