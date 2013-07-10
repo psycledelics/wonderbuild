@@ -14,9 +14,11 @@ isEmpty(platform_included) {
 		}
 		return($$result)
 	}
-	
+
 	# Treat 64-bit to 32-bit integer casts as errors
-	*-g++ {
+	*-g++* {
+        QMAKE_CXXFLAGS *= -fopenmp
+        LIBS *= -lgomp
 		#QMAKE_CXXFLAGS *= -Werror=pointer-to-int-cast # gcc 4.3
 		#QMAKE_CXXFLAGS *= -Werror=int-to-pointer-cast # gcc 4.3 
 		#QMAKE_CXXFLAGS *= -fdiagnostics-show-option

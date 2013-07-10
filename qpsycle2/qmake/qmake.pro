@@ -6,6 +6,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 # include the base stuff shared amongst all qmake projects.
 include(../../build-systems/qmake/common.pri)
 
+QMAKE_CXXFLAGS *= -std=c++11
+
 # this include defines a dependency on the qt-xml lib.
 include($$COMMON_DIR/qt-xml.pri)
 
@@ -59,7 +61,7 @@ HEADERS +=  $$QPSYCLE2_DIR/src/qpsycle2.h\
 
 
 
- LIBS += -lz -ldl -lrt -lboost_filesystem -lboost_system -lboost_signals -lboost_thread -lgomp
+ LIBS *= -lz -ldl -lrt -lboost_filesystem -lboost_system -lboost_signals -lboost_thread -lgomp
 
 
 include($$COMMON_DIR/display-vars.pri)
