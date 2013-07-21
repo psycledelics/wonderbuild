@@ -6,7 +6,6 @@ from logger import is_debug, debug, out, cols, colored, multicolumn_format
 
 if False:
 	# TODO @task decorator : allow tasks directly on functions
-	# TODO This would also speed up attributes in filesystem.py
 	class cache(object):
 		'''Computes attribute value and caches it in the instance.
 		Python Cookbook (Denis Otkidach) http://stackoverflow.com/users/168352/denis-otkidach

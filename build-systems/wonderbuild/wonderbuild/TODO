@@ -15,3 +15,5 @@
 * speedup boost lib detection : try multiple link names in parellel and don't #include
 
 * when linking fails, remove symlinks
+
+* @task decorator : allow tasks directly on functions
