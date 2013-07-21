@@ -36,7 +36,7 @@ class Task(object):
 
 	if False: # This is now done lazily directly in the Scheduler.
 		def __init__(self):
-			self._sched_stacked = task._sched_processed = False
+			self._sched_stacked = self._sched_processed = False
 			self._sched_in_task_todo_count = 0
 			self._sched_out_tasks = []
 
