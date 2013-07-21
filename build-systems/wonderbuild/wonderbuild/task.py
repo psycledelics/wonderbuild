@@ -98,10 +98,10 @@ class PurgeablePersistentDict(dict):
 	# TODO Without this, fs global_purge_unused_children cannot reliably purge fs nodes since (old) tasks' persistent data will still reference deleted nodes.
 	# TODO Then doing node1.rel_path(node2), where node1 and node2 don't have a common ancestor *instance*, will return node1's abs_path.
 	# TODO If you then do node3 / abs_path, you still get node1, which is not expected!
-	# TODO This badly breaks the install tasks that wants to remove in dest dir, node3 in that example, and instead removes node1, the original source!
+	# TODO This badly breaks the install tasks that want to remove in dest dir, node3 in that example, and instead removes node1, the original source!
 	# TODO For now, fs global_purge_unused_children is entirely disabled. Only the safe fs partial_purge_unused_children is used.
 	# TODO This is not top priority because it's only useful after some tasks have been removed or renamed in the user build scripts,
-	# TODO and we want to trim their ghost signatures from the pickle. The pickle file won't grow fat unless the user build script change.
+	# TODO and we want to trim their ghost signatures from the pickle. The pickle file won't grow fat unless the user build script changes.
 	def purge(self): pass
 
 class Persistent(object):
