@@ -5,30 +5,29 @@
 from logger import is_debug, debug, out, cols, colored, multicolumn_format
 
 if False:
-	# TODO @task decorator : allow tasks directly on functions
-	class cache(object):
-		'''Computes attribute value and caches it in the instance.
-		Python Cookbook (Denis Otkidach) http://stackoverflow.com/users/168352/denis-otkidach
-		This decorator allows you to create a property which can be computed once and
-		accessed many times. Sort of like memoization.
+	# Python Cookbook (Denis Otkidach) http://stackoverflow.com/users/168352/denis-otkidach'
+	class task(object):
+		'@task decorator: allows tasks directly on functions'
 
-		'''
 		def __init__(self, method, name=None):
+			print self, method, name
 			# record the unbound-method and the name
 			self.method = method
 			self.name = name or method.__name__
 			self.__doc__ = method.__doc__
+			
 		def __get__(self, inst, cls):
-			# self: <__main__.cache object at 0xb781340c>
-			# inst: <__main__.Foo object at 0xb781348c>
-			# cls: <class '__main__.Foo'>       
+			print self, repr(inst), cls
 			if inst is None:
 				# instance attribute accessed on class, return self
 				# You get here if you write `Foo.bar`
 				return self
-			# compute, cache and return the instance's attribute value
-			result = self.method(inst)
-			# setattr redefines the instance's attribute so this doesn't get called again
+			class T(Task):
+				def __call__(xself, sched_ctx):
+					print self, self.method, sched_ctx
+					if False: yield x
+					self.method(inst, sched_ctx)
+			result = T() #self.method(inst)
 			setattr(inst, self.name, result)
 			return result
 
