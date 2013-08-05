@@ -4,17 +4,17 @@ set -x &&
 
 jobs=4 &&
 
-wonderbuild=../../wonderbuild.py &&
-tup=../../tup/tup &&
-fbuild=../../fbuild/fbuild-light &&
-waf=../../waf/waf-light &&
-scons=../../scons/src/ &&
-fabricate=../../fabricate/fabricate.py &&
+wonderbuild=../../../wonderbuild.py &&
+tup=../../other-build-tools/tup/tup &&
+fbuild=../../other-build-tools/fbuild/fbuild-light &&
+waf=../../other-build-tools/waf/waf-light &&
+scons=../../other-build-tools/scons/src/ &&
+fabricate=../../other-build-tools/fabricate/fabricate.py &&
 
 cpython=python &&
-pypy=../../pypy/bin/pypy &&
-#jython=../../jython/bin/jython &&
-jython='java -jar ../../jython/jython.jar' &&
+pypy=../../python-alternative-implementations/pypy/bin/pypy &&
+#jython=../../python-alternative-implementations/jython/bin/jython &&
+jython='java -jar ../../python-alternative-implementations/jython/jython.jar' &&
 
 python=$cpython &&
 python3=python3 &&

@@ -1,4 +1,0 @@
-#! /bin/sh
-#set -x &&
-cd $(dirname $0/..) &&
-for i in $(seq 0 49); do for j in $(seq $3 $4); do $1 bench-$2/lib_$i/$j; done; done
