@@ -1,2 +1,0 @@
-#! /bin/sh
-exec $(dirname $0)/$(basename $0 .dev-null) "$@" 2> /dev/null
