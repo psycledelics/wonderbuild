@@ -1192,7 +1192,7 @@ class ModTask(ModDepPhases, Task, Persistent):
 					# rather than attempting to put them in a config header.
 					# See http://www.gnu.org/software/autoconf/manual/autoconf.html#Defining-Directories
 					# This is only because AC_CONFIG_HEADERS is what i'd consider broken.
-					# See for example the bugs is leads to and bad workarounds http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=370282
+					# See for example the bugs it leads to and bad workarounds http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=370282
 					# where they were trying to do recursive shell evals of the variables.
 					#
 					# The recommended way by the autoconf manual to achieve this is using makefile rules like these ones:
