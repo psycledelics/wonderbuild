@@ -24,7 +24,7 @@ Some doc for the ModTask class:
 
 	Attribute sources:
 		list of FileSystem.Node
-		This should be the source files compile.
+		This should be the source files to compile.
 
 	Attribute mod_phase, from ModDepPhases:
 		The user doesn't need to override this attribute. They only override the self.do_mod_phase() method, which is called by the mod_phase task.
