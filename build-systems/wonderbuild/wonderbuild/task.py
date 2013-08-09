@@ -17,7 +17,6 @@ class task(object):
 			def __call__(sched_ctx): return self.generator_function(owner_instance, sched_ctx)
 		result = T()
 		setattr(owner_instance, self.generator_function.__name__, result)
-		print result
 		return result
 
 class Task(object):
