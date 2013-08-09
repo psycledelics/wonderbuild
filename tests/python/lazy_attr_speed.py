@@ -41,6 +41,7 @@ if __name__ == '__main__':
 				return self._x6
 
 		class once():
+			__slots__ = ('func',)
 			def __init__(self, func):
 				self.func = func
 			def __get__(self, inst, owner):
