@@ -50,7 +50,7 @@ if __name__ == '__main__':
 
 		@once
 		def x7(self):
-			#print('x6')
+			#print('x7')
 			return 0
 
 	import time
