@@ -420,8 +420,7 @@ class ModDepPhases(object): # note: doesn't derive from Task, but derived classe
 						recurse(dep, False,
 							expose_private_deep_deps, expose_private_deep_deps,
 							expose_deep_mod_tasks is not None and (expose_deep_mod_tasks or not isinstance(dep, ModTask) or None))
-				else:
-					if not dep in seen:
+				elif not dep in seen:
 						result.appendleft(dep)
 						seen.add(dep)
 			if not root: result.appendleft(instance)
