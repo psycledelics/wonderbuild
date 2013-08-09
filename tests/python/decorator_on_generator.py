@@ -7,8 +7,7 @@ if __name__ == '__main__':
 			for x in range(5): yield x
 
 		class task():
-			def __init__(self, gen):
-				self.gen = gen
+			def __init__(self, gen): self.gen = gen
 			def __get__(self, inst, owner):
 				class Task():
 					@staticmethod
