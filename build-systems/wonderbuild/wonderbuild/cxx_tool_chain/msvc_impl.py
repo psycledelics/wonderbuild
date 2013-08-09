@@ -12,6 +12,10 @@ from cpp_include_scanner import IncludeScanner
 
 class Impl(object):
 	def __init__(self, persistent):
+		# Note: It's possible to use cl.exe -showincludes,
+		# as shown there: http://www.conifersystems.com/2008/10/09/dependencies-from-showincludes/
+		# and also implemented in waf: http://code.google.com/p/waf/issues/detail?id=1201
+		# However it seems a bit fragile.
 		self.cpp = IncludeScanner(persistent)
 
 	@staticmethod

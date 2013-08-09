@@ -1,5 +1,3 @@
-* #include scanner for msvc: cl.exe -showincludes ... http://www.conifersystems.com/2008/10/09/dependencies-from-showincludes/
-
 * --help shouldn't create the build dir.
 
 * need a way to select a script from the command line instead of just a source dir (via --src-dir).
@@ -12,6 +10,8 @@
 
 * experiment with beta-mode like tup.
 
-* speedup boost lib detection : try multiple link names in parellel and don't #include
+* speedup boost lib detection : try multiple link names in parallel and don't #include
 
 * when linking fails, remove symlinks
+
+* FHS and multiarch: automatically choose lib dir according to compiler target arch-kernel-os triplet, e.g. <prefix>/lib/x86_64-linux-gnu/
