@@ -31,7 +31,9 @@ else:
 
 	class Wonderbuild(ScriptTask):
 		def __call__(self, sched_ctx):
+			print 'begin 0'
 			for x in sched_ctx.parallel_wait(self.task1, self.task2): yield x
+			print 'end 0'
 
 		@task
 		def task1(self, sched_ctx):
