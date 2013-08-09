@@ -12,10 +12,11 @@ class task(object):
 		#self.__doc__ = generator_function.__doc__
 		
 	def __get__(self, owner_instance, owner_class):
-		class T(Task):
+		class _(Task):
 			@staticmethod
 			def __call__(sched_ctx): return self.generator_function(owner_instance, sched_ctx)
-		result = T()
+			def __str__(_): return str(owner_instance) + ': ' + self.generator_function.__name__
+		result = _()
 		setattr(owner_instance, self.generator_function.__name__, result)
 		return result
 

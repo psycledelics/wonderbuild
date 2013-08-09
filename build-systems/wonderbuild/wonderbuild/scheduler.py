@@ -125,7 +125,7 @@ class Scheduler(OptionDecl):
 			if hasattr(self, 'exception'):
 				for task in self._task_stack: self._close_gen(task)
 				if isinstance(self.exception, UserReadableException): raise self.exception
-				else: raise UserReadableException, 'An exception occurred, see stack trace above.'
+				else: raise UserReadableException, 'An exception occurred; see stack trace above.'
 
 	@staticmethod	
 	def _close_gen(task):
@@ -180,6 +180,15 @@ class Scheduler(OptionDecl):
 							except:
 								try: exception_task_str = str(task)
 								finally: raise
+							if task_gen is None:
+								msg = "Did you forget to add some 'if False: yield' statement in your task function body to make it a generator?"
+								if __debug__ and is_debug:
+									try: exception_task_str = str(task)
+									finally: raise Exception, msg
+								else:
+									try: msg = str(task) + ': ' + msg
+									except: raise Exception, msg
+									else: raise UserReadableException, msg
 						try: in_tasks = task_gen.next()
 						except StopIteration:
 							if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': task processed: ' + str(task) + ', out tasks: ' + str([str(t) for t in task._sched_out_tasks]))
