@@ -1,35 +1,24 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2008-2010 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2008-2013 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 from logger import is_debug, debug, out, cols, colored, multicolumn_format
 
-if False:
-	# Python Cookbook (Denis Otkidach) http://stackoverflow.com/users/168352/denis-otkidach'
-	class task(object):
-		'@task decorator: allows tasks directly on functions'
+class task(object):
+	'@task decorator: allows tasks directly on functions'
 
-		def __init__(self, method, name=None):
-			print self, method, name
-			# record the unbound-method and the name
-			self.method = method
-			self.name = name or method.__name__
-			self.__doc__ = method.__doc__
-			
-		def __get__(self, inst, cls):
-			print self, repr(inst), cls
-			if inst is None:
-				# instance attribute accessed on class, return self
-				# You get here if you write `Foo.bar`
-				return self
-			class T(Task):
-				def __call__(xself, sched_ctx):
-					print self, self.method, sched_ctx
-					if False: yield x
-					self.method(inst, sched_ctx)
-			result = T() #self.method(inst)
-			setattr(inst, self.name, result)
-			return result
+	def __init__(self, generator_function):
+		self.generator_function = generator_function
+		#self.__doc__ = generator_function.__doc__
+		
+	def __get__(self, owner_instance, owner_class):
+		class T(Task):
+			@staticmethod
+			def __call__(sched_ctx): return self.generator_function(owner_instance, sched_ctx)
+		result = T()
+		setattr(owner_instance, self.generator_function.__name__, result)
+		print result
+		return result
 
 class Task(object):
 
