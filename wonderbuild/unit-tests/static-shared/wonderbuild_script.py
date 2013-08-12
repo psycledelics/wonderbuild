@@ -18,7 +18,7 @@ if __name__ == '__main__':
 	else: main()
 
 else:
-	from wonderbuild.script import ScriptTask, ScriptLoaderTask
+	from wonderbuild.script import ScriptTask
 
 	class Wonderbuild(ScriptTask):
 		def __call__(self, sched_ctx):
