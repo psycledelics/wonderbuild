@@ -10,5 +10,5 @@ from _build_cfg import BuildCfg
 from _user_build_cfg import UserBuildCfgTask
 from _precompile import PreCompileTasks
 from _mod import ModTask
-from _pkg_config import PkgConfigCheckTask, PkgConfigCxxFlagsTask as _PkgConfigCxxFlagsTask, PkgConfigLdFlagsTask as _PkgConfigLdFlagsTask
+from _pkg_config import PkgConfigCheckTask
 from _build_check import MultiBuildCheckTask, BuildCheckTask
