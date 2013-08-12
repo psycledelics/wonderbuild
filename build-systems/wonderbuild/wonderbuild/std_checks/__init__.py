@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2006-2011 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2006-2013 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 from wonderbuild import UserReadableException
 from wonderbuild.cxx_tool_chain import BuildCheckTask, ok_color, failed_color
@@ -127,40 +127,6 @@ WONDERBUILD__ARCH
 	def result_display(self):
 		if self.result: return 'bin-fmt: ' + self.bin_fmt + ', os: ' + self.os + ', arch: ' + self.arch, ok_color
 		else: return 'unkown', failed_color
-
-def unversioned_sys_platform_to_binary_format(unversioned_sys_platform):
-	"infers the binary format from the unversioned_sys_platform name."
-
-	if unversioned_sys_platform in ('linux', 'freebsd', 'netbsd', 'openbsd', 'sunos'): return 'elf'
-	elif unversioned_sys_platform == 'darwin': return 'mac-o'
-	elif unversioned_sys_platform in ('win', 'cygwin', 'uwin', 'msys'): return 'pe'
-	else: return None
-
-def unversioned_sys_platform():
-	"""returns an unversioned name from sys.platform.
-	sys.plaform is not very well defined and depends directly on the python source tree.
-	The version appended to the names is unreliable as it's taken from the build environment at the time python was built,
-	i.e., it's possible to get freebsd7 on a freebsd8 system.
-	So we remove the version from the name (except for the stupid name os2).
-	Some possible values of sys.platform are, amongst others:
-		aix3 aix4 atheos beos5 darwin freebsd2 freebsd3 freebsd4 freebsd5 freebsd6 freebsd7
-		generic irix5 irix6 linux2 mac netbsd1 next3 os2emx riscos sunos5 unixware7
-	Investigating the python source tree may reveal more values.
-	"""
-	s = sys.platform
-	if s == 'java':
-		# The real OS is hidden under the JVM.
-		from java.lang import System
-		s = System.getProperty('os.name')
-		# see http://lopica.sourceforge.net/os.html for a list of possible values
-		if s == 'Mac OS X': return 'darwin'
-		elif s.startswith('Windows '): return 'win'
-		elif s == 'OS/2': return 'os2'
-		elif s == 'HP-UX': return 'hpux'
-		elif s in ('SunOS', 'Solaris'): return 'sunos'
-		else: s = s.lower()
-	if s.endswith('os2') and s != 'sunos2': return s
-	return re.split('\d+$', s)[0]
 
 class MingwCheckTask(BuildCheckTask):
 
