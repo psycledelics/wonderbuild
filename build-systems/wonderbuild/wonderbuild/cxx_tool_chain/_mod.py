@@ -611,7 +611,11 @@ class ModTask(ModDepPhases, Task, Persistent):
 						'\nLibs: ' + ' '.join(ld_flags) + \
 						'\nLibs.private: ' + ' '.join(private_ld_flags) + \
 						'\nRequires: ' + ' '.join(cfg.pkg_config)
-					if False: s += '\nRequires.private: ...' # messy specification
+					if False:
+						# Requires.private is something sitting between a public and a private dependency.
+						# Its use is when a public header of this package includes another package's header (so you need its CFlags),
+						# but this package's library does not directly call any code in the other package's library (so you don't want its Libs).
+						s += '\nRequires.private: ' + ' '.join(private_cfg.pkg_config)
 					if False: s += '\nConflicts: ...'
 					s += '\n'
 					file.parent.make_dir(file.parent)

@@ -67,6 +67,7 @@ if False: # summary of modules
 	is_debug = None
 	def debug(s): pass
 	out = None
+	out_is_dumb = None
 	def multicolumn_format(list, max_width): pass
 	def fold(s, width): pass
 	def colored(color, s): pass

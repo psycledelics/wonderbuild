@@ -15,3 +15,5 @@
 * when linking fails, remove symlinks
 
 * FHS and multiarch: automatically choose lib dir according to compiler target arch-kernel-os triplet, e.g. <prefix>/lib/x86_64-linux-gnu/
+
+* pkg-config's Requires.private is something sitting between a public and a private dependency.
