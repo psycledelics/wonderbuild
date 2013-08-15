@@ -519,7 +519,7 @@ class ModTask(ModDepPhases, Task, Persistent):
 		
 				def generate(uninstalled, file):
 					# The 'prefix' variable is *mandatory* for proper working on MS-Windows; see pkg-config(1) manpage.
-					# Consequently, we need 3 more variables, 'exec_prefix', 'libdir' and 'includedir' whose values depend on that first 'prefix' variable.
+					# Currently, we use 3 more variables, 'exec_prefix', 'libdir' and 'includedir' whose values depend on that first 'prefix' variable.
 					prefix_to_exec_prefix = self.cfg.fhs.exec_prefix.rel_path(self.cfg.fhs.prefix)
 					if False: # long comment about autotools ...
 						# Note that if the user specifies:
@@ -615,7 +615,7 @@ class ModTask(ModDepPhases, Task, Persistent):
 						'\nVersion: ' + self.version_string
 					if self.url: s += '\nURL: ' + self.url
 					s += \
-						'\nCflags: ' + ' '.join(self.cfg.impl.client_cfg_cxx_args(public_cfg, '${includedir}')) + \
+						'\nCFlags: ' + ' '.join(self.cfg.impl.client_cfg_cxx_args(public_cfg, '${includedir}')) + \
 						'\nLibs: ' + ' '.join(self.cfg.impl.client_cfg_ld_args(public_cfg, '${libdir}')) + \
 						'\nLibs.private: ' + ' '.join(self.cfg.impl.client_cfg_ld_args(private_cfg, '${libdir}')) + \
 						'\nRequires: ' + ' '.join(public_cfg.pkg_config) + \
@@ -624,9 +624,9 @@ class ModTask(ModDepPhases, Task, Persistent):
 						# Requires.private has two usages :
 						#
 						# - Case 1: public header-only dependency
-						#   A public header of this package includes another package's header (so you need its Cflags),
+						#   A public header of this package includes another package's header (so you need its CFlags),
 						#   but this package's library does not directly call any code in the other package's library (so you don't want its Libs).
-						#   So, pkg-config --cflags also brings indirect Cflags through Requires.private, whether you call it with --static or not,
+						#   So, pkg-config --cflags also brings indirect CFlags through Requires.private, whether you call it with --static or not,
 						#   but when pkg-config is called *without* --static, pkg-config --libs doesn't bring indirect Libs.
 						#   Note that this usage is *very* fragile; it may depend on the precise implementation of the other package's library:
 						#   - Is that C++ class actually a POD type ?
@@ -648,7 +648,7 @@ class ModTask(ModDepPhases, Task, Persistent):
 						# - Case 3: private dependency
 						#   You're not in case 1 (public header-only dependency),
 						#   but rather using another package's code internally in this librarie's implementation.
-						#   When pkg-config is called with --cflags, it *does* bring indirect Cflags through Requires.private,
+						#   When pkg-config is called with --cflags, it *does* bring indirect CFlags through Requires.private,
 						#   which, in this scenario (private dependency), are useless, but harmless.
 						#   For this reason, wonderbuild avoids using Requires.private for private dependencies when it can instead use Libs.private.
 						pass
