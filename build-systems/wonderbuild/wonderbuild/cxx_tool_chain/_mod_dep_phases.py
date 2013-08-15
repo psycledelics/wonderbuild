@@ -73,29 +73,31 @@ class ModDepPhases(object): # note: doesn't derive from Task, but derived classe
  	@property
 	def _expose_private_deep_deps(self): return False
 
-	def _topologically_sorted_unique_deep_deps(self, expose_private_deep_deps, expose_deep_mod_tasks=True):
+	def _topologically_sorted_unique_deep_deps(self, expose_private_deep_deps, expose_deep_mod_tasks=True, expose_private_deps_only=False):
 		from wonderbuild.cxx_tool_chain import ModTask
-		expose_private_deps = expose_private_deep_deps or expose_deep_mod_tasks
-		expose_private_deps_only = expose_private_deep_deps and not expose_deep_mod_tasks
-		if expose_private_deep_deps: expose_private_deep_deps = None # called with True or False, but we use a tribool in the recursion
 		result = deque(); seen = set() # ordering matters for sig, and static libs must appear after their clients
 		def recurse(instance, root, expose_private_deps, expose_private_deep_deps, expose_deep_mod_tasks):
 			if not root:
 				if instance in seen: return
 				seen.add(instance)
 			for dep in expose_private_deps and (expose_private_deps_only and instance.private_deps or instance.all_deps) or instance.public_deps:
-				if expose_deep_mod_tasks or not isinstance(dep, ModTask):
+				# Only ModTasks may depend on ModTasks, i.e., non-ModTasks never depend on ModTasks.
+				# So we can optimise-out the check in the recursion.
+				dep_expose_deep_mod_tasks = expose_deep_mod_tasks or not isinstance(dep, ModTask)
+				if dep_expose_deep_mod_tasks:
 					if expose_private_deep_deps is None:
 						recurse(dep, False,
 							dep._expose_private_deep_deps, dep._expose_private_deep_deps and None,
-							expose_deep_mod_tasks is not None and (expose_deep_mod_tasks or not isinstance(dep, ModTask) or None))
+							dep_expose_deep_mod_tasks)
 					else:
 						recurse(dep, False,
 							expose_private_deep_deps, expose_private_deep_deps,
-							expose_deep_mod_tasks is not None and (expose_deep_mod_tasks or not isinstance(dep, ModTask) or None))
+							dep_expose_deep_mod_tasks)
 				elif not dep in seen:
-						result.appendleft(dep)
-						seen.add(dep)
+					result.appendleft(dep)
+					seen.add(dep)
 			if not root: result.appendleft(instance)
-		recurse(self, True, expose_private_deps, expose_private_deep_deps, expose_deep_mod_tasks)
+		recurse(self, True,
+			expose_private_deep_deps or expose_deep_mod_tasks, expose_private_deep_deps and None, # called with True or False, but we use a tribool in the recursion
+			expose_deep_mod_tasks)
 		return result

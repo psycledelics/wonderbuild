@@ -445,7 +445,11 @@ class ModTask(ModDepPhases, Task, Persistent):
 		self.apply_mod_to(public_cfg)
 
 		public_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=False, expose_deep_mod_tasks=False)
-		private_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=True, expose_deep_mod_tasks=False)
+		private_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=True, expose_deep_mod_tasks=True, expose_private_deps_only=True)
+		# Note: for private_deps we use expose_deep_mod_tasks=True, expose_private_deps_only=True.
+		# This is because we avoid using Requires.private for private dependencies when we can instead use Libs.private.
+		# Doing so means we need to flatten private deep ModTask dependencies directly into Libs.private.
+		# For rationale, see comment in the code further below where the .pc file is written to.
 
 		if False: # No need for the tasks to complete, because:
 			# We just need to do apply_cxx_to and apply_mod_to.
@@ -463,10 +467,9 @@ class ModTask(ModDepPhases, Task, Persistent):
 			else: dep.apply_cxx_to(public_cfg); dep.apply_mod_to(public_cfg)
 		for dep in private_deps:
 			if isinstance(dep, ModTask):
-				if not self._expose_private_deep_deps: pass # XXX Shouldn't it be more logical to handle this directly in self._topologically_sorted_unique_deep_deps ?
-				# Wonderbuild avoids using Requires.private for private dependencies when it can instead use Libs.private.
-				# For rationale see comment in the code further below where the .pc file is written to.
-				elif False: private_cfg.pkg_config.append(dep.name) # uses Requires.private
+				# We avoid using Requires.private for private dependencies when we can instead use Libs.private.
+				# For rationale, see comment in the code further below where the .pc file is written to.
+				if False: private_cfg.pkg_config.append(dep.name) # uses Requires.private
 				else: dep.apply_mod_to(private_cfg) # uses Libs.private
 			elif isinstance(dep, PkgConfigCheckTask): private_cfg.pkg_config += dep.pkgs # uses Requires.private
 			else: dep.apply_mod_to(private_cfg) # uses Libs.private
