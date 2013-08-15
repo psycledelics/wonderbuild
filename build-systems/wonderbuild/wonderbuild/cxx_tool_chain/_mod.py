@@ -13,6 +13,8 @@ from _mod_dep_phases import ModDepPhases
 from _build_cfg import BuildCfg
 from _pkg_config import PkgConfigCheckTask, PkgConfigCxxFlagsTask as _PkgConfigCxxFlagsTask, PkgConfigLdFlagsTask as _PkgConfigLdFlagsTask
 
+_schedule_ahead = True
+
 class _BatchCompileTask(Task):
 	def __init__(self, mod_task, sources):
 		Task.__init__(self)
@@ -99,6 +101,7 @@ class ModTask(ModDepPhases, Task, Persistent):
 	def _expose_private_deep_deps(self):
 		try: return self.__expose_private_deep_deps
 		except AttributeError:
+			# Basically, a static lib must expose its private_deps for client linking.
 			self.__expose_private_deep_deps = \
 				(not self.ld or self.kind == ModTask.Kinds.PROG and self.cfg.static_prog) and \
 				self.kind != ModTask.Kinds.HEADERS
@@ -210,11 +213,12 @@ class ModTask(ModDepPhases, Task, Persistent):
 		# For shared libs and programs, we need all deps before linking. We schedule them in advance, and don't wait for them right now, but just before linking.
 		deep_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=True)
 		deep_deps_mod_phases = [dep.mod_phase for dep in deep_deps if dep.mod_phase is not None]
-		sched_ctx.parallel_no_wait(*deep_deps_mod_phases)
+		if _schedule_ahead:
+			sched_ctx.parallel_no_wait(*deep_deps_mod_phases)
 
-		# We don't need the headers we export to clients, but we want clients to be able to use them.
-		# We schedule the task but don't wait for it.
-		if self.cxx_phase is not None: sched_ctx.parallel_no_wait(self.cxx_phase)
+			# We don't need the headers we export to clients, but we want clients to be able to use them.
+			# We schedule the task but don't wait for it.
+			if self.cxx_phase is not None: sched_ctx.parallel_no_wait(self.cxx_phase)
 
 		# We need the headers of our deps.
 		for x in self._do_deps_cxx_phases_and_apply_cxx_deep(sched_ctx): yield x
@@ -228,7 +232,7 @@ class ModTask(ModDepPhases, Task, Persistent):
 				pkg_config_ld_flags_task = _PkgConfigLdFlagsTask.shared(self.cfg,
 					# XXX pkg-config and static/shared (alternative is self.cfg.static_prog or not self.cfg.shared)
 					expose_private_deep_deps=self.cfg.static_prog)
-				sched_ctx.parallel_no_wait(pkg_config_ld_flags_task)
+				if _schedule_ahead: sched_ctx.parallel_no_wait(pkg_config_ld_flags_task)
 
 		self.do_mod_phase() # brings self.sources
 
@@ -424,24 +428,24 @@ class ModTask(ModDepPhases, Task, Persistent):
 		# Our BuildCfg is not the same as self.cfg.
 		# It doesn't contain user-provided flags, nor expanded self.cfg.pkg_config flags.
 		# It doesn't contain either what's been brought by deep mod tasks.
-		cfg = BuildCfg(self.cfg.project)
+		public_cfg = BuildCfg(self.cfg.project)
 		
 		# copy impl settings
-		cfg.lang = self.cfg.lang
-		cfg.pic = self.cfg.pic
-		cfg.shared = self.cfg.shared
-		cfg.static_prog = self.cfg.static_prog
-		cfg.impl = self.cfg.impl
-		cfg.kind = self.cfg.kind
-		cfg.version = self.cfg.version
-		cfg.dest_platform = self.cfg.dest_platform
+		public_cfg.lang = self.cfg.lang
+		public_cfg.pic = self.cfg.pic
+		public_cfg.shared = self.cfg.shared
+		public_cfg.static_prog = self.cfg.static_prog
+		public_cfg.impl = self.cfg.impl
+		public_cfg.kind = self.cfg.kind
+		public_cfg.version = self.cfg.version
+		public_cfg.dest_platform = self.cfg.dest_platform
 	
-		self.apply_cxx_to(cfg)
-		private_cfg = cfg.clone() # split between 'Libs' and 'Libs.private'
-		self.apply_mod_to(cfg)
+		self.apply_cxx_to(public_cfg)
+		private_cfg = public_cfg.clone() # split between 'Libs' and 'Libs.private'
+		self.apply_mod_to(public_cfg)
 
-		private_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=True, expose_deep_mod_tasks=False)
 		public_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=False, expose_deep_mod_tasks=False)
+		private_deps = self._topologically_sorted_unique_deep_deps(expose_private_deep_deps=True, expose_deep_mod_tasks=False)
 
 		if False: # No need for the tasks to complete, because:
 			# We just need to do apply_cxx_to and apply_mod_to.
@@ -453,23 +457,30 @@ class ModTask(ModDepPhases, Task, Persistent):
 				# Otherwise, we need to wait for them here.
 				for x in sched_ctx.parallel_wait(*(private_deps + public_deps)): yield x
 		
-		for dep in private_deps:
-			if isinstance(dep, ModTask): pass
-			elif isinstance(dep, PkgConfigCheckTask): pass
-			else: dep.apply_mod_to(private_cfg)
 		for dep in public_deps:
-			if isinstance(dep, ModTask): cfg.pkg_config.append(dep.name)
-			elif isinstance(dep, PkgConfigCheckTask): cfg.pkg_config += dep.pkgs
-			else: dep.apply_cxx_to(cfg); dep.apply_mod_to(cfg)
+			if isinstance(dep, ModTask): public_cfg.pkg_config.append(dep.name)
+			elif isinstance(dep, PkgConfigCheckTask): public_cfg.pkg_config += dep.pkgs
+			else: dep.apply_cxx_to(public_cfg); dep.apply_mod_to(public_cfg)
+		for dep in private_deps:
+			if isinstance(dep, ModTask):
+				if not self._expose_private_deep_deps: pass # XXX Shouldn't it be more logical to handle this directly in self._topologically_sorted_unique_deep_deps ?
+				# Wonderbuild avoids using Requires.private for private dependencies when it can instead use Libs.private.
+				# For rationale see comment in the code further below where the .pc file is written to.
+				elif False: private_cfg.pkg_config.append(dep.name) # uses Requires.private
+				else: dep.apply_mod_to(private_cfg) # uses Libs.private
+			elif isinstance(dep, PkgConfigCheckTask): private_cfg.pkg_config += dep.pkgs # uses Requires.private
+			else: dep.apply_mod_to(private_cfg) # uses Libs.private
 
 		need_process = False
 		
-		pkg_config_sig = Sig( # XXX and private_cfg sig too
+		pkg_config_sig = Sig(
 			self.title, self.description, self.version_string, self.url or '',
-			cfg.fhs.prefix.abs_path, cfg.fhs.exec_prefix.abs_path, cfg.fhs.lib.abs_path, cfg.fhs.include.abs_path,
-			cfg.cxx_sig, cfg.ld_sig
+			self.cfg.fhs.prefix.abs_path, self.cfg.fhs.exec_prefix.abs_path, self.cfg.fhs.lib.abs_path, self.cfg.fhs.include.abs_path,
+			public_cfg.cxx_sig, public_cfg.ld_sig,
+			private_cfg.ld_sig
 		)
-		pkg_config_sig.update(*cfg.pkg_config)
+		pkg_config_sig.update(*public_cfg.pkg_config)
+		pkg_config_sig.update(*private_cfg.pkg_config)
 		pkg_config_sig = pkg_config_sig.digest()
 
 		# No need to check whether our persistent data exist since it has already been done in _mod_phase_callback.
@@ -480,8 +491,8 @@ class ModTask(ModDepPhases, Task, Persistent):
 			need_process = True
 
 		if need_process or self.cfg.check_missing:
-			installed_pc_file = cfg.fhs.lib / 'pkgconfig' / (self.name + '.pc')
-			uninstalled_pc_file = cfg.project.bld_dir / 'pkgconfig-uninstalled' / (self.name + '-uninstalled.pc')
+			installed_pc_file = self.cfg.fhs.lib / 'pkgconfig' / (self.name + '.pc')
+			uninstalled_pc_file = self.cfg.project.bld_dir / 'pkgconfig-uninstalled' / (self.name + '-uninstalled.pc')
 			if self.cfg.check_missing:
 				for f in (installed_pc_file, uninstalled_pc_file):
 					f.parent.lock.acquire()
@@ -504,118 +515,140 @@ class ModTask(ModDepPhases, Task, Persistent):
 						[str(installed_pc_file), str(uninstalled_pc_file)], color_bg_fg_rgb((230, 100, 170), (255, 255, 255)))
 		
 				def generate(uninstalled, file):
-					# the 'prefix' variable is *mandatory* for proper working on MS-Windows; see pkg-config(1) manpage.
-					prefix_dir = (uninstalled and cfg.fhs.prefix or cfg.fhs.dest.fs.root / cfg.fhs.prefix.rel_path(cfg.fhs.dest)).abs_path
-					exec_prefix_dir = '${prefix}/' + cfg.fhs.exec_prefix.rel_path(cfg.fhs.prefix)
-					lib_dir = '${exec_prefix}/' + cfg.fhs.lib.rel_path(cfg.fhs.exec_prefix)
-					include_dir = '${prefix}/' + cfg.fhs.include.rel_path(cfg.fhs.prefix)
-
-					cxx_flags = cfg.impl.client_cfg_cxx_args(cfg, '${includedir}')
-					ld_flags = cfg.impl.client_cfg_ld_args(cfg, '${libdir}')
-					private_ld_flags = cfg.impl.client_cfg_ld_args(private_cfg, '${libdir}')
-					
-					# Note that if the user specifies:
-					# --install-dest-dir=/
-					# --install-prefix-dir=/foo
-					# --install-lib-dir=/bar
-					#
-					# we will end up with:
-					#
-					# prefix=/foo
-					# exec_prefix=${prefix}/. (which expands to /foo/. )
-					# libdir=${exec_prefix}/../bar (which expands to /foo/./../bar )
-					#
-					# While we could just use '/bar', a relative path is required for proper working on MS-Windows; see pkg-config(1) manpage.
-					#
-					# By comparison, autoconf, in our example, is not generating a path relative to ${prefix}, but just '/bar'.
-					# With autoconf, the foobar.pc.in file would be:
-					#
-					# libdir=@libdir@
-					#
-					# With the default libdir, using the AC_CONFIG_FILES m4 macro the content of foobar.pc would become:
-					#
-					# libdir=${exec_prefix}/lib
-					#
-					# But as soon as the user gives a different value for the libdir variable, the relation with '${exec_prefix}' is lost.
-					# For example, if the user invokes configure with:
-					#
-					# ../configure --libdir=/bar
-					#
-					# or invoke make with:
-					#
-					# make libdir=/bar
-					#
-					# the content of foobar.pc will become:
-					#
-					# libdir=/bar
-					#
-					# Autoconf-generated pkg-config files are hence not correct for windows, in that particular, far fetched case.
-					#
-					# PS: The autoconf manual http://www.gnu.org/s/hello/manual/autoconf/Installation-Directory-Variables.html says:
-					# <quote>
-					#    [...] you should not use these variables except in makefiles.
-					#    [...] you should not rely on AC_CONFIG_FILES to replace bindir and friends in your shell scripts and other files.
-					# </quote>
-					#
-					# Just like for makefiles, this is correct for pkg-config files because pkg-config does the recursive evaluation itself.
-					# This doesn't work in the general case for foobar.sh shell scripts generated from from foobar.sh.in,
-					# or for config headers generated by the AC_CONFIG_HEADERS m4 macro.
-					#
-					# The autoconf manual concludes that directory variables should be passed as '-D' compiler flags,
-					# rather than attempting to put them in a config header.
-					# See http://www.gnu.org/software/autoconf/manual/autoconf.html#Defining-Directories
-					# This is only because AC_CONFIG_HEADERS is what i'd consider broken.
-					# See for example the bugs it leads to and bad workarounds http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=370282
-					# where they were trying to do recursive shell evals of the variables.
-					#
-					# The recommended way by the autoconf manual to achieve this is using makefile rules like these ones:
-					#
-					# foobar.sh: foobar.sh.in
-					# foobar.sh: Makefile
-					# \t         sed -e 's|@libdir@|$(libdir)|g' $@.in > $@
-					#
-					# Then the Makefile should have the variables:
-					#
-					# prefix=/foo
-					# exec_prefix=${prefix}
-					# libdir=${exec_prefix}/lib
-					#
-					# With automake, Makefile.am produces a Makefile.in, which contains these variable definitions:
-					# prefix=@prefix@
-					# exec_prefix=@exec_prefix@
-					# libdir=@libdir@
-					#
-					# When autoconf processes the Makefile.in with the AC_CONFIG_FILES m4 macro to generate the Makefile,
-					# we end up with:
-					#
-					# prefix=/foo
-					# exec_prefix=${prefix}
-					# libdir=${exec_prefix}/lib
-					#
-					# This is exactly what we mentionned before.
-					
+					# The 'prefix' variable is *mandatory* for proper working on MS-Windows; see pkg-config(1) manpage.
+					# Consequently, we need 3 more variables, 'exec_prefix', 'libdir' and 'includedir' whose values depend on that first 'prefix' variable.
+					prefix_to_exec_prefix = self.cfg.fhs.exec_prefix.rel_path(self.cfg.fhs.prefix)
+					if False: # long comment about autotools ...
+						# Note that if the user specifies:
+						# --install-dest-dir=/
+						# --install-prefix-dir=/foo
+						# --install-lib-dir=/bar
+						#
+						# we will end up with:
+						#
+						# prefix=/foo
+						# exec_prefix=${prefix}/. (which expands to /foo/. )
+						# libdir=${exec_prefix}/../bar (which expands to /foo/./../bar )
+						#
+						# While we could just use '/bar', a relative path is required for proper working on MS-Windows; see pkg-config(1) manpage.
+						#
+						# By comparison, autoconf, in our example, is not generating a path relative to ${prefix}, but just '/bar'.
+						# With autoconf, the foobar.pc.in file would be:
+						#
+						# libdir=@libdir@
+						#
+						# With the default libdir, using the AC_CONFIG_FILES m4 macro the content of foobar.pc would become:
+						#
+						# libdir=${exec_prefix}/lib
+						#
+						# But as soon as the user gives a different value for the libdir variable, the relation with '${exec_prefix}' is lost.
+						# For example, if the user invokes configure with:
+						#
+						# ../configure --libdir=/bar
+						#
+						# or invoke make with:
+						#
+						# make libdir=/bar
+						#
+						# the content of foobar.pc will become:
+						#
+						# libdir=/bar
+						#
+						# Autoconf-generated pkg-config files are hence not correct for windows, in that particular, far fetched case.
+						#
+						# PS: The autoconf manual http://www.gnu.org/s/hello/manual/autoconf/Installation-Directory-Variables.html says:
+						# <quote>
+						#    [...] you should not use these variables except in makefiles.
+						#    [...] you should not rely on AC_CONFIG_FILES to replace bindir and friends in your shell scripts and other files.
+						# </quote>
+						#
+						# Just like for makefiles, this is correct for pkg-config files because pkg-config does the recursive evaluation itself.
+						# This doesn't work in the general case for foobar.sh shell scripts generated from from foobar.sh.in,
+						# or for config headers generated by the AC_CONFIG_HEADERS m4 macro.
+						#
+						# The autoconf manual concludes that directory variables should be passed as '-D' compiler flags,
+						# rather than attempting to put them in a config header.
+						# See http://www.gnu.org/software/autoconf/manual/autoconf.html#Defining-Directories
+						# This is only because AC_CONFIG_HEADERS is what i'd consider broken.
+						# See for example the bugs it leads to and bad workarounds http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=370282
+						# where they were trying to do recursive shell evals of the variables.
+						#
+						# The recommended way by the autoconf manual to achieve this is using makefile rules like these ones:
+						#
+						# foobar.sh: foobar.sh.in
+						# foobar.sh: Makefile
+						# \t         sed -e 's|@libdir@|$(libdir)|g' $@.in > $@
+						#
+						# Then the Makefile should have the variables:
+						#
+						# prefix=/foo
+						# exec_prefix=${prefix}
+						# libdir=${exec_prefix}/lib
+						#
+						# With automake, Makefile.am produces a Makefile.in, which contains these variable definitions:
+						# prefix=@prefix@
+						# exec_prefix=@exec_prefix@
+						# libdir=@libdir@
+						#
+						# When autoconf processes the Makefile.in with the AC_CONFIG_FILES m4 macro to generate the Makefile,
+						# we end up with:
+						#
+						# prefix=/foo
+						# exec_prefix=${prefix}
+						# libdir=${exec_prefix}/lib
+						#
+						# This is exactly what we mentionned before.
+						pass
 					s = \
 						'# generated by wonderbuild' \
 						'\n' \
-						'\nprefix=' + prefix_dir + \
-						'\nexec_prefix=' + exec_prefix_dir + \
-						'\nlibdir=' + lib_dir + \
-						'\nincludedir=' + include_dir + \
+						'\nprefix=' + (uninstalled and self.cfg.fhs.prefix or self.cfg.fhs.dest.fs.root / self.cfg.fhs.prefix.rel_path(self.cfg.fhs.dest)).abs_path + \
+						'\nexec_prefix=${prefix}' + (prefix_to_exec_prefix != os.curdir and '/' + prefix_to_exec_prefix or '') + \
+						'\nlibdir=${exec_prefix}/' + self.cfg.fhs.lib.rel_path(self.cfg.fhs.exec_prefix) + \
+						'\nincludedir=${prefix}/' + self.cfg.fhs.include.rel_path(self.cfg.fhs.prefix) + \
 						'\n' \
 						'\nName: ' + self.title + \
 						'\nDescription: ' + self.description + \
 						'\nVersion: ' + self.version_string
 					if self.url: s += '\nURL: ' + self.url
 					s += \
-						'\nCflags: ' + ' '.join(cxx_flags) + \
-						'\nLibs: ' + ' '.join(ld_flags) + \
-						'\nLibs.private: ' + ' '.join(private_ld_flags) + \
-						'\nRequires: ' + ' '.join(cfg.pkg_config)
-					if False:
-						# Requires.private is something sitting between a public and a private dependency.
-						# Its use is when a public header of this package includes another package's header (so you need its CFlags),
-						# but this package's library does not directly call any code in the other package's library (so you don't want its Libs).
-						s += '\nRequires.private: ' + ' '.join(private_cfg.pkg_config)
+						'\nCflags: ' + ' '.join(self.cfg.impl.client_cfg_cxx_args(public_cfg, '${includedir}')) + \
+						'\nLibs: ' + ' '.join(self.cfg.impl.client_cfg_ld_args(public_cfg, '${libdir}')) + \
+						'\nLibs.private: ' + ' '.join(self.cfg.impl.client_cfg_ld_args(private_cfg, '${libdir}')) + \
+						'\nRequires: ' + ' '.join(public_cfg.pkg_config) + \
+						'\nRequires.private: ' + ' '.join(private_cfg.pkg_config)
+					if False: # long comment on Requires.private
+						# Requires.private has two usages :
+						#
+						# - Case 1: public header-only dependency
+						#   A public header of this package includes another package's header (so you need its Cflags),
+						#   but this package's library does not directly call any code in the other package's library (so you don't want its Libs).
+						#   So, pkg-config --cflags also brings indirect Cflags through Requires.private, whether you call it with --static or not,
+						#   but when pkg-config is called *without* --static, pkg-config --libs doesn't bring indirect Libs.
+						#   Note that this usage is *very* fragile; it may depend on the precise implementation of the other package's library:
+						#   - Is that C++ class actually a POD type ?
+						#   - Does it have a user-defined ctor, copy-ctor, move-ctor, dtor ?
+						#   - If so, are they defined directly in the header ?
+						#   - I'm calling inline functions only, but do these not call any non-inline ones themselves ?
+						#   - Do I need RTTI ?
+						#   - etc.
+						#   Such dependency on code implementation details are to be handled at the compiler/linker level
+						#   (linker's --as-needed flag, future C++ module ISO standard ...).
+						#   In wonderbuild terms, this is neither a private nor a public dependency; it's inbetween.
+						#   For the reasons mentionned above, wonderbuild will not add support such borderline usage;
+						#   just use a public dependency and the linker shall do the job of eliminating unneeded references.
+						#
+						# - Case 2: --static
+						#   When pkg-config is called with --static --libs, it *does* bring indirect Libs through Requires.private.
+						#
+						# Note that pkg-config is somewhat broken by design in the following common usage scenario:
+						# - Case 3: private dependency
+						#   You're not in case 1 (public header-only dependency),
+						#   but rather using another package's code internally in this librarie's implementation.
+						#   When pkg-config is called with --cflags, it *does* bring indirect Cflags through Requires.private,
+						#   which, in this scenario (private dependency), are useless, but harmless.
+						#   For this reason, wonderbuild avoids using Requires.private for private dependencies when it can instead use Libs.private.
+						pass
 					if False: s += '\nConflicts: ...'
 					s += '\n'
 					file.parent.make_dir(file.parent)

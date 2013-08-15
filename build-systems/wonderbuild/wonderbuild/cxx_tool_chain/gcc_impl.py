@@ -291,16 +291,27 @@ class Impl(object):
 			args = [mod_task.cfg.ld_args[0]] + obj_paths + mod_task.cfg.ld_args[1:] + ['-o', mod_task_target_path]
 			colorgcc = _colorgcc(mod_task.cfg)
 			if colorgcc is not None: args = [colorgcc.rel_path(cwd)] + args
-			if mod_task.cfg.dest_platform.bin_fmt == 'elf' and mod_task.kind != mod_task.Kinds.PROG:
-				link_node = mod_task.target_dev_dir / ('lib' + mod_task.name + '.so')
-				elf_so_name_node = mod_task.target_dir / (link_node.name + '.' + str(mod_task.version_interface))
-				args.append('-Wl,-h,' + elf_so_name_node.name)
+			if mod_task.cfg.dest_platform.bin_fmt == 'elf':
+				args.append('-Wl,--as-needed')
+				if mod_task.kind != mod_task.Kinds.PROG:
+					# soname and symlinks
+					link_node = mod_task.target_dev_dir / ('lib' + mod_task.name + '.so')
+					elf_so_name_node = mod_task.target_dir / (link_node.name + '.' + str(mod_task.version_interface))
+					args.append('-Wl,-h,' + elf_so_name_node.name)
 			elif mod_task.cfg.dest_platform.bin_fmt == 'pe':
-				args.append('-Wl,--enable-auto-import') # supress informational messages
+				args.append('-Wl,--enable-auto-import') # suppress informational messages
 				if False and mod_task.cfg.shared: # mingw doesn't need import libs
 					args.append('-Wl,--out-implib,' + (mod_task.target_dev_dir / ('lib' + mod_task.name + '.dll.a')).rel_path(cwd))
-			if exec_subprocess(args, cwd=cwd.path) != 0: raise UserReadableException, mod_task
+			if exec_subprocess(args, cwd=cwd.path) != 0:
+				if mod_task.cfg.dest_platform.bin_fmt == 'elf' and mod_task.kind != mod_task.Kinds.PROG:
+					# remove dangling symlinks
+					for x in (link_node, elf_so_name_node):
+						try: os.remove(x.path)
+						except OSError, e:
+							if e.errno != errno.ENOENT: raise
+				raise UserReadableException, mod_task
 			if mod_task.cfg.dest_platform.bin_fmt == 'elf' and mod_task.kind != mod_task.Kinds.PROG:
+				# symlinks
 				_alias(mod_task.target, elf_so_name_node)
 				_alias(elf_so_name_node, link_node)
 		else:
