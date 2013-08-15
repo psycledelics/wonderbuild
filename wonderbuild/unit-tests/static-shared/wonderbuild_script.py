@@ -48,12 +48,14 @@ else:
 					(static_wrapper and 'st' or 'sh') + '-' + \
 					(static_impl and 'st' or 'sh')
 
-				# dependencies: MainProg -> LibWrapper -> LibImpl
+				# dependencies: MainProg ---public---> LibThickWrapper ---private---> LibImpl
 
 				class LibImpl(ModTask):
 					def __init__(self): ModTask.__init__(self,
 						test_name + '--' + variant_name + '--impl',
-						ModTask.Kinds.LIB, static_impl and static_cfg or cfg)
+						ModTask.Kinds.LIB, static_impl and static_cfg or cfg,
+						# some random version information, just for more fun
+						version_interface=4, version_interface_min=2, version_impl=10, version_string='4:2:10')
 
 					def __call__(self, sched_ctx):
 						self.result = True
@@ -84,13 +86,18 @@ else:
 						def dest_dir(self): return self.fhs.include / test_name / variant_name
 				lib_impl = LibImpl()
 
-				class LibWrapper(ModTask):
+				class LibThickWrapper(ModTask):
 					def __init__(self): ModTask.__init__(self,
 						test_name + '--' + variant_name + '--wrapper',
-						ModTask.Kinds.LIB, static_wrapper and static_cfg or cfg)
+						ModTask.Kinds.LIB, static_wrapper and static_cfg or cfg,
+						# some random version information, just for more fun
+						version_interface=2, version_interface_min=1, version_impl=5, version_string='2:1:5')
 
 					def __call__(self, sched_ctx):
-						self.private_deps = [lib_impl]
+						if True: # thick wrapper: dependency in the translation unit's main source file
+							self.private_deps = [lib_impl]
+						else: # thin wrapper: dependency in the public header file
+							self.public_deps = [lib_impl]
 						self.result = True
 						self.cxx_phase = self.__class__.Install(self.cfg.project, self.name + '-headers')
 						for x in sched_ctx.parallel_wait(lib_impl): yield x # XXX
@@ -118,7 +125,7 @@ else:
 	
 						@property
 						def dest_dir(self): return self.fhs.include / test_name / variant_name
-				lib_wrapper = LibWrapper()
+				lib_thick_wrapper = LibThickWrapper()
 
 				class MainProg(ModTask):
 					def __init__(self): ModTask.__init__(self,
@@ -126,8 +133,8 @@ else:
 						ModTask.Kinds.PROG, static_prog and static_cfg or cfg)
 
 					def __call__(self, sched_ctx):
-						self.public_deps = [lib_wrapper]
-						for x in sched_ctx.parallel_wait(lib_wrapper): yield x # XXX
+						self.public_deps = [lib_thick_wrapper]#, lib_thin_wrapper]
+						for x in sched_ctx.parallel_wait(*self.public_deps): yield x # XXX listing them as a public_deps should suffice.
 						for x in ModTask.__call__(self, sched_ctx): yield x
 			
 					def do_mod_phase(self):
