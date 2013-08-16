@@ -187,7 +187,6 @@ class ModTask(ModDepPhases, Task, Persistent):
 			else: return 'deps of headers ' + self.name
 		else: return 'deps of module ' + str(self.target)
 
-
 	def do_mod_phase(self): pass
 
 	class _ModPhaseCallbackTask(Task):

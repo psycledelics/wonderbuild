@@ -22,18 +22,32 @@ class ModDepPhases(object): # note: doesn't derive from Task, but derived classe
 	def all_deps(self): return self.public_deps + self.private_deps
 
 	def do_ensure_deps(self, sched_ctx):
+		# TODO This can be simplified.
+		#for x in sched_ctx.parallel_wait(self): yield x
 		all_deps = self.all_deps
-		if len(all_deps) != 0:
-			for x in sched_ctx.parallel_wait(*all_deps): yield x
-			for dep in all_deps:
-				if not dep:
-					def dep_desc(instance): return instance.help or str(instance.mod_phase or instance.cxx_phase or instance)
-					desc = 'unmet dependency:\n' + dep_desc(self) + '\nhas an unmet dependency on:\n'
-					try:
-						for x in dep.do_ensure_deps(sched_ctx): yield x
-					except UserReadableException, e: desc += dep_desc(dep) + ',\n... chained from ... ' + str(e)
-					else: desc += dep_desc(dep)
-					raise UserReadableException, desc
+		if len(all_deps) == 0: self.result = True
+		else:
+			def topologically_process(deps):
+				for x in sched_ctx.parallel_wait(*deps): yield x
+				sub_deps = []
+				for dep in deps: sub_deps += dep.all_deps
+				if len(sub_deps) != 0:
+					for x in topologically_process(sub_deps): yield x
+				for dep in deps:
+					if len(dep.all_deps) == 0: dep.result = True
+					else: dep.result = min(bool(r) for r in dep.all_deps)
+			for x in topologically_process(all_deps): yield x
+			self.result = min(bool(r) for r in all_deps)
+			if not self.result:
+				for dep in all_deps:
+					if not dep:
+						def dep_desc(instance): return instance.help or str(instance.mod_phase or instance.cxx_phase or instance)
+						desc = 'unmet dependency:\n' + dep_desc(self) + '\nhas an unmet dependency on:\n'
+						try:
+							for x in dep.do_ensure_deps(sched_ctx): yield x
+						except UserReadableException, e: desc += dep_desc(dep) + ',\n... chained from ... ' + str(e)
+						else: desc += dep_desc(dep)
+						raise UserReadableException, desc
 		if __debug__ and is_debug: assert self.result
 
 	# @property help is compatible with CheckTask.help
