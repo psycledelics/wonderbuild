@@ -22,7 +22,10 @@ class ModDepPhases(object): # note: doesn't derive from Task, but derived classe
 	def all_deps(self): return self.public_deps + self.private_deps
 
 	def do_ensure_deps(self, sched_ctx):
+		#
 		# TODO This can be simplified.
+		#
+		from wonderbuild.cxx_tool_chain import ModTask
 		#for x in sched_ctx.parallel_wait(self): yield x
 		all_deps = self.all_deps
 		if len(all_deps) == 0: self.result = True
@@ -34,10 +37,11 @@ class ModDepPhases(object): # note: doesn't derive from Task, but derived classe
 				if len(sub_deps) != 0:
 					for x in topologically_process(sub_deps): yield x
 				for dep in deps:
-					if len(dep.all_deps) == 0: dep.result = True
-					else: dep.result = min(bool(r) for r in dep.all_deps)
+					if isinstance(dep, ModTask):
+						if len(dep.all_deps) == 0: dep.result = True
+						else: dep.result = min(bool(r) for r in dep.all_deps)
 			for x in topologically_process(all_deps): yield x
-			self.result = min(bool(r) for r in all_deps)
+			if isinstance(self, ModTask): self.result = min(bool(r) for r in all_deps)
 			if not self.result:
 				for dep in all_deps:
 					if not dep:
