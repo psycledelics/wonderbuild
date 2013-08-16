@@ -35,7 +35,8 @@ else:
 				for dir in (
 					'static-shared',
 					'pre-compiled',
-					'parallel'
+					'parallel',
+					'task-decorator'
 				)
 			]
 			for x in sched_ctx.parallel_wait(*tasks): yield x

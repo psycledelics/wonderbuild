@@ -26,7 +26,7 @@ else:
 			from wonderbuild.install import InstallTask
 
 			test_name = self.src_dir.name
-			src_dir = self.src_dir.parent / 'src'
+			src_dir = self.src_dir / 'src'
 
 			cfg = UserBuildCfgTask.shared(self.project)
 			for x in sched_ctx.parallel_wait(cfg): yield x

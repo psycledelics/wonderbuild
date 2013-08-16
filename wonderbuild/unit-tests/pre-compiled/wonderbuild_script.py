@@ -23,7 +23,7 @@ class Wonderbuild(ScriptTask):
 	def __call__(self, sched_ctx):
 
 		test_name = self.src_dir.name
-		src_dir = self.src_dir.parent / 'src'
+		src_dir = self.src_dir / 'src'
 
 		from wonderbuild.cxx_tool_chain import UserBuildCfgTask, PkgConfigCheckTask, BuildCheckTask, PreCompileTasks, ModTask
 		from wonderbuild.std_checks.std_math import StdMathCheckTask
