@@ -15,6 +15,9 @@ class StdCxx11CheckTask(BuildCheckTask):
 		else: pass # TODO other compilers
 
 	@property
+	def help(self): return 'C++11 support'
+
+	@property
 	def source_text(self): return '''\
 #if __cplusplus < 201103L
 	#error c++11 unsupported or not enabled

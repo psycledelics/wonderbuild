@@ -64,10 +64,6 @@ class Wonderbuild(ScriptTask):
 				for x in sched_ctx.parallel_wait(*req): yield x
 				self.result = min(bool(r) for r in req)
 
-			def do_ensure_deps(self):
-				if not std_math: raise UserReadableException, self.name + ' requires the standard math lib: ' + std_math.help
-				ModTask.do_ensure_deps(self)
-
 			class InstallHeaders(InstallTask):
 				@property
 				def trim_prefix(self): return src_dir

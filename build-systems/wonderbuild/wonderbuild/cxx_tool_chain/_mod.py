@@ -207,7 +207,7 @@ class ModTask(ModDepPhases, Task, Persistent):
 
 	def _mod_phase_callback(self, sched_ctx):
 		for x in sched_ctx.parallel_wait(self): yield x
-		self.do_ensure_deps()
+		for x in self.do_ensure_deps(sched_ctx): yield x
 
 		# For static archives, we don't need to wait for the deps, but we want them to be done when the build finishes so that the resulting archive can be used.
 		# For shared libs and programs, we need all deps before linking. We schedule them in advance, and don't wait for them right now, but just before linking.

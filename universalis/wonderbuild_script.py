@@ -75,12 +75,6 @@ class Wonderbuild(ScriptTask):
 				self.result = min(bool(r) for r in req)
 				self.cxx_phase = self.__class__.InstallHeaders(self.base_cfg.project, self.name + '-headers')
 
-			def do_ensure_deps(self):
-				if not boost: raise UserReadableException, self.name + ' requires the following boost libs: ' + boost.help
-				if self.cfg.dest_platform.os == 'win' and not winmm: raise UserReadableException, \
-					'on mswindows, ' + self.name + ' requires microsoft\'s windows multimedia extensions: ' + winmm.help
-				ModTask.do_ensure_deps(self)
-			
 			class InstallHeaders(InstallTask):
 				@property
 				def trim_prefix(self): return src_dir

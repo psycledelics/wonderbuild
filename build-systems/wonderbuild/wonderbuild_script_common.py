@@ -69,12 +69,6 @@ class Wonderbuild(ScriptTask):
 			self.private_deps += req + [o for o in opt if o]
 			self.result = min(bool(r) for r in req)
 
-		def do_ensure_deps(self):
-			if not self._boost:
-				from wonderbuild import UserReadableException
-				raise UserReadableException, self.name + ' requires the following boost libs: ' + self._boost.help
-			PreCompileTasks.do_ensure_deps(self)
-
 		def do_cxx_phase(self):
 			self.cfg.include_paths.append(self._top_src_dir / 'build-systems' / 'src')
 			self.source_text = '#include <forced-include.private.hpp>\n'

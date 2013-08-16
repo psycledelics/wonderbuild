@@ -70,7 +70,7 @@ class _PreCompileTask(ModDepPhases, Task, Persistent):
 
 	def _cxx_phase_callback(self, sched_ctx):
 		for x in sched_ctx.parallel_wait(self): yield x
-		self.do_ensure_deps()
+		for x in self.do_ensure_deps(sched_ctx): yield x
 		
 		# We need the headers of our deps.
 		for x in self._do_deps_cxx_phases_and_apply_cxx_deep(sched_ctx): yield x
@@ -218,6 +218,7 @@ class PreCompileTasks(ModDepPhases, Task):
 			self.cfg.pic = self.pic # this clones the parent cfg and changes the pic setting
 			for x in _PreCompileTask.__call__(self, sched_ctx): yield x
 	
-		def do_ensure_deps(self): self.parent_task.do_ensure_deps()
+		def do_ensure_deps(self, sched_ctx):
+			for x in self.parent_task.do_ensure_deps(sched_ctx): yield x
 
 	def do_cxx_phase(self): pass

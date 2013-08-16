@@ -21,36 +21,27 @@ class ModDepPhases(object): # note: doesn't derive from Task, but derived classe
 	@property
 	def all_deps(self): return self.public_deps + self.private_deps
 
-	if False:
-		# Currently, it's the responsibility of derived classes to actually call the dep tasks, which they need to do since they want to check their results.
-		# If we want to change this. We need changes in CheckTask. See code below.
-		# called by derived classes that also derive from Task
-		def __call__(self, sched_ctx):
-			self.result = True
-			for x in self.do_check_phase(sched_ctx): yield x
-			if self.result:
-				all_deps = self.all_deps
-				if len(all_deps) != 0:
-					for x in sched_ctx.parallel_wait(*all_deps): yield x
-					self.result = min(bool(dep) for dep in all_deps)
-
-	# can be overriden in derived classes to generate friendlier message when deps are unavailable
-	def do_ensure_deps(self): 
+	def do_ensure_deps(self, sched_ctx):
 		all_deps = self.all_deps
-		if False:
-			# Currently, it's the responsibility of derived classes to actually call the dep tasks, which they need to do since they want to check their results.
-			if len(all_deps) != 0:
-				for x in sched_ctx.parallel_wait(*all_deps): yield x
-		for dep in all_deps:
-			if not dep:
-				desc = str(self.mod_phase or self.cxx_phase or self) + ' requires the following dep: '
-				try: dep.do_ensure_deps()
-				except UserReadableException, e: desc += str(dep.mod_phase or dep.cxx_phase or dep) + ',\nand ' + str(e)
-				else: desc += str(dep)
-				raise UserReadableException, desc
+		if len(all_deps) != 0:
+			for x in sched_ctx.parallel_wait(*all_deps): yield x
+			for dep in all_deps:
+				if not dep:
+					def dep_desc(instance): return instance.help or str(instance.mod_phase or instance.cxx_phase or instance)
+					desc = 'unmet dependency:\n' + dep_desc(self) + '\nhas an unmet dependency on:\n'
+					try:
+						for x in dep.do_ensure_deps(sched_ctx): yield x
+					except UserReadableException, e: desc += dep_desc(dep) + ',\n... chained from ... ' + str(e)
+					else: desc += dep_desc(dep)
+					raise UserReadableException, desc
 		if __debug__ and is_debug: assert self.result
 
-	# bool result is compatible with CheckTask.result
+	# @property help is compatible with CheckTask.help
+	# This is merged in MultiBuildCheckTask which derives both from CheckTask and ModDepPhases.
+	@property
+	def help(self): return ''
+
+	# @property result is compatible with CheckTask.result
 	# This is merged in MultiBuildCheckTask which derives both from CheckTask and ModDepPhases.
 	def _get_result(self):
 		try: return self._result
@@ -59,7 +50,6 @@ class ModDepPhases(object): # note: doesn't derive from Task, but derived classe
 	result = property(_get_result, _set_result)
 	def __bool__(self): return self.result
 	def __nonzero__(self): return self.__bool__() # __bool__ has become the default in python 3
-
 	
 	def apply_cxx_to(self, cfg): pass
 	def apply_mod_to(self, cfg): pass

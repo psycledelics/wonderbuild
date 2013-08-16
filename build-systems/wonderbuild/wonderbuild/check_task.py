@@ -47,7 +47,7 @@ class CheckTask(SharedTask, OptionCfg):
 	def __str__(self): return 'check ' + self.desc
 
 	@property
-	def help(self): return str(self)
+	def help(self): return ''
 	
 	@property
 	def result_display(self):
@@ -55,7 +55,6 @@ class CheckTask(SharedTask, OptionCfg):
 		else: return 'no', failed_color
 
 	### the results vs result thing is to be removed
-
 	@property
 	def result(self): return self.results
 	def __bool__(self): return self.result
