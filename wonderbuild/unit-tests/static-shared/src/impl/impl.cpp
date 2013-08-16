@@ -1,6 +1,6 @@
 #include "impl.hpp"
-#include <print.hpp>
+#include <iostream>
 
 void impl() {
-	print("impl\n");
+	std::cout << "impl\n";
 }

@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2008-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2008-2013 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 if __name__ == '__main__':
 	import sys, os
@@ -64,7 +64,6 @@ class Wonderbuild(ScriptTask):
 				try: return self._source_text
 				except AttributeError:
 					self._source_text = \
-						'#include <print.hpp>\n' \
 						'#include <string>\n' \
 						'#include <sstream>\n' \
 						'#include <iostream>'
@@ -83,11 +82,10 @@ class Wonderbuild(ScriptTask):
 				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
 				self.cxx_phase = self.__class__.Install(self.cfg.project, self.name + '-headers')
-				for x in ModTask.__call__(self, sched_ctx): yield x
 				
 			def do_mod_phase(self):
 				self.cfg.defines['IMPL'] = self.cfg.shared and '1' or '-1'
-				for s in (src_dir / 'impl').find_iter(in_pats = ('*.cpp',)): self.sources.append(s)
+				for s in (src_dir / 'impl').find_iter(('*.cpp',)): self.sources.append(s)
 
 			def apply_cxx_to(self, cfg):
 				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
@@ -101,8 +99,8 @@ class Wonderbuild(ScriptTask):
 				def sources(self):
 					try: return self._sources
 					except AttributeError:
-						self._sources = [self.trim_prefix / 'print.hpp']
-						for s in (self.trim_prefix / 'impl').find_iter(in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',)): self._sources.append(s)
+						self._sources = []
+						for s in (self.trim_prefix / 'impl').find_iter(('*.hpp',)): self._sources.append(s)
 						return self._sources
 		
 				@property
@@ -122,11 +120,10 @@ class Wonderbuild(ScriptTask):
 				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
 				self.cxx_phase = self.__class__.Install(self.cfg.project, self.name + '-headers')
-				for x in ModTask.__call__(self, sched_ctx): yield x
 				
 			def do_mod_phase(self):
 				self.cfg.defines['WRAPPER'] = self.cfg.shared and '1' or '-1'
-				for s in (src_dir / 'wrapper').find_iter(in_pats = ('*.cpp',)): self.sources.append(s)
+				for s in (src_dir / 'wrapper').find_iter(('*.cpp',)): self.sources.append(s)
 
 			def apply_cxx_to(self, cfg):
 				if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
@@ -141,7 +138,7 @@ class Wonderbuild(ScriptTask):
 					try: return self._sources
 					except AttributeError:
 						self._sources = []
-						for s in (self.trim_prefix / 'wrapper').find_iter(in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',)): self._sources.append(s)
+						for s in (self.trim_prefix / 'wrapper').find_iter(('*.hpp',)): self._sources.append(s)
 						return self._sources
 		
 				@property
@@ -160,9 +157,8 @@ class Wonderbuild(ScriptTask):
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
-				for x in ModTask.__call__(self, sched_ctx): yield x
 				
 			def do_mod_phase(self):
-				for s in (src_dir / 'main').find_iter(in_pats = ('*.cpp',)): self.sources.append(s)
+				for s in (src_dir / 'main').find_iter(('*.cpp',)): self.sources.append(s)
 		main_prog = MainProg()
 		self.default_tasks.append(main_prog.mod_phase)

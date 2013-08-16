@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2009-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2009-2013 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 if __name__ == '__main__':
 	import sys, os
@@ -33,16 +33,17 @@ else:
 			cfg = cfg.clone()
 			if not src_dir in cfg.include_paths: cfg.include_paths.append(src_dir)
 			
-			#cfg.pic = True
-
 			cfg.shared = True
 			cfg.static_prog = False
-			
 			static_cfg = cfg.clone()
 			static_cfg.shared = False
 			static_cfg.static_prog = True
 
-			def variant(sched_ctx, static_prog, static_wrapper, static_impl):
+			def variant(static_prog, static_wrapper, static_impl):
+				static_cfg.pic = False
+				if static_impl and not static_wrapper: static_cfg.pic = True
+
+				
 				variant_name = \
 					(static_prog and 'st' or 'sh') + '-' + \
 					(static_wrapper and 'st' or 'sh') + '-' + \
@@ -60,11 +61,11 @@ else:
 					def __call__(self, sched_ctx):
 						self.result = True
 						self.cxx_phase = self.__class__.Install(self.cfg.project, self.name + '-headers')
-						for x in ModTask.__call__(self, sched_ctx): yield x
+						if False: yield
 
 					def do_mod_phase(self):
 						self.cfg.defines['IMPL'] = self.cfg.shared and '1' or '-1'
-						for s in (src_dir / 'impl').find_iter(in_pats = ('*.cpp',)): self.sources.append(s)
+						for s in (src_dir / 'impl').find_iter(('*.cpp',)): self.sources.append(s)
 
 					def apply_cxx_to(self, cfg):
 						if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
@@ -78,8 +79,8 @@ else:
 						def sources(self):
 							try: return self._sources
 							except AttributeError:
-								self._sources = [self.trim_prefix / 'print.hpp']
-								for s in (self.trim_prefix / 'impl').find_iter(in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',)): self._sources.append(s)
+								self._sources = []
+								for s in (self.trim_prefix / 'impl').find_iter(('*.hpp',)): self._sources.append(s)
 								return self._sources
 	
 						@property
@@ -100,12 +101,11 @@ else:
 							self.public_deps = [lib_impl]
 						self.result = True
 						self.cxx_phase = self.__class__.Install(self.cfg.project, self.name + '-headers')
-						for x in sched_ctx.parallel_wait(lib_impl): yield x # XXX
-						for x in ModTask.__call__(self, sched_ctx): yield x
+						for x in sched_ctx.parallel_wait(lib_impl): yield x # XXX listing them as a deps should suffice.
 
 					def do_mod_phase(self):
 						self.cfg.defines['WRAPPER'] = self.cfg.shared and '1' or '-1'
-						for s in (src_dir / 'wrapper').find_iter(in_pats = ('*.cpp',)): self.sources.append(s)
+						for s in (src_dir / 'wrapper').find_iter(('*.cpp',)): self.sources.append(s)
 
 					def apply_cxx_to(self, cfg):
 						if not self.cxx_phase.dest_dir in cfg.include_paths: cfg.include_paths.append(self.cxx_phase.dest_dir)
@@ -120,7 +120,7 @@ else:
 							try: return self._sources
 							except AttributeError:
 								self._sources = []
-								for s in (self.trim_prefix / 'wrapper').find_iter(in_pats = ('*.hpp',), ex_pats = ('*.private.hpp',)): self._sources.append(s)
+								for s in (self.trim_prefix / 'wrapper').find_iter(('*.hpp',)): self._sources.append(s)
 								return self._sources
 	
 						@property
@@ -134,16 +134,15 @@ else:
 
 					def __call__(self, sched_ctx):
 						self.public_deps = [lib_thick_wrapper]#, lib_thin_wrapper]
-						for x in sched_ctx.parallel_wait(*self.public_deps): yield x # XXX listing them as a public_deps should suffice.
-						for x in ModTask.__call__(self, sched_ctx): yield x
+						for x in sched_ctx.parallel_wait(*self.public_deps): yield x # XXX listing them as deps should suffice.
 			
 					def do_mod_phase(self):
-						for s in (src_dir / 'main').find_iter(in_pats = ('*.cpp',)): self.sources.append(s)
+						for s in (src_dir / 'main').find_iter(('*.cpp',)): self.sources.append(s)
 				main_prog = MainProg()
 				self.default_tasks.append(main_prog.mod_phase)
 				
-			variant(sched_ctx, True, True, True)
-			variant(sched_ctx, False, True, True)
-			variant(sched_ctx, False, True, False)
-			variant(sched_ctx, False, False, False)
-			#variant(sched_ctx, False, False, True)
+			variant(True, True, True)
+			variant(False, True, True)
+			variant(False, True, False)
+			variant(False, False, False)
+			variant(False, False, True)
