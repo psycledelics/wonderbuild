@@ -23,7 +23,10 @@ class ModDepPhases(object): # note: doesn't derive from Task, but derived classe
 
 	def do_ensure_deps(self, sched_ctx):
 		#
-		# TODO This can be simplified.
+		# TODO This can be simplified :
+		# make ModTask.__call__() call some check_deps() method that derived classes override
+		# and after that ensure that all_deps are processed, and compute bool result as min(all_deps).
+		# (need to reconcile CheckTask.results and ModDepPhases.result)
 		#
 		from wonderbuild.cxx_tool_chain import ModTask
 		#for x in sched_ctx.parallel_wait(self): yield x
