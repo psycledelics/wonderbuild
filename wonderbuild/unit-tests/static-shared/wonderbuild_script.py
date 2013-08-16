@@ -43,7 +43,6 @@ else:
 				static_cfg.pic = False
 				if static_impl and not static_wrapper: static_cfg.pic = True
 
-				
 				variant_name = \
 					(static_prog and 'st' or 'sh') + '-' + \
 					(static_wrapper and 'st' or 'sh') + '-' + \
@@ -60,7 +59,6 @@ else:
 
 					def __call__(self, sched_ctx):
 						if False: yield
-						self.result = True
 						self.cxx_phase = self.__class__.Install(self.cfg.project, self.name + '-headers')
 
 					def do_mod_phase(self):
@@ -100,7 +98,6 @@ else:
 							self.private_deps = [lib_impl]
 						else: # thin wrapper: dependency in the public header file
 							self.public_deps = [lib_impl]
-						self.result = True
 						self.cxx_phase = self.__class__.Install(self.cfg.project, self.name + '-headers')
 
 					def do_mod_phase(self):
