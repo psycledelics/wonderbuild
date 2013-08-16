@@ -59,9 +59,9 @@ else:
 						version_interface=4, version_interface_min=2, version_impl=10, version_string='4:2:10')
 
 					def __call__(self, sched_ctx):
+						if False: yield
 						self.result = True
 						self.cxx_phase = self.__class__.Install(self.cfg.project, self.name + '-headers')
-						if False: yield
 
 					def do_mod_phase(self):
 						self.cfg.defines['IMPL'] = self.cfg.shared and '1' or '-1'
@@ -95,13 +95,13 @@ else:
 						version_interface=2, version_interface_min=1, version_impl=5, version_string='2:1:5')
 
 					def __call__(self, sched_ctx):
+						if False: yield
 						if True: # thick wrapper: dependency in the translation unit's main source file
 							self.private_deps = [lib_impl]
 						else: # thin wrapper: dependency in the public header file
 							self.public_deps = [lib_impl]
 						self.result = True
 						self.cxx_phase = self.__class__.Install(self.cfg.project, self.name + '-headers')
-						for x in sched_ctx.parallel_wait(lib_impl): yield x # XXX listing them as a deps should suffice.
 
 					def do_mod_phase(self):
 						self.cfg.defines['WRAPPER'] = self.cfg.shared and '1' or '-1'
@@ -133,8 +133,8 @@ else:
 						ModTask.Kinds.PROG, static_prog and static_cfg or cfg)
 
 					def __call__(self, sched_ctx):
+						if False: yield
 						self.public_deps = [lib_thick_wrapper]#, lib_thin_wrapper]
-						for x in sched_ctx.parallel_wait(*self.public_deps): yield x # XXX listing them as deps should suffice.
 			
 					def do_mod_phase(self):
 						for s in (src_dir / 'main').find_iter(('*.cpp',)): self.sources.append(s)
