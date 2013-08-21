@@ -57,7 +57,7 @@ else:
 						# some random version information, just for more fun
 						version_interface=4, version_interface_min=2, version_impl=10, version_string='4:2:10')
 
-					def __call__(self, sched_ctx):
+					def do_set_deps(self, sched_ctx):
 						if False: yield
 						self.cxx_phase = self.__class__.Install(self.cfg.project, self.name + '-headers')
 
@@ -92,7 +92,7 @@ else:
 						# some random version information, just for more fun
 						version_interface=2, version_interface_min=1, version_impl=5, version_string='2:1:5')
 
-					def __call__(self, sched_ctx):
+					def do_set_deps(self, sched_ctx):
 						if False: yield
 						if True: # thick wrapper: dependency in the translation unit's main source file
 							self.private_deps = [lib_impl]
@@ -129,7 +129,7 @@ else:
 						test_name + '--' + variant_name + '--main',
 						ModTask.Kinds.PROG, static_prog and static_cfg or cfg)
 
-					def __call__(self, sched_ctx):
+					def do_set_deps(self, sched_ctx):
 						if False: yield
 						self.public_deps = [lib_thick_wrapper]#, lib_thin_wrapper]
 			

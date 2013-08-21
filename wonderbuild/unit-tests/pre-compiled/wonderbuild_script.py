@@ -44,15 +44,13 @@ class Wonderbuild(ScriptTask):
 		class Pch(PreCompileTasks):
 			def __init__(self): PreCompileTasks.__init__(self, 'pch', cfg)
 
-			def __call__(self, sched_ctx):
+			def do_set_deps(self, sched_ctx):
 				self.public_deps = [std_math]
 				req = self.public_deps
 				opt = []
 				if not pe: opt += [glibmm]
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
-				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
-				for x in PreCompileTasks.__call__(self, sched_ctx): yield x
 			
 			def do_cxx_phase(self):
 				self.source_text
@@ -73,13 +71,12 @@ class Wonderbuild(ScriptTask):
 		class LibImpl(ModTask):
 			def __init__(self): ModTask.__init__(self, test_name + '--impl', ModTask.Kinds.LIB, cfg)
 
-			def __call__(self, sched_ctx):
+			def do_set_deps(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
 				req = self.private_deps
 				opt = [std_math]
 				if not pe: opt += [glibmm]
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
-				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
 				self.cxx_phase = self.__class__.Install(self.cfg.project, self.name + '-headers')
 				
@@ -110,14 +107,13 @@ class Wonderbuild(ScriptTask):
 		class LibWrapper(ModTask):
 			def __init__(self): ModTask.__init__(self, test_name + '--wrapper', ModTask.Kinds.LIB, cfg)
 
-			def __call__(self, sched_ctx):
+			def do_set_deps(self, sched_ctx):
 				self.public_deps = [lib_impl]
 				self.private_deps = [pch.lib_task]
 				req = self.public_deps + self.private_deps
 				opt = [std_math]
 				if not pe: opt += [glibmm]
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
-				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
 				self.cxx_phase = self.__class__.Install(self.cfg.project, self.name + '-headers')
 				
@@ -148,14 +144,13 @@ class Wonderbuild(ScriptTask):
 		class MainProg(ModTask):
 			def __init__(self): ModTask.__init__(self, test_name + '--main', ModTask.Kinds.PROG, cfg)
 
-			def __call__(self, sched_ctx):
+			def do_set_deps(self, sched_ctx):
 				self.public_deps = [lib_wrapper]
 				self.private_deps = [pch.prog_task]
 				req = self.public_deps + self.private_deps
 				opt = []
 				if not pe: opt += [glibmm]
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
-				self.result = min(bool(r) for r in req)
 				self.public_deps += [x for x in opt if x]
 				
 			def do_mod_phase(self):

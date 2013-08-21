@@ -41,25 +41,23 @@ else:
 					ModTask.__init__(self, 'wrapper' + str(i), ModTask.Kinds.LIB, build_cfg)
 					self.i = i
 	
-				def __call__(self, sched_ctx):
+				def do_set_deps(self, sched_ctx):
+					if False: yield
 					self.private_deps = wrappers[:self.i]
-					self.result = True
-					for x in ModTask.__call__(self, sched_ctx): yield x
 
 				def do_mod_phase(self):
-					for s in (src_dir / ('wrapper' + str(self.i))).find_iter(in_pats=('*.cpp',)): self.sources.append(s)
+					for s in (src_dir / ('wrapper' + str(self.i))).find_iter(('*.cpp',)): self.sources.append(s)
 			count = 0
-			for n in src_dir.find_iter(in_pats = ('wrapper*',), prune_pats = ('*',)): count += 1
+			for n in src_dir.find_iter(in_pats=('wrapper*',), prune_pats=('*',)): count += 1
 			wrappers = [Wrapper(i) for i in xrange(count)]
 			
 			class Main(ModTask):
 				def __init__(self):
 					ModTask.__init__(self, 'main', ModTask.Kinds.PROG, build_cfg)
 	
-				def __call__(self, sched_ctx):
+				def do_set_deps(self, sched_ctx):
+					if False: yield
 					self.private_deps = wrappers[-1:]
-					self.result = True
-					for x in ModTask.__call__(self, sched_ctx): yield x
 
 				def do_mod_phase(self):
 					self.sources = [src_dir / 'main.cpp']
