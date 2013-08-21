@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2009-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2009-2013 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 if __name__ == '__main__':
 	import sys, os
@@ -26,8 +26,7 @@ class Wonderbuild(ScriptTask):
 		src_dir = self.src_dir
 		default_tasks = self.default_tasks
 
-		from wonderbuild.cxx_tool_chain import UserBuildCfgTask
-		from wonderbuild.cxx_tool_chain import ModTask
+		from wonderbuild.cxx_tool_chain import UserBuildCfgTask, ModTask, PkgConfigCheckTask
 		from wonderbuild.std_checks.opengl import OpenGLUTCheckTask
 		from wonderbuild.install import InstallTask
 
@@ -37,6 +36,7 @@ class Wonderbuild(ScriptTask):
 
 		check_cfg = cfg.clone()
 		glut = OpenGLUTCheckTask.shared(check_cfg)
+		x_window = PkgConfigCheckTask.shared(check_cfg, ['x11'])
 
 		class UniformMod(ModTask):
 			def __init__(self, name, path, deps=None, kind=ModTask.Kinds.LOADABLE):
@@ -45,16 +45,11 @@ class Wonderbuild(ScriptTask):
 				if deps is not None: self.public_deps += deps
 				if kind in (ModTask.Kinds.PROG, ModTask.Kinds.LOADABLE): default_tasks.append(self.mod_phase)
 
-			def __call__(self, sched_ctx):
+			def do_set_deps(self, sched_ctx):
+				for x in sched_ctx.parallel_wait(glut, x_window): yield x
 				self.private_deps = [glut]
-				#if self.kind == ModTask.Kinds.PROG: self.private_deps.append(pch.prog_task)
-				#else: self.private_deps.append(pch.lib_task)
-				#self.public_deps += []
-				req = self.all_deps
-				for x in sched_ctx.parallel_wait(*req): yield x
-				self.result = min(bool(r) for r in req)
+				if x_window: self.private_deps.append(x_window)
 				self.cxx_phase = self.__class__.InstallHeaders(self)
-				for x in ModTask.__call__(self, sched_ctx): yield x
 			
 			def do_mod_phase(self):
 				self.cfg.include_paths.appendleft(src_dir)

@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2009-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2009-2013 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 if __name__ == '__main__':
 	import sys, os
@@ -39,7 +39,6 @@ class Wonderbuild(ScriptTask):
 		pch = common.pch
 		cfg = common.cfg.clone()
 
-		from wonderbuild import UserReadableException
 		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, ModTask
 		from wonderbuild.std_checks.opengl import OpenGLUTCheckTask
 		from wonderbuild.install import InstallTask
@@ -56,15 +55,12 @@ class Wonderbuild(ScriptTask):
 				if deps is not None: self.public_deps += deps
 				if kind in (ModTask.Kinds.PROG, ModTask.Kinds.LOADABLE): default_tasks.append(self.mod_phase)
 
-			def __call__(self, sched_ctx):
+			def do_set_deps(self, sched_ctx):
+				if False: yield
 				if self.kind == ModTask.Kinds.PROG: self.private_deps = [pch.prog_task]
 				else: self.private_deps = [pch.lib_task]
 				self.public_deps += [universalis, helpers_math, gtkglextmm]
-				req = self.all_deps
-				for x in sched_ctx.parallel_wait(*req): yield x
-				self.result = min(bool(r) for r in req)
 				self.cxx_phase = self.__class__.InstallHeaders(self)
-				for x in ModTask.__call__(self, sched_ctx): yield x
 			
 			def do_mod_phase(self):
 				self.cfg.include_paths.appendleft(src_dir)

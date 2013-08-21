@@ -42,9 +42,6 @@ class Wonderbuild(ScriptTask):
 				if kind in (ModTask.Kinds.PROG, ModTask.Kinds.LOADABLE): default_tasks.append(self.mod_phase)
 				self.cxx_phase = self.__class__.InstallHeaders(self)
 
-			def __call__(self, sched_ctx):
-				for x in ModTask.__call__(self, sched_ctx): yield x
-			
 			def do_mod_phase(self):
 				self.cfg.include_paths.appendleft(src_dir)
 				if self.path.exists:
@@ -81,4 +78,3 @@ class Wonderbuild(ScriptTask):
 		ops = UniformMod('ops', src_dir / 'ops', kind=ModTask.Kinds.LIB)
 		crapculator = UniformMod('crapculator', src_dir / 'crapculator', kind=ModTask.Kinds.LIB, deps=(ops,))
 		main = UniformMod('main', src_dir / 'main', kind=ModTask.Kinds.PROG, deps=(crapculator,))
-

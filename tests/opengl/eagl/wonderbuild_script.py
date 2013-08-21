@@ -53,16 +53,10 @@ class Wonderbuild(ScriptTask):
 				if deps is not None: self.public_deps += deps
 				if kind in (ModTask.Kinds.PROG, ModTask.Kinds.LOADABLE): default_tasks.append(self.mod_phase)
 
-			def __call__(self, sched_ctx):
+			def do_set_deps(self, sched_ctx):
+				if False: yield
 				self.private_deps = [gl]
-				#if self.kind == ModTask.Kinds.PROG: self.private_deps.append(pch.prog_task)
-				#else: self.private_deps.append(pch.lib_task)
-				#self.public_deps += []
-				req = self.all_deps
-				for x in sched_ctx.parallel_wait(*req): yield x
-				self.result = min(bool(r) for r in req)
 				self.cxx_phase = self.__class__.InstallHeaders(self)
-				for x in ModTask.__call__(self, sched_ctx): yield x
 			
 			def do_mod_phase(self):
 				if self.path.exists:
@@ -107,4 +101,3 @@ class Wonderbuild(ScriptTask):
 		for lesson in xrange(2, 7):
 			lesson = str(lesson).rjust(2, '0')
 			UniformMod('neheihpone-' + lesson, src_dir / 'neheiphone' / ('NeHe Lesson ' + lesson))
-
