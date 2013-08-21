@@ -3,7 +3,7 @@
 # copyright 2008-2013 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 version = (1, 0)
-abi_sig = '6'
+abi_sig = '7'
 
 class UserReadableException(Exception): pass
 
