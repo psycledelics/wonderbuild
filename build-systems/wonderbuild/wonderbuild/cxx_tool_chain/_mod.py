@@ -57,16 +57,15 @@ class _BatchCompileTask(Task):
 			self.cfg.impl.process_cxx_task(self, sched_ctx.lock)
 		finally: sched_ctx.lock.acquire()
 
-class ModTask(ModDepPhases, Task, Persistent):
+class ModTask(ModDepPhases, Persistent):
 	class Kinds(object):
 		HEADERS = 0
 		PROG = 1
-		LIB = 2 # TODO allow the developer to specify that a lib is not dll-aware
+		LIB = 2 # TODO Because of Microsof's VC dllimport/dllexport attribute craziness, we need to allow the developer to specify that a lib is not dll-aware.
 		LOADABLE = 3
 
 	def __init__(self, name, kind, base_cfg, **kw):
 		ModDepPhases.__init__(self)
-		Task.__init__(self)
 		Persistent.__init__(self, base_cfg.project.persistent, name)
 		self.base_cfg = base_cfg
 		self.name = name
@@ -206,7 +205,7 @@ class ModTask(ModDepPhases, Task, Persistent):
 
 	def _mod_phase_callback(self, sched_ctx):
 		for x in sched_ctx.parallel_wait(self): yield x
-		for x in self.do_ensure_deps(sched_ctx): yield x
+		for x in self.ensure_deps(sched_ctx): yield x
 
 		# For static archives, we don't need to wait for the deps, but we want them to be done when the build finishes so that the resulting archive can be used.
 		# For shared libs and programs, we need all deps before linking. We schedule them in advance, and don't wait for them right now, but just before linking.

@@ -3,14 +3,28 @@
 # copyright 2008-2010 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 from option_cfg import OptionCfg
-from task import SharedTask
+from task import Task, SharedTask
 from logger import out, colored, color_bg_fg_rgb, is_debug, debug, silent
 
 ok_color = color_bg_fg_rgb((240, 255, 240), (0, 170, 0))
 failed_color = color_bg_fg_rgb((255, 240, 240), (170, 0, 0))
 _announce_color = color_bg_fg_rgb((240, 240, 255), (0, 0, 170))
 
-class CheckTask(SharedTask, OptionCfg):
+class DepTask(Task):
+
+	@property
+	def help(self): return ''
+
+	def _get_result(self):
+		try: return self._result
+		except AttributeError: raise Exception, 'did you forget to process the ' + str(self) + ' task?'
+	def _set_result(self, value): self._result = value
+	result = property(_get_result, _set_result)
+
+	def __bool__(self): return self.result
+	def __nonzero__(self): return self.__bool__() # __bool__ has become the default in python 3.0
+
+class CheckTask(DepTask, SharedTask, OptionCfg):
 
 	# OptionCfg(OptionDecl)
 	known_options = set(['recheck'])
@@ -21,6 +35,7 @@ class CheckTask(SharedTask, OptionCfg):
 		help['recheck'] = ('[yes|no]', 'perform configuration checks again', 'no => do not recheck unless signature changed')
 
 	def __init__(self, persistent, uid, shared_options_holder):
+		DepTask.__init__(self)
 		SharedTask.__init__(self, persistent, uid)
 		OptionCfg.__init__(self, shared_options_holder)
 
@@ -42,34 +57,17 @@ class CheckTask(SharedTask, OptionCfg):
 	@property
 	def desc(self): return self.uid
 
-	def do_check_and_set_result(self, sched_ctx): raise Exception, str(self.__class__) + ' did not redefine the method.'
-
 	def __str__(self): return 'check ' + self.desc
 
 	@property
-	def help(self): return ''
-	
-	@property
 	def result_display(self):
-		if self.result: return 'yes', ok_color
+		if bool(self): return 'yes', ok_color
 		else: return 'no', failed_color
 
-	### the results vs result thing is to be removed
-	@property
-	def result(self): return self.results
-	def __bool__(self): return self.result
-	def __nonzero__(self): return self.__bool__() # __bool__ has become the default in python 3.0
-
-	def _get_results(self):
-		try: return self._results
-		except AttributeError: raise Exception, 'did you forget to process the ' + str(self) + ' task?'
-	def _set_results(self, value): self._results = value
-	results = property(_get_results, _set_results)
-
-	# SharedTask(Task)
+	# DepTask(Task), SharedTask(Task)
 	def __call__(self, sched_ctx):
 		if 'recheck' not in self.options:
-			try: old_sig, self._results = self.persistent
+			try: old_sig, self._result = self.persistent
 			except KeyError: pass
 			else:
 				if old_sig == self.sig:
@@ -79,8 +77,10 @@ class CheckTask(SharedTask, OptionCfg):
 			desc = self.desc
 			self.print_check(desc)
 		for x in self.do_check_and_set_result(sched_ctx): yield x
-		self.persistent = self.sig, self.results
+		self.persistent = self.sig, self.result
 		if not silent: self.print_check_result(desc, *self.result_display)
+
+	def do_check_and_set_result(self, sched_ctx): raise Exception, str(self.__class__) + ' did not redefine the method.'
 
 	def help_package(self, search, url):
 		s = \

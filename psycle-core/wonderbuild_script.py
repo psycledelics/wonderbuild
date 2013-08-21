@@ -49,14 +49,13 @@ class Wonderbuild(ScriptTask):
 		class CoreMod(ModTask):
 			def __init__(self): ModTask.__init__(self, 'psycle-core', ModTask.Kinds.LIB, cfg)
 
-			def __call__(self, sched_ctx):
+			def do_set_deps(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
 				self.public_deps = [audiodrivers, zlib]
 				req = self.public_deps + self.private_deps
 				opt = [xml]
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.public_deps += [o for o in opt if o]
-				self.result = min(bool(r) for r in req)
 				self.cxx_phase = CoreMod.InstallHeaders(self.base_cfg.project, self.name + '-headers')
 			
 			class InstallHeaders(InstallTask):
@@ -89,12 +88,8 @@ class Wonderbuild(ScriptTask):
 				self.cfg.include_paths.appendleft(src_dir)
 				self.cfg.include_paths.appendleft(top_src_dir / 'psycle-plugins' / 'src')
 				self.cfg.include_paths.appendleft(top_src_dir / 'external-packages' / 'vst-2.4')
-				for s in (src_dir / 'psycle' / 'core').find_iter(
-					in_pats = ('*.cpp',), prune_pats = ('todo',)
-				): self.sources.append(s)
-				for s in (src_dir / 'seib' / 'vst').find_iter(
-					in_pats = ('*,coo',), prune_pats = ('todo',)
-				): self.sources.append(s);
+				for s in (src_dir / 'psycle' / 'core').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
+				for s in (src_dir / 'seib' / 'vst').find_iter(in_pats = ('*,coo',), prune_pats = ('todo',)): self.sources.append(s);
 
 		self._mod_dep_phases = mod_dep_phases = CoreMod()
 		self.default_tasks.append(mod_dep_phases.mod_phase)

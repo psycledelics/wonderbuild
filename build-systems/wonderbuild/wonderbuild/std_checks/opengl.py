@@ -42,9 +42,9 @@ class OpenGLUCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared_uid(*args, **kw): return 'openglu'
 
-	def __call__(self, sched_ctx):
+	def do_set_deps(self, sched_ctx):
+		if False: yield
 		self.public_deps = [OpenGLCheckTask.shared(self.base_cfg)]
-		for x in BuildCheckTask.__call__(self, sched_ctx): yield x
 
 	def apply_mod_to(self, cfg):
 		if cfg.dest_platform.os != 'darwin': cfg.libs.append('GLU')
@@ -66,9 +66,9 @@ class OpenGLUTCheckTask(BuildCheckTask):
 	@staticmethod
 	def shared_uid(*args, **kw): return 'openglut'
 
-	def __call__(self, sched_ctx):
+	def do_set_deps(self, sched_ctx):
+		if False: yield
 		self.public_deps = [OpenGLUCheckTask.shared(self.base_cfg)]
-		for x in BuildCheckTask.__call__(self, sched_ctx): yield x
 
 	def apply_cxx_to(self, cfg):
 		if cfg.dest_platform.os == 'darwin': cfg.frameworks.append('GLUT')

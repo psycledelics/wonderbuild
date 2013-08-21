@@ -6,14 +6,14 @@ from collections import deque
 
 from wonderbuild import UserReadableException
 from wonderbuild.logger import is_debug
-from wonderbuild.task import Task
+from wonderbuild.check_task import DepTask
 
 # mutual dependency
 #from wonderbuild.cxx_tool_chain import ModTask
 
-class ModDepPhases(object): # note: doesn't derive from Task, but derived classes must also derive from Task
+class ModDepPhases(DepTask):
 	def __init__(self):
-		if __debug__ and is_debug: assert isinstance(self, Task) # note: doesn't derive from Task, but derived classes must also derive from Task
+		DepTask.__init__(self)
 		self.private_deps = [] # of ModDepPhases
 		self.public_deps = [] # of ModDepPhases
 		self.cxx_phase = self.mod_phase = None
@@ -21,57 +21,41 @@ class ModDepPhases(object): # note: doesn't derive from Task, but derived classe
 	@property
 	def all_deps(self): return self.public_deps + self.private_deps
 
-	def do_ensure_deps(self, sched_ctx):
-		#
-		# TODO This can be simplified :
-		# make ModTask.__call__() call some check_deps() method that derived classes override
-		# and after that ensure that all_deps are processed, and compute bool result as min(all_deps).
-		# (need to reconcile CheckTask.results and ModDepPhases.result)
-		#
-		from wonderbuild.cxx_tool_chain import ModTask
-		#for x in sched_ctx.parallel_wait(self): yield x
+	# DepTask(Task)
+	def __call__(self, sched_ctx):
+		for x in self.do_set_deps(sched_ctx): yield x
 		all_deps = self.all_deps
 		if len(all_deps) == 0: self.result = True
 		else:
-			def topologically_process(deps):
-				for x in sched_ctx.parallel_wait(*deps): yield x
-				sub_deps = []
-				for dep in deps: sub_deps += dep.all_deps
-				if len(sub_deps) != 0:
-					for x in topologically_process(sub_deps): yield x
-				for dep in deps:
-					if isinstance(dep, ModTask):
-						if len(dep.all_deps) == 0: dep.result = True
-						else: dep.result = min(bool(r) for r in dep.all_deps)
-			for x in topologically_process(all_deps): yield x
-			if isinstance(self, ModTask): self.result = min(bool(r) for r in all_deps)
-			if not self.result:
+			for x in sched_ctx.parallel_wait(*all_deps): yield x
+			self.result = min(bool(d) for d in all_deps)
+
+	def do_set_deps(self, sched_ctx):
+		if False: yield
+
+	def ensure_deps(self, sched_ctx):
+		if not self:
+			def dep_desc(instance): return str(instance.mod_phase or instance.cxx_phase or instance)
+			def dep_help(instance): return instance.help or dep_desc(instance)
+			all_deps = self.all_deps
+			if len(all_deps) == 0:
+				raise UserReadableException, dep_help(self)
+			else:
 				for dep in all_deps:
 					if not dep:
-						def dep_desc(instance): return instance.help or str(instance.mod_phase or instance.cxx_phase or instance)
 						desc = 'unmet dependency:\n' + dep_desc(self) + '\nhas an unmet dependency on:\n'
 						try:
-							for x in dep.do_ensure_deps(sched_ctx): yield x
-						except UserReadableException, e: desc += dep_desc(dep) + ',\n... chained from ... ' + str(e)
+							for x in dep.ensure_deps(sched_ctx): yield x
+						except UserReadableException, e:
+							# XXX ugly!
+							ugly1 = dep_desc(dep)
+							ugly2 = str(e)
+							if ugly1 != ugly2: desc += ugly1 + ',\n... chained from ... ' + ugly2
+							else: desc += ugly1
 						else: desc += dep_desc(dep)
 						raise UserReadableException, desc
-		if __debug__ and is_debug: assert self.result
+		if __debug__ and is_debug: assert self
 
-	# @property help is compatible with CheckTask.help
-	# This is merged in MultiBuildCheckTask which derives both from CheckTask and ModDepPhases.
-	@property
-	def help(self): return ''
-
-	# @property result is compatible with CheckTask.result
-	# This is merged in MultiBuildCheckTask which derives both from CheckTask and ModDepPhases.
-	def _get_result(self):
-		try: return self._result
-		except AttributeError: raise Exception, 'did you forget to process the ' + str(self) + ' task?'
-	def _set_result(self, value): self._result = value
-	result = property(_get_result, _set_result)
-	def __bool__(self): return self.result
-	def __nonzero__(self): return self.__bool__() # __bool__ has become the default in python 3
-	
 	def apply_cxx_to(self, cfg): pass
 	def apply_mod_to(self, cfg): pass
 	

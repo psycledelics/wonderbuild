@@ -6,7 +6,7 @@ from wonderbuild.signature import Sig
 from wonderbuild.check_task import CheckTask
 from wonderbuild.cxx_tool_chain import ModDepPhases
 
-class MultiBuildCheckTask(CheckTask, ModDepPhases):
+class MultiBuildCheckTask(ModDepPhases, CheckTask):
 
 	# CheckTask(SharedTask)
 	@staticmethod
@@ -21,8 +21,8 @@ class MultiBuildCheckTask(CheckTask, ModDepPhases):
 	def _shared(class_, base_cfg, *args, **kw): return CheckTask._shared(class_, base_cfg.shared_checks, *args, **kw)
 
 	def __init__(self, persistent, uid, base_cfg, pipe_preproc=False, compile=True, link=True):
-		CheckTask.__init__(self, persistent, uid, base_cfg.shared_checks)
 		ModDepPhases.__init__(self)
+		CheckTask.__init__(self, persistent, uid, base_cfg.shared_checks)
 		self.base_cfg = base_cfg
 		self.pipe_preproc = pipe_preproc
 		self.compile = compile
@@ -52,6 +52,15 @@ class MultiBuildCheckTask(CheckTask, ModDepPhases):
 			sig = self._sig = sig.digest()
 			return sig
 
+	# ModDepPhases(DepTask(Task)), CheckTask(DepTask(Task), SharedTask(Task))
+	def __call__(self, sched_ctx):
+		for x in ModDepPhases.__call__(self, sched_ctx): yield x
+		for x in CheckTask.__call__(self, sched_ctx): yield x
+
+	# CheckTask
+	def do_check_and_set_result(self, sched_ctx):
+		if False: yield x
+
 class BuildCheckTask(MultiBuildCheckTask):
 	@property
 	def _prog_source_text(self):
@@ -67,6 +76,15 @@ class BuildCheckTask(MultiBuildCheckTask):
 			try: self._bld_dir = bld_dir / 'checks' / self.uid
 			finally: bld_dir.lock.release()
 			return self._bld_dir
+
+	@property
+	def return_code(self): return self._return_code
+
+	@property		
+	def out(self): return self._out
+
+	@property		
+	def err(self): return self._err
 
 	# MultiBuildCheckTask(CheckTask)
 	def do_check_and_set_result(self, sched_ctx):
@@ -86,6 +104,8 @@ class BuildCheckTask(MultiBuildCheckTask):
 					f.write(err); f.write('\n')
 					f.write('return code: '); f.write(str(r)); f.write('\n')
 				finally: f.close()
-			if self.pipe_preproc: self.results = r == 0, out
-			else: self.results = r == 0
+			if self.pipe_preproc: self._out = out
+			self._return_code = r
+			if r != 0: self._err = err
+			self.result = r == 0
 		finally: sched_ctx.lock.acquire()

@@ -19,7 +19,7 @@ class MultithreadingSupportCheckTask(BuildCheckTask):
 			else:
 				cfg.cxx_flags.append('-pthread')
 		elif cfg.kind == 'msvc':
-			cfg.cxx_flags.append('-MD') # TODO -MT, -MTd, -MD, -MDd
+			cfg.cxx_flags.append('-MD') # choice between -MT, -MTd, -MD, -MDd
 
 	def apply_mod_to(self, cfg):
 		# some documentation is available in <boost/config/requires_threads.hpp>
@@ -62,15 +62,11 @@ class PThreadCheckTask(BuildCheckTask):
 	def shared_uid(*args, **kw): return 'posix-thread'
 
 	def apply_cxx_to(self, cfg):
-		if cfg.kind == 'gcc': # TODO windows/cygwin platforms
-			cfg.cxx_flags.append('-pthread')
-		else:
-			cfg.defines['_REENTRANT'] = '1'
-			cfg.libs.append('pthread')
+		if cfg.kind == 'gcc': cfg.cxx_flags.append('-pthread')
+		else: cfg.defines['_REENTRANT'] = '1'
 
 	def apply_mod_to(self, cfg):
-		if cfg.kind == 'gcc': # TODO windows/cygwin platforms
-			cfg.ld_flags.append('-pthread')
+		if cfg.kind == 'gcc': cfg.ld_flags.append('-pthread')
 		else: cfg.libs.append('pthread')
 
 	@property

@@ -62,13 +62,11 @@ class Wonderbuild(ScriptTask):
 				if kind in (ModTask.Kinds.PROG, ModTask.Kinds.LOADABLE): default_tasks.append(self.mod_phase)
 				self.cxx_phase = self.__class__.InstallHeaders(self) # note: set in __ini__ because called directly in AudioDriversMod.__call__
 
-			def __call__(self, sched_ctx):
+			def do_set_deps(self, sched_ctx):
+				if False: yield
 				if self.kind == ModTask.Kinds.PROG: self.private_deps = [pch.prog_task]
 				else: self.private_deps = [pch.lib_task]
 				self.public_deps += [helpers]
-				req = self.all_deps
-				for x in sched_ctx.parallel_wait(*req): yield x
-				self.result = min(bool(r) for r in req)
 		
 			class InstallHeaders(InstallTask):
 				def __init__(self, outer):
@@ -87,8 +85,9 @@ class Wonderbuild(ScriptTask):
 					except AttributeError:
 						self._sources = []
 						if self.outer.path.exists:
-							for s in self.outer.path.find_iter(in_pats = ('*.hpp', '*.h'),
-								ex_pats = ('*.private.hpp',), prune_pats = ('todo',)): self._sources.append(s)
+							for s in self.outer.path.find_iter(
+									in_pats=('*.hpp', '*.h'), ex_pats=('*.private.hpp',), prune_pats=('todo',)
+								): self._sources.append(s)
 						for h in ('.hpp', '.h'):
 							f = self.outer.path.parent / (self.outer.path.name + h)
 							if f.exists:
@@ -139,14 +138,13 @@ class Wonderbuild(ScriptTask):
 		class AudioDriversMod(ModTask):
 			def __init__(self): ModTask.__init__(self, 'psycle-audiodrivers', ModTask.Kinds.LIB, cfg)
 
-			def __call__(self, sched_ctx):
+			def do_set_deps(self, sched_ctx):
 				self.private_deps = [pch.lib_task]
 				self.public_deps = [helpers]
 				req = self.public_deps + self.private_deps
 				opt = [alsa, jack, esound, dsound, winmm, gstreamer] # netaudio, asio
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.public_deps += [o for o in opt if o]
-				self.result = min(bool(r) for r in req)
 				self.cxx_phase = self.__class__.InstallHeaders(self.base_cfg.project, self.name + '-headers')
 
 				# brings the headers
@@ -225,3 +223,4 @@ class Wonderbuild(ScriptTask):
 					if winmm:     s.append(dir / 'microsoftmmewaveout.cpp')
 
 		self._mod_dep_phases = mod_dep_phases = AudioDriversMod()
+		self.default_tasks.append(mod_dep_phases.mod_phase)

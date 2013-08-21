@@ -42,15 +42,6 @@ if False: # summary of modules
 	class ScriptTask(Task): pass
 	def import_module(node): pass
 	
-	# check_task
-	class CheckTask(SharedTask, OptionCfg): pass
-
-	# fhs
-	class FHS(OptionCfg, Persistent): pass
-
-	# install
-	class InstallTask(Task, Persistent, OptionDecl): pass
-
 	# filesystem
 	class FileSystem(): pass
 	class Node(): pass
@@ -59,20 +50,26 @@ if False: # summary of modules
 	# signature
 	class Sig(): pass
 
-	# logger
-	known_options = None # OptionDecl
-	def generate_option_help(help): pass # OptionDecl
-	def use_options(options): pass
-	silent = None
-	is_debug = None
-	def debug(s): pass
-	out = None
-	out_is_dumb = None
-	def multicolumn_format(list, max_width): pass
-	def fold(s, width): pass
-	def colored(color, s): pass
-	def color_bg_fg_rgb(bg, fg): pass
+	# fhs
+	class FHS(OptionCfg, Persistent): pass
 
+	# install
+	class InstallTask(Task, Persistent, OptionDecl): pass
+
+	# check_task
+	class DepTask(Task): pass # @property result, def __bool__(self), @property help
+	class CheckTask(DepTask, SharedTask, OptionCfg): pass
+
+	# cxx_tool_chain
+	class ModDepPhases(DepTask): pass
+	class _PreCompileTask(ModDepPhases, Persistent): pass
+	class PreCompileTasks(ModDepPhases): pass
+	class ModTask(ModDepPhases, Persistent): pass
+	class _PkgConfigTask(CheckTask): pass
+	class PkgConfigCheckTask(ModDepPhases, _PkgConfigTask): pass
+	class MultiBuildCheckTask(ModDepPhases, CheckTask): pass
+	class BuildCheckTask(MultiBuildCheckTask): pass
+	
 	# std_checks
 	class ValidCfgCheckTask(BuildCheckTask): pass
 	class DestPlatformCheckTask(BuildCheckTask): pass
@@ -80,8 +77,6 @@ if False: # summary of modules
 	class AutoLinkSupportCheckTask(BuildCheckTask): pass
 	class ClangCheckTask(BuildCheckTask): pass
 	class MingwCheckTask(BuildCheckTask): pass
-	def unversioned_sys_platform(): pass
-	def unversioned_sys_platform_to_binary_format(unversioned_sys_platform): pass
 	# std_checks.multithreading_spport
 	class MultithreadingSupportCheckTask(BuildCheckTask): pass
 	class PThreadCheckTask(BuildCheckTask): pass
@@ -108,3 +103,17 @@ if False: # summary of modules
 	class WinMMCheckTask(BuildCheckTask): pass
 	# std_checks.zlib
 	class ZLibCheckTask(BuildCheckTask): pass
+	
+	# logger
+	known_options = None # OptionDecl
+	def generate_option_help(help): pass # OptionDecl
+	def use_options(options): pass
+	silent = None
+	is_debug = None
+	def debug(s): pass
+	out = None
+	out_is_dumb = None
+	def multicolumn_format(list, max_width): pass
+	def fold(s, width): pass
+	def colored(color, s): pass
+	def color_bg_fg_rgb(bg, fg): pass

@@ -67,13 +67,11 @@ class Wonderbuild(ScriptTask):
 				if deps is not None: self.public_deps += deps
 				if kind in (ModTask.Kinds.PROG, ModTask.Kinds.LOADABLE): default_tasks.append(self.mod_phase)
 
-			def __call__(self, sched_ctx):
+			def do_set_deps(self, sched_ctx):
+				if False: yield
 				if self.kind == ModTask.Kinds.PROG: self.private_deps = [pch.prog_task]
 				else: self.private_deps = [pch.lib_task]
 				self.public_deps += [std_cxx11, universalis, helpers_math]
-				req = self.all_deps
-				for x in sched_ctx.parallel_wait(*req): yield x
-				self.result = min(bool(r) for r in req)
 				self.cxx_phase = self.__class__.InstallHeaders(self)
 			
 			class InstallHeaders(InstallTask):
@@ -182,4 +180,3 @@ class Wonderbuild(ScriptTask):
 				deps=(host, gtkmm, gnomecanvasmm, cluttermm),
 				kind=ModTask.Kinds.PROG
 			)
-

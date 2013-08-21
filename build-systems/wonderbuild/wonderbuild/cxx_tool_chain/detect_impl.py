@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2007-2010 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2007-2013 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 from wonderbuild import UserReadableException
 from wonderbuild.logger import out, colored, is_debug, debug, silent
@@ -10,9 +10,11 @@ from wonderbuild.std_checks import ValidCfgCheckTask, ClangCheckTask, DestPlatfo
 
 class DetectImplCheckTask(CheckTask):
 
+	# CheckTask(SharedTask)
 	@staticmethod
 	def shared_uid(*args, **kw): return 'c++-tool-chain'
 
+	# CheckTask(SharedTask)
 	@classmethod
 	def shared(class_, user_build_cfg): return CheckTask._shared(class_, user_build_cfg.shared_checks, user_build_cfg)
 
@@ -20,30 +22,34 @@ class DetectImplCheckTask(CheckTask):
 		CheckTask.__init__(self, persistent, uid, user_build_cfg.shared_checks)
 		self.user_build_cfg = user_build_cfg
 
+	# CheckTask
 	@property
 	def sig(self): return self.user_build_cfg.options_sig
 
+	# CheckTask
 	@property
 	def result_display(self):
-		if not self.result: return 'not found', failed_color
+		if not self: return 'not found', failed_color
 		else: return str(self.kind) + ' version ' + '.'.join(str(v) for v in self.version), ok_color
 
-	@property
-	def result(self): return self.kind is not None
+	def __bool__(self): return self.kind is not None
 	
 	@property
-	def kind(self): return self.results[0]
+	def kind(self): return self.result[0]
 	
 	@property
-	def version(self): return self.results[1]
+	def version(self): return self.result[1]
 	
+	# CheckTask(DepTask(Task), SharedTask(Task))
 	def __call__(self, sched_ctx):
+		# Don't do it all directly in do_check_and_set_result because it's not executed when sig hasn't changed.
 		for x in CheckTask.__call__(self, sched_ctx): yield x
 		cfg = self.user_build_cfg
 		cfg.kind = self.kind
 		cfg.version = self.version
 		if cfg.impl is None: self._select_impl()
 		if cfg.impl is None: raise UserReadableException, str(self) + ': no supported c++ compiler found'
+
 		# set the programs
 		cxx_prog, ld_prog, ar_prog, ranlib_prog = cfg.impl.progs(cfg)
 		if __debug__ and is_debug:
@@ -65,9 +71,10 @@ class DetectImplCheckTask(CheckTask):
 		cfg.dest_platform.bin_fmt = dest_platform.bin_fmt
 		cfg.dest_platform.os = dest_platform.os
 		cfg.dest_platform.arch = dest_platform.arch
-		cfg.dest_platform.pic_flag_defines_pic = pic.result
-		cfg.impl.kind_is_clang = clang.result
+		cfg.dest_platform.pic_flag_defines_pic = bool(pic)
+		cfg.impl.kind_is_clang = bool(clang)
 	
+	# CheckTask
 	def do_check_and_set_result(self, sched_ctx):
 		if False: yield
 		sched_ctx.lock.release()
@@ -126,7 +133,8 @@ class DetectImplCheckTask(CheckTask):
 			# read the version
 			cfg.version = cfg.impl is not None and cfg.impl.parse_version(out, err) or None
 		finally: sched_ctx.lock.acquire()
-		self.results = cfg.kind, cfg.version
+		
+		self.result = cfg.kind, cfg.version
 
 	def _select_impl(self):
 		cfg = self.user_build_cfg

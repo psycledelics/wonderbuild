@@ -25,7 +25,7 @@ class _PkgConfigTask(CheckTask):
 	@property
 	def prog(self): return 'pkg-config'
 
-	def __str__(self): return 'check pkg-config ' + ' '.join(self.what_args) + ' ' + ' '.join(self.pkgs)
+	def __str__(self): return 'check ' + self.desc
 
 	# CheckTask
 	@property
@@ -71,16 +71,14 @@ class _PkgConfigFlagsTask(_PkgConfigTask):
 	def do_check_and_set_result(self, sched_ctx):
 		if False: yield
 		r, out, err = exec_subprocess_pipe(self.args, silent=True)
-		if r != 0: raise Exception, r
-		self.results = out.split()
+		if r != 0: raise Exception, r # Simply short-circuited here because we've already validated the packages with PkgConfigCheckTask.
+		self.result = out.split()
 
 	# _PkgConfigTask(CheckTask)
-	if __debug__ and is_debug:
-		@property
-		def result_display(self): return ' '.join(self.result), ok_color
-	else:
-		@property
-		def result_display(self): return 'ok', ok_color
+	@property
+	def result_display(self):
+		if __debug__ and is_debug: return ' '.join(self.result), ok_color
+		else: return 'ok', ok_color
 
 	def apply_to(self): raise Exception, str(self.__class__) + ' did not redefine the method.'
 
@@ -144,7 +142,7 @@ class _PkgConfigLdFlagsTask(_PkgConfigFlagsTask):
 # export because _PkgConfigLdFlagsTask.shared is used by ModTask._mod_phase_callback
 PkgConfigLdFlagsTask = _PkgConfigLdFlagsTask
 
-class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
+class PkgConfigCheckTask(ModDepPhases, _PkgConfigTask):
 
 	# _PkgConfigTask(CheckTask(SharedTask))
 	@classmethod
@@ -169,9 +167,12 @@ class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 	@property
 	def what_args(self): return ['--exists']
 
+	# ModDepPhases(DepTask(Task)), CheckTask(DepTask(Task), SharedTask(Task))
+	def __call__(self, sched_ctx):
+		for x in ModDepPhases.__call__(self, sched_ctx): yield x
+		for x in CheckTask.__call__(self, sched_ctx): yield x
+
 	# _PkgConfigTask(CheckTask)
-	# Note: This sets 'results', which indirectly sets the bool result property as defined in CheckTask.
-	# The bool result is taken from CheckTask and not ModDepPhases because ModDepPhases comes last in the inheritance.
 	def do_check_and_set_result(self, sched_ctx):
 		if False: yield
 		try: r = exec_subprocess(self.args)
@@ -179,4 +180,4 @@ class PkgConfigCheckTask(_PkgConfigTask, ModDepPhases):
 			if __debug__ and is_debug: debug('cfg: ' + self.desc + ': exception: ' + str(e))
 			r = 1
 		# note: in case of a positive result, we could as well store a positive result for each individual packages
-		self.results = r == 0
+		self.result = r == 0

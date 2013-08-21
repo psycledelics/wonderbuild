@@ -40,7 +40,6 @@ class Wonderbuild(ScriptTask):
 		pch = common.pch
 		cfg = common.cfg.clone()
 
-		from wonderbuild import UserReadableException
 		from wonderbuild.cxx_tool_chain import ModTask, BuildCheckTask
 		from wonderbuild.install import InstallTask
 
@@ -62,10 +61,6 @@ class Wonderbuild(ScriptTask):
 				ModTask.__init__(self, name, ModTask.Kinds.HEADERS, cfg,
 					cxx_phase=self.__class__.InstallHeaders(cfg.project, name + '-headers'))
 				
-			def __call__(self, sched_ctx):
-				if False: yield
-				self.result = True
-			
 			class InstallHeaders(InstallTask):
 				@property
 				def trim_prefix(self): return src_dir
@@ -94,14 +89,12 @@ class Wonderbuild(ScriptTask):
 				if deps is not None: self.public_deps += deps
 				if kind in (ModTask.Kinds.PROG, ModTask.Kinds.LOADABLE): default_tasks.append(self.mod_phase)
 
-			def __call__(self, sched_ctx):
+			def do_set_deps(self, sched_ctx):
+				if False: yield
 				if self.kind == ModTask.Kinds.PROG: self.private_deps = [pch.prog_task]
 				else: self.private_deps = [pch.lib_task]
 				self.public_deps += [universalis, helpers_math, helpers]
 				if self.name.startswith(n): self.public_deps.append(interface)
-				req = self.all_deps
-				for x in sched_ctx.parallel_wait(*req): yield x
-				self.result = min(bool(r) for r in req)
 				if self.kind == ModTask.Kinds.LIB: self.cxx_phase = self.__class__.InstallHeaders(self)
 			
 			class InstallHeaders(InstallTask):
@@ -200,25 +193,14 @@ class Wonderbuild(ScriptTask):
 		dw_eq = UniformMod(n + 'dw-eq', p / 'dw' / 'eq', deps=(dw_filter,))
 		
 		druttis_dsp = UniformMod('psycle-druttis-dsp', p / 'druttis' / 'dsp', kind=ModTask.Kinds.LIB)
-		druttis_band_limited_wave_tables = UniformMod('psycle-druttis-band-limited-wave-tables', p / 'druttis' / 'blwtbl', 
-			deps=(druttis_dsp,))
-			
-		druttis_plucked_string = UniformMod(n + 'pluckedstring', p / 'druttis' / 'PluckedString',
-			deps=(druttis_dsp,))
-
-		druttis_sublime = UniformMod(n + 'sublime', p / 'druttis' / 'sublime', 
-			deps=(druttis_dsp,druttis_band_limited_wave_tables))
-
+		druttis_band_limited_wave_tables = UniformMod('psycle-druttis-band-limited-wave-tables', p / 'druttis' / 'blwtbl', deps=(druttis_dsp,))
+		druttis_plucked_string = UniformMod(n + 'pluckedstring', p / 'druttis' / 'PluckedString', deps=(druttis_dsp,))
+		druttis_sublime = UniformMod(n + 'sublime', p / 'druttis' / 'sublime', deps=(druttis_dsp, druttis_band_limited_wave_tables))
 		druttis_slicit = UniformMod(n + 'slicit', p / 'druttis' / 'slicit', deps=(druttis_dsp,))
 		druttis_eq3 = UniformMod(n + 'eq3', p / 'druttis' / 'eq3', deps=(druttis_dsp,))
-		druttis_koruz = UniformMod(n + 'koruz', p / 'druttis' / 'Koruz',
-			deps=(druttis_dsp,))
-
-		druttis_phantom = UniformMod(n + 'phantom', p / 'druttis' / 'Phantom',
-			deps=(druttis_dsp,))
-
-		druttis_feed_me = UniformMod(n + 'feedme', p / 'druttis' / 'FeedMe',
-			deps=(druttis_dsp,))
+		druttis_koruz = UniformMod(n + 'koruz', p / 'druttis' / 'Koruz', deps=(druttis_dsp,))
+		druttis_phantom = UniformMod(n + 'phantom', p / 'druttis' / 'Phantom', deps=(druttis_dsp,))
+		druttis_feed_me = UniformMod(n + 'feedme', p / 'druttis' / 'FeedMe', deps=(druttis_dsp,))
 
 		if False: # it uses ms's winapi!
 			yannis_brown_midi = UniformMod(n + 'ymidi', p / 'y_midi')
@@ -227,7 +209,6 @@ class Wonderbuild(ScriptTask):
 			guido_volume = UniformMod(n + 'guido-volume', p / '?????!!!!!!!!')
 		
 		for x in sched_ctx.parallel_wait(stk): yield x
-
 		if stk:
 			stk_plucked = UniformMod(n + 'stk-plucked', p / 'stk' / 'stk.plucked', deps=(stk,))
 			stk_rev = UniformMod(n + 'stk-rev', p / 'stk' / 'stk.reverbs', deps=(stk,))

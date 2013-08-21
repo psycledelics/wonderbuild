@@ -45,10 +45,6 @@ class Wonderbuild(ScriptTask):
 				ModTask.__init__(self, name, ModTask.Kinds.HEADERS, cfg,
 					cxx_phase=self.__class__.InstallHeaders(project, name + '-headers'))
 				
-			def __call__(self, sched_ctx):
-				if False: yield
-				self.result = True
-			
 			class InstallHeaders(InstallTask):
 				@property
 				def trim_prefix(self): return src_dir

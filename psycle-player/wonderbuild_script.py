@@ -24,11 +24,10 @@ class Wonderbuild(ScriptTask):
 	def common(self): return self._common
 
 	def __call__(self, sched_ctx):
-		project = self.project
 		top_src_dir = self.src_dir.parent
 		src_dir = self.src_dir / 'src'
 
-		core = ScriptLoaderTask.shared(project, top_src_dir / 'psycle-core')
+		core = ScriptLoaderTask.shared(self.project, top_src_dir / 'psycle-core')
 		for x in sched_ctx.parallel_wait(core): yield x
 		core = core.script_task
 		self._common = common = core.common
@@ -45,22 +44,19 @@ class Wonderbuild(ScriptTask):
 		class PlayerMod(ModTask):
 			def __init__(self): ModTask.__init__(self, 'psycle-player', ModTask.Kinds.PROG, cfg)
 
-			def __call__(self, sched_ctx):
+			def do_set_deps(self, sched_ctx):
 				self.private_deps = [pch.prog_task, core]
 				req = self.all_deps
 				opt = [xml]
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.private_deps += [o for o in opt if o]
-				self.result = min(bool(r) for r in req)
 
 			def do_mod_phase(self):
 				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
 				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
 				if xml: self.cfg.defines['PSYCLE__LIBXMLPP_AVAILABLE'] = None
 				self.cfg.include_paths.appendleft(src_dir)
-				for s in (src_dir / 'psycle' / 'player').find_iter(
-					in_pats = ('*.cpp',), prune_pats = ('todo',)
-				): self.sources.append(s)
+				for s in (src_dir / 'psycle' / 'player').find_iter(in_pats = ('*.cpp',), prune_pats = ('todo',)): self.sources.append(s)
 
 		player = PlayerMod()
 		self.default_tasks.append(player.mod_phase)

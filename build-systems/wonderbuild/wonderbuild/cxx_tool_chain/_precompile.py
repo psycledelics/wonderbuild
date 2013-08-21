@@ -9,10 +9,9 @@ from wonderbuild.task import Persistent, Task
 from _mod_dep_phases import ModDepPhases
 from _pkg_config import PkgConfigCxxFlagsTask as _PkgConfigCxxFlagsTask
 
-class _PreCompileTask(ModDepPhases, Task, Persistent):
+class _PreCompileTask(ModDepPhases, Persistent):
 	def __init__(self, name, base_cfg):
 		ModDepPhases.__init__(self)
-		Task.__init__(self)
 		Persistent.__init__(self, base_cfg.project.persistent, name)
 		self.name = name
 		self.base_cfg = base_cfg
@@ -24,8 +23,8 @@ class _PreCompileTask(ModDepPhases, Task, Persistent):
 			self._cfg = self.base_cfg.clone()
 			return self._cfg
 	
-	# Task
-	def __call__(self, sched_ctx):
+	# ModDepPhases
+	def do_set_deps(self, sched_ctx):
 		if False: yield
 		self.cxx_phase = _PreCompileTask._CxxPhaseCallbackTask(self)
 	
@@ -70,7 +69,7 @@ class _PreCompileTask(ModDepPhases, Task, Persistent):
 
 	def _cxx_phase_callback(self, sched_ctx):
 		for x in sched_ctx.parallel_wait(self): yield x
-		for x in self.do_ensure_deps(sched_ctx): yield x
+		for x in self.ensure_deps(sched_ctx): yield x
 		
 		# We need the headers of our deps.
 		for x in self._do_deps_cxx_phases_and_apply_cxx_deep(sched_ctx): yield x
@@ -144,10 +143,9 @@ class _PreCompileTask(ModDepPhases, Task, Persistent):
 				self.persistent = cxx_sig, deps, Sig(''.join(dep_sigs)).digest()
 		finally: sched_ctx.lock.acquire()
 
-class PreCompileTasks(ModDepPhases, Task):
+class PreCompileTasks(ModDepPhases): # XXX *NOT* to be used as a ModDepPhases ! One has to chose between .lib_task or .prog_task (pic vs non-pic)
 	def __init__(self, name, base_cfg):
 		ModDepPhases.__init__(self)
-		Task.__init__(self)
 		self.name = name
 		self.base_cfg = base_cfg
 
@@ -205,20 +203,16 @@ class PreCompileTasks(ModDepPhases, Task):
 		@property
 		def source_text(self): return self.parent_task.source_text
 
-		# _PreCompileTask(Task)
-		def __call__(self, sched_ctx):
+		# _PreCompileTask(ModDepPhases)
+		def do_set_deps(self, sched_ctx):
 			for x in sched_ctx.parallel_wait(self.parent_task): yield x
 			self.private_deps = self.parent_task.private_deps
 			self.public_deps = self.parent_task.public_deps
-			self.result = self.parent_task.result
 			try: self.parent_task.__cxx_phase_done
 			except AttributeError:
 				self.parent_task.do_cxx_phase()
 				self.parent_task.__cxx_phase_done = True
 			self.cfg.pic = self.pic # this clones the parent cfg and changes the pic setting
-			for x in _PreCompileTask.__call__(self, sched_ctx): yield x
+			for x in _PreCompileTask.do_set_deps(self, sched_ctx): yield x
 	
-		def do_ensure_deps(self, sched_ctx):
-			for x in self.parent_task.do_ensure_deps(sched_ctx): yield x
-
 	def do_cxx_phase(self): pass

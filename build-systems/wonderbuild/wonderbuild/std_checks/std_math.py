@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2006-2010 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2006-2013 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 from wonderbuild.cxx_tool_chain import MultiBuildCheckTask, BuildCheckTask, ok_color, failed_color
 
@@ -9,29 +9,23 @@ class StdMathCheckTask(MultiBuildCheckTask):
 	@staticmethod
 	def shared_uid(*args, **kw): return 'std-math'
 
-	def do_check_and_set_result(self, sched_ctx):
+	def do_set_deps(self, sched_ctx):
 		t = StdMathCheckTask.SubCheckTask.shared(self, True)
 		for x in sched_ctx.parallel_wait(t): yield x
-		if t.result: self.results = t.result, t.m
-		else:
+		if not t:
 			t = StdMathCheckTask.SubCheckTask.shared(self, False)
-			for x in sched_ctx.parallel_wait(t): yield x
-			if t.result: self.results = t.result, t.m
-			else: self.results = False, None
-	
+		self.private_deps = [t]
+		self._t = t
+
 	@property
-	def result(self): return self.results[0]
-	
-	@property
-	def m(self): return self.results[1]
+	def m(self): return self._t.m
 
 	@property
 	def result_display(self):
-		if self.result: return 'yes with' + (not self.m and 'out' or '') + ' lm', ok_color
+		if self: return 'yes with' + (not self.m and 'out' or '') + ' lm', ok_color
 		else: return 'no', failed_color
 		
-	def apply_mod_to(self, cfg):
-		if self.m: cfg.libs.append('m')
+	def apply_mod_to(self, cfg): self._t.apply_mod_to(cfg)
 
 	@property
 	def source_text(self):

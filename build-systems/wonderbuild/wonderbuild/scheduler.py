@@ -123,7 +123,10 @@ class Scheduler(OptionDecl):
 				for t in self._threads: t.join(timeout = self.timeout)
 				if __debug__ and is_debug: debug('sched: threads joined')
 			if hasattr(self, 'exception'):
-				for task in self._task_stack: self._close_gen(task)
+				for task in self._task_stack:
+					try: self._close_gen(task)
+					except:
+						if __debug__ and is_debug: raise
 				if isinstance(self.exception, UserReadableException): raise self.exception
 				else: raise UserReadableException, 'An exception occurred; see stack trace above.'
 
@@ -135,6 +138,17 @@ class Scheduler(OptionDecl):
 			else:
 				if task_gen is not None:
 					try: task_gen.close()
+					except:
+						if __debug__ and is_debug:
+							# In a task gen, a block such as this:
+							#     sched_ctx.lock.acquire()
+							#     try:
+							#         for x in sched_ctx.parallel_wait(xxx): yield x
+							#     finally: sched_ctx.lock.release()
+							# may here raise an exception 'thread.error: release unlocked lock'.
+							# This is caused by the reentrance into the scheduler, which may temporarily release the lock.
+							# In this situation, closing the task gen will execute the finally block, and fail due to the lock not being held anymore.
+							raise
 					finally: task._sched_gen = None
 		finally:
 			out_tasks = task._sched_out_tasks
@@ -142,7 +156,8 @@ class Scheduler(OptionDecl):
 				task._out_tasks = None
 				for out_task in out_tasks:
 					try: Scheduler._close_gen(out_task)
-					except: continue
+					except:
+						if __debug__ and is_debug: raise
 
 	def _thread_loop(self, thread_id, remaining_start_count, remaining_start_cond):
 		if __debug__ and is_debug: debug('sched: thread: ' + str(thread_id) + ': started')

@@ -67,7 +67,6 @@ class Wonderbuild(ScriptTask):
 			opt = [std_cxx11, mt, openmp, dl, glibmm]
 			for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 			self.private_deps += req + [o for o in opt if o]
-			self.result = min(bool(r) for r in req)
 
 		def do_cxx_phase(self):
 			self.cfg.include_paths.append(self._top_src_dir / 'build-systems' / 'src')

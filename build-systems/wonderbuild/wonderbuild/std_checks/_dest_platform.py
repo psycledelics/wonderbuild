@@ -92,25 +92,23 @@ WONDERBUILD__ARCH
 
 	def do_check_and_set_result(self, sched_ctx):
 		for x in BuildCheckTask.do_check_and_set_result(self, sched_ctx): yield x
-		r, out = self.results
-		if not r: self.results = False, None, None, None
+		if not self.result: self.result = False, None, None, None
 		else:
-			out = out.split('\n')
-			self.results = True, out[-4][1:-1], out[-3][1:-1], out[-2][1:-1]
+			out = self.out.split('\n')
+			self.result = True, out[-4][1:-1], out[-3][1:-1], out[-2][1:-1]
+
+	def __bool__(self): return self.result[0]
 	
 	@property
-	def result(self): return self.results[0]
-	
-	@property
-	def bin_fmt(self): return self.results[1]
+	def bin_fmt(self): return self.result[1]
 
 	@property
-	def os(self): return self.results[2]
+	def os(self): return self.result[2]
 
 	@property
-	def arch(self): return self.results[3]
+	def arch(self): return self.result[3]
 
 	@property
 	def result_display(self):
-		if self.result: return 'bin-fmt: ' + self.bin_fmt + ', os: ' + self.os + ', arch: ' + self.arch, ok_color
+		if self: return 'bin-fmt: ' + self.bin_fmt + ', os: ' + self.os + ', arch: ' + self.arch, ok_color
 		else: return 'unkown', failed_color

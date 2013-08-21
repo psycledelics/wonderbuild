@@ -57,12 +57,10 @@ class Wonderbuild(ScriptTask):
 				ModTask.__init__(self, name, ModTask.Kinds.HEADERS, cfg,
 					cxx_phase = self.__class__.InstallHeaders(cfg.project, name + '-headers'))
 				
-			def __call__(self, sched_ctx):
+			def do_set_deps(self, sched_ctx):
+				if False: yield
 				self.private_deps = [pch.lib_task]
 				self.public_deps = [universalis, std_math]
-				req = self.all_deps
-				for x in sched_ctx.parallel_wait(*req): yield x
-				self.result = min(bool(r) for r in req)
 
 			class InstallHeaders(InstallTask):
 				@property
@@ -89,12 +87,10 @@ class Wonderbuild(ScriptTask):
 		class HelpersMod(ModTask):
 			def __init__(self): ModTask.__init__(self, 'psycle-helpers', ModTask.Kinds.LIB, cfg)
 
-			def __call__(self, sched_ctx):
+			def do_set_deps(self, sched_ctx):
+				if False: yield
 				self.private_deps = [pch.lib_task]
 				self.public_deps = [universalis, helpers_math, soxr]
-				req = self.all_deps
-				for x in sched_ctx.parallel_wait(*req): yield x
-				self.result = min(bool(r) for r in req)
 				self.cxx_phase = HelpersMod.InstallHeaders(self.base_cfg.project, self.name + '-headers')
 
 			class InstallHeaders(InstallTask):
@@ -125,21 +121,20 @@ class Wonderbuild(ScriptTask):
 		self._mod_dep_phases = helpers = HelpersMod()
 		self.default_tasks.append(helpers.mod_phase)
 						
-		class UnitTestMod(ModTask):
-			def __init__(self): ModTask.__init__(self, 'psycle-helpers-unit-tests', ModTask.Kinds.PROG, cfg)
-
-			def __call__(self, sched_ctx):
-				self.private_deps = [pch.prog_task, helpers, boost_test]
-				req = self.all_deps
-				for x in sched_ctx.parallel_wait(*req): yield x
-				self.result = min(bool(r) for r in req)
-
-			def do_mod_phase(self):
-				self.cfg.include_paths.appendleft(src_dir)
-				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
-				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
-				self.sources.append(src_dir / 'unit_tests.cpp')
-				
-		unit_tests = UnitTestMod()
 		for x in sched_ctx.parallel_wait(boost_test): yield x
-		if boost_test: self.default_tasks.append(unit_tests.mod_phase)
+		if boost_test:
+			class UnitTestMod(ModTask):
+				def __init__(self): ModTask.__init__(self, 'psycle-helpers-unit-tests', ModTask.Kinds.PROG, cfg)
+
+				def do_set_deps(self, sched_ctx):
+					if False: yield
+					self.private_deps = [pch.prog_task, helpers, boost_test]
+
+				def do_mod_phase(self):
+					self.cfg.include_paths.appendleft(src_dir)
+					self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
+					self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
+					self.sources.append(src_dir / 'unit_tests.cpp')
+				
+			unit_tests = UnitTestMod()
+			self.default_tasks.append(unit_tests.mod_phase)

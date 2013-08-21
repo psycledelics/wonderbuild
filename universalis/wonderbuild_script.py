@@ -58,21 +58,18 @@ class Wonderbuild(ScriptTask):
 		glibmm = PkgConfigCheckTask.shared(check_cfg, ['glibmm-2.4', 'gmodule-2.0', 'gthread-2.0'])
 		winmm = WinMMCheckTask.shared(check_cfg)
 		
-		from wonderbuild import UserReadableException
 		from wonderbuild.install import InstallTask
 
 		class UniversalisMod(ModTask):
 			def __init__(self): ModTask.__init__(self, 'universalis', ModTask.Kinds.LIB, cfg)
 				
-			def __call__(self, sched_ctx):
-				self.private_deps = []
+			def do_set_deps(self, sched_ctx):
 				self.public_deps = [diversalis, std_math, boost, mt, dl]
 				if self.cfg.dest_platform.os == 'win': self.public_deps.append(winmm)
 				req = self.all_deps
 				opt = [std_cxx11, openmp, glibmm]
 				for x in sched_ctx.parallel_wait(*(req + opt)): yield x
 				self.public_deps += [o for o in opt if o]
-				self.result = min(bool(r) for r in req)
 				self.cxx_phase = self.__class__.InstallHeaders(self.base_cfg.project, self.name + '-headers')
 
 			class InstallHeaders(InstallTask):
@@ -106,21 +103,20 @@ class Wonderbuild(ScriptTask):
 		common.pch.private_deps.append(mod_dep_phases)
 		self.default_tasks.append(mod_dep_phases.mod_phase)
 
-		class UnitTestMod(ModTask):
-			def __init__(self): ModTask.__init__(self, 'universalis-unit-tests', ModTask.Kinds.PROG, cfg)
-
-			def __call__(self, sched_ctx):
-				self.private_deps = [pch.prog_task, universalis, boost_test]
-				req = self.all_deps
-				for x in sched_ctx.parallel_wait(*req): yield x
-				self.result = min(bool(r) for r in req)
-
-			def do_mod_phase(self):
-				self.cfg.include_paths.appendleft(src_dir)
-				self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
-				self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
-				self.sources.append(src_dir / 'unit_tests.cpp')
-				
-		unit_tests = UnitTestMod()
 		for x in sched_ctx.parallel_wait(boost_test): yield x
-		if boost_test: self.default_tasks.append(unit_tests.mod_phase)
+		if boost_test:
+			class UnitTestMod(ModTask):
+				def __init__(self): ModTask.__init__(self, 'universalis-unit-tests', ModTask.Kinds.PROG, cfg)
+
+				def do_set_deps(self, sched_ctx):
+					if False: yield
+					self.private_deps = [pch.prog_task, universalis, boost_test]
+
+				def do_mod_phase(self):
+					self.cfg.include_paths.appendleft(src_dir)
+					self.cfg.defines['UNIVERSALIS__META__MODULE__NAME'] = '"' + self.name +'"'
+					self.cfg.defines['UNIVERSALIS__META__MODULE__VERSION'] = 0
+					self.sources.append(src_dir / 'unit_tests.cpp')
+				
+			unit_tests = UnitTestMod()
+			self.default_tasks.append(unit_tests.mod_phase)
