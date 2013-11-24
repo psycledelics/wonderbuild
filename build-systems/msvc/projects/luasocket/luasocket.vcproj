@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="lualib"
-	ProjectGUID="{702967DE-84A7-41AB-B91D-95B656FF8881}"
-	RootNamespace="lualib"
+	Name="luasocket"
+	ProjectGUID="{A2F41715-28BA-40EB-8AB0-97F076B6FD2B}"
+	RootNamespace="luasocket"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -20,15 +20,15 @@
 	</ToolFiles>
 	<Configurations>
 		<Configuration
-			Name="debug|Win32"
+			Name="Debug|Win32"
 			ConfigurationType="4"
 			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\platform_win32.vsprops;..\..\properties\no_pre_compiled_header.vsprops"
 			CharacterSet="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description="unpack lualib source"
-				CommandLine="build.cmd 5.2.2"
+				Description="unpack luasocket source"
+				CommandLine="build.cmd 3.0"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -77,14 +77,14 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="debug|x64"
+			Name="Debug|x64"
 			ConfigurationType="4"
 			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\platform_x64.vsprops;..\..\properties\no_pre_compiled_header.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description="unpack lualib source"
-				CommandLine="build.cmd 5.2.2"
+				Description="unpack luasocket source"
+				CommandLine="build.cmd 3.0"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -133,14 +133,14 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="release|Win32"
+			Name="Release|Win32"
 			ConfigurationType="4"
 			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\platform_win32.vsprops;..\..\properties\no_pre_compiled_header.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description="unpack lualib source"
-				CommandLine="build.cmd 5.2.2"
+				Description="unpack luasocket source"
+				CommandLine="build.cmd 3.0"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -189,14 +189,16 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="release|x64"
+			Name="Release|x64"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\platform_x64.vsprops;..\..\properties\no_pre_compiled_header.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				Description="unpack lualib source"
-				CommandLine="build.cmd 5.2.2"
+				Description="unpack luasocket source"
+				CommandLine="build.cmd 3.0"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -254,232 +256,105 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lapi.c"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\auxiliar.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lcode.c"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\buffer.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lctype.c"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\except.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\ldebug.c"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\inet.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\ldo.c"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\io.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\ldump.c"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\luasocket.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lfunc.c"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\mime.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lgc.c"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\options.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\llex.c"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\select.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lmem.c"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\tcp.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lobject.c"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\timeout.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lopcodes.c"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\udp.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lparser.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lstate.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lstring.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\ltable.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\ltm.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lundump.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lvm.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lzio.c"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\wsocket.c"
 				>
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lapi.h"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\auxiliar.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lcode.h"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\buffer.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lctype.h"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\except.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\ldebug.h"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\inet.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\ldo.h"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\io.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lfunc.h"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\options.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lgc.h"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\select.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\llex.h"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\tcp.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\llimits.h"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\timeout.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lmem.h"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\udp.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lobject.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lopcodes.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lparser.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lstate.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lstring.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\ltable.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\ltm.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\luaconf.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lundump.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lvm.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lzio.h"
-				>
-			</File>
-		</Filter>
-		<Filter
-			Name="Extension Libs"
-			>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lauxlib.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lauxlib.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lbaselib.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lbitlib.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lcorolib.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\ldblib.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\linit.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\liolib.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lmathlib.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\loadlib.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\loslib.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lstrlib.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\ltablib.c"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lualib.h"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\wsocket.h"
 				>
 			</File>
 		</Filter>
@@ -487,11 +362,11 @@
 			Name="Shared Headers"
 			>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lua.h"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\luasocket.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2.2\src\lua.hpp"
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\mime.h"
 				>
 			</File>
 		</Filter>

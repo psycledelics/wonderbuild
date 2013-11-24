@@ -26,7 +26,8 @@ if not exist %output%\boost-%1-%2-stamp (
 		mkdir %output%\debug\bin || exit /b 1
 	)
 	REM copying also the release system lib to the debug dir to allow using the release plugins with debug psycle
-	move %pkgdir%\%libdir%\%3\*-gd-*.dll %output%\debug\bin || copy %pkgdir%\%libdir%\%3\boost_system*.dll %output%\debug\bin || exit /b 1
+	move %pkgdir%\%libdir%\%3\*-gd-*.dll %output%\debug\bin || exit /b 1
+	copy /Y %pkgdir%\%libdir%\%3\boost_system*.dll %output%\debug\bin || exit /b 1
 
 	if not exist %output%\debug\lib (
 		mkdir %output%\debug\lib || exit /b 1

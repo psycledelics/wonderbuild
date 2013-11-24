@@ -1525,11 +1525,23 @@
 							>
 						</File>
 						<File
+							RelativePath=".\src\psycle\host\LuaHelper.hpp"
+							>
+						</File>
+						<File
 							RelativePath=".\src\psycle\host\LuaHost.cpp"
 							>
 						</File>
 						<File
 							RelativePath=".\src\psycle\host\LuaHost.hpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\LuaInternals.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\LuaInternals.hpp"
 							>
 						</File>
 						<File
