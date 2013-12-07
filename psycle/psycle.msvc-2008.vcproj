@@ -1085,6 +1085,14 @@
 							>
 						</File>
 						<File
+							RelativePath=".\src\psycle\host\InstrIndividualMap.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\InstrIndividualMap.hpp"
+							>
+						</File>
+						<File
 							RelativePath=".\src\psycle\host\InstrumentAmpDlg.cpp"
 							>
 						</File>
@@ -1130,14 +1138,6 @@
 						</File>
 						<File
 							RelativePath=".\src\psycle\host\InstrumentPanDlg.hpp"
-							>
-						</File>
-						<File
-							RelativePath=".\src\psycle\host\InstrumentPitDlg.cpp"
-							>
-						</File>
-						<File
-							RelativePath=".\src\psycle\host\InstrumentPitDlg.hpp"
 							>
 						</File>
 						<File
