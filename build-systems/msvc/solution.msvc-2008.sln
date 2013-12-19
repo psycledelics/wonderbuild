@@ -1770,6 +1770,7 @@ Global
 		{A2F41715-28BA-40EB-8AB0-97F076B6FD2B}.release|win32.ActiveCfg = Release|Win32
 		{A2F41715-28BA-40EB-8AB0-97F076B6FD2B}.release|win32.Build.0 = Release|Win32
 		{A2F41715-28BA-40EB-8AB0-97F076B6FD2B}.release|x64.ActiveCfg = Release|x64
+		{A2F41715-28BA-40EB-8AB0-97F076B6FD2B}.release|x64.Build.0 = Release|x64
 		{A2F41715-28BA-40EB-8AB0-97F076B6FD2B}.unpack|win32.ActiveCfg = Release|Win32
 		{A2F41715-28BA-40EB-8AB0-97F076B6FD2B}.unpack|win32.Build.0 = Release|Win32
 		{A2F41715-28BA-40EB-8AB0-97F076B6FD2B}.unpack|x64.ActiveCfg = Release|Win32
