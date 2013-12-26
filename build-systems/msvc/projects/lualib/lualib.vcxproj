@@ -65,8 +65,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'">cmd.exe /c build.cmd 5.2.2</NMakeBuildCommandLine>
-    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">cmd.exe /c build.cmd 5.2.2</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'">cmd.exe /c build.cmd 5.2</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">cmd.exe /c build.cmd 5.2</NMakeBuildCommandLine>
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="lapi.c" />

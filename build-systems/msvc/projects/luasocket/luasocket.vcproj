@@ -190,8 +190,6 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\platform_x64.vsprops;..\..\properties\no_pre_compiled_header.vsprops"
 			>

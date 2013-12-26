@@ -15,7 +15,7 @@
   "$(TopSrcDir)/external-packages/zlib-1.2.3/include";
   "$(TopSrcDir)/external-packages/dsound-9/include";
   "$(TopSrcDir)/external-packages/libsoxr/soxr-0.1.1-Source/src/";
-  "$(TopSrcDir)/external-packages/lua-5.2.2/src/";
+  "$(TopSrcDir)/external-packages/lua-5.2/src/";
   "$(TopSrcDir)/external-packages/boost-1.50.0/include";
   "$(TopSrcDir)/external-packages/asio-2.2/common";
   "$(TopSrcDir)/external-packages/asio-2.2/host";

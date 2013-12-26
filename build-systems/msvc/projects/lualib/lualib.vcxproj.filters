@@ -19,177 +19,177 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\lapi.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lapi.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\lauxlib.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lauxlib.c">
       <Filter>Extension Libs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\lbaselib.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lbaselib.c">
       <Filter>Extension Libs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\lbitlib.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lbitlib.c">
       <Filter>Extension Libs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\lcode.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lcode.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\lcorolib.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lcorolib.c">
       <Filter>Extension Libs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\lctype.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lctype.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\ldblib.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\ldblib.c">
       <Filter>Extension Libs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\ldebug.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\ldebug.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\ldo.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\ldo.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\ldump.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\ldump.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\lfunc.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lfunc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\lgc.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lgc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\linit.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\linit.c">
       <Filter>Extension Libs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\liolib.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\liolib.c">
       <Filter>Extension Libs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\llex.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\llex.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\lmathlib.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lmathlib.c">
       <Filter>Extension Libs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\lmem.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lmem.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\loadlib.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\loadlib.c">
       <Filter>Extension Libs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\lobject.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lobject.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\lopcodes.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lopcodes.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\loslib.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\loslib.c">
       <Filter>Extension Libs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\lparser.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lparser.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\lstate.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lstate.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\lstring.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lstring.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\lstrlib.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lstrlib.c">
       <Filter>Extension Libs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\ltable.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\ltable.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\ltablib.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\ltablib.c">
       <Filter>Extension Libs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\ltm.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\ltm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\lundump.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lundump.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\lvm.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lvm.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\external-packages\lua-5.2.2\src\lzio.c">
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lzio.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\lapi.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lapi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\lauxlib.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lauxlib.h">
       <Filter>Extension Libs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\lcode.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lcode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\lctype.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lctype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\ldebug.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\ldebug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\ldo.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\ldo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\lfunc.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lfunc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\lgc.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lgc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\llex.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\llex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\llimits.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\llimits.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\lmem.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lmem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\lobject.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lobject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\lopcodes.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lopcodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\lparser.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lparser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\lstate.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lstate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\lstring.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lstring.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\ltable.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\ltable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\ltm.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\ltm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\lua.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lua.h">
       <Filter>Shared Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\luaconf.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\luaconf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\lualib.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lualib.h">
       <Filter>Extension Libs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\lundump.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lundump.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\lvm.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lvm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\lzio.h">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lzio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\external-packages\lua-5.2.2\src\lua.hpp">
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lua.hpp">
       <Filter>Shared Headers</Filter>
     </ClInclude>
   </ItemGroup>
