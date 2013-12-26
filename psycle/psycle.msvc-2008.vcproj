@@ -511,6 +511,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\psycle\host\resources\Project3.ico"
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\host\resources\Psycle.ico"
 					>
 				</File>
@@ -556,6 +560,10 @@
 				</File>
 				<File
 					RelativePath="src\psycle\host\resources\splash copia.bmp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\resources\splash_screen.bmp"
 					>
 				</File>
 				<File

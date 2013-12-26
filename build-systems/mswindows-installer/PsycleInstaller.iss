@@ -8,7 +8,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppID={{8E7D0A7F-B85F-44DC-8C1C-2A2C27BAEA0B}
 AppName=Psycle Modular Music Creation Studio
-AppVersion=1.10.1
+AppVersion=1.11.1
 ;AppVerName=Psycle Modular Music Creation Studio 1.8.8
 AppPublisher=psycledelics
 AppPublisherURL=http://psycle.sourceforge.net/
@@ -20,12 +20,12 @@ AllowNoIcons=true
 InfoBeforeFile=..\..\psycle\doc\for-end-users\readme.txt
 InfoAfterFile=..\..\psycle\doc\for-end-users\whatsnew.txt
 OutputBaseFilename=PsycleInstallerx64
-SetupIconFile=..\..\psycle\pixmaps\psycle.ico
+SetupIconFile=..\..\psycle\pixmaps\Project3.ico
 Compression=lzma/Max
 SolidCompression=true
 MinVersion=0,5.2.3790
 AppCopyright=2000-2012 psycledelics
-AppVerName=Psycle 1.10.1 64 bits
+AppVerName=Psycle 1.11.1 64 bits
 PrivilegesRequired=poweruser
 TimeStampsInUTC=true
 DisableReadyPage=true
@@ -33,6 +33,8 @@ ArchitecturesInstallIn64BitMode=x64
 ArchitecturesAllowed=x64
 ChangesAssociations=true
 ShowLanguageDialog=no
+WizardImageFile="installer_left image.bmp"
+WizardSmallImageFile=installer_top_right.bmp
 
 [Languages]
 Name: english; MessagesFile: compiler:Default.isl
@@ -44,10 +46,12 @@ Name: deleteCacheFile; Description: deletes the cache of plugin names to force i
 Name: deleteRegistrySettings; Description: deletes the existing settings in the registry, allowing psycle to regenerate the defaults.; Flags: unchecked
 
 [Files]
-Source: ..\msvc\output\x64\release\bin\boost_date_time-vc90-mt-1_41.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application; 
-Source: ..\msvc\output\x64\release\bin\boost_filesystem-vc90-mt-1_41.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application;
-Source: ..\msvc\output\x64\release\bin\boost_system-vc90-mt-1_41.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application; 
-Source: ..\msvc\output\x64\release\bin\boost_thread-vc90-mt-1_41.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application; 
+Source: ..\msvc\output\x64\release\bin\boost_date_time-vc90-mt-1_50.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application; 
+Source: ..\msvc\output\x64\release\bin\boost_filesystem-vc90-mt-1_50.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application; 
+Source: ..\msvc\output\x64\release\bin\boost_system-vc90-mt-1_50.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application; 
+Source: ..\msvc\output\x64\release\bin\boost_thread-vc90-mt-1_50.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application; 
+Source: ..\msvc\output\x64\release\bin\boost_chrono-vc90-mt-1_50.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application; 
+Source: ..\msvc\output\x64\release\bin\boost_signals-vc90-mt-1_50.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application; 
 Source: ..\msvc\output\x64\release\bin\psycle.exe; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application; 
 Source: ..\msvc\output\x64\release\bin\universalis.dll; DestDir: {app}; Flags: 64bit ignoreversion; Components: Application; 
 Source: ..\msvc\output\x64\release\bin\psycle-plugins\*.dll; DestDir: {app}\PsyclePlugins; Flags: 64bit ignoreversion; Excludes: crasher.dll; Components: Open_Source_Plugins; 

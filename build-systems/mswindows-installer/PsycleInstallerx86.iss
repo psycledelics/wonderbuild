@@ -8,7 +8,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{8E7D0A7F-B85F-44DC-8C1C-2A2C27BAEA0B}
 AppName=Psycle Modular Music Creation Studio
-AppVersion=1.10.1
+AppVersion=1.11.1
 ;AppVerName=Psycle Modular Music Creation Studio 1.8.8
 AppPublisher=psycledelics
 AppPublisherURL=http://psycle.sourceforge.net/
@@ -20,12 +20,12 @@ AllowNoIcons=true
 InfoBeforeFile=..\..\psycle\doc\for-end-users\readme.txt
 InfoAfterFile=..\..\psycle\doc\for-end-users\whatsnew.txt
 OutputBaseFilename=PsycleInstallerx86
-SetupIconFile=..\..\psycle\pixmaps\psycle.ico
-Compression=lzma
+SetupIconFile=..\..\psycle\pixmaps\Project3.ico
+Compression=lzma/Max
 SolidCompression=true
 MinVersion=0,5.0.2195sp4
 AppCopyright=2000-2012 psycledelics
-AppVerName=Psycle 1.10.1 32 bits
+AppVerName=Psycle 1.11.1 32 bits
 PrivilegesRequired=poweruser
 TimeStampsInUTC=true
 DisableReadyPage=true
@@ -33,6 +33,8 @@ ArchitecturesInstallIn64BitMode=
 ArchitecturesAllowed=x86 x64
 ChangesAssociations=true
 ShowLanguageDialog=no
+WizardImageFile="installer_left image.bmp"
+WizardSmallImageFile=installer_top_right.bmp
 
 [Languages]
 Name: english; MessagesFile: compiler:Default.isl
@@ -44,10 +46,12 @@ Name: deleteCacheFile; Description: deletes the cache of plugin names to force i
 Name: deleteRegistrySettings; Description: deletes the existing settings in the registry, allowing psycle to regenerate the defaults.; Flags: unchecked
 
 [Files]
-Source: ..\msvc\output\Win32\release\bin\boost_date_time-vc90-mt-1_41.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
-Source: ..\msvc\output\Win32\release\bin\boost_filesystem-vc90-mt-1_41.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
-Source: ..\msvc\output\Win32\release\bin\boost_system-vc90-mt-1_41.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
-Source: ..\msvc\output\Win32\release\bin\boost_thread-vc90-mt-1_41.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
+Source: ..\msvc\output\Win32\release\bin\boost_date_time-vc90-mt-1_50.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
+Source: ..\msvc\output\Win32\release\bin\boost_filesystem-vc90-mt-1_50.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
+Source: ..\msvc\output\Win32\release\bin\boost_system-vc90-mt-1_50.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
+Source: ..\msvc\output\Win32\release\bin\boost_thread-vc90-mt-1_59.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
+Source: ..\msvc\output\Win32\release\bin\boost_chrono-vc90-mt-1_50.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application; 
+Source: ..\msvc\output\Win32\release\bin\boost_signals-vc90-mt-1_50.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application; 
 Source: ..\msvc\output\Win32\release\bin\psycle.exe; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
 Source: ..\msvc\output\Win32\release\bin\universalis.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
 Source: ..\msvc\output\Win32\release\bin\psycle-plugins\*.dll; DestDir: {app}\PsyclePlugins; Flags: 32bit ignoreversion; Excludes: crasher.dll; Components: Open_Source_Plugins;
@@ -66,7 +70,7 @@ Name: {group}\{cm:ProgramOnTheWeb,Psycledelics site}; Filename: http://psycle.so
 Name: {group}\{cm:UninstallProgram,Psycle 64}; Filename: {uninstallexe};
 Name: {commondesktop}\Psycle Modular Music Creation Studio; Filename: {app}\psycle.exe; Tasks: desktopicon
 Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\Psycle Modular Music Creation Studio; Filename: {app}\psycle.exe; Tasks: quicklaunchicon
-Name: "{group}\Documents\How to Skin Psycle"; Filename: {app}\Docs\how-to-skin-psycle.txt; WorkingDir: {app}\Docs; Components: Documentation
+Name: "{group}\Documents\How to Skin Psycle"; Filename: {app}\Docs\how-to-skin-psycle.txt; WorkingDir: {app}\Docs; Components: Documentation; 
 Name: {group}\Documents\Version History; Filename: {app}\Docs\whatsnew.txt; WorkingDir: {app}\Docs; Components: Documentation
 Name: {group}\Documents\Pattern Keys; Filename: {app}\Docs\keys.txt; WorkingDir: {app}\Docs; Components: Documentation
 Name: "{group}\Documents\MIDI Help"; Filename: {app}\Docs\psycle-midi-2.2b\psyclemidi.html; WorkingDir: {app}\Docs\psycle-midi-2.2b; Components: Documentation;
