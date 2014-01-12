@@ -395,15 +395,7 @@
 					>
 				</File>
 				<File
-					RelativePath="src\psycle\host\resources\bmp00004.bmp"
-					>
-				</File>
-				<File
 					RelativePath="src\psycle\host\resources\bmp00005.bmp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\resources\bmp00009.bmp"
 					>
 				</File>
 				<File
@@ -419,43 +411,7 @@
 					>
 				</File>
 				<File
-					RelativePath="src\psycle\host\resources\Slider\imgMiniOff.bmp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\resources\Slider\imgMiniOn.bmp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\resources\Slider\imgOff.bmp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\resources\Slider\imgOn.bmp"
-					>
-				</File>
-				<File
 					RelativePath="src\psycle\host\resources\keys_bac.bmp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\resources\MasterMachine\ledOff-left.bmp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\resources\MasterMachine\ledOff-right.bmp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\resources\MasterMachine\ledOn-left.bmp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\resources\MasterMachine\ledOn-right.bmp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\resources\MasterMachine\LedOn.bmp"
 					>
 				</File>
 				<File
@@ -479,11 +435,15 @@
 					>
 				</File>
 				<File
-					RelativePath="src\psycle\host\resources\MasterMachine\Master-Mixer.bmp"
+					RelativePath=".\src\psycle\host\resources\master_skin.bmp"
 					>
 				</File>
 				<File
 					RelativePath="src\psycle\host\resources\minus.ico"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\resources\mixer_skin.bmp"
 					>
 				</File>
 				<File
@@ -496,10 +456,6 @@
 				</File>
 				<File
 					RelativePath="src\psycle\host\resources\notekey.bmp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\resources\MasterMachine\numbers.bmp"
 					>
 				</File>
 				<File
@@ -539,30 +495,6 @@
 					>
 				</File>
 				<File
-					RelativePath="src\psycle\host\resources\MasterMachine\Slide.bmp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\resources\Slider\sliderB.bmp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\resources\Slider\sliderBh.bmp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\resources\Slider\sliderP.bmp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\resources\Slider\sliderPh.bmp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\resources\splash copia.bmp"
-					>
-				</File>
-				<File
 					RelativePath=".\src\psycle\host\resources\splash_screen.bmp"
 					>
 				</File>
@@ -580,14 +512,6 @@
 				</File>
 				<File
 					RelativePath="src\psycle\host\resources\Toolbar32.bmp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\resources\Slider\VuOff.bmp"
-					>
-				</File>
-				<File
-					RelativePath="src\psycle\host\resources\Slider\VuOn.bmp"
 					>
 				</File>
 				<File
