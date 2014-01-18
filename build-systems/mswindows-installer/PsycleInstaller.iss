@@ -24,7 +24,7 @@ SetupIconFile=..\..\psycle\pixmaps\psycleinstaler.ico
 Compression=lzma/Max
 SolidCompression=true
 MinVersion=0,5.2.3790
-AppCopyright=2000-2012 psycledelics
+AppCopyright=2000-2014 psycledelics
 AppVerName=Psycle 1.11.1 64 bits
 PrivilegesRequired=poweruser
 TimeStampsInUTC=true
@@ -61,10 +61,12 @@ Source: ..\..\psycle-plugins\src\psycle\plugins\*.txt; DestDir: {app}\Docs; Excl
 Source: ..\..\psycle\Skins\*; DestDir: {app}\Skins; Excludes: *.txt; Flags: recursesubdirs ignoreversion createallsubdirs; Components: Skins; 
 Source: ..\..\psycle\doc\*.psy; DestDir: "{commondocs}\Psycle Songs"; Flags: ignoreversion; Components: Demo_Songs; 
 Source: ..\..\psycle-plugins\presets\*.prs; DestDir: {app}\PsyclePlugins; Flags: ignoreversion onlyifdoesntexist; Components: Presets; 
+Source: ..\..\psycle\LuaScripts\*.lua; DestDir: {app}\LuaScripts; Flags: IgnoreVersion recursesubdirs promptifolder createallsubdirs; Components: LuaScripts; 
 
 [Icons]
 Name: {group}\Psycle Modular Music Creation Studio 64; Filename: {app}\psycle.exe
-Name: "{group}\{cm:ProgramOnTheWeb,Psycledelics site}"; Filename: http://psycle.sourceforge.net/; 
+Name: "{group}\{cm:ProgramOnTheWeb,Psycledelics site}"; Filename: http://psycle.pastnotecut.org/; 
+Name: "{group}\{cm:ProgramOnTheWeb,Psycle development}"; Filename: http://sourceforge.net/projects/psycle/; 
 Name: "{group}\{cm:UninstallProgram,Psycle 64}"; Filename: {uninstallexe};
 Name: {commondesktop}\Psycle Modular Music Creation Studio 64; Filename: {app}\psycle.exe; Tasks: desktopicon
 Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\Psycle Modular Music Creation Studio 64; Filename: {app}\psycle.exe; Tasks: quicklaunchicon
@@ -87,7 +89,8 @@ Name: VstPack; Description: Download and install the freely available VST Pack.;
 Name: Presets; Description: Install presets for selected plugins (does not overwrite existing files); Types: custom full
 Name: Documentation; Description: Install the documentation of the project; Types: custom full
 Name: Skins; Description: Skins that change the look and feel of Psycle; Types: custom full
-Name: Demo_Songs; Description: Demo songs to show what psycle can do; Types: custom full; Languages: 
+Name: Demo_Songs; Description: Demo songs to show what psycle can do; Types: custom full
+Name: LuaScripts; Description: Lua utility and example scripts; Types: custom compact full
 [Dirs]
 Name: {app}\PsyclePlugins; Flags: uninsalwaysuninstall; Components: Open_Source_Plugins; 
 Name: {app}\Skins; Flags: uninsalwaysuninstall; Components: Skins; 
@@ -95,6 +98,7 @@ Name: {app}\VstPlugins; Components: Application;
 Name: {app}\VstPlugins64; Components: Application; 
 Name: {app}\Docs; Flags: uninsalwaysuninstall; Components: Documentation; 
 Name: "{commondocs}\Psycle Songs"; Components: " Demo_Songs"; 
+Name: {app}\LuaScripts; Flags: UninsAlwaysUninstall; Components: LuaScripts; 
 [Registry]
 Root: HKCU; Subkey: software\psycle; Flags: uninsdeletekey
 Root: HKCU; Subkey: software\psycle; Tasks: " deleteRegistrySettings"; Flags: deletekey
@@ -145,3 +149,7 @@ end;
 [InnoIDE_Settings]
 UseRelativePaths=true
 
+[Types]
+Name: compact; Description: "Minimal installation"; 
+Name: custom; Description: "Custom installation"; Flags: IsCustom;
+Name: full; Description: "Full installation";

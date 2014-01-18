@@ -6,7 +6,7 @@
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{8E7D0A7F-B85F-44DC-8C1C-2A2C27BAEA0B}
+AppID={{8E7D0A7F-B85F-44DC-8C1C-2A2C27BAEA0B}
 AppName=Psycle Modular Music Creation Studio
 AppVersion=1.11.1
 ;AppVerName=Psycle Modular Music Creation Studio 1.8.8
@@ -24,7 +24,7 @@ SetupIconFile=..\..\psycle\pixmaps\psycleinstaler.ico
 Compression=lzma/Max
 SolidCompression=true
 MinVersion=0,5.0.2195sp4
-AppCopyright=2000-2012 psycledelics
+AppCopyright=2000-2014 psycledelics
 AppVerName=Psycle 1.11.1 32 bits
 PrivilegesRequired=poweruser
 TimeStampsInUTC=true
@@ -63,11 +63,13 @@ Source: ..\..\psycle\Skins\*; DestDir: {app}\Skins; Excludes: *.txt; Flags: recu
 Source: ..\..\psycle\doc\*.psy; DestDir: "{commondocs}\Psycle Songs"; Flags: ignoreversion; Components: Demo_Songs; 
 Source: ..\..\psycle-plugins\presets\*.prs; DestDir: {app}\PsyclePlugins; Flags: ignoreversion onlyifdoesntexist; Components: Presets;
 Source: "Output\Psycle Winamp plugin_v1_10.exe"; DestDir: {tmp}; Components: "Winamp_plugin"; 
+Source: ..\..\psycle\LuaScripts\*.lua; DestDir: {app}\LuaScripts; Flags: IgnoreVersion recursesubdirs promptifolder createallsubdirs; Components: LuaScripts; 
 
 [Icons]
 Name: {group}\Psycle Modular Music Creation Studio; Filename: {app}\psycle.exe
-Name: {group}\{cm:ProgramOnTheWeb,Psycledelics site}; Filename: http://psycle.sourceforge.net/;
-Name: {group}\{cm:UninstallProgram,Psycle 64}; Filename: {uninstallexe};
+Name: "{group}\{cm:ProgramOnTheWeb,Psycledelics site}"; Filename: http://psycle.pastnotecut.org/; 
+Name: "{group}\{cm:ProgramOnTheWeb,Psycle development}"; Filename: http://sourceforge.net/projects/psycle/; 
+Name: {group}\{cm:UninstallProgram,Psycle 32}; Filename: {uninstallexe};
 Name: {commondesktop}\Psycle Modular Music Creation Studio; Filename: {app}\psycle.exe; Tasks: desktopicon
 Name: {userappdata}\Microsoft\Internet Explorer\Quick Launch\Psycle Modular Music Creation Studio; Filename: {app}\psycle.exe; Tasks: quicklaunchicon
 Name: "{group}\Documents\How to Skin Psycle"; Filename: {app}\Docs\how-to-skin-psycle.txt; WorkingDir: {app}\Docs; Components: Documentation; 
@@ -93,6 +95,7 @@ Name: Documentation; Description: Install the documentation of the project; Type
 Name: Skins; Description: Skins that change the look and feel of Psycle; Types: custom full
 Name: Demo_Songs; Description: Demo songs to show what psycle can do; Types: custom full; Languages: 
 Name: "Winamp_plugin"; Description: "Installs the winamp plugin to play .psy files with this player.";Types: custom full; Languages: 
+Name: LuaScripts; Description: Lua utility and example scripts; Types: custom compact full
 [Dirs]
 Name: {app}\PsyclePlugins; Flags: uninsalwaysuninstall; Components: " Open_Source_Plugins Closed_Source_Plugins";
 Name: {app}\Skins; Flags: uninsalwaysuninstall; Components: Skins;
@@ -100,6 +103,7 @@ Name: {app}\VstPlugins; Components: Application;
 Name: {app}\VstPlugins64; Components: Application;
 Name: {app}\Docs; Flags: uninsalwaysuninstall; Components: Documentation;
 Name: "{commondocs}\Psycle Songs"; Components: " Demo_Songs";
+Name: {app}\LuaScripts; Flags: UninsAlwaysUninstall; Components: LuaScripts; 
 [Registry]
 Root: HKCU; Subkey: software\psycle; Flags: uninsdeletekey
 Root: HKCU; Subkey: software\psycle; Tasks: " deleteRegistrySettings"; Flags: deletekey
@@ -149,3 +153,8 @@ end;
 
 [InnoIDE_Settings]
 UseRelativePaths=true
+
+[Types]
+Name: compact; Description: "Minimal installation"; 
+Name: custom; Description: "Custom installation"; Flags: IsCustom;
+Name: full; Description: "Full installation";
