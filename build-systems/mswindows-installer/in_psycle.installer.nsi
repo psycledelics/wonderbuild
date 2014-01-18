@@ -15,8 +15,8 @@
 ; !include "Sections.nsh"
  
 ; common defines for a generic DrO installer :o)
-!define VERSION "1.10"
-!define ALT_VER "1_10"
+!define VERSION "1.11"
+!define ALT_VER "1_11"
 !define PLUG "Psycle Winamp plugin"
 !define PLUG_ALT "Psycle Winamp plugin"
 !define PLUG_FILE "in_psycle"
@@ -99,10 +99,12 @@ Section "Plugin (required)"
  
   SetOverwrite on
   SetOutPath "$INSTDIR"
-  File "..\msvc\output\win32\release\bin\boost_date_time-vc90-mt-1_41.dll"
-  File "..\msvc\output\win32\release\bin\boost_filesystem-vc90-mt-1_41.dll"
-  File "..\msvc\output\win32\release\bin\boost_system-vc90-mt-1_41.dll"
-  File "..\msvc\output\win32\release\bin\boost_thread-vc90-mt-1_41.dll"
+  File "..\msvc\output\win32\release\bin\boost_chrono-vc90-mt-1_50.dll"
+  File "..\msvc\output\win32\release\bin\boost_date_time-vc90-mt-1_50.dll"
+  File "..\msvc\output\win32\release\bin\boost_filesystem-vc90-mt-1_50.dll"
+  File "..\msvc\output\win32\release\bin\boost_signals-vc90-mt-1_50.dll"
+  File "..\msvc\output\win32\release\bin\boost_system-vc90-mt-1_50.dll"
+  File "..\msvc\output\win32\release\bin\boost_thread-vc90-mt-1_50.dll"
   File "..\msvc\output\win32\release\bin\universalis.dll"
   File "..\..\psycle\doc\winamp-psycle-plugin.txt"
 

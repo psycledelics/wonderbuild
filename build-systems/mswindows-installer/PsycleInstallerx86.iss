@@ -49,7 +49,7 @@ Name: deleteRegistrySettings; Description: deletes the existing settings in the 
 Source: ..\msvc\output\Win32\release\bin\boost_date_time-vc90-mt-1_50.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
 Source: ..\msvc\output\Win32\release\bin\boost_filesystem-vc90-mt-1_50.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
 Source: ..\msvc\output\Win32\release\bin\boost_system-vc90-mt-1_50.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
-Source: ..\msvc\output\Win32\release\bin\boost_thread-vc90-mt-1_59.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
+Source: ..\msvc\output\Win32\release\bin\boost_thread-vc90-mt-1_50.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
 Source: ..\msvc\output\Win32\release\bin\boost_chrono-vc90-mt-1_50.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application; 
 Source: ..\msvc\output\Win32\release\bin\boost_signals-vc90-mt-1_50.dll; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application; 
 Source: ..\msvc\output\Win32\release\bin\psycle.exe; DestDir: {app}; Flags: 32bit ignoreversion; Components: Application;
@@ -62,7 +62,7 @@ Source: ..\..\psycle-plugins\src\psycle\plugins\*.txt; DestDir: {app}\Docs; Excl
 Source: ..\..\psycle\Skins\*; DestDir: {app}\Skins; Excludes: *.txt; Flags: recursesubdirs ignoreversion createallsubdirs; Components: Skins;
 Source: ..\..\psycle\doc\*.psy; DestDir: "{commondocs}\Psycle Songs"; Flags: ignoreversion; Components: Demo_Songs; 
 Source: ..\..\psycle-plugins\presets\*.prs; DestDir: {app}\PsyclePlugins; Flags: ignoreversion onlyifdoesntexist; Components: Presets;
-Source: "Output\Psycle Winamp plugin_v1_10.exe"; DestDir: {tmp}; Components: "Winamp_plugin"; 
+Source: "Output\Psycle Winamp plugin_v1_11.exe"; DestDir: {tmp}; Components: "Winamp_plugin"; 
 Source: ..\..\psycle\LuaScripts\*.lua; DestDir: {app}\LuaScripts; Flags: IgnoreVersion recursesubdirs promptifolder createallsubdirs; Components: LuaScripts; 
 
 [Icons]
@@ -82,7 +82,7 @@ Name: "{group}\Documents\Tweakings And Commands"; Filename: {app}\Docs\tweaking.
 Filename: {app}\psycle.exe; Description: {cm:LaunchProgram,Psycle Modular Music Creation Studio}; Flags: nowait postinstall skipifsilent; Tasks: ; Components: Application
 Filename: {tmp}\Vst-Bundle.exe; WorkingDir: {tmp}; StatusMsg: Select the location of your 32bit VST Plugins Dir (use Psycle\VstPlugins if in doubt); Flags: runascurrentuser; Components: " VstPack"; Tasks: ; Languages: 
 Filename: {tmp}\vcredist_x86.exe; WorkingDir: {tmp}; Flags: 32bit runascurrentuser; Components: InstallMSRuntimes_x86
-Components: Winamp_plugin; Filename: "{tmp}\Psycle Winamp plugin_v1_10.exe"; WorkingDir: {tmp}; Flags: RunAsCurrentUser; 
+Components: Winamp_plugin; Filename: "{tmp}\Psycle Winamp plugin_v1_11.exe"; WorkingDir: {tmp}; Flags: RunAsCurrentUser; 
 
 [Components]
 Name: Application; Description: Main Application and needed dlls; Flags: fixed; Types: custom compact full; Languages: 

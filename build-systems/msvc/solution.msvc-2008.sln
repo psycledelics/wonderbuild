@@ -636,6 +636,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "psycle_help", "psycle_help"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "psycle-winamp-plugin-in_psycle", "..\..\psycle\psycle-winamp-plugin-in_psycle.msvc-2008.vcproj", "{41A8B146-5360-4F84-B22C-912FBEE45326}"
 	ProjectSection(ProjectDependencies) = postProject
+		{A2F41715-28BA-40EB-8AB0-97F076B6FD2B} = {A2F41715-28BA-40EB-8AB0-97F076B6FD2B}
 		{702967DE-84A7-41AB-B91D-95B656FF8881} = {702967DE-84A7-41AB-B91D-95B656FF8881}
 	EndProjectSection
 EndProject

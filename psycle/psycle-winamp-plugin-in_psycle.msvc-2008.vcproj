@@ -81,7 +81,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				CommandLine="copy $(ProjectDir)src\psycle\host\resources\in_psycle.lng $(TargetDir)"
 			/>
 		</Configuration>
 		<Configuration
@@ -417,6 +417,14 @@
 			</File>
 			<File
 				RelativePath="src\psycle\host\Global.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\psycle\host\InstPreview.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\psycle\host\InstPreview.hpp"
 				>
 			</File>
 			<File
