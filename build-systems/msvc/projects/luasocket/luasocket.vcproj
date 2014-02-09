@@ -44,7 +44,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="$(Defines);_LIB"
+				PreprocessorDefinitions="$(Defines);_LIB;_WIN32_WINNT=0x502;LUASOCKET_INET_PTON"
 				UsePrecompiledHeader="0"
 				CompileAs="0"
 			/>
@@ -337,6 +337,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\select.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\external-packages\luasocket-3.0\luasocket\socket.h"
 				>
 			</File>
 			<File

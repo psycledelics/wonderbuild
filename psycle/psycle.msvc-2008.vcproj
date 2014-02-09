@@ -43,6 +43,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="LUASOCKET_SUPPORT"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
