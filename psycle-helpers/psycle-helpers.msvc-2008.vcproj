@@ -343,6 +343,14 @@
 						>
 					</File>
 					<File
+						RelativePath=".\src\psycle\helpers\dspslide.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\psycle\helpers\dspslide.hpp"
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\helpers\fft.cpp"
 						>
 					</File>
