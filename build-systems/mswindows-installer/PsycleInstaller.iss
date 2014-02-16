@@ -8,7 +8,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppID={{8E7D0A7F-B85F-44DC-8C1C-2A2C27BAEA0B}
 AppName=Psycle Modular Music Creation Studio
-AppVersion=1.11.1
+AppVersion=1.11.2
 ;AppVerName=Psycle Modular Music Creation Studio 1.8.8
 AppPublisher=psycledelics
 AppPublisherURL=http://psycle.sourceforge.net/
@@ -25,7 +25,7 @@ Compression=lzma/Max
 SolidCompression=true
 MinVersion=0,5.2.3790
 AppCopyright=2000-2014 psycledelics
-AppVerName=Psycle 1.11.1 64 bits
+AppVerName=Psycle 1.11.2 64 bits
 PrivilegesRequired=poweruser
 TimeStampsInUTC=true
 DisableReadyPage=true
