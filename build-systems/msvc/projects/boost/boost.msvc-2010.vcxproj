@@ -44,11 +44,11 @@
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'">cmd.exe /c build.cmd 1.50.0 10.0-cxxabi-1600 $(Platform)</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'">cmd.exe /c "clean.cmd $(Platform) &amp;&amp; build.cmd 1.50.0 10.0-cxxabi-1600  $(Platform)"</NMakeReBuildCommandLine>
+    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'">cmd.exe /c "clean.cmd $(Platform) &amp;&amp; build.cmd 1.55.0 10.0-cxxabi-1600  $(Platform)"</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'">cmd.exe /c clean.cmd $(Platform)</NMakeCleanCommandLine>
     <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'" />
     <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">cmd.exe /c build.cmd 1.50.0 10.0-cxxabi-1600 $(Platform)</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">cmd.exe /c "clean.cmd $(Platform) &amp;&amp; build.cmd 1.50.0 10.0-cxxabi-1600  $(Platform)"</NMakeReBuildCommandLine>
+    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">cmd.exe /c "clean.cmd $(Platform) &amp;&amp; build.cmd 1.55.0 10.0-cxxabi-1600  $(Platform)"</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">cmd.exe /c clean.cmd $(Platform)</NMakeCleanCommandLine>
     <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='unpack|x64'" />
     <NMakePreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
