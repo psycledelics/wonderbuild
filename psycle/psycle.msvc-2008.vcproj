@@ -108,6 +108,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="LUASOCKET_SUPPORT"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -171,6 +172,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="LUASOCKET_SUPPORT"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -234,6 +236,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="LUASOCKET_SUPPORT"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -512,7 +515,11 @@
 					>
 				</File>
 				<File
-					RelativePath="src\psycle\host\resources\Toolbar32.bmp"
+					RelativePath=".\src\psycle\host\resources\Toolbar24Mask.bmp"
+					>
+				</File>
+				<File
+					RelativePath=".\Toolbar24Mask.bmp"
 					>
 				</File>
 				<File

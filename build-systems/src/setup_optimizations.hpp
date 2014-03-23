@@ -51,8 +51,9 @@
 		//#pragma inline_recursion(on)
 		//#define inline __forceinline
 		
-		#define _SECURE_SCL 0 // disable checked iterators. see http://msdn.microsoft.com/en-us/library/aa985896.aspx
-		#define _HAS_ITERATOR_DEBUGGING 0 // see http://msdn.microsoft.com/en-us/library/aa985939.aspx
+		//This doesn't work anymore, at least doesn't compile with VS 2008 and boost 1.55.0
+	//	#define _SECURE_SCL 0 // disable checked iterators. see http://msdn.microsoft.com/en-us/library/aa985896.aspx
+	//	#define _HAS_ITERATOR_DEBUGGING 0 // see http://msdn.microsoft.com/en-us/library/aa985939.aspx
 		
 		#if !_SECURE_SCL
 			// see https://svn.boost.org/trac/boost/ticket/1917

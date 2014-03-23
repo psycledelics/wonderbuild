@@ -254,83 +254,83 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lapi.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lapi.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lcode.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lcode.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lctype.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lctype.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ ldebug.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ldebug.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ ldo.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ldo.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ ldump.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ldump.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lfunc.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lfunc.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lgc.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lgc.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ llex.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\llex.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lmem.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lmem.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lobject.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lobject.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lopcodes.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lopcodes.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lparser.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lparser.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lstate.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lstate.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lstring.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lstring.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ ltable.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ltable.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ ltm.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ltm.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lundump.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lundump.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lvm.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lvm.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lzio.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lzio.c"
 				>
 			</File>
 		</Filter>
@@ -339,87 +339,87 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lapi.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lapi.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lcode.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lcode.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lctype.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lctype.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ ldebug.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ldebug.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ ldo.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ldo.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lfunc.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lfunc.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lgc.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lgc.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ llex.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\llex.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ llimits.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\llimits.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lmem.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lmem.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lobject.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lobject.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lopcodes.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lopcodes.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lparser.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lparser.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lstate.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lstate.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lstring.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lstring.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ ltable.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ltable.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ ltm.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ltm.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ luaconf.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\luaconf.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lundump.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lundump.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lvm.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lvm.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lzio.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lzio.h"
 				>
 			</File>
 		</Filter>
@@ -427,59 +427,59 @@
 			Name="Extension Libs"
 			>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lauxlib.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lauxlib.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lauxlib.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lauxlib.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lbaselib.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lbaselib.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lbitlib.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lbitlib.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lcorolib.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lcorolib.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ ldblib.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ldblib.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ linit.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\linit.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ liolib.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\liolib.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lmathlib.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lmathlib.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ loadlib.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\loadlib.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ loslib.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\loslib.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lstrlib.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lstrlib.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ ltablib.c"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ltablib.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lualib.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lualib.h"
 				>
 			</File>
 		</Filter>
@@ -487,11 +487,11 @@
 			Name="Shared Headers"
 			>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lua.h"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lua.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\external-packages\lua-5.2\src\ lua.hpp"
+				RelativePath="..\..\..\..\external-packages\lua-5.2\src\lua.hpp"
 				>
 			</File>
 		</Filter>

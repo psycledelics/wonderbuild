@@ -45,7 +45,9 @@ rem The following commands can be used to build boost for the 64-bit Windows pla
 rem -----------------------------------------------------------------------------------------------------------------
 
 %bjam% toolset=msvc address-model=64 --stagedir=%src%.stage64 variant=release,debug clean
-%bjam% toolset=msvc address-model=64 --stagedir=%src%.stage64 variant=release define=_SECURE_SCL=0 define=_HAS_ITERATOR_DEBUGGING=0 stage
+REM  This no longer works in vs2008 and boost 1.55.0
+REM %bjam% toolset=msvc address-model=64 --stagedir=%src%.stage64 variant=release define=_SECURE_SCL=0 define=_HAS_ITERATOR_DEBUGGING=0 stage
+%bjam% toolset=msvc address-model=64 --stagedir=%src%.stage64 variant=release stage
 %bjam% toolset=msvc address-model=64 --stagedir=%src%.stage64 variant=debug stage
 
 goto :eof
@@ -56,7 +58,9 @@ rem The following commands can be used to build boost for the 32-bit Windows pla
 rem -----------------------------------------------------------------------------------------------------------------
 
 %bjam% toolset=msvc address-model=32 --stagedir=%src%.stage32 variant=release,debug clean
-%bjam% toolset=msvc address-model=32 --stagedir=%src%.stage32 variant=release define=_SECURE_SCL=0 define=_HAS_ITERATOR_DEBUGGING=0  cxxflags="-arch:SSE2" stage
+REM  This no longer works in vs2008 and boost 1.55.0
+REM %bjam% toolset=msvc address-model=32 --stagedir=%src%.stage32 variant=release define=_SECURE_SCL=0 define=_HAS_ITERATOR_DEBUGGING=0  cxxflags="-arch:SSE2" stage
+%bjam% toolset=msvc address-model=32 --stagedir=%src%.stage32 variant=release cxxflags="-arch:SSE2" stage
 %bjam% toolset=msvc address-model=32 --stagedir=%src%.stage32 variant=debug
 
 goto :eof
