@@ -69,16 +69,13 @@
     <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">cmd.exe /c build.cmd 5.2</NMakeBuildCommandLine>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
-    <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <CompileAs>Default</CompileAs>
-    </ClCompile>
-    <PreBuildEvent>
-      <Command>build.cmd 3.0</Command>
-    </PreBuildEvent>
     <PreBuildEvent>
       <Message>unpack luasocket source</Message>
+      <Command>build.cmd 3.0</Command>
     </PreBuildEvent>
+    <ClCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);_LIB;_WIN32_WINNT=0x502;LUASOCKET_INET_PTON</PreprocessorDefinitions>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|Win32'">
     <PreBuildEvent>
@@ -86,7 +83,25 @@
       <Command>build.cmd 3.0</Command>
     </PreBuildEvent>
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);_LIB;_WIN32_WINNT=0x502;LUASOCKET_INET_PTON</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|x64'">
+    <PreBuildEvent>
+      <Message>unpack luasocket source</Message>
+      <Command>build.cmd 3.0</Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);_LIB;_WIN32_WINNT=0x502;LUASOCKET_INET_PTON</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'">
+    <PreBuildEvent>
+      <Message>unpack luasocket source</Message>
+      <Command>build.cmd 3.0</Command>
+    </PreBuildEvent>
+    <ClCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);_LIB;_WIN32_WINNT=0x502;LUASOCKET_INET_PTON</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
