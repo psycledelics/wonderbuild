@@ -1033,6 +1033,14 @@
 							>
 						</File>
 						<File
+							RelativePath=".\src\psycle\host\InstrNoteMap.cpp"
+							>
+						</File>
+						<File
+							RelativePath=".\src\psycle\host\InstrNoteMap.hpp"
+							>
+						</File>
+						<File
 							RelativePath=".\src\psycle\host\InstrumentAmpDlg.cpp"
 							>
 						</File>
