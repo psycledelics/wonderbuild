@@ -439,6 +439,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\src\psycle\helpers\endiantypes.hpp"
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\helpers\msriff.cpp"
 						>
 					</File>
