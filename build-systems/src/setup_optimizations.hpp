@@ -51,17 +51,12 @@
 		//#pragma inline_recursion(on)
 		//#define inline __forceinline
 		
-		//This doesn't work anymore, at least doesn't compile with VS 2008 and boost 1.55.0
-	//	#define _SECURE_SCL 0 // disable checked iterators. see http://msdn.microsoft.com/en-us/library/aa985896.aspx
-	//	#define _HAS_ITERATOR_DEBUGGING 0 // see http://msdn.microsoft.com/en-us/library/aa985939.aspx
+		// ADVISE! This needs to be defined in "Defines", else the file yvals.h sets them before!
+		//#define _SECURE_SCL 0 // disable checked iterators. see http://msdn.microsoft.com/en-us/library/aa985896.aspx
 		
-		#if !_SECURE_SCL
+		#if _SECURE_SCL==0
 			// see https://svn.boost.org/trac/boost/ticket/1917
 			DIVERSALIS__WARNING("Compiling with _SECURE_SCL = 0. Remember to build Boost libs this way too.")
-		#endif
-		#if !_HAS_ITERATOR_DEBUGGING
-			// see https://svn.boost.org/trac/boost/ticket/1917
-			DIVERSALIS__WARNING("Compiling with _HAS_ITERATOR_DEBUGGING = 0. Remember to build Boost libs this way too.")
 		#endif
 	#endif
 #endif

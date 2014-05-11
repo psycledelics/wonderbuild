@@ -443,6 +443,14 @@
 						>
 					</File>
 					<File
+						RelativePath=".\src\psycle\helpers\filetypedetector.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\psycle\helpers\filetypedetector.hpp"
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\helpers\msriff.cpp"
 						>
 					</File>
