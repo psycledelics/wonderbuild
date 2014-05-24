@@ -99,12 +99,12 @@ Section "Plugin (required)"
  
   SetOverwrite on
   SetOutPath "$INSTDIR"
-  File "..\msvc\output\win32\release\bin\boost_chrono-vc90-mt-1_50.dll"
-  File "..\msvc\output\win32\release\bin\boost_date_time-vc90-mt-1_50.dll"
-  File "..\msvc\output\win32\release\bin\boost_filesystem-vc90-mt-1_50.dll"
-  File "..\msvc\output\win32\release\bin\boost_signals-vc90-mt-1_50.dll"
-  File "..\msvc\output\win32\release\bin\boost_system-vc90-mt-1_50.dll"
-  File "..\msvc\output\win32\release\bin\boost_thread-vc90-mt-1_50.dll"
+  File "..\msvc\output\win32\release\bin\boost_chrono-vc90-mt-1_55.dll"
+  File "..\msvc\output\win32\release\bin\boost_date_time-vc90-mt-1_55.dll"
+  File "..\msvc\output\win32\release\bin\boost_filesystem-vc90-mt-1_55.dll"
+  File "..\msvc\output\win32\release\bin\boost_signals-vc90-mt-1_55.dll"
+  File "..\msvc\output\win32\release\bin\boost_system-vc90-mt-1_55.dll"
+  File "..\msvc\output\win32\release\bin\boost_thread-vc90-mt-1_55.dll"
   File "..\msvc\output\win32\release\bin\universalis.dll"
   File "..\..\psycle\doc\winamp-psycle-plugin.txt"
 
