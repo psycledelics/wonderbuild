@@ -95,10 +95,21 @@
 	// warnings about __STDC_SECURE_LIB__ and others
 	// see http://www.opengroup.org/platform/single_unix_specification/uploads/40/6355/n1093.pdf
 	// see http://msdn.microsoft.com/en-us/library/aa985974.aspx
-	//These warnings need to be set in Defines.
-	//	#define _SCL_SECURE_NO_WARNINGS
-	//	#define _CRT_SECURE_NO_WARNINGS
-	//	#define _CRT_NONSTDC_NO_WARNINGS
+	//#define _SCL_SECURE_NO_WARNINGS
+	//#define _CRT_SECURE_NO_WARNINGS // TODO This one is actually set in some visual studio property file. It should be defined here, because we support other build systems.
 	//#define _ATL_SECURE_NO_WARNINGS
 	//#define _AFX_SECURE_NO_WARNINGS
+
+	// If this is not defined, we get warnings on each call to posix functions (e.g. 'mkdir', 'read', 'lseek'),
+	// saying that the function name is not part of the ISO C++ standard.
+	// Microsoft's CRT does implement these functions, but they want you to use names that are prepended with an underscode (e.g. '_mkdir', '_read', '_lseek').
+	// This is really A BAD IDEA. Those "new" names are IN NO WAY STANDARD : they are part of NEITHER posix nor ISO C++ standards.
+	// The names with underscores prepended are "conforming" to the ISO C++ standard only in the sense that
+	// a runtime lib implementation is free to use this "reserved namespace" of identifiers starting with underscores,
+	// and so the global namespace is not polluted with "undesired names".
+	// The situation would be far better if the posix functions could be brought into the global namespace with explicit includes.
+	// This should be handled properly in universalis in the same way "stdlib" headers help bring recent standard stuff
+	// that aren't yet supported in all environments: there would be some headers dedicated to posix that would make msvc happy and quiet.
+	// For now, please, let not these boring warnings clutter build outputs.
+	#define _CRT_NONSTDC_NO_WARNINGS
 #endif
