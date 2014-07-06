@@ -1,10 +1,10 @@
-TARGET = psycle-plugin-blitz
+TARGET = psycle-plugin-blitz12
 
 include(psycle-plugins.pri)
 
 SOURCES_PRESERVE_PATH += \
-	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins/jme/blitzn, *.cpp)
+	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins/jme/blitz12, *.cpp)
 HEADERS += \
-	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins/jme/blitzn, *.hpp) \
-	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins/jme/blitzn, *.h)
+	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins/jme/blitz12, *.hpp) \
+	$$findFiles($$PSYCLE_PLUGINS_DIR/src/psycle/plugins/jme/blitz12, *.h)
 

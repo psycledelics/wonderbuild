@@ -1,4 +1,4 @@
-TARGET = psycle-plugin-blitz
+TARGET = psycle-plugin-blitzn
 
 include(psycle-plugins.pri)
 
