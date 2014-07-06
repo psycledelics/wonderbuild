@@ -457,11 +457,11 @@
 					>
 				</File>
 				<File
-					RelativePath="src\psycle\core\plugincatcher.cpp"
+					RelativePath="src\psycle\core\plugincache.cpp"
 					>
 				</File>
 				<File
-					RelativePath="src\psycle\core\plugincatcher.h"
+					RelativePath="src\psycle\core\plugincache.h"
 					>
 				</File>
 				<File
