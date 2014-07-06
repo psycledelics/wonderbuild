@@ -1,4 +1,4 @@
-TARGET = psycle-plugin-gamefx
+TARGET = psycle-plugin-gamefxn
 
 include(psycle-plugins.pri)
 
