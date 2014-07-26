@@ -1,2 +1,2 @@
-usr/include/psycle/plugin_interface.hpp
-usr/lib/pkgconfig/psycle-plugin-interface.pc
+opt/psycle/include/psycle/plugin_interface.hpp
+opt/psycle/lib/pkgconfig/psycle-plugin-interface.pc

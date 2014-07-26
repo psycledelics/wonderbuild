@@ -43,7 +43,7 @@ override_dh_auto_build:
 
 override_dh_auto_test:
 	set -e && \
-	for test in debian/++wonderbuild/staged-install/usr/bin/*-unit-tests; \
+	for test in debian/++wonderbuild/staged-install/opt/psycle/bin/*-unit-tests; \
 	do \
 		$$test --log_level=test_suite --report_level=detailed; \
 	done
@@ -59,4 +59,4 @@ override_dh_install:
 
 override_dh_auto_clean:
 	rm -Rf debian/++wonderbuild
-
+	rm -Rf */++* # TODO need to find a way for the source package to include only files that belong to the svn repo.

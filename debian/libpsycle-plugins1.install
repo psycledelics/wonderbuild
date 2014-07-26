@@ -1,5 +1,5 @@
-usr/lib/libpsycle-plugin-*.so
-usr/lib/libpsycle-plugin-*.so.*
-usr/lib/libpsycle-dw-filter.so.*
-usr/lib/libpsycle-druttis-dsp.so.*
-usr/lib/libpsycle-druttis-band-limited-wave-tables.so.*
+opt/psycle/lib/libpsycle-plugin-*.so
+opt/psycle/lib/libpsycle-plugin-*.so.*
+opt/psycle/lib/libpsycle-dw-filter.so.*
+opt/psycle/lib/libpsycle-druttis-dsp.so.*
+opt/psycle/lib/libpsycle-druttis-band-limited-wave-tables.so.*

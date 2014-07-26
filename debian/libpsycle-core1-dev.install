@@ -1,3 +1,3 @@
-usr/include/psycle/core/
-usr/lib/pkgconfig/psycle-core.pc
-usr/lib/libpsycle-core.so
+opt/psycle/include/psycle/core/
+opt/psycle/lib/pkgconfig/psycle-core.pc
+opt/psycle/lib/libpsycle-core.so

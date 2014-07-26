@@ -1,4 +1,4 @@
-usr/include/universalis.hpp
-usr/include/universalis/
-usr/lib/pkgconfig/universalis.pc
-usr/lib/libuniversalis.so
+opt/psycle/include/universalis.hpp
+opt/psycle/include/universalis/
+opt/psycle/lib/pkgconfig/universalis.pc
+opt/psycle/lib/libuniversalis.so

@@ -1,3 +1,3 @@
-usr/include/psycle/helpers/math.hpp
-usr/include/psycle/helpers/math/
-usr/lib/pkgconfig/psycle-helpers-math.pc
+opt/psycle/include/psycle/helpers/math.hpp
+opt/psycle/include/psycle/helpers/math/
+opt/psycle/lib/pkgconfig/psycle-helpers-math.pc

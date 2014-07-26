@@ -1,3 +1,3 @@
-usr/include/diversalis.hpp
-usr/include/diversalis/
-usr/lib/pkgconfig/diversalis.pc
+opt/psycle/include/diversalis.hpp
+opt/psycle/include/diversalis/
+opt/psycle/lib/pkgconfig/diversalis.pc
