@@ -156,7 +156,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="$(Defines);_LIB"
+				PreprocessorDefinitions="$(Defines);_LIB;_WIN32_WINNT=0x0510;LUASOCKET_INET_PTON"
 				UsePrecompiledHeader="0"
 				CompileAs="0"
 			/>
