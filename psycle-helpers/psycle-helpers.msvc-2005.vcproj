@@ -293,23 +293,11 @@
 						>
 					</File>
 					<File
-						RelativePath="src\psycle\helpers\math\rint.hpp"
-						>
-					</File>
-					<File
-						RelativePath="src\psycle\helpers\math\round.hpp"
-						>
-					</File>
-					<File
 						RelativePath="src\psycle\helpers\math\math.hpp"
 						>
 					</File>
 					<File
 						RelativePath="src\psycle\helpers\math\sin.hpp"
-						>
-					</File>
-					<File
-						RelativePath="src\psycle\helpers\math\sincos.hpp"
 						>
 					</File>
 					<File

@@ -586,6 +586,10 @@
 					RelativePath="src\universalis\stdlib\thread.hpp"
 					>
 				</File>
+				<File
+					RelativePath="src\universalis\stdlib\cmath.hpp"
+					>
+				</File>
 				<Filter
 					Name="detail"
 					>
