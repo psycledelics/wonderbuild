@@ -465,6 +465,10 @@
 				</Filter>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath=".\src\psycle\helpers\pathname_validate.hpp"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
