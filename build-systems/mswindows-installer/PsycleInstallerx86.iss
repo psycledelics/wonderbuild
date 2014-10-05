@@ -8,7 +8,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppID={{8E7D0A7F-B85F-44DC-8C1C-2A2C27BAEA0B}
 AppName=Psycle Modular Music Creation Studio
-AppVersion=1.11.3
+AppVersion=1.12.0
 ;AppVerName=Psycle Modular Music Creation Studio 1.8.8
 AppPublisher=psycledelics
 AppPublisherURL=http://psycle.sourceforge.net/
@@ -25,7 +25,7 @@ Compression=lzma/Max
 SolidCompression=true
 MinVersion=0,5.0.2195sp4
 AppCopyright=2000-2014 psycledelics
-AppVerName=Psycle 1.11.3 32 bits
+AppVerName=Psycle 1.12.0 32 bits
 PrivilegesRequired=poweruser
 TimeStampsInUTC=true
 DisableReadyPage=true
@@ -77,6 +77,8 @@ Name: {group}\Documents\Version History; Filename: {app}\Docs\whatsnew.txt; Work
 Name: {group}\Documents\Pattern Keys; Filename: {app}\Docs\keys.txt; WorkingDir: {app}\Docs; Components: Documentation
 Name: "{group}\Documents\MIDI Help"; Filename: {app}\Docs\psycle-midi-2.2b\psyclemidi.html; WorkingDir: {app}\Docs\psycle-midi-2.2b; Components: Documentation;
 Name: "{group}\Documents\Tweakings And Commands"; Filename: {app}\Docs\tweaking.txt; WorkingDir: {app}\Docs\; Components: Documentation
+Name: "{group}\Documents\Lua Scripting Manual"; Filename: {app}\Docs\LuaScriptingManual.pdf; 
+Name: "{group}\Demo Songs Folder"; Filename: "{commondocs}\Psycle Songs\"; 
 
 [Run]
 Filename: {app}\psycle.exe; Description: {cm:LaunchProgram,Psycle Modular Music Creation Studio}; Flags: nowait postinstall skipifsilent; Tasks: ; Components: Application

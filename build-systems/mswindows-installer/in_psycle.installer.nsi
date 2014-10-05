@@ -15,8 +15,8 @@
 ; !include "Sections.nsh"
  
 ; common defines for a generic DrO installer :o)
-!define VERSION "1.11"
-!define ALT_VER "1_11"
+!define VERSION "1.12"
+!define ALT_VER "1_12"
 !define PLUG "Psycle Winamp plugin"
 !define PLUG_ALT "Psycle Winamp plugin"
 !define PLUG_FILE "in_psycle"
