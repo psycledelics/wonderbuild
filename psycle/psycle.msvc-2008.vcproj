@@ -1394,6 +1394,26 @@
 						>
 					</File>
 					<File
+						RelativePath=".\src\psycle\host\ladspa.h"
+						>
+					</File>
+					<File
+						RelativePath=".\src\psycle\host\ladspahost.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\psycle\host\ladspahost.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\psycle\host\ladspamachine.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\psycle\host\ladspamachine.h"
+						>
+					</File>
+					<File
 						RelativePath="src\psycle\host\Machine.cpp"
 						>
 					</File>
