@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>lualib</ProjectName>
+    <ProjectName>luasocket</ProjectName>
     <ProjectGuid>{F99FF9ED-D9EA-4EE7-A025-F0A0454C2F40}</ProjectGuid>
-    <RootNamespace>lualib</RootNamespace>
+    <RootNamespace>luasocket</RootNamespace>
     <Keyword>MakeFileProj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -138,7 +138,7 @@
     <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\wsocket.c" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\lualib\lualib.vcxproj">
+    <ProjectReference Include="..\lualib\lualib.msvc-2010.vcxproj">
       <Project>{fee2d9f8-bad2-d34c-95b9-fb03657990dd}</Project>
     </ProjectReference>
   </ItemGroup>
