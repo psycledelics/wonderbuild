@@ -74,12 +74,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "generators", "generators", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "effects", "effects", "{150B85B9-4D15-48C7-A365-92E2BCE9DFC5}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lualib", "projects\lualib\lualib.vcxproj", "{FEE2D9F8-BAD2-D34C-95B9-FB03657990DD}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lualib", "projects\lualib\lualib.msvc-2010.vcxproj", "{FEE2D9F8-BAD2-D34C-95B9-FB03657990DD}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "luasocket", "projects\luasocket\luasocket.vcxproj", "{F99FF9ED-D9EA-4EE7-A025-F0A0454C2F40}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "luasocket", "projects\luasocket\luasocket.msvc-2010.vcxproj", "{F99FF9ED-D9EA-4EE7-A025-F0A0454C2F40}"
 	ProjectSection(ProjectDependencies) = postProject
 		{FEE2D9F8-BAD2-D34C-95B9-FB03657990DD} = {FEE2D9F8-BAD2-D34C-95B9-FB03657990DD}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "stk", "projects\stk\stk.msvc-2010.vcxproj", "{29C0ACBE-EA30-4F5E-9B41-123456789ABC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -262,11 +262,11 @@
 			Name="stk"
 			>
 			<File
-				RelativePath="..\..\external-packages\stk-4.4.2\stk\Shakers.cpp"
+				RelativePath="..\..\external-packages\stk-4.5.0\stk\Shakers.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\external-packages\stk-4.4.2\stk\Stk.cpp"
+				RelativePath="..\..\external-packages\stk-4.5.0\stk\Stk.cpp"
 				>
 			</File>
 		</Filter>

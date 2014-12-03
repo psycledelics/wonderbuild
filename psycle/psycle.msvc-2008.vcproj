@@ -1394,10 +1394,6 @@
 						>
 					</File>
 					<File
-						RelativePath=".\src\psycle\host\ladspa.h"
-						>
-					</File>
-					<File
 						RelativePath=".\src\psycle\host\ladspahost.cpp"
 						>
 					</File>
