@@ -19,8 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <Keyword>luasocket</Keyword>
+    <ProjectName>lualib</ProjectName>
     <ProjectGuid>{F99FF9ED-D9EA-4EE7-A025-F0A0454C2F40}</ProjectGuid>
+    <RootNamespace>lualib</RootNamespace>
+    <Keyword>MakeFileProj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|Win32'" Label="Configuration">
