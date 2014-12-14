@@ -5,7 +5,7 @@
 	Name="pre-compiled-headers"
 	ProjectGUID="{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
 	RootNamespace="pre-compiled-headers"
-	TargetFrameworkVersion="0"
+	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
 		<Platform
@@ -255,6 +255,15 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{D28A43F2-5DDC-44CA-904C-BDFEEDFF032A}"
+			CopyLocal="false"
+			CopyLocalDependencies="false"
+			UseInBuild="false"
+			UseDependenciesInBuild="false"
+			CopyLocalSatelliteAssemblies="false"
+			RelativePathToProject=".\projects\boost\boost.msvc-2008.vcproj"
+		/>
 	</References>
 	<Files>
 		<File

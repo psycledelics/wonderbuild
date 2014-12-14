@@ -19,8 +19,6 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
-    <OutDir>$(TopOutputDir)/bin</OutDir>
-    <IntDir>$(TopOutputDir)/intermediate/$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='unpack|x64'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
@@ -47,7 +45,7 @@
     <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'">cmd.exe /c "clean.cmd $(Platform) &amp;&amp; build.cmd 1.55.0 10.0-cxxabi-1600  $(Platform)"</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'">cmd.exe /c clean.cmd $(Platform)</NMakeCleanCommandLine>
     <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'" />
-    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">cmd.exe /c build.cmd 1.50.0 10.0-cxxabi-1600 $(Platform)</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">cmd.exe /c build.cmd 1.55.0 10.0-cxxabi-1600 $(Platform)</NMakeBuildCommandLine>
     <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">cmd.exe /c "clean.cmd $(Platform) &amp;&amp; build.cmd 1.55.0 10.0-cxxabi-1600  $(Platform)"</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">cmd.exe /c clean.cmd $(Platform)</NMakeCleanCommandLine>
     <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='unpack|x64'" />

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="zlib"
 	ProjectGUID="{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}"
+	RootNamespace="zlib"
 	Keyword="MakeFileProj"
 	TargetFrameworkVersion="0"
 	>
@@ -28,7 +29,7 @@
 				BuildCommandLine="cmd.exe /c build.cmd $(PlatformName)"
 				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd $(PlatformName) &amp;&amp; build.cmd $(PlatformName)&quot;"
 				CleanCommandLine="cmd.exe /c clean.cmd $(PlatformName)"
-				Output=""
+				Output="$(TopOutputDir)/../zlib-stamp"
 				PreprocessorDefinitions=""
 				IncludeSearchPath=""
 				ForcedIncludes=""
@@ -47,7 +48,7 @@
 				BuildCommandLine="cmd.exe /c build.cmd $(PlatformName)"
 				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd $(PlatformName) &amp;&amp; build.cmd $(PlatformName)&quot;"
 				CleanCommandLine="cmd.exe /c clean.cmd $(PlatformName)"
-				Output=""
+				Output="$(TopOutputDir)/../zlib-stamp"
 				PreprocessorDefinitions=""
 				IncludeSearchPath=""
 				ForcedIncludes=""

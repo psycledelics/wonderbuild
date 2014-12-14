@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="steinberg-asio-sdk"
-	RootNamespace="asio"
 	ProjectGUID="{21F6FB1D-B7DB-4EDB-A2B0-DA1B2F04AF01}"
+	RootNamespace="asio"
+	TargetFrameworkVersion="0"
 	>
 	<Platforms>
 		<Platform
@@ -20,7 +21,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops;..\build-systems\msvc\properties\staticlib.vsprops;..\build-systems\msvc\properties\no_pre_compiled_header.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -39,6 +40,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PrecompiledHeaderThrough=""
+				PrecompiledHeaderFile=""
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -71,7 +74,7 @@
 		<Configuration
 			Name="debug|x64"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops;..\build-systems\msvc\properties\staticlib.vsprops;..\build-systems\msvc\properties\no_pre_compiled_header.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -122,7 +125,7 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops;..\build-systems\msvc\properties\staticlib.vsprops;..\build-systems\msvc\properties\no_pre_compiled_header.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -173,7 +176,7 @@
 		<Configuration
 			Name="release|x64"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops;..\build-systems\msvc\properties\staticlib.vsprops;..\build-systems\msvc\properties\no_pre_compiled_header.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -223,10 +226,6 @@
 		</Configuration>
 	</Configurations>
 	<References>
-		<ProjectReference
-			ReferencedProjectIdentifier="{3D1A7DAF-F9A8-48BE-AFFE-9B7F690C4B7F}"
-			RelativePathToProject=".\projects\pre-compiled-headers\pre-compiled-headers.msvc-2008.vcproj"
-		/>
 	</References>
 	<Files>
 		<Filter

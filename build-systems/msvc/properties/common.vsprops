@@ -17,10 +17,6 @@
 		WarningLevel="4"
 	/>
 	<Tool
-		Name="VCLibrarianTool"
-		OutputFile="$(TopOutputDir)/lib/$(RootNameSpace).lib"
-	/>
-	<Tool
 		Name="VCLinkerTool"
 		OutputFile="$(OutDir)/$(RootNameSpace).dll"
 		GenerateDebugInformation="true"

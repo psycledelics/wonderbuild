@@ -88,11 +88,27 @@
     <Midl>
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'">
     <Midl>
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|Win32'">
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="$(TopSrcDir)\build-systems\src\forced-include.private.hpp" />
@@ -100,6 +116,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pre_compiled_headers.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\boost\boost.msvc-2010.vcxproj">
+      <Project>{29c0acbe-ea30-4f5e-9b41-b2dd71c29df1}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -7,6 +7,7 @@ SETLOCAL
 
 set pkgdir=..\..\..\..\external-packages\stk-%1
 set deldir=0
+set output=..\..\output\%2
 
 if not exist %pkgdir%\stk (
 	pushd %pkgdir% || exit /b 1
@@ -19,6 +20,7 @@ if not exist %pkgdir%\stk (
 	del /q stk-%1.tar || exit /b 1
 	popd || exit /b 1
 )
+echo stk copied > %output%\stk-stamp || exit /b 1
 
 
 ENDLOCAL

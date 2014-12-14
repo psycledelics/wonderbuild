@@ -53,28 +53,24 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\properties\release.props" />
-    <Import Project="..\..\properties\use_pre_compiled_header_with_mfc.props" />
     <Import Project="..\..\properties\create_pre_compiled_header.props" />
     <Import Project="..\..\properties\platform_win32.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\properties\debug.props" />
-    <Import Project="..\..\properties\use_pre_compiled_header_with_mfc.props" />
     <Import Project="..\..\properties\create_pre_compiled_header.props" />
     <Import Project="..\..\properties\platform_win32.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\properties\release.props" />
-    <Import Project="..\..\properties\use_pre_compiled_header_with_mfc.props" />
     <Import Project="..\..\properties\create_pre_compiled_header.props" />
     <Import Project="..\..\properties\platform_x64.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\properties\debug.props" />
-    <Import Project="..\..\properties\use_pre_compiled_header_with_mfc.props" />
     <Import Project="..\..\properties\create_pre_compiled_header.props" />
     <Import Project="..\..\properties\platform_x64.props" />
   </ImportGroup>
@@ -94,26 +90,31 @@
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='release|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='release|x64'" />
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-    </ClCompile>
-    <Link>
-      <AssemblyDebug>true</AssemblyDebug>
-    </Link>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|x64'">
     <Midl>
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
-    <Link>
-      <AssemblyDebug>true</AssemblyDebug>
-    </Link>
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'">
     <Midl>
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|Win32'">
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="$(TopSrcDir)\build-systems\src\forced-include.private.hpp" />
@@ -121,6 +122,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pre_compiled_headers.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\boost\boost.msvc-2010.vcxproj">
+      <Project>{29c0acbe-ea30-4f5e-9b41-b2dd71c29df1}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="unpack|Win32">
       <Configuration>unpack</Configuration>
@@ -19,9 +19,11 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='unpack|x64'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -39,21 +41,17 @@
     <Import Project="..\..\properties\platform_x64.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup>
-    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'">cmd.exe /c build.cmd 4.5.0</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'">cmd.exe /c "clean.cmd 4.5.0 &amp;&amp; build.cmd 4.5.0"</NMakeReBuildCommandLine>
-    <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'">cmd.exe /c clean.cmd 4.5.0</NMakeCleanCommandLine>
-    <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'" />
-    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">cmd.exe /c build.cmd 4.5.0</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">cmd.exe /c "clean.cmd 4.5.0 &amp;&amp; build.cmd 4.5.0"</NMakeReBuildCommandLine>
-    <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">cmd.exe /c clean.cmd 4.5.0</NMakeCleanCommandLine>
-    <NMakeOutput Condition="'$(Configuration)|$(Platform)'=='unpack|x64'" />
-    <NMakePreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
-    <NMakeIncludeSearchPath Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">$(NMakeIncludeSearchPath)</NMakeIncludeSearchPath>
-    <NMakeForcedIncludes Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">$(NMakeForcedIncludes)</NMakeForcedIncludes>
-    <NMakeAssemblySearchPath Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">$(NMakeAssemblySearchPath)</NMakeAssemblySearchPath>
-    <NMakeForcedUsingAssemblies Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">$(NMakeForcedUsingAssemblies)</NMakeForcedUsingAssemblies>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'">
+    <NMakeBuildCommandLine>cmd.exe /c build.cmd 4.5.0 $(PlatformName)</NMakeBuildCommandLine>
+    <NMakeOutput />
+    <NMakeCleanCommandLine>cmd.exe /c clean.cmd 4.5.0 $(PlatformName)</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>cmd.exe /c "clean.cmd 4.5.0 $(PlatformName) &amp;&amp; build.cmd 4.5.0 $(PlatformName)"</NMakeReBuildCommandLine>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">
+    <NMakeBuildCommandLine>cmd.exe /c build.cmd 4.5.0 $(PlatformName)</NMakeBuildCommandLine>
+    <NMakeOutput />
+    <NMakeCleanCommandLine>cmd.exe /c clean.cmd 4.5.0 $(PlatformName)</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>cmd.exe /c "clean.cmd 4.5.0 $(PlatformName) &amp;&amp; build.cmd 4.5.0 $(PlatformName)"</NMakeReBuildCommandLine>
   </PropertyGroup>
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>

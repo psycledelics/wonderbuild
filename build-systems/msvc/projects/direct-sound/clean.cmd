@@ -13,6 +13,7 @@ pushd %output% && (
 	if exist %output% (
 		pushd %output% && (
 			del /s/q dsound.lib || exit /b 1
+			del /s/q dxguid.lib || exit /b 1
 			popd
 		)
 	)

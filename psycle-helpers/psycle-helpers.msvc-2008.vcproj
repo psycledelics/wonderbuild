@@ -21,7 +21,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops;..\build-systems\msvc\properties\staticlib.vsprops"
 			CharacterSet="0"
 			>
 			<Tool
@@ -74,7 +74,7 @@
 		<Configuration
 			Name="debug|x64"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\debug.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops;..\build-systems\msvc\properties\staticlib.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -125,7 +125,7 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\platform_win32.vsprops;..\build-systems\msvc\properties\staticlib.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -177,7 +177,7 @@
 		<Configuration
 			Name="release|x64"
 			ConfigurationType="4"
-			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops"
+			InheritedPropertySheets="..\build-systems\msvc\properties\release.vsprops;..\build-systems\msvc\properties\platform_x64.vsprops;..\build-systems\msvc\properties\staticlib.vsprops"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -230,6 +230,10 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{B78DFE59-051A-43FD-B489-775A4982581C}"
 			RelativePathToProject="..\..\universalis\universalis.msvc-2008.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{AF9AD75C-4785-4432-BAC3-ADAB1E7F1192}"
+			RelativePathToProject=".\projects\libsoxr\libsoxr.msvc-2008.vcproj"
 		/>
 	</References>
 	<Files>

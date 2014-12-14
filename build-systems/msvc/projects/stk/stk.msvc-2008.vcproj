@@ -26,9 +26,9 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="cmd.exe /c build.cmd 4.5.0"
-				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd 4.5.0 &amp;&amp; build.cmd 4.5.0&quot;"
-				CleanCommandLine="cmd.exe /c clean.cmd 4.5.0"
+				BuildCommandLine="cmd.exe /c build.cmd 4.5.0 $(PlatformName)"
+				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd 4.5.0 $(PlatformName) &amp;&amp; build.cmd 4.5.0 $(PlatformName)&quot;"
+				CleanCommandLine="cmd.exe /c clean.cmd 4.5.0 $(PlatformName)"
 				Output=""
 				PreprocessorDefinitions=""
 				IncludeSearchPath=""
@@ -45,9 +45,9 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="cmd.exe /c build.cmd 4.5.0"
-				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd 4.5.0 &amp;&amp; build.cmd 4.5.0&quot;"
-				CleanCommandLine="cmd.exe /c clean.cmd 4.5.0"
+				BuildCommandLine="cmd.exe /c build.cmd 4.5.0 $(PlatformName)"
+				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd 4.5.0 $(PlatformName) &amp;&amp; build.cmd 4.5.0 $(PlatformName)&quot;"
+				CleanCommandLine="cmd.exe /c clean.cmd 4.5.0 $(PlatformName)"
 				Output=""
 				PreprocessorDefinitions=""
 				IncludeSearchPath=""

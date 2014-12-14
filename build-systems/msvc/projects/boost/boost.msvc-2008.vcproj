@@ -3,10 +3,10 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="boost"
-	ProjectGUID="{29C0ACBE-EA30-4F5E-9B41-B2DD71C29DF1}"
+	ProjectGUID="{D28A43F2-5DDC-44CA-904C-BDFEEDFF032A}"
 	RootNamespace="boost"
 	Keyword="MakeFileProj"
-	TargetFrameworkVersion="0"
+	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
 		<Platform
@@ -29,7 +29,7 @@
 				BuildCommandLine="cmd.exe /c build.cmd 1.55.0 9.0-cxxabi-1500 $(PlatformName)"
 				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd $(PlatformName) &amp;&amp; build.cmd 1.55.0 9.0-cxxabi-1500  $(PlatformName)&quot;"
 				CleanCommandLine="cmd.exe /c clean.cmd $(PlatformName)"
-				Output=""
+				Output="$(TopOutputDir)/../boost-1.55.0-9.0-cxxabi-1500-stamp"
 				PreprocessorDefinitions=""
 				IncludeSearchPath=""
 				ForcedIncludes=""
@@ -48,7 +48,7 @@
 				BuildCommandLine="cmd.exe /c build.cmd 1.55.0 9.0-cxxabi-1500 $(PlatformName)"
 				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd $(PlatformName) &amp;&amp; build.cmd 1.55.0 9.0-cxxabi-1500  $(PlatformName)&quot;"
 				CleanCommandLine="cmd.exe /c clean.cmd $(PlatformName)"
-				Output=""
+				Output="$(TopOutputDir)/../boost-1.55.0-9.0-cxxabi-1500-stamp"
 				PreprocessorDefinitions=""
 				IncludeSearchPath=""
 				ForcedIncludes=""

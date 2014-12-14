@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\luasocket.h">
+      <Filter>Shared Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\mime.h">
+      <Filter>Shared Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\auxiliar.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\buffer.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\except.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\inet.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\io.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\options.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\select.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\socket.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\tcp.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\timeout.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\udp.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\wsocket.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\buffer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\except.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\inet.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\io.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\luasocket.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\mime.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\options.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\select.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\tcp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\timeout.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\udp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\wsocket.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\external-packages\luasocket-3.0\luasocket\auxiliar.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Shared Headers">
+      <UniqueIdentifier>{0f48fca1-ad0f-46c4-b844-885ed410478c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{04c0bc7f-88f8-4368-8bed-b1ead1c66d20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{b46d9851-cf1d-4d41-881e-0e8697eabece}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

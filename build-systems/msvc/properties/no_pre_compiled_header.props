@@ -10,6 +10,8 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <ForcedIncludeFiles>%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeaderFile></PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(OutDir)$(RootNameSpace).pch</PrecompiledHeaderOutputFile>
       <ProgramDataBaseFileName>$(OutDir)$(RootNameSpace).pdb</ProgramDataBaseFileName>
     </ClCompile>

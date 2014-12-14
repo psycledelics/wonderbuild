@@ -5,7 +5,7 @@
 	Name="psycle"
 	ProjectGUID="{C6292BF4-9E87-4176-9101-A3D29D074B35}"
 	RootNamespace="psycle"
-	TargetFrameworkVersion="0"
+	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
 		<Platform
@@ -288,6 +288,23 @@
 		<ProjectReference
 			ReferencedProjectIdentifier="{16F2DEB9-8F35-45C9-B460-732615F0C8D5}"
 			RelativePathToProject="..\..\psycle-helpers\psycle-helpers.msvc-2008.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{702967DE-84A7-41AB-B91D-95B656FF8881}"
+			RelativePathToProject=".\projects\lualib\lualib.msvc-2008.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{A2F41715-28BA-40EB-8AB0-97F076B6FD2B}"
+			RelativePathToProject=".\projects\luasocket\luasocket.msvc-2008.vcproj"
+		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}"
+			CopyLocal="false"
+			CopyLocalDependencies="false"
+			UseInBuild="false"
+			UseDependenciesInBuild="false"
+			CopyLocalSatelliteAssemblies="false"
+			RelativePathToProject=".\projects\direct-sound\direct-sound.msvc-2008.vcproj"
 		/>
 	</References>
 	<Files>
@@ -635,6 +652,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\psycle\host\Canvas.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\psycle\host\Canvas.hpp"
+					>
+				</File>
+				<File
 					RelativePath="src\psycle\host\ChildView.cpp"
 					>
 				</File>
@@ -855,6 +880,14 @@
 					</File>
 					<File
 						RelativePath="src\psycle\host\GearRackDlg.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\psycle\host\LuaGui.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\psycle\host\LuaGui.hpp"
 						>
 					</File>
 					<File

@@ -13,13 +13,12 @@
   <PropertyGroup Label="Globals">
     <ProjectName>microsoft-direct-sound</ProjectName>
     <ProjectGuid>{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}</ProjectGuid>
+    <RootNamespace>microsoft-direct-sound</RootNamespace>
     <Keyword>MakeFileProj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
-    <OutDir>$(TopOutputDir)/bin</OutDir>
-    <IntDir>$(TopOutputDir)/intermediate/$(ProjectName)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='unpack|x64'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>

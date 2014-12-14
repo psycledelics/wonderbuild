@@ -5,7 +5,7 @@
 	Name="pre-compiled-headers-with-mfc"
 	ProjectGUID="{28C015FB-3BDA-4B32-8D85-C652E9892216}"
 	RootNamespace="pre-compiled-headers-with-mfc"
-	TargetFrameworkVersion="0"
+	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
 		<Platform
@@ -21,7 +21,7 @@
 		<Configuration
 			Name="debug|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\use_pre_compiled_header_with_mfc.vsprops;..\..\properties\create_pre_compiled_header.vsprops;..\..\properties\platform_win32.vsprops"
+			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\create_pre_compiled_header.vsprops;..\..\properties\platform_win32.vsprops"
 			UseOfMFC="2"
 			CharacterSet="0"
 			ManagedExtensions="0"
@@ -83,7 +83,7 @@
 		<Configuration
 			Name="debug|x64"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\use_pre_compiled_header_with_mfc.vsprops;..\..\properties\create_pre_compiled_header.vsprops;..\..\properties\platform_x64.vsprops"
+			InheritedPropertySheets="..\..\properties\debug.vsprops;..\..\properties\create_pre_compiled_header.vsprops;..\..\properties\platform_x64.vsprops"
 			UseOfMFC="2"
 			ManagedExtensions="0"
 			>
@@ -144,7 +144,7 @@
 		<Configuration
 			Name="release|Win32"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\use_pre_compiled_header_with_mfc.vsprops;..\..\properties\create_pre_compiled_header.vsprops;..\..\properties\platform_win32.vsprops"
+			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\create_pre_compiled_header.vsprops;..\..\properties\platform_win32.vsprops"
 			UseOfMFC="2"
 			ManagedExtensions="0"
 			WholeProgramOptimization="1"
@@ -204,7 +204,7 @@
 		<Configuration
 			Name="release|x64"
 			ConfigurationType="2"
-			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\use_pre_compiled_header_with_mfc.vsprops;..\..\properties\create_pre_compiled_header.vsprops;..\..\properties\platform_x64.vsprops"
+			InheritedPropertySheets="..\..\properties\release.vsprops;..\..\properties\create_pre_compiled_header.vsprops;..\..\properties\platform_x64.vsprops"
 			UseOfMFC="2"
 			ManagedExtensions="0"
 			WholeProgramOptimization="1"
@@ -264,6 +264,15 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{D28A43F2-5DDC-44CA-904C-BDFEEDFF032A}"
+			CopyLocal="false"
+			CopyLocalDependencies="false"
+			UseInBuild="false"
+			UseDependenciesInBuild="false"
+			CopyLocalSatelliteAssemblies="false"
+			RelativePathToProject=".\projects\boost\boost.msvc-2008.vcproj"
+		/>
 	</References>
 	<Files>
 		<File

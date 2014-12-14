@@ -7,6 +7,9 @@
 	<Tool
 		Name="VCCLCompilerTool"
 		UsePrecompiledHeader="0"
+		ForcedIncludeFiles=""
+		PrecompiledHeaderThrough=""
+		PrecompiledHeaderFile="$(OutDir)$(RootNameSpace).pch"
 		ProgramDataBaseFileName="$(OutDir)/$(RootNameSpace).pdb"
 	/>
 	<UserMacro
