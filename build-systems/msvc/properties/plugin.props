@@ -1,10 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<!-- Included in common.props
   <ImportGroup Label="PropertySheets">
     <Import Project="top_output_dir.props" />
   </ImportGroup>
+-->
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir>$(TopOutputDir)/bin/psycle-plugins\</OutDir>
+    <IntDir>$(TopOutputDir)/intermediate/psycle-plugins\$(ProjectName)\</IntDir>
   </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalOptions>/FS %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+  </ItemDefinitionGroup>
 </Project>
