@@ -41,11 +41,15 @@ class Wonderbuild(ScriptTask):
 		from wonderbuild import UserReadableException
 		from wonderbuild.cxx_tool_chain import PkgConfigCheckTask, ModTask
 		from wonderbuild.std_checks.std_cxx11 import StdCxx11CheckTask
+		from wonderbuild.std_checks.boost import BoostCheckTask
 		from wonderbuild.std_checks.dsound import DSoundCheckTask
 		from wonderbuild.install import InstallTask
 
 		check_cfg = cfg.clone()
 		std_cxx11 = StdCxx11CheckTask.shared(check_cfg)
+		boost = BoostCheckTask.shared(check_cfg, (1, 40, 0), ('system', 'signals', 'thread', 'filesystem', 'date_time'))
+		# TODO upgrade to boost signals2
+		cfg.defines['BOOST_SIGNALS_NO_DEPRECATION_WARNING'] = None
 		gstreamer = PkgConfigCheckTask.shared(check_cfg, ['gstreamer-0.10'])
 		jack = PkgConfigCheckTask.shared(check_cfg, ['jack >= 0.101.1'])
 		alsa = PkgConfigCheckTask.shared(check_cfg, ['alsa >= 1.0'])
@@ -55,7 +59,7 @@ class Wonderbuild(ScriptTask):
 		dsound = DSoundCheckTask.shared(check_cfg)
 
 		for x in sched_ctx.parallel_wait(
-			std_cxx11,
+			std_cxx11, boost,
 			gstreamer, jack, alsa, dsound,
 			gtkmm, gnomecanvasmm, cluttermm
 		): yield x
@@ -71,7 +75,7 @@ class Wonderbuild(ScriptTask):
 				if False: yield
 				if self.kind == ModTask.Kinds.PROG: self.private_deps = [pch.prog_task]
 				else: self.private_deps = [pch.lib_task]
-				self.public_deps += [std_cxx11, universalis, helpers_math]
+				self.public_deps += [std_cxx11, boost, universalis, helpers_math]
 				self.cxx_phase = self.__class__.InstallHeaders(self)
 			
 			class InstallHeaders(InstallTask):

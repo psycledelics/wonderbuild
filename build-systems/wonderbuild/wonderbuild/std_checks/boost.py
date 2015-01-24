@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2006-2010 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2006-2015 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import sys, os
 
@@ -258,6 +258,11 @@ class BoostCheckTask(MultiBuildCheckTask):
 					#include <boost/signals/slot.hpp>
 					void signals() { /* todo do something with it for a complete check */ }
 				""" + auto_link('signals')
+			source_texts['signals2'] = \
+				"""
+					#include <boost/signals2/slot.hpp>
+					void signals() { /* todo do something with it for a complete check */ }
+				""" + auto_link('signals2')
 			source_texts['thread'] = \
 				"""
 					#include <boost/thread/thread.hpp>
