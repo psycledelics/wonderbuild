@@ -134,7 +134,7 @@ begin
     end;
     if IsComponentSelected('InstallMSRuntimes_x64') then
     begin
-      ITD_AddFile('http://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x64.exe',ExpandConstant('{tmp}\vcredist_x64.exe'));
+      ITD_AddFile('http://download.microsoft.com/download/2/d/6/2d61c766-107b-409d-8fba-c39e61ca08e8/vcredist_x64.exe',ExpandConstant('{tmp}\vcredist_x64.exe'));
     end;
   end;
   Result := True;
