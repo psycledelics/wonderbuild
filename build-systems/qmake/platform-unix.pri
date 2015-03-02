@@ -4,6 +4,9 @@
 isEmpty(platform_unix_included) {
 	platform_unix_included = 1
 	verbose: message("platform-unix included")
+                  QMAKE_CXXFLAGS *= -std=c++14
+                  QMAKE_CXXFLAGS_DEBUG *= -std=c++14
+
 
 	unix {
 		verbose: message("System is unix")
