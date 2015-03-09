@@ -4,27 +4,30 @@ set -x &&
 
 cd $(dirname $0) &&
 
-if test "$1" = "clean"
-then
-	rm -f *.o *.a *.so *.dbg prog prog-* &&
-	exit
-fi &&
+#######
+# clean
+
+rm -f *.o *.a *.so *.so.[0-9.]* *.dbg prog prog-* &&
 
 ##########
 # dynamic
 
 c++ -o bar.o -fPIC -c -ggdb3 -O0 bar.cpp -I. &&
-c++ -o libbar.so -shared bar.o &&
-objcopy --only-keep-debug libbar.so libbar.so.dbg &&
+c++ -o libbar.so.1.0.0 -shared -Wl,--soname=libbar.so.1 bar.o &&
+ln -s libbar.so.1.0.0 libbar.so.1 &&
+ln -s libbar.so.1 libbar.so &&
+objcopy --only-keep-debug libbar.so libbar.so.1.0.0.dbg &&
 objcopy --strip-debug libbar.so &&
-objcopy --add-gnu-debuglink=libbar.so.dbg libbar.so &&
+objcopy --add-gnu-debuglink=libbar.so.1.0.0.dbg libbar.so &&
 readelf -d libbar.so | grep NEEDED &&
 
 c++ -o foo.o -fPIC -c -ggdb3 -O0 foo.cpp -I. &&
-c++ -o libfoo.so -shared foo.o -L. -Wl,-rpath-link=. -Wl,-rpath=\$ORIGIN -lbar && # -Wl,-no-undefined
-objcopy --only-keep-debug libfoo.so libfoo.so.dbg &&
+c++ -o libfoo.so.1.0.0 -shared -Wl,--soname=libfoo.so.1 foo.o -L. -Wl,-rpath-link=. -Wl,-rpath=\$ORIGIN -lbar && # -Wl,-no-undefined
+ln -s libfoo.so.1.0.0 libfoo.so.1 &&
+ln -s libfoo.so.1 libfoo.so &&
+objcopy --only-keep-debug libfoo.so libfoo.so.1.0.0.dbg &&
 objcopy --strip-debug libfoo.so &&
-objcopy --add-gnu-debuglink=libfoo.so.dbg libfoo.so &&
+objcopy --add-gnu-debuglink=libfoo.so.1.0.0.dbg libfoo.so &&
 readelf -d libfoo.so | grep NEEDED &&
 
 c++ -o prog.o -c -ggdb3 -O0 prog.cpp -I. &&
