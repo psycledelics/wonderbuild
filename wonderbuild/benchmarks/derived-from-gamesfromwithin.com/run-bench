@@ -4,20 +4,21 @@ set -x &&
 
 jobs=4 &&
 
-wonderbuild=../../../wonderbuild.py &&
-tup=../../other-build-tools/tup/tup &&
-fbuild=../../other-build-tools/fbuild/fbuild-light &&
-waf=../../other-build-tools/waf/waf-light &&
-scons=../../other-build-tools/scons/src/ &&
-fabricate=../../other-build-tools/fabricate/fabricate.py &&
-
 cpython=python &&
 pypy=../../python-alternative-implementations/pypy/bin/pypy &&
 #jython=../../python-alternative-implementations/jython/bin/jython &&
 jython='java -jar ../../python-alternative-implementations/jython/jython.jar' &&
 
-python=$cpython &&
-python3=python3 &&
+python2=${cpython}2 &&
+python3=${cpython}3 &&
+
+wonderbuild="$python2 ../../../wonderbuild.py" &&
+fbuild="$python3 ../../other-build-tools/fbuild/fbuild-light" &&
+waf="$python3 ../../other-build-tools/waf/waf-light" &&
+scons_dir=../../other-build-tools/scons/src/ && scons="$python2 $scons_dir/script/scons.py" &&
+fabricate_dir=../../other-build-tools/fabricate/ && fabricate="$python2 ./fabricate_script.py" &&
+tup=../../other-build-tools/tup/tup &&
+meson=meson && ninja=ninja && # meson was already available in debian when i found this tool
 
 
 measure() {
@@ -59,7 +60,7 @@ main() {
 
 	case $tool in
 		wonderbuild)
-			measure $python $wonderbuild --bld-dir=build-$tool --jobs=$jobs --check-missing=no --silent=yes "$@"
+			measure $wonderbuild --bld-dir=build-$tool --jobs=$jobs --check-missing=no --silent=yes "$@"
 		;;
 
 		tup)
@@ -93,7 +94,7 @@ main() {
 		fbuild)
 			# fbuild lacks a silent option!
 			# fbuild requires python >= 3
-			measure $python3 $fbuild --buildroot=build-$tool --jobs=$jobs "$@"
+			measure $fbuild --buildroot=build-$tool --jobs=$jobs "$@"
 		;;
 	
 		waf)
@@ -102,12 +103,12 @@ main() {
 				$waf configure
 			fi &&
 			# waf lacks a silent option!
-			measure $python $waf --jobs=$jobs "$@"
+			measure $waf --jobs=$jobs "$@"
 		;;
 
 		scons)
-			SCONS_LIB_DIR=$(cd $scons && pwd)/engine \
-				measure $python $scons/script/scons.py --no-cache --jobs=$jobs "$@"
+			SCONS_LIB_DIR=$(cd $scons_dir && pwd)/engine \
+				measure $scons --no-cache --jobs=$jobs "$@"
 		;;
 
 		make)
@@ -149,11 +150,20 @@ main() {
 		;;
 
 		fabricate)
-			if ! test -e $(basename $fabricate)
+			if ! test -e $(basename fabricate.py)
 			then
-				ln -s $fabricate .
+				ln -s $fabricate_dir/fabricate.py .
 			fi &&
-			measure $python ./fabricate_script.py "$@"
+			measure $fabricate "$@"
+		;;
+
+		meson)
+			if ! test -d build-$tool
+			then
+				mkdir build-$tool &&
+				$meson . build-$tool
+			fi &&
+			measure $ninja -C build-$tool -j $jobs "$@"
 		;;
 	esac
 } &&

@@ -18,4 +18,5 @@ cp -R bench bench-yabs &&
 cp -R bench bench-make &&
 cp -R bench bench-jam &&
 cp -R bench bench-cmake &&
+cp -R bench bench-meson &&
 cp -R bench bench-autotools && find bench-autotools -type f -name Makefile -exec rm {} \;

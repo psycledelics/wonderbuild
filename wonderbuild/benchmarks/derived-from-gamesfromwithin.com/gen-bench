@@ -51,6 +51,7 @@ def main(argv):
 		create_makefile_rec,
 		create_jam,
 		create_msvc,
+		create_meson
 	): tool(libs)
 
 	for i in xrange(libs): create_lib(i, classes, internal_includes, external_includes)
@@ -70,6 +71,7 @@ def create_lib(lib_number, classes, internal_includes, external_includes):
 		create_jam_sub,
 		create_msvc_sub,
 		create_fabricate_sub,
+		create_meson_sub
 	): sub(lib_number, classes)
 	os.chdir(os.pardir)
 
@@ -562,6 +564,27 @@ def create_msvc_sub(lib_number, classes):
 	'num': str(lib_number),
 	'tgt': lib_name(lib_number),
 	'src': '\n'.join(['		<File RelativePath="class_%s.cpp"/>' % str(i) for i in xrange(classes)])
+})
+	finally: f.close()
+
+def create_meson(libs):
+	f = open('meson.build', 'w')
+	try: f.write('''\
+project('benchmark', 'cpp')
+%(subs)s
+''' % {
+	'subs': '\n'.join(["subdir('%s')" % lib_dir(i) for i in xrange(libs)])
+})
+	finally: f.close()
+
+def create_meson_sub(lib_number, classes):
+	f = open('meson.build', 'w')
+	try: f.write('''\
+static_library('%(tgt)s', %(src)s, include_directories: ['/foo']) # include_directories does not seem to work in meason v0.18
+''' % {
+	'num': str(lib_number),
+	'tgt': lib_name(lib_number),
+	'src': ', '.join(["'class_" + str(i) + ".cpp'" for i in xrange(classes)])
 })
 	finally: f.close()
 
