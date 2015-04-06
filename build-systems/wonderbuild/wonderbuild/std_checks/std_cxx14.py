@@ -7,16 +7,19 @@ from wonderbuild.cxx_tool_chain import BuildCheckTask
 class StdCxx1yCheckTask(BuildCheckTask):
 
 	@staticmethod
-	def shared_uid(*args, **kw): return 'std-c++1y'
+	def shared_uid(*args, **kw): return 'std-c++14'
 
 	def apply_cxx_to(self, cfg):
 		if cfg.kind == 'gcc':
-			if '-std=c++1y' not in cfg.cxx_flags and '-std=gnu++1y' not in cfg.cxx_flags: cfg.cxx_flags.append('-std=gnu++1y')
+			if '-std=c++14' not in cfg.cxx_flags and '-std=gnu++14' not in cfg.cxx_flags: cfg.cxx_flags.append('-std=gnu++14')
 		else: pass # TODO other compilers
 
 	@property
+	def help(self): return 'C++14 support'
+
+	@property
 	def source_text(self): return '''\
-#if !defined __GXX_EXPERIMENTAL_CXX1Y__
-	#error c++1y unsupported or not enabled
+#if __cplusplus < 201402L
+	#error c++14 unsupported or not enabled
 #endif
 '''
