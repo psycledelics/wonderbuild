@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="9,00"
+	Name="zlib"
+	ProjectGUID="{69C0ACBE-EA31-4F5E-9B41-B1DF73C24DF0}"
+	RootNamespace="zlib"
+	Keyword="MakeFileProj"
+	TargetFrameworkVersion="0"
+	>
+	<Platforms>
+		<Platform
+			Name="Win32"
+		/>
+		<Platform
+			Name="x64"
+		/>
+	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
+	<Configurations>
+		<Configuration
+			Name="unpack|Win32"
+			ConfigurationType="0"
+			InheritedPropertySheets="..\..\properties\top_output_dir.vsprops;..\..\properties\top_src_dir.vsprops;..\..\properties\platform_win32.vsprops"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="cmd.exe /c build.cmd $(PlatformName)"
+				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd $(PlatformName) &amp;&amp; build.cmd $(PlatformName)&quot;"
+				CleanCommandLine="cmd.exe /c clean.cmd $(PlatformName)"
+				Output="$(TopOutputDir)/../zlib-stamp"
+				PreprocessorDefinitions=""
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="unpack|x64"
+			ConfigurationType="0"
+			InheritedPropertySheets="..\..\properties\top_output_dir.vsprops;..\..\properties\top_src_dir.vsprops;..\..\properties\platform_x64.vsprops"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="cmd.exe /c build.cmd $(PlatformName)"
+				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd $(PlatformName) &amp;&amp; build.cmd $(PlatformName)&quot;"
+				CleanCommandLine="cmd.exe /c clean.cmd $(PlatformName)"
+				Output="$(TopOutputDir)/../zlib-stamp"
+				PreprocessorDefinitions=""
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="commands"
+			>
+			<File
+				RelativePath=".\build.cmd"
+				>
+			</File>
+			<File
+				RelativePath=".\clean.cmd"
+				>
+			</File>
+		</Filter>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets">
+    <Import Project="top_src_dir.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros">
+    <IncludePath>
+  "$(ProjectDir)/src";
+  "$(SolutionDir)/src";
+  "$(TopSrcDir)/build-systems/src";
+  "$(TopSrcDir)/external-packages/vst-2.4";
+  "$(TopSrcDir)/external-packages/foobar2000";
+  "$(TopSrcDir)/external-packages/winamp-2";
+  "$(TopSrcDir)/external-packages/winamp-2/Wasabi";
+  "$(TopSrcDir)/external-packages/zlib-1.2.3/include";
+  "$(TopSrcDir)/external-packages/dsound-9/include";
+  "$(TopSrcDir)/external-packages/lua-5.2/src/";
+  "$(TopSrcDir)/external-packages/luasocket-3.0";
+  "$(TopSrcDir)/external-packages/boost-1.55.0/include";
+  "$(TopSrcDir)/external-packages/asio-2/common";
+  "$(TopSrcDir)/external-packages/asio-2/host";
+  "$(TopSrcDir)/external-packages/asio-2/host/pc";
+  "$(TopSrcDir)/external-packages/fluidsynth/include";
+  "$(TopSrcDir)/external-packages/stk-4.5.0";
+  "$(TopSrcDir)/external-packages/ladspa";
+  "$(TopSrcDir)/diversalis/src";
+  "$(TopSrcDir)/universalis/src";
+  "$(TopSrcDir)/psycle-helpers/src";
+  "$(TopSrcDir)/psycle-audiodrivers/src";
+  "$(TopSrcDir)/psycle-core/src";
+  "$(TopSrcDir)/psycle-plugins/src";
+  "$(TopSrcDir)/psycle/src";$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(IncludePath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(IncludePath);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="IncludePath">
+      <Value>$(IncludePath)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

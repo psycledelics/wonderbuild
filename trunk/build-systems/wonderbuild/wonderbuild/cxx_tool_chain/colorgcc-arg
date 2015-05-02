@@ -1,0 +1,5 @@
+#! /bin/sh
+
+export COLORGCC="$1" &&
+shift &&
+exec $(dirname "$0")/colorgcc "$@"

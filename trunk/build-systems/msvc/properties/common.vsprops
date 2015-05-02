@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="common"
+	InheritedPropertySheets=".\top_output_dir.vsprops;.\lib_path.vsprops;.\include_path.vsprops;.\use_pre_compiled_header.vsprops;.\defines.vsprops"
+	EnableManagedIncrementalBuild="0"
+	>
+	<Tool
+		Name="VCBscMakeTool"
+		OutputFile="$(IntDir)/$(RootNameSpace).bsc"
+	/>
+	<Tool
+		Name="VCCLCompilerTool"
+		MinimalRebuild="false"
+		ExceptionHandling="2"
+		WarningLevel="4"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		OutputFile="$(OutDir)/$(RootNameSpace).dll"
+		GenerateDebugInformation="true"
+		ProgramDatabaseFile="$(OutDir)/$(RootNameSpace).pdb"
+		TurnOffAssemblyGeneration="true"
+		ImportLibrary="$(TopOutputDir)/lib/$(RootNameSpace).lib"
+	/>
+</VisualStudioPropertySheet>

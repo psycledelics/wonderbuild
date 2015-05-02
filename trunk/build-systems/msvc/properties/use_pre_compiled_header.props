@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<!-- Included in common.props
+  <ImportGroup Label="PropertySheets">
+    <Import Project="top_output_dir.props" />
+  </ImportGroup>
+-->  
+  <PropertyGroup Label="UserMacros">
+    <PreCompiledHeader>forced-include.private.hpp</PreCompiledHeader>
+    <PreCompiledObject>$(TopOutputDir)/intermediate/pre-compiled-headers/pre_compiled_headers.obj</PreCompiledObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <ForcedIncludeFiles>$(PreCompiledHeader);%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeaderFile>$(PreCompiledHeader)</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>$(TopOutputDir)/intermediate/pre-compiled-headers/pre-compiled-headers.pch</PrecompiledHeaderOutputFile>
+      <ProgramDataBaseFileName>$(TopOutputDir)/intermediate/pre-compiled-headers/pre-compiled-headers.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(PreCompiledObject);%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="PreCompiledHeader">
+      <Value>$(PreCompiledHeader)</Value>
+    </BuildMacro>
+    <BuildMacro Include="PreCompiledObject">
+      <Value>$(PreCompiledObject)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

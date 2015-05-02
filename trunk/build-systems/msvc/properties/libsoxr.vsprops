@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="libsoxr"
+	InheritedPropertySheets=".\no_pre_compiled_header.vsprops"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="$(IncludePath);$(TopSoxrDir)/msvc"
+		PreprocessorDefinitions="$(Defines);_USE_MATH_DEFINES;_CRT_SECURE_NO_WARNINGS;SOXR_LIB"
+		CompileAs="0"
+	/>
+
+	<UserMacro
+		Name="TopSoxrDir"
+		Value="$(TopSrcDir)/external-packages/libsoxr/soxr-0.1.1-Source/"
+	/>
+</VisualStudioPropertySheet>

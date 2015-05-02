@@ -1,0 +1,158 @@
+Source: psycle
+Standards-Version: 3.9.2.0
+Section: sound
+Priority: optional
+Maintainer: Johan Boule <bohan.debian@retropaganda.info>
+Vcs-Svn: https://psycle.svn.sourceforge.net/svnroot/psycle
+Vcs-Browser: http://psycle.svn.sourceforge.net/viewvc/psycle
+Homepage: http://psycle.sourceforge.net
+Build-Depends:
+ debhelper (>= 7.4.15),
+ python (>= 2.6.5),
+ pkg-config (>= 0.22),
+ libboost-dev (>= 1.40.0),
+ libboost-system-dev (>= 1.40.0),
+ libboost-signals-dev (>= 1.40.0),
+ libboost-thread-dev (>= 1.40.0),
+ libboost-filesystem-dev (>= 1.40.0),
+ libboost-date-time-dev (>= 1.40.0),
+ libboost-test-dev (>= 1.40.0),
+ libglibmm-2.4-dev (>= 2.24.2),
+ libxml++2.6-dev (>= 2.30.0),
+ zlib1g-dev,
+ libgstreamer0.10-dev (>= 0.10.28),
+ libjack-dev (>= 0.118),
+ libesd0-dev (>= 0.2.41),
+ libasound2-dev (>= 1.0.22),
+ libsoxr-dev (>= 0.1.1)
+
+Package: psycle-player1
+Provides: psycle-player
+Section: sound
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libpsycle-core1 (= ${source:Version})
+Recommends: libpsycle-plugins1
+Description: blah
+ more blah blah.
+
+Package: libpsycle-plugins1
+Provides: libpsycle-plugins
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libpsycle-helpers1 (= ${source:Version})
+Description: blah
+ more blah blah.
+
+Package: libpsycle-plugin-interface1-dev
+Provides: libpsycle-plugin-interface-dev
+Section: libdevel
+Architecture: any
+Depends: 
+Description: blah
+ more blah blah.
+
+Package: libpsycle-core1
+Provides: libpsycle-core
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libpsycle-audiodrivers1 (= ${source:Version})
+Description: blah
+ more blah blah.
+
+Package: libpsycle-core1-dev
+Provides: libpsycle-core-dev
+Section: libdevel
+Architecture: any
+Depends: libpsycle-audiodrivers1-dev (= ${source:Version}), libpsycle-plugin-interface1-dev (= ${source:Version})
+Description: blah
+ more blah blah.
+
+Package: libpsycle-audiodrivers1
+Provides: libpsycle-audiodrivers
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libpsycle-helpers1 (= ${source:Version})
+Description: blah
+ more blah blah.
+
+Package: libpsycle-audiodrivers1-dev
+Provides: libpsycle-audiodrivers-dev
+Section: libdevel
+Architecture: any
+Depends: libpsycle-helpers1-dev (= ${source:Version})
+Description: blah
+ more blah blah.
+
+Package: libpsycle-helpers1
+Provides: libpsycle-helpers
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libuniversalis1 (= ${source:Version})
+Description: blah
+ more blah blah.
+
+Package: libpsycle-helpers1-dev
+Provides: libpsycle-helpers-dev
+Section: libdevel
+Architecture: any
+Depends: libpsycle-helpers-math1-dev (= ${source:Version})
+Description: blah
+ more blah blah.
+
+Package: libpsycle-helpers-math1-dev
+Provides: libpsycle-helpers-math-dev
+Section: libdevel
+Architecture: any
+Depends: libuniversalis1-dev (= ${source:Version})
+Description: blah
+ more blah blah.
+
+Package: libuniversalis1
+Provides: libuniversalis
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: platform abstraction layer library
+ Universalis is a library which abstracts the few platform specificities
+ which are not handled by the boost and glibmm libraries themselves.
+ .
+ Those abstractions of platforms specificities can be categorized into:
+ - tweaks for conformance with the C++ standard library
+ - widespread compiler extensions to the C++ standard
+ - widespread operating system features
+ - widespread CPU features
+
+Package: libuniversalis1-dev
+Provides: libuniversalis-dev
+Section: libdevel
+Architecture: any
+Depends: libdiversalis1-dev (= ${source:Version})
+Description: Development files for the Universalis library
+ Universalis is a library which abstracts the few platform specificities
+ which are not handled by the boost and glibmm libraries themselves.
+ .
+ Those abstractions of platforms specificities can be categorized into:
+ - tweaks for conformance with the C++ standard library
+ - widespread compiler extensions to the C++ standard
+ - widespread operating system features
+ - widespread CPU features
+ .
+ This package contains the development files.
+
+Package: libdiversalis1-dev
+Provides: libdiversalis-dev
+Section: libdevel
+Architecture: all
+Depends: pkg-config (>= 0.22)
+Description: preprocessor definitions describing the platform
+ Diversalis is a set of preprocessor definitions which describe the platform.
+ .
+ Platform specificities can be categorized into:
+ - conformance with the C++ standard library
+ - compiler extensions to the C++ standard
+ - operating system features
+ - CPU features
+ .
+ This is a header-only library; there is no runtime package.
+ .
+ This package contains the development files.

@@ -1,0 +1,15 @@
+* --help shouldn't create the build dir.
+
+* need a way to select a script from the command line instead of just a source dir (via --src-dir).
+
+* integrate binreloc.
+
+* versionned libs; also take care of relinking clients of shared libs when their version changed.
+
+* rewrite colorgcc in python; low priority, since clang already has colors natively.
+
+* experiment with beta-mode like tup.
+
+* speedup boost lib detection : try multiple link names in parallel and don't #include
+
+* FHS and multiarch: automatically choose lib dir according to compiler target arch-kernel-os triplet, e.g. <prefix>/lib/x86_64-linux-gnu/

@@ -1,0 +1,3 @@
+opt/psycle/include/psycle/helpers/
+opt/psycle/lib/pkgconfig/psycle-helpers.pc
+opt/psycle/lib/libpsycle-helpers.so

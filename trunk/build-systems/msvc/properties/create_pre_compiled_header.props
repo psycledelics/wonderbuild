@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<!-- Included in common.props
+  <ImportGroup Label="PropertySheets">
+    <Import Project="top_output_dir.props" />
+  </ImportGroup>
+-->  
+  <PropertyGroup Label="UserMacros">
+    <PreCompiledObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir>$(TopOutputDir)/intermediate/$(ProjectName)\</OutDir>
+    <IgnoreImportLibrary>true</IgnoreImportLibrary>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderOutputFile>$(OutDir)$(RootNameSpace).pch</PrecompiledHeaderOutputFile>
+      <ProgramDataBaseFileName>$(OutDir)$(RootNameSpace).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <OutputFile>$(IntDir)$(RootNameSpace).dll</OutputFile>
+      <ProgramDatabaseFile>$(IntDir)$(RootNameSpace).pdb</ProgramDatabaseFile>
+      <ImportLibrary>$(IntDir)$(RootNameSpace).lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="PreCompiledObject">
+      <Value>$(PreCompiledObject)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

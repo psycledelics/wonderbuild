@@ -1,0 +1,1389 @@
+#! /bin/bash
+
+#=====================================================================================================================================================================
+# file: libexec/build
+
+####################################################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# copyright 1999-2007 psycledelics http://psycle.pastnotecut.org : johan boule
+#
+# \meta generic
+# \meta standard gnu
+#
+####################################################################################################
+
+set -o nounset &&
+
+export LC_ALL=C &&
+
+function description
+{
+cat<<eof
+
+Does a full rebuild of the source package,
+and optionally updates remote servers.
+
+This script accepts the following options:
+
+	$(echo-custom --output \<output\>)\
+	
+		Path to temporary output.
+		Defaults to the environment variable PACKAGENERIC__OUTPUT,
+		or $output__relative if it is not set.
+	
+	$(echo-custom --packages [packages])\
+	
+		Path to the local cache of the remote archive repository of packages.
+		If [packages] is not given, it defaults to the environment variable
+		PACKAGENERIC__PACKAGES, or <output>/packages if is it not set.
+		Note that <output>/packages is deleted each new run, being under the <output> directory.
+		If you want to cache the remote archive repository locally between several runs,
+		give a [packages] location which is outside of the <output> directory.
+		
+	$(echo-custom --binary-distribution \<distributions ...\>)\
+	
+		Implies --source-distribution
+		
+		Builds binary packages for each distribution in a corresponding temporary chroot,
+		and output them under the <packages> directory.
+		
+	$(echo-custom --source-distribution [distributions ...])\
+	
+		Implies --distdir
+		
+		Builds source packages for each distribution
+		and output them under the <packages> directory.
+		If no [distribution] is given, the archive field in debian/changelog is used.
+		
+	$(echo-custom --distribution-section-component \<section-component\>)\
+	
+		Defaults to main.
+		
+	$(echo-custom --upload)\
+		
+		Sends the packages located under <packages>/<remote-host>
+		to the <remote-host> defined in packageneric/package/remote.
+		
+		For this to work, you need to have a ssh key to connect to the <remote-host>,
+		and if your local user name differs from the remote user name,
+		you also need to have your local user name mapped the remote user name
+		in packageneric/package/remote/user.
+		
+		Also, upon a successful build, a commit to the version-control-system (being it gnu-arch or subversion)
+		will be done with a summary message including
+		the version of the source package, as set in debian/changelog.
+		This is let us identify and retrieve the source of any release.
+		Two things worth to note about commits to a gnu-arch archive:
+			1)
+				The archive is a pgp-signed archive,
+				so, you need a pgp key to commit to the archive.
+				Read http://wiki.gnuarch.org/moin.cgi/Signing_20Archives
+			2)
+				Please use a sftp server wrapper on the remote server
+				that sets umask to allow group-writable permissions, or you will
+				prevent other devers from committing further to the archive.
+				Read http://wiki.gnuarch.org/moin.cgi/Centralized_20Development
+
+	$(echo-custom --distdir)\
+		
+		With this option,
+			a make distdir is done first, under <output>/build/$package__name,
+			resulting in a <output>/build/$package__name/$package__name-$package__version distdir.
+			Then, the build is done with the distdir as source package.
+			You will hence see two configurations done, this is normal.
+		
+		Without this option,
+			just build directly from <output>/build/$package__name.
+	
+	$(echo-custom -n --no-nested-source-packages)   The opposite of --nested-source-packages.
+	   $(echo-custom --nested-source-packages)\
+		
+		This option is on by default.
+		Recursively builds the nested source packages.
+
+	$(echo-custom --no-bootstrap)\
+		
+		Do not Call packageneric/generic/bin/autotools.bootstrap, i.e. simply configures and makes.
+	
+	$(echo-custom --configure \<options\>)\
+	
+		Calls to the configure script, if any, will be passed <options>.
+		(this can, e.g., override the default --prefix=<output>/install)
+	
+	$(echo-custom --prefix \<prefix\>)\
+	
+		Shortcut for --configure --prefix.
+		Defaults to the environment variable PACKAGENERIC__INSTALL,
+		or <output>/install if is it not set.
+		Note that <output>/install is deleted each new run, being under the <output> directory.
+		If you want to keep the installation between several runs,
+		give a <prefix> location which is outside of the <output> directory.
+		Since PKG_CONFIG_PATH automatically contains the configured <libdir>/pkgconfig path.
+		this will let you build packages separatly with the --no-nested-source-packages option,
+		without having to combine it with the --continue option.
+		
+	$(echo-custom --debug)\
+			
+		Shortcut for --configure CPPFLAGS CXXFLAGS LDFLAGS.
+		Compiles, links, and installs with debugging portions of the code and debugging information enabled.
+		
+	$(echo-custom --make \<options\>)\
+	
+		Calls to make, if any, will be passed <options>.
+		(this can, e.g., set a DESTDIR variable for stage install.)
+		
+	$(echo-custom --continue)\
+		
+		Implies --no-bootstrap.
+		Continues the build at the point it was left at.
+		If a makefile already exists,
+			simply invokes make to continue ; i.e. no bootstrap or reconfiguration is done.
+		Else, If the configure script already exists,
+			simply configures and makes (same thing as --no-bootstrap).
+		Else, bootstraps, configures, and makes.
+	
+	$(echo-custom --clean)\
+		
+		Removes the <output> directory,
+		and, if --no-bootstrap is not also given, also calls
+		packageneric/generic/bin/autotools.bootstrap --clean.
+		Nothing else is done, even if other options are given.
+		
+	$(echo-custom -n --help)   Shows this help.
+	
+	$(echo-custom -n --version)   $($libexec/version)
+	
+eof
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+function main
+{
+ 	local libexec=$(cd $(dirname $0) && pwd) &&
+	$libexec/package/meta-information --ensure &&
+	local package__name=$($libexec/package/meta-information name) &&
+	local package__version=$($libexec/package/meta-information version) &&
+ 	local output__relative=++packageneric &&
+
+	echoing '===========================================================' &&
+	echoing "packageneric $($libexec/version) $(basename $0) script" &&
+	echoing "source package: $package__name $package__version $($libexec/package/meta-information archive)" &&
+	echoing '===========================================================' &&
+	
+	# options
+		# default
+			local output=${PACKAGENERIC__OUTPUT:-$(pwd)/$output__relative} &&
+			local packages= &&
+			local binary__distribution= &&
+			local source__distribution= &&
+			local distribution__section_component= &&
+			local option__distribute=false &&
+			local option__upload=false &&
+			local option__distdir=false &&
+			local option__nested_source_packages=true &&
+			local option__nested_source_packages__embeed=true &&
+			local option__bootstrap=true &&
+			local configure__options="--config-cache --with-gui" &&
+			local configure__options__prefix=${PACKAGENERIC__INSTALL:-$output/install} &&
+			local option__debug=false &&
+			local make__options="--silent" &&
+			#local make__options= &&
+			local option__continue=false &&
+			local option__clean=false &&
+			local option__configure__cached=false &&
+			local option__no_chroot=false &&
+			local option__cross_packaging=false &&
+			local options= &&
+		# command line
+			while test $# != 0
+			do
+				options="$options $1" &&
+				case $1 in
+					--output) shift && output=$1 ;;
+					--packages) case $2 in --*) : ;; *) shift && packages=$1 ;; esac ;;
+					--binary-distribution) option__distribute=true && shift && binary__distribution=$1 ;;
+					--source-distribution) option__distribute=true && case $2 in --*) : ;; *) shift && source__distribution=$1 ;; esac ;;
+					--distribution-section-component) shift && distribution__section_component=$1 ;;
+					--upload) option__upload=true ;;
+					--distdir) option__distdir=true ;;
+					--nested-source-packages) option__nested_source_packages=true ;;
+					--no-nested-source-packages) option__nested_source_packages=false ;;
+					--no-bootstrap) option__bootstrap=false ;;
+					--configure) shift && configure__options=$configure__options\ $1 ;;
+					--prefix) shift && configure__options__prefix=$1 ;;
+					--debug) option__debug=true ;;
+					--make) shift && make__options=$make__options\ $1 ;;
+					--continue) option__continue=true ;;
+					--clean) option__clean=true ;;
+					--configuration-cached) option__configure__cached=true ;;
+					--no-chroot) option__no_chroot=true ;;
+					--cross-packaging) option__cross_packaging=true ;;
+					--version) return ;;
+					--help) description && return ;;
+					*) echoing "unexpected option: $1." && description && false ; return ;;
+				esac ||
+				return
+				shift
+			done &&
+		# implies
+			if test -z "$packages"
+			then
+				packages=${PACKAGENERIC__PACKAGES:-$output/packages}
+			fi &&
+			if $option__configure__cached
+			then
+				option__bootstrap=false
+			else
+				if $option__continue
+				then
+					option__bootstrap=false
+				fi &&
+				if $option__distribute
+				then
+					option__distdir=true
+				fi &&
+				export PKG_CONFIG_PATH=${PKG_CONFIG_PATH:-}:$configure__options__prefix/lib/pkgconfig &&
+				configure__options=$configure__options\ --prefix=$configure__options__prefix &&
+				if $option__nested_source_packages
+				then
+					configure__options="--with-nested-source-packages $configure__options"
+				else
+					configure__options="--without-nested-source-packages $configure__options"
+				fi
+			fi &&
+
+	echoing '' &&
+	echoing "build start date: $(date)" &&
+	
+ 	local source=$($libexec/root) &&
+ 	cd $source &&
+ 	
+	echoing '' &&
+	echoing "source:   $source" &&
+	echoing "output:   $output" &&
+	echoing "packages: $packages" &&
+	echoing "binary distribution: $binary__distribution" &&
+	echoing "source distribution: $source__distribution" &&
+	echoing '' &&
+	
+	if ! $option__configure__cached && test $(dirname $(which make)) != $libexec/wrappers
+	then
+		: #PATH=$libexec/wrappers:$PATH
+	fi &&
+	if ! $option__configure__cached && ! $option__continue
+	then
+		echoing "removing output directory" rm --force --recursive $output 2>/dev/null ||
+		{
+			echoing "error: could not remove output directory $output" &&
+			{
+				rm --version 1>/dev/null 2>&1 ||
+				echoing "error: this $(basename $0) script only works on GNU systems."
+			} &&
+			false
+		}
+	fi &&
+	if $option__clean
+	then
+		if $option__bootstrap && ! $option__continue
+		then
+			echoing "autotools bootstrap" $libexec/autotools/bootstrap --clean || no-bootstrap-advice
+		fi
+	else
+		export CCACHE_DIR=$(echo ${CCACHE_DIR:-$output/ccache}) &&
+		if $option__configure__cached
+		then
+			local configure__options="--cache-file ../../../../config.cache $configure__options"
+		else
+			if $option__bootstrap && ! $option__continue
+			then
+				echoing "autotools bootsrap" $libexec/autotools/bootstrap || no-bootstrap-advice &&
+				package__name=$($libexec/package/meta-information name) &&
+				package__version=$($libexec/package/meta-information version) &&
+				echoing "refreshed meta-information: source package: $package__name $package__version $($libexec/package/meta-information archive)"
+			fi &&
+			compilation_flags
+		fi &&
+		if ! $option__configure__cached && ! $option__continue || test ! -e $output/build/$package__name/Makefile
+		then
+			echoing "making build directory" mkdir -p $output/build/$package__name &&
+			(
+				echoing "entering build directory" cd $output/build/$package__name &&
+				echoing "autotools autoconf configure" $source/configure $configure__options &&
+				echoing "leaving build directory"
+			)
+		fi &&
+		(
+			echoing "entrering build directory" cd $output/build/$package__name &&
+			if $option__distdir
+			then
+				local distdir=$package__name-$package__version &&
+				if ! $option__continue || test ! -d $distdir/$output__relative/build/$package__name
+				then
+					echoing "making distdir" make $make__options distdir &&
+					echoing "Successfully built distribution directory: $(pwd)/$distdir"
+				fi
+			else
+				echoing "making all" make $make__options all &&
+				echoing "successfully built files in directory: $output/build/$package__name" &&
+				echoing "making install-strip" make $make__options install-strip &&
+				echoing "successfully installed files in directory: $output/build/$package__name/++packageneric/install" # todo: this is AC_DEFAULT_PREFIX, or --configure --prefix=
+			fi &&
+			if $option__distribute
+			then
+				if test -e /etc/debian_version
+				then
+					echoing "debian" \
+						./$distdir/packageneric/generic/detail/libexec/debian/build \
+							--source-root $source \
+							--build-root $(pwd) \
+							--packages $packages \
+							$(if $option__upload ; then echo --upload ; fi) \
+							--source-distribution "$source__distribution" \
+							--binary-distribution "$binary__distribution" \
+							$(if test -n "$distribution__section_component" ; then echo --distribution-section-component $distribution__section_component ; fi) \
+					 		$(if $option__nested_source_packages ; then echo --nested-source-packages ; fi) \
+					 		$(if $option__no_chroot ; then echo --no-chroot ; fi) \
+					 		$(if $option__cross_packaging ; then echo --cross-packaging ; fi) \
+					&&
+					if which tree 1>/dev/null
+					then
+						tree -alF $packages
+					fi
+				elif test "$OSTYPE" = msys
+				then
+						local src=${package__tar_name}_$package__version.tar.gz &&
+						if ! test -e $src
+						then
+							echoing "tarball" tar --create $distdir | gzip --best > $src
+						fi &&
+						echoing "building in distdir" ./$distdir/packageneric/generic/bin/build --configuration-cached &&
+						echoing "microsoft distribute" ./$distdir/packageneric/generic/detail/libexec/microsoft/distribute $(pwd)/$distdir/$output__relative/install
+				else
+					echoing "error: distribution is not implemented for your system." &&
+					false
+				fi &&
+				{
+					echoing "removing build directory" rm -Rf $output/build/$package__name 2>/dev/null ||
+					{
+						echoing "warning: could not remove build directory $output/build/$pakage__name" &&
+						false
+					}
+				}
+			elif $option__distdir
+			then
+				echoing "building in distdir" ./$distdir/packageneric/generic/bin/build --configuration-cached
+			fi &&
+			echoing "build end date: $(date)"
+		)
+	fi &&
+	echoing "completed successfully for $(pwd) ${options:-} $*" ||
+	{
+		echoing "failed for $(pwd) ${options:-} $*" &&
+		false
+	}
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+function compilation_flags
+{
+	if $option__debug
+	then
+		# Include debugging portions of the source code:
+		CPPFLAGS="-UNDEBUG ${CPPFLAGS:-}" &&
+		
+		# Debugging information level:
+		local debugging_information_level=-ggdb3 &&
+		
+		# Warning level:
+		local warning_level=-Wall &&
+		
+		# Optimizations: (If the vars already contain a -O option it will be used instead as the last is the one that is effective.)
+		local optimization_level=-O0 &&
+		
+		# Generation of profiling code:
+		#CXXFLAGS="-pg $CXXFLAGS" &&
+		
+		# mudflap
+		#CXXFLAGS="-mudflapth ${CPPFLAGS:-}"
+		#LDFLAGS="-lmudflap ${CPPFLAGS:-}"
+		:
+	else
+		# Exclude debugging portions from the source code:
+		CPPFLAGS="-DNDEBUG ${CPPFLAGS:-}" &&
+		
+		# Debugging information level:
+		local debugging_information_level= &&
+		
+		# Warning level:
+		local warning_level=-Wall &&
+		
+		# Optimizations: (If the vars already constain a -O option it will be used instead as the last is the one that is effective.)
+		local optimization_level=-O3
+	fi &&
+	local compiler_flags="-pipe $warning_level $optimization_level $debugging_information_level" &&
+	CFLAGS="$compiler_flags ${CFLAGS:-}" &&
+	CXXFLAGS="$compiler_flags ${CXXFLAGS:-}" &&
+	LDFLAGS="-Wl,$optimization_level ${LDFLAGS:-}" &&
+	export CXX=$(echo ${CXX:-}) CPPFLAGS=$(echo $CPPFLAGS) CFLAGS=$(echo $CFLAGS) CXXFLAGS=$(echo $CXXFLAGS) LDFLAGS=$(echo $LDFLAGS)
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+function no-bootstrap-advice
+{
+	echoing "note: If you don't have all the autotools development tools (autoconf, automake, libtool) ; with an unmodified tree, try $0 --no-bootstrap instead." &&
+	false
+} &&
+
+function date
+{
+	local date__format= &&
+	echo UTC $(command date --universal '+%Y-%m-%d %H:%M:%S')
+} &&
+
+function echo-custom
+{
+	echo -en '\033[2;36m' &&
+	echo -e "$@" &&
+	echo -en '\033[0m'
+} &&
+
+function echoing
+{
+	local script_path=packageneric.$(basename $0) &&
+	local comment=$1 && shift &&
+	echo-custom "$script_path: $comment" &&
+	if test $# != 0
+	then
+		echo-custom "$script_path: -> calling: $@" &&
+		"$@"
+	fi
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+main "$@"
+
+#=====================================================================================================================================================================
+# file: libexec/debian/build
+
+###########################################################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# copyright 1999-2007 psycledelics http://psycle.pastnotecut.org : johan boule
+#
+# Builds and rsync debian archive
+# \meta generic
+# \meta standard gnu
+#
+###########################################################################################################
+
+set -o nounset &&
+#set -o failglob &&
+
+function main
+{
+	#####################################################################################################
+	#####################################################################################################
+	#####################################################################################################
+
+	# options
+		# default
+			local source_root= &&
+			local build_root= &&
+			local source__distribution= &&
+			local binary__distribution= &&
+			local distribution__section_component=main &&
+			local option__upload=false &&
+			local packages__remote= &&
+			local packages__stage= &&
+			local option__nested_source_packages=false &&
+			local option__no_chroot=false &&
+			local option__cross_packaging=false &&
+		# command lines
+			while test $# != 0
+			do
+				case $1 in
+					--source-root) shift && source_root=$1 ;;
+					--build-root) shift && build_root=$1 ;;
+					--source-distribution) shift && source__distribution=$1 ;;
+					--binary-distribution) shift && binary__distribution=$1 ;;
+					--distribution-section-component) shift && distribution__section_component=$1 ;;
+					--upload) option__upload=true ;;
+					--packages) shift && packages__remote=$1 ;;
+					--stage-packages) shift && packages__stage=$1 ;;
+					--nested-source-packages) option__nested_source_packages=true ;;
+					--no-chroot) option__no_chroot=true ;;
+					--cross-packaging) option__cross_packaging=true ;;
+					*) echoing "unexpected option $1 in $@" ; false ; return ;;
+				esac &&
+				shift
+			done &&
+		# missing
+			if test -z "$source_root" -o -z "$build_root"
+			then
+				echoing "missing parameters on the command line" &&
+				false
+				return
+			fi &&
+	
+	#####################################################################################################
+	#####################################################################################################
+	#####################################################################################################
+
+	local libexec=$(cd $(dirname $0)/.. && pwd) &&
+	local source=$($libexec/root) &&
+	. $libexec/debian/archive/build &&
+	. $libexec/find &&
+
+	local package__name=$(cd $source && dpkg-parsechangelog | sed --silent 's/^Source: //p') &&
+	local package__version=$(cd $source && dpkg-parsechangelog | sed --silent 's/^Version: //p') &&
+
+	#####################################################################################################
+	#####################################################################################################
+	#####################################################################################################
+
+	# ensure dist/source dir includes the version in its name (needed for nested source packages)
+	{	
+		if test $(basename $source) != $package__name-$package__version
+		then
+			mv $source $(dirname $source)/$package__name-$package__version &&
+			source=$(dirname $source)/$package__name-$package__version &&
+			libexec=$source/packageneric/generic/detail/libexec
+		fi
+	} &&
+
+	if test -z "$packages__stage"
+	then
+		packages__stage=$build_root/++packageneric/packages &&
+		mkdir --verbose $packages__stage --parents
+	fi &&
+			
+	#####################################################################################################
+	#####################################################################################################
+	#####################################################################################################
+
+	#################
+	# source package
+	
+	(cd $packages__stage && echoing "building source package $source" dpkg-source -b $source) &&
+
+	##################
+	# nested packages
+	
+	if $option__nested_source_packages
+	then
+		(
+			cd $source &&
+			if test -d packageneric/package/nested
+			then
+				for dir in $(eval find packageneric/package/nested -maxdepth 1 $(packageneric__find__dir__no_arch))
+				do
+					if test -x $dir/packageneric/generic/detail/libexec/debian/build
+					then
+						echoing "nested source package $dir/" \
+							$dir/packageneric/generic/detail/libexec/debian/build \
+								--source-root $source_root/$dir \
+								--build-root $build_root \
+								--source-distribution "$source__distribution" \
+								--binary-distribution "$binary__distribution" \
+								$(if test -n "$distribution__section_component" ; then echo --distribution-section-component $distribution__section_component ; fi) \
+								--stage-packages $packages__stage \
+								--nested-source-packages \
+								$(if $option__no_chroot ; then echo --no-chroot ; fi) \
+						&&
+						echoing "poping back from $dir to parent source package $source/"
+					fi ||
+					return
+				done
+			fi
+		)
+	fi &&
+
+	###############
+	# distribution
+	
+	if test -z "$source__distribution"
+	then
+		source__distribution=${PACKAGENERIC__PACKAGE__ARCHIVE:-$(cd $source_root && dpkg-parsechangelog | sed --silent 's/^Distribution: //p')}
+	fi &&
+	
+	if $option__cross_packaging && test "$binary__distribution" != experimental -o "$source__distribution" != unstable
+	then
+		option__cross_packaging=false
+	fi &&
+	
+	if test -n "$binary__distribution"
+	then
+		##################
+		# binary packages
+		
+		if ! $option__no_chroot
+		then
+			if test ! -e /var/cache/pbuilder/base.$binary__distribution.tgz
+			then
+				{
+					scope distribution__name &&
+					case $binary__distribution in
+						stable  ) local distribution__name=sarge ;;
+						testing ) local distribution__name=etch  ;;
+						unstable) local distribution__name=sid   ;;
+						*       ) local distribution__name=$binary__distribution ;;
+					esac &&
+					if test ! -e /var/cache/pbuilder/base.$distribution__name.tgz
+					then
+						echoing sudo ${PACKAGENERIC__SUDO:-sudo} pbuilder create --basetgz /var/cache/pbuilder/base.$distribution__name.tgz --distribution $distribution__name
+					fi &&
+					if test $distribution__name != $binary__distribution
+					then
+						echoing sudo ${PACKAGENERIC__SUDO:-sudo} ln --verbose --symbolic base.$distribution__name.tgz /var/cache/pbuilder/base.$binary__distribution.tgz
+					fi &&
+					unset distribution__name
+				}
+			fi &&
+			if $option__nested_source_packages
+			then
+				local packages__extra__mount=$packages__stage
+				local packages__extra=.
+			else
+				archive__download &&
+				local packages__extra__mount=$packages__remote/$packageneric__remote__host/$packageneric__remote__path/$packages/debian/dists/$binary__distribution &&
+				local packages__extra=$source__distribution$(if test $distribution__section_component = main ; then echo /$distribution__section_component ; fi)
+			fi &&
+			echoing "chroot-building binary $(dpkg-architecture -qDEB_HOST_ARCH) packages $source" \
+				$libexec/debian/archive/pbuilder \
+					/var/cache/pbuilder/base.$binary__distribution.tgz \
+					$packages__extra__mount \
+					$packages__extra \
+					$packages__stage/{${package__name}_$package__version.dsc,} &&
+			unset packages__extra &&
+			unset packages__extra__mount &&
+			{
+				# todo we don't need to lintian all packages again, just the ones of this source package
+				echoing "linting packages $source" lintian --display-info $packages__stage/*.changes ||
+				# todo removes this once problem is resolved in stable distros too
+				echo-custom "lintian failed, but we don't stop because this might be an internal error due to objdump on /usr/lib/debug"
+			}
+		else
+			(
+				echoing "cd distdir $source" cd $source &&
+				echoing "building binary $(dpkg-architecture -qDEB_HOST_ARCH) packages $source" dpkg-buildpackage -rfakeroot -tc -b &&
+				echoing "cd distdir/.. $source/.." cd .. &&
+				echoing "linting packages $source" lintian --display-info *.changes &&
+				echoing "installing binary $(dpkg-architecture -qDEB_HOST_ARCH) packages $source" ${PACKAGENERIC__SUDO:-sudo} dpkg --install --recursive . &&
+				echoing "collecting in accumulating staging archive" mv --verbose *.{changes,deb} $packages__stage
+			)
+		fi
+	fi &&
+	
+	#####################################################################################################
+	#####################################################################################################
+	#####################################################################################################
+	
+	(
+		cd $packages__stage &&
+		
+		###################
+		# source changelog
+	
+		mkdir --verbose changelogs --parent &&
+		gzip --best --rsyncable < $source/debian/changelog > changelogs/$package__name.gz &&
+	
+		#####################################################################################################
+		#####################################################################################################
+		#####################################################################################################
+
+		if test $source__distribution = unstable
+		then
+			ln --verbose --symbolic ${package__name}_$package__version.tar.gz $package__name.tar.gz
+		fi
+	) &&
+				
+	#####################################################################################################
+	#####################################################################################################
+	#####################################################################################################
+
+	if test -n "$packages__remote"
+	then
+		archive
+	fi &&
+	
+	#####################################################################################################
+	#####################################################################################################
+	#####################################################################################################
+
+	if $option__upload
+	then
+		(
+			cd $source_root &&
+			archive__name &&
+			echoing "commiting" \
+				$libexec/version-control-systems/commit \
+					"package $package__name version $package__version released to $packageneric__remote__host:$packageneric__remote__path in archive $binary__distribution/$source__distribution" ||
+			echoing "not commited."
+		)
+	fi
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+function scope
+{
+	:
+} &&
+
+function echo-custom
+{
+	echo -en '\e[5;34m' &&
+	echo "$@" &&
+	echo -en '\e[0m'
+} &&
+
+function echoing
+{
+	local script_path=packageneric.debian.$(basename $0)
+	local comment=$1 && shift &&
+	echo-custom "$script_path: $comment" &&
+	if test $# != 0
+	then
+		echo-custom "$script_path: -> calling: $@" &&
+		"$@"
+	fi
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+main "$@" &&
+echoing "completed successfully for $(pwd) $*" ||
+{
+	echoing "failed for $(pwd) $*" &&
+	false
+}
+
+#=====================================================================================================================================================================
+# file: libexec/debian/archive/build
+
+###########################################################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# copyright 1999-2007 psycledelics http://psycle.pastnotecut.org : johan boule
+#
+# Builds and rsync debian archive
+# \meta generic
+# \meta standard gnu
+#
+###########################################################################################################
+
+function archive
+{
+	#local packages__incoming=$1 && shift &&
+	#local binary_distribution=$1 && shift &&
+	#local source__distribution=$1 && shift &&
+	#local distribution__section_component=$1 && shift &&
+	
+	echoing "building archive $packages__remote for packages $packages__stage" && 
+	(
+		cd $packages__stage &&
+
+		#########################
+		# standard source tarbal
+		
+		mkdir --verbose standard-source-tarball --parents &&
+		(
+			cd standard-source-tarball &&
+			mv --verbose ../*.tar.gz . &&
+			for file in *.tar.gz
+			do
+				md5sum $file | gpg --clearsign > $file.sum.asc &&
+				if test -L $file
+				then
+					ln --verbose --symbolic $(readlink --no-newline $file).sig $file.sig
+				else
+					gpg --detach-sign $file
+				fi ||
+				return
+			done
+		) &&
+		
+		#########
+		# debian
+		
+		mkdir --verbose debian --parents &&
+		(
+			cd debian &&
+			
+			ln --verbose --symbolic ../standard-source-tarball/*_*.tar.gz . &&
+			mv --verbose ../*.dsc . &&
+			
+			mkdir --verbose dists &&
+			cd dists &&
+			
+			mkdir source --parents &&
+			(
+				cd source &&
+				ln --verbose --symbolic ../../*.{dsc,tar.gz} . &&
+				mkdir --verbose $source__distribution --parents &&
+				cd $source__distribution &&
+				ln --verbose --symbolic ../*.{dsc,tar.gz} . &&
+				mkdir --verbose $distribution__section_component --parents &&
+				cd $distribution__section_component &&
+				ln --verbose --symbolic ../*.{dsc,tar.gz} .
+			) &&
+			
+			if test -n "$binary__distribution"
+			then
+				mkdir --verbose $binary__distribution --parents &&
+				cd $binary__distribution &&
+				mv --verbose ../../../*.{changes,deb} . &&
+				mkdir --verbose $source__distribution --parents &&
+				(
+					cd $source__distribution &&
+					ln --verbose --symbolic ../*.{changes,deb} . &&
+					mkdir --verbose $distribution__section_component --parents &&
+					cd $distribution__section_component &&
+					ln --verbose --symbolic ../*.{changes,deb} .
+				) &&
+				echoing "signing binary packages $source" debsigs --sign=builder *.deb # --sign=<type> can be builder, or origin.
+			fi
+		) &&
+		
+		##################
+		# cross packaging
+		
+		if $option__cross_packaging
+		then
+			echoing "cross packaging" $libexec/debian/archive/alien . debian/dists/$binary__distribution
+		fi
+	) &&
+	
+	#####################################################################################################
+	#####################################################################################################
+	#####################################################################################################
+	# merges the local and the remote archive repository
+
+	echoing "merging the local and the remote archive repository" &&
+	{
+		archive__download &&
+		merge &&
+		archive__upload
+	} &&	
+		
+	#####################################################################################################
+	#####################################################################################################
+	#####################################################################################################
+	
+	remote_execution
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+function archive__name
+{
+	if test -z ${packages:-}
+	then
+		packages=packages &&
+		. $libexec/package/remote $source_root
+	fi
+} &&
+
+function archive__download
+{
+	if test -z ${packages:-}
+	then
+		archive__name &&
+		mkdir --verbose $packages__remote/$packageneric__remote__host/$packageneric__remote__path/$packages --parents &&
+		echoing "rsyncing from remote archive to local archive" \
+			rsync \
+				--verbose --itemize-changes --progress --stats --compress --recursive --links --ignore-existing --filter='dir-merge /.rsync-filter' --relative --no-implied-dirs \
+				$packageneric__remote__user@$packageneric__remote__host:$packageneric__remote__path/$packages/ \
+				$packages__remote/$packageneric__remote__host/
+	fi
+} &&
+
+function archive__upload
+{
+	if ! $option__upload
+	then
+		return
+	fi &&
+	if test -z ${packages:-}
+	then
+		archive__name
+	fi &&
+	echoing "rsyncing from local archive to remote archive" \
+		rsync \
+			--verbose --itemize-changes --progress --stats --compress --recursive --links --checksum --delete --filter='dir-merge /.rsync-filter' \
+			$packages__remote/$packageneric__remote__host/$packageneric__remote__path/$packages/ \
+			$packageneric__remote__user@$packageneric__remote__host:$packageneric__remote__path/$packages/
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+function merge
+{
+	(
+		cd $packages__remote/$packageneric__remote__host/$packageneric__remote__path/$packages &&
+		echoing "merging archive locally: moving $packages__stage to $(pwd)" &&
+		
+		#####################################################################################################
+		#####################################################################################################
+		#####################################################################################################
+		
+		for file in $(cd $packages__stage && find . -mindepth 1 -type f -or -type l)
+		do
+			mkdir $(dirname $file) --parent &&
+			mv --verbose --force $packages__stage/$file $(dirname $file)/ ||
+			return
+		done &&
+		
+		#####################################################################################################
+		#####################################################################################################
+		#####################################################################################################
+		
+		remove-old &&
+		scan
+	)
+} &&
+		
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+function remove-old
+{
+	echoing "removing previous versions of package $package__name in archive component section debian/dists/$binary__distribution/$source__distribution/$distribution__section_component" &&
+	
+	if test -n "$binary__distribution"
+	then
+		for changes in debian/dists/$binary__distribution/$source__distribution/${package__name}_*_$(dpkg-architecture -qDEB_HOST_ARCH).changes
+		do
+			local old__version=$(sed --silent 's/^Version: //p' < $changes | head --lines 1) &&
+			if test $old__version != $package__version
+			then
+				echoing "$package__name old version $old__version ..." &&
+				local found_in_other_source_distribution=false &&
+				for distribution in $(find debian/dists/$binary__distribution -mindepth 1 -maxdepth 1 -type d)
+				do
+					if test $(basename $distribution) != $source__distribution -a -e $distribution/$(basename $changes)
+					then
+						echoing "$package__name old version $old_version is still used in source distribution $(basename $distribution) ... not removing globally" &&
+						found_in_other_source_distribution=true &&
+						break
+					fi ||
+					return
+				done &&
+				for binary in $(sed --silent 's/^Binary: //p' < $changes | sed 's/,//g')
+				do
+					echoing "$package__name old version $old__version ... binary $(dpkg-architecture -qDEB_HOST_ARCH) $binary ..." &&
+					rm --verbose --force debian/dists/$binary__distribution/$source__distribution/{,$distribution__section_component/}${binary}_${old__version}_{$(dpkg-architecture -qDEB_HOST_ARCH),all}.deb &&
+					if ! $found_in_other_source_distribution
+					then
+						rm --verbose --force debian/dists/$binary__distribution/${binary}_${old__version}_{$(dpkg-architecture -qDEB_HOST_ARCH),all}.deb
+					fi &&
+					if $option__cross_packaging
+					then
+						rm --verbose --force {linux-standard-base/lsb-,rpm/}$binary-$old__version-1.{$(dpkg-architecture -qDEB_HOST_ARCH),noarch}.rpm &&
+						rm --verbose --force slackware/$binary-$old__version.tgz
+					fi ||
+					return
+				done &&
+				rm --verbose --force debian/dists/$binary__distribution/$source__distribution/{,$distribution__section_component/}${package__name}_${old__version}_$(dpkg-architecture -qDEB_HOST_ARCH).changes &&
+				if ! $found_in_other_source_distribution
+				then
+					rm --verbose --force debian/dists/$binary__distribution/${package__name}_${old__version}_$(dpkg-architecture -qDEB_HOST_ARCH).changes
+				fi
+			fi ||
+			return
+		done
+	fi &&
+	for dsc in debian/dists/source/$source__distribution/${package__name}_*.dsc
+	do
+		local old__version=$(sed --silent 's/^Version: //p' < $dsc | head --lines 1) &&
+		if test $old__version != $package__version
+		then
+			echoing "$package__name old version $old__version ..." &&
+			local found_in_other_source_distribution=false &&
+			for distribution in $(find debian/dists/source -mindepth 1 -maxdepth 1 -type d)
+			do
+				if test $(basename $distribution) != $source__distribution -a -e $distribution/$(basename $dsc)
+				then
+					echoing "$package__name old version $old_version is still used in source distribution $(basename $distribution) ... not removing globally" &&
+					found_in_other_source_distribution=true &&
+					break
+				fi ||
+				return
+			done &&
+			echoing "$package__name old version $old__version ... source" &&
+			rm --verbose --force debian/dists/source/$source__distribution/{,$distribution__section_component/}${package__name}_$old__version.{dsc,tar.gz} &&
+			if ! $found_in_other_source_distribution
+			then
+				rm --verbose --force debian/{,dists/source/}${package__name}_$old__version.{dsc,tar.gz} &&
+				rm --verbose --force standard-source-tarball/${package__name}_$old__version{,.unofficial}.tar.gz{,.{sig,sum.asc}}
+			fi
+		fi ||
+		return
+	done &&
+	
+	##################
+	# nested packages
+	
+	if $option__nested_source_packages
+	then
+		if test -d $source/packageneric/package/nested
+		then
+			for dir in $(cd $source && eval find packageneric/package/nested -maxdepth 1 $(packageneric__find__dir__no_arch))
+			do
+				if test -e $source/$dir/packageneric/generic/detail/libexec/debian/archive/build
+				then
+					echoing "nested source package $dir/" &&
+					(
+						local source=$source/$dir &&
+						local package__name=$($source/packageneric/generic/detail/libexec/package/meta-information name) &&
+						local package__version=$($source/packageneric/generic/detail/libexec/package/meta-information version) &&
+						remove-old
+					) &&
+					echoing "poping back from $dir to parent source package $source/"
+				fi
+			done
+		fi
+	fi
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+function scan
+{
+	echoing "scanning packages in archive component section $(pwd)/debian $binary__distribution/$source__distribution $distribution__section_component" &&
+	(
+		cd debian/dists &&
+		scan-architecture     .                source $source__distribution $source__distribution                       $distribution__section_component source &&
+		if test -n "$binary__distribution"
+		then
+			scan-architecture . $binary__distribution $source__distribution $binary__distribution/$source__distribution $distribution__section_component $(dpkg-architecture -qDEB_HOST_ARCH)
+		fi
+	)
+} &&
+
+function scan-architecture
+{
+	local debian__dists=$1 && shift &&
+	local distribution__path__prefix=$1 && shift &&
+	local distribution__path__relative=$1 && shift &&
+	local distribution__name=$1 && shift &&
+	local distribution__section_component=$1 && shift &&
+	local architecture=$1 && shift &&
+	echoing "scanning $architecture packages in archive component section $distribution__path__prefix/$distribution__path__relative $distribution__section_component" &&
+	(
+		cd $debian__dists/$distribution__path__prefix/$distribution__path__relative/$distribution__section_component &&
+		if test $architecture = source
+		then
+			local dir=$architecture
+		else
+			local dir=binary-$architecture
+		fi &&
+		if test ! -d $dir
+		then
+			mkdir --verbose $dir --parents
+		fi &&
+		if test ! -e $dir/Release
+		then
+			{
+				cat > $dir/Release <<-eof
+					Archive: $distribution__name
+					Component: $distribution__section_component
+					Origin: $($libexec/package/meta-information origin)
+					Label: $(id --user --name)@$(hostname --long)
+					Architecture: $architecture
+				eof
+			} &&
+			gpg --detach-sign --armor --output $dir/Release.gpg $dir/Release
+		fi &&
+		if test $architecture = source
+		then
+			local file=$dir/Sources &&
+			echoing "scanning sources" eval "dpkg-scansources . > $file"
+		else
+			local file=$dir/Packages &&
+			#local override=$libexec/debian/archive/override &&
+			local override=/dev/null &&
+			echoing "scanning binaries $architecture" eval "dpkg-scanpackages -a $architecture . $override dists/$distribution__path__prefix/ > $file"
+		fi &&
+		gzip --force --best --rsyncable $file
+	)
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+function remote_execution
+{
+	if ! $option__upload
+	then
+		return
+	fi &&
+	echoing "executing update commands on the remote host itself" &&
+	local deb=$package__name-doc_${package__version}_all.deb &&
+	ssh $packageneric__remote__user@$packageneric__remote__host <<-eof
+		#set -o xtrace &&
+		if test -n "$binary__distribution" -a $source__distribution = unstable -a -e $packageneric__remote__path/$packages/debian/dists/$binary__distribution/$deb
+		then
+			# Since we uploaded to the debian archive the doc binary package, which contains the doxygen documentation,
+			# we can also update the site by extracting the doxygen directory from the debian binary package.
+			{
+				cd /tmp &&
+				rm --recursive --force $packageneric__remote__user.$deb.extracted &&
+				mkdir $packageneric__remote__user.$deb.extracted &&
+				cd $packageneric__remote__user.$deb.extracted &&
+				ar x $packageneric__remote__path/$packages/debian/dists/$binary__distribution/$deb &&
+				umask 0001 &&
+				tar --extract --gzip --touch --file data.tar.gz &&
+				if test -d usr/share/doc/${package__name}-doc/doxygen
+				then
+					rm --recursive --force $packageneric__remote__path/doxygen &&
+					mv usr/share/doc/${package__name}-doc/doxygen $packageneric__remote__path &&
+					cd $packageneric__remote__path &&
+					chmod u=rwx,g=rwsx,o=rx doxygen &&
+					find doxygen -follow -type d -exec chmod ug=rwsx,o=rx {} \; &&
+					find doxygen -follow -type f -exec chmod ug+rwX,o+r-w {} \;
+				fi
+			}
+		fi &&
+		{
+			cd $packageneric__remote__path &&
+			if test -x update-timestamps
+			then
+				./update-timestamps
+			fi
+		}
+	eof
+}
+
+#=====================================================================================================================================================================
+# file: libexec/debian/archive/pbuilder
+
+###########################################################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# copyright 1999-2007 psycledelics http://psycle.pastnotecut.org : johan boule
+#
+# \meta generic
+# \meta standard gnu
+#
+###########################################################################################################
+
+set -o nounset &&
+
+function main
+{
+	local tmp_dir= &&
+
+	local result=true &&
+
+	local distribution=$1 && shift &&
+	echoing "$(basename $0):         distribution: $distribution" &&
+
+	local extra_packages_mount_dir=$1 && shift &&
+	test -d $extra_packages_mount_dir ||
+	{
+		echoing "$(basename $0): directory does not exist: $extra_packages_mount_dir" &&
+		echoing "$(basename $0): pwd: $(pwd)" &&
+		false
+	} &&
+	extra_packages_mount_dir=$(cd $extra_packages_mount_dir && pwd) &&
+	echoing "$(basename $0): extra packages mount: $extra_packages_mount_dir" &&
+
+	local extra_packages_dir=$1 && shift &&
+	echoing "$(basename $0):       extra packages: $extra_packages_dir" &&
+	test -d $extra_packages_mount_dir/$extra_packages_dir ||
+	{
+		echoing "$(basename $0): directory does not exist: $extra_packages_dir" &&
+		echoing "$(basename $0): under: $extra_packages_mount_dir" &&
+		false
+	} &&
+
+	local source_dsc_file=$1 && shift &&
+	echoing "$(basename $0):               source: $source_dsc_file" &&
+
+	local result_dir=$1 && shift &&
+	test -d $result_dir ||
+	{
+		echoing "$(basename $0): directory does not exist: $result_dir" &&
+		echoing "$(basename $0): pwd: $(pwd)" &&
+		false
+	} &&
+	result_dir=$(cd $result_dir && pwd) &&
+	echoing "$(basename $0):               result: $result_dir" &&
+
+	local tmp_dir=$result_dir/++packageneric/$(basename $0) &&
+	mkdir $tmp_dir --parents &&
+
+	local build_dir=$tmp_dir/build &&
+	mkdir $build_dir &&
+
+	local archive_dir=$tmp_dir/archive &&
+	mkdir $archive_dir &&
+
+	ln --verbose --symbolic $extra_packages_mount_dir/$extra_packages_dir $archive_dir/packages &&
+
+	local hook_dir=$tmp_dir/hook &&
+	mkdir $hook_dir &&
+	local hook=$hook_dir/B00-chmod &&
+	{
+		cat > $hook <<-eof
+			#! /bin/sh
+			chown $(id --user):$(id --group) --changes /tmp/buildd/*.{changes,deb}
+		eof
+	} &&
+	chmod +x $hook &&
+	ln $hook $hook_dir/C00-chmod &&
+	local hook=$hook_dir/D00-apt &&
+	{
+		cat > $hook <<-eof
+			#! /bin/sh
+			echo deb file://$archive_dir / >> /etc/apt/sources.list &&
+			cat /etc/apt/sources.list &&
+			if test -e /etc/apt/apt.conf
+			then
+				cat /etc/apt/apt.conf
+			fi &&
+			{
+				apt-get update       --option acquire::retries=3 ||
+				apt-get update       --option acquire::retries=3
+			} &&
+			{
+				apt-get dist-upgrade --option acquire::retries=3 --assume-yes --force-yes ||
+				apt-get dist-upgrade --option acquire::retries=3 --assume-yes --force-yes
+			}
+		eof
+	} &&
+	chmod +x $hook &&
+	{
+		cat > $archive_dir/Release <<-eof
+			Archive: $distribution
+			Component: main
+			Origin: $extra_packages_dir
+			Label: $(id --user --name)@$(hostname --long)
+			Architecture: $(dpkg-architecture -qDEB_HOST_ARCH)
+		eof
+	} &&
+	(
+		cd $archive_dir/packages &&
+		dpkg-scanpackages -a $(dpkg-architecture -qDEB_HOST_ARCH) . /dev/null packages/ > $archive_dir/Packages
+	) &&
+	echoing sudo ${PACKAGENERIC__SUDO:-sudo} \
+		pbuilder \
+			build \
+			--basetgz $distribution \
+			--buildplace $build_dir \
+			--bindmounts $extra_packages_mount_dir \
+			$(if test $(readlink --canonicalize --no-newline $extra_packages_mount_dir) != $(readlink --canonicalize --no-newline $result_dir) ; then echo --bindmounts $archive_dir ; fi) \
+			--hookdir $hook_dir \
+			--debbuildopts -b \
+			--buildresult $result_dir \
+			"$@" \
+			$source_dsc_file ||
+	result=false
+	if test -n "$tmp_dir" -a -d $tmp_dir
+	then
+		rm $tmp_dir --recursive --force --verbose
+	fi &&
+	$result
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+function echo-custom
+{
+	echo -en '\e[1;33m' &&
+	echo "$@" &&
+	echo -en '\e[0m'
+} &&
+
+function echoing
+{
+	local script_path=packageneric.debian.archive.$(basename $0)
+	local comment=$1 && shift &&
+	echo-custom "$script_path: $comment" &&
+	if test $# != 0
+	then
+		echo-custom "$script_path: -> calling: $@" &&
+		"$@"
+	fi
+} &&
+
+#####################################################################################################
+#####################################################################################################
+#####################################################################################################
+
+main "$@" &&
+echoing "completed successfully for $(pwd) $*" ||
+{
+	echoing "failed for $(pwd) $*" &&
+	false
+}
+
+#=====================================================================================================================================================================
+# file: libexec/debian/archive/alien
+
+##############################################################################
+#
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# copyright 1999-2007 psycledelics http://psycle.pastnotecut.org : johan boule
+#
+# Converts the whole debian archive to other package formats
+# \meta generic
+# \meta standard gnu
+#
+##############################################################################
+
+main()
+{
+	local packages=$1 &&
+	local debian=$2
+
+	cd $packages &&
+		
+	local formats="lsb tgz rpm" &&
+	for format in $formats
+	do
+		local to="$to --to-$format"
+	done &&
+
+	fakeroot -- alien --keep-version $to $debian/*.deb &&
+
+	mkdir --verbose linux-standard-base &&
+	mv --verbose lsb-* linux-standard-base/ &&
+	
+	mkdir --verbose slackware &&
+	mv --verbose *.tgz slackware/ &&
+	
+	mkdir --verbose rpm &&
+	mv --verbose *.rpm rpm/
+} &&
+
+main "$@"
+

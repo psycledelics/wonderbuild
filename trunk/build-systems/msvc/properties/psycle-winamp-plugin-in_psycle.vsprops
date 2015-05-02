@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="psycle-winamp-plugin-in_psycle"
+	OutputDirectory="$(TopOutputDir)/bin/"
+	InheritedPropertySheets=".\top_output_dir.vsprops"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		PreprocessorDefinitions="_WINDOWS;_USRDLL;_AFXDLL;WINAMP_PLUGIN;$(Defines)"
+	/>
+</VisualStudioPropertySheet>

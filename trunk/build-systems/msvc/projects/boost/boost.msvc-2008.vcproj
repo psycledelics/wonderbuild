@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="9,00"
+	Name="boost"
+	ProjectGUID="{D28A43F2-5DDC-44CA-904C-BDFEEDFF032A}"
+	RootNamespace="boost"
+	Keyword="MakeFileProj"
+	TargetFrameworkVersion="196613"
+	>
+	<Platforms>
+		<Platform
+			Name="Win32"
+		/>
+		<Platform
+			Name="x64"
+		/>
+	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
+	<Configurations>
+		<Configuration
+			Name="unpack|Win32"
+			ConfigurationType="0"
+			InheritedPropertySheets="..\..\properties\top_output_dir.vsprops;..\..\properties\top_src_dir.vsprops;..\..\properties\platform_win32.vsprops"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="cmd.exe /c build.cmd 1.55.0 9.0-cxxabi-1500 $(PlatformName)"
+				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd $(PlatformName) &amp;&amp; build.cmd 1.55.0 9.0-cxxabi-1500  $(PlatformName)&quot;"
+				CleanCommandLine="cmd.exe /c clean.cmd $(PlatformName)"
+				Output="$(TopOutputDir)/../boost-1.55.0-9.0-cxxabi-1500-stamp"
+				PreprocessorDefinitions=""
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="unpack|x64"
+			ConfigurationType="0"
+			InheritedPropertySheets="..\..\properties\top_output_dir.vsprops;..\..\properties\top_src_dir.vsprops;..\..\properties\platform_x64.vsprops"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="cmd.exe /c build.cmd 1.55.0 9.0-cxxabi-1500 $(PlatformName)"
+				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd $(PlatformName) &amp;&amp; build.cmd 1.55.0 9.0-cxxabi-1500  $(PlatformName)&quot;"
+				CleanCommandLine="cmd.exe /c clean.cmd $(PlatformName)"
+				Output="$(TopOutputDir)/../boost-1.55.0-9.0-cxxabi-1500-stamp"
+				PreprocessorDefinitions=""
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="commands"
+			>
+			<File
+				RelativePath=".\build.cmd"
+				>
+			</File>
+			<File
+				RelativePath=".\clean.cmd"
+				>
+			</File>
+		</Filter>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

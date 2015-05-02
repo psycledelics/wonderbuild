@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="unpack|Win32">
+      <Configuration>unpack</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="unpack|x64">
+      <Configuration>unpack</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>microsoft-direct-sound</ProjectName>
+    <ProjectGuid>{69C0ACBE-EA31-4F5E-9B41-B2DD73C29DF1}</ProjectGuid>
+    <RootNamespace>microsoft-direct-sound</RootNamespace>
+    <Keyword>MakeFileProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='unpack|x64'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\properties\top_output_dir.props" />
+    <Import Project="..\..\properties\top_src_dir.props" />
+    <Import Project="..\..\properties\platform_win32.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='unpack|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\properties\top_output_dir.props" />
+    <Import Project="..\..\properties\top_src_dir.props" />
+    <Import Project="..\..\properties\platform_x64.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='unpack|Win32'">
+    <NMakeBuildCommandLine>cmd.exe /c build.cmd $(Platform)</NMakeBuildCommandLine>
+    <NMakeOutput>$(TopOutputDir)/../direct-sound-stamp</NMakeOutput>
+    <NMakeCleanCommandLine>cmd.exe /c clean.cmd $(Platform)</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>cmd.exe /c "clean.cmd $(Platform) &amp;&amp; build.cmd $(Platform)"</NMakeReBuildCommandLine>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='unpack|x64'">
+    <NMakeBuildCommandLine>cmd.exe /c build.cmd $(Platform)</NMakeBuildCommandLine>
+    <NMakeOutput>$(TopOutputDir)/../direct-sound-stamp</NMakeOutput>
+    <NMakeCleanCommandLine>cmd.exe /c clean.cmd $(Platform)</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>cmd.exe /c "clean.cmd $(Platform) &amp;&amp; build.cmd $(Platform)"</NMakeReBuildCommandLine>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="build.cmd" />
+    <None Include="clean.cmd" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

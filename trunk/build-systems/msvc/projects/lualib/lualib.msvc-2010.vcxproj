@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="debug|Win32">
+      <Configuration>debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="debug|x64">
+      <Configuration>debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="release|Win32">
+      <Configuration>release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="release|x64">
+      <Configuration>release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>lualib</ProjectName>
+    <ProjectGuid>{FEE2D9F8-BAD2-D34C-95B9-FB03657990DD}</ProjectGuid>
+    <RootNamespace>lualib</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\properties\release.props" />
+    <Import Project="..\..\properties\platform_win32.props" />
+    <Import Project="..\..\properties\no_pre_compiled_header.props" />
+    <Import Project="..\..\properties\staticlib.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\properties\debug.props" />
+    <Import Project="..\..\properties\platform_win32.props" />
+    <Import Project="..\..\properties\no_pre_compiled_header.props" />
+    <Import Project="..\..\properties\staticlib.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\properties\release.props" />
+    <Import Project="..\..\properties\platform_x64.props" />
+    <Import Project="..\..\properties\no_pre_compiled_header.props" />
+    <Import Project="..\..\properties\staticlib.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\properties\debug.props" />
+    <Import Project="..\..\properties\platform_x64.props" />
+    <Import Project="..\..\properties\no_pre_compiled_header.props" />
+    <Import Project="..\..\properties\staticlib.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|Win32'">
+    <PreBuildEvent>
+      <Message>unpack lualib source</Message>
+      <Command>build.cmd 5.2</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|Win32'">
+    <PreBuildEvent>
+      <Message>unpack lualib source</Message>
+      <Command>build.cmd 5.2</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|x64'">
+    <PreBuildEvent>
+      <Message>unpack lualib source</Message>
+      <Command>build.cmd 5.2</Command>
+    </PreBuildEvent>
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release|x64'">
+    <PreBuildEvent>
+      <Message>unpack lualib source</Message>
+      <Command>build.cmd 5.2</Command>
+    </PreBuildEvent>
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lapi.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lauxlib.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lbaselib.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lbitlib.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lcode.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lcorolib.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lctype.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\ldblib.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\ldebug.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\ldo.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\ldump.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lfunc.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lgc.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\linit.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\liolib.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\llex.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lmathlib.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lmem.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\loadlib.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lobject.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lopcodes.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\loslib.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lparser.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lstate.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lstring.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lstrlib.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\ltable.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\ltablib.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\ltm.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lundump.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lvm.c" />
+    <ClCompile Include="..\..\..\..\external-packages\lua-5.2\src\lzio.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lapi.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lauxlib.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lcode.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lctype.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\ldebug.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\ldo.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lfunc.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lgc.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\llex.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\llimits.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lmem.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lobject.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lopcodes.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lparser.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lstate.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lstring.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\ltable.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\ltm.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lua.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lua.hpp" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\luaconf.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lualib.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lundump.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lvm.h" />
+    <ClInclude Include="..\..\..\..\external-packages\lua-5.2\src\lzio.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

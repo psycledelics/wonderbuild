@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="platform_x64"
+	>
+  <Tool
+    Name="VCCLCompilerTool"
+    Detect64BitPortabilityProblems="false"
+			/>
+	<Tool
+		Name="VCLinkerTool"
+		TargetMachine="17"
+	/>
+	<Tool
+		Name="VCMIDLTool"
+		TargetEnvironment="3"
+	/>
+</VisualStudioPropertySheet>
