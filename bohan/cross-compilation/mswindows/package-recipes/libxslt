@@ -1,0 +1,90 @@
+#! /usr/bin/env bash
+
+# libxslt package recipe for MinGW cross pkg tool.
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# copyright 2008-2008 Johan Boule <bohan@jabber.org>
+#
+# Based on MinGW cross compiling environment, version 1.4
+# copyright 2007-2008 Volker Grabsch <vog@notjusthosting.com>
+# copyright 2007-2008 Rocco Rutte <pdmef@gmx.net>
+# copyright 2007-2008 Andreas Roever <roever@users.sf.net>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject
+# to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+# CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+#---
+#   libxslt
+#
+#   http://xmlsoft.org/XSLT/
+#---
+
+set -eux
+
+VERSION_libxslt=1.1.23
+
+case "$1" in
+
+version)
+    echo $VERSION_libxslt
+    ;;
+
+new-version)
+    VERSION=`
+        wget -q -O- 'ftp://xmlsoft.org/libxslt/' |
+        $SED -n 's,.*LATEST_LIBXSLT_IS_\([0-9][^>]*\)</a>.*,\1,p' | 
+        head -1`
+    test -n "$VERSION"
+    $SED "s,^VERSION_libxslt=.*,VERSION_libxslt=$VERSION," -i "$0"
+    ;;
+
+description)
+    echo XSLT processing library
+    ;;
+
+deps)
+	# libxslt's configure script by default checks the availability of libgcrypt and use it if found.
+	# libxml2 has a pkg-config file, but libxslt's configure script uses xml2-config.
+    echo gcc-cross libxml2 libgcrypt
+    ;;
+    
+download)
+    tar tfz "libxslt-$VERSION_libxslt.tar.gz" &>/dev/null ||
+    wget -c "ftp://xmlsoft.org/libxslt/libxslt-$VERSION_libxslt.tar.gz"
+    ;;
+
+unpack)
+    tar xfz "libxslt-$VERSION_libxslt.tar.gz"
+    ;;
+
+build | continue-build)
+	cd "libxslt-$VERSION_libxslt"
+	case "$1" in
+		build)
+			./configure \
+				--host="$TARGET" \
+				--disable-shared \
+				--without-debug \
+				--prefix="$PREFIX/$TARGET" \
+				--with-libxml-prefix="$PREFIX/$TARGET" \
+				LIBGCRYPT_CONFIG="$PREFIX/$TARGET/bin/libgcrypt-config" \
+				--without-python \
+				--without-plugins
+			;;
+	esac
+	$MAKE install bin_PROGRAMS= sbin_PROGRAMS= noinst_PROGRAMS= DESTDIR=$DESTDIR
+	;;
+
+clean-build)
+    rm -Rf "libxslt-$VERSION_libxslt"
+    ;;
+
+esac

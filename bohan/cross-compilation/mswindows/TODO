@@ -1,0 +1,7 @@
+*	Just for the record (not a todo), this was originally derived from:
+	http://www.nongnu.org/mingw-cross-env
+
+*	Fedora eventually responds to the need:
+	http://fedoraproject.org/wiki/Features/Windows_cross_compiler
+
+*	split dependencies into two categories: build dependencies, and runtime dependencies.

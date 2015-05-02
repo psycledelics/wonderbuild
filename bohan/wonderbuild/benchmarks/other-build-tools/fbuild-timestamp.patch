@@ -1,0 +1,19 @@
+diff --git a/lib/fbuild/path.py b/lib/fbuild/path.py
+index b3f79f3..5b94fcf 100644
+--- a/lib/fbuild/path.py
++++ b/lib/fbuild/path.py
+@@ -1,5 +1,5 @@
+ import collections
+-import hashlib
++import time
+ import itertools
+ import os
+ import shutil
+@@ -290,6 +290,7 @@ class Path(str):
+ 
+     def digest(self, chunksize=65536):
+         """Hash the file usind md5 and return the digest."""
++        return time.time()
+         with open(self, 'rb') as f:
+             m = hashlib.md5()
+             while True:

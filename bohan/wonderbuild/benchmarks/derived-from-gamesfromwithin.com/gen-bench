@@ -1,0 +1,591 @@
+#! /usr/bin/env python
+
+# related: http://gamesfromwithin.com/?p=44
+
+import sys, os
+from random import Random
+random = Random(0) # initialise with seed to have reproductible benches
+
+# for example: ./gen-bench /tmp/build 50 100 15 5
+
+HELP_USAGE = '''\
+Usage: gen-bench root libs classes internal external.
+    root     - Root directory where to create libs.
+    libs     - Number of libraries (libraries only depend on those with smaller numbers)
+    classes  - Number of classes per library
+    internal - Number of includes per file referring to that same library
+    external - Number of includes per file pointing to other libraries
+
+To test the autotools part, do:
+	autoreconf --install --symlink &&
+	mkdir build-autotools &&
+	cd build-autotools &&
+	../configure --disable-shared CXXFLAGS= &&
+	time make --jobs=4 --silent &&
+	time make --jobs=4 --silent
+'''
+
+def main(argv):
+	if len(argv) != 6:
+		print HELP_USAGE
+		sys.exit(1)
+
+	root_dir = argv[1]
+	libs = int(argv[2])
+	classes = int(argv[3])
+	internal_includes = int(argv[4])
+	external_includes = int(argv[5])
+
+	set_dir(root_dir)
+
+	for tool in (
+		create_wonderbuild,
+		create_tup,
+		create_waf,
+		create_scons,
+		create_fbuild,
+		create_fabricate,
+		#create_yabs,
+		create_autotools,
+		create_cmake,
+		create_makefile_rec,
+		create_jam,
+		create_msvc,
+		create_meson
+	): tool(libs)
+
+	for i in xrange(libs): create_lib(i, classes, internal_includes, external_includes)
+
+def create_lib(lib_number, classes, internal_includes, external_includes):
+	set_dir(lib_dir(lib_number))
+	for i in xrange(classes):
+		classname = "class_" + str(i)
+		create_hpp(lib_number, classname)
+		create_cpp(lib_number, classname, classes, internal_includes, external_includes)
+	for sub in (
+		create_tup_sub,
+		create_scons_sub,
+		create_cmake_sub,
+		create_autotools_sub,
+		create_makefile_rec_sub,
+		create_jam_sub,
+		create_msvc_sub,
+		create_fabricate_sub,
+		create_meson_sub
+	): sub(lib_number, classes)
+	os.chdir(os.pardir)
+
+def lib_dir(i): return 'lib_' + str(i)
+def lib_name(i): return 'lib' + str(i)
+
+def set_dir(dir):
+	if not os.path.exists(dir): os.mkdir(dir)
+	os.chdir(dir)
+
+def create_hpp(lib_number, name):
+	f = open(name + '.hpp', 'w' )
+	try: f.write('''\
+#ifndef %(guard)s
+#define %(guard)s
+//#include <boost/spirit.hpp>
+namespace %(namespace)s {
+	class %(name)s {
+		public:
+			%(name)s();
+			~%(name)s();
+	};
+}
+#endif
+''' % {
+	'guard': lib_dir(lib_number) + '__' + name + '__included',
+	'namespace': lib_dir(lib_number),
+	'name': name
+})
+	finally: f.close()
+
+def create_cpp(lib_number, name, classes_per_lib, internal_includes, external_includes):
+	f = open(name + '.cpp', 'w')
+	try:
+		f.write ('#include "' + name + '.hpp"\n')
+		includes = random.sample(xrange(classes_per_lib), internal_includes)
+		for i in includes: f.write ('#include "class_' + str(i) + '.hpp"\n')
+		if lib_number > 0:
+			includes = random.sample(xrange(classes_per_lib), external_includes)
+			lib_list = xrange(lib_number)
+			for i in includes: f.write ('#include <' + lib_dir(random.choice(lib_list)) + '/' + 'class_' + str(i) + '.hpp>\n')
+		f.write ('\n')
+		f.write('''\
+namespace %(namespace)s {
+	%(name)s::%(name)s() {}
+	%(name)s::~%(name)s() {}
+}
+''' % {
+			'namespace': lib_dir(lib_number),
+			'name': name
+		})
+	finally: f.close()
+
+def create_wonderbuild(libs):
+	f = open('wonderbuild_script.py', 'w')
+	try: f.write(r'''
+from wonderbuild.script import ScriptTask
+class Wonderbuild(ScriptTask):
+	def __call__(self, sched_ctx):
+		from wonderbuild.cxx_tool_chain import UserBuildCfgTask, PreCompileTasks, ModTask
+
+		src_dir = self.src_dir
+		
+		class CustomBuildCfgTask(UserBuildCfgTask):
+			def __call__(self, sched_ctx):
+				for x in UserBuildCfgTask.__call__(self, sched_ctx): yield x
+				self.cxx_flags = ['-g', '-O0', '-Wall']
+				self.shared = self.pic = False
+				self.defines['BENCH'] = None
+				self.include_paths.append(src_dir)
+		
+		build_cfg = CustomBuildCfgTask(self.project)
+		for x in sched_ctx.parallel_wait(build_cfg): yield x
+
+		use_pch = False
+		if use_pch:
+			class Pch(PreCompileTasks):
+				@property
+				def source_text(self):
+					try: return self._source_text
+					except AttributeError:
+						if False:
+							s = []
+							for l in src_dir.find_iter(in_pats = ['lib_*'], prune_pats = ['*']):
+								for n in l.find_iter(in_pats = ['*.hpp']):
+									s.append('#include <%s>' % n.rel_path(src_dir))
+							s.sort()
+							self._source_text = '\n'.join(s)
+						else:
+							self._source_text = '#include <boost/spirit.hpp>\n'
+						return self._source_text
+			pch = Pch('pch', build_cfg)
+
+		class BenchLib(ModTask):
+			def __init__(self, name, i):
+				ModTask.__init__(self, name, ModTask.Kinds.LIB, build_cfg)
+				self.i = i
+	
+			if use_pch:
+				def __call__(self, sched_ctx):
+					for x in sched_ctx.parallel_wait(pch.lib_task): yield x
+					for x in ModTask.__call__(self, sched_ctx): yield x
+
+			def do_mod_phase(self):
+				if use_pch: pch.lib_task.apply_to(self.cfg)
+				self.cfg.defines['BENCH_LIB'] = self.i
+				sub_src_dir = src_dir / self.name
+				for s in sub_src_dir.find_iter(in_pats=('*.cpp',)): self.sources.append(s)
+
+		for n in src_dir.find_iter(in_pats = ('lib_*',), prune_pats = ('*',)):
+			self.default_tasks.append(BenchLib(n.name, n.name[len('lib_'):]).mod_phase)
+''')
+	finally: f.close()
+
+def create_tup(libs):
+	f = open('Tuprules.tup', 'w')
+	try: f.write('''\
+CXX = g++
+CXXFLAGS = -g -O0 -Wall -pipe -I..
+AR = ar
+
+!cxx = |> ^ CXX %f^ $(CXX) $(CXXFLAGS) -c %f -o %o |>
+!ar = |> ^ AR %o^ $(AR) crus %o %f |>
+''')
+	finally: f.close()
+
+def create_tup_sub(lib_number, classes):
+	f = open('Tupfile', 'w')
+	try: f.write('''\
+include_rules
+: foreach *.cpp |> !cxx |> %%B.o
+: *.o |> !ar |> %(tgt)s.a
+''' % {'tgt': lib_name(lib_number)})
+	finally: f.close()
+
+def create_fbuild(libs):
+	f = open('fbuildroot.py', 'w')
+	try: f.write(r'''
+from fbuild.path import Path
+import fbuild.builders.cxx
+
+def build(ctx):
+	src_dir = Path('.')
+	static = fbuild.builders.cxx.guess_static(ctx)
+	flags = ['-g', '-O0', '-Wall']
+	defines = ['BENCH']
+	include_paths = [src_dir]
+	for p in Path('.').igloball('lib_*'):
+		lib = static.build_lib(p, [s for s in p.find('*.cpp')],
+			macros=defines + ['BENCH_LIB=' + p[len('lib_'):]],
+			includes=include_paths,
+			cflags=flags
+		)
+''')
+	finally: f.close()
+
+def create_waf(libs):
+	f = open('wscript', 'w')
+	try: f.write('''\
+APPNAME = 'build-bench'
+VERSION = '1.0.0'
+top = '.'
+out = 'build-waf'
+
+def options(opt):
+	opt.load('compiler_cxx')
+
+def configure(conf):
+	conf.load('compiler_cxx')
+	#conf.load('g++')
+	#conf.load('gccdeps')
+	#conf.load('batched_cc')
+
+def build(bld):
+	for n in bld.srcnode.ant_glob('lib_*', dir=True, src=False):
+		obj = bld.new_task_gen(
+			features=['cxx', 'cxxstlib'],
+			target=n.name,
+			cxxflags=['-g', '-O0', '-Wall'],
+			defines=['BENCH', 'BENCH_LIB=' + n.name[len('lib_'):]],
+			includes = '.',
+			source = [s.relpath_gen(bld.srcnode) for s in n.ant_glob('*.cpp')]
+		); obj.source.sort() # issue #527 was not fixed
+
+if True:
+	# use timestamp for file signature instead of content hash
+	import os, stat
+	def h_file(filename):
+		st = os.stat(filename)
+		if stat.S_ISDIR(st.st_mode): raise IOError('not a file')
+		return str(st.st_mtime)
+	from waflib import Utils
+	Utils.h_file = h_file
+
+''')
+	finally: f.close()
+
+def create_fabricate(libs):
+	f = open('fabricate_script.py', 'w')
+	try:
+		f.write('''\
+import fabricate
+
+COMPILER = 'g++'
+CXXFLAGS = ['-g', '-O0', '-Wall', '-pipe']
+ARCHIVER = 'ar'
+
+for lib in (
+''')
+		for i in xrange(libs): f.write("\t\'lib_%d\',\n" % (i,))
+		f.write('''\
+): execfile('%s/fabricate_subscript.py' % (lib,))
+''')
+	finally: f.close()
+
+
+def create_fabricate_sub(lib_number, classes):
+	f = open('fabricate_subscript.py', 'w')
+	try:
+		f.write("CPPDEFINES = ['-DBENCH', '-DBENCH_LIB=%d']\n\n" % (lib_number,))
+		f.write('''\
+klasses = (
+''')
+		for i in xrange(classes): f.write("\t'class_%d',\n" % (i,))
+		f.write('''\
+)
+
+for klass in klasses: fabricate.run(
+	COMPILER, CXXFLAGS, CPPDEFINES,
+	'-I.',
+	'-I%(lib)s',
+	'-o', '%(lib)s/%%s.o' %% (klass,),
+	'-c', '%(lib)s/%%s.cpp' %% (klass,),
+)
+
+fabricate.run(
+	ARCHIVER, 'crus', '%(lib)s/%(lib)s.a',
+	['%(lib)s/%%s.o' %% (klass,) for klass in klasses],
+)
+''' % {'lib': 'lib_%d' % (lib_number,)})
+	finally: f.close()
+
+def create_scons(libs):
+	f = open('SConstruct', 'w')
+	try: f.write('''\
+env = Environment(
+	CPPFLAGS = ['-g', '-O0', '-Wall'],
+	CPPDEFINES = {'BENCH': None},
+	CPPPATH = [Dir('#')]
+)
+env.Decider('timestamp-newer')
+env.SetOption('implicit_cache', True)
+env.SourceCode('.', None)
+%(subs)s
+''' % {
+	'subs': '\n'.join(
+		['''env.SConscript('%(dir)s/SConscript', build_dir = 'build-scons/%(dir)s', duplicate = 0, exports = ['env'])''' % {
+			'dir': lib_dir(i)} for i in xrange(libs)])
+})
+	finally: f.close()
+
+def create_scons_sub(lib_number, classes):
+	f = open('SConscript', 'w')
+	try: f.write('''\
+Import('env')
+env = env.Clone()
+env.Append(
+	CPPDEFINES = {'BENCH_LIB': '%(num)s'}
+)
+env.StaticLibrary('%(tgt)s', Split('%(src)s'))
+''' % {
+	'num': str(lib_number),
+	'tgt': lib_name(lib_number),
+	'src': ' '.join(['class_' + str(i) + '.cpp' for i in xrange(classes)])
+})
+	finally: f.close()
+
+def create_autotools(libs):
+	f = open('configure.ac', 'w')
+	try: f.write('''\
+AC_INIT([build-bench], [1.0.0])
+AC_CONFIG_AUX_DIR([autotools-aux])
+AM_INIT_AUTOMAKE([foreign subdir-objects nostdinc no-define tar-pax dist-bzip2])
+AC_PROG_CXX
+AM_PROG_LIBTOOL
+AC_CONFIG_HEADERS([unused-config.hpp])
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+''')
+	finally: f.close()
+	f = open('Makefile.am', 'w')
+	try: f.write('''\
+AM_CPPFLAGS = -I$(srcdir) -DBENCH
+AM_CXXFLAGS = -g -O0 -Wall
+lib_LTLIBRARIES =
+%(subs)s
+''' % {
+	'subs': '\n'.join(['include %s/Makefile.am' % lib_dir(i) for i in xrange(libs)])
+})
+	finally: f.close()
+
+def create_autotools_sub(lib_number, classes):
+	f = open('Makefile.am', 'w')
+	try: f.write('''\
+lib_LTLIBRARIES += %(tgt)s.la
+%(tgt)s_la_CPPFLAGS = $(AM_CPPFLAGS) -DBENCH_LIB=%(num)s
+%(tgt)s_la_SOURCES = %(src)s
+''' % {
+	'num': str(lib_number),
+	'tgt': lib_name(lib_number),
+	'src': ' '.join(['%s/class_%s.cpp' % (lib_dir(lib_number), str(i)) for i in xrange(classes)])
+})
+	finally: f.close()
+
+def create_makefile_rec(libs):
+	f = open('Makefile', 'w')
+	try: f.write('''\
+subdirs = %(subs)s
+
+all: $(subdirs)
+	@for i in $(subdirs); do $(MAKE) -r -C $$i all; done
+
+clean:
+	@for i in $(subdirs); do $(MAKE) -r -C $$i clean; done
+
+depend:
+	@for i in $(subdirs); do $(MAKE) -r -C $$i depend; done
+''' % {
+	'subs': ' '.join([lib_dir(i) for i in xrange(libs)])
+})
+	finally: f.close()
+
+def create_makefile_rec_sub(lib_number, classes):
+	f = open('Makefile', 'w')
+	try: f.write ('''\
+INCLUDE_PATHS = -I..
+STD_INCLUDE_PATHS = $(shell $(CXX) -xc++ /dev/null -E -Wp,-v 2>&1 1> /dev/null | sed -e '/^[^ ]/d' -e 's,^ ,-I,')
+DEFINES = -DBENCH -DBENCH_LIB=%(num)s
+DEPEND = makedepend
+CXX = g++
+CXX_FLAGS = -g -O0 -Wall -pipe
+AR = ar
+AR_FLAGS = crus
+.SUFFIXES: .o .cpp
+lib = %(tgt)s.a
+src = %(src)s
+objects = $(patsubst %%.cpp, %%.o, $(src))
+
+all: depend $(lib)
+
+$(lib): $(objects)
+	$(AR) $(AR_FLAGS) $@ $^
+
+.cpp.o:
+	$(CXX) $(CXX_FLAGS) $(DEFINES) $(INCLUDE_PATHS) -c $< -o $@
+
+clean:
+	@rm -f $(objects) $(lib)
+	
+depend:
+	@$(DEPEND) $(DEFINES) $(INCLUDE_PATHS) $(STD_INCLUDE_PATHS) $(src)
+''' % {
+	'num': str(lib_number),
+	'tgt': lib_name(lib_number),
+	'src': ' '.join(['class_%s.cpp' % str(i) for i in xrange(classes)])
+})
+	finally: f.close()
+
+def create_jam(libs):
+	f = open('Jamfile', 'w')
+	try: f.write ('''\
+SubDir TOP ;
+%(subs)s
+''' % {
+	'subs': '\n'.join(['SubInclude TOP %s ;' % lib_dir(i) for i in xrange(libs)])
+})
+	finally: f.close()
+	f = open('Jamrules', 'w')
+	try: f.write('''\
+C++FLAGS = -g -Wall -DBENCH ;
+OPTIM = -O0 ;
+HDRS = $(TOP) ;
+''')
+	finally: f.close()
+
+def create_jam_sub(lib_number, classes):
+	f = open('Jamfile', 'w')
+	try: f.write ('''\
+SubDir TOP %(dir)s ;
+SUBDIRC++FLAGS = -DBENCH_LIB=%(num)s ;
+SUBDIRHDRS = $(TOP)/%(dir)s ;
+SubDirHdrs = $(TOP)/%(dir)s ;
+Library %(tgt)s :
+%(src)s
+	;
+''' % {
+	'num': str(lib_number),
+	'dir': lib_dir(lib_number),
+	'tgt': lib_name(lib_number),
+	'src': '\n'.join(['	class_%s.cpp' % str(i) for i in xrange(classes)])
+})
+	finally: f.close()
+
+def create_cmake(libs):
+	f = open('CMakeLists.txt', 'w')
+	try: f.write('''\
+project(build-bench)
+cmake_minimum_required(VERSION 2.6)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+%(subs)s
+''' % {
+	'subs': '\n'.join(['add_subdirectory(%s)' % lib_dir(i) for i in xrange(libs)])
+})
+	finally: f.close()
+
+def create_cmake_sub(lib_number, classes):
+	f = open('CMakeLists.txt', 'w')
+	try: f.write('''\
+add_library(%(tgt)s STATIC %(src)s)
+''' % {
+	'num': str(lib_number),
+	'tgt': lib_name(lib_number),
+	'src': ' '.join(['class_' + str(i) + '.cpp' for i in xrange(classes)])
+})
+	finally: f.close()
+
+def create_msvc(libs):
+	f = open('solution.sln', 'w')
+	try:
+		f.write('Microsoft Visual Studio Solution File, Format Version 8.00\n')
+		for i in xrange(libs):
+			f.write('''\
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "%(tgt)s", "%(dir)s\\%(tgt)s.vcproj", "{CF495178-8865-4D20-939D-AAA%(num)s}"
+EndProject
+''' % {
+	'num': str(i),
+	'dir': lib_dir(i),
+	'tgt': lib_name(i)
+})
+	finally: f.close()
+
+def create_msvc_sub(lib_number, classes):
+	f = open(lib_name(lib_number) + '.vcproj', 'w')
+	try: f.write('''\
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.10"
+	Name="%(tgt)s"
+	ProjectGUID="{CF495178-8865-4D20-939D-AAA%(num)s}"
+	Keyword="Win32Proj">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory="Debug"
+			IntermediateDirectory="Debug"
+			ConfigurationType="4"
+			CharacterSet="2">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				PreprocessorDefinitions="BENCH;BENCH_LIB=%(num)s"
+				AdditionalIncludeDirectories=".."
+				MinimalRebuild="TRUE"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="5"
+				UsePrecompiledHeader="0"
+				WarningLevel="4"
+				DebugInformationFormat="4"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="$(OutDir)/%(tgt)s.lib"/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+%(src)s
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>
+''' % {
+	'num': str(lib_number),
+	'tgt': lib_name(lib_number),
+	'src': '\n'.join(['		<File RelativePath="class_%s.cpp"/>' % str(i) for i in xrange(classes)])
+})
+	finally: f.close()
+
+def create_meson(libs):
+	f = open('meson.build', 'w')
+	try: f.write('''\
+project('benchmark', 'cpp')
+%(subs)s
+''' % {
+	'subs': '\n'.join(["subdir('%s')" % lib_dir(i) for i in xrange(libs)])
+})
+	finally: f.close()
+
+def create_meson_sub(lib_number, classes):
+	f = open('meson.build', 'w')
+	try: f.write('''\
+static_library('%(tgt)s', %(src)s, include_directories: ['/foo']) # include_directories does not seem to work in meason v0.18
+''' % {
+	'num': str(lib_number),
+	'tgt': lib_name(lib_number),
+	'src': ', '.join(["'class_" + str(i) + ".cpp'" for i in xrange(classes)])
+})
+	finally: f.close()
+
+if __name__ == "__main__": main(sys.argv)

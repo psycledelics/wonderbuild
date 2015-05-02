@@ -1,0 +1,113 @@
+#! /usr/bin/env python
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# copyright 2009-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+
+if __name__ == '__main__':
+	import sys, os
+	os.chdir(os.path.dirname(__file__))
+	count = int(sys.argv[1])
+	src_dir = 'src'
+	if not os.path.exists(src_dir): os.mkdir(src_dir)
+	f = open(os.path.join(src_dir, 'main.cpp'), 'wb')
+	try:
+		f.write('#include <wrapper' + str(count - 1) + '/wrapper.hpp>\n')
+		f.write('int main() {\n')
+		f.write('\twrapper_even_' + str(count - 1) + '();\n')
+		f.write('\treturn 0;\n')
+		f.write('}\n')
+	finally:
+		f.close()
+	for i in xrange(count):
+		dir = os.path.join(src_dir, 'wrapper' + str(i))
+		if not os.path.exists(dir): os.mkdir(dir)
+		f = open(os.path.join(dir, 'wrapper.hpp'), 'wb')
+		try:
+			f.write('#ifndef WRAPPER' + str(i) + '\n')
+			f.write('#define WRAPPER' + str(i) + '\n')
+			f.write('void wrapper_even_' + str(i) + '();\n')
+			f.write('void wrapper_odd_' + str(i) + '();\n')
+			f.write('#endif\n')
+		finally:
+			f.close()
+		f = open(os.path.join(dir, 'wrapper_even.cpp'), 'wb')
+		try:
+			for j in xrange(0, i, i % 2 + 1): f.write('#include <wrapper' + str(j) + '/wrapper.hpp>\n')
+			f.write('#include <iostream>\n')
+			f.write('void wrapper_even_' + str(i) + '() {\n')
+			for j in xrange(0, i, 2): f.write('\twrapper_even_' + str(j) + '();\n')
+			if i % 2 == 0:
+				for j in xrange(1, i, 2): f.write('\twrapper_odd_' + str(j) + '();\n')
+				f.write('\tstd::cout << ' + str(i) + " << '\\n';\n")
+			f.write('}\n')
+		finally:
+			f.close()
+		f = open(os.path.join(dir, 'wrapper_odd.cpp'), 'wb')
+		try:
+			for j in xrange(i): f.write('#include <wrapper' + str(j) + '/wrapper.hpp>\n')
+			f.write('#include <iostream>\n')
+			f.write('void wrapper_odd_' + str(i) + '() {\n')
+			for j in xrange(0, i, 2): f.write('\twrapper_even_' + str(j) + '();\n')
+			for j in xrange(1, i, 2): f.write('\twrapper_odd_' + str(j) + '();\n')
+			if i % 2 != 0: f.write('\tstd::cout << ' + str(i) + " << '\\n';\n")
+			f.write('}\n')
+		finally:
+			f.close()
+	
+	f = open('Tuprules.tup', 'w')
+	try:
+		f.write('CXX = g++\n')
+		f.write('CXXFLAGS = -g -O0 -Wall -pipe -fPIC -Isrc\n')
+		f.write('LD = $(CXX)\n')
+		f.write('!cxx = |> $(CXX) $(CXXFLAGS) -c %f -o %o |>\n')
+		f.write('!ld = |> $(LD) -shared -o %o %f |>\n')
+		f.write('!ld_prog = |> $(LD) -o %o %f |>\n')
+	finally:
+		f.close()
+	f = open('Tupfile', 'w')
+	try:
+		f.write('include_rules\n')
+		for i in xrange(count):
+			f.write(': foreach src/wrapper' + str(i) + '/*.cpp |> !cxx |> src,wrapper' + str(i) + ',%B.o\n')
+			f.write(': src,wrapper' + str(i) + ',*.o ')
+			for j in xrange(i): f.write('libwrapper' + str(j) + '.so ')
+			f.write('|> !ld |> libwrapper' + str(i) + '.so\n')
+		f.write(': src/main.cpp |> !cxx |> src,%B.o\n')
+		f.write(': src,main.o ')
+		if True: # grrr, that's rather stupid and inserts spurious dependencies
+			for i in xrange(count - 1): f.write('libwrapper' + str(i) + '.so ')
+		f.write('libwrapper' + str(count - 1) + '.so |> !ld_prog |> main\n')
+	finally:
+		f.close()
+	
+	f = open('configure.ac', 'w')
+	try:
+		f.write('AC_INIT([lib-dep-stress], [1.0.0])\n')
+		f.write('AC_CONFIG_AUX_DIR([autotools-aux])\n')
+		f.write('AM_INIT_AUTOMAKE([foreign subdir-objects nostdinc no-define tar-pax dist-bzip2])\n')
+		f.write('AM_PROG_LIBTOOL\n')
+		f.write('AC_CONFIG_HEADERS([unused-config.hpp])\n')
+		f.write('AC_CONFIG_FILES([Makefile])\n')
+		f.write('AC_OUTPUT\n')
+	finally: f.close()
+	f = open('Makefile.am', 'w')
+	try:
+		f.write('AM_CPPFLAGS = -I$(srcdir)/src -DWRAPPER\n')
+		f.write('AM_CXXFLAGS = -g -O0 -Wall\n')
+		f.write('lib_LTLIBRARIES = \n')
+		for i in xrange(count):
+			f.write('lib_LTLIBRARIES += libwrapper' + str(i) + '.la\n')
+			f.write('libwrapper' + str(i) + '_la_SOURCES = src/wrapper' + str(i) + '/wrapper_even.cpp src/wrapper' + str(i) + '/wrapper_odd.cpp\n')
+			f.write('libwrapper' + str(i) + '_la_LIBADD =')
+			for j in xrange(i): f.write( ' libwrapper' + str(j) + '.la')
+			f.write('\n')
+		f.write('noinst_PROGRAMS = main\n')
+		f.write('main_SOURCES = src/main.cpp\n')
+		f.write('main_LDADD = libwrapper' + str(count - 1) + '.la\n')
+	finally: f.close()
+
+'''
+To test the autotools part, do:
+	autoreconf --install --symlink &&
+	rm -Rf ++autotools && mkdir ++autotools &&
+	(cd ++autotools && ../configure --config-cache --disable-shared CXXFLAGS= && time make --jobs=4 --silent)
+'''

@@ -1,0 +1,40 @@
+Index: iphonedevonlinux-apps-source/apps/tCube_v3/Makefile
+===================================================================
+--- iphonedevonlinux-apps-source/apps/tCube_v3/Makefile	(revision 6)
++++ iphonedevonlinux-apps-source/apps/tCube_v3/Makefile	(working copy)
+@@ -1,5 +1,4 @@
+-#CC = /path/to/my/toolchain/bin/arm-apple-darwin9-gcc
+-CC=arm-apple-darwin9-gcc
++CC = $(PREFIX)/bin/arm-apple-darwin9-gcc
+ LD = $(CC)
+ 
+ # Here comes your IP of the ipod/iphone.
+@@ -15,21 +14,19 @@
+ SRC=src/
+ IMG=img/
+ 
+-LDFLAGS=	-isysroot ../../sdks/iPhoneOS3.0.sdk/ \
+-		-lobjc \
+-		-bind_at_load \
+-		-framework Foundation \
+-		-framework CoreFoundation \
+-		-framework UIKit \
+-		-framework CoreGraphics \
+-		-w
++LDFLAGS =
++LDFLAGS += -bind_at_load
++LDFLAGS += -lobjc \
++	-framework Foundation \
++	-framework CoreFoundation \
++	-framework UIKit \
++	-framework CoreGraphics
+ 
+ all:	tCube_v3 bundle
+ 
+ tCube_v3:  AllShapes.o CubeShape.o tCubeView.o MainViewController.o tCube_v3.o 
+ 	$(LD) $(LDFLAGS) -o $@ $^
+ 
+-#tCubeViewController
+ bundle: tCube_v3
+ 	@mkdir -p tCube_v3.app
+ 	@cp tCube_v3 tCube_v3.app/tCube_v3_

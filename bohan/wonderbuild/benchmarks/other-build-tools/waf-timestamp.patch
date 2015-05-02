@@ -1,0 +1,18 @@
+Index: ../waf/wafadmin/Utils.py
+===================================================================
+--- ../waf/wafadmin/Utils.py	(revision 6598)
++++ ../waf/wafadmin/Utils.py	(working copy)
+@@ -131,6 +131,13 @@
+ 		f.close()
+ 		return m.digest()
+ 
++if True:
++	import stat
++	def h_file(filename):
++		st = os.stat(filename)
++		if stat.S_ISDIR(st.st_mode): raise IOError('not a file')
++		return str(st.st_mtime)
++
+ class ordered_dict(UserDict):
+ 	def __init__(self, dict = None):
+ 		self.allkeys = []

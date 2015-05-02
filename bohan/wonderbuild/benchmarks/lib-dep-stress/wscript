@@ -1,0 +1,52 @@
+#! /usr/bin/env python
+# This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
+# copyright 2009-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+
+import os
+
+# REMEMBER: libraries are linked one by one by default, if you want to remove
+# that constraint, you will have to change something....
+import Task, Constants
+#Task.algotype = Constants.NORMAL
+Task.algotype = Constants.MAXPARALLEL
+#Task.algotype = Constants.MAXJOBS
+
+APPNAME = 'lib-dep-stress'
+VERSION = '1.0.0'
+srcdir = '.'
+blddir = '++waf'
+
+def init(): pass
+
+def set_options(opt):
+	opt.tool_options('compiler_cxx')
+
+def configure(conf):
+	conf.check_tool('compiler_cxx')
+	conf.env.PREFIX = os.path.join(conf.blddir, os.pardir, '++install')
+	conf.env.CXXFLAGS = ['-g', '-O0', '-Wall']
+	conf.env.CXXDEFINES = ['WRAPPER']
+
+def build(bld):
+	kind = 'cshlib'
+	#kind = 'cstaticlib'
+	
+	count = 0
+	for x in bld.srcnode.find_dir('src').find_iter(in_pat=('wrapper*',), prune_pat=('*',), dir=True): count += 1
+
+	for i in xrange(count):
+		bld.new_task_gen(
+			features=['cxx', kind],
+			target = 'wrapper' + str(i),
+			includes = 'src',
+			source = ['src/wrapper' + str(i) + '/wrapper_even.cpp', 'src/wrapper' + str(i) + '/wrapper_odd.cpp'],
+			uselib_local = ['wrapper' + str(j) for j in reversed(xrange(i))] # reversed because patch for issue #520 was rejected
+		)
+
+	bld.new_task_gen(
+		features=['cxx', 'cprogram'],
+		target='main',
+		includes = 'src',
+		source = 'src/main.cpp',
+		uselib_local = 'wrapper' + str(count - 1)
+	)

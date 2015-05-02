@@ -1,0 +1,22 @@
+#! /bin/sh
+
+set -x &&
+
+cd $(dirname $0) &&
+
+rm -Rf bench bench-* &&
+./gen-bench bench 50 100 15 5 &&
+
+cp -R bench bench-wonderbuild &&
+cp -R bench bench-tup &&
+cp -R bench bench-tup-monitor &&
+cp -R bench bench-waf &&
+cp -R bench bench-scons &&
+cp -R bench bench-fbuild &&
+cp -R bench bench-fabricate &&
+cp -R bench bench-yabs &&
+cp -R bench bench-make &&
+cp -R bench bench-jam &&
+cp -R bench bench-cmake &&
+cp -R bench bench-meson &&
+cp -R bench bench-autotools && find bench-autotools -type f -name Makefile -exec rm {} \;

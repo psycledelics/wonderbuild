@@ -1,0 +1,171 @@
+#! /bin/sh
+
+set -x &&
+
+jobs=4 &&
+
+cpython=python &&
+pypy=../../python-alternative-implementations/pypy/bin/pypy &&
+#jython=../../python-alternative-implementations/jython/bin/jython &&
+jython='java -jar ../../python-alternative-implementations/jython/jython.jar' &&
+
+python2=${cpython}2 &&
+python3=${cpython}3 &&
+
+wonderbuild="$python2 ../../../wonderbuild.py" &&
+fbuild="$python3 ../../other-build-tools/fbuild/fbuild-light" &&
+waf="$python3 ../../other-build-tools/waf/waf-light" &&
+scons_dir=../../other-build-tools/scons/src/ && scons="$python2 $scons_dir/script/scons.py" &&
+fabricate_dir=../../other-build-tools/fabricate/ && fabricate="$python2 ./fabricate_script.py" &&
+tup=../../other-build-tools/tup/tup &&
+meson=meson && ninja=ninja && # meson was already available in debian when i found this tool
+
+
+measure() {
+	if which time; then time "$@"; else case "$SHELL" in bash) time "$@";; *) bash -c "time $*";; esac; fi
+	#strace -fF "$@"
+} &&
+
+dummy_change() {
+	for file
+	do
+		echo changing $file &&
+		echo >> $file
+	done
+} &&
+
+main() {
+	op=$1 && shift &&
+	tool=$1 && shift &&
+	
+	change=$(
+		case $tool in
+			fabricate) echo dummy_change;;
+			*) echo touch;;
+		esac
+	) &&
+	
+	cd $(dirname $0)/bench-$tool &&
+
+	case $op in
+		reset)
+			rm -Rf build-$tool &&
+			find . -name \*.o -delete &&
+			find . -name \*.a -delete
+			;;
+		no-op) ;;
+		small) $change lib_17/class_17.hpp ;;
+		big)   $change lib_17/*.hpp ;;
+	esac &&
+
+	case $tool in
+		wonderbuild)
+			measure $wonderbuild --bld-dir=build-$tool --jobs=$jobs --check-missing=no --silent=yes "$@"
+		;;
+
+		tup)
+			if test $op = reset
+			then
+				rm -Rf .tup
+			fi &&
+			if ! test -d .tup
+			then
+				$tup init
+			fi &&
+			#$tup config num_jobs $jobs
+			measure $tup upd -j$jobs "$@"
+		;;
+		
+		tup-monitor)
+			if test $op = reset
+			then
+				# TODO stop the monitor
+				rm -Rf .tup
+			fi &&
+			if ! test -d .tup
+			then
+				$tup init
+			fi &&
+			$tup monitor
+			#$tup config num_jobs $jobs
+			measure $tup upd -j$jobs "$@"
+		;;
+
+		fbuild)
+			# fbuild lacks a silent option!
+			# fbuild requires python >= 3
+			measure $fbuild --buildroot=build-$tool --jobs=$jobs "$@"
+		;;
+	
+		waf)
+			if ! test -d build-$tool
+			then
+				$waf configure
+			fi &&
+			# waf lacks a silent option!
+			measure $waf --jobs=$jobs "$@"
+		;;
+
+		scons)
+			SCONS_LIB_DIR=$(cd $scons_dir && pwd)/engine \
+				measure $scons --no-cache --jobs=$jobs "$@"
+		;;
+
+		make)
+			if test $op = reset
+			then
+				make -r clean --silent
+			fi &&
+			measure make -r --jobs=$jobs "$@"
+		;;
+
+		jam)
+			if test $op = reset
+			then
+				jam clean
+			fi &&
+			measure jam -j$jobs "$@"
+		;;
+
+		autotools)
+			if ! test -f configure
+			then
+				autoreconf --install --symlink
+			fi &&
+			if ! test -d build-$tool
+			then
+				mkdir build-$tool &&
+				(cd build-$tool && ../configure --disable-shared CXXFLAGS=)
+			fi &&
+			measure make -C build-$tool -r --jobs=$jobs "$@"
+		;;
+
+		cmake)
+			if ! test -d build-$tool
+			then
+				mkdir build-$tool &&
+				(cd build-$tool && cmake ..)
+			fi &&
+			measure make -C build-$tool -r --jobs=$jobs "$@"
+		;;
+
+		fabricate)
+			if ! test -e $(basename fabricate.py)
+			then
+				ln -s $fabricate_dir/fabricate.py .
+			fi &&
+			measure $fabricate "$@"
+		;;
+
+		meson)
+			if ! test -d build-$tool
+			then
+				mkdir build-$tool &&
+				$meson . build-$tool
+			fi &&
+			measure $ninja -C build-$tool -j $jobs "$@"
+		;;
+	esac
+} &&
+
+main "$@"

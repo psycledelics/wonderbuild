@@ -1,0 +1,1043 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<?xml-stylesheet type='text/xsl' href='time.xsl'?>
+<part caption='Benchmarks of various C++ build tools' image='http://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Koch_curve.svg/180px-Koch_curve.svg.png' alt='koch curve'>
+	<i>(send comments to Johan Boul&#233; &lt;<a href='mailto:bohan.wonderbuild@retropaganda.info?subject=[wonderbuild%20benchmarks]'>bohan.wonderbuild@retropaganda.info</a>&gt;)</i>
+	<part caption='Configuration details'>
+		The benchmarks were generated with this <a href='gen-bench'/> script.
+		The script produces reproductible seeded-random setups.
+		All these tests were run on the same gen-bench output,
+		but each copied to its own directory to ensure they don't interfere with each others.
+		<br/><br/>
+		The gen-bench script was run with the arguments "50 100 15 5".
+		<br/>
+		This gen-bench invocation generates 10000 tiny interdependent C++ source and header files,
+		to be built into 50 static libs.
+		<br/><br/>
+		All tools were configured to use the same compiler flags (-g -O0 -Wall -DBENCH -DBENCH_LIB=x -Idir),
+		and to produce static libs only.
+		<br/>
+		Configuration time was not counted for tools that have a separate configuration phase.
+		<br/><br/>
+		All tests were run at least seven times (first run not counted) and the average taken
+		(sorry, didn't measure incertitude).
+		Initial builds were not always run seven times, but the first run was never counted.
+		<br/>
+		All tools were run with silent/quiet option and/or > /dev/null.
+		<br/>
+		The command lines used to run the tests can be seen in this <a href='run-bench'/> script.
+		<part caption='Toy makefiles'>
+			The toy makefiles generated were recursive, and C++ dependencies were tracked using the makedepend X utility.
+		</part>
+		<part caption='Autotools'>
+			The autotools generated only one makefile with everything (no recursive make invocation).
+			<br/>
+			C++ dependencies were tracked with gcc's generated deps as a side-effect of compilation (-MMD option).
+			<br/>
+			Libtool was enabled, even for building static libs.
+		</part>
+		<part caption='Jam'>
+			Despite a lot of efforts, i wasn't able to find out why jam is missing some header depencencies.
+			While it's possible this could be fixed with a trivial change,
+			i must point out that the documentation is rather confusing.
+			Several people have reported problems on jam's mailing list, but it didn't help me.
+			I decided to keep jam's benchmark results, since it's one of the fastest build tool,
+			and it's missing only a few dependencies (precisely, it's rebuilding all libs but lib17 itself),
+			so real numbers should actually be a bit higher, but not much.
+		</part>
+		<part caption='Scons'>
+			Scons was tuned to use file timestamps comparisons rather than content hashing.
+			<br/>
+			C++ dependencies were tracked with scons' own full-featured custom preprocessor.
+			<br/>
+			Cache of implicit deps was enabled.
+			<br/>
+			Automatic fetching of source files from SCMs was disabled.
+			<br/>
+			Built target cache was disabled.
+			<br/>
+			Copying of source files to the build dir was disabled.
+		</part>
+		<part caption='Waf'>
+			Waf was tuned to use file timestamps comparisons rather than content hashing
+			(in Utils.py, def h_file(filename): return str(os.stat(filename).st_mtime) ).
+			<br/>
+			C++ dependencies were tracked with either gcc's generated deps as a side-effect of compilation (-MMD option),
+			or waf's own full-featured custom preprocessor.
+			<br/>
+			The parallelism algorithm of the task scheduler was set to "normal" (supposedly faster than "max parallel").
+			<br/>
+		</part>
+		<part caption='CMake'>
+			The CMake part of the <a href='gen-bench'/> script was contributed by Richard Quirk.
+			<br/>
+			CMake seems to be unable to track system-wide headers.
+		</part>
+		<part caption='FBuild'>
+			FBuild was tuned to use only file timestamps comparisons, by disabling content hashing.
+			(in fbuild.path.Path, import time; def digest(self): return time.time() ).
+			<br/>
+			The fbuild script finds source files dynamically instead of relying on a hard-coded file list.
+			This is far more maintainance-free, and the impact on speed is negligible.
+		</part>
+		<part caption='Fabricate'>
+			The Fabricate part of the <a href='gen-bench'/> script was contributed by Michael Haggerty.
+		</part>
+		<part caption='Tup'>
+			The Tup part of the <a href='gen-bench'/> script was contributed by Jed Brown.
+			<br/>
+			The tup scripts find source files dynamically instead of relying on a hard-coded file list.
+			This is far more maintainance-free, and the impact on speed is negligible.
+			<br/>
+			Tup itself was built with gcc's -O2 optimisation.
+		</part>
+		<part caption='Wonderbuild'>
+			Wonderbuild used either gcc's generated deps as a side-effect of compilation (-MMD option),
+			or a custom dumb include scanner, with no condition nor macro evaluation.
+			<br/>
+			The wonderbuild script finds source files dynamically instead of relying on a hard-coded file list.
+			This is far more maintainance-free, and the impact on speed is negligible.
+			<br/><br/>
+			If you have an insterest in developping build tools,
+			you can try wonderbuild with this benchmark with:
+			<code>
+				<pre>
+	svn co https://psycle.svn.sourceforge.net/svnroot/psycle/branches/bohan/wonderbuild
+	cd wonderbuild/benchmarks
+	./gen-bench bench 50 100 15 5
+	cd bench
+	time ../../wonderbuild.py --silent --check-missing=no # initial full build
+	time ../../wonderbuild.py --silent --check-missing=no # no-op rebuild
+	touch lib_17/class_17.hpp &amp;&amp; time ../../wonderbuild.py --silent --check-missing=no # small partial rebuild
+	touch lib_17/*.hpp &amp;&amp; time ../../wonderbuild.py --silent --check-missing=no # big partial rebuild
+				</pre>
+			</code>
+			Alternatively, you may use the <a href='run-bench'/> helper script, which does the same thing, with:
+			<code>
+				<pre>
+	svn co https://psycle.svn.sourceforge.net/svnroot/psycle/branches/bohan/wonderbuild
+	cd wonderbuild/benchmarks
+	./gen-bench.default
+	./run-bench reset wonderbuild # initial full build
+	./run-bench big wonderbuild # big partial rebuild
+	./run-bench small wonderbuild # small partial rebuild
+	./run-bench no-op wonderbuild # big partial rebuild
+				</pre>
+			</code>
+			Using the latter <a href='run-bench'/> helper script, you can easily compare wonderbuild with other tools,
+			as was done in these benchmarks. For example:
+			<code>
+				<pre>
+	./run-bench small make # small partial rebuild with make
+	./run-bench small autotools # small partial rebuild with autotools
+	./run-bench small cmake # small partial rebuild with cmake
+	./run-bench small waf # small partial rebuild with waf
+				</pre>
+			</code>
+		</part>
+	</part>
+	<part caption='Results'>
+		<part caption='Times on a fast machine' anchor='linux'>
+			All tests were run with 4 jobs on the same quad core system,
+			ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
+			<part caption='Tool versions'>
+				<ul>
+					<li>Tup version was 0.3-107-g8d046aa</li>
+					<li>Scons version was 1.2.0</li>
+					<li>Waf version was somewhere after 1.5.7 (svn rev 6260)</li>
+					<li>FBuild version was 0.1</li>
+					<li>Fabricate version was subversion revision 48</li>
+					<li>Python version was 2.5.2, except for FBuild where it was version 3.1</li>
+					<li>Jam version was 2.5</li>
+					<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
+					<li>CMake version was 2.4.7</li>
+					<li>Make version was gnu make 3.81</li>
+					<li>Makedepend was version 1.0.1</li>
+					<li>Shell was dash (not bash) version 0.5.4</li>
+					<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
+				</ul>
+			</part>
+			<part caption='Initial full build'>
+				<bars scale='5'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='wonderbuild'   value=' 30.8'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib), (dynamically looking for sources)</bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='toy makefiles' value=' 32.9'>without scan of system-wide headers, (recursive)</bar>
+					<bar name='toy makefiles' value=' 33.4'>with scan of system-wide headers, (recursive)</bar>
+					<bar name='jam'           value=' 35.6'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='cmake'         value=' 37.5'>without scan of system-wide headers (like gcc -MMD)</bar>
+					<bar name='tup'           value=' 41.3'>with or without monitor</bar>
+					<bar name='waf'           value=' 47.0'>gcc deps, timestamp signatures</bar>
+					<bar name='waf'           value=' 47.3'>waf cpp, timestamp signatures</bar>
+					<bar name='waf'           value=' 49.3'>waf cpp, timestamp signatures, dynamically looking for sources</bar>
+					<bar name='fbuild'        value=' 74.3'>(timestamp signatures only, content hashing disabled, dynamically looking for sources)</bar>
+					<bar name='tup'           value=' 86.2'>without monitor</bar>
+					<bar name='scons'         value='131.0'>with fast tuning options</bar>
+					<bar name='scons'         value='137.7'>with default options</bar>
+					<bar name='autotools'     value='188.0'>(non recursive)</bar>
+					<bar-section>Not using batch compilation, with only one CPU</bar-section>
+					<bar name='fabricate'     value='188.3'>(bizarrely 172s the first run) (hash sum signatures) <span style='color: red'>(only one CPU supported)</span></bar>
+				</bars>
+			</part>
+			<part caption='Big partial rebuild'>
+				After touch lib_17/*.hpp => rebuild of 585 object files from c++ and 33 static libs
+				<br/><br/>
+				<bars scale='20'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='wonderbuild'   value=' 4.40'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib), (dynamically looking for sources)</bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='jam'           value=' 4.25'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='toy makefiles' value=' 4.66'>without scan of system-wide headers, (recursive)</bar>
+					<bar name='toy makefiles' value=' 5.05'>with scan of system-wide headers, (recursive)</bar>
+					<bar name='tup'           value=' 5.54'>with or without monitor</bar>
+					<bar name='cmake'         value=' 6.15'>without scan of system-wide headers (like gcc -MMD)</bar>
+					<bar name='waf'           value=' 7.42'>(same with gcc deps and waf cpp), timestamp signatures</bar>
+					<bar name='waf'           value=' 8.00'>(same with gcc deps and waf cpp), timestamp signatures, dynamically looking for sources</bar>
+					<bar name='fbuild'        value='24.71'>(timestamp signatures only, content hashing disabled, dynamically looking for sources)</bar>
+					<bar name='autotools'     value='29.64'>(non recursive)</bar>
+					<bar name='scons'         value='39.58'>(with fast tuning options)</bar>
+					<bar-section>Not using batch compilation, with only one CPU</bar-section>
+					<bar name='fabricate'     value='26.90'>(hash sum signatures) <span style='color: red'>(only one CPU supported)</span></bar>
+				</bars>
+			</part>
+			<part caption='Small partial rebuild'>
+				After touch lib_17/class_17.hpp => rebuild of 26 object files from c++ and 8 static libs
+				<br/><br/>
+				<bars scale='60'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='wonderbuild'   value=' 0.84'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib), (dynamically looking for sources)</bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='tup'           value=' 0.38'>with monitor</bar>
+					<bar name='tup'           value=' 0.40'>without monitor</bar>
+					<bar name='jam'           value=' 0.81'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='toy makefiles' value=' 1.01'>without scan of system-wide headers, (recursive)</bar>
+					<bar name='toy makefiles' value=' 1.42'>with scan of system-wide headers, (recursive)</bar>
+					<bar name='cmake'         value=' 1.70'>without scan of system-wide headers (like gcc -MMD)</bar>
+					<bar name='waf'           value=' 2.43'>(same with gcc deps and waf cpp), timestamp signatures</bar>
+					<bar name='waf'           value=' 2.91'>(same with gcc deps and waf cpp), timestamp signatures, dynamically looking for sources</bar>
+					<bar name='autotools'     value=' 4.63'>(non recursive)</bar>
+					<bar name='fbuild'        value=' 6.80'>(timestamp signatures only, content hashing disabled, dynamically looking for sources)</bar>
+					<bar name='scons'         value='24.37'>(with fast tuning options)</bar>
+					<bar-section>Not using batch compilation, with only one CPU</bar-section>
+					<bar name='fabricate'     value=' 6.01'>(hash sum signatures) <span style='color: red'>(only one CPU supported)</span></bar>
+				</bars>
+			</part>
+			<part caption='No-op rebuild'>
+				<bars scale='60'>
+					<bar name='tup'           value=' 0.07'>with monitor</bar>
+					<bar name='tup'           value=' 0.08'>without monitor</bar>
+					<bar name='wonderbuild'   value=' 0.63'>gcc deps, (dynamically looking for sources)</bar>
+					<bar name='jam'           value=' 0.71'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='toy makefiles' value=' 0.79'>without scan of system-wide headers, (recursive)</bar>
+					<bar name='toy makefiles' value=' 1.23'>with scan of system-wide headers, (recursive)</bar>
+					<bar name='cmake'         value=' 1.39'>without scan of system-wide headers (like gcc -MMD)</bar>
+					<bar name='waf'           value=' 1.65'>(timestamp signatures)</bar>
+					<bar name='autotools'     value=' 2.05'>(non recursive)</bar>
+					<bar name='waf'           value=' 2.10'>(timestamp signatures), dynamically looking for sources</bar>
+					<bar name='fbuild'        value=' 2.97'>(timestamp signatures only, content hashing disabled, dynamically looking for sources)</bar>
+					<bar name='scons'         value='23.25'>with fast tuning options</bar>
+					<bar name='scons'         value='35.97'>with default options</bar>
+					<bar-section>Not using batch compilation, with only one CPU</bar-section>
+					<bar name='fabricate'     value=' 4.99'>(hash sum signatures) <span style='color: red'>(only one CPU supported)</span></bar>
+				</bars>
+			</part>
+		</part>
+		<part caption='Times on a slower machine' anchor='linux-slower'>
+			All tests were run with 1 job on the same system, linux 2.6.24, gcc's C++ compiler.
+			<part caption='Tool versions'>
+				<ul>
+					<li>Scons version was 1.2.0</li>
+					<li>Waf version was somewhere after 1.5.2 (svn rev 5345)</li>
+					<li>Python version was 2.4.4</li>
+					<li>Jam version was 2.5</li>
+					<li>Autotools versions were autoconf 2.61, automake 1.10, libtool 1.5.22</li>
+					<li>CMake version was 2.6.0</li>
+					<li>Make version was gnu make 3.81</li>
+					<li>Makedepend was version 1.0.0</li>
+					<li>Shell was bash version 3.1.17</li>
+					<li>Compiler tool chain versions were gcc 4.1.2, binutils 2.17</li>
+				</ul>
+			</part>
+			<part caption='Initial full build'>
+				<bars scale='0.7'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='wonderbuild'   value=' 168'>gcc deps</bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='toy makefiles' value=' 189'>(recursive)</bar>
+					<bar name='jam'           value=' 203'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='waf'           value=' 251'>waf cpp, timestamp signatures</bar>
+					<bar name='cmake'         value=' 253'>without scan of system-wide headers (like gcc -MMD)</bar>
+					<bar name='scons'         value=' 445'/>
+					<bar name='autotools'     value='1336'>(non recursive)</bar>
+				</bars>
+			</part>
+			<part caption='Big partial rebuild'>
+				After touch lib_17/*.hpp => rebuild of 585 object files from c++ and 33 static libs
+				<br/><br/>
+				<bars scale='4.5'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='wonderbuild'   value=' 21.9'>gcc deps</bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='jam'           value=' 22.6'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='toy makefiles' value=' 24.4'>(recursive)</bar>
+					<bar name='waf'           value=' 36.2'>waf cpp, timestamp signatures</bar>
+					<bar name='cmake'         value=' 42.8'>without scan of system-wide headers (like gcc -MMD)</bar>
+					<bar name='scons'         value='122.8'/>
+					<bar name='autotools'     value='203.8'>(non recursive)</bar>
+				</bars>
+			</part>
+			<part caption='Small partial rebuild'>
+				After touch lib_17/class_17.hpp => rebuild of 26 object files from c++ and 8 static libs
+				<br/><br/>
+				<bars scale='20'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='wonderbuild'   value=' 2.77'>gcc deps</bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='jam'           value=' 2.58'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='toy makefiles' value=' 3.33'>(recursive)</bar>
+					<bar name='waf'           value=' 6.22'>waf cpp, timestamp signatures</bar>
+					<bar name='cmake'         value='10.18'>without scan of system-wide headers (like gcc -MMD)</bar>
+					<bar name='autotools'     value='26.25'>(non recursive)</bar>
+					<bar name='scons'         value='77.1 '/>
+				</bars>
+			</part>
+			<part caption='No-op rebuild'>
+				<bars scale='20'>
+					<bar name='wonderbuild'   value=' 1.75'>gcc deps</bar>
+					<bar name='jam'           value=' 2.02'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='toy makefiles' value=' 2.25'>(recursive)</bar>
+					<bar name='waf'           value=' 3.12'>waf cpp, timestamp signatures</bar>
+					<bar name='cmake'         value=' 7.01'>without scan of system-wide headers (like gcc -MMD)</bar>
+					<bar name='autotools'     value=' 7.11'>(non recursive)</bar>
+					<bar name='scons'         value='73.12'/>
+				</bars>
+			</part>
+		</part>
+		<part caption='Times on ms-windows/mingw-gcc' andchor='mingw'>
+			All tests were run with 1 job on the same system, ms-windows-xp inside virtualbox, gcc's C++ compiler.
+			<part caption='Tool versions'>
+				<ul>
+					<li>Scons version was 1.2.0</li>
+					<li>Waf version was somewhere after 1.5.4 (svn rev 6104)</li>
+					<li>Python version was 2.6.1</li>
+					<li>CMake version was 2.6.4</li>
+					<li>Compiler tool chain versions were gcc 3.4.5, binutils 2.17.50</li>
+				</ul>
+			</part>
+			<part caption='Initial full build'>
+				<bars scale='24.95' unit='m'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='wonderbuild' value='12.60'>gcc deps</bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='waf'         value='15.03'>waf cpp</bar>
+					<bar name='cmake'       value='28.98'>without scan of system-wide headers (like gcc -MMD)</bar>
+					<bar name='scons'       value='31.98'>with fast tuning options</bar>
+				</bars>
+			</part>
+			<part caption='Big partial rebuild'>
+				After touch lib_17/*.hpp => rebuild of 585 object files from c++ and 33 static libs
+				<br/><br/>
+				<bars scale='3.32'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='wonderbuild' value=' 95.3'>gcc deps</bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='waf'         value='124.4'>waf cpp</bar>
+					<bar name='scons'       value='240.0'>with fast tuning options</bar>
+					<bar name='cmake'       value='248.7'>without scan of system-wide headers (like gcc -MMD)</bar>
+				</bars>
+			</part>
+			<part caption='Small partial rebuild'>
+				After touch lib_17/class_17.hpp => rebuild of 26 object files from c++ and 8 static libs
+				<br/><br/>
+				<bars scale='14.6'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='wonderbuild' value=' 5.5'>gcc deps</bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='waf'         value='13.3'>waf cpp</bar>
+					<bar name='cmake'       value='43.7'>without scan of system-wide headers (like gcc -MMD)</bar>
+					<bar name='scons'       value='55.0'>with fast tuning options</bar>
+				</bars>
+			</part>
+			<part caption='No-op rebuild'>
+				<bars scale='19.1'>
+					<bar name='wonderbuild' value=' 1.0'>gcc deps</bar>
+					<bar name='waf'         value=' 6.2'>waf cpp</bar>
+					<bar name='cmake'       value='29.5'>without scan of system-wide headers (like gcc -MMD)</bar>
+					<bar name='scons'       value='42.0'>with fast tuning options</bar>
+				</bars>
+			</part>
+		</part>
+		<part caption='Times on ms-windows/msvc' anchor='msvc'>
+			All tests were run with 1 job on the same system, ms-windows-xp inside virtualbox, microsoft's C++ compiler.
+			<part caption='Tool versions'>
+				<ul>
+					<li>Waf version was 1.5.6</li>
+					<li>Python version was 2.6.1</li>
+					<li>CMake version was 2.6.4</li>
+					<li>Compiler was MS Visual C++ version 15 (Visual Studio 9.0 aka 2008)</li>
+				</ul>
+			</part>
+			<part caption='Initial full build'>
+				<bars scale='29.3' unit='m'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='wonderbuild'    value=' 5.15'/>
+					<bar name='cmake/vcbuild'  value=' 6.26'/>
+					<bar name='cmake/msbuild'  value=' 6.65'/>
+					<bar name='cmake/msvc-ide' value=' 6.75'>(roughly)</bar>
+					<bar name='vcbuild'        value=' 6.78'/>
+					<bar name='msbuild'        value=' 7.05'/>
+					<bar name='msvc-ide'       value=' 7.60'>(roughly)</bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='waf'            value='16.73'/>
+					<bar name='cmake/nmake'    value='26.55'/>
+				</bars>
+			</part>
+			<part caption='Big partial rebuild'>
+				After touch lib_17/*.hpp => rebuild of 585 object files from c++ and 33 static libs
+				<br/><br/>
+				<bars scale='3.19'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='wonderbuild'    value=' 42.07'/>
+					<bar name='cmake/msvc-ide' value=' 65.00'>(roughly)</bar>
+					<bar name='cmake/vcbuild'  value=' 66.98'/>
+					<bar name='msvc-ide'       value=' 70.00'>(roughly)</bar>
+					<bar name='vcbuild'        value=' 75.57'/>
+					<bar name='cmake/msbuild'  value=' 87.96'/>
+					<bar name='msbuild'        value=' 89.12'/>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='waf'            value='126.86'/>
+					<bar name='cmake/nmake'    value='241.51'/>
+				</bars>
+			</part>
+			<part caption='Small partial rebuild'>
+				After touch lib_17/class_17.hpp => rebuild of 26 object files from c++ and 8 static libs
+				<br/><br/>
+				<bars scale='14.6'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='wonderbuild'    value=' 3.83'/>
+					<bar name='msvc-ide'       value=' 7.00'>(roughly)</bar>
+					<bar name='cmake/msvc-ide' value=' 7.00'>(roughly)</bar>
+					<bar name='vcbuild'        value='14.47'/>
+					<bar name='cmake/vcbuild'  value='17.21'/>
+					<bar name='msbuild'        value='35.40'/>
+					<bar name='cmake/msbuild'  value='39.58'/>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='waf'            value=' 8.58'/>
+					<bar name='cmake/nmake'    value='53.11'/>
+				</bars>
+			</part>
+			<part caption='No-op rebuild'>
+				<bars scale='19.1'>
+					<bar name='wonderbuild'    value=' 0.90'/>
+					<bar name='msvc-ide'       value=' 1.00'>(roughly)</bar>
+					<bar name='cmake/msvc-ide' value=' 1.00'>(roughly)</bar>
+					<bar name='waf'            value=' 1.79'/>
+					<bar name='vcbuild'        value='10.65'/>
+					<bar name='cmake/vcbuild'  value='11.90'/>
+					<bar name='msbuild'        value='31.36'/>
+					<bar name='cmake/msbuild'  value='34.67'/>
+					<bar name='cmake/nmake'    value='40.47'/>
+				</bars>
+			</part>
+		</part>
+		<part caption='Times on cygwin/ms-windows' anchor='cygwin'>
+			All tests were run with 1 job on the same system, cygwin running on ms-windows-xp inside virtualbox, gcc's C++ compiler.
+			<part caption='Tool versions'>
+				<ul>
+					<li>Waf version was somewhere after 1.5.4 (svn rev 6104)</li>
+					<li>Python version was 2.5.2</li>
+					<li>Shell was bash version 3.2.48</li>
+					<li>Compiler tool chain versions were gcc 4.3.2, binutils 2.18.50</li>
+				</ul>
+			</part>
+			<part caption='Initial full build'>
+				<bars scale='7.45' unit='m'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='wonderbuild' value='30.55'>gcc deps</bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='waf'         value='86.25'>waf cpp, timestamp signatures</bar>
+				</bars>
+			</part>
+			<part caption='Big partial rebuild'>
+				After touch lib_17/*.hpp => rebuild of 585 object files from c++ and 33 static libs
+				<br/><br/>
+				<bars scale='1.115'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='wonderbuild' value='237'>gcc deps</bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='waf'         value='589'>waf cpp, timestamp signatures</bar>
+				</bars>
+			</part>
+			<part caption='Small partial rebuild'>
+				After touch lib_17/class_17.hpp => rebuild of 26 object files from c++ and 8 static libs
+				<br/><br/>
+				<bars scale='19.6'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='wonderbuild' value='17.0'>gcc deps</bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='waf'         value='33.1'>waf cpp, timestamp signatures</bar>
+				</bars>
+			</part>
+			<part caption='No-op rebuild'>
+				<bars scale='150'>
+					<bar name='wonderbuild' value='2.28'>gcc deps</bar>
+					<bar name='waf'         value='4.32'>waf cpp, timestamp signatures</bar>
+				</bars>
+			</part>
+		</part>
+		<part caption='Times with a cold filesystem cache' anchor='cold-fs-cache'>
+			All tests were run with 4 jobs on the same quad core system,
+			ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
+			<br/>
+			The filesystem was unmounted and remounted just before running the build.
+			<part caption='Tool versions'>
+				<ul>
+					<li>Scons version was 1.2.0</li>
+					<li>Waf version was somewhere after 1.5.9 (svn rev 6671)</li>
+					<li>Python version was 2.5.2</li>
+					<li>Jam version was 2.5</li>
+					<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
+					<li>CMake version was 2.4.7</li>
+					<li>Make version was gnu make 3.81</li>
+					<li>Makedepend was version 1.0.1</li>
+					<li>Shell was dash (not bash) version 0.5.4</li>
+					<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
+				</ul>
+			</part>
+			<part caption='Initial full build'>
+				<bars scale='5'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='wonderbuild'   value=' 34.32'>gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='toy makefiles' value=' 36.02'>without scan of system-wide headers, (recursive)</bar>
+					<bar name='toy makefiles' value=' 36.63'>with scan of system-wide headers, (recursive)</bar>
+					<bar name='jam'           value=' 38.48'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='cmake'         value=' 39.72'>without scan of system-wide headers (like gcc -MMD)</bar>
+					<bar name='waf'           value=' 48.83'>waf cpp, timestamp signatures</bar>
+					<bar name='waf'           value=' 49.13'>gcc deps, timestamp signatures</bar>
+					<bar name='scons'         value='147.99'>with default options</bar>
+					<bar name='scons'         value='149.01'>with fast tuning options</bar>
+					<bar name='autotools'     value='230.35'>(non recursive)</bar>
+				</bars>
+			</part>
+			<part caption='No-op rebuild'>
+				<bars scale='60'>
+					<bar name='wonderbuild'   value=' 1.26'>gcc deps</bar>
+					<bar name='waf'           value=' 2.36'>(timestamp signatures)</bar>
+					<bar name='toy makefiles' value=' 2.95'>without scan of system-wide headers, (recursive)</bar>
+					<bar name='toy makefiles' value=' 3.42'>with scan of system-wide headers, (recursive)</bar>
+					<bar name='cmake'         value=' 3.67'>without scan of system-wide headers (like gcc -MMD)</bar>
+					<bar name='jam'           value=' 5.47'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='autotools'     value='11.60'>(non recursive)</bar>
+					<bar name='scons'         value='29.07'>with fast tuning options</bar>
+					<bar name='scons'         value='53.87'>with default options</bar>
+				</bars>
+			</part>
+		</part>
+		<part caption='Scalability' anchor='scalability'>
+			<!--part caption='Polluting the source dir with unused files'>
+				no-op, total files in all of the 50 lib dirs, waf rev 6692
+				wonderbuild  10000:  0.65s,  1600952 bytes
+				wonderbuild  60000:  1.95s,  4186951 bytes
+				wonderbuild 110000:  3.35s,  7024188 bytes
+				wonderbuild 210000:  5.96s, 12512308 bytes
+				wonderbuild 110000:  3.34s,  7324188 bytes
+				wonderbuild  60000:  1.97s,  4430002 bytes
+				wonderbuild  10000:  0.66s,  1707579 bytes
+				        waf  10000:  2.11s,  2109958 bytes
+				        waf  60000:  5.09s,  5125231 bytes (ar!)
+				        waf 110000:  8.05s,  8176926 bytes (ar!)
+				        waf 210000: 13.86s, 14276034 bytes (ar!)
+				        waf 110000:  8.06s,  8181390 bytes
+				        waf  60000:  5.09s,  5134239 bytes (ar!)
+				        waf  10000:  2.12s,  2148034 bytes (ar!)
+			</part-->
+			<part caption='Increasing the number of files and includes'>
+				Here we compare two different <a href='gen-bench'/> invocations:<br/>
+				- the reference one called with the parameters 50 100 15 5 (50 libs, 10000 files, 104500 #includes)<br/>
+				- with another one called with the parameters 100 200 30 10 (100 libs, 40000 files, 818000 #includes).
+				<br/>
+				The results are the time ratio between the latter and the former.
+				<br/><br/>
+				All tests were run with 4 jobs on the same quad core system,
+				ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
+				<part caption='Tool versions'>
+					<ul>
+						<li>Tup version was 0.3-107-g8d046aa</li>
+						<li>Waf version was somewhere after 1.5.9 (svn rev 6671)</li>
+						<li>Fabricate version was subversion revision 48</li>
+						<li>Python version was 2.5.2</li>
+						<li>Jam version was 2.5</li>
+						<li>CMake version was 2.4.7</li>
+						<li>Make version was gnu make 3.81</li>
+						<li>Makedepend was version 1.0.1</li>
+						<li>Shell was dash (not bash) version 0.5.4</li>
+						<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
+					</ul>
+				</part>
+				<part caption='Initial full build'>
+					<bars scale='100' unit=' times'>
+						<bar name='wonderbuild' value='4.28'>( 131.77s /  30.8s) gcc deps (same with 1 batch/lib or max &lt;jobs> batches/lib)</bar>
+						<bar name='jam'         value='4.34'>( 154.35s /  35.6s) <span style='color: red'>missed header deps!</span></bar>
+						<bar name='cmake'       value='4.39'>( 164.50s /  37.5s) without scan of system-wide headers (like gcc -MMD)</bar>
+						<bar name='tup'         value='5.36'>( 221.52s /  41.3s) without monitor</bar>
+						<bar name='waf'         value='4.82'>( 226.56s /  47.0s) gcc deps, timestamp signatures</bar>
+						<bar name='waf'         value='6.83'>( 323.08s /  47.3s) waf cpp, timestamp signatures</bar>
+						<bar name='fabricate'   value='6.42'>(1209.33s / 188.3s) (bizarrely 932s the first run) (hash sum signatures) <span style='color: red'>(only one CPU supported)</span></bar>
+					</bars>
+				</part>
+				<part caption='Big partial rebuild'>
+					After touch lib_17/*.hpp => rebuild of 3291 object files from c++ and 83 static libs
+					<br/>
+					(The reference benchmark rebuilt 585 object files from c++ and 33 static libs)
+					<br/><br/>
+					<bars scale='100' unit=' times'>
+						<bar name='wonderbuild' value='5.82'>( 25.59s /  4.40s) gcc deps</bar>
+						<bar name='jam'         value='6.58'>( 27.98s /  4.25s) <span style='color: red'>missed header deps!</span></bar>
+						<bar name='tup'         value='6.06'>( 33.59s /  5.54s) without monitor</bar>
+						<bar name='cmake'       value='5.99'>( 36.86s /  6.15s) without scan of system-wide headers (like gcc -MMD)</bar>
+						<bar name='waf'         value='7.02'>( 52.06s /  7.42s) gcc deps, timestamp signatures</bar>
+						<bar name='waf'         value='8.00'>( 59.35s /  7.42s) waf cpp, timestamp signatures</bar>
+						<bar name='fabricate'   value='9.21'>(247.82s / 26.90s) (hash sum signatures) <span style='color: red'>(only one CPU supported)</span></bar>
+					</bars>
+				</part>
+				<part caption='Small partial rebuild'>
+					After touch lib_17/class_17.hpp => rebuild of 37 object files from c++ and 13 static libs
+					<br/>
+					(The reference benchmark rebuilt 26 object files from c++ and 8 static libs)
+					<br/><br/>
+					<bars scale='100' unit=' times'>
+						<bar name='tup'         value='2.93'>( 1.17s / 0.40s) without monitor</bar>
+						<bar name='wonderbuild' value='4.10'>( 3.44s / 0.84s) gcc deps</bar>
+						<bar name='jam'         value='5.41'>( 4.38s / 0.81s) <span style='color: red'>missed header deps!</span></bar>
+						<bar name='cmake'       value='4.61'>( 7.84s / 1.70s) without scan of system-wide headers (like gcc -MMD)</bar>
+						<bar name='waf'         value='4.34'>(10.55s / 2.43s) waf cpp, timestamp signatures</bar>
+						<bar name='waf'         value='4.37'>(10.63s / 2.43s) gcc deps, timestamp signatures</bar>
+						<bar name='fabricate'   value='7.84'>(47.12s / 6.01s) (hash sum signatures) <span style='color: red'>(only one CPU supported)</span></bar>
+					</bars>
+				</part>
+				<part caption='No-op rebuild'>
+					<bars scale='100' unit=' times'>
+						<bar name='tup'         value='3.88'>( 0.31s / 0.08s) without monitor</bar>
+						<bar name='wonderbuild' value='4.70'>( 2.96s / 0.63s) gcc deps</bar>
+						<bar name='jam'         value='5.77'>( 4.10s / 0.71s) <span style='color: red'>missed header deps!</span></bar>
+						<bar name='cmake'       value='4.87'>( 6.77s / 1.39s) without scan of system-wide headers (like gcc -MMD)</bar>
+						<bar name='waf'         value='4.43'>( 7.31s / 1.65s) waf cpp, timestamp signatures</bar>
+						<bar name='waf'         value='4.45'>( 7.35s / 1.65s) gcc deps, timestamp signatures</bar>
+						<bar name='fabricate'   value='8.93'>(44.57s / 4.99s) (hash sum signatures) <span style='color: red'>(only one CPU supported)</span></bar>
+					</bars>
+				</part>
+				<part caption='Broken tools'>
+					<bars scale='20'>
+						<bar name='toy makefiles' value='0'>(recursive) <span style='color: red'>UNFINISHED: makedepend did not manage to compute the include dependencies (error:  out of space: increase MAXFILES)</span></bar>
+					</bars>
+				</part>
+			</part>
+			<part caption='Stressing the dependencies between libraries' anchor='scalability-lib-deps'>
+				Here we used <a href='misc/lib-dep-stress'/> to stress the dependencies between libraries.
+				<br/>
+				The generate-src script was asked to generate N libraries, each library n depending on all libraries from 0 through n - 1.<br/>
+				This leads to a total of N * (N -1) / 2 dependencies.
+				<br/>
+				Thus:<br/>
+				- with 200 libs => 19900 dependencies,<br/>
+				- with 100 libs =>  4950 dependencies,<br/>
+				- with  50 libs =>  1225 dependencies.
+				<br/><br/>
+				All tests were run with 4 jobs on the same quad core system,
+				ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
+				<part caption='Tool versions'>
+					<ul>
+						<li>Waf version was somewhere after 1.5.9 (svn rev 6674 with issue #522's optim patch)</li>
+						<li>Python version was 2.5.2</li>
+						<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
+						<li>Make version was gnu make 3.81</li>
+						<li>Shell was dash (not bash) version 0.5.4</li>
+						<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
+					</ul>
+				</part>
+				<part caption='Initial full build'>
+					<bars scale='9'>
+						<bar-section>With  50 libs =>  1225 dependencies, using static libs</bar-section>
+						<bar name='wonderbuild'   value='   6.73'>gcc deps</bar>
+						<bar name='waf'           value='   7.04'>waf cpp, timestamp signatures, manually-ordered deps</bar>
+						<bar name='autotools'     value='  77.53'>(non recursive)</bar>
+						<bar-section>With  50 libs =>  1225 dependencies, using shared libs</bar-section>
+						<bar name='wonderbuild'   value='  9.38'>gcc deps</bar>
+						<bar name='waf'           value='  10.44'>waf cpp, timestamp signatures</bar>
+						<bar name='autotools'     value='  79.26'>(non recursive)</bar>
+						<bar-section>With 100 libs =>  4950 dependencies, using static libs</bar-section>
+						<bar name='wonderbuild'   value='  13.17'>gcc deps</bar>
+						<bar name='waf'           value='  14.23'>waf cpp, timestamp signatures, manually-ordered deps</bar>
+						<bar name='autotools'     value='1301.95'>(non recursive)</bar>
+						<bar-section>With 100 libs =>  4950 dependencies, using shared libs</bar-section>
+						<bar name='wonderbuild'   value='20.33'>gcc deps</bar>
+						<bar name='waf'           value='23.57'>waf cpp, timestamp signatures</bar>
+						<bar name='autotools'     value='1295.55'>(non recursive)</bar>
+						<bar-section>With 200 libs => 19900 dependencies, using static libs</bar-section>
+						<bar name='wonderbuild'   value='26.96'>gcc deps</bar>
+						<bar name='waf'           value='30.19'>waf cpp, timestamp signatures, manually-ordered deps</bar>
+						<bar name='autotools'     value=' 0'>(non recursive)<span style='color: red'> UNFINISHED: did not manage to complete within reasonable time, due to libtool being extremely slow!</span></bar>
+						<bar-section>With 200 libs => 19900 dependencies, using shared libs</bar-section>
+						<bar name='wonderbuild'   value='74.68'>gcc deps</bar>
+						<bar name='waf'           value='91.23'>waf cpp, timestamp signatures</bar>
+						<bar name='autotools'     value=' 0'>(non recursive)<span style='color: red'> UNFINISHED: did not manage to complete within reasonable time, due to libtool being extremely slow!</span></bar>
+					</bars>
+				</part>
+				<part caption='No-op rebuild'>
+					<bars scale='75'>
+						<bar-section>With  50 libs =>  1225 dependencies, using static libs</bar-section>
+						<bar name='wonderbuild'   value=' 0.07'>gcc deps</bar>
+						<bar name='autotools'     value=' 0.23'>(non recursive)</bar>
+						<bar name='waf'           value=' 0.23'>waf cpp, timestamp signatures, manually-ordered deps</bar>
+						<bar-section>With  50 libs =>  1225 dependencies, using shared libs</bar-section>
+						<bar name='wonderbuild'   value=' 0.09'>gcc deps</bar>
+						<bar name='autotools'     value=' 0.23'>(non recursive)</bar>
+						<bar name='waf'           value=' 0.40'>waf cpp, timestamp signatures</bar>
+						<bar-section>With 100 libs =>  4950 dependencies, using static libs</bar-section>
+						<bar name='wonderbuild'   value=' 0.16'>gcc deps</bar>
+						<bar name='autotools'     value=' 0.49'>(non recursive)</bar>
+						<bar name='waf'           value=' 0.57'>waf cpp, timestamp signatures, manually-ordered deps</bar>
+						<bar-section>With 100 libs =>  4950 dependencies, using shared libs</bar-section>
+						<bar name='wonderbuild'   value=' 0.19'>gcc deps</bar>
+						<bar name='autotools'     value=' 0.49'>(non recursive)</bar>
+						<bar name='waf'           value=' 1.82'>waf cpp, timestamp signatures</bar>
+						<bar-section>With 200 libs => 19900 dependencies, using static libs</bar-section>
+						<bar name='wonderbuild'   value=' 0.37'>gcc deps</bar>
+						<bar name='waf'           value=' 1.95'>waf cpp, timestamp signatures, manually-ordered deps</bar>
+						<bar name='autotools'     value=' 0'>(non recursive)<span style='color: red'> UNFINISHED: did not manage to complete within reasonable time, due to libtool being extremely slow!</span></bar>
+						<bar-section>With 200 libs => 19900 dependencies, using shared libs</bar-section>
+						<bar name='wonderbuild'   value=' 0.54'>gcc deps</bar>
+						<bar name='waf'           value='11.87'>waf cpp, timestamp signatures</bar>
+						<bar name='autotools'     value=' 0'>(non recursive)<span style='color: red'> UNFINISHED: did not manage to complete within reasonable time, due to libtool being extremely slow!</span></bar>
+					</bars>
+				</part>
+			</part>
+			<part caption='Times with big headers (and pre-compilation)' anchor='pch'>
+				Here the benchmark was modified to add a <code>#include &lt;boost/spirit.hpp></code> in every header.
+				<br/>
+				It clearly demonstrates the advantage of pre-compilation as soon as the size of the headers become significant.
+				<br/><br/>
+				All tests were run with 4 jobs on the same quad core system,
+				ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
+				<part caption='Tool versions'>
+					<ul>
+						<li>Waf version was 1.5.3</li>
+						<li>Python version was 2.5.2</li>
+						<li>Autotools versions were autoconf 2.61, automake 1.10.1, libtool 1.5.26</li>
+						<li>CMake version was 2.4.7</li>
+						<li>Make version was gnu make 3.81</li>
+						<li>Makedepend was version 1.0.1</li>
+						<li>Shell was dash (not bash) version 0.5.4</li>
+						<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
+					</ul>
+				</part>
+				<part caption='Initial full build'>
+					<part caption='With scan of system-wide headers'>
+						<bars scale='20' unit='m'>
+							<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value='  7.38'>-MD gcc deps</bar>
+							<bar-section>Using batch compilation, but no pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 20.93'>-MD gcc deps</bar>
+							<bar-section>Using neither</bar-section>
+							<bar name='cmake'         value=' 20.43'>with scan of deps in /usr/include (closer to gcc -MD)</bar>
+							<bar name='waf'           value=' 21.63'>-MD gcc deps, timestamp signatures</bar>
+							<bar name='waf'           value=' 21.63'>waf deps, timestamp signatures</bar>
+							<bar name='autotools'     value=' 26.61'>-MD gcc deps (non recursive)</bar>
+						</bars>
+					</part>
+					<part caption='Without scan of system-wide headers'>
+						<bars scale='20' unit='m'>
+							<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value='  7.13'>-MMD gcc deps</bar>
+							<bar-section>Using batch compilation, but no pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 20.50'>-MMD gcc deps</bar>
+							<bar-section>Using neither</bar-section>
+							<bar name='cmake'         value=' 19.42'>without scan of system-wide headers (like gcc -MMD)</bar>
+							<bar name='waf'           value=' 21.92'>-MMD gcc deps, timestamp signatures</bar>
+							<bar name='scons'         value=' 23.25'>with fast tuning options</bar>
+							<bar name='autotools'     value=' 26.75'>-MMD gcc deps (non recursive)</bar>
+						</bars>
+					</part>
+					<part caption='Broken tools'>
+						<bars scale='20' unit='m'>
+							<bar-section>Using batch compilation, but no pre-compiled headers</bar-section>
+							<bar name='waf'           value=' 21.51'>waf deps, timestamp signatures <span style='color: red'>batch-compilation currently has broken dependency-handling</span></bar>
+							<bar-section>Using neither</bar-section>
+							<bar name='toy makefiles' value='180.00'>(recursive) <span style='color: red'>UNFINISHED: did not manage to complete within several hours, due to makedepend being extremely slow!</span></bar>
+						</bars>
+					</part>
+				</part>
+				<part caption='Big partial rebuild'>
+					After touch lib_17/*.hpp => rebuild of 585 object files from c++ and 33 static libs
+					<part caption='With scan of system-wide headers'>
+						<bars scale='3'>
+							<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 53'>-MD gcc deps</bar>
+							<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value='151'>-MD gcc deps</bar>
+							<bar-section>Using neither</bar-section>
+							<bar name='waf'           value='162'>-MD gcc deps, timestamp signatures</bar>
+							<bar name='cmake'         value='170'>with scan of deps in /usr/include (closer to gcc -MD)</bar>
+							<bar name='autotools'     value='241'>-MD gcc deps (non recursive)</bar>
+						</bars>
+					</part>
+					<part caption='Without scan of system-wide headers'>
+						<bars scale='3'>
+							<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 53'>-MMD gcc deps</bar>
+							<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value='147'>-MMD gcc deps</bar>
+							<bar-section>Using neither</bar-section>
+							<bar name='cmake'         value='138'>without scan of system-wide headers (like gcc -MMD)</bar>
+							<bar name='waf'           value='158'>-MMD gcc deps, timestamp signatures</bar>
+							<bar name='waf'           value='159'>waf deps, timestamp signatures</bar>
+							<bar name='scons'         value='185'>with fast tuning options</bar>
+							<bar name='autotools'     value='197'>-MMD gcc deps (non recursive)</bar>
+						</bars>
+					</part>
+				</part>
+				<part caption='Small partial rebuild'>
+					After touch lib_17/class_17.hpp => rebuild of 26 object files from c++ and 8 static libs
+					<part caption='With scan of system-wide headers'>
+						<bars scale='50'>
+							<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 3.13'>-MD gcc deps</bar>
+							<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value='10.36'>-MD gcc deps</bar>
+							<bar-section>Using neither</bar-section>
+							<bar name='waf'           value='12.02'>-MD gcc deps, timestamp signatures</bar>
+							<bar name='cmake'         value='29.20'>with scan of deps in /usr/include (closer to gcc -MD)</bar>
+							<bar name='autotools'     value='50.44'>-MD gcc deps (non recursive)</bar>
+						</bars>
+					</part>
+					<part caption='Without scan of system-wide headers'>
+						<bars scale='50'>
+							<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 3.01'>-MMD gcc deps</bar>
+							<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 7.52'>-MMD gcc deps</bar>
+							<bar-section>Using neither</bar-section>
+							<bar name='cmake'         value=' 7.82'>without scan of system-wide headers (like gcc -MMD)</bar>
+							<bar name='waf'           value=' 8.57'>waf deps, timestamp signatures</bar>
+							<bar name='waf'           value=' 8.65'>-MMD gcc deps, timestamp signatures</bar>
+							<bar name='autotools'     value='11.92'>-MMD gcc deps (non recursive)</bar>
+							<bar name='scons'         value='33.85'>with fast tuning options</bar>
+						</bars>
+					</part>
+				</part>
+				<part caption='No-op rebuild'>
+					<part caption='With scan of system-wide headers'>
+						<bars scale='50'>
+							<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 0.70'>-MD gcc deps</bar>
+							<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 4.64'>-MD gcc deps</bar>
+							<bar-section>Using neither</bar-section>
+							<bar name='waf'           value=' 4.58'>-MD gcc deps, timestamp signatures</bar>
+							<bar name='cmake'         value='22.13'>with scan of deps in /usr/include (closer to gcc -MD)</bar>
+							<bar name='autotools'     value='41.54'>-MD gcc deps (non recursive)</bar>
+						</bars>
+					</part>
+					<part caption='Without scan of system-wide headers'>
+						<bars scale='50'>
+							<bar-section>Using both batch compilation and pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 0.69'>-MMD gcc deps</bar>
+							<bar-section>Using batch compilation but no pre-compiled headers</bar-section>
+							<bar name='wonderbuild'   value=' 0.69'>-MMD gcc deps</bar>
+							<bar-section>Using neither</bar-section>
+							<bar name='waf'           value=' 1.13'>-MMD gcc deps, timestamp signatures</bar>
+							<bar name='waf'           value=' 1.13'>waf deps, timestamp signatures</bar>
+							<bar name='cmake'         value=' 1.39'>without scan of system-wide headers (like gcc -MMD)</bar>
+							<bar name='autotools'     value=' 2.05'>-MMD gcc deps (non recursive)</bar>
+							<bar name='scons'         value='27.48'>with fast tuning options</bar>
+						</bars>
+					</part>
+				</part>
+			</part>
+		</part>
+		<part caption='Jython vs CPython' anchor='jython'>
+			Comparison of Python (CPython) and Jython.
+			<br/><br/>
+			All tests were run with 4 jobs on the same quad core system,
+			ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
+			<part caption='Tool versions'>
+				<ul>
+					<li>Python (CPython) version was 2.5.2</li>
+					<li>Jython version was 2.5.0</li>
+					<li>The JVM was Sun's version 1.6.0</li>
+					<li>Waf version was 1.5.8</li>
+					<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
+				</ul>
+			</part>
+			<part caption='Initial full build'>
+				<bars scale='4.37'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='cpython/wonderbuild' value=' 30.76'>gcc deps</bar>
+					<bar name='jython/wonderbuild'  value=' 41.61'>gcc deps</bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='cpython/wonderbuild' value=' 38.92'>gcc deps</bar>
+					<bar name='cpython/waf'         value=' 47.31'>waf cpp, timestamp signatures</bar>
+					<bar name='jython/wonderbuild'  value='147.37'>gcc deps</bar>
+					<bar name='jython/waf'          value='202.51'>waf cpp, timestamp signatures</bar>
+				</bars>
+			</part>
+			<part caption='Big partial rebuild'>
+				After touch lib_17/*.hpp => rebuild of 585 object files from c++ and 33 static libs
+				<br/><br/>
+				<bars scale='24.1'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='cpython/wonderbuild' value=' 4.38'>gcc deps</bar>
+					<bar name='jython/wonderbuild'  value='14.48'>gcc deps</bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='cpython/waf'         value=' 7.12'>waf cpp, timestamp signatures</bar>
+					<bar name='jython/waf'          value='36.93'>waf cpp, timestamp signatures</bar>
+				</bars>
+			</part>
+			<part caption='Small partial rebuild'>
+				After touch lib_17/class_17.hpp => rebuild of 26 object files from c++ and 8 static libs
+				<br/><br/>
+				<bars scale='61.4'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='cpython/wonderbuild' value=' 0.85'>gcc deps</bar>
+					<bar name='jython/wonderbuild'  value=' 8.30'>gcc deps</bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='cpython/waf'         value=' 1.92'>waf cpp, timestamp signatures</bar>
+					<bar name='jython/waf'          value='14.45'>waf cpp, timestamp signatures</bar>
+				</bars>
+			</part>
+			<part caption='No-op rebuild'>
+				<bars scale='82'>
+					<bar name='cpython/wonderbuild' value=' 0.64'>gcc deps</bar>
+					<bar name='cpython/waf'         value=' 1.18'>waf cpp, timestamp signatures</bar>
+					<bar name='jython/wonderbuild'  value=' 6.96'>gcc deps</bar>
+					<bar name='jython/waf'          value='10.81'>waf cpp, timestamp signatures</bar>
+				</bars>
+			</part>
+		</part>
+		<part caption='Using more jobs than available CPUs' anchor='jobs'>
+			Spotting the optimal number of jobs (threads and/or processes).
+			<br/>
+			The test machine had 4 CPUs.
+			<br/><br/>
+			All tests were run on the same quad core system,
+			ext2 filesystem on a 4-disk lvm/md-raid0 device, linux 2.6.24, gcc's C++ compiler.
+			<part caption='Tool versions'>
+				<ul>
+					<li>Python (CPython) version was 2.5.2</li>
+					<li>Jython version was 2.5.0</li>
+					<li>The JVM was Sun's version 1.6.0</li>
+					<li>Waf version was 1.5.8</li>
+					<li>Make version was gnu make 3.81</li>
+					<li>Shell was dash (not bash) version 0.5.4</li>
+					<li>Compiler tool chain versions were gcc 4.2.4, binutils 2.18.0</li>
+				</ul>
+			</part>
+			<part caption='Initial full build'>
+				<bars scale='5'>
+					<bar-section>Using batch compilation</bar-section>
+					<bar name='cpython/wonderbuild' value=' 76.09'>1 job, gcc deps</bar>
+					<bar name='cpython/wonderbuild' value=' 41.51'>2 jobs, gcc deps</bar>
+					<bar name='cpython/wonderbuild' value=' 34.67'>3 jobs, gcc deps</bar>
+					<bar name='cpython/wonderbuild' value=' 30.76'>4 jobs, gcc deps</bar>
+					<bar name='cpython/wonderbuild' value=' 29.77'>5 jobs, gcc deps</bar>
+					<bar name='cpython/wonderbuild' value=' 29.14'>6 jobs, gcc deps</bar>
+					<bar name='cpython/wonderbuild' value=' 29.04'>7 jobs, gcc deps</bar>
+					<bar name='cpython/wonderbuild' value=' 29.03'>8 jobs, gcc deps</bar>
+					<bar name='cpython/wonderbuild' value=' 29.04'>9 jobs, gcc deps</bar>
+					<bar name='cpython/wonderbuild' value=' 29.11'>10 jobs, gcc deps</bar>
+					<bar name='cpython/wonderbuild' value=' 30.28'>20 jobs, gcc deps</bar>
+					<bar name='cpython/wonderbuild' value=' 41.72'>100 jobs, gcc deps</bar>
+					<bar name='cpython/wonderbuild' value=' 67.32'>1000 jobs, gcc deps</bar>
+					<bar name='jython/wonderbuild'  value=' 89.66'>1 job, gcc deps</bar>
+					<bar name='jython/wonderbuild'  value=' 52.53'>2 jobs, gcc deps</bar>
+					<bar name='jython/wonderbuild'  value=' 45.69'>3 jobs, gcc deps</bar>
+					<bar name='jython/wonderbuild'  value=' 41.61'>4 jobs, gcc deps</bar>
+					<bar name='jython/wonderbuild'  value=' 41.18'>5 jobs, gcc deps</bar>
+					<bar name='jython/wonderbuild'  value=' 41.44'>6 jobs, gcc deps</bar>
+					<bar name='jython/wonderbuild'  value=' 42.02'>7 jobs, gcc deps</bar>
+					<bar name='jython/wonderbuild'  value=' 42.34'>8 jobs, gcc deps</bar>
+					<bar name='jython/wonderbuild'  value=' 43.37'>9 jobs, gcc deps</bar>
+					<bar name='jython/wonderbuild'  value=' 43.67'>10 jobs, gcc deps</bar>
+					<bar name='jython/wonderbuild'  value=' 53.29'>20 jobs, gcc deps</bar>
+					<bar name='jython/wonderbuild'  value='  0'>100 jobs, gcc deps, <span style='color: red'>java.io.IOException: error=24, Too many open files</span></bar>
+					<bar-section>Not using batch compilation</bar-section>
+					<bar name='toy makefiles'       value='80.55'>1 job, (recursive)</bar>
+					<bar name='toy makefiles'       value='47.86'>2 jobs, (recursive)</bar>
+					<bar name='toy makefiles'       value='38.00'>3 jobs, (recursive)</bar>
+					<bar name='toy makefiles'       value='34.72'>4 jobs, (recursive)</bar>
+					<bar name='toy makefiles'       value='33.74'>5 jobs, (recursive)</bar>
+					<bar name='toy makefiles'       value='33.46'>6 jobs, (recursive)</bar>
+					<bar name='toy makefiles'       value='33.42'>7 jobs, (recursive)</bar>
+					<bar name='toy makefiles'       value='33.13'>8 jobs, (recursive)</bar>
+					<bar name='toy makefiles'       value='33.36'>9 jobs, (recursive)</bar>
+					<bar name='toy makefiles'       value='33.33'>10 jobs, (recursive)</bar>
+					<bar name='toy makefiles'       value='33.26'>20 jobs, (recursive)</bar>
+					<bar name='toy makefiles'       value='33.28'>100 jobs, (recursive)</bar>
+					<bar name='toy makefiles'       value='33.31'>1000 jobs, (recursive)</bar>
+					<bar name='cpython/waf'         value='120.40'>1 job, waf cpp, timestamp signatures</bar>
+					<bar name='cpython/waf'         value=' 65.12'>2 jobs, waf cpp, timestamp signatures</bar>
+					<bar name='cpython/waf'         value=' 50.64'>3 jobs, waf cpp, timestamp signatures</bar>
+					<bar name='cpython/waf'         value=' 47.31'>4 jobs, waf cpp, timestamp signatures</bar>
+					<bar name='cpython/waf'         value=' 45.83'>5 jobs, waf cpp, timestamp signatures</bar>
+					<bar name='cpython/waf'         value=' 45.51'>6 jobs, waf cpp, timestamp signatures</bar>
+					<bar name='cpython/waf'         value=' 45.04'>7 jobs, waf cpp, timestamp signatures</bar>
+					<bar name='cpython/waf'         value=' 45.40'>8 jobs, waf cpp, timestamp signatures</bar>
+					<bar name='cpython/waf'         value=' 45.54'>9 jobs, waf cpp, timestamp signatures</bar>
+					<bar name='cpython/waf'         value=' 46.02'>10 jobs, waf cpp, timestamp signatures</bar>
+					<bar name='cpython/waf'         value=' 47.14'>20 jobs, waf cpp, timestamp signatures</bar>
+					<bar name='cpython/waf'         value=' 50.74'>100 jobs, waf cpp, timestamp signatures</bar>
+					<bar name='cpython/waf'         value=' 95.36'>1000 jobs, waf cpp, timestamp signatures</bar>
+					<bar name='jython/waf'          value='321.84'>1 job, waf cpp, timestamp signatures</bar>
+					<bar name='jython/waf'          value='202.51'>4 jobs, waf cpp, timestamp signatures</bar>
+					<bar name='jython/waf'          value='206.06'>7 jobs, waf cpp, timestamp signatures</bar>
+					<bar name='jython/waf'          value='210.05'>100 jobs, waf cpp, timestamp signatures</bar>
+				</bars>
+			</part>
+		</part>
+		<part caption='Number of system calls' anchor='strace'>
+			The following numbers were obtained with <code>strace -fF</code>
+			<br/><br/>
+			(Note: the wonderbuild and fbuild scripts find source files dynamically instead of relying on a hard-coded file list.)
+			<part caption='No-op rebuild'>
+				<bars unit='' scale='0.015'>
+					<bar-section>Number of stat() calls</bar-section>
+					<bar name='jam'           value=' 9252'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='wonderbuild'   value='10381'>with check of missing built files (including intermediate object files)</bar>
+					<bar name='waf'           value='10476'>timestamp signatures</bar>
+					<bar name='scons'         value='46693'>with fast tuning options</bar>
+					<bar name='fbuild'        value='61430'>(timestamp signatures only, content hashing disabled)</bar>
+					<bar name='toy makefiles' value='61996'>(recursive)</bar>
+					<bar name='scons'         value='67190'>with default options</bar>
+				</bars>
+				<bars unit='' scale='0.015'>
+					<bar-section>Number of fstat() calls</bar-section>
+					<bar name='wonderbuild'   value='  217'>(same with or without check of missing built files)</bar>
+					<bar name='fbuild'        value='  340'>(timestamp signatures only, content hashing disabled)</bar>
+					<bar name='waf'           value='  587'>timestamp signatures</bar>
+					<bar name='scons'         value='  780'>with fast tuning options</bar>
+					<bar name='jam'           value='10560'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='toy makefiles' value='32014'>(recursive)</bar>
+					<bar name='scons'         value='60780'>with default options</bar>
+					<bar-section>Number of open() calls</bar-section>
+					<bar name='wonderbuild'   value='  655'>(same with or without check of missing built files)</bar>
+					<bar name='fbuild'        value='  768'>(timestamp signatures only, content hashing disabled)</bar>
+					<bar name='waf'           value=' 1609'>timestamp signatures</bar>
+					<bar name='scons'         value=' 2433'>with fast tuning options</bar>
+					<bar name='jam'           value=' 9308'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='scons'         value='27433'>with default options</bar>
+					<bar name='toy makefiles' value='33227'>(recursive)</bar>
+				</bars>
+				<bars unit=''>
+					<bar-section>Number of getdents() calls</bar-section>
+					<bar name='wonderbuild'   value='    5'>(same with or without check of missing built files)</bar>
+					<bar name='jam'           value='  152'><span style='color: red'>missed header deps!</span></bar>
+					<bar name='fbuild'        value='  156'>(timestamp signatures only, content hashing disabled)</bar>
+					<bar name='toy makefiles' value='  202'>(recursive)</bar>
+					<bar name='scons'         value='  217'>(same with or without fast tuning options)</bar>
+					<bar name='waf'           value='  305'>timestamp signatures</bar>
+				</bars>
+			</part>
+		</part>
+	</part>
+</part>
+
