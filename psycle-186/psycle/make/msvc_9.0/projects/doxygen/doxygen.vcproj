@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="9,00"
+	Name="doxygen"
+	ProjectGUID="{7C2EC99A-E859-4DF0-B21F-40F81E97735C}"
+	Keyword="MakeFileProj"
+	TargetFrameworkVersion="131072"
+	>
+	<Platforms>
+		<Platform
+			Name="Win32"
+		/>
+	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
+	<Configurations>
+		<Configuration
+			Name="html|Win32"
+			OutputDirectory="$(TopOutputDir)/doc"
+			IntermediateDirectory="$(TopOutputDir)/intermediate"
+			ConfigurationType="0"
+			InheritedPropertySheets="..\top_output_dir.vsprops"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="cmd.exe /c build.cmd"
+				ReBuildCommandLine="cmd.exe /c &quot;clean.cmd &amp;&amp; build.cmd&quot;"
+				CleanCommandLine="cmd.exe /c clean.cmd"
+				Output=""
+				PreprocessorDefinitions=""
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="style"
+			>
+			<File
+				RelativePath="$(SolutionDir)\..\..\doxygen\doxygen.css"
+				>
+			</File>
+			<File
+				RelativePath="$(SolutionDir)\..\..\doxygen\doxygen.footer.html"
+				>
+			</File>
+			<File
+				RelativePath="$(SolutionDir)\..\..\doxygen\doxygen.header.html"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="generated output"
+			>
+			<File
+				RelativePath="$(SolutionDir)\..\..\..\doc\doxygen\html\index.html"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="commands"
+			>
+			<File
+				RelativePath=".\build.cmd"
+				>
+			</File>
+			<File
+				RelativePath=".\clean.cmd"
+				>
+			</File>
+		</Filter>
+		<File
+			RelativePath="$(SolutionDir)\..\..\doxygen\doxygen.configuration"
+			>
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

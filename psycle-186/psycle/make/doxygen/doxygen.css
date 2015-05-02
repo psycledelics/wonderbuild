@@ -1,0 +1,266 @@
+body
+{
+	/*background-color: #e0e0e0;*/
+	background-color: #cccc99;
+	color: #000000;
+	font-family: helvetica;
+	font-size: 12px;
+}
+td /* body's font size isn't inherited in tables! */
+{
+	font-size: 12px;
+}
+
+/* titles */
+
+h1
+{
+	margin-top: 2px;
+	padding-top: 4px;
+	text-align: center;
+	/*background-color: #c0c0c0;*/
+	background-color: #ddddaa;
+	font-size: 18px;
+	font-weight: bold;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #808080;
+	padding-bottom: 10px;
+	margin-bottom: 8px;
+}
+h2
+{
+	margin-top: 8px;
+	/*background-color: #c0c0c0;*/
+	background-color: #bbbb88;
+	font-size: 18px;
+	font-weight: normal;
+	margin-bottom: 8px;
+}
+h3
+{
+	margin-top: 8px;
+	/*background-color: #c0c0c0;*/
+	background-color: #bbbb88;
+	font-size: 14px;
+	font-weight: normal;
+	margin-bottom: 8px;
+}
+
+/* links */
+
+a
+{
+	color: #003060;
+	text-decoration: none;
+}
+a:hover
+{
+	background-color: #ffffff;
+	color: #003060;
+	text-decoration: none;
+}
+
+/* quick index (links at the top of each page) */
+
+div.qindex
+{
+	text-align: center;
+	background-image: url(http://psycle.pastnotecut.org/images/tbg.gif);
+	background-repeat: repeat-x;
+	background-color: transparent;
+	color: #000000;
+	padding-left: 12px;
+	padding-right: 12px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+a.qindex
+{
+	padding-left: 2px;
+	padding-right: 2px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	margin-left: 2px;
+	margin-right: 2px;
+}
+a.qindexHL
+{
+	background-color: #f0f0f0;
+	color: #000000;
+	padding-left: 2px;
+	padding-right: 2px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	margin-left: 2px;
+	margin-right: 2px;
+}
+
+/* index tables */
+
+td.indexkey
+{ 
+	background-color: #b3b395;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	padding-left: 4px;
+	padding-right: 4px;
+	margin-left: 0px;
+	margin-right: 0px;
+}
+td.indexvalue
+{ 
+	color: #004000;
+	background-color: #b3b395;
+	padding-top: 1px;
+	padding-bottom: 1px;
+	padding-left: 4px;
+	padding-right: 4px;
+	margin-left: 0px;
+	margin-right: 0px;
+}
+a.el
+{
+	text-decoration: none;
+	font-weight: bold;
+}
+
+/* images */
+
+img
+{
+	border-style: groove;
+	border-width: 4px;
+	border-color: #c0c0c0;
+	background-color: #808080;
+}
+
+/* source code */
+
+pre
+{
+	font-family: lucida console;
+	font-size: 10px
+}
+.fragment
+{
+	width: auto;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #808080;
+	background-color: #ddddaa;
+	padding-left: 12px;
+	padding-right: 12px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+span.keyword       { color: #0000ff }
+span.keywordtype   { color: #102040 }
+span.keywordflow   { color: #a04000 }
+span.comment       { color: #008000 }
+span.preprocessor  { color: #e08000 }
+span.stringliteral { color: #800080 }
+span.charliteral   { color: #804040 }
+a.code
+{
+	color: #ff0000;
+	font-weight: normal;
+	text-decoration: none;
+}
+
+/* member brief */
+
+td.memItemLeft /* return type */
+{
+	background-color: #b3b395;
+}
+td.memItemRight /* parameters */
+{
+	background-color: #b3b395;
+}
+td.mdescLeft /* blank, just for tab */
+{
+}
+td.mdescRight /* brief description */
+{
+	background-color: transparent;
+	color: #004000;
+	width: 100%;
+	padding-left: 10%;
+}
+
+/* member long */
+
+table.mdTable
+{
+	width: 100%;
+	margin-left: 0px;
+	background-color: #b3b395;
+}
+td.mdRow
+{
+}
+td.md
+{
+	font-weight: normal;
+	font-family: lucida console;
+	font-size: 12px;
+}
+td.mdname /* parameters */
+{
+	background-color: transparent;
+	font-weight: bold;
+	color: #602020;
+	font-size: 12px;
+}
+td.mdname1 /* parameter if only one */
+{
+	background-color: transparent;
+	font-weight: bold;
+	color: #602020;
+	font-size: 12px;
+}
+
+/* groups */
+
+div.groupHeader
+{
+	margin-top: 8px;
+	/*background-color: #c0c0c0;*/
+	background-color: #bbbb88;
+	font-size: 14px;
+	font-weight: normal;
+	margin-bottom: 8px;
+}
+
+div.groupText
+{
+	margin-left: 32px;
+}
+
+/* hacks */
+
+p
+{
+	margin-top: 0.25em;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	margin-bottom: 0px;
+}
+
+br
+{
+	font-size: 1px;
+	margin-top: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	margin-bottom: 0px;
+}
+
+/* ugly doxygen defaults */
+
+CAPTION { font-weight: bold; color: #ffffff; }
+A.elRef { font-weight: bold; color: #ffffff; }
+A.codeRef { font-weight: normal; color: #ffffff; }
+DL.el { margin-left: -1cm; color: #ffffff; }
+DIV.ah { background-color: black; font-weight: bold; color: #ffffff; margin-bottom: 3px; margin-top: 3px }

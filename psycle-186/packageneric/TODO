@@ -1,0 +1,41 @@
+*	if 'g++' doesn't exist but 'g++-x.x' does, configure checks don't work.
+
+*	problem reported by magnus:
+	after a scons --clean, when trying to build again:
+	/tmp/++packageneric/variants/default/intermediate/freepsycle/modules/freepsycle-gui/src/packageneric/module.private.hpp:1:51 error: packageneric/source-package.private.hpp: No such file or directory
+
+microsoft:
+	
+*	for vcproj, use InheritedPropertySheets pointing to vcprops files.
+	-- bohan
+
+configuration headers:
+	
+*	to allow for static libraries to be built,
+	split packageneric/package/modules/*/defines.private.hpp
+	into two separate files: meta-informations.private.hpp and sources.private.hpp.
+	then source.private.hpp can be included by client sources,
+	while still having their own meta-informations.private.hpp.
+	Possibly sources.private.hpp could be installed like gtk packages do, in $(libdir)/include
+	(new automake var pkglibincludedir = $(pkglib)/include, and use of stanza nobase_pkglibinclude_HEADERS)
+	Note that .pc files have Requires.private for static libs, but,
+	making the additional -I cflag only active for static build would then require an additional .pc file,
+	which would never be invoked directly. Anyway the file has a .private.hpp extension which already denote
+	it's not part of the public interface, and it doesn't contain any functions or objects.
+	-- bohan
+
+*	the generated .pc files have suprious or missing paths and dependencies
+	-- bohan
+
+*	headers are not copied to install include dir
+	-- bohan
+	
+*	have a look at new scons features added in the two last google summer of code projects,
+	particularly, the automake-like features
+	-- bohan
+
+misc:
+
+*	remember to update the TODO file.
+	-- bohan
+
