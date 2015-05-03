@@ -1,0 +1,31 @@
+=======================================================
+ Wonderbuild - an extremely fast, extensible build tool
+=======================================================
+
+Wonderbuild is a build tool that handles all the phases
+involved in building softwares: configuration/checks, build, installation.
+
+Builds are described in python modules.
+Wonderbuild does not try to hide the python language, it requires
+to have a good knowledge of python. On the other hand, if you do know
+python well enough, it shouldn't take a long time to learn wonderbuild
+since it exposes only a minimal number of powerful concepts,
+rather than burying everything behind a massive API.
+
+If you don't like waiting a long time for your builds to finish,
+you'll be pleased with the speed wonderbuild reaches: it has been
+designed from the ground up to be the fastest build tool, and according
+to benchmarks done with it and various other build tools,
+the goal has been reached (only tup is faster, but that's a different kind of build tool).
+You can read the benchmarks here:
+http://psycle.svn.sourceforge.net/viewvc/psycle/branches/bohan/wonderbuild/benchmarks/time.xml
+
+Wonderbuild's speed is due to an implementation that:
+- allows tasks to start executing immediately,
+	discovering task dependencies dynamically,
+- makes it possible to take advantage of multi-cpu/core systems at all levels in the code,
+	never loosing an opportunity of parallelism,
+- minimises filesystem calls.
+
+Wonderbuild is currently undocumented.
+

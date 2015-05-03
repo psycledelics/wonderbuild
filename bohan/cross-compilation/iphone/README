@@ -1,3 +1,0 @@
-To build on a 64-bit platform,
-install the i386 uuid-dev and libssl-dev .deb with: dpkg --force-architecture -i xxx.deb
-and once the toolchain is built, fix the system by replacing them back with 64-bit ones with: aptitude install uuid-dev libssl-dev
