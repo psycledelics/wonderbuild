@@ -12,7 +12,7 @@ jython='java -jar ../../python-alternative-implementations/jython/jython.jar' &&
 python2=${cpython}2 &&
 python3=${cpython}3 &&
 
-wonderbuild="$python2 ../../../wonderbuild.py" &&
+wonderbuild="$python2 ../../../wonderbuild/main.py" &&
 fbuild="$python3 ../../other-build-tools/fbuild/fbuild-light" &&
 waf="$python3 ../../other-build-tools/waf/waf-light" &&
 scons_dir=../../other-build-tools/scons/src/ && scons="$python2 $scons_dir/script/scons.py" &&

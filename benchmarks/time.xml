@@ -101,21 +101,21 @@
 			you can try wonderbuild with this benchmark with:
 			<code>
 				<pre>
-	svn co https://psycle.svn.sourceforge.net/svnroot/psycle/branches/bohan/wonderbuild
-	cd wonderbuild/benchmarks
+	git clone https://github.com/johan-boule/wonderbuild.git
+	cd wonderbuild/benchmarks/derived-from-gamesfromwithin.com
 	./gen-bench bench 50 100 15 5
 	cd bench
-	time ../../wonderbuild.py --silent --check-missing=no # initial full build
-	time ../../wonderbuild.py --silent --check-missing=no # no-op rebuild
-	touch lib_17/class_17.hpp &amp;&amp; time ../../wonderbuild.py --silent --check-missing=no # small partial rebuild
-	touch lib_17/*.hpp &amp;&amp; time ../../wonderbuild.py --silent --check-missing=no # big partial rebuild
+	time ../../../wonderbuild/main.py --silent --check-missing=no # initial full build
+	time ../../../wonderbuild/main.py --silent --check-missing=no # no-op rebuild
+	touch lib_17/class_17.hpp &amp;&amp; time ../../../wonderbuild/main.py --silent --check-missing=no # small partial rebuild
+	touch lib_17/*.hpp &amp;&amp; time ../../../wonderbuild/main.py --silent --check-missing=no # big partial rebuild
 				</pre>
 			</code>
 			Alternatively, you may use the <a href='run-bench'/> helper script, which does the same thing, with:
 			<code>
 				<pre>
-	svn co https://psycle.svn.sourceforge.net/svnroot/psycle/branches/bohan/wonderbuild
-	cd wonderbuild/benchmarks
+	git clone https://github.com/johan-boule/wonderbuild.git
+	cd wonderbuild/benchmarks/derived-from-gamesfromwithin.com
 	./gen-bench.default
 	./run-bench reset wonderbuild # initial full build
 	./run-bench big wonderbuild # big partial rebuild
