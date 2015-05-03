@@ -652,7 +652,7 @@ class ModTask(ModDepPhases, Persistent):
 						#   Such dependency on code implementation details are to be handled at the compiler/linker level
 						#   (linker's --as-needed flag, future C++ module ISO standard ...).
 						#   In wonderbuild terms, this is neither a private nor a public dependency; it's inbetween.
-						#   For the reasons mentionned above, wonderbuild will not add support such borderline usage;
+						#   For the reasons mentionned above, wonderbuild will not add support for such borderline usage;
 						#   just use a public dependency and the linker shall do the job of eliminating unneeded references.
 						#
 						# - Case 2: --static
