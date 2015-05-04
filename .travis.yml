@@ -1,3 +1,7 @@
+# This file contains the configuration for the travis continuous integration service.
+# You can consult the travis service running for the wonderbuild project at
+# https://travis-ci.org/psycledelics/wonderbuild
+
 language: cpp
 
 compiler:
