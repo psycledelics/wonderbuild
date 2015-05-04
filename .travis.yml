@@ -1,10 +1,10 @@
 language: cpp
 
 compiler:
-	- gcc
-	- clang
+ - gcc
+ - clang
 
 os:
-	- linux
+ - linux
 
 script: /bin/true
