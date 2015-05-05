@@ -11,4 +11,4 @@ compiler:
 os:
  - linux
 
-script: unit-tests/wonderbuild_script.py
+script: unit-tests/wonderbuild_script.py --verbose=exec
