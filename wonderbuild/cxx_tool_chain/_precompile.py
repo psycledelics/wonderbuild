@@ -129,15 +129,16 @@ class _PreCompileTask(ModDepPhases, Persistent):
 				try: f.write(self.source_text); f.write('\n')
 				finally: f.close()
 				deps = self.cfg.impl.process_precompile_task(self, sched_ctx.lock)
-				# We create a file with a #error to ensure the pch is used.
-				f = open(self.header.path, 'w')
-				try:
-					f.write(
-						'#error This is an intentional error to ensure the pre-compiled header is really used.\n'
-						'// Below is the original file content that was pre-compiled to ' + self.target.rel_path(self.header.parent) + '\n'
-					)
-					f.write(self.source_text); f.write('\n')					
-				finally: f.close()
+				if not self.cfg.impl.kind_is_clang: # clang checks that the gch timestamp is higher than that of the header
+					# We create a file with a #error to ensure the pch is used.
+					f = open(self.header.path, 'w')
+					try:
+						f.write(
+							'#error This is an intentional error to ensure the pre-compiled header is really used.\n'
+							'// Below is the original file content that was pre-compiled to ' + self.target.rel_path(self.header.parent) + '\n'
+						)
+						f.write(self.source_text); f.write('\n')					
+					finally: f.close()
 				self.header.clear()
 				dep_sigs = [d.sig for d in deps]
 				self.persistent = cxx_sig, deps, Sig(''.join(dep_sigs)).digest()
