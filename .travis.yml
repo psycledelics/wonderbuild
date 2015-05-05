@@ -11,4 +11,4 @@ compiler:
 os:
  - linux
 
-script: /bin/true
+script: unit-tests/wonderbuild_script.py
