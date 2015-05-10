@@ -36,7 +36,11 @@ class DestPlatformCheckTask(BuildCheckTask):
 #elif defined __NetBSD__
 	#define WONDERBUILD__OS "netbsd"
 #elif defined __sun
-	#define WONDERBUILD__OS "sunos"
+	#if defined __SVR4
+		#define WONDERBUILD__OS "solaris"
+	#else
+		#define WONDERBUILD__OS "sunos"
+	#endif
 #elif defined __sgi
 	#define WONDERBUILD__OS "irix"
 #elif defined __hpux

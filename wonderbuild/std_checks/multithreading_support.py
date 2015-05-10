@@ -14,7 +14,7 @@ class MultithreadingSupportCheckTask(BuildCheckTask):
 		if cfg.kind == 'gcc':
 			if cfg.dest_platform.os in ('win', 'cygwin'):
 				cfg.cxx_flags.append('-mthreads')
-			elif cfg.dest_platform.os == 'sunos':
+			elif cfg.dest_platform.os == 'solaris':
 				cfg.cxx_flags.append('-pthread')
 			else:
 				cfg.cxx_flags.append('-pthread')
@@ -26,7 +26,7 @@ class MultithreadingSupportCheckTask(BuildCheckTask):
 		if cfg.kind == 'gcc':
 			if cfg.dest_platform.os in ('win', 'cygwin'):
 				cfg.ld_flags.append('-mthreads')
-			elif cfg.dest_platform.os == 'sunos':
+			elif cfg.dest_platform.os == 'solaris':
 				cfg.ld_flags.append('-pthread')
 			else:
 				cfg.ld_flags.append('-pthread')
