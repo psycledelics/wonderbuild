@@ -6,7 +6,7 @@ from wonderbuild.cxx_tool_chain import BuildCheckTask
 
 class DSoundCheckTask(BuildCheckTask):
 
-	default_min_version='0x900'
+	default_min_version = '0x900' # needs to be a string?
 
 	@staticmethod
 	def shared_uid(base_cfg, min_version=default_min_version): return 'ms-dsound-' + str(min_version)

@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2008-2013 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2008-2015 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 version = (1, 0)
 abi_sig = '7'
@@ -85,10 +85,8 @@ if False: # summary of modules
 	class DlfcnCheckTask(MultiBuildCheckTask): pass
 	# std_checks.math
 	class StdMathCheckTask(MultiBuildCheckTask): pass
-	# std_checks.cxx11
-	class StdCxx11CheckTask(BuildCheckTask): pass
-	# std_checks.cxx1y
-	class StdCxx1yCheckTask(BuildCheckTask): pass
+	# std_checks.std_cxx
+	class StdCxxCheckTask(BuildCheckTask): pass
 	# std_checks.boost
 	class BoostCheckTask(MultiBuildCheckTask): pass
 	# std_checks.openmp
