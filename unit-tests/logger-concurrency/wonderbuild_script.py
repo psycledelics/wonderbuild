@@ -26,22 +26,35 @@ if __name__ == '__main__':
 	else: main()
 
 from wonderbuild.script import ScriptTask
-from wonderbuild.task import Task
+from wonderbuild.task import task
 from wonderbuild.subprocess_wrapper import exec_subprocess
 
 class Wonderbuild(ScriptTask):
-	class Foo(Task):
-		def __call__(self, sched_ctx):
-			if False: yield
+
+	@task
+	def foo(self, sched_ctx):
+		if False: yield
+		for i in xrange(3):
 			sched_ctx.lock.release()
-			try: exec_subprocess(['sh', '-c', "for i in 1 2 3; do echo -n $i f; sleep 1; echo -n o; sleep 1; echo o; done"])
+			try: exec_subprocess(['sh', '-c', "for i in 1 2; do echo -n %s.$i f; sleep 1; echo -n o; sleep 1; echo o; done" % i])
 			finally: sched_ctx.lock.acquire()
-	class Bar(Task):
-		def __call__(self, sched_ctx):
-			if False: yield
+
+	@task
+	def bar(self, sched_ctx):
+		if False: yield
+		for i in xrange(3):
 			sched_ctx.lock.release()
-			try: exec_subprocess(['sh', '-c', "for i in 1 2 3; do echo -n $i b; sleep 1; echo -n a; sleep 1; echo r; done"])
+			try: exec_subprocess(['sh', '-c', "for i in 1 2 3; do echo -n %s.$i b; sleep 1; echo -n a; sleep 1; echo r; done" % i])
 			finally: sched_ctx.lock.acquire()
+
+	@task
+	def xyz(self, sched_ctx):
+		if False: yield
+		for i in xrange(3):
+			sched_ctx.lock.release()
+			try: exec_subprocess(['sh', '-c', "for i in 1 2 3 4; do echo -n %s.$i x; sleep 1; echo -n y; sleep 1; echo z; done" % i])
+			finally: sched_ctx.lock.acquire()
+
 	def __call__(self, sched_ctx):
-		tasks = Wonderbuild.Foo(), Wonderbuild.Bar()
-		for x in sched_ctx.parallel_wait(*tasks): yield x
+		for x in sched_ctx.parallel_wait(self.foo, self.bar, self.xyz): yield x
+

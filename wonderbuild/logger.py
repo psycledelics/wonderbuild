@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2008-2013 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2008-2015 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import sys, os
 
@@ -46,7 +46,7 @@ def use_options(options):
 		is_debug = 'verbose' in options
 
 		if is_debug:
-			debug_out = sync_log and out or sys.stderr
+			debug_out = out if sync_log else err
 			zones = options['verbose'].split(',')
 			global debug
 			if len(zones) != 0:
@@ -61,6 +61,7 @@ def use_options(options):
 #########################################
 
 out = sys.stdout
+err = sys.stderr
 
 #########################################
 # multicolumn_format(list, max_width)

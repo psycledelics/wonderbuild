@@ -137,7 +137,7 @@ run(options, option_collector)
 			validate_options(options, option_collector.known_options)
 			raise
 
-		try: Scheduler(options).process(main_task)
+		try: Scheduler(**options).process(main_task)
 		except:
 			project.global_purge = False # some task failed, so not all the tasks have been evaluated => we shouldn't do the global purge
 			raise

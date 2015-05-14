@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 # This source is free software ; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation ; either version 2, or (at your option) any later version.
-# copyright 2007-2009 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
+# copyright 2007-2015 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 import sys, os, threading
 
@@ -8,23 +8,23 @@ from wonderbuild import UserReadableException
 from options import OptionDecl
 from logger import is_debug, debug, colored, silent
 
-is_jython = os.name == 'java' # platform.system() == 'Java'
+_is_jython = os.name == 'java' # platform.system() == 'Java'
 
-# get the cpu_count made available by the os.
-if is_jython:
+# get the cpu count made available by the os.
+if _is_jython:
 	from java.lang import Runtime
-	cpu_count = Runtime.getRuntime().availableProcessors()
+	_cpu_count = Runtime.getRuntime().availableProcessors()
 else:
 	try:
 		#if 'SC_NPROCESSORS_ONLN' in os.sysconf_names:
-		cpu_count = os.sysconf('SC_NPROCESSORS_ONLN')
+		_cpu_count = os.sysconf('SC_NPROCESSORS_ONLN')
 	except:
-		cpu_count = int(os.environ.get('NUMBER_OF_PROCESSORS', 1)) # env var defined on mswindows
-		#_, cpu_count, __ = int(exec_subprocess_pipe(['sysctl', '-n', 'hw.ncpu']))
-		#cpu_count = int(exec_subprocess_pipe(['nproc']))
+		_cpu_count = int(os.environ.get('NUMBER_OF_PROCESSORS', 1)) # env var defined on mswindows
+		#_, _cpu_count, __ = int(exec_subprocess_pipe(['sysctl', '-n', 'hw.ncpu']))
+		#_cpu_count = int(exec_subprocess_pipe(['nproc']))
 
-_jobs = cpu_count * 2 # at least two threads per core is always better for i/o bound tasks
-_default_timeout = 3600.0
+_default_jobs = _cpu_count * 2 # at least two threads per core is always better for i/o bound tasks
+_default_timeout = 3600.0 # seconds
 
 class Scheduler(OptionDecl):
 
@@ -34,12 +34,12 @@ class Scheduler(OptionDecl):
 	# OptionDecl
 	@staticmethod
 	def generate_option_help(help):
-		help['jobs'] = ('<count>', 'use <count> threads in the scheduler to process the tasks', 'autodetected: ' + str(cpu_count) + ' * 2 (io-bounded)')
+		help['jobs'] = ('<count>', 'use <count> threads in the scheduler to process the tasks', 'autodetected: ' + str(_cpu_count) + ' * 2 (io-bounded)')
 		help['timeout'] = ('<seconds>', 'wait at most <seconds> for a task to complete before considering it\'s busted and bailing out', str(_default_timeout))
 
-	def __init__(self, options):
-		self.thread_count = int(options.get('jobs', _jobs))
-		self.timeout = float(options.get('timeout', _default_timeout))
+	def __init__(self, **kwargs):
+		self.thread_count = int(kwargs.get('jobs', _default_jobs))
+		self.timeout = float(kwargs.get('timeout', _default_timeout))
 
 	class Context(object):
 		def __init__(self, scheduler):
@@ -55,20 +55,20 @@ class Scheduler(OptionDecl):
 	
 	class _DummyCondition(_DummyLock):
 		def wait(self, timeout): pass
-		def notify(self, count = 1): pass
-		def notifyAll(self): pass
+		def notify(self, count=1): pass
+		def notify_all(self): pass
 
-	if is_jython:
+	if _is_jython:
 		class _JythonCondition(object):
 			def __init__(self, lock): self._cond = threading.Condition(lock)
 			def acquire(self): self._cond.acquire()
 			def release(self): self._cond.release()
 			def wait(self, timeout): self._cond.wait(timeout)
-			def notify(self, count = 1):
+			def notify(self, count=1):
 				if count == 0: return
 				elif count == 1: self._cond.notify()
-				else: self._cond.notifyAll() # there was no notify(count) as of jython 2.5.0
-			def notifyAll(self): self._cond.notifyAll()
+				else: self._cond.notify_all() # there was no notify(count) as of jython 2.5.0
+			def notify_all(self): self._cond.notify_all()
 		
 	def process(self, *tasks):
 		self._task_stack = list(tasks)
@@ -83,7 +83,7 @@ class Scheduler(OptionDecl):
 			self._cond = Scheduler._DummyCondition()
 		else:
 			self._lock = threading.Lock()
-			if is_jython: self._cond = Scheduler._JythonCondition(self._lock)
+			if _is_jython: self._cond = Scheduler._JythonCondition(self._lock)
 			else: self._cond = threading.Condition(self._lock)
 		self._context = Scheduler.Context(self)
 
@@ -100,11 +100,11 @@ class Scheduler(OptionDecl):
 			try:
 				thread_id = 1
 				t = threading.Thread(
-					target = self._thread_loop,
-					args = (thread_id, remaining_start_count - 1, remaining_start_cond),
-					name = 'scheduler-thread-' + str(thread_id)
+					name='scheduler-thread-' + str(thread_id),
+					target=self._thread_loop,
+					args=(thread_id, remaining_start_count - 1, remaining_start_cond)
 				)
-				t.setDaemon(True)
+				t.daemon = True
 				t.start()
 				self._threads.append(t)
 				while len(self._threads) != remaining_start_count: remaining_start_cond.wait(timeout = self.timeout)
@@ -118,7 +118,7 @@ class Scheduler(OptionDecl):
 				self._cond.acquire()
 				try:
 					self._joining = True
-					self._cond.notifyAll()
+					self._cond.notify_all()
 				finally: self._cond.release()
 				for t in self._threads: t.join(timeout = self.timeout)
 				if __debug__ and is_debug: debug('sched: threads joined')
@@ -167,11 +167,11 @@ class Scheduler(OptionDecl):
 				if remaining_start_count == 0: remaining_start_cond.notify()
 				else:
 					t = threading.Thread(
+						name = 'scheduler-thread-' + str(thread_id + 1),
 						target = self._thread_loop,
-						args = (thread_id + 1, remaining_start_count - 1, remaining_start_cond),
-						name = 'scheduler-thread-' + str(thread_id + 1)
+						args = (thread_id + 1, remaining_start_count - 1, remaining_start_cond)
 					)
-					t.setDaemon(True)
+					t.daemon =True
 					t.start()
 					self._threads.append(t)
 			finally: remaining_start_cond.release()
@@ -245,12 +245,12 @@ class Scheduler(OptionDecl):
 					task._sched_out_tasks = []
 					if notify > 0: self._cond.notify(notify)
 					elif notify < 0 and self._done_cond():
-						self._cond.notifyAll()
+						self._cond.notify_all()
 						break
 		except Exception, e:
 			self.exception = e
 			self._stop_requested = True
-			self._cond.notifyAll()
+			self._cond.notify_all()
 			if not isinstance(e, UserReadableException):
 				if exception_task_str is not None: print >> sys.stderr, colored('31;1', 'wonderbuild: task failed: ') + colored('31', exception_task_str)
 				import traceback; traceback.print_exc()
@@ -288,7 +288,7 @@ class Scheduler(OptionDecl):
 		#assert self._cond is acquired
 		if __debug__ and is_debug: debug('sched: parallel_no_wait: ' + str([str(t) for t in tasks]))
 		notify = 0
-		for t in reversed(tasks):
+		for t in tasks:
 			Scheduler._init_task(t)
 			if not t._sched_processed and not t._sched_stacked and t._sched_in_task_todo_count == 0:
 				if __debug__ and is_debug: debug('sched: task pushed on stack: ' + str(t))

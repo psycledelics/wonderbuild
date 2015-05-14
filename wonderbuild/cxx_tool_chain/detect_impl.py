@@ -3,7 +3,7 @@
 # copyright 2007-2013 members of the psycle project http://psycle.sourceforge.net ; johan boule <bohan@jabber.org>
 
 from wonderbuild import UserReadableException
-from wonderbuild.logger import out, colored, is_debug, debug, silent
+from wonderbuild.logger import colored, is_debug, debug, silent
 from wonderbuild.subprocess_wrapper import exec_subprocess, exec_subprocess_pipe
 from wonderbuild.check_task import CheckTask, ok_color, failed_color
 from wonderbuild.std_checks import ValidCfgCheckTask, ClangCheckTask, DestPlatformCheckTask, PicFlagDefinesPicCheckTask
