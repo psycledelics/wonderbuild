@@ -3,7 +3,7 @@
 =======================================================
 
 Wonderbuild is a build tool that handles all the phases
-involved in building softwares: configuration/checks, build, installation.
+involved in building software: configuration/checks, build, installation.
 
 Builds are described in python modules.
 Wonderbuild does not try to hide the python language, it requires
