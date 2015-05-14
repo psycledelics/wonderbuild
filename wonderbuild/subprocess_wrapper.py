@@ -76,16 +76,17 @@ def exec_subprocess(args, env=None, cwd=None):
 			r = subprocess.call(args=args, bufsize=-1, env=env, cwd=cwd)
 		else:
 			r, stdout, stderr = exec_subprocess_pipe(args, env=env, cwd=cwd, silent=True)
-			_stdouterr_cond.acquire()
-			try:
-				global _stdouterr_thread
-				if _stdouterr_thread is None:
-					_stdouterr_thread = threading.Thread(name='subprocess-stdouterr-multiplexer', target=_stdouterr_thread_loop)
-					_stdouterr_thread.daemon = True
-					_stdouterr_thread.start()
-				_stdouterr_ready.appendleft((stdout, stderr))
-				_stdouterr_cond.notify()
-			finally: _stdouterr_cond.release()
+			if(len(stdout) != 0 or len(stderr) != 0):
+				_stdouterr_cond.acquire()
+				try:
+					global _stdouterr_thread
+					if _stdouterr_thread is None:
+						_stdouterr_thread = threading.Thread(name='subprocess-stdouterr-multiplexer', target=_stdouterr_thread_loop)
+						_stdouterr_thread.daemon = True
+						_stdouterr_thread.start()
+					_stdouterr_ready.appendleft((stdout, stderr))
+					_stdouterr_cond.notify()
+				finally: _stdouterr_cond.release()
 	finally:
 		if do_msg: out.write('make: Leaving directory `' + cwd + "'\n")
 	return r
