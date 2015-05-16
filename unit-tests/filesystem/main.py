@@ -26,15 +26,11 @@ if __name__ == '__main__':
 
 	persistent = {}
 	fs = FileSystem(persistent)
-	t0 = time.time()
-	files = []
-	for x in (fs.root / 'usr' / 'include').find_iter(('*.h', '*.hpp')):
-		files.append(x.sig)
-	t1 = time.time()
-	files = []
-	for x in (fs.root / 'usr' / 'include').find_iter(('*.h', '*.hpp')):
-		files.append(x.sig)
-	t2 = time.time()
-	print str(t1 - t0) + 's'
-	print str(t2 - t1) + 's'
+	for i in xrange(2):
+		t0 = time.time()
+		files = []
+		for x in (fs.root / 'usr' / 'include').find_iter(('*.h', '*.hpp')):
+			files.append(x.sig)
+		t1 = time.time()
+		print str(len(files) / (t1 - t0)) + ' f/s'
 
