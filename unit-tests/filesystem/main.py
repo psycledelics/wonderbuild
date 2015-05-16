@@ -31,6 +31,8 @@ if __name__ == '__main__':
 		files = []
 		for x in (fs.root / 'usr' / 'include').find_iter(('*.h', '*.hpp')):
 			files.append(x.sig)
+		for x in (fs.root / 'usr' / 'lib').find_iter(('*.so', '*.so.*'), prune_pats=('private','llvm-*')): # perm denied and cycling symlinks
+			files.append(x.sig)
 		t1 = time.time()
-		print str(len(files) / (t1 - t0)) + ' f/s'
+		print '{} files in {:6.2f} seconds: {:10.0f} f/s'.format(len(files), t1 - t0, len(files) / (t1 - t0))
 
