@@ -306,7 +306,7 @@ class Node(object):
 		try: return self._height
 		except AttributeError:
 			self.fs
-			self._height = self.parent.height + 1
+			self._height = self.parent.height + 1 # needed even if it's also done in the fs property because self.fs.cur initially has _fs but not _height (see __init__)
 			return self._height
 
 	def __str__(self): return self.path
