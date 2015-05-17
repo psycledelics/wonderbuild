@@ -261,7 +261,7 @@ class Node(object):
 			elif self._old_children is not None: self._children.update(self._old_children)
 		return self._children
 
-	def find_iter(self, in_pats=('*',), ex_pats=None, prune_pats=None):
+	def find_iter(self, in_pats=('*',), ex_pats=None, prune_pats=None, files_only=True):
 		if __debug__ and is_debug: debug('fs: find_iter  : ' + str(self) + os.sep + ' ' + str(in_pats) + ' ' + str(ex_pats) + ' ' + str(prune_pats))
 		for name, node in self.actual_children.iteritems():
 			matched = False
@@ -270,13 +270,15 @@ class Node(object):
 					if match(name, pat): matched = True; break
 			if not matched:
 				for pat in in_pats:
-					if match(name, pat): matched = True; yield node; break
-				if not matched and node.is_dir:
+					if match(name, pat):
+						if not (files_only and node.is_dir): yield node
+						break
+				if node.is_dir:
 					if prune_pats is not None:
 						for pat in prune_pats:
 							if match(name, pat): matched = True; break
 					if not matched:
-						for node in node.find_iter(in_pats, ex_pats, prune_pats): yield node
+						for node in node.find_iter(in_pats, ex_pats, prune_pats, files_only): yield node
 	
 	def __div__(self, path): return self.__truediv__(path) # truediv has become the default div in python 3.0 (that's //, not / !)
 
