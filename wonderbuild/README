@@ -18,7 +18,7 @@ designed from the ground up to be the fastest build tool, and according
 to benchmarks done with it and various other build tools,
 the goal has been reached (only tup is faster, but that's a different kind of build tool).
 You can read the benchmarks here:
-http://retropaganda.info/~bohan/work/wonderbuild/benchmarks/time.xml
+http://retropaganda.info/~bohan/devel/wonderbuild/benchmarks/time.xml
 
 Wonderbuild's speed is due to an implementation that:
 - allows tasks to start executing immediately,
