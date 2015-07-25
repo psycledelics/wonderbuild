@@ -1,2 +1,2 @@
-exclude, /bench/***
-exclude, /bench-*/***
+hide, /bench
+hide, /bench-*
