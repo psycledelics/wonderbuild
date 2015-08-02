@@ -170,7 +170,6 @@
 					<bar name='waf'           value=' 47.3'>waf cpp, timestamp signatures</bar>
 					<bar name='waf'           value=' 49.3'>waf cpp, timestamp signatures, dynamically looking for sources</bar>
 					<bar name='fbuild'        value=' 74.3'>(timestamp signatures only, content hashing disabled, dynamically looking for sources)</bar>
-					<bar name='tup'           value=' 86.2'>without monitor</bar>
 					<bar name='scons'         value='131.0'>with fast tuning options</bar>
 					<bar name='scons'         value='137.7'>with default options</bar>
 					<bar name='autotools'     value='188.0'>(non recursive)</bar>
