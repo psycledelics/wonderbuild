@@ -2,7 +2,7 @@
 
 set -x &&
 
-jobs=4 &&
+jobs=$(nproc || getconf _NPROCESSORS_ONLN) &&
 
 cpython=python &&
 pypy=../../python-alternative-implementations/pypy/bin/pypy &&
@@ -37,14 +37,14 @@ dummy_change() {
 main() {
 	op=$1 && shift &&
 	tool=$1 && shift &&
-	
+
 	change=$(
 		case $tool in
 			fabricate) echo dummy_change;;
 			*) echo touch;;
 		esac
 	) &&
-	
+
 	cd $(dirname $0)/bench-$tool &&
 
 	case $op in
@@ -75,7 +75,7 @@ main() {
 			#$tup config num_jobs $jobs
 			measure $tup upd -j$jobs "$@"
 		;;
-		
+
 		tup-monitor)
 			if test $op = reset
 			then
@@ -96,7 +96,7 @@ main() {
 			# fbuild requires python >= 3
 			measure $fbuild --buildroot=build-$tool --jobs=$jobs "$@"
 		;;
-	
+
 		waf)
 			if ! test -d build-$tool
 			then

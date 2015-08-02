@@ -153,15 +153,7 @@ class Wonderbuild(ScriptTask):
 				def source_text(self):
 					try: return self._source_text
 					except AttributeError:
-						if False:
-							s = []
-							for l in src_dir.find_iter(in_pats = ['lib_*'], prune_pats = ['*']):
-								for n in l.find_iter(in_pats = ['*.hpp']):
-									s.append('#include <%s>' % n.rel_path(src_dir))
-							s.sort()
-							self._source_text = '\n'.join(s)
-						else:
-							self._source_text = '#include <boost/spirit.hpp>\n'
+						self._source_text = '#include <boost/spirit.hpp>\n'
 						return self._source_text
 			pch = Pch('pch', build_cfg)
 
@@ -181,8 +173,9 @@ class Wonderbuild(ScriptTask):
 				sub_src_dir = src_dir / self.name
 				for s in sub_src_dir.find_iter(in_pats=('*.cpp',)): self.sources.append(s)
 
-		for n in src_dir.find_iter(in_pats = ('lib_*',), prune_pats = ('*',)):
-			self.default_tasks.append(BenchLib(n.name, n.name[len('lib_'):]).mod_phase)
+		for n in src_dir.actual_children.itervalues():
+			if n.name.startswith('lib_'):
+				self.default_tasks.append(BenchLib(n.name, n.name[len('lib_'):]).mod_phase)
 ''')
 	finally: f.close()
 
