@@ -240,13 +240,13 @@ def configure(conf):
 
 def build(bld):
 	for n in bld.srcnode.ant_glob('lib_*', dir=True, src=False):
-		obj = bld.new_task_gen(
+		obj = bld(
 			features=['cxx', 'cxxstlib'],
 			target=n.name,
 			cxxflags=['-g', '-O0', '-Wall'],
 			defines=['BENCH', 'BENCH_LIB=' + n.name[len('lib_'):]],
 			includes = '.',
-			source = [s.relpath_gen(bld.srcnode) for s in n.ant_glob('*.cpp')]
+			source = [s.relpath() for s in n.ant_glob('*.cpp')]
 		); obj.source.sort() # issue #527 was not fixed
 
 if True:
@@ -255,7 +255,7 @@ if True:
 	def h_file(filename):
 		st = os.stat(filename)
 		if stat.S_ISDIR(st.st_mode): raise IOError('not a file')
-		return str(st.st_mtime)
+		return str(st.st_mtime).encode('ascii')
 	from waflib import Utils
 	Utils.h_file = h_file
 
