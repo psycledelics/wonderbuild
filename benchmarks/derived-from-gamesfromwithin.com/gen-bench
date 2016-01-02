@@ -321,7 +321,7 @@ env.SourceCode('.', None)
 %(subs)s
 ''' % {
 	'subs': '\n'.join(
-		['''env.SConscript('%(dir)s/SConscript', build_dir = 'build-scons/%(dir)s', duplicate = 0, exports = ['env'])''' % {
+		['''env.SConscript('%(dir)s/SConscript', variant_dir='build-scons/%(dir)s', duplicate=0, exports=['env'])''' % {
 			'dir': lib_dir(i)} for i in xrange(libs)])
 })
 	finally: f.close()
