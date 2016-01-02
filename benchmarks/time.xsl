@@ -58,7 +58,7 @@
 			<table class='caption-root'>
 				<tr>
 					<td nowrap='true'>
-						<a href='http://retropaganda.info/~bohan/work/sf/psycle/branches/bohan/wonderbuild'>
+						<a href='http://retropaganda.info/~bohan/devel/wonderbuild'>
 							<img alt='{$alt}' border='0' align='left' src='{$image}'/>
 						</a>
 					</td>

@@ -5,7 +5,7 @@
 	<br/>
 	<span style='color: red; font-size: 20px'>Note these benchmarks are from <a href='https://sourceforge.net/p/psycle/code/10721/log/?path=%2Fbranches%2Fbohan%2Fwonderbuild%2Fbenchmarks%2Ftime.xml'>2009-2010</a> and need to be updated!</span>
 	<part caption='Configuration details'>
-		The benchmarks were generated with this <a href='gen-bench'/> script.
+		The benchmarks were generated with this <a href='derived-from-gamesfromwithin.com/gen-bench'/> script.
 		The script produces reproductible seeded-random setups.
 		All these tests were run on the same gen-bench output,
 		but each copied to its own directory to ensure they don't interfere with each others.
@@ -26,7 +26,7 @@
 		<br/>
 		All tools were run with silent/quiet option and/or > /dev/null.
 		<br/>
-		The command lines used to run the tests can be seen in this <a href='run-bench'/> script.
+		The command lines used to run the tests can be seen in this <a href='derived-from-gamesfromwithin.com/run-bench'/> script.
 		<part caption='Toy makefiles'>
 			The toy makefiles generated were recursive, and C++ dependencies were tracked using the makedepend X utility.
 		</part>
@@ -70,7 +70,7 @@
 			<br/>
 		</part>
 		<part caption='CMake'>
-			The CMake part of the <a href='gen-bench'/> script was contributed by Richard Quirk.
+			The CMake part of the <a href='derived-from-gamesfromwithin.com/gen-bench'/> script was contributed by Richard Quirk.
 			<br/>
 			CMake seems to be unable to track system-wide headers.
 		</part>
@@ -82,10 +82,10 @@
 			This is far more maintainance-free, and the impact on speed is negligible.
 		</part>
 		<part caption='Fabricate'>
-			The Fabricate part of the <a href='gen-bench'/> script was contributed by Michael Haggerty.
+			The Fabricate part of the <a href='derived-from-gamesfromwithin.com/gen-bench'/> script was contributed by Michael Haggerty.
 		</part>
 		<part caption='Tup'>
-			The Tup part of the <a href='gen-bench'/> script was contributed by Jed Brown.
+			The Tup part of the <a href='derived-from-gamesfromwithin.com/gen-bench'/> script was contributed by Jed Brown.
 			<br/>
 			The tup scripts find source files dynamically instead of relying on a hard-coded file list.
 			This is far more maintainance-free, and the impact on speed is negligible.
@@ -113,7 +113,7 @@
 	touch lib_17/*.hpp &amp;&amp; time ../../../wonderbuild/main.py --silent --check-missing=no # big partial rebuild
 				</pre>
 			</code>
-			Alternatively, you may use the <a href='run-bench'/> helper script, which does the same thing, with:
+			Alternatively, you may use the <a href='derived-from-gamesfromwithin.com/run-bench'/> helper script, which does the same thing, with:
 			<code>
 				<pre>
 	git clone https://github.com/johan-boule/wonderbuild.git
@@ -125,7 +125,7 @@
 	./run-bench no-op wonderbuild # big partial rebuild
 				</pre>
 			</code>
-			Using the latter <a href='run-bench'/> helper script, you can easily compare wonderbuild with other tools,
+			Using the latter <a href='derived-from-gamesfromwithin.com/run-bench'/> helper script, you can easily compare wonderbuild with other tools,
 			as was done in these benchmarks. For example:
 			<code>
 				<pre>
@@ -553,7 +553,7 @@
 				        waf  10000:  2.12s,  2148034 bytes (ar!)
 			</part-->
 			<part caption='Increasing the number of files and includes'>
-				Here we compare two different <a href='gen-bench'/> invocations:<br/>
+				Here we compare two different <a href='derived-from-gamesfromwithin.com/gen-bench'/> invocations:<br/>
 				- the reference one called with the parameters 50 100 15 5 (50 libs, 10000 files, 104500 #includes)<br/>
 				- with another one called with the parameters 100 200 30 10 (100 libs, 40000 files, 818000 #includes).
 				<br/>
@@ -634,7 +634,7 @@
 				</part>
 			</part>
 			<part caption='Stressing the dependencies between libraries' anchor='scalability-lib-deps'>
-				Here we used <a href='misc/lib-dep-stress'/> to stress the dependencies between libraries.
+				Here we used <a href='lib-dep-stress'/> to stress the dependencies between libraries.
 				<br/>
 				The generate-src script was asked to generate N libraries, each library n depending on all libraries from 0 through n - 1.<br/>
 				This leads to a total of N * (N -1) / 2 dependencies.
