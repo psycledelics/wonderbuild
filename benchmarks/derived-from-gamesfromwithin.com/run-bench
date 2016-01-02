@@ -60,7 +60,7 @@ main() {
 
 	case $tool in
 		wonderbuild)
-			measure $wonderbuild --bld-dir=build-$tool --jobs=$jobs --check-missing=no --silent=yes "$@"
+			TERM=dumb measure $wonderbuild --bld-dir=build-$tool --jobs=$jobs --check-missing=no --silent=yes "$@"
 		;;
 
 		tup)
