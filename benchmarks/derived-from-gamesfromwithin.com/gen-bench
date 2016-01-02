@@ -564,6 +564,7 @@ def create_meson(libs):
 	f = open('meson.build', 'w')
 	try: f.write('''\
 project('benchmark', 'cpp')
+inc = include_directories('.')
 %(subs)s
 ''' % {
 	'subs': '\n'.join(["subdir('%s')" % lib_dir(i) for i in xrange(libs)])
@@ -573,7 +574,7 @@ project('benchmark', 'cpp')
 def create_meson_sub(lib_number, classes):
 	f = open('meson.build', 'w')
 	try: f.write('''\
-static_library('%(tgt)s', %(src)s, include_directories: ['/foo']) # include_directories does not seem to work in meason v0.18
+static_library('%(tgt)s', %(src)s, include_directories: inc)
 ''' % {
 	'num': str(lib_number),
 	'tgt': lib_name(lib_number),
