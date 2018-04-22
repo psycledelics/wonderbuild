@@ -29,7 +29,7 @@ class StdCxxCheckTask(BuildCheckTask):
 	@property
 	def source_text(self):
 		if self.min_version == 14: precise_version = '201402L'
-		elif self.min_version = 11: precise_version = '201103L'
+		elif self.min_version == 11: precise_version = '201103L'
 		else: precise_version = str(self.min_version)
 		
 		return '''\
