@@ -20,7 +20,7 @@ class StdCxxCheckTask(BuildCheckTask):
 			if (
 				'-std=c++' + str(self.min_version) not in cfg.cxx_flags and
 				'-std=gnu++' + str(self.min_version) not in cfg.cxx_flags
-			): cfg.cxx_flags.append('-std=gnu++' + + str(self.min_version))
+			): cfg.cxx_flags.append('-std=gnu++' + str(self.min_version))
 		else: pass # TODO other compilers
 
 	@property
