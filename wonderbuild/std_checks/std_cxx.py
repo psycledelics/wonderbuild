@@ -36,4 +36,4 @@ class StdCxxCheckTask(BuildCheckTask):
 #if __cplusplus < %s
 	#error c++%s unsupported or not enabled
 #endif
-''' % precise_version, str(self.min_version)
+''' % (precise_version, str(self.min_version))
