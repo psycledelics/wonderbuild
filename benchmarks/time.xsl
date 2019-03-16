@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='ascii' ?>
 <xsl:transform version='1.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
 	<!--xsl:output method='xml' media-type='application/xhtml+xml'/-->
-	<xsl:output method='html' media-type='text/html'/>
+	<!--xsl:output method='html' media-type='text/html'/-->
+	<xsl:output method='html'/>
 
 	<xsl:template match='/part'>
 		<!--DOCTYPE html-->
