@@ -5,7 +5,8 @@
 
 	<xsl:template match='/part'>
 		<!--DOCTYPE html-->
-		<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+		<!--html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"-->
+		<html lang="en">
 			<head>
 				<meta name='description' content='Benchmarks of various build tools'/>
 				<meta name='keywords' content='build tool c++ gcc make scons waf python autotools automake libtool open source free software gnu linux gpl'/>
