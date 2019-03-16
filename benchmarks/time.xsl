@@ -15,7 +15,7 @@
 				<!--style type='text/css' title='psycledelics'>
 					@import url(time.css);
 				</style-->
-				<link rel='home' title='Home' href='http://retropaganda.info/~bohan/work/sf/psycle/branches/bohan/wonderbuild'/>
+				<link rel='home' title='Home' href='http://retropaganda.info/~bohan/devel/wonderbuild'/>
 				<link rel='author' title='Author' href='http://retropaganda.info/~bohan'/>
 				<title><xsl:value-of select='@caption'/></title>
 			</head>
@@ -152,7 +152,7 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match='b|i|s|u|br|hr|ol|ul|li|pre|table|th|tr|td|div|span|p|code|em|script|object|param|embeed'>
+	<xsl:template match='b|i|s|u|br|hr|ol|ul|li|pre|table|th|tr|td|div|span|p|code|em|script|object|param|embed'>
 		<xsl:copy>
 			<xsl:copy-of select='@*'/>
 			<xsl:apply-templates/>
