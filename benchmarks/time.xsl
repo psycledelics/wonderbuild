@@ -1,12 +1,10 @@
 <?xml version='1.0' encoding='ascii' ?>
 <xsl:transform version='1.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'>
-	<!--xsl:output method='xml'/-->
-	<xsl:output method='html'/>
-	<!--xsl:output method='text'/-->
+	<xsl:output method='xml' media-type='application/xhtml+xml'/>
 
 	<xsl:template match='/part'>
-		<!--DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"-->
-		<html>
+		<!--DOCTYPE html-->
+		<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 			<head>
 				<meta name='description' content='Benchmarks of various build tools'/>
 				<meta name='keywords' content='build tool c++ gcc make scons waf python autotools automake libtool open source free software gnu linux gpl'/>
