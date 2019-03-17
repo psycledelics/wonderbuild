@@ -163,6 +163,9 @@ class Impl(object):
 	def process_cxx_task(self, cxx_task, lock):
 		cwd = cxx_task.target_dir
 		args = cxx_task.cfg.cxx_args + ['-MMD', '-c'] + [cxx_task.cfg.bld_rel_name_or_abs_path(p) for p in cxx_task._actual_sources]
+		if False: # TODO clang cannot write that in batch mode!
+			if cxx_task.cfg.impl.kind_is_clang:
+				args += ['-MJcompile_commands.json']
 		colorgcc = _colorgcc(cxx_task.cfg)
 		if colorgcc is not None: args = [colorgcc.rel_path(cwd)] + args
 		implicit_deps = cxx_task.persistent_implicit_deps
