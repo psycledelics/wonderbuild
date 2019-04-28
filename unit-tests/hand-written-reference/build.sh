@@ -22,7 +22,7 @@ objcopy --add-gnu-debuglink=libbar.so.1.0.0.dbg libbar.so &&
 readelf -d libbar.so | grep NEEDED &&
 
 c++ -o foo.o -fPIC -c -ggdb3 -O0 foo.cpp -I. &&
-c++ -o libfoo.so.1.0.0 -shared -Wl,--soname=libfoo.so.1 foo.o -L. -Wl,-rpath-link=. -Wl,-rpath=\$ORIGIN -lbar && # -Wl,-no-undefined
+c++ -o libfoo.so.1.0.0 -shared -Wl,--soname=libfoo.so.1 foo.o -L. -Wl,-rpath=\$ORIGIN -lbar && # -Wl,-no-undefined
 ln -s libfoo.so.1.0.0 libfoo.so.1 &&
 ln -s libfoo.so.1 libfoo.so &&
 objcopy --only-keep-debug libfoo.so libfoo.so.1.0.0.dbg &&
