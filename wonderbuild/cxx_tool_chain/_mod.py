@@ -103,7 +103,7 @@ class ModTask(ModDepPhases, Persistent):
 			# Basically, a static lib must expose its private_deps for client linking.
 			self.__expose_private_deep_deps = \
 				(not self.ld or self.kind == ModTask.Kinds.PROG and self.cfg.static_prog) and \
-				self.kind != ModTask.Kinds.HEADERS
+				self.kind != ModTask.Kinds.HEADERS # TODO not right: headers may depend on other libs
 			return self.__expose_private_deep_deps
 
 	# ModDepPhases
