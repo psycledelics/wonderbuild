@@ -103,7 +103,7 @@ class ModTask(ModDepPhases, Persistent):
 			# Basically, a static lib must expose its private_deps for client linking.
 			self.__expose_private_deep_deps = \
 				(not self.ld or self.kind == ModTask.Kinds.PROG and self.cfg.static_prog) and \
-				self.kind != ModTask.Kinds.HEADERS
+				self.kind != ModTask.Kinds.HEADERS # TODO not right: headers may depend on other libs
 			return self.__expose_private_deep_deps
 
 	# ModDepPhases
@@ -545,9 +545,9 @@ class ModTask(ModDepPhases, Persistent):
 						#
 						# we would end up with:
 						#
-						# prefix=/foo
+						# prefix=/opt/tux
 						#
-						# Libs: -L${prefix}/../libraries
+						# Libs: -L${prefix}/libraries
 						# CFlags: -I${prefix}/include
 						#
 						# While we could just use '/opt/tux/libraries' for Libs, a relative path is required for proper working on MS-Windows; see pkg-config(1) manpage.
@@ -638,8 +638,8 @@ class ModTask(ModDepPhases, Persistent):
 						# Requires.private has two usages :
 						#
 						# - Case 1: public header-only dependency
-						#   A public header of this package includes another package's header (so you need its CFlags),
-						#   but this package's library does not directly call any code in the other package's library (so you don't want its Libs).
+						#   A public header of your package includes another package's header (so you need its CFlags),
+						#   but your package's library does not directly call any code in the other package's library (so you don't want its Libs).
 						#   So, pkg-config --cflags also brings indirect CFlags through Requires.private, whether you call it with --static or not,
 						#   but when pkg-config is called *without* --static, pkg-config --libs doesn't bring indirect Libs.
 						#   Note that this usage is *very* fragile; it may depend on the precise implementation of the other package's library:
@@ -661,7 +661,7 @@ class ModTask(ModDepPhases, Persistent):
 						# Note that pkg-config is somewhat broken by design in the following common usage scenario:
 						# - Case 3: private dependency
 						#   You're not in case 1 (public header-only dependency),
-						#   but rather using another package's code internally in this librarie's implementation.
+						#   but rather using another package's code internally in your librarie's implementation.
 						#   When pkg-config is called with --cflags, it *does* bring indirect CFlags through Requires.private,
 						#   which, in this scenario (private dependency), are useless, but harmless.
 						#   For this reason, wonderbuild avoids using Requires.private for private dependencies when it can instead use Libs.private.

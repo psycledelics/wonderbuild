@@ -69,6 +69,7 @@ class ModDepPhases(DepTask):
 	def _expose_private_deep_deps(self): return False
 
 	def _topologically_sorted_unique_deep_deps(self, expose_private_deep_deps, expose_deep_mod_tasks=True, expose_private_deps_only=False):
+		# TODO I think it's boggus. See wondermake for a fix
 		from wonderbuild.cxx_tool_chain import ModTask
 		result = deque(); seen = set() # ordering matters for sig, and static libs must appear after their clients
 		def recurse(instance, root, expose_private_deps, expose_private_deep_deps, expose_deep_mod_tasks):

@@ -277,7 +277,7 @@ class Impl(object):
 
 	@staticmethod
 	def cfg_ar_ranlib_args(cfg):
-		ar_args = [cfg.ar_prog, 'rcs']
+		ar_args = [cfg.ar_prog, 'rcsD']
 		#if __debug__ and is_debug: debug('cfg: cxx: impl: gcc: ar: ' + str(ar_args))
 		if True: return ar_args, None # We use the s option in gnu ar to do the same as ranlib.
 		else:

@@ -55,7 +55,7 @@ class _PkgConfigTask(CheckTask):
 	@staticmethod
 	def env_sig():
 		sig = Sig()
-		for name in ('PKG_CONFIG_PATH', 'PKG_CONFIG_LIBDIR', 'PKG_CONFIG_DISABLE_UNINSTALLED'): # PKG_CONFIG_TOP_BUILD_DIR, PKG_CONFIG_ALLOW_SYSTEM_CFLAGS, PKG_CONFIG_ALLOW_SYSTEM_LIBS
+		for name in ('PKG_CONFIG_PATH', 'PKG_CONFIG_LIBDIR', 'PKG_CONFIG_DISABLE_UNINSTALLED', 'PKG_CONFIG_TOP_BUILD_DIR', 'PKG_CONFIG_ALLOW_SYSTEM_CFLAGS', 'PKG_CONFIG_ALLOW_SYSTEM_LIBS', 'PKG_CONFIG_SYSROOT_DIR'):
 			e = os.environ.get(name, None)
 			if e is not None: sig.update(e)
 		return sig.digest()
