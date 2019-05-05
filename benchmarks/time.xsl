@@ -59,7 +59,7 @@
 				<tr>
 					<td nowrap='true'>
 						<a href='http://retropaganda.info/~bohan/devel/wonderbuild'>
-							<img alt='{$alt}' border='0' align='left' src='{$image}'/>
+							<img alt='{$alt}' border='0' align='left' width='64px' height='64px' src='{$image}'/>
 						</a>
 					</td>
 					<td nowrap='true'>
