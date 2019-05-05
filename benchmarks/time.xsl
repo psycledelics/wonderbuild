@@ -63,15 +63,14 @@
 						</a>
 					</td>
 					<td nowrap='true'>
-						<xsl:text>&lt;</xsl:text>
 						<xsl:choose>
 							<xsl:when test='$location="top"'>
+								<xsl:apply-templates select='@caption'/>
 							</xsl:when>
 							<xsl:when test='$location="bottom"'>
-								<xsl:text>/</xsl:text>
+								<i style='font-family: URW Chancery L, cursive'><xsl:text>Fin</xsl:text></i>
 							</xsl:when>
 						</xsl:choose>
-						<xsl:apply-templates select='@caption'/>&gt;
 					</td>
 				</tr>
 			</table>
