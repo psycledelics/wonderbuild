@@ -23,4 +23,4 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       - name: test
-        run: unit-tests/wonderbuild_script.py
+        run: python2 unit-tests/wonderbuild_script.py
