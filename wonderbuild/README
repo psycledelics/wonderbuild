@@ -27,5 +27,3 @@ Wonderbuild's speed is due to an implementation that:
 - minimises filesystem calls.
 
 Wonderbuild is currently undocumented.
-
-[![Build Status](https://travis-ci.org/psycledelics/wonderbuild.svg?branch=master)](https://travis-ci.org/psycledelics/wonderbuild)
